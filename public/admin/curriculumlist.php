@@ -176,7 +176,7 @@
         //     window.location.href = $(this).attr('data-link')
         // })
 
-        function displayResults (results) {
+        function hideResults (results) {
             if (results.length == 0) {
                 msg.addClass('d-none')
                 cards.each(function () {        // show all curriculum cards if the search bar is empty
@@ -214,7 +214,7 @@
                     return !(curriculum.code.toLowerCase().includes(keywords) || curriculum.description.toLowerCase().includes(keywords) || curriculum.title.toLowerCase().includes(keywords))
                 }
                 var results = curriculumList.filter(filterOutCurriculum)
-                displayResults(results)
+                hideResults(results)
                 spinner.fadeOut()
             }, 500)
         })
@@ -227,7 +227,7 @@
             formData = $(this).serializeArray()
             currCode = formData[0].value.trim()
             currName = formData[1].value.trim()
-            currDesc = formData[2].value
+            currDesc = formData[2].value.trim()
 
             if (currCode == code || currCode.length == 0) {
                 $('.unique-error-msg').removeClass('invisible')
