@@ -25,15 +25,23 @@
         box-shadow: none;
     }
 
-    .spinner-grow {
+    .spinner-border, [class*='-toast'] {
         position: fixed;
         z-index: 99;
         overflow: show;
         margin: auto;
+    }
+
+    .spinner-border {
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
+    }
+
+    [class*='-toast'] {
+        right: 0.5in;
+        bottom: 0.5in;
     }
 </style>
 
@@ -54,7 +62,7 @@
         </header>
         <div class="curriculum-con d-flex flex-wrap container">
             <!-- SPINNER -->
-            <div class="spinner-grow" role="status" hidden>
+            <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
             <!-- No result message -->
@@ -91,8 +99,8 @@
         <?php include("../footer.html"); ?>
     </main>
 
-    <!-- Modal -->
-    <div class="modal fade" id="addCurriculumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- MODAL -->
+    <div class="modal fade" id="add-curr-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -102,25 +110,42 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="">
+                    <form id="curriculum-form" action="">
                         <h6>Please complete the following:</h6>
                         <div class="form-group">
-                            <label for="curriculumCode">Code</label>
-                            <input type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A">
-                            <label for="curriculumName">Name</label>
-                            <input type="text" name="code" class='form-control' placeholder="ex. K12 Academic">
-                            <label for="curriculumName">Description</label>
-                            <textarea name="code" class='form-control' placeholder="ex. K-12 Basic Education Academic Track"></textarea>
+                            <label for="curr-code">Code</label>
+                            <input id="curr-code"type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
+                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
+                            <label for="curr-name">Name</label>
+                            <input id="curr-name"type="text" name="code" class='form-control' placeholder="ex. K12 Academic" required>
+                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a curriculum name</small></p>
+                            <label for="curr-desc">Short Description</label>
+                            <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <a type="button" class="btn btn-primary" href="Add.php">Add</a>
+                    <button class="btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="submitCurriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div class="position-absolute" style="bottom: 20px; right: 25px;">
+            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"></div>
+            </div>
+
+            <div class="toast add-toast bg-dark text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    Curriculum successfully added
+                </div>
+            </div>
+        </div>
+    </div>
+     
 </body>
 
 <script type="text/javascript">
@@ -130,9 +155,17 @@
     var kebab = $('.kebab')
     var addCurriculumBtn = $('.add-curriculum')
     var msg = $('.msg')
-    var timeout = null;
+    var spinner = $('.spinner-border')
+    var timeout = null
+
+    function showWarningToast(msg) {
+        let msgToast = $('.warning-toast')
+        msgToast.find('.toast-body').text(msg)
+        msgToast.toast('show')
+    }
 
     $(document).ready(function() {
+        spinner.fadeOut("slow")
         kebab.click(function() {
             $(this).siblings('.dropdown-menu').show()
         })
@@ -173,6 +206,7 @@
         }
 
         $('input[type=search]').keyup(function() {
+            spinner.show()
             clearTimeout(timeout) // resets the timer
             timeout = setTimeout(() => { // executes the function after the specified milliseconds
                 var keywords = $(this).val().trim().toLowerCase()
@@ -181,10 +215,28 @@
                 }
                 var results = curriculumList.filter(filterOutCurriculum)
                 displayResults(results)
+                spinner.fadeOut()
             }, 500)
         })
 
-        $('.add-curriculum').click(() => $('#addCurriculumModal').modal('toggle'))
+        $('.add-curriculum').click(() => $('#add-curr-modal').modal('toggle'))
+
+        $('#curriculum-form').submit(function(event){
+            event.preventDefault()
+            let code = 'alvin'
+            formData = $(this).serializeArray()
+            currCode = formData[0].value.trim()
+            currName = formData[1].value.trim()
+            currDesc = formData[2].value
+
+            if (currCode == code || currCode.length == 0) {
+                $('.unique-error-msg').removeClass('invisible')
+            }
+
+            if (currName.length == 0) {
+                $('.name-error-msg').removeClass('invisible')
+            }
+        })
     })
 </script>
 
