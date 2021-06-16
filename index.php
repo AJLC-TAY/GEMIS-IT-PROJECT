@@ -1,8 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<?php include_once("src/head.html"); ?>
+<title>Home | GEMIS</title>
 </head>
+
 <body>
-    Hello there!
+    <main class="container">
+        <?php include("src/footer.html"); ?>
+    </main>
 </body>
+
 </html>

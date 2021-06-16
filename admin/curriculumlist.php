@@ -1,8 +1,8 @@
-<?php include_once("../head.html"); ?>
+<?php include_once("../src/head.html"); ?>
 <title>Curriculum Page | GEMIS</title>
 </head>
 <style>
-    .card {
+    .card {  
         width: 275px;
         height: 250px;
     }
@@ -16,7 +16,7 @@
     }
 
     .kebab::before {
-        content: url('../../assets/kebab.svg');
+        content: url('../assets/kebab.svg');
     }
 
     .kebab:hover,
@@ -69,12 +69,12 @@
             <div class="msg w-100 d-flex justify-content-center d-none">
                 <p class="m-auto">No results found</p>
             </div>
-            <?php require_once("../../src/getCurriculum.php");
+            <?php require_once("../src/getCurriculum.php");
             foreach ($curriculumList as $curr) {
                 echo "<div id='" . $curr->code . "-card' class='card shadow-sm p-0'>
                         <div class='card-body'>
                             <div class='dropdown'>
-                                <button class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                <button class='kebab btn btn-link rounded-circle dropdown-toggle'></button>
                                 <ul class='dropdown-menu'>
                                     <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
                                     <li><a class='dropdown-item' href='#'>Archive</a></li>
@@ -96,7 +96,17 @@
                 </div>";
             ?>
         </div>
-        <?php include("../footer.html"); ?>
+        <?php include("src/footer.html"); ?>
+        <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown button
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="#">Action</a>
+    <a class="dropdown-item" href="#">Another action</a>
+    <a class="dropdown-item" href="#">Something else here</a>
+  </div>
+</div>
     </main>
 
     <!-- MODAL -->
@@ -117,7 +127,7 @@
                             <input id="curr-code"type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
                             <label for="curr-name">Name</label>
-                            <input id="curr-name"type="text" name="code" class='form-control' placeholder="ex. K12 Academic" required>
+                            <input id="curr-name"type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a curriculum name</small></p>
                             <label for="curr-desc">Short Description</label>
                             <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
@@ -125,8 +135,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submitCurriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="submit-curriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
                 </div>
             </div>
         </div>
@@ -145,7 +155,6 @@
             </div>
         </div>
     </div>
-    <!-- Test comment -->
 </body>
 
 <script type="text/javascript">
@@ -166,12 +175,6 @@
 
     $(document).ready(function() {
         spinner.fadeOut("slow")
-        kebab.click(function() {
-            $(this).siblings('.dropdown-menu').show()
-        })
-
-        kebab.focusout(() => $('.dropdown-menu').hide()) // hides the all dropmenu if the kebab is unfocused
-
         // $('[data-link]').click(function () {
         //     window.location.href = $(this).attr('data-link')
         // })
@@ -221,21 +224,33 @@
 
         $('.add-curriculum').click(() => $('#add-curr-modal').modal('toggle'))
 
+        /*** Add new curriculum information through AJAX */
         $('#curriculum-form').submit(function(event){
             event.preventDefault()
-            let code = 'alvin'
-            formData = $(this).serializeArray()
-            currCode = formData[0].value.trim()
-            currName = formData[1].value.trim()
-            currDesc = formData[2].value.trim()
+            var formData = $(this).serializeArray()
+            var currCode = formData[0].value.trim()
+            var currName = formData[1].value.trim()
+            var currDesc = formData[2].value.trim()
+            formData.push({'name': 'add_curriculum'})
+            var hideUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
-            if (currCode == code || currCode.length == 0) {
-                $('.unique-error-msg').removeClass('invisible')
-            }
+            if (currCode.length == 0) hideUniqueErrorMsg()
 
             if (currName.length == 0) {
                 $('.name-error-msg').removeClass('invisible')
+            } else {
+                $.post('../src/add.php', formData, function(data) {
+                    // success
+                }).fail(function() {
+                    hideUniqueErrorMsg()
+                })
             }
+        })
+
+        /*** Reset curriculum form and hide error messages */
+        $(".close").click(() => {
+            $('#curriculum-form').trigger('reset')
+            $("[class*='error-msg']").addClass('invisible')
         })
     })
 </script>
