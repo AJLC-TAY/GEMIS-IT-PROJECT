@@ -154,7 +154,7 @@
     var cards = $('.card')
     var kebab = $('.kebab')
     var addCurriculumBtn = $('.add-curriculum')
-    var msg = $('.msg')
+    var noResultMsg = $('.msg')
     var spinner = $('.spinner-border')
     var timeout = null
 
@@ -178,7 +178,7 @@
 
         function hideResults (results) {
             if (results.length == 0) {
-                msg.addClass('d-none')
+                noResultMsg.addClass('d-none')
                 cards.each(function () {        // show all curriculum cards if the search bar is empty
                     $(this).show()      
                 })
@@ -190,7 +190,7 @@
                     $(this).hide()
                     addCurriculumBtn.hide()      
                 })
-                msg.removeClass('d-none')
+                noResultMsg.removeClass('d-none')
                 return
             }
 
