@@ -96,11 +96,12 @@
                 </div>";
             ?>
         </div>
+        <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
         <?php include("../src/footer.html"); ?>
     </main>
 
     <!-- MODAL -->
-    <div class="modal fade" id="add-curr-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -131,6 +132,54 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Archived Curriculums</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="overflow-auto" style="height: 50vh;">
+
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Junior High School
+                                <button class="btn btn-link">Unarchive</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
         <div class="position-absolute" style="bottom: 20px; right: 25px;">
@@ -242,6 +291,9 @@
             $('#curriculum-form').trigger('reset')
             $("[class*='error-msg']").addClass('invisible')
         })
+
+
+        $('.view-archive').click(() => $('#view-arch-curr-modal').modal('toggle'))
 
 
     })
