@@ -38,14 +38,14 @@
 
     $(document).ready(function() {
         var $table = $('#table').bootstrapTable({
-            "url": `/src/getTracks.php?code=${code}`,
+            "url": `/src/getTracks.php?code=${code}`, // k12acad
             "method": 'GET',
             // "search": true,
             // "searchSelector": '#search-artist',
             "uniqueId": "code",
             "idField": "code",
             "height": 300,
-            "exportDataType": "All",
+            // "exportDataType": "All",
             "pagination": true,
             "paginationParts": ["pageInfoShort", "pageSize", "pageList"],
             "pageSize": 10,

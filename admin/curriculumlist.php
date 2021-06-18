@@ -1,5 +1,5 @@
 <?php include_once("../src/head.html"); ?>
-<title>Curriculums Page | GEMIS</title>
+<title>Curriculum Page | GEMIS</title>
 </head>
 <style>
     .card {  
@@ -74,7 +74,7 @@
                 echo "<div id='" . $curr->code . "-card' class='card shadow-sm p-0'>
                         <div class='card-body'>
                             <div class='dropdown'>
-                                <button class='kebab btn btn-link rounded-circle dropdown-toggle'></button>
+                                <button type='button' class='kebab btn btn-link rounded-circle' data-toggle='dropdown'></button>
                                 <ul class='dropdown-menu'>
                                     <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
                                     <li><a class='dropdown-item' href='#'>Archive</a></li>
@@ -96,7 +96,7 @@
                 </div>";
             ?>
         </div>
-        <?php include("src/footer.html"); ?>
+        <?php include("../src/footer.html"); ?>
     </main>
 
     <!-- MODAL -->
@@ -147,6 +147,10 @@
     </div>
 </body>
 
+
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script type="text/javascript">
     var curriculumList = <?php echo json_encode($curriculumList); ?>;
     var curriculumCon = $('.curriculum-con')
@@ -242,6 +246,8 @@
             $('#curriculum-form').trigger('reset')
             $("[class*='error-msg']").addClass('invisible')
         })
+
+
     })
 </script>
 
