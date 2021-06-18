@@ -74,7 +74,7 @@
                 echo "<div id='" . $curr->code . "-card' class='card shadow-sm p-0'>
                         <div class='card-body'>
                             <div class='dropdown'>
-                                <button type='button' class='kebab btn btn-link rounded-circle' data-toggle='dropdown'></button>
+                                <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                 <ul class='dropdown-menu'>
                                     <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
                                     <li><a class='dropdown-item' href='#'>Archive</a></li>
@@ -146,6 +146,7 @@
         </div>
     </div>
 </body>
+
 <script type="text/javascript">
     var curriculumList = <?php echo json_encode($curriculumList); ?>;
     var curriculumCon = $('.curriculum-con')
