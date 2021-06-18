@@ -1,5 +1,5 @@
 <?php include_once("../src/head.html"); ?>
-<title>Curriculum Page | GEMIS</title>
+<title>Curriculums Page | GEMIS</title>
 </head>
 <style>
     .card {  
@@ -97,16 +97,6 @@
             ?>
         </div>
         <?php include("src/footer.html"); ?>
-        <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Dropdown button
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
     </main>
 
     <!-- MODAL -->
