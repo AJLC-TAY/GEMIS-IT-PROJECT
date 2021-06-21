@@ -230,19 +230,15 @@
         /** Shows only the matching cards with the keyword */
         function showResults(results) {
             var len = results.length
-            if (len === curriculumList.length) {    
-                return showAllCurriculum()
-            }
+
+            if (len === curriculumList.length) return showAllCurriculum()
 
             if (len > 0) {
                 noResultMsg.addClass('d-none')
                 cards.each(function() {
                     var card = $(this)
-                    if (results.includes(card.attr('data-id'))) {
-                        card.show()
-                    } else {
-                        card.hide()
-                    }
+                    if (results.includes(card.attr('data-id'))) card.show()
+                    else card.hide()
                 })
                 return
             }
@@ -264,13 +260,11 @@
             clearTimeout(timeout) // resets the timer
             timeout = setTimeout(() => { // executes the function after the specified milliseconds
                 var keywords = $(this).val().trim().toLowerCase()
-                let filterCurriculum = (curriculum) => { // returns the curriculum info that does not contain the keyword
+                let filterCurriculum = (curriculum) => { // returns the curriculum info that contain the keyword
                     return (curriculum.code.toLowerCase().includes(keywords) || curriculum.description.toLowerCase().includes(keywords) || curriculum.title.toLowerCase().includes(keywords))
                 }
                 var results = curriculumList.filter(filterCurriculum)
 
-                console.log(results)
-                // hideUnmatchedResult(results)
                 showResults(results.map((element) => { // map function returns an array containing the specified component of the element
                     return element.code
                 }))
@@ -294,9 +288,8 @@
 
             if (currCode.length == 0) hideUniqueErrorMsg()
 
-            if (currName.length == 0) {
-                $('.name-error-msg').removeClass('invisible')
-            } else {
+            if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
+            else {
                 $.post('../src/add.php', formData, function(data) {
                     // success
                 }).fail(function() {
@@ -313,8 +306,6 @@
 
 
         $('.view-archive').click(() => $('#view-arch-curr-modal').modal('toggle'))
-
-
     })
 </script>
 
