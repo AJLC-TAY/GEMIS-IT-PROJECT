@@ -2,7 +2,7 @@
 <title>Curriculum Page | GEMIS</title>
 </head>
 <style>
-    .card {  
+    .card {
         width: 275px;
         height: 250px;
     }
@@ -25,7 +25,8 @@
         box-shadow: none;
     }
 
-    .spinner-border, [class*='-toast'] {
+    .spinner-border,
+    [class*='-toast'] {
         position: fixed;
         z-index: 99;
         overflow: show;
@@ -58,7 +59,7 @@
             </nav>
             <h2>Curriculum</h2>
             <!-- SEARCH BAR -->
-            <input type="search" class="form-control" placeholder="Search something here">
+            <input id="search-input" type="search" class="form-control" placeholder="Search something here">
         </header>
         <div class="curriculum-con d-flex flex-wrap container">
             <!-- SPINNER -->
@@ -71,7 +72,7 @@
             </div>
             <?php require_once("../src/getCurriculum.php");
             foreach ($curriculumList as $curr) {
-                echo "<div id='" . $curr->code . "-card' class='card shadow-sm p-0'>
+                echo "<div data-id='" . $curr->code . "' class='card shadow-sm p-0'>
                         <div class='card-body'>
                             <div class='dropdown'>
                                 <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
@@ -115,10 +116,10 @@
                         <h6>Please complete the following:</h6>
                         <div class="form-group">
                             <label for="curr-code">Code</label>
-                            <input id="curr-code"type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
+                            <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
                             <label for="curr-name">Name</label>
-                            <input id="curr-name"type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
+                            <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a curriculum name</small></p>
                             <label for="curr-desc">Short Description</label>
                             <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
@@ -204,6 +205,7 @@
     var addCurriculumBtn = $('.add-curriculum')
     var noResultMsg = $('.msg')
     var spinner = $('.spinner-border')
+    var searchInput = $('input[type=search]')
     var timeout = null
 
     function showWarningToast(msg) {
@@ -214,49 +216,64 @@
 
     $(document).ready(function() {
         spinner.fadeOut("slow")
-        // $('[data-link]').click(function () {
-        //     window.location.href = $(this).attr('data-link')
-        // })
 
-        function hideResults (results) {
-            if (results.length == 0) {
+        /** Shows all curriculum cards with the add button */
+        function showAllCurriculum () {
+            spinner.show()
+            cards.each(function() {
+                $(this).show()
+            })
+            noResultMsg.addClass('d-none') // hide 'No result' message
+            spinner.fadeOut()
+        }
+
+        /** Shows only the machting cards with the keyword */
+        function showResults(results) {
+            var len = results.length
+            if (len == curriculumList.length) {    
+                return showAllCurriculum()
+            }
+
+            if (len > 0) {
                 noResultMsg.addClass('d-none')
-                cards.each(function () {        // show all curriculum cards if the search bar is empty
-                    $(this).show()      
+                cards.each(function() {
+                    var card = $(this)
+                    if (results.includes(card.attr('data-id'))) {
+                        card.show()
+                    } else {
+                        card.hide()
+                    }
                 })
-                return
-            } 
-
-            if (results.length == curriculumList.length) {
-                cards.each(function () {
-                    $(this).hide()
-                    addCurriculumBtn.hide()      
-                })
-                noResultMsg.removeClass('d-none')
                 return
             }
 
-            results.forEach(curriculum => {
-                cards.each(function() {
-                    let element = $(this)
-                    if (curriculum.code + '-card' == element.attr('id')) {
-                        element.hide()
-                        addCurriculumBtn.hide()
-                    }
-                })
+            // no results found at this point
+            cards.each(function() {
+                $(this).hide()
+                noResultMsg.removeClass('d-none')
             })
-        }
+        } 
 
-        $('input[type=search]').keyup(function() {
+        /** Executes when the clear button of the search input is clicked */
+        document.getElementById('search-input').addEventListener("search", function(event) {
+            showAllCurriculum()
+        });
+
+        searchInput.keyup(function(event) {
             spinner.show()
             clearTimeout(timeout) // resets the timer
             timeout = setTimeout(() => { // executes the function after the specified milliseconds
                 var keywords = $(this).val().trim().toLowerCase()
-                let filterOutCurriculum = (curriculum) => { // returns the curriculum info that does not contain the keyword
-                    return !(curriculum.code.toLowerCase().includes(keywords) || curriculum.description.toLowerCase().includes(keywords) || curriculum.title.toLowerCase().includes(keywords))
+                let filterCurriculum = (curriculum) => { // returns the curriculum info that does not contain the keyword
+                    return (curriculum.code.toLowerCase().includes(keywords) || curriculum.description.toLowerCase().includes(keywords) || curriculum.title.toLowerCase().includes(keywords))
                 }
-                var results = curriculumList.filter(filterOutCurriculum)
-                hideResults(results)
+                var results = curriculumList.filter(filterCurriculum)
+
+                console.log(results)
+                // hideUnmatchedResult(results)
+                showResults(results.map((element) => { // map function returns an array containing the specified component of the element
+                    return element.code
+                }))
                 spinner.fadeOut()
             }, 500)
         })
@@ -264,13 +281,15 @@
         $('.add-curriculum').click(() => $('#add-curr-modal').modal('toggle'))
 
         /*** Add new curriculum information through AJAX */
-        $('#curriculum-form').submit(function(event){
+        $('#curriculum-form').submit(function(event) {
             event.preventDefault()
             var formData = $(this).serializeArray()
             var currCode = formData[0].value.trim()
             var currName = formData[1].value.trim()
             var currDesc = formData[2].value.trim()
-            formData.push({'name': 'add_curriculum'})
+            formData.push({
+                'name': 'add_curriculum'
+            })
             var hideUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
             if (currCode.length == 0) hideUniqueErrorMsg()

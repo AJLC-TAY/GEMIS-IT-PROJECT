@@ -29,19 +29,16 @@
     var $table
     var code = 'k12acad'
 
-    // function onPostBodyOfTable() {
-    //     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    //     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-    //         return new bootstrap.Tooltip(tooltipTriggerEl)
-    //     })
-    // }
+    function onPostBodyOfTable() {
+    
+    }
 
     $(document).ready(function() {
         var $table = $('#table').bootstrapTable({
             "url": `/src/getTracks.php?code=${code}`, // k12acad
             "method": 'GET',
             // "search": true,
-            // "searchSelector": '#search-artist',
+            // "searchSelector": '#search-curr',
             "uniqueId": "code",
             "idField": "code",
             "height": 300,
