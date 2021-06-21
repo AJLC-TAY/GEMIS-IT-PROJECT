@@ -6,5 +6,4 @@
             http_response_code(406);
         }
     }
-  
 ?>

@@ -19,7 +19,6 @@
         content: url('../assets/kebab.svg');
     }
 
-    .kebab:hover,
     .kebab:focus {
         background-color: #DCDCDC;
         box-shadow: none;
@@ -284,16 +283,16 @@
             formData.push({
                 'name': 'add_curriculum'
             })
-            var hideUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
+            var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
-            if (currCode.length == 0) hideUniqueErrorMsg()
+            if (currCode.length == 0) showUniqueErrorMsg()
 
             if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
             else {
                 $.post('../src/add.php', formData, function(data) {
                     // success
                 }).fail(function() {
-                    hideUniqueErrorMsg()
+                    showUniqueErrorMsg()
                 })
             }
         })

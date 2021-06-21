@@ -6,11 +6,14 @@ if (isset($_GET['code'])) {
         $track1 = new stdClass();
         $track1->code = 'STEM';
         $track1->name = 'Science, Technology, Engineering, and Math';
-        $track1->action = "<button class='btn btn-primary'>Action</button>";
+        $track1->action = "<button class='btn btn-primary'>View</button>"
+                         ."<button class='btn btn-secondary'>Edit</button>";
+    
         $track2 = new stdClass();
         $track2->code = 'HumSS';
         $track2->name = 'Humanities and Social Sciences';
-        $track2->action = "<button class='btn btn-primary'>Action</button>";
+        $track2->action = "<button class='btn btn-primary'>View</button>"
+                         ."<button class='btn btn-secondary'>Edit</button>";
         $tracks[] = $track1;
         $tracks[] = $track2;
 
