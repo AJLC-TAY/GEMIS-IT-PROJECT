@@ -227,10 +227,10 @@
             spinner.fadeOut()
         }
 
-        /** Shows only the machting cards with the keyword */
+        /** Shows only the matching cards with the keyword */
         function showResults(results) {
             var len = results.length
-            if (len == curriculumList.length) {    
+            if (len === curriculumList.length) {    
                 return showAllCurriculum()
             }
 
