@@ -4,11 +4,12 @@
 </head>
 
 
-<?php $curriculum = 'K12 Academic';?>
+<?php $curriculum = 'K12 Academic'; ?>
+
 <body>
     <main>
-      <!-- HEADER -->
-      <header>
+        <!-- HEADER -->
+        <header>
             <!-- BREADCRUMB -->
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -39,23 +40,53 @@
             <table id="table" class="table-striped">
                 <thead class='thead-dark'>
                     <div class="d-flex flex-row-reverse justify-content-between mb-3"></div>
-                        <h4><?php echo $curriculum; ?> Strand List</h4>
-                        <div>
-                            <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                            <button id="add-btn" class="btn btn-success" title='Add new strand'>Add strand</button>
-                        </div>
+                    <h4><?php echo $curriculum; ?> Strand List</h4>
+                    <div>
+                        <button class="btn btn-secondary" title='Archive strand'>Archive</button>
+                        <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
                     </div>
-                    <tr>
-                        <th data-checkbox="true"></th>
-                        <th scope='col' data-width="100" data-align="right" data-field='code'>Code</th>
-                        <th scope='col' data-width="600" data-sortable="true" data-field="name">Track Name</th>
-                        <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                    </tr>
-                </thead>
-            </table>
+        </div>
+        <tr>
+            <th data-checkbox="true"></th>
+            <th scope='col' data-width="100" data-align="right" data-field='code'>Code</th>
+            <th scope='col' data-width="600" data-sortable="true" data-field="name">Track Name</th>
+            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+        </tr>
+        </thead>
+        </table>
         </div>
     </main>
-    
+    <!-- ADD PROGRAM MODAL -->
+    <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Strand/Program</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prog-form" action="">
+                        <div class="form-group">
+                            <label for="prog-code">Strand Code</label>
+                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                            <label for="prog-name">Strand Name</label>
+                            <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
+                            <label for="prog-curr">Curriculum</label>
+                            <input type="text" class='form-control' name="curr" value="Curriculum test" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="/node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
@@ -65,7 +96,7 @@
     var code = 'k12acad'
 
     function onPostBodyOfTable() {
-    
+
     }
 
     $(document).ready(function() {
@@ -84,25 +115,56 @@
             "pageList": "[10, 25, 50, All]",
             // "onPostBody": onPostBodyOfTable
         })
-            
+
         $('#edit-btn').click(function() {
             $(this).prop("disabled", true)
-            $( "#save-btn" ).prop( "disabled", false )
+            $("#save-btn").prop("disabled", false)
             $(this).closest('form').find('input').each(function() {
                 $(this).prop('disabled', false)
             })
         })
-        
-        $('#save-btn').click(function(){
+
+        $('#save-btn').click(function() {
             $(this).prop("disabled", true)
-            $( "#edit-btn" ).prop( "disabled", false )
+            $("#edit-btn").prop("disabled", false)
             $(this).closest('form').find('input').each(function() {
                 $(this).prop('disabled', true)
             })
         })
 
-        
+
     })
 
+    $('.add-prog').click(() => $('#add-prog-modal').modal('toggle'))
+    /*** Add new program information through AJAX */
+    $('#prog-form').submit(function(event) {
+        event.preventDefault()
+        var progFormData = $(this).serializeArray()
+        var progCode = progFormData[0].value.trim()
+        var progName = progFormData[1].value.trim()
+        var progCurr = progFormData[2].value.trim()
+        progFormData.push({
+            'name': 'add_prog'
+        })
+        var hideUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
+
+        if (progCode.length == 0) hideUniqueErrorMsg()
+
+        if (progName.length == 0) $('.name-error-msg').removeClass('invisible')
+        else {
+            $.post('../src/addProg.php', progFormData, function(data) {
+                // success
+            }).fail(function() {
+                hideUniqueErrorMsg()
+            })
+        }
+    })
+
+    /*** Reset program form and hide error messages */
+    $(".close").click(() => {
+        $('#prog-form').trigger('reset')
+        $("[class*='error-msg']").addClass('invisible')
+    })
 </script>
+
 </html>
