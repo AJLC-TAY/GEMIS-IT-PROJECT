@@ -1,6 +1,7 @@
 <?php include_once("../src/head.html"); ?>
 <title>Curriculum Page | GEMIS</title>
 </head>
+
 <style>
     .card {
         width: 275px;
@@ -16,7 +17,7 @@
     }
 
     .kebab::before {
-        content: url('../assets/kebab.svg');
+        content: url('/assets/kebab.svg');
     }
 
     .kebab:focus {
@@ -46,154 +47,169 @@
 </style>
 
 <body>
-    <main class="container">
-        <!-- HEADER -->
-        <header>
-            <!-- BREADCRUMB -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
-                </ol>
-            </nav>
-            <h2>Curriculum</h2>
-            <!-- SEARCH BAR -->
-            <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-        </header>
-        <div class="curriculum-con d-flex flex-wrap container">
-            <!-- SPINNER -->
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <!-- No result message -->
-            <div class="msg w-100 d-flex justify-content-center d-none">
-                <p class="m-auto">No results found</p>
-            </div>
-            <?php require_once("../src/getCurriculum.php");
-            foreach ($curriculumList as $curr) {
-                echo "<div data-id='" . $curr->code . "' class='card shadow-sm p-0'>
-                        <div class='card-body'>
-                            <div class='dropdown'>
-                                <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                <ul class='dropdown-menu'>
-                                    <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
-                                    <li><a class='dropdown-item' href='#'>Archive</a></li>
-                                </ul>
+
+    <section id="container">
+        <?php include_once ('sidebar.html'); ?>
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
+                                    </ol>
+                                </nav>
+                                <h2>Curriculum</h2>
+                                <!-- SEARCH BAR -->
+                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                            </header>
+                            <div class="curriculum-con d-flex flex-wrap container">
+                                <!-- SPINNER -->
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <!-- No result message -->
+                                <div class="msg w-100 d-flex justify-content-center d-none">
+                                    <p class="m-auto">No results found</p>
+                                </div>
+                                <?php require_once("../src/getCurriculum.php");
+                                foreach ($curriculumList as $curr) {
+                                    echo "<div data-id='" . $curr->code . "' class='card shadow-sm p-0'>
+                                            <div class='card-body'>
+                                                <div class='dropdown'>
+                                                    <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                                    <ul class='dropdown-menu'>
+                                                        <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='#'>Archive</a></li>
+                                                    </ul>
+                                                </div>
+                                                <h4>$curr->title</h4>
+                                                <p>$curr->description</p>
+                                            </div>
+                                            <div class='modal-footer p-0'>
+                                                <a role='button' class='btn' href='curriculum.php?id=" . $curr->code . "'>View</a>
+                                            </div>
+                                        </div>";
+                                }
+
+                                    echo "<div class='btn add-curriculum card shadow-sm'>
+                                        <div class='card-body'>
+                                            Add Curriculum
+                                        </div>
+                                    </div>";
+                                ?>
                             </div>
-                            <h4>$curr->title</h4>
-                            <p>$curr->description</p>
+                            <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
                         </div>
-                        <div class='modal-footer p-0'>
-                            <a role='button' class='btn' href='curriculum.php?id=" . $curr->code . "'>View</a>
+                    </div>
+                </div>
+                <!--main content end-->
+                <!--footer start-->
+                <?php include_once ("footer.html");?>
+                <!--footer end-->
+            </section>
+        </section>
+    </section>
+        <!-- MODAL -->
+        <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Add Curriculum</h4>
                         </div>
-                    </div>";
-            }
-
-            echo "<div class='btn add-curriculum card shadow-sm'>
-                    <div class='card-body'>
-                        Add Curriculum
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>";
-            ?>
-        </div>
-        <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
-        <?php include("../src/footer.html"); ?>
-    </main>
-
-    <!-- MODAL -->
-    <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Curriculum</h4>
+                    <div class="modal-body">
+                        <form id="curriculum-form" action="">
+                            <h6>Please complete the following:</h6>
+                            <div class="form-group">
+                                <label for="curr-code">Code</label>
+                                <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
+                                <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
+                                <label for="curr-name">Name</label>
+                                <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
+                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a curriculum name</small></p>
+                                <label for="curr-desc">Short Description</label>
+                                <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
+                            </div>
+                        </form>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="submit-curriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="curriculum-form" action="">
-                        <h6>Please complete the following:</h6>
-                        <div class="form-group">
-                            <label for="curr-code">Code</label>
-                            <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
-                            <label for="curr-name">Name</label>
-                            <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a curriculum name</small></p>
-                            <label for="curr-desc">Short Description</label>
-                            <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
+            </div>
+        </div>
+
+        <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Archived Curriculums</h4>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submit-curriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Archived Curriculums</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="overflow-auto" style="height: 50vh;">
+                    <div class="modal-body">
+                        <div class="overflow-auto" style="height: 50vh;">
 
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                        </ul>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Junior High School
+                                    <button class="btn btn-link">Unarchive</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+        <!-- TOAST -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+            <div class="position-absolute" style="bottom: 20px; right: 25px;">
+                <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body"></div>
+                </div>
+
+                <div class="toast add-toast bg-dark text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body">
+                        Curriculum successfully added
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
-        <div class="position-absolute" style="bottom: 20px; right: 25px;">
-            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body"></div>
-            </div>
-
-            <div class="toast add-toast bg-dark text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    Curriculum successfully added
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 <script type="text/javascript">
@@ -215,9 +231,12 @@
 
     $(document).ready(function() {
         spinner.fadeOut("slow")
+        /** Display active menu item */
+        $('#curr-management a:first').click()
+        $('#curriculum').addClass('active-sub')
 
         /** Shows all curriculum cards with the add button */
-        function showAllCurriculum () {
+        function showAllCurriculum() {
             spinner.show()
             cards.each(function() {
                 $(this).show()
@@ -247,11 +266,11 @@
                 $(this).hide()
                 noResultMsg.removeClass('d-none')
             })
-        } 
+        }
 
         /** Executes when the clear button of the search input is clicked */
         document.getElementById('search-input').addEventListener("search", function(event) {
-            showAllCurriculum()
+            if (searchInput.value.length == 0) showAllCurriculum()
         });
 
         searchInput.keyup(function(event) {
@@ -285,16 +304,29 @@
             })
             var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
-            if (currCode.length == 0) showUniqueErrorMsg()
+            // if (currCode.length == 0) showUniqueErrorMsg()
 
-            if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
-            else {
-                $.post('../src/add.php', formData, function(data) {
-                    // success
-                }).fail(function() {
-                    showUniqueErrorMsg()
-                })
+            // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
+            // else {
+
+            var processError = (error) => {
+                switch (error) {
+                    case 'codeError':
+                        showUniqueErrorMsg()
+                        break;
+                    case 'undefinedName':
+                        $('.name-error-msg').removeClass('invisible')
+                        break;
+                }
             }
+            $.post('/src/add.php', formData, function(data) {
+                // success
+            }).fail(function(xhr, textStatus, error) {
+                let responseText = JSON.parse(xhr.responseText)
+                responseText.error.forEach(processError)
+                // if (responseText.error === 'codeExist') showUniqueErrorMsg()
+            })
+            // }
         })
 
         /*** Reset curriculum form and hide error messages */

@@ -7,55 +7,71 @@
 <?php $curriculum = 'K12 Academic'; ?>
 
 <body>
-    <main>
-        <!-- HEADER -->
-        <header>
-            <!-- BREADCRUMB -->
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><?php echo $curriculum; ?></li>
-                </ol>
-            </nav>
-            <h2><?php echo $curriculum; ?> Curriculum</h2>
-        </header>
 
-        <!-- Form -->
-        <form>
-            <div class="container">
-                <h4>Information</h4>
-                <label>Curriculum Code</label>
-                <input type="text" name="code" disabled required>
-                <label>Curriculum Name</label>
-                <input type="text" name="name" disabled required>
-                <label>Description</label>
-                <input type="text" name="desc" disabled>
-                <button id="edit-btn" class="btn btn-secondary">Edit</button>
-                <button id="save-btn" class="btn btn-success" disabled>Save</button>
-            </div>
-        </form>
-        <!-- Track table -->
-        <div class="container">
-            <table id="table" class="table-striped">
-                <thead class='thead-dark'>
-                    <div class="d-flex flex-row-reverse justify-content-between mb-3"></div>
-                    <h4><?php echo $curriculum; ?> Strand List</h4>
-                    <div>
-                        <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                        <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+    <section id="container">
+        <?php include_once ('sidebar.html'); ?>
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $curriculum; ?></li>
+                                    </ol>
+                                </nav>
+                                <h2><?php echo $curriculum; ?> Curriculum</h2>
+                            </header>
+
+                            <!-- Form -->
+                            <form>
+                                <div class="container">
+                                    <h4>Information</h4>
+                                    <label>Curriculum Code</label>
+                                    <input type="text" name="code" disabled required>
+                                    <label>Curriculum Name</label>
+                                    <input type="text" name="name" disabled required>
+                                    <label>Description</label>
+                                    <input type="text" name="desc" disabled>
+                                    <button id="edit-btn" class="btn btn-secondary">Edit</button>
+                                    <button id="save-btn" class="btn btn-success" disabled>Save</button>
+                                </div>
+                            </form>
+                            <!-- Track table -->
+                            <div class="container">
+                                <table id="table" class="table-striped">
+                                    <thead class='thead-dark'>
+                                        <div class="d-flex flex-row-reverse justify-content-between mb-3"></div>
+                                        <h4>Strand List</h4>
+                                        <div>
+                                            <button class="btn btn-secondary" title='Archive strand'>Archive</button>
+                                            <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                        </div>
+        
+                                        <tr>
+                                            <th data-checkbox="true"></th>
+                                            <th scope='col' data-width="100" data-align="right" data-field='code'>Code</th>
+                                            <th scope='col' data-width="600" data-sortable="true" data-field="name">Track Name</th>
+                                            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-        </div>
-        <tr>
-            <th data-checkbox="true"></th>
-            <th scope='col' data-width="100" data-align="right" data-field='code'>Code</th>
-            <th scope='col' data-width="600" data-sortable="true" data-field="name">Track Name</th>
-            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-        </tr>
-        </thead>
-        </table>
-        </div>
-    </main>
+                </div>
+                <!--main content end-->
+                <!--footer start-->
+                <?php include_once ("footer.html");?>
+                <!--footer end-->
+            </section>
+        </section>
     <!-- ADD PROGRAM MODAL -->
     <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
@@ -100,6 +116,9 @@
     }
 
     $(document).ready(function() {
+        /** Display active menu item */
+        $('#curr-management a:first').click()
+        $('#curriculum').addClass('active-sub')
         var $table = $('#table').bootstrapTable({
             "url": `/src/getTracks.php?code=${code}`, // k12acad
             "method": 'GET',
