@@ -49,12 +49,12 @@
                             <div class="container mt-5">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>
-                                        <div class="d-flex flex-row-reverse justify-content-between mb-3">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <h4>Strand List</h4>
                                             <div>
                                                 <button class="btn btn-secondary" title='Archive strand'>Archive</button>
                                                 <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
                                             </div>
-                                            <h4 class="ms-2">Strand List</h4>
                                         </div>
         
                                         <tr>
