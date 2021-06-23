@@ -86,7 +86,7 @@
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
                                                         <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
-                                                        <li><a class='dropdown-item' href='#'>Archive</a></li>
+                                                        <li><button data-name='" . $curr->title ."' class='archive-btn dropdown-item'>Archive</button></li>
                                                     </ul>
                                                 </div>
                                                 <h4>$curr->title</h4>
@@ -144,6 +144,27 @@
                     <div class="modal-footer">
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                         <button type="submit" name="submit-curriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Confirmation</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
+                        <p class="modal-msg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary close-btn">Archive</button>
                     </div>
                 </div>
             </div>
@@ -223,11 +244,28 @@
     var searchInput = $('input[type=search]')
     var timeout = null
 
+    
     function showWarningToast(msg) {
         let msgToast = $('.warning-toast')
         msgToast.find('.toast-body').text(msg)
         msgToast.toast('show')
     }
+
+    /**
+     *  Adds mouse click event listener to archive button and sets archive 
+     *  confirmation modal with the specified remark and modal message.
+     * 
+     *  @param {string} remark - Identifies what type of data is being archived.
+     *  @param {string} msg    - Modal message.
+     */
+    // function initializeArchiveModal (remark, msg) {
+    //     $('.archive-btn').click(function() {
+    //         let name = $(this).attr('data-name')
+    //         $('#modal-identifier').html(`${name} ${remark}`)
+    //         $('.modal-msg').html(msg)
+    //         $('#archive-modal').modal('toggle')
+    //     })
+    // }
 
     $(document).ready(function() {
         spinner.fadeOut("slow")
@@ -331,12 +369,19 @@
 
         /*** Reset curriculum form and hide error messages */
         $(".close").click(() => {
-            $('#curriculum-form').trigger('reset')
-            $("[class*='error-msg']").addClass('invisible')
+            $('#curriculum-form').trigger('reset')              // reset form
+            $("[class*='error-msg']").addClass('invisible')     // hide error messages
         })
 
 
         $('.view-archive').click(() => $('#view-arch-curr-modal').modal('toggle'))
+        // initializeArchiveModal('Curriculum', 'Archiving this curriculum will also archive all tracks, programs, subjects, and student grades under this curriculum.')
+        $('.archive-btn').click(function() {
+            let name = $(this).attr('data-name')
+            $('#modal-identifier').html(`${name} Curriculum`)
+            $('.modal-msg').html('Archiving this curriculum will also archive all programs/strands, subjects, and student grades under this curriculum.')
+            $('#archive-modal').modal('toggle')
+        })
     })
 </script>
 

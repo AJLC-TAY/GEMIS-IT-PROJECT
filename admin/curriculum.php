@@ -4,7 +4,9 @@
 </head>
 
 
-<?php $curriculum = 'K12 Academic'; ?>
+<?php $curriculum = 'K12 Academic';
+      $curriculum_code = 'K12ACAD';
+?>
 
 <body>
 
@@ -44,14 +46,15 @@
                                 </div>
                             </form>
                             <!-- Track table -->
-                            <div class="container">
+                            <div class="container mt-5">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>
-                                        <div class="d-flex flex-row-reverse justify-content-between mb-3"></div>
-                                        <h4>Strand List</h4>
-                                        <div>
-                                            <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                            <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                        <div class="d-flex flex-row-reverse justify-content-between mb-3">
+                                            <div>
+                                                <button class="btn btn-secondary" title='Archive strand'>Archive</button>
+                                                <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                            </div>
+                                            <h4 class="ms-2">Strand List</h4>
                                         </div>
         
                                         <tr>
@@ -92,7 +95,7 @@
                             <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="Curriculum test" readonly>
+                            <input type="text" class='form-control' name="curr" value="<?php echo($curriculum_code);?>" readonly>
                         </div>
                     </form>
                 </div>
