@@ -1,4 +1,4 @@
-<?php include_once("../src/head.html"); ?>
+<?php include_once("../inc/head.html"); ?>
 <title>Curriculum Page | GEMIS</title>
 </head>
 
@@ -17,7 +17,7 @@
     }
 
     .kebab::before {
-        content: url('/assets/kebab.svg');
+        content: url('../assets/kebab.svg');
     }
 
     .kebab:focus {
@@ -47,9 +47,12 @@
 </style>
 
 <body>
+    <?php include('../class/Administration.php'); 
+    $admin = new Administration();
+    ?>
 
     <section id="container">
-        <?php include_once ('sidebar.html'); ?>
+        <?php include_once ('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -69,31 +72,32 @@
                                 <!-- SEARCH BAR -->
                                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                             </header>
+                            <!-- SPINNER -->
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <!-- No result message -->
+                            <div class="msg w-100 d-flex justify-content-center d-none">
+                                <p class="m-auto">No results found</p>
+                            </div>
                             <div class="curriculum-con d-flex flex-wrap container">
-                                <!-- SPINNER -->
-                                <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                <!-- No result message -->
-                                <div class="msg w-100 d-flex justify-content-center d-none">
-                                    <p class="m-auto">No results found</p>
-                                </div>
-                                <?php require_once("../src/getCurriculum.php");
-                                foreach ($curriculumList as $curr) {
-                                    echo "<div data-id='" . $curr->code . "' class='card shadow-sm p-0'>
+                                <?php $curriculumList = $admin->listCurriculum();
+                                foreach ($curriculumList as  $curr) {
+                                    echo "<div data-id='" .  $curr->get_cur_code() . "' class='card shadow-sm p-0'>
                                             <div class='card-body'>
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='curriculum.php?id=" . $curr->code . "'>Edit</a></li>
-                                                        <li><button data-name='" . $curr->title ."' class='archive-btn dropdown-item'>Archive</button></li>
+                                                        <li><a class='dropdown-item' href='curriculum.php?id=" .   $curr->get_cur_code() . "'>Edit</a></li>
+                                                        <li><button data-name='" .  $curr->get_cur_name() ."' class='archive-btn dropdown-item'>Archive</button></li>
+                                                        <li><button class='delete dropdown-item' id='" .  $curr->get_cur_code() . "'>Delete</button></li>
                                                     </ul>
                                                 </div>
-                                                <h4>$curr->title</h4>
-                                                <p>$curr->description</p>
+                                                <h4>". $curr->get_cur_name() ." </h4>
+                                                <p> ". $curr->get_cur_desc() ."</p>
                                             </div>
                                             <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='curriculum.php?id=" . $curr->code . "'>View</a>
+                                                <a role='button' class='btn' href='curriculum.php?id=" .  $curr->get_cur_code() . "'>View</a>
                                             </div>
                                         </div>";
                                 }
@@ -111,7 +115,7 @@
                 </div>
                 <!--main content end-->
                 <!--footer start-->
-                <?php include_once ("footer.html");?>
+                <?php include_once ("../inc/footer.html");?>
                 <!--footer end-->
             </section>
         </section>
@@ -119,15 +123,15 @@
         <!-- MODAL -->
         <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h4 class="mb-0">Add Curriculum</h4>
+                <form id="curriculum-form" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <h4 class="mb-0">Add Curriculum</h4>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="curriculum-form" action="">
+                        <div class="modal-body">
                             <h6>Please complete the following:</h6>
                             <div class="form-group">
                                 <label for="curr-code">Code</label>
@@ -139,13 +143,14 @@
                                 <label for="curr-desc">Short Description</label>
                                 <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                             </div>
-                        </form>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="action" id="action" value="addCurriculum"/>
+                            <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add"/>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="submit-curriculum" form="curriculum-form" class="submit btn btn-primary" data-link='add.php'>Add</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -236,153 +241,214 @@
 <script type="text/javascript">
     var curriculumList = <?php echo json_encode($curriculumList); ?>;
     var curriculumCon = $('.curriculum-con')
-    var cards = $('.card')
     var kebab = $('.kebab')
     var addCurriculumBtn = $('.add-curriculum')
     var noResultMsg = $('.msg')
     var spinner = $('.spinner-border')
-    var searchInput = $('input[type=search]')
+    var searchInput = $('#search-input')
     var timeout = null
 
-    
+
+    function reloadCurriculum() {
+        // location.reload()
+        spinner.show()
+        var action = 'getCurriculumJSON'
+        $.post('action.php', {action}, function (data) {
+            curriculumCon.empty()
+            curriculumList = JSON.parse(data)
+            curriculumList.forEach(element => {
+                var code = element.cur_code
+                var name = element.cur_name
+                var desc = element.cur_desc
+                curriculumCon.append(
+                    `<div data-id='${code}' class='card shadow-sm p-0'>
+                        <div class='card-body'>
+                            <div class='dropdown'>
+                                <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                <ul class='dropdown-menu'>
+                                    <li><a class='dropdown-item' href='curriculum.php?id=${code}'>Edit</a></li>
+                                    <li><button data-name='${name}' class='archive-btn dropdown-item'>Archive</button></li>
+                                    <li><button class='delete dropdown-item' id='${code}'>Delete</button></li>
+                                </ul>
+                            </div>
+                            <h4>${name}</h4>
+                            <p>${desc}</p>
+                        </div>
+                        <div class='modal-footer p-0'>
+                            <a role='button' class='btn' href='curriculum.php?id=${code}'>View</a>
+                        </div>
+                    </div>`
+                )
+            })
+            curriculumCon.append(`<div class='btn add-curriculum card shadow-sm'>
+                                    <div class='card-body'> Add Curriculum</div>
+                                </div>`)
+        })
+
+        spinner.fadeOut()
+    }
+     
     function showWarningToast(msg) {
         let msgToast = $('.warning-toast')
         msgToast.find('.toast-body').text(msg)
         msgToast.toast('show')
     }
 
-    /**
-     *  Adds mouse click event listener to archive button and sets archive 
-     *  confirmation modal with the specified remark and modal message.
-     * 
-     *  @param {string} remark - Identifies what type of data is being archived.
-     *  @param {string} msg    - Modal message.
-     */
-    // function initializeArchiveModal (remark, msg) {
-    //     $('.archive-btn').click(function() {
-    //         let name = $(this).attr('data-name')
-    //         $('#modal-identifier').html(`${name} ${remark}`)
-    //         $('.modal-msg').html(msg)
-    //         $('#archive-modal').modal('toggle')
-    //     })
-    // }
+    /** Shows all curriculum cards with the add button */
+    function showAllCurriculum() {
+        spinner.show()
+        $('.card').each(function() {
+            $(this).show()
+        })
+        noResultMsg.addClass('d-none') // hide 'No result' message
+        spinner.fadeOut()
+    }
+
+    /** Shows only the matching cards with the keyword */
+    function showResults(results) {
+        var len = results.length
+        var cards = $('.card')
+        if (len === curriculumList.length) return showAllCurriculum()
+
+        if (len > 0) {
+            noResultMsg.addClass('d-none')
+            cards.each(function() {
+                var card = $(this)
+                if (results.includes(card.attr('data-id'))) card.show()
+                else card.hide()
+            })
+            return
+        }
+
+        // no results found at this point
+        cards.each(function() {
+            $(this).hide()
+            noResultMsg.removeClass('d-none')
+        })
+    }
 
     $(document).ready(function() {
         spinner.fadeOut("slow")
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#curriculum').addClass('active-sub')
-
-        /** Shows all curriculum cards with the add button */
-        function showAllCurriculum() {
-            spinner.show()
-            cards.each(function() {
-                $(this).show()
-            })
-            noResultMsg.addClass('d-none') // hide 'No result' message
-            spinner.fadeOut()
-        }
-
-        /** Shows only the matching cards with the keyword */
-        function showResults(results) {
-            var len = results.length
-
-            if (len === curriculumList.length) return showAllCurriculum()
-
-            if (len > 0) {
-                noResultMsg.addClass('d-none')
-                cards.each(function() {
-                    var card = $(this)
-                    if (results.includes(card.attr('data-id'))) card.show()
-                    else card.hide()
-                })
-                return
-            }
-
-            // no results found at this point
-            cards.each(function() {
-                $(this).hide()
-                noResultMsg.removeClass('d-none')
-            })
-        }
-
-        /** Executes when the clear button of the search input is clicked */
-        document.getElementById('search-input').addEventListener("search", function(event) {
-            if (searchInput.value.length == 0) showAllCurriculum()
-        });
-
-        searchInput.keyup(function(event) {
-            spinner.show()
-            clearTimeout(timeout) // resets the timer
-            timeout = setTimeout(() => { // executes the function after the specified milliseconds
-                var keywords = $(this).val().trim().toLowerCase()
-                let filterCurriculum = (curriculum) => { // returns the curriculum info that contain the keyword
-                    return (curriculum.code.toLowerCase().includes(keywords) || curriculum.description.toLowerCase().includes(keywords) || curriculum.title.toLowerCase().includes(keywords))
-                }
-                var results = curriculumList.filter(filterCurriculum)
-
-                showResults(results.map((element) => { // map function returns an array containing the specified component of the element
-                    return element.code
-                }))
-                spinner.fadeOut()
-            }, 500)
-        })
-
-        $('.add-curriculum').click(() => $('#add-curr-modal').modal('toggle'))
-
-        /*** Add new curriculum information through AJAX */
+    
         $('#curriculum-form').submit(function(event) {
             event.preventDefault()
-            var formData = $(this).serializeArray()
-            var currCode = formData[0].value.trim()
-            var currName = formData[1].value.trim()
-            var currDesc = formData[2].value.trim()
-            formData.push({
-                'name': 'add_curriculum'
+            spinner.show()
+            var form = $(this)
+            var formData = form.serialize()
+            $.post("action.php", formData, function(data) {
+                form.trigger('reset')
+                $('#add-curr-modal').modal('hide')
+                reloadCurriculum()
+            }).fail(function () {
+
             })
-            var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
-            // if (currCode.length == 0) showUniqueErrorMsg()
+            /** Example of ajax */
+            // $.ajax({
+            //     url:"action.php",
+            //     method:"POST",
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+            //     success: function(data){				
+            //         $(this).trigger('reset')
+            //         $('#add-curr-modal').modal('hide')		
+            //     },
+            //     error: function() {
+            //         alert('error')
+            //     }
 
-            // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
-            // else {
-
-            var processError = (error) => {
-                switch (error) {
-                    case 'codeError':
-                        showUniqueErrorMsg()
-                        break;
-                    case 'undefinedName':
-                        $('.name-error-msg').removeClass('invisible')
-                        break;
-                }
-            }
-            $.post('/src/add.php', formData, function(data) {
-                // success
-            }).fail(function(xhr, textStatus, error) {
-                let responseText = JSON.parse(xhr.responseText)
-                responseText.error.forEach(processError)
-                // if (responseText.error === 'codeExist') showUniqueErrorMsg()
-            })
-            // }
+            // })
         })
 
-        /*** Reset curriculum form and hide error messages */
-        $(".close").click(() => {
-            $('#curriculum-form').trigger('reset')              // reset form
-            $("[class*='error-msg']").addClass('invisible')     // hide error messages
-        })
-
-
-        $('.view-archive').click(() => $('#view-arch-curr-modal').modal('toggle'))
-        // initializeArchiveModal('Curriculum', 'Archiving this curriculum will also archive all tracks, programs, subjects, and student grades under this curriculum.')
-        $('.archive-btn').click(function() {
-            let name = $(this).attr('data-name')
-            $('#modal-identifier').html(`${name} Curriculum`)
-            $('.modal-msg').html('Archiving this curriculum will also archive all programs/strands, subjects, and student grades under this curriculum.')
-            $('#archive-modal').modal('toggle')
-        })
+         
     })
+
+    /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
+
+    $(document).on('search', '#search-input', function () {
+        if (searchInput.val().length == 0) showAllCurriculum()
+    })
+
+    $(document).on('keyup', '#search-input', function() {
+        spinner.show()
+        clearTimeout(timeout) // resets the timer
+        timeout = setTimeout(() => { // executes the function after the specified milliseconds
+            var keywords = $('#search-input').val().trim().toLowerCase()
+            let filterCurriculum = (curriculum) => { // returns the curriculum info that contain the keyword
+                return (curriculum.cur_code.toLowerCase().includes(keywords) || curriculum.cur_desc.toLowerCase().includes(keywords) || curriculum.cur_name.toLowerCase().includes(keywords))
+            }
+            var results = curriculumList.filter(filterCurriculum)
+            showResults(results.map((element) => { // map function returns an array containing the specified component of the element
+                return element.cur_code
+            }))
+            spinner.fadeOut()
+        }, 500)
+    })
+
+    $(document).on('click', '.view-archive', () => $('#view-arch-curr-modal').modal('toggle'))
+
+    /*** Add Modal Section */
+    $(document).on('click', '.add-curriculum', () => $('#add-curr-modal').modal('toggle'))
+
+    /*** Modal Options */
+    $(document).on('click', '.archive-btn', function() {
+        let name = $(this).attr('data-name')
+        $('#modal-identifier').html(`${name} Curriculum`)
+        $('.modal-msg').html('Archiving this curriculum will also archive all programs/strands, subjects, and student grades under this curriculum.')
+        $('#archive-modal').modal('toggle')
+    })
+
+    $(document).on('click', '.delete', function() {
+        spinner.show()
+        var code = $(this).attr('id')
+        var action = "deleteCurriculum"
+
+        if(confirm("Are you sure you want to delete this Curriculum?")) {
+            $.post("action.php", {code, action}, function(data) {					
+                reloadCurriculum()
+            })
+        } else {
+            return false
+        }
+        spinner.fadeOut()
+    })
+
+    /*** Footer modal buttons */
+    /*** Reset curriculum form and hide error messages */
+    $(document).on('click', ".close", () => {
+        $('#curriculum-form').trigger('reset')              // reset form
+        $("[class*='error-msg']").addClass('invisible')     // hide error messages
+    })
+
+/*** Add new curriculum information through AJAX */
+// $('#curriculum-form').submit(function(event) {
+//     event.preventDefault()
+//     spinner.show()
+//     var element = $(this)
+//     var formData = element.serializeArray()
+//     var currCode = formData[0].value.trim()
+//     var currName = formData[1].value.trim()
+//     var currDesc = formData[2].value.trim()
+//     var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
+
+//     // if (currCode.length == 0) showUniqueErrorMsg()
+
+//     // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
+//     // else {
+
+//     $.post('../src/admin/add.php', formData, function(data) {
+//         // success
+//         element.closest('.modal').modal('toggle')
+//         location.reload()
+//     }).fail(function(xhr, textStatus, error) {
+//         let responseText = JSON.parse(xhr.responseText)
+//         responseText.error.forEach(processError)
+//     })
+// })
 </script>
 
 </html>

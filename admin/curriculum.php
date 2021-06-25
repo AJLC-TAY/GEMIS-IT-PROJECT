@@ -1,6 +1,6 @@
-<?php include_once("../src/head.html"); ?>
+<?php include_once ("../inc/head.html"); ?>
 <title>Curriculum | GEMIS</title>
-<link href='/node_modules/bootstrap-table/dist/bootstrap-table.min.css' rel='stylesheet'>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
 
@@ -11,7 +11,7 @@
 <body>
 
     <section id="container">
-        <?php include_once ('sidebar.html'); ?>
+        <?php include_once ('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -40,7 +40,7 @@
                                     <label>Curriculum Name</label>
                                     <input type="text" name="name" disabled required>
                                     <label>Description</label>
-                                    <input type="text" name="desc" disabled>
+                                    <input name="desc" disabled></input>
                                     <button id="edit-btn" class="btn btn-secondary">Edit</button>
                                     <button id="save-btn" class="btn btn-success" disabled>Save</button>
                                 </div>
@@ -59,8 +59,8 @@
         
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="right" data-field='code'>Code</th>
-                                            <th scope='col' data-width="600" data-sortable="true" data-field="name">Track Name</th>
+                                            <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
+                                            <th scope='col' data-width="600" data-sortable="true" data-field="prog_name">Program/Strand Name</th>
                                             <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                     </thead>
@@ -71,7 +71,7 @@
                 </div>
                 <!--main content end-->
                 <!--footer start-->
-                <?php include_once ("footer.html");?>
+                <?php include_once ("../inc/footer.html");?>
                 <!--footer end-->
             </section>
         </section>
@@ -95,7 +95,7 @@
                             <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo($curriculum_code);?>" readonly>
+                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code);?>" readonly>
                         </div>
                     </form>
                 </div>
@@ -108,8 +108,8 @@
     </div>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="/node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
-<script src="/node_modules/bootstrap-table/dist/locale/bootstrap-table-en-US.min.js"></script>
+<script src="../assets/js/bootstrap-table.min.js"></script>
+<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
     var $table
     var code = 'k12acad'
@@ -122,8 +122,9 @@
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#curriculum').addClass('active-sub')
+
         var $table = $('#table').bootstrapTable({
-            "url": `/src/getTracks.php?code=${code}`, // k12acad
+            "url": `getAction.php?code=${code}&data=program`,
             "method": 'GET',
             // "search": true,
             // "searchSelector": '#search-curr',
