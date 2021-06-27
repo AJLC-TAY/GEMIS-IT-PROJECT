@@ -1,7 +1,7 @@
 <?php
     // session_start();
     require('config.php');
-    require('dataclasses.php');
+    require('Dataclasses.php');
 
     class Administration extends Dbconfig {
         protected $hostName;
@@ -86,9 +86,21 @@
             $result = mysqli_query($this->dbConnect, $query);
             $strands = array();
             while ($row = mysqli_fetch_assoc($result)) {
-                $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
+                $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['prog_name']);
             }
             echo json_encode($strands);
+        }
+
+        
+        public function getSubjects() {
+            // $code = $_GET['code'];
+            // $query = "SELECT * FROM program WHERE curriculum_curr_code='$code'";
+            // $result = mysqli_query($this->dbConnect, $query);
+            // $strands = array();
+            // while ($row = mysqli_fetch_assoc($result)) {
+            //     $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['prog_name']);
+            // }
+            // echo json_encode($strands);
         }
     }
 ?>
