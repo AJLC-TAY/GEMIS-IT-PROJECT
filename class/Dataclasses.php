@@ -67,7 +67,7 @@
         }
 
         public function get_prog_desc() {
-            return $this->prog_des;
+            return $this->prog_desc;
         }
 
         public function jsonSerialize() {
@@ -488,8 +488,8 @@
     }
     
     // class Subject extends Faculty { private $sub_code; }
-    class Section extends Faculty { private $section_code; }
-    class ClassGrade extends SubjectClass { private $grade_id; }
-    class GradeReport extends ClassGrade { private $report_id; }
+    // class Section extends Faculty { private $section_code; }
+    // class ClassGrade extends SubjectClass { private $grade_id; }
+    // class GradeReport extends ClassGrade { private $report_id; }
 
 ?>

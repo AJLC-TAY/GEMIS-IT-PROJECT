@@ -1,50 +1,8 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Curriculum Page | GEMIS</title>
+<link rel="stylesheet" href="../css/general.css"></link>
 </head>
 
-<style>
-    .card {
-        width: 275px;
-        height: 250px;
-    }
-
-    .curriculum-con {
-        height: 80vh;
-    }
-
-    .kebab {
-        width: 43px;
-    }
-
-    .kebab::before {
-        content: url('../assets/kebab.svg');
-    }
-
-    .kebab:focus {
-        background-color: #DCDCDC;
-        box-shadow: none;
-    }
-
-    .spinner-border,
-    [class*='-toast'] {
-        position: fixed;
-        z-index: 99;
-        overflow: show;
-        margin: auto;
-    }
-
-    .spinner-border {
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    [class*='-toast'] {
-        right: 0.5in;
-        bottom: 0.5in;
-    }
-</style>
 
 <body>
     <?php include('../class/Administration.php'); 
@@ -83,21 +41,24 @@
                             <div class="curriculum-con d-flex flex-wrap container">
                                 <?php $curriculumList = $admin->listCurriculum();
                                 foreach ($curriculumList as  $curr) {
-                                    echo "<div data-id='" .  $curr->get_cur_code() . "' class='card shadow-sm p-0'>
+                                    $code = $curr->get_cur_code();
+                                    $name = $curr->get_cur_name();
+                                    $desc = $curr->get_cur_desc();
+                                    echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
                                             <div class='card-body'>
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='curriculum.php?id=" .   $curr->get_cur_code() . "'>Edit</a></li>
-                                                        <li><button data-name='" .  $curr->get_cur_name() ."' class='archive-btn dropdown-item'>Archive</button></li>
-                                                        <li><button class='delete dropdown-item' id='" .  $curr->get_cur_code() . "'>Delete</button></li>
+                                                        <li><a class='dropdown-item' href='curriculum.php?id=" .   $code . "'>Edit</a></li>
+                                                        <li><button data-name='" .  $name ."' class='archive-btn dropdown-item'>Archive</button></li>
+                                                        <li><button class='delete dropdown-item' id='" .  $code . "'>Delete</button></li>
                                                     </ul>
                                                 </div>
-                                                <h4>". $curr->get_cur_name() ." </h4>
-                                                <p> ". $curr->get_cur_desc() ."</p>
+                                                <h4>". $name ." </h4>
+                                                <p> ". $desc ."</p>
                                             </div>
                                             <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='curriculum.php?id=" .  $curr->get_cur_code() . "'>View</a>
+                                                <a role='button' class='btn' href='curriculum.php?id=" .  $code . "'>View</a>
                                             </div>
                                         </div>";
                                 }

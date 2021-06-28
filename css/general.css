@@ -1,0 +1,41 @@
+.card {
+    width: 275px;
+    height: 250px;
+}
+
+.curriculum-con {
+    height: 80vh;
+}
+
+.kebab {
+    width: 43px;
+}
+
+.kebab::before {
+    content: url('../assets/kebab.svg');
+}
+
+.kebab:focus {
+    background-color: #DCDCDC;
+    box-shadow: none;
+}
+
+.spinner-border,
+[class*='-toast'] {
+    position: fixed;
+    z-index: 99;
+    overflow: show;
+    margin: auto;
+}
+
+.spinner-border {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+[class*='-toast'] {
+    right: 0.5in;
+    bottom: 0.5in;
+}
