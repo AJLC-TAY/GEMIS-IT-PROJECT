@@ -1,7 +1,7 @@
 <?php
     // session_start();
     require('config.php');
-    require('dataclasses.php');
+    require('Dataclasses.php');
 
     class Administration extends Dbconfig {
         protected $hostName;
@@ -19,7 +19,7 @@
                 $this -> dbName = $database -> dbName;
 
                 $conn = new mysqli($this-> hostName, $this-> userName, $this-> password, $this->dbName);
-                if($conn->connect_error){
+                if($conn->connect_error) {
                     die("Error failed to connect to MySQL: " . $conn->connect_error);
                 } else {
                     $this->dbConnect = $conn;
@@ -30,7 +30,7 @@
         private function getData($sqlQuery) {
             $result = mysqli_query($this->dbConnect, $sqlQuery);
             if(!$result){
-                die('Error in query: '. mysqli_error());
+                die('Error in query: ' . mysqli_error());
             }
             $data = array();
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
