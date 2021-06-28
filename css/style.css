@@ -209,6 +209,17 @@ a.logo span {
     color: #5dbb63;
 }
 
+.form-control {
+    margin-bottom: .15in;
+}
+
+.form-select {
+    margin-bottom: .15in;
+}
+
+.breadcrumb {
+    margin-top: .25in;
+}
 
 /*top menu*/
 
