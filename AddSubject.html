@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCNHS GEMIS</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="lib/bootstrap/css/bootstrap3.min.css" rel="stylesheet"> -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- <link href="assets/css/style-responsive.css" rel="stylesheet"> -->
+</head>
+
+<body>
+    <section id="container">
+        <!--TOP BAR CONTENT & NOTIFICATIONS-->
+        <!--header start-->
+        <header class="header black-bg">
+            <div class="sidebar-toggle-box">
+                <div class="fa fa-bars tooltips" data-placement="right"></div>
+            </div>
+            <!--logo start-->
+            <a href="index.html" class="logo"><b>PCNHS<span> GEMIS</span></b></a>
+            <!--logo end-->
+            <div class="top-menu">
+                <ul class="nav pull-right top-menu">
+                    <li>
+                        <h5 class="topbar">Date</h5>
+                    </li>
+                    <li><a class="topbar" href="">Login as Admin</a></li>
+                    <li><a class="logout" href="">Sign out</a></li>
+                </ul>
+            </div>
+        </header>
+        <!--header end-->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <h5 class="centered">SY 2021-2022</h5>
+                    <li class="mt">
+                        <a href="">
+                            <i class="fa fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-user"></i>
+                            <span>Faculty</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-user"></i>
+                            <span>Student</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a class="active" href="javascript:;">
+                            <i class="fa fa-book"></i>
+                            <span>Curriculum Management</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="">School Year</a></li>
+                            <li><a href="/admin/curriculumlist.php">Curriculum</a></li>
+                            <li><a href="">Program/Strand</a></li>
+                            <li><a href="">Subject</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-tasks"></i>
+                            <span>Enrollment Management</span>
+                        </a>
+                        <ul class="sub">
+                            <li><a href="">Enrollment</a></li>
+                            <li><a href="">Set Up</a></li>
+                            <li><a href="">Section</a></li>
+                        </ul>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;">
+                            <i class="fa fa-th"></i>
+                            <span>Signatory Management</span>
+                        </a>
+                    </li>
+                    <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">CURRICULUM MANAGEMENT</li>
+                    </ol>
+                </nav>
+                <div class="row">
+                    <h1>Add Subject</h1>
+                    <div class="col-8">
+                        <div class="row mt">
+                            <form>
+                                <div class="form-group row">
+
+                                    <label for="subjectCode1" class="col-sm-2 col-form-label">Subject code</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="subjectcode1">
+                                    </div>
+                                    <label for="subjectName1" class="col-sm-2 col-form-label">Subject name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="subjectname1">
+                                    </div>
+                                    <label for="subjectType1" class="col-sm-2 col-form-label">Subject type</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="subjecttype1">
+                                    </div>
+                                    <label for="subjectSemester1" class="col-sm-2 col-form-label">Subject Semester</label>
+                                    <!-- <div class="form-group form-inline">
+                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                                <option selected>Choose...</option>
+                                                <option>1st</option>
+                                                <option>2nd</option>
+                                                <option>Remedial/Summer</option>
+                                        </select>
+                                    </div> -->
+                                    <div class="col-sm-10">
+                                        <select name="semester" class="form-select" id="semester">
+                                            <option selected>-- Select semester --</option>
+                                            <option value="1">1st Semester</option>
+                                            <option value="2">2nd Semester</option>
+                                        </select>
+                                    </div>
+                                    <label for="grade-level" class="col-sm-2 col-form-label">Grade Level</label>
+                                    <div class="col-sm-10">
+                                        <select name="gradeLevel" class="form-select" id="grade-level">
+                                                <option selected>-- Select grade level --</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Radios" id="radios1" value="option1" checked>
+                            <label class="form-check-label" for="humss">
+                                HumSS
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Radios" id="radios2" value="option2">
+                            <label class="form-check-label" for="abm">
+                                ABM
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Radios" id="radios3" value="option2">
+                            <label class="form-check-label" for="electronics">
+                              Electronics
+                           </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Radios" id="radios4" value="option2">
+                            <label class="form-check-label" for="breadpastry">
+                              Bread & Pastry
+                            </label>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="col-6">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Search subject here" aria-label="Search subject here" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">ADD</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Search subject here" aria-label="Search subject here" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">ADD</button>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <div class="col-4">
+                        <input class="btn btn-outline-secondary" type="button" value="Prerequisite | Corequisite Subjects">
+                    </div>
+                    <h3 class="pt-3">Grade 11</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">CODE</th>
+                                <th scope="col">SUBJECT NAME</th>
+                                <th scope="col">TYPE</th>
+                                <th scope="col">PRE</th>
+                                <th scope="col">CO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="text-center">
+                                <th scope="row">OCC</th>
+                                <td>Oral Communication in Context</td>
+                                <td>CORE</td>
+                                <td><input class="form-check-input" type="radio" name="Radios" id="radios5" value="option5"></td>
+                                <td><input class="form-check-input" type="radio" name="Radios" id="radios6" value="option6"></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--main content end-->
+                <!--footer start-->
+                <footer class="site-footer">
+                    <div class="text-center">
+                        <p>
+                            &copy; Copyrights <strong>incognito</strong>. All Rights Reserved
+                        </p>
+                    </div>
+                </footer>
+                <!--footer end-->
+            </section>
+            <!-- js placed at the end of the document so the pages load faster -->
+            <script src="assets/js/jquery.min.js"></script>
+            <script src="assets/js/bootstrap.bundle.min.js"></script>
+            <script src="assets/js/jquery.scrollTo.min.js"></script>
+            <script src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+            <!--common script for all pages-->
+            <script src="js/common-scripts.js"></script>
+        </section>
+</body>
+
+</html>
