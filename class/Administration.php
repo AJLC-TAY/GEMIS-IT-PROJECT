@@ -48,7 +48,7 @@
             $curriculumList = array();
 
             while ($row = mysqli_fetch_assoc($result)) {
-                $curriculum = new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
+                $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
                 $curriculum->add_cur_desc($row['curr_desc']);
                 $curriculumList[] = $curriculum;
             }
@@ -57,6 +57,17 @@
 
         public function listCurriculumJSON() {
             echo json_encode($this->listCurriculum());
+        }
+
+        /** Get curriculum object from a specified curriculum code */
+        public function getCurriculum() {
+            $code = $_GET['code'];
+            $query = "SELECT * FROM curriculum WHERE curr_code='$code'";
+            $result = mysqli_query($this->dbConnect, $query);
+            $row = mysqli_fetch_assoc($result);
+            $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
+            $curriculum->add_cur_desc($row['curr_desc']);
+            return $curriculum;
         }
 
         /** Adds a new curriculum */
@@ -80,6 +91,21 @@
             mysqli_query($this->dbConnect, $query);
         }
 
+        public function updateCurriculum() {
+            $code = $_POST['code'];
+            $old_code = $_POST['current_code'];
+            $name = $_POST['name'];
+            $description = $_POST['curriculum-desc'];
+            
+            // $updateQuery = "UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE=?";//kasama ata ung where statement para alam kong anong curr and iaupdate?
+            // $stmt = mysqli_prepare($this->dbConnect, $updateQuery);
+            // mysqli_stmt_bind_param($stmt, 'ssss', $code, $name, $description, $old_code);
+            // mysqli_stmt_execute($stmt);
+            $updateQuery = "UPDATE curriculum SET curr_code='".$code."', curr_name='".$name."', curr_desc='".$description."' WHERE curr_code = '".$old_code."'";
+			mysqli_query($this->dbConnect, $updateQuery);
+        }
+
+        /*** Program Methods */
         public function getPrograms() {
             $code = $_GET['code'];
             $query = "SELECT * FROM program WHERE curriculum_curr_code='$code'";
@@ -91,16 +117,91 @@
             echo json_encode($strands);
         }
 
-        
-        public function getSubjects() {
-            // $code = $_GET['code'];
-            // $query = "SELECT * FROM program WHERE curriculum_curr_code='$code'";
-            // $result = mysqli_query($this->dbConnect, $query);
-            // $strands = array();
-            // while ($row = mysqli_fetch_assoc($result)) {
-            //     $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['prog_name']);
-            // }
-            // echo json_encode($strands);
+        public function getProgramsJSON() {
+            echo json_encode($this->getPrograms());
         }
+
+        /** Adds a new program */
+        public function addProgram() {
+            $code = $_POST['code'];
+            $currCode = $_POST['curr-code'];
+            $description = $_POST['program-desc'];
+            // start of validation
+
+            // end of validation
+
+            $query = "INSERT INTO program VALUES (?, ?, ?)";
+            $stmt = mysqli_prepare($this->dbConnect, $query);
+            mysqli_stmt_bind_param($stmt, 'sss', $code, $currCode, $description);
+            mysqli_stmt_execute($stmt);
+        }
+
+        public function deleteProgram() {
+            $code = $_POST['code'];
+            $query = "DELETE FROM program WHERE prog_code='$code'";
+            mysqli_query($this->dbConnect, $query);
+        }
+
+        public function updateProgram() {
+            $code = $_POST['code'];
+            $currCode = $_GET['curr-code']; //uneditable yung curr_code here noh?
+            $prog_description = $_POST['program-desc']; 
+
+            //$updateQuery = "UPDATE program SET prog_code = '$code', description = '$description' WHERE prog_code = '$code'";
+
+            // $updateQuery = "UPDATE ".$this->program." 
+            // SET prog_code = '".$_POST["code"]."', description = '".$_POST["description"]."'
+            // WHERE prog_code ='".$_POST["code"]."'";
+            // $isUpdated = mysqli_query($this->dbConnect, $updateQuery);
+            
+            //if($_POST['code']) {	}	 
+        }
+
+                /*** Subject Methods */
+                // public function getPrograms() {
+                //     $code = $_GET['code'];
+                //     $query = "SELECT * FROM program WHERE curriculum_curr_code='$code'";
+                //     $result = mysqli_query($this->dbConnect, $query);
+                //     $strands = array();
+                //     while ($row = mysqli_fetch_assoc($result)) {
+                //         $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['prog_name']);
+                //     }
+                //     echo json_encode($strands);
+                // }
+        
+                // public function getProgramsJSON() {
+                //     echo json_encode($this->getPrograms());
+                // }
+        
+                // /** Adds a new program */
+                // public function addProgram() {
+                //     $code = $_POST['code'];
+                //     $currCode = $_POST['curr-code'];
+                //     $description = $_POST['program-desc'];
+                //     // start of validation
+        
+                //     // end of validation
+        
+                //     $query = "INSERT INTO program VALUES (?, ?, ?)";
+                //     $stmt = mysqli_prepare($this->dbConnect, $query);
+                //     mysqli_stmt_bind_param($stmt, 'sss', $code, $currCode, $description);
+                //     mysqli_stmt_execute($stmt);
+                // }
+        
+                // public function deleteProgram() {
+                //     $code = $_POST['code'];
+                //     $query = "DELETE FROM program WHERE prog_code='$code'";
+                //     mysqli_query($this->dbConnect, $query);
+                // }
+        
+                // public function updateProgram() {
+                //     //if($_POST['subjectid']) {	
+                //         $updateQuery = "UPDATE ".$this->subjectsTable." 
+                //         SET subject = '".$_POST["subject"]."', type = '".$_POST["s_type"]."', code = '".$_POST["code"]."'
+                //         WHERE subject_id ='".$_POST["subjectid"]."'";
+                //         $isUpdated = mysqli_query($this->dbConnect, $updateQuery);		
+                //     //}	
+               // }
+                   
     }
 ?>

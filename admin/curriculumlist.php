@@ -58,7 +58,11 @@
                                                 <p> ". $desc ."</p>
                                             </div>
                                             <div class='modal-footer p-0'>
+<<<<<<< HEAD
+                                                <a role='button' class='btn' href='curriculum.php?code=" .  $curr->get_cur_code() . ">View</a>
+=======
                                                 <a role='button' class='btn' href='curriculum.php?id=" .  $code . "'>View</a>
+>>>>>>> 218a1f17ac2649cdffe59c6bdbb9c04fbdcdef3b
                                             </div>
                                         </div>";
                                 }

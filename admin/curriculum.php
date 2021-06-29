@@ -4,8 +4,13 @@
 </head>
 
 
-<?php $curriculum = 'K12 Academic';
-      $curriculum_code = 'K12ACAD';
+<?php 
+    include('../class/Administration.php');
+    $admin = new Administration();
+    $curriculum = $admin->getCurriculum(); // define var
+    $curr_name = $curriculum->get_cur_name();
+    $curr_code = $curriculum->get_cur_code();
+    $curr_desc = $curriculum->get_cur_desc();
 ?>
 
 <body>
@@ -25,24 +30,26 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                                         <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $curriculum; ?></li>
+                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                     </ol>
                                 </nav>
-                                <h2><?php echo $curriculum; ?> Curriculum</h2>
+                                <h2><?php echo $curr_name; ?> Curriculum</h2>
                             </header>
 
                             <!-- Form -->
-                            <form>
+                            <form action="action.php" method="POST">
                                 <div class="container">
                                     <h4>Information</h4>
                                     <label>Curriculum Code</label>
-                                    <input type="text" name="code" disabled required>
+                                    <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
+                                    <input type="text" name="code" value="<?php echo $curr_code; ?>" disabled required> <!--call var -->
                                     <label>Curriculum Name</label>
-                                    <input type="text" name="name" disabled required>
+                                    <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required>
                                     <label>Description</label>
-                                    <input name="desc" disabled></input>
+                                    <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled>
                                     <button id="edit-btn" class="btn btn-secondary">Edit</button>
-                                    <button id="save-btn" class="btn btn-success" disabled>Save</button>
+                                    <input type="hidden" name="action" value="updateCurriculum">
+                                    <input type="submit" id="save-btn" class="btn btn-success" value='Submit'  disabled>
                                 </div>
                             </form>
                             <!-- Track table -->
@@ -147,46 +154,15 @@
             })
         })
 
-        $('#save-btn').click(function() {
-            $(this).prop("disabled", true)
-            $("#edit-btn").prop("disabled", false)
-            $(this).closest('form').find('input').each(function() {
-                $(this).prop('disabled', true)
-            })
-        })
+        // $('#save-btn').click(function() {
+        //     $(this).prop("disabled", true)
+        //     $("#edit-btn").prop("disabled", false)
+        //     $(this).closest('form').find('input').each(function() {
+        //         $(this).prop('disabled', true)
+        //     })
+        // })
 
 
-    })
-
-    $('.add-prog').click(() => $('#add-prog-modal').modal('toggle'))
-    /*** Add new program information through AJAX */
-    $('#prog-form').submit(function(event) {
-        event.preventDefault()
-        var progFormData = $(this).serializeArray()
-        var progCode = progFormData[0].value.trim()
-        var progName = progFormData[1].value.trim()
-        var progCurr = progFormData[2].value.trim()
-        progFormData.push({
-            'name': 'add_prog'
-        })
-        var hideUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
-
-        if (progCode.length == 0) hideUniqueErrorMsg()
-
-        if (progName.length == 0) $('.name-error-msg').removeClass('invisible')
-        else {
-            $.post('../src/addProg.php', progFormData, function(data) {
-                // success
-            }).fail(function() {
-                hideUniqueErrorMsg()
-            })
-        }
-    })
-
-    /*** Reset program form and hide error messages */
-    $(".close").click(() => {
-        $('#prog-form').trigger('reset')
-        $("[class*='error-msg']").addClass('invisible')
     })
 </script>
 
