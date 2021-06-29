@@ -49,7 +49,7 @@
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='curriculum.php?id=" .   $code . "'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='curriculum.php?code=" .   $code . "&state=edit'>Edit</a></li>
                                                         <li><button data-name='" .  $name ."' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='" .  $code . "'>Delete</button></li>
                                                     </ul>
@@ -58,11 +58,7 @@
                                                 <p> ". $desc ."</p>
                                             </div>
                                             <div class='modal-footer p-0'>
-<<<<<<< HEAD
-                                                <a role='button' class='btn' href='curriculum.php?code=" .  $curr->get_cur_code() . ">View</a>
-=======
-                                                <a role='button' class='btn' href='curriculum.php?id=" .  $code . "'>View</a>
->>>>>>> 218a1f17ac2649cdffe59c6bdbb9c04fbdcdef3b
+                                                <a role='button' class='btn' href='curriculum.php?code=" .  $code . "'>View</a>
                                             </div>
                                         </div>";
                                 }

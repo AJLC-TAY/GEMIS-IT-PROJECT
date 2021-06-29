@@ -103,6 +103,7 @@
             // mysqli_stmt_execute($stmt);
             $updateQuery = "UPDATE curriculum SET curr_code='".$code."', curr_name='".$name."', curr_desc='".$description."' WHERE curr_code = '".$old_code."'";
 			mysqli_query($this->dbConnect, $updateQuery);
+            header("Location: curriculum.php?code=$code");
         }
 
         /*** Program Methods */

@@ -7,16 +7,12 @@
 <?php 
     include('../class/Administration.php');
     $admin = new Administration();
-    $curriculum = $admin->getCurriculum(); // define var
-    $curr_name = $curriculum->get_cur_name();
-    $curr_code = $curriculum->get_cur_code();
-    $curr_desc = $curriculum->get_cur_desc();
-    $state = "disabled";
-    $edit_btn_state = "";
-    if(isset($_GET['state']) && $_GET['state'] == 'edit') {
-        $state = "";
-        $edit_btn_state = "disabled";
-    }
+    // $program = $admin->getProgram(); // define var
+    // $prog_name = $program->get_prog_name();
+    // $prog_code = $program->get_prog_code();
+    
+    $prog_code = 'ABM';
+    $prog_name = 'Acountancy and Business Management';
 ?>
 
 <body>
@@ -35,29 +31,25 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
+                                        <li class="breadcrumb-item"><a href="programlist.php">Programs</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $prog_name; ?></li>
                                     </ol>
                                 </nav>
-                                <h2><?php echo $curr_name; ?> Curriculum</h2>
+                                <h2><?php echo "$prog_code"." | "." $prog_name"; ?></h2>
                             </header>
 
                             <!-- Form -->
                             <form action="action.php" method="POST">
                                 <div class="container">
                                     <h4>Information</h4>
-                                    <label>Curriculum Code</label>
-                                    <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                    <?php echo "<input class='form-input' type='text' name='code' value='$curr_code' $state required>"; ?> <!--call var -->
-                                    <label>Curriculum Name</label>
-                                    <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
-                                    <?php echo "<input class='form-input' type='text' name='name' value='$curr_name' $state required>"; ?> 
-                                    <label>Description</label>
-                                    <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
-                                    <?php echo "<textarea  class='form-input' name='curriculum-desc' $state>".$curr_desc."</textarea>"; ?> 
-                                    <?php echo "<button id='edit-btn' class='btn btn-secondary' $edit_btn_state>Edit</button>"; ?>
-                                    <input type="hidden" name="action" value="updateCurriculum">
-                                    <?php echo "<input type='submit' id='save-btn' class='btn btn-success' value='Save' $state>"; ?>
+                                    <label>Program Code</label>
+                                    <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
+                                    <input type="text" name="code" value="<?php echo $prog_code; ?>" disabled required> <!--call var -->
+                                    <label>Program Name</label>
+                                    <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required>
+                                    <button id="edit-btn" class="btn btn-secondary">Edit</button>
+                                    <input type="hidden" name="action" value="updateProgram">
+                                    <input type="submit" id="save-btn" class="btn btn-success" value='Submit'  disabled>
                                 </div>
                             </form>
                             <!-- Track table -->
@@ -65,17 +57,17 @@
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>
                                         <div class="d-flex justify-content-between mb-3">
-                                            <h4>Strand List</h4>
+                                            <h4>Subjects</h4>
                                             <div>
-                                                <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                                <button class="btn btn-secondary" title='Archive subject'>Archive</button>
+                                                <button id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</button>
                                             </div>
                                         </div>
         
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
-                                            <th scope='col' data-width="600" data-sortable="true" data-field="prog_name">Program/Strand Name</th>
+                                            <th scope='col' data-width="100" data-align="right" data-field='sub_code'>Code</th>
+                                            <th scope='col' data-width="600" data-sortable="true" data-field="sub_name">Subject Name</th>
                                             <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                     </thead>
@@ -90,18 +82,18 @@
                 <!--footer end-->
             </section>
         </section>
-    <!-- ADD PROGRAM MODAL -->
-    <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+    <!-- ADD SUBJECT MODAL -->
+    <!-- <div class="modal" id="add-subject-modal" tabindex="-1" aria-labelledby="modal addSubject" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">Add Strand/Program</h4>
+                        <h4 class="mb-0">Add Subject</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="prog-form" action="">
+                    <form id="subject-form" action="">
                         <div class="form-group">
                             <label for="prog-code">Strand Code</label>
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
@@ -120,7 +112,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
@@ -136,10 +128,10 @@
     $(document).ready(function() {
         /** Display active menu item */
         $('#curr-management a:first').click()
-        $('#curriculum').addClass('active-sub')
+        $('#program').addClass('active-sub')
 
         var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?code=${code}&data=program`,
+            "url": `getAction.php?code=${code}&data=subjects`,
             "method": 'GET',
             // "search": true,
             // "searchSelector": '#search-curr',
@@ -155,11 +147,9 @@
         })
 
         $('#edit-btn').click(function() {
-            let editBtn = $(this)
-            let saveBtn = $("#save-btn")
-            editBtn.prop("disabled", true)
-            saveBtn.prop("disabled", false)
-            editBtn.closest('form').find('.form-input').each(function() {
+            $(this).prop("disabled", true)
+            $("#save-btn").prop("disabled", false)
+            $(this).closest('form').find('input').each(function() {
                 $(this).prop('disabled', false)
             })
         })
@@ -167,7 +157,7 @@
         // $('#save-btn').click(function() {
         //     $(this).prop("disabled", true)
         //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('.form-input').each(function() {
+        //     $(this).closest('form').find('input').each(function() {
         //         $(this).prop('disabled', true)
         //     })
         // })

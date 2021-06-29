@@ -65,7 +65,7 @@
                                                 <p> ". $curr_code ." | ". $code ."</p>
                                             </div>
                                             <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='program.php?id=" .  $code . "'>View</a>
+                                                <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
                                             </div>
                                         </div>";
                                 }
