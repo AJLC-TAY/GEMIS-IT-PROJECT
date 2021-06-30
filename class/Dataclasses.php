@@ -484,8 +484,907 @@
                 'sign_id' => $this->sign_id
             ];
         }
+    }    
     
-    }
+
+
+    // class Address  {
+    //     public $stud_id;
+    //     public $home_no;
+    //     public $street;
+    //     public $barangay;
+    //     public $mun_city;
+    //     public $province;
+    //     public $zip_code;
+
+    //     public function __construct($stud_id,$home_no,$street,$barangay,$mun_city,$province,$zip_code)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //         $this->home_no = $home_no;
+    //         $this->street = $street;
+    //         $this->barangay = $barangay;
+    //         $this->mun_city = $mun_city;
+    //         $this->province = $province;
+    //         $this->zip_code = $zip_code;
+    //     }
+
+    //     //getter functions
+    //     public function get_stud_id()
+    //     {
+    //         $this->stud_id;
+    //     }
+
+    //     public function get_home_no()
+    //     {
+    //         $this->home_no;
+    //     }
+
+    //     public function get_street()
+    //     {
+    //         $this->street;
+    //     }
+
+    //     public function get_barangay()
+    //     {
+    //         $this->barangay;
+    //     }
+
+    //     public function get_mun_city()
+    //     {
+    //         $this->mun_city;
+    //     }
+
+    //     public function get_province()
+    //     {
+    //         $this->province;
+    //     }
+
+    //     public function get_zip_code()
+    //     {
+    //         $this->zip_code;
+    //     }
+
+    //     //setter functions
+    //     public function set_stud_id($stud_id)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //     }
+
+    //     public function set_home_no($home_no)
+    //     {
+    //         $this->home_no = $home_no;
+    //     }
+
+    //     public function set_street($street)
+    //     {
+    //         $this->street = $street;
+    //     }
+
+    //     public function set_barangay($barangay)
+    //     {
+    //         $this->barangay = $barangay;
+    //     }
+
+    //     public function set_mun_city($mun_city)
+    //     {
+    //         $this->mun_city = $mun_city;
+    //     }
+
+    //     public function set_province($province)
+    //     {
+    //         $this->province = $province;
+    //     }
+
+    //     public function set_zip_code($zip_code)
+    //     {
+    //         $this->zip_code = $zip_code;
+    //     }
+
+    //     class GradeReport
+    // {
+    //     public $report_id; // auto-incremented
+    //     public $stud_id;
+    //     public $no_of_absent;
+    //     public $no_of_tardy;
+    //     public $no_of_present;
+    //     public $no_of_days;
+    //     public $general_average;
+
+    //     public function __construct($stud_id,$no_of_absent,$no_of_tardy,$no_of_present,$no_of_days,$general_average)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //         $this->no_of_absent = $no_of_absent;
+    //         $this->no_of_tardy = $no_of_tardy;
+    //         $this->no_of_present = $no_of_present;
+    //         $this->no_of_days = $no_of_days;
+    //         $this->general_average = $general_average;
+    //     }
+
+    //     //getter functions
+    //     public function get_report_id()
+    //     {
+    //         $this->report_id;
+    //     }
+
+    //     public function get_stud_id()
+    //     {
+    //         $this->stud_id;
+    //     }
+
+    //     public function get_no_of_absent()
+    //     {
+    //         $this->no_of_absent;
+    //     }
+
+    //     public function get_no_tardy()
+    //     {
+    //         $this->no_of_tardy;
+    //     }
+
+    //     public function get_no_of_present()
+    //     {
+    //         $this->no_of_present;
+    //     }
+
+    //     public function get_no_of_days()
+    //     {
+    //         $this->get_no_of_days;
+    //     }
+
+    //     public function get_general_average()
+    //     {
+    //         $this->general_average;
+    //     }
+
+    //     //setter functions
+    //     //report_id is auto-incremented
+    //     public function set_stud_id($stud_id)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //     }
+        
+    //     public function set_no_of_absent($no_of_absent)
+    //     {
+    //         $this->no_of_absent = $no_of_absent;
+    //     }
+
+    //     public function set_no_of_tardy($no_of_tardy)
+    //     {
+    //         $this->no_of_tardy = $no_of_tardy;
+    //     }
+
+    //     public function set_no_of_present($no_of_present)
+    //     {
+    //         $this->no_of_present = $no_of_present;
+    //     }
+
+    //     public function set_no_of_days($no_of_days)
+    //     {
+    //         $this->no_of_days = $no_of_days;
+    //     }
+
+    //     public function set_general_average($general_average)
+    //     {
+    //         $this->general_average = $general_average;
+    //     }
+
+    //     class Guardian
+    //     {
+    //         public $stud_id;
+    //         public $first_name;
+    //         public $middle_name;
+    //         public $last_name;
+    //         public $relationship;
+    //         public $cp_no;
+    
+    //         public function __construct($stud_id,$first_name,$middle_name,$last_name,$relationship,$cp_no)
+    //         {
+    //             $this->stud_id = $stud_id;
+    //             $this->first_name = $first_name;
+    //             $this->middle_name = $middle_name;
+    //             $this->last_name = $last_name;
+    //             $this->relationship = $relationship;
+    //             $this->cp_no = $cp_no;
+    //         }
+    
+    //         //getter functions
+    //         public function get_stud_id()
+    //         {
+    //             $this->stud_id;
+    //         }
+    
+    //         public function get_first_name()
+    //         {
+    //             $this->first_name;
+    //         }
+    
+    //         public function get_middle_name()
+    //         {
+    //             $this->middle_name;
+    //         }
+    
+    //         public function get_last_name()
+    //         {
+    //             $this->last_name;
+    //         }
+    
+    //         public function get_relationship()
+    //         {
+    //             $this->relationship;
+    //         }
+    
+    //         public function get_cp_no()
+    //         {
+    //             $this->cp_no;
+    //         }
+    
+    //         //setter functions
+    //         public function set_stud_id($stud_id)
+    //         {
+    //             $this->stud_id = $stud_id;
+    //         }
+    
+    //         public function set_first_name($first_name)
+    //         {
+    //             $this->first_name = $first_name;
+    //         }
+    
+    //         public function set_middle_name($middle_name)
+    //         {
+    //             $this->middle_name = $middle_name;
+    //         }
+    
+    //         public function set_last_name($last_name)
+    //         {
+    //             $this->last_name = $last_name;
+    //         }
+    
+    //         public function set_relationship($relationship)
+    //         {
+    //             $this->relationship = $relationship;
+    //         }
+    
+    //         public function set_cp_no($cp_no)
+    //         {
+    //             $this->cp_no = $cp_no;
+    //         }
+
+    //         class ObservedValues
+    //         {
+    //             public $report_id;
+    //             public $value_name;
+    //             public $bhvr_statement;
+    //             public $marking;
+    //             public $quarter;
+        
+    //             public function __construct($report_id,$value_name,$bhvr_statement,$marking,$quarter)
+    //             {
+    //                 $this->report_id = $report_id;
+    //                 $this->value_name = $value_name;
+    //                 $this->bhvr_statement = $bhvr_statement;
+    //                 $this->marking = $marking;
+    //                 $this->quarter = $quarter;
+    //             }
+        
+    //             //getter functions
+    //             public function get_report_id()
+    //             {
+    //                 $this->report_id;
+    //             }
+        
+    //             public function get_value_name()
+    //             {
+    //                 $this->value_name;
+    //             }
+        
+    //             public function get_bhvr_statement()
+    //             {
+    //                 $this->bhvr_statement;
+    //             }
+        
+    //             public function get_marking()
+    //             {
+    //                 $this->marking;
+    //             }
+        
+    //             public function get_quarter()
+    //             {
+    //                 $this->quarter;
+    //             }
+        
+    //             //setter functions
+    //             public function set_report_id($report_id)
+    //             {
+    //                 $this->report_id = $report_id;
+    //             }
+        
+    //             public function set_value_name($value_name)
+    //             {
+    //                 $this->value_name = $value_name;
+    //             }
+        
+    //             public function set_bhvr_statement($bhvr_statement)
+    //             {
+    //                 $this->bhvr_statement = $bhvr_statement;
+    //             }
+        
+    //             public function set_marking($marking)
+    //             {
+    //                 $this->marking = $marking;
+    //             }
+        
+    //             public function set_quarter($quarter)
+    //             {
+    //                 $this->quarter = $quarter;
+    //             }
+
+    //             class StudentParent
+    // {
+    //     public $stud_id;
+    //     public $first_name;
+    //     public $middle_name;
+    //     public $last_name;
+    //     public $sex;
+    //     public $cp_no;
+    //     public $occupation;
+
+    //     public function __construct($stud_id,$first_name,$middle_name,$last_name,$sex,$cp_no,$occupation)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //         $this->first_name = $first_name;
+    //         $this->middle_name = $middle_name;
+    //         $this->last_name = $last_name;
+    //         $this->sex = $sex;
+    //         $this->cp_no = $cp_no;
+    //         $this->occupation = $occupation;
+    //     }
+
+    //     //getter functions
+    //     public function get_stud_id()
+    //     {
+    //         $this->stud_id;
+    //     }
+
+    //     public function get_first_name()
+    //     {
+    //         $this->first_name;
+    //     }
+
+    //     public function get_middle_name()
+    //     {
+    //         $this->middle_name;
+    //     }
+
+    //     public function get_last_name()
+    //     {
+    //         $this->last_name;
+    //     }
+
+    //     public function get_sex()
+    //     {
+    //         $this->sex;
+    //     }
+
+    //     public function get_cp_no()
+    //     {
+    //         $this->cp_no;
+    //     }
+
+    //     public function get_occupation()
+    //     {
+    //         $this->occupation;
+    //     }
+
+    //     //setter functions
+    //     public function set_stud_id($stud_id)
+    //     {
+    //         $this->stud_id = $stud_id;
+    //     }
+
+    //     public function set_first_name($first_name)
+    //     {
+    //         $this->first_name = $first_name;
+    //     }
+
+    //     public function set_middle_name($middle_name)
+    //     {
+    //         $this->middle_name = $middle_name;
+    //     }
+
+    //     public function set_last_name($last_name)
+    //     {
+    //         $this->last_name = $last_name;
+    //     }
+
+    //     public function set_sex($sex)
+    //     {
+    //         $this->sex = $sex;
+    //     }
+
+    //     public function set_cp_no($cp_no)
+    //     {
+    //         $this->cp_no = $cp_no;
+    //     }
+
+    //     public function set_occupation($occupation)
+    //     {
+    //         $this->occupation = $occupation;
+    //     }
+
+    //     class Promotion 
+    //     {
+    //         public $stud_id;
+    //         public $school_name;
+    //         public $school_id;
+    //         public $balik_aral;
+    //         public $last_grd_lvl_comp;
+    //         public $last_school_yr_comp;
+    //         public $grd_level;
+    //         public $grd_to_enroll;
+    //         public $last_gen_ave;
+    //         public $semester;
+    
+    //         public function __construct($stud_id,$school_name,$school_id,$balik_aral,$last_grd_lvl_comp,$last_school_yr_comp,$grd_level,$grd_to_enroll,$last_gen_ave,$semester)
+    //         {
+    //             $this->stud_id = $stud_id;
+    //             $this->school_name = $school_name;
+    //             $this->school_id = $school_id;
+    //             $this->balik_aral = $balik_aral;
+    //             $this->last_grd_lvl_comp = $last_grd_lvl_comp;
+    //             $this->last_school_yr_comp = $last_school_yr_comp;
+    //             $this->grd_level = $grd_level;
+    //             $this->grd_to_enroll = $grd_to_enroll;
+    //             $this->last_gen_ave = $last_gen_ave;
+    //             $this->semester = $semester;
+    //         }
+    
+    //         //getter functions
+    //         public function get_stud_id()
+    //         {
+    //             $this->stud_id;
+    //         }
+    
+    //         public function get_school_name()
+    //         {
+    //             $this->school_name;
+    //         }
+    
+    //         public function get_school_id()
+    //         {
+    //             $this->school_id;
+    //         }
+    
+    //         public function get_balik_aral()
+    //         {
+    //             $this->balik_aral;
+    //         }
+    
+    //         public function get_last_grd_lvl_comp()
+    //         {
+    //             $this->last_grd_lvl_comp;
+    //         }
+    
+    //         public function get_last_school_yr_comp()
+    //         {
+    //             $this->last_school_yr_comp;
+    //         }
+    
+    //         public function get_grd_level()
+    //         {
+    //             $this->grd_level;
+    //         }
+    
+    //         public function get_grd_to_enroll()
+    //         {
+    //             $this->grd_to_enroll;
+    //         }
+    
+    //         public function get_last_gen_ave()
+    //         {
+    //             $this->last_gen_ave;
+    //         }
+    
+    //         public function get_semester()
+    //         {
+    //             $this->semester;
+    //         }
+    
+    //         //setter functions
+    
+    //         public function set_stud_id($stud_id)
+    //         {
+    //             $this->stud_id = $stud_id;
+    //         }
+    //         public function set_school_name($school_name)
+    //         {
+    //             $this->school_name = $school_name;
+    //         }
+    
+    //         public function set_school_id($school_id)
+    //         {
+    //             $this->school_id = $school_id;
+    //         }
+    
+    //         public function set_balik_aral($balik_aral)
+    //         {
+    //             $this->balik_aral = $balik_aral;
+    //         }
+    
+    //         public function set_last_grd_lvl_comp($last_grd_lvl_comp)
+    //         {
+    //             $this->last_grd_lvl_comp = $last_grd_lvl_comp;
+    //         }
+    
+    //         public function set_last_school_yr_comp($last_school_yr_comp)
+    //         {
+    //             $this->last_school_yr_comp = $last_school_yr_comp; 
+    //         }
+    
+    //         public function set_grd_level($grd_level)
+    //         {
+    //             $this->grd_level = $grd_level;
+    //         }
+            
+    //         public function set_grd_to_enroll($grd_to_enroll)
+    //         {
+    //             $this->grd_to_enroll = $grd_to_enroll;
+    //         }
+    
+    //         public function set_last_gen_ave($last_gen_ave)
+    //         {
+    //             $this->get_last_gen_ave = $last_gen_ave;
+    //         }
+    
+    //         public function set_semester($semester)
+    //         {
+    //             $this->semester;
+    //         }
+
+    //         class Promotion 
+    //         {
+    //             public $stud_id;
+    //             public $school_name;
+    //             public $school_id;
+    //             public $balik_aral;
+    //             public $last_grd_lvl_comp;
+    //             public $last_school_yr_comp;
+    //             public $grd_level;
+    //             public $grd_to_enroll;
+    //             public $last_gen_ave;
+    //             public $semester;
+        
+    //             public function __construct($stud_id,$school_name,$school_id,$balik_aral,$last_grd_lvl_comp,$last_school_yr_comp,$grd_level,$grd_to_enroll,$last_gen_ave,$semester)
+    //             {
+    //                 $this->stud_id = $stud_id;
+    //                 $this->school_name = $school_name;
+    //                 $this->school_id = $school_id;
+    //                 $this->balik_aral = $balik_aral;
+    //                 $this->last_grd_lvl_comp = $last_grd_lvl_comp;
+    //                 $this->last_school_yr_comp = $last_school_yr_comp;
+    //                 $this->grd_level = $grd_level;
+    //                 $this->grd_to_enroll = $grd_to_enroll;
+    //                 $this->last_gen_ave = $last_gen_ave;
+    //                 $this->semester = $semester;
+    //             }
+        
+    //             //getter functions
+    //             public function get_stud_id()
+    //             {
+    //                 $this->stud_id;
+    //             }
+        
+    //             public function get_school_name()
+    //             {
+    //                 $this->school_name;
+    //             }
+        
+    //             public function get_school_id()
+    //             {
+    //                 $this->school_id;
+    //             }
+        
+    //             public function get_balik_aral()
+    //             {
+    //                 $this->balik_aral;
+    //             }
+        
+    //             public function get_last_grd_lvl_comp()
+    //             {
+    //                 $this->last_grd_lvl_comp;
+    //             }
+        
+    //             public function get_last_school_yr_comp()
+    //             {
+    //                 $this->last_school_yr_comp;
+    //             }
+        
+    //             public function get_grd_level()
+    //             {
+    //                 $this->grd_level;
+    //             }
+        
+    //             public function get_grd_to_enroll()
+    //             {
+    //                 $this->grd_to_enroll;
+    //             }
+        
+    //             public function get_last_gen_ave()
+    //             {
+    //                 $this->last_gen_ave;
+    //             }
+        
+    //             public function get_semester()
+    //             {
+    //                 $this->semester;
+    //             }
+        
+    //             //setter functions
+        
+    //             public function set_stud_id($stud_id)
+    //             {
+    //                 $this->stud_id = $stud_id;
+    //             }
+    //             public function set_school_name($school_name)
+    //             {
+    //                 $this->school_name = $school_name;
+    //             }
+        
+    //             public function set_school_id($school_id)
+    //             {
+    //                 $this->school_id = $school_id;
+    //             }
+        
+    //             public function set_balik_aral($balik_aral)
+    //             {
+    //                 $this->balik_aral = $balik_aral;
+    //             }
+        
+    //             public function set_last_grd_lvl_comp($last_grd_lvl_comp)
+    //             {
+    //                 $this->last_grd_lvl_comp = $last_grd_lvl_comp;
+    //             }
+        
+    //             public function set_last_school_yr_comp($last_school_yr_comp)
+    //             {
+    //                 $this->last_school_yr_comp = $last_school_yr_comp; 
+    //             }
+        
+    //             public function set_grd_level($grd_level)
+    //             {
+    //                 $this->grd_level = $grd_level;
+    //             }
+                
+    //             public function set_grd_to_enroll($grd_to_enroll)
+    //             {
+    //                 $this->grd_to_enroll = $grd_to_enroll;
+    //             }
+        
+    //             public function set_last_gen_ave($last_gen_ave)
+    //             {
+    //                 $this->get_last_gen_ave = $last_gen_ave;
+    //             }
+        
+    //             public function set_semester($semester)
+    //             {
+    //                 $this->semester;
+    //             }
+
+    //             class Student //extends User
+    // {
+    //     public $stud_id;
+    //     public $id_no;
+    //     public $lrn;
+    //     public $first_name;
+    //     public $middle_name;
+    //     public $last_name;
+    //     public $ext_name;
+    //     public $sex;
+    //     public $age;
+    //     public $birthdate;
+    //     public $birth_place;
+    //     public $indigenous_group;
+    //     public $mother_tongue;
+    //     public $religion;
+    //     public $cp_no;
+    //     public $psa_birth_cert;
+    //     public $belong_to_ipcc;
+    //     public $id_picture;
+
+    //     public function __construct($id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture)
+    //     {
+    //         $this->id_no = $id_no;
+    //         $this->lrn = $lrn;
+    //         $this->first_name = $first_name;
+    //         $this->middle_name = $middle_name;
+    //         $this->last_name = $last_name;
+    //         $this->ext_name = $ext_name;
+    //         $this->sex = $sex;
+    //         $this->age = $age;
+    //         $this->birthdate = $birthdate;
+    //         $this->birth_place = $birth_place;
+    //         $this->indigenous_group = $indigenous_group;
+    //         $this->mother_tongue = $mother_tongue;
+    //         $this->religion = $religion;
+    //         $this->cp_no = $cp_no;
+    //         $this->psa_birth_cert = $psa_birth_cert;
+    //         $this->belong_to_ipcc = $belong_to_ipcc;
+    //         $this->id_picture = $id_picture;
+    //     }
+
+    //     //getter functions
+    //     public function get_stud_id()
+    //     {
+    //         return $this->stud_id;
+    //     }
+
+    //     public function get_id_no(){ //extended function?
+    //         return $this->id_no;
+    //     }
+
+    //     public function get_lrn(){
+    //         return $this->lrn;
+    //     }
+
+    //     public function get_first_name()
+    //     {
+    //         return $this->first_name;
+    //     }
+
+    //     public function get_middle_name()
+    //     {
+    //         return $this->middle_name;
+    //     }
+
+    //     public function get_last_name()
+    //     {
+    //         return $this->last_name;
+    //     }
+
+    //     public function get_ext_name()
+    //     {
+    //         return $this->ext_name;
+    //     }
+
+    //     public function get_sex()
+    //     {
+    //         return $this->sex;
+    //     }
+
+    //     public function get_age()
+    //     {
+    //         return $this->age;
+    //     }
+
+    //     public function get_birthdate()
+    //     {
+    //         return $this->birthdate;
+    //     }
+
+    //     public function get_birth_place()
+    //     {
+    //         return $this->birth_place;
+    //     }
+
+    //     public function get_indigenous_group()
+    //     {
+    //         return $this->indigenous_group;
+    //     }
+
+    //     public function get_mother_tongue()
+    //     {
+    //         return $this->mother_tongue;
+    //     }
+
+    //     public function get_religion()
+    //     {
+    //         return $this->religion;
+    //     }
+
+    //     public function get_cp_no()
+    //     {
+    //         return $this->cp_no;
+    //     }
+
+    //     public function get_psa_birth_cert()
+    //     {
+    //         return $this->psa_birth_cert;
+    //     }
+
+    //     public function get_belong_to_ipcc()
+    //     {
+    //         return $this->belong_to_ipcc;
+    //     }
+
+    //     public function get_id_picture()
+    //     {
+    //         return $this->id_picture;
+    //     }
+
+    //     //setter function
+    //     //no stud_id, auto-incremented
+
+    //     public function set_lrn($lrn)
+    //     {
+    //         $this->lrn = $lrn;
+    //     }
+
+    //     public function set_first_name($first_name)
+    //     {
+    //         $this->first_name = $first_name;
+    //     }
+
+    //     public function set_middle_name($middle_name)
+    //     {
+    //         $this->middle_name = $middle_name;
+    //     }
+
+    //     public function set_last_name($last_name)
+    //     {
+    //         $this->last_name = $last_name;
+    //     }
+
+    //     public function set_ext_name($ext_name)
+    //     {
+    //         $this->ext_name = $ext_name;
+    //     }
+
+    //     public function set_sex($sex)
+    //     {
+    //         $this->sex = $sex;
+    //     }
+
+    //     public function set_age($age)
+    //     {
+    //         $this->age = $age;
+    //     }
+
+    //     public function set_birthdate($birthdate)
+    //     {
+    //         $this->birthdate = $birthdate;
+    //     }
+
+    //     public function set_birth_place($birth_place)
+    //     {
+    //         $this->birth_place = $birth_place;
+    //     }
+
+    //     public function set_indigenous_group($indigenous_group)
+    //     {
+    //         $this->indigenous_group = $indigenous_group;
+    //     }
+
+    //     public function set_mother_tongue($mother_tongue)
+    //     {
+    //         $this->mother_tongue = $mother_tongue;
+    //     }
+
+    //     public function set_religion($religion)
+    //     {
+    //         $this->religion = $religion;
+    //     }
+
+    //     public function set_cp_no($cp_no)
+    //     {
+    //         $this->cp_no = $cp_no;
+    //     }
+
+    //     public function set_psa_birth_cert($psa_birth_cert)
+    //     {
+    //         $this->psa_birth_cert = $psa_birth_cert;
+    //     }
+
+    //     public function set_belong_to_ipcc($belong_to_ipcc)
+    //     {
+    //         $this->belong_to_ipcc = $belong_to_ipcc;
+    //     }
+
+    //     public function set_id_picture($id_picture)
+    //     {
+    //         $this->id_picture = $id_picture;
+    //     }
+
+    // }    
+
     
     // class Subject extends Faculty { private $sub_code; }
     // class Section extends Faculty { private $section_code; }

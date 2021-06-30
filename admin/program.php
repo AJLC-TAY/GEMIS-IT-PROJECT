@@ -7,12 +7,17 @@
 <?php 
     include('../class/Administration.php');
     $admin = new Administration();
-    // $program = $admin->getProgram(); // define var
-    // $prog_name = $program->get_prog_name();
-    // $prog_code = $program->get_prog_code();
-    
-    $prog_code = 'ABM';
-    $prog_name = 'Acountancy and Business Management';
+    $program = $admin->getProgram();
+    $prog_name = $program->get_prog_desc();
+    $prog_code = $program->get_prog_code();
+    $state = "disabled";  
+    $edit_btn_state = "";  
+    if(isset($_GET['state']) && $_GET['state'] == 'edit') {
+        $state = "";
+        $edit_btn_state = "disabled";
+    }
+    // $prog_code = 'ABM';
+    // $prog_name = 'Acountancy and Business Management';
 ?>
 
 <body>
@@ -41,15 +46,17 @@
                             <!-- Form -->
                             <form action="action.php" method="POST">
                                 <div class="container">
-                                    <h4>Information</h4>
+                                <h4>Information</h4>
                                     <label>Program Code</label>
                                     <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
-                                    <input type="text" name="code" value="<?php echo $prog_code; ?>" disabled required> <!--call var -->
-                                    <label>Program Name</label>
-                                    <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required>
-                                    <button id="edit-btn" class="btn btn-secondary">Edit</button>
-                                    <input type="hidden" name="action" value="updateProgram">
-                                    <input type="submit" id="save-btn" class="btn btn-success" value='Submit'  disabled>
+                                    <?php echo "<input class='form-input' type='text' name='code' value='$prog_code' $state required>"; ?> <!--call var -->
+                                    <label>Program Description</label>
+                                    <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
+                                    <?php echo "<input class='form-input' type='text' name='name' value='$prog_name' $state required>"; ?> 
+                                  
+                                    <?php echo "<button id='edit-btn' class='btn btn-secondary' $edit_btn_state>Edit</button>"; ?>
+                                    <input type="hidden" name="action" value="updateCurriculum">
+                                    <?php echo "<input type='submit' id='save-btn' class='btn btn-success' value='Save' $state>"; ?>
                                 </div>
                             </form>
                             <!-- Track table -->

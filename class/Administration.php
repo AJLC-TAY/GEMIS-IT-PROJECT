@@ -107,18 +107,7 @@
         }
 
         /*** Program Methods */
-        public function getPrograms() {
-            $code = $_GET['code'];
-            $query = "SELECT * FROM program WHERE curriculum_curr_code='$code'";
-            $result = mysqli_query($this->dbConnect, $query);
-            $strands = array();
-            while ($row = mysqli_fetch_assoc($result)) {
-                $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
-            }
-            echo json_encode($strands);
-        }
-
-        public function listProgram(){
+        public function listPrograms() {
             $query = "SELECT * FROM program";
             $result = mysqli_query($this->dbConnect, $query);
             $programList = array();
@@ -129,15 +118,25 @@
             return $programList;
         }
 
-        public function getProgramsJSON() {
-            echo json_encode($this->getPrograms());
+        public function listProgramsJSON() {
+            echo json_encode($this->listPrograms());
+        }
+
+        public function getProgram() {
+            $code = $_GET['code'];
+            $query = "SELECT * FROM program WHERE prog_code='$code'";
+            $result = mysqli_query($this->dbConnect, $query);
+            $row = mysqli_fetch_assoc($result);
+            $program = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
+            //$program->get_prog_name($row['description']);
+            return $program;
         }
 
         /** Adds a new program */
         public function addProgram() {
             $code = $_POST['code'];
             $currCode = $_POST['curr-code'];
-            $description = $_POST['program-desc'];
+            $description = $_POST['desc'];
             // start of validation
 
             // end of validation
@@ -157,7 +156,8 @@
         public function updateProgram() {
             $code = $_POST['code'];
             $currCode = $_GET['curr-code']; //uneditable yung curr_code here noh?
-            $prog_description = $_POST['program-desc']; 
+            $prog_description = $_POST['prog-desc']; 
+            $old_code = $_POST['current_code'];
 
             //$updateQuery = "UPDATE program SET prog_code = '$code', description = '$description' WHERE prog_code = '$code'";
 
@@ -167,6 +167,9 @@
             // $isUpdated = mysqli_query($this->dbConnect, $updateQuery);
             
             //if($_POST['code']) {	}	 
+            $updateQuery = "UPDATE program SET prog_code='".$code."', description='".$prog_description."' WHERE prog_code = '".$old_code."'";
+			mysqli_query($this->dbConnect, $updateQuery);
+            header("Location: program.php?code=$code");
         }
 
                 /*** Subject Methods */
