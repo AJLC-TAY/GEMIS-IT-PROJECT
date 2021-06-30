@@ -39,35 +39,35 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="curriculum-con d-flex flex-wrap container">
-                                <?php $curriculumList = $admin->listCurriculum();
-                                foreach ($curriculumList as  $curr) {
-                                    $code = $curr->get_cur_code();
-                                    $name = $curr->get_cur_name();
-                                    $desc = $curr->get_cur_desc();
-                                    echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
-                                            <div class='card-body'>
-                                                <div class='dropdown'>
-                                                    <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                                    <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='curriculum.php?code=" .   $code . "&state=edit'>Edit</a></li>
-                                                        <li><button data-name='" .  $name ."' class='archive-btn dropdown-item'>Archive</button></li>
-                                                        <li><button class='delete dropdown-item' id='" .  $code . "'>Delete</button></li>
-                                                    </ul>
-                                                </div>
-                                                <h4>". $name ." </h4>
-                                                <p> ". $desc ."</p>
-                                            </div>
-                                            <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='curriculum.php?code=" .  $code . "'>View</a>
-                                            </div>
-                                        </div>";
-                                }
+                                <?php // $curriculumList = $admin->listCurriculum();
+                                // foreach ($curriculumList as  $curr) {
+                                //     $code = $curr->get_cur_code();
+                                //     $name = $curr->get_cur_name();
+                                //     $desc = $curr->get_cur_desc();
+                                //     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
+                                //             <div class='card-body'>
+                                //                 <div class='dropdown'>
+                                //                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                //                     <ul class='dropdown-menu'>
+                                //                         <li><a class='dropdown-item' href='curriculum.php?code=" .   $code . "&state=edit'>Edit</a></li>
+                                //                         <li><button data-name='" .  $name ."' class='archive-btn dropdown-item'>Archive</button></li>
+                                //                         <li><button class='delete dropdown-item' id='" .  $code . "'>Delete</button></li>
+                                //                     </ul>
+                                //                 </div>
+                                //                 <h4>". $name ." </h4>
+                                //                 <p> ". $desc ."</p>
+                                //             </div>
+                                //             <div class='modal-footer p-0'>
+                                //                 <a role='button' class='btn' href='curriculum.php?code=" .  $code . "'>View</a>
+                                //             </div>
+                                //         </div>";
+                                // }
 
-                                    echo "<div class='btn add-curriculum card shadow-sm'>
-                                        <div class='card-body'>
-                                            Add Curriculum
-                                        </div>
-                                    </div>";
+                                //     echo "<div class='btn add-curriculum card shadow-sm'>
+                                //         <div class='card-body'>
+                                //             Add Curriculum
+                                //         </div>
+                                //     </div>";
                                 ?>
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
@@ -200,7 +200,7 @@
 </body>
 
 <script type="text/javascript">
-    var curriculumList = <?php echo json_encode($curriculumList); ?>;
+    //var curriculumList = <? // echo json_encode($curriculumList); ?>;
     var curriculumCon = $('.curriculum-con')
     var kebab = $('.kebab')
     var addCurriculumBtn = $('.add-curriculum')
@@ -208,6 +208,7 @@
     var spinner = $('.spinner-border')
     var searchInput = $('#search-input')
     var timeout = null
+    var curriculumList = []
 
 
     function reloadCurriculum() {
@@ -236,7 +237,7 @@
                             <p>${desc}</p>
                         </div>
                         <div class='modal-footer p-0'>
-                            <a role='button' class='btn' href='curriculum.php?id=${code}'>View</a>
+                            <a role='button' class='btn' href='curriculum.php?code=${code}'>View</a>
                         </div>
                     </div>`
                 )
@@ -289,7 +290,10 @@
     }
 
     $(document).ready(function() {
+        /** Fetch data */
+        reloadCurriculum()
         spinner.fadeOut("slow")
+
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#curriculum').addClass('active-sub')
@@ -324,8 +328,6 @@
 
             // })
         })
-
-         
     })
 
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
@@ -352,7 +354,6 @@
 
     $(document).on('click', '.view-archive', () => $('#view-arch-curr-modal').modal('toggle'))
 
-    /*** Add Modal Section */
     $(document).on('click', '.add-curriculum', () => $('#add-curr-modal').modal('toggle'))
 
     /*** Modal Options */

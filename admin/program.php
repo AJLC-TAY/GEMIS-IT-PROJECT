@@ -3,7 +3,6 @@
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
-
 <?php 
     include('../class/Administration.php');
     $admin = new Administration();

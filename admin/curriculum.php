@@ -20,7 +20,6 @@
 ?>
 
 <body>
-
     <section id="container">
         <?php include_once ('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
