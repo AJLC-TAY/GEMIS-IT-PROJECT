@@ -46,10 +46,10 @@
         private $prog_desc;
         private $action;
         
-        public function __construct($prog_code, $curr_code, $prog_name) {
+        public function __construct($prog_code, $curr_code, $prog_desc) {
             $this->prog_code = $prog_code;
             $this->curr_code = $curr_code;
-            $this->prog_name = $prog_name;
+            $this->prog_desc = $prog_desc;
             $this->action = "<button class='btn btn-secondary'>Edit</button>"
                           . "<button class='btn btn-primary'>View</button>";
         }

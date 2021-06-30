@@ -40,12 +40,7 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="curriculum-con d-flex flex-wrap container">
-                                <?php //$programList = $admin->listProgram();
-
-                                $programList = [new Program('GAS', 'k12acad', 'General Academic Strand'), 
-                                                new Program('HUMMS', 'k12acad', 'Hummanities and Social Sciences'),
-                                                new Program('TVL-EPAS', 'k12acad', 'Electronics'),
-                                                new Program('TVL-COOKERY', 'k12acad', 'Cookery')];
+                                <?php $programList = $admin->listProgram();
                                 foreach ($programList as  $prog) {
                                     $code = $prog->get_prog_code();
                                     $curr_code = $prog->get_curr_code();

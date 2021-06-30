@@ -113,9 +113,20 @@
             $result = mysqli_query($this->dbConnect, $query);
             $strands = array();
             while ($row = mysqli_fetch_assoc($result)) {
-                $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['prog_name']);
+                $strands[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
             }
             echo json_encode($strands);
+        }
+
+        public function listProgram(){
+            $query = "SELECT * FROM program";
+            $result = mysqli_query($this->dbConnect, $query);
+            $programList = array();
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                $programList[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
+            }
+            return $programList;
         }
 
         public function getProgramsJSON() {
