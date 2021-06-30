@@ -2,7 +2,7 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
-/********curriculum********/
+/******** CURRICULUM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addCurriculum') {
     $admin->addCurriculum();
 }
@@ -20,7 +20,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
 }
 
 
-/********program********/
+/******** PROGRAM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addProgram') {
     $admin->addProgram();
 }
@@ -37,7 +37,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
     $admin->updateProgram();
 }
 
-// /********subject********/
+// /******** SUBJECT ********/
 // if (isset($_POST['action']) && $_POST['action'] === 'addSubject') {
 //     $admin->addSubject();
 // }
