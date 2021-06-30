@@ -24,7 +24,7 @@
         <?php include_once ('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper"></section>
                 <div class="row">
                     <div class="col-lg-9">
                         <div class="row mt ps-3">
