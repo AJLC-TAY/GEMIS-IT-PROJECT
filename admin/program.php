@@ -1,28 +1,28 @@
-<?php include_once ("../inc/head.html"); ?>
+<?php include_once("../inc/head.html"); ?>
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
-<?php 
-    include('../class/Administration.php');
-    $admin = new Administration();
-    $program = $admin->getProgram();
-    $prog_name = $program->get_prog_desc();
-    $prog_code = $program->get_prog_code();
-    $state = "disabled";  
-    $edit_btn_state = "";  
-    if(isset($_GET['state']) && $_GET['state'] == 'edit') {
-        $state = "";
-        $edit_btn_state = "disabled";
-    }
-    // $prog_code = 'ABM';
-    // $prog_name = 'Acountancy and Business Management';
+<?php
+include('../class/Administration.php');
+$admin = new Administration();
+$program = $admin->getProgram();
+$prog_name = $program->get_prog_desc();
+$prog_code = $program->get_prog_code();
+$state = "disabled";
+$edit_btn_state = "";
+if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+    $state = "";
+    $edit_btn_state = "disabled";
+}
+// $prog_code = 'ABM';
+// $prog_name = 'Acountancy and Business Management';
 ?>
 
 <body>
 
     <section id="container">
-        <?php include_once ('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -39,23 +39,34 @@
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $prog_name; ?></li>
                                     </ol>
                                 </nav>
-                                <h2><?php echo "$prog_code"." | "." $prog_name"; ?></h2>
+                                <h2><?php echo "$prog_code" . " | " . " $prog_name"; ?></h2>
                             </header>
 
                             <!-- Form -->
                             <form action="action.php" method="POST">
                                 <div class="container">
-                                <h4>Information</h4>
-                                    <label>Program Code</label>
-                                    <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
-                                    <?php echo "<input class='form-input' type='text' name='code' value='$prog_code' $state required>"; ?> <!--call var -->
-                                    <label>Program Description</label>
-                                    <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
-                                    <?php echo "<input class='form-input' type='text' name='name' value='$prog_name' $state required>"; ?> 
-                                  
-                                    <?php echo "<button id='edit-btn' class='btn btn-secondary' $edit_btn_state>Edit</button>"; ?>
-                                    <input type="hidden" name="action" value="updateCurriculum">
-                                    <?php echo "<input type='submit' id='save-btn' class='btn btn-success' value='Save' $state>"; ?>
+                                    <h4>Information</h4>
+                                    <div class="col-12 card">
+                                        <form>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Program Code</label>
+                                                <div class="col-sm-9">
+                                                    <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
+                                                    <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required>"; ?>
+                                                </div>
+                                                <label class="col-sm-3 col-form-label">Description</label>
+                                                <div class='col-sm-9'>
+                                                    <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
+                                                    <?php echo "<textarea class='form-input form-control' type='text' name='name' $state required>" . $prog_name . "</textarea>"; ?>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="d-flex justify-content-end">
+                                            <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
+                                            <input type="hidden" name="action" value=" ">
+                                            <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                             <!-- Track table -->
@@ -69,7 +80,7 @@
                                                 <button id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</button>
                                             </div>
                                         </div>
-        
+
                                         <tr>
                                             <th data-checkbox="true"></th>
                                             <th scope='col' data-width="100" data-align="right" data-field='sub_code'>Code</th>
@@ -84,12 +95,12 @@
                 </div>
                 <!--main content end-->
                 <!--footer start-->
-                <?php include_once ("../inc/footer.html");?>
+                <?php include_once("../inc/footer.html"); ?>
                 <!--footer end-->
             </section>
         </section>
-    <!-- ADD SUBJECT MODAL -->
-    <!-- <div class="modal" id="add-subject-modal" tabindex="-1" aria-labelledby="modal addSubject" aria-hidden="true">
+        <!-- ADD SUBJECT MODAL -->
+        <!-- <div class="modal" id="add-subject-modal" tabindex="-1" aria-labelledby="modal addSubject" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,7 +119,7 @@
                             <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code);?>" readonly>
+                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code); ?>" readonly>
                         </div>
                     </form>
                 </div>
