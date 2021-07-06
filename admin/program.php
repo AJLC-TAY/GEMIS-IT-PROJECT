@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Curriculum | GEMIS</title>
+<title>Program | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
@@ -50,18 +50,18 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Program Code</label>
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-8">
                                                     <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
                                                     <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required>"; ?>
                                                 </div>
                                                 <label class="col-sm-3 col-form-label">Description</label>
-                                                <div class='col-sm-9'>
+                                                <div class='col-sm-8'>
                                                     <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
                                                     <?php echo "<textarea class='form-input form-control' type='text' name='name' $state required>" . $prog_name . "</textarea>"; ?>
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class="d-flex justify-content-end">
+                                        <div class="d-flex justify-content-end col-sm-11">
                                             <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
                                             <input type="hidden" name="action" value=" ">
                                             <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
