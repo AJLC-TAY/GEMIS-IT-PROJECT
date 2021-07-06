@@ -128,7 +128,6 @@
             $result = mysqli_query($this->dbConnect, $query);
             $row = mysqli_fetch_assoc($result);
             $program = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
-            //$program->get_prog_name($row['description']);
             return $program;
         }
 
