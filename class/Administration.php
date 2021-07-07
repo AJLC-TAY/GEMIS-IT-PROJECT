@@ -142,8 +142,9 @@
 
             $query = "INSERT INTO program VALUES (?, ?, ?)";
             $stmt = mysqli_prepare($this->dbConnect, $query);
-            mysqli_stmt_bind_param($stmt, 'sss', $code, $currCode, $description);
+            mysqli_stmt_bind_param($stmt, 'sss', $code, $description, $currCode);
             mysqli_stmt_execute($stmt);
+            
         }
 
         public function deleteProgram() {
