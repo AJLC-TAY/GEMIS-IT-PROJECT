@@ -16,7 +16,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'getCurriculumJSON') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
-    $code = $admin->updateCurriculum();
+    $admin = $admin->updateCurriculum();
 }
 
 

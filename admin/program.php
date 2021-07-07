@@ -56,14 +56,14 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 </div>
                                                 <label class="col-sm-3 col-form-label">Description</label>
                                                 <div class='col-sm-8'>
-                                                    <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
-                                                    <?php echo "<textarea class='form-input form-control' type='text' name='name' $state required>" . $prog_name . "</textarea>"; ?>
+                                                    <!-- <input name="name" value="<?php echo $prog_name; ?>" disabled> -->
+                                                    <?php echo "<textarea class='form-input form-control' name='name' $state>" . $prog_name . "</textarea>"; ?>
                                                 </div>
                                             </div>
                                         </form>
                                         <div class="d-flex justify-content-end col-sm-11">
                                             <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
-                                            <input type="hidden" name="action" value=" ">
+                                            <input type="hidden" name="action" value="updateProgram">
                                             <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
                                         </div>
                                     </div>
@@ -166,7 +166,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         $('#edit-btn').click(function() {
             $(this).prop("disabled", true)
             $("#save-btn").prop("disabled", false)
-            $(this).closest('form').find('input').each(function() {
+            $(this).closest('form').find('.form-input').each(function() {
                 $(this).prop('disabled', false)
             })
         })

@@ -156,7 +156,7 @@
         public function updateProgram() {
             $code = $_POST['code'];
             $currCode = $_GET['curr-code']; //uneditable yung curr_code here noh?
-            $prog_description = $_POST['prog-desc']; 
+            $prog_description = $_POST['name']; 
             $old_code = $_POST['current_code'];
 
             //$updateQuery = "UPDATE program SET prog_code = '$code', description = '$description' WHERE prog_code = '$code'";

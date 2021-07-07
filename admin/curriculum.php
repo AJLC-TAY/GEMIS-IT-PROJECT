@@ -50,7 +50,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>
                                             <div class="col-sm-8">
-                                                <!-- <input type="hidden" name="current_code" value="<?php echo $curr_code; ?> class=" form-control"> -->
+                                                <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
                                                 <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
                                             </div>
                                             <label class="col-sm-3 col-form-label">Curriculum name</label>
