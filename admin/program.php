@@ -11,6 +11,10 @@ $prog_name = $program->get_prog_desc();
 $prog_code = $program->get_prog_code();
 $state = "disabled";
 $edit_btn_state = "";
+
+if ($_GET['editState'] == 'enable'){
+    $state = "enabled";
+}
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = "";
     $edit_btn_state = "disabled";

@@ -21,13 +21,13 @@ function getSubjectPageContent($state) {
                                     <div class="row mt">
                                         <div class="col-10">
                                             <div class="form-group row">
-                                                <label for="subjectCode1" class="col-sm-2 col-form-label">Subject code</label>
+                                                <label for="subjectCode1"  class="col-sm-2 col-form-label">Subject code</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="sub-code" value="">
+                                                    <input type="text" name = "code" class="form-control" id="sub-code" value="">
                                                 </div>
                                                 <label for="subjectName1" class="col-sm-2 col-form-label">Subject name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="sub-name">
+                                                    <input type="text" name = "name" class="form-control" id="sub-name">
                                                 </div>
                                                 <label for="subjectType1" class="col-sm-2 col-form-label">Subject type</label>
                                                 <div class="col-sm-10">
@@ -76,7 +76,7 @@ function getSubjectPageContent($state) {
                                                     <td>Oral Communication in Context</td>
                                                     <td>CORE</td>
                                                     <td><input class="form-check-input" type="radio" name="Radios" id="radios5" value="option5"></td>
-                                                    <td><input class="form-check-input" type="radio" name="Radios" id="radios6" value="option6"></td>
+                                                    <td><input class="form-check-input" type="radio" name="Radios1" id="radios6" value="option6"></td>
         
                                                 </tr>
                                             </tbody>

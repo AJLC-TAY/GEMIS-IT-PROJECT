@@ -52,7 +52,7 @@
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?id=" .   $code . "'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='program.php?editState=enable&code=" .   $code . "'>Edit</a></li>
                                                         <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
                                                     </ul>

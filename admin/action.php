@@ -37,20 +37,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
     $admin->updateProgram();
 }
 
-// /******** SUBJECT ********/
-// if (isset($_POST['action']) && $_POST['action'] === 'addSubject') {
-//     $admin->addSubject();
-// }
+/******** SUBJECT ********/
+if (isset($_POST['action']) && $_POST['action'] === 'addSubject') {
+    $admin->addSubject();
+}
 
-// if (isset($_POST['action']) && $_POST['action'] === 'deleteSubject') {
-//     $admin->deleteSubject();
-// }
+if (isset($_POST['action']) && $_POST['action'] === 'deleteSubject') {
+    $admin->deleteSubject();
+}
 
-// if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
-//     $admin->listSubjectJSON();
-// }
+if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
+    $admin->listSubjectsJSON();
+}
 
-// if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
-//     $admin->updateSubject();
-// }
+if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
+    $admin->updateSubject();
+}
 ?>
