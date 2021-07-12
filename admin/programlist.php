@@ -1,17 +1,18 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Program Page | GEMIS</title>
-<link rel="stylesheet" href="../css/general.css"></link>
+<link rel="stylesheet" href="../css/general.css">
+</link>
 </head>
 
 <body>
-    <?php include('../class/Administration.php'); 
+    <?php include('../class/Administration.php');
     $admin = new Administration();
 
     require_once('../class/Dataclasses.php');
     ?>
 
     <section id="container">
-        <?php include_once ('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -45,19 +46,19 @@
                                     $code = $prog->get_prog_code();
                                     $curr_code = $prog->get_curr_code();
                                     $desc = $prog->get_prog_desc();
-                                    
+
                                     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
                                             <div class='card-body'>
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?id=" .   $code . "'>Edit</a></li>
-                                                        <li><button data-name='" .  $desc ."' class='archive-btn dropdown-item'>Archive</button></li>
+                                                        <li><a class='dropdown-item' href='program.php?editState=enable&code=" .   $code . "'>Edit</a></li>
+                                                        <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
                                                     </ul>
                                                 </div>
-                                                <h4>". $desc ." </h4>
-                                                <p> ". $curr_code ." | ". $code ."</p>
+                                                <h4>" . $desc . " </h4>
+                                                <p> " . $curr_code . " | " . $code . "</p>
                                             </div>
                                             <div class='modal-footer p-0'>
                                                 <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
@@ -65,7 +66,7 @@
                                         </div>";
                                 }
 
-                                    echo "<div class='btn add-program card shadow-sm'>
+                                echo "<div class='btn add-program card shadow-sm'>
                                         <div class='card-body'>
                                             Add Program
                                         </div>
@@ -78,14 +79,14 @@
                 </div>
                 <!--main content end-->
                 <!--footer start-->
-                <?php include_once ("../inc/footer.html");?>
+                <?php include_once("../inc/footer.html"); ?>
                 <!--footer end-->
             </section>
         </section>
     </section>
 
-     <!-- MODAL -->
-     <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+    <!-- MODAL -->
+    <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
             <form id="program-form" method="post">
                 <div class="modal-content">
@@ -109,9 +110,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="action" id="action" value="addProgram"/>
+                        <input type="hidden" name="action" id="action" value="addProgram" />
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <input type="submit" form="program-form" class="submit btn btn-primary" value="Add"/>
+                        <input type="submit" form="program-form" class="submit btn btn-primary" value="Add" />
                     </div>
                 </div>
             </form>
@@ -189,21 +190,24 @@
 
 <!-- Scripts -->
 <script type="text/javascript">
-    var programList = <?php echo json_encode($programList); ?>;
-    var programCon = $('.progam-con')
+    //var programList = <?php //echo json_encode($programList); ?>;
+    var programCon = $('.program-con')
     var kebab = $('.kebab')
     var addProgramBtn = $('.add-program')
     var noResultMsg = $('.msg')
     var spinner = $('.spinner-border')
     var searchInput = $('#search-input')
     var timeout = null
+    var programList = []
 
 
     function reloadProgram() {
         // location.reload()
         spinner.show()
-        var action = 'listProgramsJSON'
-        $.post('action.php', {action}, function (data) {
+        var action = 'getProgramJSON'
+        $.post('action.php', {
+            action
+        }, function(data) {
             programCon.empty()
             programList = JSON.parse(data)
             programList.forEach(element => {
@@ -237,7 +241,7 @@
 
         spinner.fadeOut()
     }
-     
+
     function showWarningToast(msg) {
         let msgToast = $('.warning-toast')
         msgToast.find('.toast-body').text(msg)
@@ -282,17 +286,18 @@
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#program').addClass('active-sub')
-    
+
         $('#program-form').submit(function(event) {
             event.preventDefault()
             spinner.show()
             var form = $(this)
             var formData = form.serialize()
+            console.log(formData)
             $.post("action.php", formData, function(data) {
                 form.trigger('reset')
                 $('#add-prog-modal').modal('hide')
                 reloadProgram()
-            }).fail(function () {
+            }).fail(function() {
 
             })
 
@@ -314,12 +319,12 @@
             // })
         })
 
-         
+
     })
 
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
 
-    $(document).on('search', '#search-input', function () {
+    $(document).on('search', '#search-input', function() {
         if (searchInput.val().length == 0) showAllProgram()
     })
 
@@ -328,8 +333,8 @@
         clearTimeout(timeout) // resets the timer
         timeout = setTimeout(() => { // executes the function after the specified milliseconds
             var keywords = $('#search-input').val().trim().toLowerCase()
-            let filterProgram = (program) => { // returns the curriculum info that contain the keyword
-                return (program.prog_code.toLowerCase().includes(keywords) || curriculum.prog_desc.toLowerCase().includes(keywords) || prog.curr_code.toLowerCase().includes(keywords))
+            let filterProgram = (program) => { // returns the program info that contain the keyword
+                return (program.prog_code.toLowerCase().includes(keywords) || program.prog_desc.toLowerCase().includes(keywords) || program.curr_code.toLowerCase().includes(keywords))
             }
             var results = programList.filter(filterProgram)
             showResults(results.map((element) => { // map function returns an array containing the specified component of the element
@@ -357,8 +362,11 @@
         var code = $(this).attr('id')
         var action = "deleteProgram"
 
-        if(confirm("Are you sure you want to delete this Program?")) {
-            $.post("action.php", {code, action}, function(data) {					
+        if (confirm("Are you sure you want to delete this Program?")) {
+            $.post("action.php", {
+                code,
+                action
+            }, function(data) {
                 reloadProgram()
             })
         } else {
@@ -370,34 +378,35 @@
     /*** Footer modal buttons */
     /*** Reset Program form and hide error messages */
     $(document).on('click', ".close", () => {
-        $('#program-form').trigger('reset')              // reset form
-        $("[class*='error-msg']").addClass('invisible')     // hide error messages
+        $('#program-form').trigger('reset') // reset form
+        $("[class*='error-msg']").addClass('invisible') // hide error messages
     })
 
-/*** Add new curriculum information through AJAX */
-// $('#curriculum-form').submit(function(event) {
-//     event.preventDefault()
-//     spinner.show()
-//     var element = $(this)
-//     var formData = element.serializeArray()
-//     var currCode = formData[0].value.trim()
-//     var currName = formData[1].value.trim()
-//     var currDesc = formData[2].value.trim()
-//     var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
+    /*** Add new curriculum information through AJAX */
+    // $('#curriculum-form').submit(function(event) {
+    //     event.preventDefault()
+    //     spinner.show()
+    //     var element = $(this)
+    //     var formData = element.serializeArray()
+    //     var currCode = formData[0].value.trim()
+    //     var currName = formData[1].value.trim()
+    //     var currDesc = formData[2].value.trim()
+    //     var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
 
-//     // if (currCode.length == 0) showUniqueErrorMsg()
+    //     // if (currCode.length == 0) showUniqueErrorMsg()
 
-//     // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
-//     // else {
+    //     // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
+    //     // else {
 
-//     $.post('../src/admin/add.php', formData, function(data) {
-//         // success
-//         element.closest('.modal').modal('toggle')
-//         location.reload()
-//     }).fail(function(xhr, textStatus, error) {
-//         let responseText = JSON.parse(xhr.responseText)
-//         responseText.error.forEach(processError)
-//     })
-// })
+    //     $.post('../src/admin/add.php', formData, function(data) {
+    //         // success
+    //         element.closest('.modal').modal('toggle')
+    //         location.reload()
+    //     }).fail(function(xhr, textStatus, error) {
+    //         let responseText = JSON.parse(xhr.responseText)
+    //         responseText.error.forEach(processError)
+    //     })
+    // })
 </script>
+
 </html>

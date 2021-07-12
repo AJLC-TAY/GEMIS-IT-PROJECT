@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Curriculum | GEMIS</title>
+<title>Program | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
@@ -11,6 +11,7 @@ $prog_name = $program->get_prog_desc();
 $prog_code = $program->get_prog_code();
 $state = "disabled";
 $edit_btn_state = "";
+
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = "";
     $edit_btn_state = "disabled";
@@ -50,20 +51,20 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <form>
                                             <div class="form-group row">
                                                 <label class="col-sm-3 col-form-label">Program Code</label>
-                                                <div class="col-sm-9">
+                                                <div class="col-sm-8">
                                                     <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
                                                     <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required>"; ?>
                                                 </div>
                                                 <label class="col-sm-3 col-form-label">Description</label>
-                                                <div class='col-sm-9'>
-                                                    <!-- <input type="text" name="name" value="<?php echo $prog_name; ?>" disabled required> -->
-                                                    <?php echo "<textarea class='form-input form-control' type='text' name='name' $state required>" . $prog_name . "</textarea>"; ?>
+                                                <div class='col-sm-8'>
+                                                    <!-- <input name="name" value="<?php echo $prog_name; ?>" disabled> -->
+                                                    <?php echo "<textarea class='form-input form-control' name='name' $state>" . $prog_name . "</textarea>"; ?>
                                                 </div>
                                             </div>
                                         </form>
-                                        <div class="d-flex justify-content-end">
+                                        <div class="d-flex justify-content-end col-sm-11">
                                             <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
-                                            <input type="hidden" name="action" value=" ">
+                                            <input type="hidden" name="action" value="updateProgram">
                                             <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
                                         </div>
                                     </div>
@@ -166,7 +167,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         $('#edit-btn').click(function() {
             $(this).prop("disabled", true)
             $("#save-btn").prop("disabled", false)
-            $(this).closest('form').find('input').each(function() {
+            $(this).closest('form').find('.form-input').each(function() {
                 $(this).prop('disabled', false)
             })
         })

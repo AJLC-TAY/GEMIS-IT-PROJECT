@@ -49,27 +49,28 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     <form>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>
-                                            <div class="col-sm-9">
-                                                <!-- <input type="hidden" name="current_code" value="<?php echo $curr_code; ?> class=" form-control"> -->
+                                            <div class="col-sm-8">
+                                                <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
                                                 <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
                                             </div>
                                             <label class="col-sm-3 col-form-label">Curriculum name</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
                                                 <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
                                             </div>
                                             <label class="col-sm-3 col-form-label">Description</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
                                                 <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                             </div>
                                         </div>
+                                        <div class="d-flex justify-content-end col-sm-11">
+                                            <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
+                                            <input type="hidden" name="action" value="updateCurriculum">
+                                            <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
+                                        </div>
                                     </form>
-                                    <div class="d-flex justify-content-end">
-                                        <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
-                                        <input type="hidden" name="action" value="updateCurriculum">
-                                        <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
-                                    </div>
+
                                 </div>
                             </div>
                         </form>
