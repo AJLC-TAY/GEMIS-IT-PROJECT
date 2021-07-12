@@ -1,10 +1,14 @@
 <?php
+
 function getSubjectPageContent($state) {
+    $admin = new Administration();
+    
     if ($state === 'add') {
         $content = new stdClass();
-        if (isset($_GET['program'])) {
-            $prog_code = strtoupper($_GET['program']);
-            $prog_name = 'Accountancy and Business Management';
+        if (isset($_GET['code'])) {
+            $program = $admin->getProgram();
+            $prog_name = $program->get_prog_desc();
+            $prog_code = $program->get_prog_code();
             $content->breadcrumb = '<nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -14,7 +18,7 @@ function getSubjectPageContent($state) {
                                         </ol>
                                     </nav>'; 
 
-            $content->form = '<h2>'.$prog_name.'</h2>
+            $content->form = '<h2>'.$prog_code.' | '.$prog_name.'</h2>
                               <h4>Add Subject</h4>
                                 <form class="container" method="POST" action="action.php">
                                     <input type="hidden" name="prog_code" value="'.$prog_code.'">

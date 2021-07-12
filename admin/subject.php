@@ -5,10 +5,11 @@
 <?php 
     $content = null;
     $isAddPageUnderProgram = FALSE;
+    include('../class/Administration.php');
     include_once ('subjectForm.php');
     if (isset($_GET['state'])) {
         $state = $_GET['state'];
-        if (isset($_GET['program'])) {
+        if (isset($_GET['code'])) {
             $isAddPageUnderProgram = TRUE;
         }
         $content = getSubjectPageContent($state);

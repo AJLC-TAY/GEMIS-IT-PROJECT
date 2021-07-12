@@ -16,8 +16,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = "";
     $edit_btn_state = "disabled";
 }
-// $prog_code = 'ABM';
-// $prog_name = 'Acountancy and Business Management';
 ?>
 
 <body>
@@ -78,7 +76,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             <h4>Subjects</h4>
                                             <div>
                                                 <button class="btn btn-secondary" title='Archive subject'>Archive</button>
-                                                <button id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</button>
+                                                <a href="subject.php?state=add&code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
                                             </div>
                                         </div>
 
