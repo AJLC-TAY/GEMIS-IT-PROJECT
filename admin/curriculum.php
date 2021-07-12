@@ -121,10 +121,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
                             <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code); ?>" readonly>
+                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
                         </div>
                     </form>
                 </div>
@@ -185,8 +185,32 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         //         $(this).prop('disabled', true)
         //     })
         // })
-
-
+        
+        $('.add-prog').click(() => $('#add-prog-modal').modal('toggle'))
+        /*** Add new program information through AJAX */
+        $('#prog-form').submit(function(event) {
+            event.preventDefault()
+            var action = 'addProgram'
+            var progForm = $(this)
+            var progFormData = progForm.serializeArray()
+            var code = progFormData[0].value.trim()
+            var desc = progFormData[1].value.trim()
+            var currCode = progFormData[2].value.trim()
+            
+            $.ajax({
+                type: 'POST',
+                url: 'action.php',
+                data: {code: code,
+                    desc:desc,
+                    'curr-code':currCode,
+                     action:'addProgram'},
+                success: function(response) {
+                    //$('#add-prog-modal').modal('hide')
+                    alert("added sucessfully")
+                    $('#prog-form').trigger('reset')
+                }
+            });
+        })
     })
 </script>
 
