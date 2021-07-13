@@ -121,10 +121,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
                             <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code); ?>" readonly>
+                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
                         </div>
                     </form>
                 </div>
