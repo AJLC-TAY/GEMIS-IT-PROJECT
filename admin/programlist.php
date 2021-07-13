@@ -220,7 +220,7 @@
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?id="${prog_code}'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='program.php?state=edit&code=${prog_code}'>Edit</a></li>
                                                         <li><button data-name='${prog_desc}' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='${prog_code}'>Delete</button></li>
                                                     </ul>
