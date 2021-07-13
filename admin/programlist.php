@@ -190,7 +190,6 @@
 
 <!-- Scripts -->
 <script type="text/javascript">
-    //var programList = <?php //echo json_encode($programList); ?>;
     var programCon = $('.program-con')
     var kebab = $('.kebab')
     var addProgramBtn = $('.add-program')
@@ -200,9 +199,7 @@
     var timeout = null
     var programList = []
 
-
     function reloadProgram() {
-        // location.reload()
         spinner.show()
         var action = 'getProgramJSON'
         $.post('action.php', {
@@ -300,23 +297,7 @@
             }).fail(function() {
 
             })
-
-            /** Example of ajax */
-            // $.ajax({
-            //     url:"action.php",
-            //     method:"POST",
-            //     data: formData,
-            //     processData: false,
-            //     contentType: false,
-            //     success: function(data){				
-            //         $(this).trigger('reset')
-            //         $('#add-curr-modal').modal('hide')		
-            //     },
-            //     error: function() {
-            //         alert('error')
-            //     }
-
-            // })
+         
         })
 
 
@@ -381,32 +362,6 @@
         $('#program-form').trigger('reset') // reset form
         $("[class*='error-msg']").addClass('invisible') // hide error messages
     })
-
-    /*** Add new curriculum information through AJAX */
-    // $('#curriculum-form').submit(function(event) {
-    //     event.preventDefault()
-    //     spinner.show()
-    //     var element = $(this)
-    //     var formData = element.serializeArray()
-    //     var currCode = formData[0].value.trim()
-    //     var currName = formData[1].value.trim()
-    //     var currDesc = formData[2].value.trim()
-    //     var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
-
-    //     // if (currCode.length == 0) showUniqueErrorMsg()
-
-    //     // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
-    //     // else {
-
-    //     $.post('../src/admin/add.php', formData, function(data) {
-    //         // success
-    //         element.closest('.modal').modal('toggle')
-    //         location.reload()
-    //     }).fail(function(xhr, textStatus, error) {
-    //         let responseText = JSON.parse(xhr.responseText)
-    //         responseText.error.forEach(processError)
-    //     })
-    // })
 </script>
 
 </html>

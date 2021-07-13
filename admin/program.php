@@ -134,13 +134,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
-    var $table
-    var code = 'k12acad'
-
-    function onPostBodyOfTable() {
-
-    }
-
     $(document).ready(function() {
         /** Display active menu item */
         $('#curr-management a:first').click()
@@ -169,16 +162,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 $(this).prop('disabled', false)
             })
         })
-
-        // $('#save-btn').click(function() {
-        //     $(this).prop("disabled", true)
-        //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('input').each(function() {
-        //         $(this).prop('disabled', true)
-        //     })
-        // })
-
-
     })
 </script>
 
