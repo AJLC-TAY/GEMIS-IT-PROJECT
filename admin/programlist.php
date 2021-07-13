@@ -273,7 +273,7 @@
             })
             return
         }
-
+        
         // no results found at this point
         cards.each(function() {
             $(this).hide()
