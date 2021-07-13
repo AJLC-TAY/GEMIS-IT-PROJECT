@@ -103,10 +103,8 @@
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
                             <label for="prog-desc">Description</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accaountancy,Business, and Management" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
-                            <label for="curr-code">Curriculum Code</label>
-                            <input id="curr-code" type="text" name="curr-code" class='form-control' placeholder="ex. K12 Academic" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -289,7 +287,6 @@
             spinner.show()
             var form = $(this)
             var formData = form.serialize()
-            console.log(formData)
             $.post("action.php", formData, function(data) {
                 form.trigger('reset')
                 $('#add-prog-modal').modal('hide')

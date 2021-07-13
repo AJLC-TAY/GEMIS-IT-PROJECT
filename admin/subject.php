@@ -5,8 +5,9 @@
 <?php 
     $content = null;
     $isAddPageUnderProgram = FALSE;
-    include('../class/Administration.php');
+    include_once ('../class/Administration.php');
     include_once ('subjectForm.php');
+    
     if (isset($_GET['state'])) {
         $state = $_GET['state'];
         if (isset($_GET['code'])) {
