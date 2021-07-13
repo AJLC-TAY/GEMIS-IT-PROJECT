@@ -41,36 +41,36 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="program-con d-flex flex-wrap container">
-                                <?php $programList = $admin->listPrograms();
-                                foreach ($programList as  $prog) {
-                                    $code = $prog->get_prog_code();
-                                    $curr_code = $prog->get_curr_code();
-                                    $desc = $prog->get_prog_desc();
+                                <?php //$programList = $admin->listPrograms(); -->
+                                // foreach ($programList as  $prog) {
+                                //     $code = $prog->get_prog_code();
+                                //     $curr_code = $prog->get_curr_code();
+                                //     $desc = $prog->get_prog_desc();
 
-                                    echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
-                                            <div class='card-body'>
-                                                <div class='dropdown'>
-                                                    <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                                    <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?state=edit&code=" .   $code . "'>Edit</a></li>
-                                                        <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
-                                                        <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
-                                                    </ul>
-                                                </div>
-                                                <h4>" . $desc . " </h4>
-                                                <p> " . $curr_code . " | " . $code . "</p>
-                                            </div>
-                                            <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
-                                            </div>
-                                        </div>";
-                                }
+                                //     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
+                                //             <div class='card-body'>
+                                //                 <div class='dropdown'>
+                                //                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                //                     <ul class='dropdown-menu'>
+                                //                         <li><a class='dropdown-item' href='program.php?state=edit&code=" .   $code . "'>Edit</a></li>
+                                //                         <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
+                                //                         <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
+                                //                     </ul>
+                                //                 </div>
+                                //                 <h4>" . $desc . " </h4>
+                                //                 <p> " . $curr_code . " | " . $code . "</p>
+                                //             </div>
+                                //             <div class='modal-footer p-0'>
+                                //                 <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
+                                //             </div>
+                                //         </div>";
+                                // }
 
-                                echo "<div class='btn add-program card shadow-sm'>
-                                        <div class='card-body'>
-                                            Add Program
-                                        </div>
-                                    </div>";
+                                // echo "<div class='btn add-program card shadow-sm'>
+                                //         <div class='card-body'>
+                                //             Add Program
+                                //         </div>
+                                //     </div>";
                                 ?>
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Programs</button>
@@ -103,8 +103,10 @@
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
                             <label for="prog-desc">Description</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accaountancy,Business, and Management" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
+                            <label for="curr-code">Curriculum Code</label>
+                            <input id="curr-code" type="text" name="curr-code" class='form-control' placeholder="ex. K12 Academic" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -188,6 +190,7 @@
 
 <!-- Scripts -->
 <script type="text/javascript">
+    //var programList = <?php //echo json_encode($programList); ?>;
     var programCon = $('.program-con')
     var kebab = $('.kebab')
     var addProgramBtn = $('.add-program')
@@ -197,7 +200,9 @@
     var timeout = null
     var programList = []
 
+
     function reloadProgram() {
+        // location.reload()
         spinner.show()
         var action = 'getProgramJSON'
         $.post('action.php', {
@@ -277,6 +282,7 @@
     }
 
     $(document).ready(function() {
+        reloadProgram()
         spinner.fadeOut("slow")
         /** Display active menu item */
         $('#curr-management a:first').click()
@@ -287,6 +293,7 @@
             spinner.show()
             var form = $(this)
             var formData = form.serialize()
+            console.log(formData)
             $.post("action.php", formData, function(data) {
                 form.trigger('reset')
                 $('#add-prog-modal').modal('hide')
@@ -294,7 +301,23 @@
             }).fail(function() {
 
             })
-         
+
+            /** Example of ajax */
+            // $.ajax({
+            //     url:"action.php",
+            //     method:"POST",
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+            //     success: function(data){				
+            //         $(this).trigger('reset')
+            //         $('#add-curr-modal').modal('hide')		
+            //     },
+            //     error: function() {
+            //         alert('error')
+            //     }
+
+            // })
         })
 
 
@@ -359,6 +382,32 @@
         $('#program-form').trigger('reset') // reset form
         $("[class*='error-msg']").addClass('invisible') // hide error messages
     })
+
+    /*** Add new curriculum information through AJAX */
+    // $('#curriculum-form').submit(function(event) {
+    //     event.preventDefault()
+    //     spinner.show()
+    //     var element = $(this)
+    //     var formData = element.serializeArray()
+    //     var currCode = formData[0].value.trim()
+    //     var currName = formData[1].value.trim()
+    //     var currDesc = formData[2].value.trim()
+    //     var showUniqueErrorMsg = () => $('.unique-error-msg').removeClass('invisible')
+
+    //     // if (currCode.length == 0) showUniqueErrorMsg()
+
+    //     // if (currName.length == 0) $('.name-error-msg').removeClass('invisible')
+    //     // else {
+
+    //     $.post('../src/admin/add.php', formData, function(data) {
+    //         // success
+    //         element.closest('.modal').modal('toggle')
+    //         location.reload()
+    //     }).fail(function(xhr, textStatus, error) {
+    //         let responseText = JSON.parse(xhr.responseText)
+    //         responseText.error.forEach(processError)
+    //     })
+    // })
 </script>
 
 </html>
