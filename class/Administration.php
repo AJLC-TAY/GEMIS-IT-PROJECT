@@ -214,24 +214,24 @@ class Administration extends Dbconfig
         return $subject;
     }
 
-    /** Adds a new program */
+    /** Adds a new subject */
     public function addSubject()
     {
         $code = $_POST['code'];
-        $subName = $_GET['name']; 
-        $grdLvl = $_POST['gradeLevel'];
-        $sem = $_POST['semester'];
+        $subName = $_POST['name']; 
         $type = $_POST["sub-type"];
-        $prereq = $_POST["Radios"];//?
-        $coreq = $_POST["Radios1"]; //?
+        $grdLvl = $_POST['grade-level'];
+        $sem = $_POST['semester'];
+        // $prereq = $_POST["Radios"];//?
+        // $coreq = $_POST["Radios1"]; //?
 
         // start of validation
 
         // end of validation
 
-        $query = "INSERT INTO program VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES (?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($this->dbConnect, $query);
-        mysqli_stmt_bind_param($stmt, 'sss', $code, $subName, $grdLvl, $sem, $type, $prereq, $coreq);
+        mysqli_stmt_bind_param($stmt, 'ssdds', $code, $subName, $grdLvl, $sem, $type);
         mysqli_stmt_execute($stmt);
     }
 
@@ -263,5 +263,23 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $query = "DELETE FROM subject WHERE sub_code='$code'";
         mysqli_query($this->dbConnect, $query);
+    }
+
+    public function searchSubjects() 
+    {
+        if(strlen($_GET['keyword']) > 0) {
+            $text = $_GET['keyword'];
+            $query = "SELECT * FROM subject WHERE sub_name LIKE \"%$text%\"";
+            $result = mysqli_query($this->dbConnect, $query);
+            $subjects = array();
+
+            while($row = mysqli_fetch_assoc($result)) {
+                $sub = new stdClass();
+                $sub->code = $row['code'];
+                $sub->name = $row['name'];
+                $subjects[] = $sub;
+            }
+            echo json_encode($subjects);
+        }
     }
 }
