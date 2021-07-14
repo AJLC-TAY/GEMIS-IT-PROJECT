@@ -41,9 +41,9 @@
 
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="right" data-field=' '>Code</th>
-                                            <th scope='col' data-width="600" data-sortable="true" data-field="">Subject Name</th>
-                                            <th scope='col' data-width="100" data-sortable="true" data-field=" ">Type</th>
+                                            <th scope='col' data-width="100" data-align="right" data-field="sub_code">Code</th>
+                                            <th scope='col' data-width="600" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                            <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Type</th>
                                             <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                     </thead>
@@ -110,10 +110,10 @@
         $('#program').addClass('active-sub')
 
         var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?code=${code}&data=subjects`,
+            "url": `getAction.php?data=subjects`,
             "method": 'GET',
-            // "search": true,
-            // "searchSelector": '#search-curr',
+            "search": true,
+            "searchSelector": '#search-input',
             "uniqueId": "code",
             "idField": "code",
             "height": 300,

@@ -7,6 +7,6 @@ if (isset($_GET['code']) && $_GET['data'] == 'program') {
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'subjects') {
-    $admin->searchSubjects();
+    $admin->listSubjectsJSON();
 }
 ?>

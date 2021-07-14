@@ -109,16 +109,19 @@ class Subject implements JsonSerializable
     private $prerequisite;
     private $corequisite;
     private $prog_code;
+    private $action;
 
     public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $prerequisite, $corequisite)
     {
         $this->sub_code = $sub_code;
-        $this->$sub_name = $sub_name;
-        $this->$for_grd_level = $for_grd_level;
-        $this->$sub_semester = $sub_semester;
-        $this->$sub_type = $sub_type;
-        $this->$prerequisite = $prerequisite;
-        $this->$corequisite = $corequisite;
+        $this->sub_name = $sub_name;
+        $this->for_grd_level = $for_grd_level;
+        $this->sub_semester = $sub_semester;
+        $this->sub_type = $sub_type;
+        $this->prerequisite = $prerequisite;
+        $this->corequisite = $corequisite;
+        $this->action =  "<a href='subject.php?code=".$sub_code."&state=edit' class='btn btn-secondary'>Edit</a>"
+                        . "<a href='subject.php?code=".$sub_code."' class='btn btn-primary'>View</a>";
     }
 
     public function get_sub_code()
@@ -165,7 +168,8 @@ class Subject implements JsonSerializable
             'sub_semester' => $this->sub_semester,
             'sub_type' => $this->sub_type,
             'prerequisite' => $this->prerequisite,
-            'corequisite' => $this->corequisite
+            'corequisite' => $this->corequisite,
+            'action' => $this->action
         ];
     }
 }

@@ -64,51 +64,7 @@ function getSubjectPageContent($state) {
                                     <input id="req-btn" class="btn btn-outline-secondary " data-bs-toggle="collapse" data-bs-target="#req-table-con" type="button" value="Prerequisite | Corequisite Subjects">
                                 
                                     <div id="req-table-con" class="collapse">
-                                    <div class="col-12">
-                                        <div class="requisites d-flex flex-column justify-content-between">
-                                            <div class="card">
-                                                <div class="card-header">Prerequisite</div>
-                                                <div class="requisite card-body">
-                                                    <div class="input-group mb-3">
-                                                        <div class="search-con">
-                                                            <input id="pre" type="search" class="form-control" placeholder="Search subject here">
-                                                            <ul id="pre-results" class="dropdown-menu" aria-labelledby="dropdownMenuButton"></ul>
-                                                        </div>   
-                                                    
-                                                    </div>
-                                                    <ul id="prerequisite" class="added-sub list-group">
-                                                        <li id="pre-msg" class="no-subject-msg list-group-item border border-1 d-flex justify-content-center align-items-center">No subjects yet.</li>';
-                                                        foreach ($subjects as $sub) {
-                                                            $form .= '<li class="subject list-group-item d-flex justify-content-between align-items-center"><option value="">'.$sub.'</option>
-                                                            <button type="btn" class="btn btn-danger radius-50"><img src=""></button></li>';
-                                                        }
-                                                    $form .= '
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-            
-                                            <div class="card">
-                                                <div class="card-header">Corequisite</div>
-                                                <div class="requisite card-body">
-                                                    <div class="input-group mb-3">
-                                                        <div class="search-con">
-                                                            <input id="co" type="search" class="form-control" placeholder="Search subject here">
-                                                            <ul id="co-results" class="dropdown-menu" aria-labelledby="dropdownMenuButton"></ul>
-                                                        </div>   
-                                                    </div>
-                                                    <ul id="corequisite" class="added-sub list-group">
-                                                    <li id="co-msg" class="no-subject-msg border border-1 d-flex justify-content-center align-items-center">No subjects yet.</li>';
-                                                        foreach ($subjects as $sub) {
-                                                            $form .= '<li class="subject list-group-item d-flex justify-content-between align-items-center"><option value="">'.$sub.'</option>
-                                                            <button type="btn" class="btn btn-danger btn-sm"><img src=""></button></li>';
-                                                        }
-                                                    $form .='
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     </div>
                                     <input type="hidden" name="action" value="addSubject">
                                     <input class="btn btn-success form-control" type="submit" value="Add Subject">
