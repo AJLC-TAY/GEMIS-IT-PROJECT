@@ -75,8 +75,16 @@
                             <label for="prog-desc">Description</label>
                             <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
-                            <label for="curr-code">Curriculum Code</label>
-                            <input id="curr-code" type="text" name="curr-code" class='form-control' placeholder="ex. K12 Academic" required>
+                            <select id="curr-code" class="form-control" name="curr-code">
+                            <option selected>Select...</option>
+                                <?php $currList = $admin->listCurriculum();
+                                foreach ($currList as  $cur) {
+                                   $curr_code = $cur->get_cur_code();
+                                    echo "<option> " . $curr_code . "</option>";
+                                }
+                                ?>
+
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
