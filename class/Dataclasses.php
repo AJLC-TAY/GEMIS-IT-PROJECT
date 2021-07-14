@@ -52,15 +52,15 @@ class Program implements JsonSerializable
     private $curr_code;
     private $prog_name;
     private $prog_desc;
-    #private $action;
+    private $action;
 
     public function __construct($prog_code, $curr_code, $prog_desc)
     {
         $this->prog_code = $prog_code;
         $this->curr_code = $curr_code;
         $this->prog_desc = $prog_desc;
-        // $this->action = "<button class='btn btn-secondary'>Edit</button>"
-        //               . "<button class='btn btn-primary'>View</button>";
+        $this->action = "<a href='program.php?code=".$prog_code."&state=edit' class='btn btn-secondary'>Edit</a>"
+                      . "<a href='program.php?code=".$prog_code."' class='btn btn-primary'>View</a>";
     }
 
     public function get_curr_code()
@@ -88,8 +88,8 @@ class Program implements JsonSerializable
         return [
             'prog_code'    => $this->prog_code,
             'curr_code'    => $this->curr_code,
-            //'prog_name'    => $this->prog_name, 
-            //'action'       => $this->action
+            // 'prog_name'    => $this->prog_name, 
+            'action'       => $this->action,
             'prog_desc'    => $this->prog_desc,
         ];
     }

@@ -41,37 +41,7 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="program-con d-flex flex-wrap container">
-                                <?php //$programList = $admin->listPrograms(); -->
-                                // foreach ($programList as  $prog) {
-                                //     $code = $prog->get_prog_code();
-                                //     $curr_code = $prog->get_curr_code();
-                                //     $desc = $prog->get_prog_desc();
-
-                                //     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
-                                //             <div class='card-body'>
-                                //                 <div class='dropdown'>
-                                //                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                //                     <ul class='dropdown-menu'>
-                                //                         <li><a class='dropdown-item' href='program.php?state=edit&code=" .   $code . "'>Edit</a></li>
-                                //                         <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
-                                //                         <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
-                                //                     </ul>
-                                //                 </div>
-                                //                 <h4>" . $desc . " </h4>
-                                //                 <p> " . $curr_code . " | " . $code . "</p>
-                                //             </div>
-                                //             <div class='modal-footer p-0'>
-                                //                 <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
-                                //             </div>
-                                //         </div>";
-                                // }
-
-                                // echo "<div class='btn add-program card shadow-sm'>
-                                //         <div class='card-body'>
-                                //             Add Program
-                                //         </div>
-                                //     </div>";
-                                ?>
+                                
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Programs</button>
                         </div>
@@ -103,7 +73,7 @@
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
                             <label for="prog-desc">Description</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accaountancy,Business, and Management" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
                             <label for="curr-code">Curriculum Code</label>
                             <input id="curr-code" type="text" name="curr-code" class='form-control' placeholder="ex. K12 Academic" required>
@@ -190,7 +160,6 @@
 
 <!-- Scripts -->
 <script type="text/javascript">
-    //var programList = <?php //echo json_encode($programList); ?>;
     var programCon = $('.program-con')
     var kebab = $('.kebab')
     var addProgramBtn = $('.add-program')
@@ -202,7 +171,6 @@
 
 
     function reloadProgram() {
-        // location.reload()
         spinner.show()
         var action = 'getProgramJSON'
         $.post('action.php', {
@@ -226,7 +194,7 @@
                                                     </ul>
                                                 </div>
                                                 <h4>${prog_desc}</h4>
-                                                <p>${cur_code} | "${prog_code}"</p>
+                                                <p>${cur_code} | ${prog_code}</p>
                                             </div>
                                             <div class='modal-footer p-0'>
                                                 <a role='button' class='btn' href='program.php?code=${prog_code}'>View</a>

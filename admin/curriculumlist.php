@@ -40,36 +40,7 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="curriculum-con d-flex flex-wrap container">
-                                <?php // $curriculumList = $admin->listCurriculum();
-                                // foreach ($curriculumList as  $curr) {
-                                //     $code = $curr->get_cur_code();
-                                //     $name = $curr->get_cur_name();
-                                //     $desc = $curr->get_cur_desc();
-                                //     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
-                                //             <div class='card-body'>
-                                //                 <div class='dropdown'>
-                                //                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                //                     <ul class='dropdown-menu'>
-                                //                         <li><a class='dropdown-item' href='curriculum.php?code=" .   $code . "&state=edit'>Edit</a></li>
-                                //                         <li><button data-name='" .  $name ."' class='archive-btn dropdown-item'>Archive</button></li>
-                                //                         <li><button class='delete dropdown-item' id='" .  $code . "'>Delete</button></li>
-                                //                     </ul>
-                                //                 </div>
-                                //                 <h4>". $name ." </h4>
-                                //                 <p> ". $desc ."</p>
-                                //             </div>
-                                //             <div class='modal-footer p-0'>
-                                //                 <a role='button' class='btn' href='curriculum.php?code=" .  $code . "'>View</a>
-                                //             </div>
-                                //         </div>";
-                                // }
-
-                                //     echo "<div class='btn add-curriculum card shadow-sm'>
-                                //         <div class='card-body'>
-                                //             Add Curriculum
-                                //         </div>
-                                //     </div>";
-                                ?>
+                
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
                         </div>
@@ -137,6 +108,27 @@
             </div>
         </div>
 
+        <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Confirmation</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Do you want to delete <span class="modal-identifier"></span>?</h5>
+                        <p class="modal-msg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger close-btn delete-btn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -191,7 +183,7 @@
                     <div class="toast-body"></div>
                 </div>
 
-                <div class="toast add-toast bg-dark text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body">
                         Curriculum successfully added
                     </div>

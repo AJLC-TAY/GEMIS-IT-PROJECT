@@ -23,9 +23,9 @@ function reloadCurriculum() {
                         <div class='dropdown'>
                             <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                             <ul class='dropdown-menu'>
-                                <li><a class='dropdown-item' href='curriculum.php?code=${code}'>Edit</a></li>
+                                <li><a class='dropdown-item' href='curriculum.php?code=${code}&state=edit'>Edit</a></li>
                                 <li><button data-name='${name}' class='archive-btn dropdown-item'>Archive</button></li>
-                                <li><button class='delete dropdown-item' id='${code}'>Delete</button></li>
+                                <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>Delete</button></li>
                             </ul>
                         </div>
                         <h4>${name}</h4>
@@ -102,6 +102,7 @@ $(document).ready(function() {
             form.trigger('reset')
             $('#add-curr-modal').modal('hide')
             reloadCurriculum()
+            $('.add-toast').toast('show')
         }).fail(function () {
 
         })
@@ -142,20 +143,33 @@ $(document).on('click', '.archive-btn', function() {
     $('#archive-modal').modal('toggle')
 })
 
-$(document).on('click', '.delete', function() {
+
+
+$(document).on('click', '.delete-option', function() {
     spinner.show()
     var code = $(this).attr('id')
-    var action = "deleteCurriculum"
+    let name = $(this).attr('data-name')
+    var deleteModal =  $('#delete-modal')
+    deleteModal.find('.modal-identifier').html(`${name} Curriculum`)
+    deleteModal.find('.modal-msg').html('Deleting this curriculum will also delete all programs/strands, subjects, and student grades under this curriculum.')
+    deleteModal.find('.delete-btn').attr('id', code)
+    deleteModal.modal('toggle')
 
-    if(confirm("Are you sure you want to delete this Curriculum?")) {
-        $.post("action.php", {code, action}, function(data) {					
-            reloadCurriculum()
-        })
-    } else {
-        return false
-    }
     spinner.fadeOut()
 })
+
+$(document).on('click', '.delete-btn', function() {
+    var code = $(this).attr('id')
+    var action = "deleteCurriculum"
+    $.post("action.php", {code, action}, function(data) {	
+        $('#delete-modal').modal('hide')		
+        reloadCurriculum()
+        let warningToast = $('.warning-toast')
+        warningToast.find('.toast-body').html('Curriculum successfully deleted.')
+        warningToast.toast('show')
+    })
+})
+
 
 /*** Footer modal buttons */
 /*** Reset curriculum form and hide error messages */

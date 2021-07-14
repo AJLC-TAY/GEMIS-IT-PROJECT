@@ -89,7 +89,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     <tr>
                                         <th data-checkbox="true"></th>
                                         <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
-                                        <th scope='col' data-width="600" data-sortable="true" data-field="prog_name">Program/Strand Name</th>
+                                        <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
                                         <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                                     </tr>
                                 </thead>

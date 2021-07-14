@@ -134,6 +134,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
+    var code = <?php echo json_encode($prog_code);?>;
     $(document).ready(function() {
         /** Display active menu item */
         $('#curr-management a:first').click()
