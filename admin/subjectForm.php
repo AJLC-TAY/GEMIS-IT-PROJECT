@@ -163,10 +163,21 @@ function getSubjectPageContent($state) {
                                     </div>
                                 </div>
                                 
-                                <input id="req-btn" class="btn btn-outline-secondary " data-bs-toggle="collapse" data-bs-target="#req-table-con" type="button" value="Prerequisite | Corequisite Subjects">
+                                <div class="col-4">
+                                    <input id="req-btn" class="btn btn-outline-secondary " data-bs-toggle="collapse" data-bs-target="#req-table-con" type="button" value="Prerequisite | Corequisite Subjects">
+                                </div>
                                 
+                                <br>
+                                <br>
                                 <div id="req-table-con" class="collapse">
-                                    <h3 class="pt-3">Grade 11</h3>
+                                    <div class="col-11">
+                                        <h3 class="pt-3">Grade 11</h3>
+                                    </div>
+        
+                                    <div class="col-1">
+                                        <input class="btn btn-outline-secondary" type="button" value="Clear">
+                                    </div>
+                                    
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr class="text-center">
@@ -182,9 +193,22 @@ function getSubjectPageContent($state) {
                                                 <th scope="row">OCC</th>
                                                 <td>Oral Communication in Context</td>
                                                 <td>CORE</td>
-                                                <td><input class="form-check-input" type="radio" name="Radios" id="radios5" value="option5"></td>
-                                                <td><input class="form-check-input" type="radio" name="Radios" id="radios6" value="option6"></td>
-
+                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios5" value="option5"></td>
+                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios6" value="option6"></td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th scope="row">OCC</th>
+                                                <td>Oral Communication in Context</td>
+                                                <td>CORE</td>
+                                                <td><input class="form-check-input" type="radio" name="Radios2" id="radios7" value="option7"></td>
+                                                <td><input class="form-check-input" type="radio" name="Radios2" id="radios8" value="option8"></td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th scope="row">OCC</th>
+                                                <td>Oral Communication in Context</td>
+                                                <td>CORE</td>
+                                                <td><input class="form-check-input" type="radio" name="Radios3" id="radios9" value="option9"></td>
+                                                <td><input class="form-check-input" type="radio" name="Radios3" id="radios10" value="option10"></td>
                                             </tr>
                                         </tbody>
                                     </table>
