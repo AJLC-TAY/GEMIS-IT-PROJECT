@@ -41,36 +41,36 @@
                                 <p class="m-auto">No results found</p>
                             </div>
                             <div class="program-con d-flex flex-wrap container">
-                                <?php $programList = $admin->listPrograms();
-                                foreach ($programList as  $prog) {
-                                    $code = $prog->get_prog_code();
-                                    $curr_code = $prog->get_curr_code();
-                                    $desc = $prog->get_prog_desc();
+                                <?php //$programList = $admin->listPrograms(); -->
+                                // foreach ($programList as  $prog) {
+                                //     $code = $prog->get_prog_code();
+                                //     $curr_code = $prog->get_curr_code();
+                                //     $desc = $prog->get_prog_desc();
 
-                                    echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
-                                            <div class='card-body'>
-                                                <div class='dropdown'>
-                                                    <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
-                                                    <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?editState=enable&code=" .   $code . "'>Edit</a></li>
-                                                        <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
-                                                        <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
-                                                    </ul>
-                                                </div>
-                                                <h4>" . $desc . " </h4>
-                                                <p> " . $curr_code . " | " . $code . "</p>
-                                            </div>
-                                            <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
-                                            </div>
-                                        </div>";
-                                }
+                                //     echo "<div data-id='" .  $code . "' class='card shadow-sm p-0'>
+                                //             <div class='card-body'>
+                                //                 <div class='dropdown'>
+                                //                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
+                                //                     <ul class='dropdown-menu'>
+                                //                         <li><a class='dropdown-item' href='program.php?state=edit&code=" .   $code . "'>Edit</a></li>
+                                //                         <li><button data-name='" .  $desc . "' class='archive-btn dropdown-item'>Archive</button></li>
+                                //                         <li><button class='delete dropdown-item' id='" . $code . "'>Delete</button></li>
+                                //                     </ul>
+                                //                 </div>
+                                //                 <h4>" . $desc . " </h4>
+                                //                 <p> " . $curr_code . " | " . $code . "</p>
+                                //             </div>
+                                //             <div class='modal-footer p-0'>
+                                //                 <a role='button' class='btn' href='program.php?code=" .  $code . "'>View</a>
+                                //             </div>
+                                //         </div>";
+                                // }
 
-                                echo "<div class='btn add-program card shadow-sm'>
-                                        <div class='card-body'>
-                                            Add Program
-                                        </div>
-                                    </div>";
+                                // echo "<div class='btn add-program card shadow-sm'>
+                                //         <div class='card-body'>
+                                //             Add Program
+                                //         </div>
+                                //     </div>";
                                 ?>
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Programs</button>
@@ -220,7 +220,7 @@
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?id="${prog_code}'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='program.php?state=edit&code=${prog_code}'>Edit</a></li>
                                                         <li><button data-name='${prog_desc}' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='${prog_code}'>Delete</button></li>
                                                     </ul>
@@ -273,7 +273,7 @@
             })
             return
         }
-
+        
         // no results found at this point
         cards.each(function() {
             $(this).hide()
@@ -282,6 +282,7 @@
     }
 
     $(document).ready(function() {
+        reloadProgram()
         spinner.fadeOut("slow")
         /** Display active menu item */
         $('#curr-management a:first').click()

@@ -34,7 +34,7 @@
                                             <h4>Subject List</h4>
                                             <div>
                                                 <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</button>
+                                                <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</a>
                                                 <button class="btn btn-secondary" title='Archive strand'>Export</button>
                                             </div>
                                         </div>

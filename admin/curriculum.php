@@ -121,10 +121,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
                             <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                             <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code); ?>" readonly>
+                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
                         </div>
                     </form>
                 </div>
@@ -140,54 +140,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
-    var $table
-    var code = 'k12acad'
-
-    function onPostBodyOfTable() {
-
-    }
-
-    $(document).ready(function() {
-        /** Display active menu item */
-        $('#curr-management a:first').click()
-        $('#curriculum').addClass('active-sub')
-
-        var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?code=${code}&data=program`,
-            "method": 'GET',
-            // "search": true,
-            // "searchSelector": '#search-curr',
-            "uniqueId": "code",
-            "idField": "code",
-            "height": 300,
-            // "exportDataType": "All",
-            "pagination": true,
-            "paginationParts": ["pageInfoShort", "pageSize", "pageList"],
-            "pageSize": 10,
-            "pageList": "[10, 25, 50, All]",
-            // "onPostBody": onPostBodyOfTable
-        })
-
-        $('#edit-btn').click(function() {
-            let editBtn = $(this)
-            let saveBtn = $("#save-btn")
-            editBtn.prop("disabled", true)
-            saveBtn.prop("disabled", false)
-            editBtn.closest('form').find('.form-input').each(function() {
-                $(this).prop('disabled', false)
-            })
-        })
-
-        // $('#save-btn').click(function() {
-        //     $(this).prop("disabled", true)
-        //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('.form-input').each(function() {
-        //         $(this).prop('disabled', true)
-        //     })
-        // })
-
-
-    })
+    var code = <?php echo json_encode($curr_code);?>;
 </script>
+<script type="text/javascript" src="../js/admin/curriculum.js"></script>
 
 </html>

@@ -16,8 +16,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = "";
     $edit_btn_state = "disabled";
 }
-// $prog_code = 'ABM';
-// $prog_name = 'Acountancy and Business Management';
 ?>
 
 <body>
@@ -78,7 +76,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             <h4>Subjects</h4>
                                             <div>
                                                 <button class="btn btn-secondary" title='Archive subject'>Archive</button>
-                                                <button id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</button>
+                                                <a href="subject.php?state=add&code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
                                             </div>
                                         </div>
 
@@ -136,13 +134,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
-    var $table
-    var code = 'k12acad'
-
-    function onPostBodyOfTable() {
-
-    }
-
     $(document).ready(function() {
         /** Display active menu item */
         $('#curr-management a:first').click()
@@ -171,16 +162,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 $(this).prop('disabled', false)
             })
         })
-
-        // $('#save-btn').click(function() {
-        //     $(this).prop("disabled", true)
-        //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('input').each(function() {
-        //         $(this).prop('disabled', true)
-        //     })
-        // })
-
-
     })
 </script>
 
