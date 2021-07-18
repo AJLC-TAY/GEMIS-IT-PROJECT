@@ -55,7 +55,32 @@
         else $('#subject').addClass('active-sub')
    
         $('#req-btn').click(function () {
-            $('#req-table-con').removeClass('d-none')  
+            console.log(($('#grade-level').text))
+            switch($('#grade-level').val()){
+                case '11':
+                    $('#grade11-table').show()
+                    $('#grade12-table').hide()
+                    break;
+                case '12':
+                    $('#grade12-table').show()
+                    $('#grade11-table').show() //kasi may subjects na prereq or coreq ay nasa lower grade
+                    break;
+                default:
+                    $('#grade11-table').hide()
+                    $('#grade12-table').hide()
+            }
+            // if ($('#grade-level').val() == 11){
+            //     $('#grade11-table').show()
+            //     console.log($('#grade-level').value)
+            // } //else if ($('#grade-level').value === 11){
+            //     //$('#grade11-table').show()
+            //     //console.log('pasok 3')
+            //     //console.log($('#grade-level').value)
+            // else if  ($('#grade-level').val() == 12){
+            //     $('#grade12-table').show()}
+
+           //$('#req-table-con').removeClass('d-none')  
+
         })
 
         $('#sub-type').change(function() {
