@@ -74,6 +74,8 @@ function getSubjectPageContent($state) {
         }
 
         $programs = $admin->listPrograms();
+        $subjectGrade11 = $admin->listSubjectsGrade11();
+        $subjectGrade12 = $admin->listSubjectsGrade12();
         $content->breadcrumb = '<nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -123,7 +125,7 @@ function getSubjectPageContent($state) {
                                     </div>
                                     <div id="app-spec-options" class="col-4">
                                         <label>Options for Applied or Specialized Subjects</label>';
-
+                                    
                                     foreach ($programs as $program) {
                                         $prog_code = $program->get_prog_code();
                                         $prog_name = $program->get_prog_name();
@@ -143,7 +145,9 @@ function getSubjectPageContent($state) {
                                 
                                 <br>
                                 <br>
+
                                 <div id="req-table-con" class="collapse">
+                                <div id="grade11-table" class="collapse" >
                                     <div class="col-11">
                                         <h3 class="pt-3">Grade 11</h3>
                                     </div>
@@ -153,40 +157,77 @@ function getSubjectPageContent($state) {
                                     </div>
                                     
                                     <table class="table table-bordered">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th scope="col">CODE</th>
-                                                <th scope="col">SUBJECT NAME</th>
-                                                <th scope="col">TYPE</th>
-                                                <th scope="col">PRE</th>
-                                                <th scope="col">CO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="text-center">
-                                                <th scope="row">OCC</th>
-                                                <td>Oral Communication in Context</td>
-                                                <td>CORE</td>
-                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios5" value="option5"></td>
-                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios6" value="option6"></td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <th scope="row">OCC</th>
-                                                <td>Oral Communication in Context</td>
-                                                <td>CORE</td>
-                                                <td><input class="form-check-input" type="radio" name="Radios2" id="radios7" value="option7"></td>
-                                                <td><input class="form-check-input" type="radio" name="Radios2" id="radios8" value="option8"></td>
-                                            </tr>
-                                            <tr class="text-center">
-                                                <th scope="row">OCC</th>
-                                                <td>Oral Communication in Context</td>
-                                                <td>CORE</td>
-                                                <td><input class="form-check-input" type="radio" name="Radios3" id="radios9" value="option9"></td>
-                                                <td><input class="form-check-input" type="radio" name="Radios3" id="radios10" value="option10"></td>
-                                            </tr>
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col">CODE</th>
+                                            <th scope="col">SUBJECT NAME</th>
+                                            <th scope="col">TYPE</th>
+                                            <th scope="col">PRE</th>
+                                            <th scope="col">CO</th>
+                                        </tr>
+                                    </thead>
+
+                                        <tbody>';
+                                            foreach ($subjectGrade11 as $subGr11) {
+                                                $sub_code = $subGr11->get_sub_code();
+                                                $sub_name = $subGr11->get_sub_name();
+                                                $sub_type = $subGr11->get_sub_type();
+                                                //$prereq = $subGr11->get_prerequisite();
+                                                //$coreq = $subGr11->get_corequisite(); 
+                                                $form .= '<tr class="text-center">
+                                                <th scope="col">'.$sub_code.'</th>
+                                                <td scope="col">'.$sub_name.'</td>
+                                                <td scope="col">'.$sub_type.'</td>
+                                                <td scope="col"><input class="form-check-input" type="radio" name="Radios1" id="radios5" value="option5"></td>
+                                                <td scope="col"><input class="form-check-input" type="radio" name="Radios1" id="radios6" value="option6"></td>';
+                                            }
+                                            $form .='
+                                                </tr>
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div id="grade12-table" class="collapse">
+                                <div class="col-11">
+                                        <h3 class="pt-3">Grade 12</h3>
+                                    </div>
+        
+                                    <div class="col-1">
+                                        <input class="btn btn-outline-secondary" type="button" value="Clear">
+                                    </div>
+                                    
+                                    <table class="table table-bordered">
+
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th scope="col">CODE</th>
+                                            <th scope="col">SUBJECT NAME</th>
+                                            <th scope="col">TYPE</th>
+                                            <th scope="col">PRE</th>
+                                            <th scope="col">CO</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody>';
+                                            foreach ($subjectGrade12 as $subGr12) {
+                                                $sub_code = $subGr12->get_sub_code();
+                                                $sub_name = $subGr12->get_sub_name();
+                                                $sub_type = $subGr12->get_sub_type();
+                                                //$prereq = $subGr12->get_prerequisite();
+                                                //$coreq = $subGr12->get_corequisite(); 
+                                                $form .= '<tr class="text-center">
+                                                <th scope="col">'.$sub_code.'</th>
+                                                <td>'.$sub_name.'</td>
+                                                <td>'.$sub_type.'</td>
+                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios5" value="option5"></td>
+                                                <td><input class="form-check-input" type="radio" name="Radios1" id="radios6" value="option6"></td>';
+                                            }
+                                            $form .='
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                                
                                 <input type="hidden" name="action" value="addSubject">
                                 <input class="btn btn-success form-control" type="submit" value="Add Subject">
                             </form>';

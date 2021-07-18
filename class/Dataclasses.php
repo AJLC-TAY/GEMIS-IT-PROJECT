@@ -126,12 +126,12 @@ class Subject implements JsonSerializable
 
     public function get_sub_code()
     {
-        return $this->prog_code;
+        return $this->sub_code;
     }
 
     public function get_sub_name()
     {
-        return $this->prog_name;
+        return $this->sub_name;
     }
 
     public function get_for_grd_level()
@@ -146,7 +146,7 @@ class Subject implements JsonSerializable
 
     public function get_sub_type()
     {
-        return $this->sub_types;
+        return $this->sub_type;
     }
 
     public function get_prerequisite()
