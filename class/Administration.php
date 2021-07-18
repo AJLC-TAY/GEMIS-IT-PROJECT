@@ -20,7 +20,7 @@ class Administration extends Dbconfig
             $this->password = $database->password;
             $this->dbName = $database->dbName;
 
-            $conn = new mysqli($this->hostName, $this->userName, $this->password, $this->dbName);
+            $conn = new mysqli($this->hostName, $this->userName, $this->password, $this->dbName, 3308);
             if ($conn->connect_error) {
                 die("Error failed to connect to MySQL: " . $conn->connect_error);
             } else {
@@ -254,7 +254,7 @@ class Administration extends Dbconfig
         // $isUpdated = mysqli_query($this->dbConnect, $updateQuery);
 
         //if($_POST['code']) {	}	 
-        $updateQuery = "UPDATE subject SET sub_code='" . $code . "',sub_name='" . $subName . "', for_grd_lvl='" . $grdLvl . "',sub_semester='" . $sem . "',sub_type='" . $type . "',prerequisite='" . $prereq . "', corerequisite='" . $coreq . "' WHERE sub_code = '" . $old_code . "'";
+        $updateQuery = "UPDATE subject SET sub_code='" . $code . "',sub_name='" . $subName . "', for_grd_level='" . $grdLvl . "',sub_semester='" . $sem . "',sub_type='" . $type . "',prerequisite='" . $prereq . "', corerequisite='" . $coreq . "' WHERE sub_code = '" . $old_code . "'";
         mysqli_query($this->dbConnect, $updateQuery);
         header("Location: subject.php?code=$code");
     }
@@ -282,4 +282,44 @@ class Administration extends Dbconfig
             echo json_encode($subjects);
         }
     }
+
+        
+    /** Returns the list of Grade 11 subjects. */
+    public function listSubjectsGrade11()
+    {
+        $query = "SELECT * FROM subject WHERE for_grd_level = 11";
+        $result = mysqli_query($this->dbConnect, $query);
+        $subjGrade11List = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjectGrade11 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+            $subjGrade11List[] = $subjectGrade11;
+        }
+        return $subjGrade11List;
+    }
+
+    public function listSubjectsGrade11JSON()
+    {
+        echo json_encode($this->listSubjectsGrade11());
+    }
+
+    /** Returns the list of Grade 12 subjects. */
+    public function listSubjectsGrade12()
+    {
+        $query = "SELECT * FROM subject WHERE for_grd_level = 12";
+        $result = mysqli_query($this->dbConnect, $query);
+        $subjGrade12List = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjectGrade12 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+            $subjGrade12List[] = $subjectGrade12;
+        }
+        return $subjGrade12List;
+    }
+
+    public function listSubjectsGrade12JSON()
+    {
+        echo json_encode($this->listSubjectsGrade12());
+    }
+
 }
