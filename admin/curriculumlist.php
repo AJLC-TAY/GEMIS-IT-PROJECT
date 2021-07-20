@@ -9,6 +9,13 @@
     <?php include('../class/Administration.php'); 
     $admin = new Administration();
     ?>
+    <!-- SPINNER -->
+    <div class="spinner-con">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
 
     <section id="container">
         <?php include_once ('../inc/admin/sidebar.html'); ?>
@@ -31,10 +38,6 @@
                                 <!-- SEARCH BAR -->
                                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                             </header>
-                            <!-- SPINNER -->
-                            <div class="spinner-border" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
                             <!-- No result message -->
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>

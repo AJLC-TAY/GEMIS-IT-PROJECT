@@ -2,7 +2,7 @@ var curriculumCon = $('.curriculum-con')
 var kebab = $('.kebab')
 var addCurriculumBtn = $('.add-curriculum')
 var noResultMsg = $('.msg')
-var spinner = $('.spinner-border')
+var spinner = $('.spinner-con')
 var searchInput = $('#search-input')
 var timeout = null
 var curriculumList = []
@@ -42,7 +42,7 @@ function reloadCurriculum() {
                             </div>`)
     })
 
-    spinner.fadeOut()
+    spinner.fadeOut(500)
 }
     
 function showWarningToast(msg) {

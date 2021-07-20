@@ -17,6 +17,13 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
 ?>
 
 <body>
+    <!-- SPINNER -->
+    <div class="spinner-con">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->

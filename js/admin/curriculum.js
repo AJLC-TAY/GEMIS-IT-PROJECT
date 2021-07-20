@@ -1,5 +1,7 @@
 
+var spinner = $('.spinner-con')
 $(function() {
+    spinner.show()
     /** Display active menu item */
     $('#curr-management a:first').click()
     $('#curriculum').addClass('active-sub')
@@ -29,5 +31,5 @@ $(function() {
             $(this).prop('disabled', false)
         })
     })
-
+    spinner.fadeOut(500)
 })

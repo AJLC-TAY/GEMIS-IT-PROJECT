@@ -1,8 +1,8 @@
-var spinner = $('.spinner-border')
+var spinner = $('.spinner-con')
 $(document).ready(function () {
+    spinner.show()
     $('.no-subject-msg').hide()
     let timeout = null;
-    let spinner = $('.spinner-grow')
 
     $('#curr-management a:first').click()
     if (isAddPageUnderProgram) $('#program').addClass('active-sub')
@@ -39,10 +39,11 @@ $(document).ready(function () {
         var form  = $(this)
         var formData = form.serializeArray()
 
+        // initialize requisites array
         var prereq = []
         var coreq = []
 
-
+        // remove radio buttons from the formdata and store them from the respective requisite arrays
         formData = formData.filter(function(item) {
             let value = item.value
             if (item.name.includes('radio-')) {
@@ -56,21 +57,27 @@ $(document).ready(function () {
             return true
         })
 
+        /**
+         * Stores all subject code under one requisite to the form data.
+         * @param {String}  requisite   Requisite identifier, 'pre' or 'co'. 
+         * @param {Array}   codeList    Raw subject code list.
+         */
         var saveRequisiteCodes = (requisite, codeList) => {
-            if (codeList.length == 0) return                    // return if list of codes is empty
+            if (codeList.length == 0) return                       // return if list of codes is empty
             
             codeList.forEach(code => {  
                 code = code.substring(code.indexOf("-") + 1)
                 formData.push( {'name': requisite, 'value': code}) // store subject code value; from pre-ABM to ABM
             })
         }
+
         saveRequisiteCodes('pre[]', prereq)
         saveRequisiteCodes('co[]', coreq)
 
         console.log(formData)
 
-        $.post("action.php", formData, function(data) {
-            
+        $.post("action.php", formData, function() {
+            window.location.href = 'subjectList.php' 
         })
     })
 
@@ -83,4 +90,7 @@ $(document).ready(function () {
         cancelBtn.removeClass('disabled')
         cancelBtn.removeClass('d-none')
     })
+
+        
+    spinner.fadeOut(500)
 })

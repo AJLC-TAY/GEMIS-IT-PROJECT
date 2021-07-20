@@ -19,7 +19,13 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 ?>
 
 <body>
-
+    <!-- SPINNER -->
+    <div class="spinner-con">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
@@ -136,7 +142,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
     var code = <?php echo json_encode($prog_code);?>;
+    var spinner = $('.spinner-con')
     $(document).ready(function() {
+        spinner.show()
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#program').addClass('active-sub')
@@ -164,6 +172,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 $(this).prop('disabled', false)
             })
         })
+        
+        spinner.fadeOut(500)
     })
 </script>
 

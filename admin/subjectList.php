@@ -5,6 +5,13 @@
 </head>
 
 <body>
+    <!-- SPINNER -->
+    <div class="spinner-con">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
@@ -59,12 +66,28 @@
             </section>
         </section>
     </section>
+       <!-- TOAST -->
+       <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div class="position-absolute" style="bottom: 20px; right: 25px;">
+            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"></div>
+            </div>
+
+            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    Subject successfully added
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TOAST END -->
 </body>
 
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript"> //javascript to be edited
+    var spinner = $('.spinner-con')
     var $table
     var code = 'k12acad'
 
@@ -73,6 +96,7 @@
     }
 
     $(document).ready(function() {
+        spinner.show()
         /** Display active menu item */
         $('#curr-management a:first').click()
         $('#subject').addClass('active-sub')
@@ -109,6 +133,6 @@
         //     })
         // })
 
-
+        spinner.fadeOut(500)
     })
 </script>

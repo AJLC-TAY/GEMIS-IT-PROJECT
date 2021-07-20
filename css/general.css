@@ -20,22 +20,37 @@
     box-shadow: none;
 }
 
-.spinner-border,
+/* TOAST */
 [class*='-toast'] {
     position: fixed;
     z-index: 99;
     overflow: show;
     margin: auto;
+    right: 0.5in;
+    bottom: 0.5in;
 }
+/* END TOAST */
 
-.spinner-border {
+/* SPINNER */
+.spinner-border, .spinner-con {
+    position: fixed;
+    overflow: show;
+    margin: auto;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
 }
 
-[class*='-toast'] {
-    right: 0.5in;
-    bottom: 0.5in;
+.spinner-border {
+  z-index: 99;
 }
+
+.spinner-con {
+  z-index: 98;
+  background: black; 
+  opacity: 0.40;
+  width: 100%;
+  height: 100%;
+}
+/* END SPINNER */
