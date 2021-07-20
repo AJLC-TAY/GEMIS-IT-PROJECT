@@ -76,7 +76,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             <h4>Subjects</h4>
                                             <div>
                                                 <button class="btn btn-secondary" title='Archive subject'>Archive</button>
-                                                <a href="subject.php?state=add&code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
+                                                <a href="subject.php?state=add&prog_code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
                                             </div>
                                         </div>
 
@@ -84,6 +84,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             <th data-checkbox="true"></th>
                                             <th scope='col' data-width="100" data-align="right" data-field='sub_code'>Code</th>
                                             <th scope='col' data-width="600" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                            <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Subject Type</th>
                                             <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                     </thead>
@@ -141,7 +142,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         $('#program').addClass('active-sub')
 
         var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?code=${code}&data=subjects`,
+            "url": `getAction.php?prog_code=${code}&data=subjects`,
             "method": 'GET',
             // "search": true,
             // "searchSelector": '#search-curr',

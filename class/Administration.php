@@ -15,12 +15,7 @@ class Administration extends Dbconfig
     {
         if (!$this->dbConnect) {
             $database = new dbConfig();
-            $this->hostName = $database->serverName;
-            $this->userName = $database->userName;
-            $this->password = $database->password;
-            $this->dbName = $database->dbName;
-
-            $conn = new mysqli($this->hostName, $this->userName, $this->password, $this->dbName, 3308);
+            $conn = $database->connect();
             if ($conn->connect_error) {
                 die("Error failed to connect to MySQL: " . $conn->connect_error);
             } else {
@@ -122,6 +117,7 @@ class Administration extends Dbconfig
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
 
+        
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
         }
@@ -135,7 +131,7 @@ class Administration extends Dbconfig
 
     public function getProgram()
     {
-        $code = $_GET['code'];
+        $code = $_GET['prog_code'];
         $query = "SELECT * FROM program WHERE prog_code='$code'";
         $result = mysqli_query($this->dbConnect, $query);
         $row = mysqli_fetch_assoc($result);
@@ -189,12 +185,22 @@ class Administration extends Dbconfig
     /*** Subject Methods */
     public function listSubjects()
     {
-        $query = "SELECT * FROM subject";
-        $result = mysqli_query($this->dbConnect, $query);
-        $subjectList = array();
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $subjectList[] = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+        $subjectList = [];
+     
+        $queryOne = "SELECT * FROM subject";
+        $resultOne = mysqli_query($this->dbConnect, $queryOne);
+        
+        while ($row = mysqli_fetch_assoc($resultOne)) {
+            $code = $row['sub_code'];
+            $sub_type = $row['sub_type'];
+            $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+            if ($sub_type == 'specialized') {
+                $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+                $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
+                $rowTwo = mysqli_fetch_row($resultTwo);
+                $subject->set_program($rowTwo[0]);
+            }
+            $subjectList[] = $subject;
         }
         return $subjectList;
     }
@@ -204,13 +210,79 @@ class Administration extends Dbconfig
         echo json_encode($this->listSubjects());
     }
 
+    public function listSubUnderProgJSON() {
+        $subjectList = [];
+        $query = "SELECT subject_sub_code FROM sharedsubject WHERE program_prog_code='". $_GET['prog_code'] ."';";
+        $result = mysqli_query($this->dbConnect, $query);
+
+        $subjects = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjects[] = $row['subject_sub_code'];
+        }
+
+        foreach($subjects as $sub) {
+            $query = "SELECT * FROM subject WHERE sub_code='". $sub ."';";
+            $result = mysqli_query($this->dbConnect, $query);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                $code = $row['sub_code'];
+                $sub_type = $row['sub_type'];
+                $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+                if ($sub_type == 'specialized' || $sub_type == 'applied') {
+                    $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+                    $resultFour = mysqli_query($this->dbConnect, $queryTwo);
+                    $programs = [];
+                    while ($rowFour = mysqli_fetch_assoc($resultFour)) {
+                        $programs[] = $rowFour['program_prog_code'];
+                    }
+                    $subject->set_programs($programs);
+                }
+                $subjectList[] = $subject;
+            }
+        }
+        echo json_encode($subjectList);
+    }
+
     public function getSubject()
     {
         $code = $_GET['code'];
-        $query = "SELECT * FROM subject WHERE sub_code='$code'";
-        $result = mysqli_query($this->dbConnect, $query);
+        $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
+        $result = mysqli_query($this->dbConnect, $queryOne);
         $row = mysqli_fetch_assoc($result);
-        $subject = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+        $sub_type = $row['sub_type'];
+        $subject = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+
+        $queryTwo = "SELECT * FROM requisite WHERE sub_code='$code' AND type='pre'";
+        $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
+        $prereq = [];
+        while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
+            $prereq[] = $rowTwo['req_sub_code'];
+        }
+
+        $queryThree = "SELECT * FROM requisite WHERE sub_code='$code' AND type='co'";
+        $resultThree = mysqli_query($this->dbConnect, $queryThree);
+        $coreq = [];
+        while ($rowThree = mysqli_fetch_assoc($resultThree)) {
+            $coreq[] = $rowThree['req_sub_code'];
+        }
+
+        if ($sub_type != 'core') {
+            $queryFour = "SELECT * FROM sharedsubject WHERE subject_sub_code='$code'";
+            $resultFour = mysqli_query($this->dbConnect, $queryFour);
+            $programs = [];
+            while ($rowFour = mysqli_fetch_assoc($resultFour)) {
+                $programs[] = $rowFour['program_prog_code'];
+            }
+            $subject->set_programs($programs);
+        }
+
+        if ($prereq) {
+            $subject->set_prerequisite($prereq);
+        }
+
+        if ($coreq) {
+            $subject->set_corequisite($coreq);
+        }
         return $subject;
     }
 
@@ -222,17 +294,35 @@ class Administration extends Dbconfig
         $type = $_POST["sub-type"];
         $grdLvl = $_POST['grade-level'];
         $sem = $_POST['semester'];
-        // $prereq = $_POST["Radios"];//?
-        // $coreq = $_POST["Radios1"]; //?
 
         // start of validation
 
         // end of validation
 
-        $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES (?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($this->dbConnect, $query);
-        mysqli_stmt_bind_param($stmt, 'ssdds', $code, $subName, $grdLvl, $sem, $type);
-        mysqli_stmt_execute($stmt);
+        $query = 'INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type)';
+        $query .= 'VALUES ("'. $code .'", "'. $subName . '", "'. $grdLvl .'", "'. $sem. '", "'. $type . '");';
+
+        // insert program and subject info in sharedsubject table
+        if ($type == 'applied' || $type == 'specialized') {
+            $prog_code_list = $_POST['prog_code'];
+            foreach($prog_code_list as $prog_code) {
+                $query .= 'INSERT INTO sharedsubject VALUES ("'. $code .'", "'. $prog_code .'");';
+            }
+        }
+
+        if (isset($_POST['pre'])) {
+            foreach($_POST['pre'] as $req_code) {
+                $query .= 'INSERT INTO requisite VALUES ("'. $code .'", "pre", "'. $req_code .'");';
+            }
+        }
+
+        if (isset($_POST['co'])) {
+            foreach($_POST['co'] as $req_code) {
+                $query .= 'INSERT INTO requisite VALUES ("'. $code .'", "co", "'. $req_code .'");';
+            }
+        }
+
+        mysqli_multi_query($this->dbConnect, $query);
     }
 
     public function updateSubject()

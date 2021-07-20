@@ -58,38 +58,6 @@
                 <!--footer end-->
             </section>
         </section>
-        <!-- ADD SUBJECT MODAL -->
-        <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal  " aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h4 class="mb-0">Add Subject</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="prog-form" action="">
-                            <div class="form-group">
-                                <label for=" ">Subject Code</label>
-                                <input id=" " type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. AM1" required>
-                                <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique subject code</small></p>
-                                <label for=" ">Subject Name</label>
-                                <input id=" e" type="text" name="name" class='form-control' placeholder="ex. Entrepreneurship 2" required>
-                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the subject name</small></p>
-                                <label for=" e">Subject Type</label>
-                                <input id=" " type="text" name="name" class='form-control' placeholder="ex. ABM 2" required>
-                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the subject type</small></p>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link=''>Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 </body>
 
@@ -107,7 +75,7 @@
     $(document).ready(function() {
         /** Display active menu item */
         $('#curr-management a:first').click()
-        $('#program').addClass('active-sub')
+        $('#subject').addClass('active-sub')
 
         var $table = $('#table').bootstrapTable({
             "url": `getAction.php?data=subjects`,

@@ -196,7 +196,7 @@
                                                 <div class='dropdown'>
                                                     <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                                                     <ul class='dropdown-menu'>
-                                                        <li><a class='dropdown-item' href='program.php?state=edit&code=${prog_code}'>Edit</a></li>
+                                                        <li><a class='dropdown-item' href='program.php?state=edit&prog_code=${prog_code}'>Edit</a></li>
                                                         <li><button data-name='${prog_desc}' class='archive-btn dropdown-item'>Archive</button></li>
                                                         <li><button class='delete dropdown-item' id='${prog_code}'>Delete</button></li>
                                                     </ul>
@@ -205,7 +205,7 @@
                                                 <p>${cur_code} | ${prog_code}</p>
                                             </div>
                                             <div class='modal-footer p-0'>
-                                                <a role='button' class='btn' href='program.php?code=${prog_code}'>View</a>
+                                                <a role='button' class='btn' href='program.php?prog_code=${prog_code}'>View</a>
                                             </div>
                                         </div>`
                 )

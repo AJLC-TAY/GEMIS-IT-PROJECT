@@ -59,8 +59,8 @@ class Program implements JsonSerializable
         $this->prog_code = $prog_code;
         $this->curr_code = $curr_code;
         $this->prog_desc = $prog_desc;
-        $this->action = "<a href='program.php?code=".$prog_code."&state=edit' class='btn btn-secondary'>Edit</a>"
-                      . "<a href='program.php?code=".$prog_code."' class='btn btn-primary'>View</a>";
+        $this->action = "<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary'>Edit</a>"
+                      . "<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary'>View</a>";
     }
 
     public function get_curr_code()
@@ -106,22 +106,21 @@ class Subject implements JsonSerializable
     private $for_grd_level;
     private $sub_semester;
     private $sub_type;
-    private $prerequisite;
-    private $corequisite;
-    private $prog_code;
+    private $prerequisite = [];
+    private $corequisite = [];
+    private $program;
+    private $programs = [];
     private $action;
 
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $prerequisite, $corequisite)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type)
     {
         $this->sub_code = $sub_code;
         $this->sub_name = $sub_name;
         $this->for_grd_level = $for_grd_level;
         $this->sub_semester = $sub_semester;
         $this->sub_type = $sub_type;
-        $this->prerequisite = $prerequisite;
-        $this->corequisite = $corequisite;
         $this->action =  "<a href='subject.php?code=".$sub_code."&state=edit' class='btn btn-secondary'>Edit</a>"
-                        . "<a href='subject.php?code=".$sub_code."' class='btn btn-primary'>View</a>";
+                    . "<a href='subject.php?code=".$sub_code."&state=view' class='btn btn-primary'>View</a>";
     }
 
     public function get_sub_code()
@@ -147,6 +146,39 @@ class Subject implements JsonSerializable
     public function get_sub_type()
     {
         return $this->sub_type;
+    }
+
+    public function set_prerequisite($prerequisite)
+    {
+        $this->prerequisite = $prerequisite;
+    }
+
+    public function set_corequisite($corequisite)
+    {
+        $this->corequisite = $corequisite;
+    }
+    
+    public function set_programs($programs)
+    {
+        $this->programs = $programs;
+    }
+
+    public function set_program($program)
+    {
+        $this->program = $program;
+        $sub_code = $this->get_sub_code();
+        $this->action =  "<a href='subject.php?prog_code=". $program ."&code=". $sub_code ."&state=edit' class='btn btn-secondary'>Edit</a>"
+                        . "<a href='subject.php?prog_code=". $program ."&code=". $sub_code ."&state=view' class='btn btn-primary'>View</a>";
+    }
+
+    public function get_programs()
+    {
+        return $this->programs;
+    }
+
+    public function get_program()
+    {
+        return $this->program;
     }
 
     public function get_prerequisite()

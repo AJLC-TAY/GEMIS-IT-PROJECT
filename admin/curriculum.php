@@ -11,12 +11,9 @@ $curriculum = $admin->getCurriculum(); // define var
 $curr_name = $curriculum->get_cur_name();
 $curr_code = $curriculum->get_cur_code();
 $curr_desc = $curriculum->get_cur_desc();
-$state = "disabled";
-$edit_btn_state = "";
-if (isset($_GET['state']) && $_GET['state'] == 'edit') {
-    $state = "";
-    $edit_btn_state = "disabled";
-}
+
+$state = (isset($_GET['state']) && $_GET['state'] == 'edit') ? "" : "disabled";
+$edit_btn_state = ($state == "disabled") ? "" : "disabled";
 ?>
 
 <body>
