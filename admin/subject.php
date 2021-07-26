@@ -9,15 +9,11 @@
     include_once ('subjectForm.php');
     
     if (isset($_GET['state'])) {
-        $state = $_GET['state'];
-        if (isset($_GET['code'])) {
-            $isAddPageUnderProgram = TRUE;
-        }
-        $content = getSubjectPageContent($state);
+        $isAddPageUnderProgram = isset($_GET['code']) ? TRUE : FALSE;
+        $content = getSubjectPageContent($_GET['state']);
     } else {
         return;
     }
-
 ?>
 <body>
     <!-- SPINNER -->

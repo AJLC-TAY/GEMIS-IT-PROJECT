@@ -1,4 +1,3 @@
-
 var spinner = $('.spinner-con')
 $(function() {
     spinner.show()

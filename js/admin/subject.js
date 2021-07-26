@@ -1,5 +1,5 @@
 var spinner = $('.spinner-con')
-$(document).ready(function () {
+$(function () {
     spinner.show()
     $('.no-subject-msg').hide()
     let timeout = null;
@@ -77,7 +77,7 @@ $(document).ready(function () {
         console.log(formData)
 
         $.post("action.php", formData, function() {
-            window.location.href = 'subjectList.php' 
+            // window.location.href = 'subjectList.php' 
         })
     })
 
