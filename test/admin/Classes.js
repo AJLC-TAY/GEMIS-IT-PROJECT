@@ -2,25 +2,29 @@ class Page {
     constructor(menuItem, subMenuItem = '') {
         this.menuItem = $(`${menuItem} a:first`)
         this.subMenuItem = $(`${subMenuItem}`)
-
         this.spinner = $('.spinner-con')
     }
 
+    /** Display active menu item */
     preload() {
-        /** Display active menu item */
         this.spinner.show()
         this.menuItem.click()
         if (this.subMenuItem) this.subMenuItem.addClass('active-sub')
     }
 
+    /** Fades out spinner */
     hideSpinner() {
         this.spinner.fadeOut(500)
     }
 
+    /** 
+     *  Overide the text of the toast body then toast is displayed.
+     *  @param {String} msg Text to be showed.
+     */
     showWarningToast(msg) {
-        let msgToast = $('.warning-toast')
-        msgToast.find('.toast-body').text(msg)
-        msgToast.toast('show')
+        let toast = $('.warning-toast')
+        toast.find('.toast-body').text(msg)
+        toast.toast('show')
     }
 }
 
@@ -78,7 +82,7 @@ class CardsPage extends Page {
         super(menuItem, subMenuItem)
         this.page = page                                               // ex. curriculum
         this.camelized = page.charAt(0).toUpperCase() + page.slice(1)  // ex. camelized = Curriculum 
-        this.action = action
+        this.action = action // getCurriculumJSON, getProgramJSON
 
         // access html elements
         this.addBtn = $('.add-btn')
@@ -104,10 +108,12 @@ class CardsPage extends Page {
 
         // delete and arhive messages
         this.deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`
-        this.archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects, and student grades under this ${page}.`
+        this.archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`
  
+        // functions
         this.prepareHTMLOfData = null 
         this.filter = null
+
         this.keywords = ""
         this.timeout = null
         this.dataList = []
@@ -157,31 +163,32 @@ class CardsPage extends Page {
     }
 
     
-    reload() {      
+    reload() {
         this.spinner.show()
+        // action = getCurriculumJSON
         $.post('action.php', {action : this.action}, (data) => {
             this.dataList = JSON.parse(data)
-            let html = this.prepareHTMLOfData(this.dataList) + `<div class='btn add-btn card shadow-sm'>
+            let addBtn = `<div class='btn add-btn card shadow-sm'>
                 <div class='card-body'>Add ${this.camelized}</div>
             </div>`
+            let html = this.prepareHTMLOfData(this.dataList) + addBtn
             $('.cards-con').html(html)
         })
         this.hideSpinner()
     }
 
     showWarningToast() {
-        this.warningToast.find('.toast-body').html(`${this.camelized} successfully deleted`)
-        this.warningToast.toast('show')
+        super.showWarningToast(`${this.camelized} successfully deleted`)
     }
 
+    /** Shows all curriculum cards with the add button */
     showAllCards() {
-        /** Shows all curriculum cards with the add button */
         this.spinner.show()
         $('.card').each(function() {
             $(this).show()
         })
         this.noResultMsg.addClass('d-none') // hide 'No result' message
-        this.spinner.fadeOut()
+        this.hideSpinner()
     }
 
     showResults(results) {
@@ -228,7 +235,6 @@ class CardsPage extends Page {
             this.timeout = setTimeout(() => { // executes the function after the specified milliseconds
                 let results = getDataResult(this.dataList)
                 this.showResults(results.map((element) => { // map function returns an array containing the specified component of the element
-                    // console.log(element)
                     return element[this.elementAccess]
                 }))
                 this.hideSpinner()
@@ -270,6 +276,5 @@ class CardsPage extends Page {
             $(`#${this.page}-form`).trigger('reset')              // reset form
             $("[class*='error-msg']").addClass('invisible')     // hide error messages
         })
-        
     }
 }

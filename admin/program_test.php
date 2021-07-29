@@ -105,37 +105,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <!--footer end-->
             </section>
         </section>
-        <!-- ADD SUBJECT MODAL -->
-        <!-- <div class="modal" id="add-subject-modal" tabindex="-1" aria-labelledby="modal addSubject" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Subject</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="subject-form" action="">
-                        <div class="form-group">
-                            <label for="prog-code">Strand Code</label>
-                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
-                            <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="name" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
-                            <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr" value="<?php echo ($curriculum_code); ?>" readonly>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
