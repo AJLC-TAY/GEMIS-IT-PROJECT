@@ -1,4 +1,4 @@
-let page, menuItem, subMenuItem, table, url, method, uniqueId, idField, height, search, searchSelector, exportDataType
+let page,  menuItem, subMenuItem, table, url, method, uniqueId, idField, height, search, searchSelector, exportDataType
 
 menuItem = '#curr-management'
 subMenuItem = '#curriculum'
@@ -14,9 +14,8 @@ page.setup()
 $(function () {
     $('#edit-btn').click(function() {
         let editBtn = $(this)
-        let saveBtn = $("#save-btn")
         editBtn.prop("disabled", true)
-        saveBtn.prop("disabled", false)
+        $("#save-btn").prop("disabled", false)
         editBtn.closest('form').find('.form-input').each(function() {
             $(this).prop('disabled', false)
         })

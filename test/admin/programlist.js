@@ -39,9 +39,10 @@ let getDataResult = (dataList) => {
     return dataList.filter(filterFunc)
 }
 
-page.setPrepareHTMLDataFunc(prepareHTML)
-page.setGetDataResultFunc(getDataResult)
+page.setPrepareHTMLDataFunc(prepareHTML) // preparing of cards
+page.setGetDataResultFunc(getDataResult) 
 
+// custom script
 $(function() {
     page.preload()
     page.reload()
