@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);
 body {
-    color: #797979;
-    background: #eaeaea;
+    color: #333333;
+    background: #fff5ee;
     font-family: 'Ruda', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -156,7 +156,7 @@ ul.top-menu>li>.logout {
 /* MAIN CONTENT CONFIGURATION */
 
 #main-content {
-    margin-left: 210px;
+    margin-left: 230px;
 }
 
 .header,
@@ -179,7 +179,7 @@ ul.top-menu>li>.logout {
 
 .wrapper {
     display: inline-block;
-    margin-top: 60px;
+    margin-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;
@@ -415,6 +415,19 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+
+.back-btn {
+    margin-top: 20px;
+}
+
+.btn-space {
+    margin-right: 5px;
+
+}
+
+.save-btn {
+    width: 90px;
+}
 
 
 

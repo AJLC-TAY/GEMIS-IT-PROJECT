@@ -102,8 +102,12 @@
                                 </div>
                             </div>
                             <br>
-                            <button type="submit" class="btn btn-primary">Assign Subjects</button>
+                            <button type="submit" class="btn btn-primary" data-toggle="modal">Assign Subjects</button>
                         </form>
+                        <div class="back-btn d-flex justify-content-end col-md-8">
+                            <button type="button" class="btn btn-secondary btn-space">Back</button>
+                            <button type="button" class="btn btn-success btn-space save-btn">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,4 +117,5 @@
             <!--footer end-->
         </section>
     </section>
+
 </body>

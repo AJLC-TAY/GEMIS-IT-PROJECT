@@ -88,52 +88,5 @@
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript"> //javascript to be edited
-    var spinner = $('.spinner-con')
-    var $table
-    var code = ''
-
-    function onPostBodyOfTable() {
-
-    }
-
-    $(document).ready(function() {
-        spinner.show()
-        /** Display active menu item */
-        $('# a:first').click()
-        $('# ').addClass('')
-
-        var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?data=subjects`,
-            "method": 'GET',
-            "search": true,
-            "searchSelector": '#search-input',
-            "uniqueId": "code",
-            "idField": "code",
-            "height": 300,
-            // "exportDataType": "All",
-            "pagination": true,
-            "paginationParts": ["pageInfoShort", "pageSize", "pageList"],
-            "pageSize": 10,
-            "pageList": "[10, 25, 50, All]",
-            // "onPostBody": onPostBodyOfTable
-        })
-
-        $('#edit-btn').click(function() {
-            $(this).prop("disabled", true)
-            $("#save-btn").prop("disabled", false)
-            $(this).closest('form').find('.form-input').each(function() {
-                $(this).prop('disabled', false)
-            })
-        })
-
-        // $('#save-btn').click(function() {
-        //     $(this).prop("disabled", true)
-        //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('input').each(function() {
-        //         $(this).prop('disabled', true)
-        //     })
-        // })
-
-        spinner.fadeOut(500)
-    })
+  
 </script>
