@@ -195,7 +195,10 @@
         </div>
 </body>
 
+
 <!-- <script type="text/javascript" src="../js/admin/curriculumlist.js"></script> -->
-<script type="text/javascript" src="../test/admin/Classes.js"></script>
+<script type="text/javascript" src="../test/admin/common.js"></script>
+<script type="text/javascript" src="../test/admin/cardPage.js"></script>
 <script type="text/javascript" src="../test/admin/curriculumlist.js"></script>
+
 </html>

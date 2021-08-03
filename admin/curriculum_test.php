@@ -1,6 +1,9 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
+<!-- JQUERY FOR BOOTSTRAP TABLE -->
+<script src="../assets/js/bootstrap-table.min.js"></script>
+<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 </head>
 
 
@@ -140,13 +143,12 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
         </div>
     </div>
 </body>
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+
 <script type="text/javascript">
     var code = <?php echo json_encode($curr_code);?>;
 </script>
-<script type="text/javascript" src="../test/admin/Classes.js"></script>
+<script type="text/javascript" src="../test/admin/page.js"></script>
+<script type="text/javascript" src="../test/admin/Class.js"></script>
 <script type="text/javascript" src="../test/admin/curriculum.js"></script>
 
 </html>

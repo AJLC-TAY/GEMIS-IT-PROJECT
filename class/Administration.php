@@ -179,7 +179,7 @@ class Administration extends Dbconfig
         //if($_POST['code']) {	}	 
         $updateQuery = "UPDATE program SET prog_code='" . $code . "', description='" . $prog_description . "' WHERE prog_code = '" . $old_code . "'";
         mysqli_query($this->dbConnect, $updateQuery);
-        header("Location: program.php?code=$code");
+        header("Location: program.php?prog_code=$code");
     }
 
     /*** Subject Methods */
@@ -210,6 +210,24 @@ class Administration extends Dbconfig
         echo json_encode($this->listSubjects());
     }
 
+    private function setParentPrograms($code, $sub_type, $subject) 
+    {
+        $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+        $resultFour = mysqli_query($this->dbConnect, $queryTwo);
+        $programs = [];
+        while ($rowFour = mysqli_fetch_assoc($resultFour)) {
+            $programs[] = $rowFour['program_prog_code'];
+        }
+
+        if ($sub_type == 'applied') {
+            $subject->set_Programs($programs);
+        } else if ($sub_type == 'specialized') {
+            $subject->set_Program($programs[0]);
+        }
+
+        return $subject;
+    }
+
     public function listSubUnderProgJSON() {
         $subjectList = [];
         $query = "SELECT subject_sub_code FROM sharedsubject WHERE program_prog_code='". $_GET['prog_code'] ."';";
@@ -221,22 +239,18 @@ class Administration extends Dbconfig
         }
 
         foreach($subjects as $sub) {
-            $query = "SELECT * FROM subject WHERE sub_code='". $sub ."';";
+            $query = "SELECT * FROM subject WHERE sub_code='$sub';";
             $result = mysqli_query($this->dbConnect, $query);
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $code = $row['sub_code'];
                 $sub_type = $row['sub_type'];
                 $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
-                if ($sub_type == 'specialized' || $sub_type == 'applied') {
-                    $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
-                    $resultFour = mysqli_query($this->dbConnect, $queryTwo);
-                    $programs = [];
-                    while ($rowFour = mysqli_fetch_assoc($resultFour)) {
-                        $programs[] = $rowFour['program_prog_code'];
-                    }
-                    $subject->set_programs($programs);
-                }
+
+                if ($sub_type !== 'core') {
+                    $subject = $this->setParentPrograms($code, $sub_type, $subject);
+                } 
+
                 $subjectList[] = $subject;
             }
         }
@@ -252,28 +266,28 @@ class Administration extends Dbconfig
         $sub_type = $row['sub_type'];
         $subject = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
 
-        $queryTwo = "SELECT * FROM requisite WHERE sub_code='$code' AND type='pre'";
+        if ($sub_type != 'core') {
+            $subject = $this->setParentPrograms($code, $sub_type, $subject);
+        }
+
+        $queryTwo = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='PRE';";
         $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
         $prereq = [];
-        while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
-            $prereq[] = $rowTwo['req_sub_code'];
+        if ($resultTwo) {
+            while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
+                // $prereq[] = $rowTwo['req_sub_code'];
+                $prereq[] = $rowTwo['subject_sub_code1'];
+            }
         }
 
-        $queryThree = "SELECT * FROM requisite WHERE sub_code='$code' AND type='co'";
+        $queryThree = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='CO'";
         $resultThree = mysqli_query($this->dbConnect, $queryThree);
         $coreq = [];
-        while ($rowThree = mysqli_fetch_assoc($resultThree)) {
-            $coreq[] = $rowThree['req_sub_code'];
-        }
-
-        if ($sub_type != 'core') {
-            $queryFour = "SELECT * FROM sharedsubject WHERE subject_sub_code='$code'";
-            $resultFour = mysqli_query($this->dbConnect, $queryFour);
-            $programs = [];
-            while ($rowFour = mysqli_fetch_assoc($resultFour)) {
-                $programs[] = $rowFour['program_prog_code'];
+        if ($resultThree) {
+            while ($rowThree = mysqli_fetch_assoc($resultThree)) {
+                // $coreq[] = $rowThree['req_sub_code'];
+                $coreq[] = $rowThree['subject_sub_code1'];
             }
-            $subject->set_programs($programs);
         }
 
         if ($prereq) {
@@ -299,29 +313,65 @@ class Administration extends Dbconfig
 
         // end of validation
 
-        $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES ('{$code}', '{$subName}', '{$grdLvl}', '{$sem}', '{$type}');";
+        $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES ('$code', '$subName', '$grdLvl', '$sem', '$type');";
 
         // insert program and subject info in sharedsubject table
         if ($type == 'applied' || $type == 'specialized') {
             $prog_code_list = $_POST['prog_code'];
             foreach($prog_code_list as $prog_code) {
-                $query .= 'INSERT INTO sharedsubject VALUES ("'. $code .'", "'. $prog_code .'");';
+                $query .= "INSERT INTO sharedsubject VALUES ('$code', '$prog_code');";
             }
         }
 
         if (isset($_POST['pre'])) {
             foreach($_POST['pre'] as $req_code) {
-                $query .= 'INSERT INTO requisite VALUES ("'. $code .'", "pre", "'. $req_code .'");';
+                $query .= "INSERT INTO requisite VALUES ('$code', 'PRE', '$req_code');";
             }
         }
 
         if (isset($_POST['co'])) {
             foreach($_POST['co'] as $req_code) {
-                $query .= 'INSERT INTO requisite VALUES ("'. $code .'", "co", "'. $req_code .'");';
+                $query .= "INSERT INTO requisite VALUES ('$code', 'CO', '$req_code');";
             }
         }
 
+        echo $query;
         mysqli_multi_query($this->dbConnect, $query);
+    }
+    
+    public function processRequisiteUpdateQry($code, $requisite) {
+        $query = '';
+        if (isset($_POST["$requisite"])) {
+            $req_code_list = $_POST["$requisite"];
+
+            // get current requisite subjects
+            $queryThree = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='$requisite';";
+            $result = mysqli_query($this->dbConnect, $queryThree);
+            $current_subjects = [];
+            while($row = mysqli_fetch_assoc($result)) {
+                $current_subjects[] = $row['subject_sub_code1']; 
+            }
+
+            // delete req subject not found in the submitted requisite code list
+            $sub_codes_to_delete = array_diff($current_subjects, $req_code_list);
+            if (count($sub_codes_to_delete) > 0) {
+                foreach ($sub_codes_to_delete as $code_to_delete) {
+                    $query .= "DELETE FROM requisite WHERE subject_sub_code='$code' AND subject_sub_code1='$code_to_delete' AND  type='$requisite';";
+                }
+            }
+
+            // add new req subject found in the submitted requisite code list
+            $new_sub_codes = array_diff($req_code_list, $current_subjects);       // codes not found in the current req sub will be added as new row in the db
+            if (count($new_sub_codes) > 0 ){
+                foreach ($new_sub_codes as $new_code) {
+                    $query .= "INSERT INTO requisite VALUES ('$code', '$requisite', '$new_code');";
+                }
+            } 
+        } else {
+            $query .= "DELETE FROM requisite WHERE subject_sub_code='$code' AND  type='$requisite';";
+        }
+
+        return $query;
     }
 
     public function updateSubject()
@@ -336,14 +386,14 @@ class Administration extends Dbconfig
 
         // end of validation
 
-        $query = "UPDATE subject SET sub_code='{$code}', sub_name='{$subName}', for_grd_level='{$grdLvl}', sub_semester='{$sem}', sub_type='{$type}' WHERE sub_code='{$code}';";
+        $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', for_grd_level='$grdLvl', sub_semester='$sem', sub_type='$type' WHERE sub_code='$code';";
 
         // insert program and subject info in sharedsubject table
         if ($type === 'applied') {
             $prog_code_list = $_POST['prog_code'];
 
             // get current program/s from db
-            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='{$code}';";
+            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
             $result = mysqli_query($this->dbConnect, $queryTwo);
             $current_programs = [];
             while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
@@ -354,7 +404,7 @@ class Administration extends Dbconfig
             $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in the array 2
             if (count($prog_codes_to_delete) > 0) {
                 foreach ($prog_codes_to_delete as $code_to_delete) {
-                    $query .= "DELETE FROM sharedsubject WHERE program_prog_code='{$code_to_delete}' AND subject_sub_code='{$code}';";
+                    $query .= "DELETE FROM sharedsubject WHERE program_prog_code='$code_to_delete' AND subject_sub_code='$code';";
                 }
             }
 
@@ -362,7 +412,7 @@ class Administration extends Dbconfig
             $new_prog_codes = array_diff($prog_code_list, $current_programs);       // codes not found in the current programs will be added as new row in the db
             if (count($new_prog_codes) > 0 ){
                 foreach ($new_prog_codes as $new_code) {
-                    $query .= "INSERT INTO sharedsubject VALUES ('{$code}', '{$new_code}';";
+                    $query .= "INSERT INTO sharedsubject VALUES ('$code', '$new_code');";
                 }
             } 
         }
@@ -371,104 +421,25 @@ class Administration extends Dbconfig
             $prog_code = $_POST['prog_code'];
 
             // get current program/s from db
-            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='{$code}';";
+            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
             $result = mysqli_query($this->dbConnect, $queryTwo);
             $current_program = mysqli_fetch_array($result, MYSQLI_NUM)[0];
 
             // update current record if new code is different w/ the current code
             if ($current_program !== $prog_code) {
-                $query .= "UPDATE sharedsubject SET program_prog_code='{$prog_code}' WHERE program_prog_code='{$current_program}' AND subject_sub_code='{$code}';";
+                $query .= "UPDATE sharedsubject SET program_prog_code='$prog_code' WHERE program_prog_code='$current_program' AND subject_sub_code='$code';";
             }
         }
 
-        $query = $query . $this->processRequisiteUpdateQry($code, 'pre');
-        $query = $query . $this->processRequisiteUpdateQry($code, 'co');
+        $query .= $this->processRequisiteUpdateQry($code, 'PRE');
+        $query .= $this->processRequisiteUpdateQry($code, 'CO');
 
-        // if (isset($_POST['pre'])) {
-        //     $req_code_list = $_POST['pre'];
-        //     $queryThree = "SELECT * WHERE sub_type ='pre' AND sub_code='{$code}';";
-        //     $result = mysqli_query($this->dbConnect, $queryThree);
-        //     $current_pre_subjects = [];
-        //     while($row = mysqli_fetch_row($result)) {
-        //         $current_pre_subjects[] = $row[2]; 
-        //     }
-
-        //     $sub_codes_to_delete = array_diff($current_pre_subjects, $req_code_list);
-        //     if (count($sub_codes_to_delete) > 0) {
-        //         foreach ($sub_codes_to_delete as $code_to_delete) {
-        //             $query .= "DELETE FROM requisite WHERE sub_req_code='{$code_to_delete}' AND sub_code='{$code}' AND sub_type='pre';";
-        //         }
-        //     }
-
-        //     $new_sub_codes = array_diff($req_code_list, $current_pre_subjects);       // codes not found in the current req sub will be added as new row in the db
-        //     if (count($new_sub_codes) > 0 ){
-        //         foreach ($new_sub_codes as $new_code) {
-        //             $query .= "INSERT INTO requisite VALUES ('{$code}', 'pre', '{$new_code}';";
-        //         }
-        //     } 
-        // }
-
-            // if (isset($_POST['co'])) {
-        //     $req_code_list = $_POST['co'];
-        //     $queryThree = "SELECT * WHERE sub_type ='co' AND sub_code='{$code}';";
-        //     $result = mysqli_query($this->dbConnect, $queryThree);
-        //     $current_co_subjects = [];
-        //     while($row = mysqli_fetch_row($result)) {
-        //         $current_co_subjects[] = $row[2]; 
-        //     }
-
-        //     $sub_codes_to_delete = array_diff($current_co_subjects, $req_code_list);
-        //     if (count($sub_codes_to_delete) > 0) {
-        //         foreach ($sub_codes_to_delete as $code_to_delete) {
-        //             $query .= "DELETE FROM requisite WHERE sub_req_code='{$code_to_delete}' AND sub_code='{$code}' AND sub_type='co';";
-        //         }
-        //     }
-
-        //     $new_sub_codes = array_diff($req_code_list, $current_co_subjects);      
-        //     if (count($new_sub_codes) > 0 ){
-        //         foreach ($new_sub_codes as $new_code) {
-        //             $query .= "INSERT INTO requisite VALUES ('{$code}', 'co', '{$new_code}';";
-        //         }
-        //     } 
-        // }
         echo $query;
+
         mysqli_multi_query($this->dbConnect, $query);
     }
 
-    private function processRequisiteUpdateQry($code, $requisite) {
-        $query = '';
-        if (isset($_POST["{$requisite}"])) {
-            $req_code_list = $_POST["{$requisite}"];
-
-            // get current requisite subjects
-            $queryThree = "SELECT req_sub_code FROM requisite WHERE type='{$requisite}' AND sub_code='{$code}';";
-            $result = mysqli_query($this->dbConnect, $queryThree);
-            $current_subjects = [];
-            while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-                $current_subjects[] = $row[0]; 
-            }
-
-            // delete req subject not found in the submitted requisite code list
-            $sub_codes_to_delete = array_diff($current_subjects, $req_code_list);
-            if (count($sub_codes_to_delete) > 0) {
-                foreach ($sub_codes_to_delete as $code_to_delete) {
-                    $query .= "DELETE FROM requisite WHERE req_sub_code='{$code_to_delete}' AND sub_code='{$code}' AND type='{$requisite}';";
-                }
-            }
-
-            print_r($sub_codes_to_delete);
-            
-            // add new req subject found in the submitted requisite code list
-            $new_sub_codes = array_diff($req_code_list, $current_subjects);       // codes not found in the current req sub will be added as new row in the db
-            if (count($new_sub_codes) > 0 ){
-                foreach ($new_sub_codes as $new_code) {
-                    $query .= "INSERT INTO requisite VALUES ('{$code}', '{$requisite}', '{$new_code}');";
-                }
-            } 
-        }
-
-        return $query;
-    }
+    
 
     public function deleteSubject()
     {
@@ -504,7 +475,7 @@ class Administration extends Dbconfig
         $subjGrade11List = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjectGrade11 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+            $subjectGrade11 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
             $subjGrade11List[] = $subjectGrade11;
         }
         return $subjGrade11List;
@@ -523,7 +494,7 @@ class Administration extends Dbconfig
         $subjGrade12List = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjectGrade12 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type'],$row['prerequisite'],$row['corequisite']);
+            $subjectGrade12 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
             $subjGrade12List[] = $subjectGrade12;
         }
         return $subjGrade12List;

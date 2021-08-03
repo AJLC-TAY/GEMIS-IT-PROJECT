@@ -26,35 +26,42 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="subjectlist.php">Subject</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Subject</li>
                                     </ol>
                                 </nav>
-                                <h2>Subject</h2>
-                                <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h2>Subject</h2>
+                                    <div>
+                                        <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</a>
+                                    </div>
+                                </div>
                             </header>
                             <!-- Subject table -->
-                            <div class="container mt-5">
-                                <table id="table" class="table-striped">
-                                    <thead class='thead-dark'>
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <h4>Subject List</h4>
-                                            <div>
-                                                <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</a>
-                                                <button class="btn btn-secondary" title='Archive strand'>Export</button>
+                            <div class="container mt-1">
+                                <div class="card w-100 h-auto bg-light">
+                                    <table id="table" class="table-striped">
+                                        <thead class='thead-dark'>
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <!-- SEARCH BAR -->
+                                                <span class="flex-grow-1 me-5"> 
+                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                                </span>
+                                                <div>
+                                                    <button class="btn btn-secondary" title='Archive strand'>Archive</button>
+                                                    <button class="btn btn-secondary" title='Archive strand'>Export</button>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="right" data-field="sub_code">Code</th>
-                                            <th scope='col' data-width="600" data-sortable="true" data-field="sub_name">Subject Name</th>
-                                            <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Type</th>
-                                            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-align="left" data-field="sub_code">Code</th>
+                                                <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                                <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Type</th>
+                                                <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -108,7 +115,7 @@
             "searchSelector": '#search-input',
             "uniqueId": "code",
             "idField": "code",
-            "height": 300,
+            "height": 425,
             // "exportDataType": "All",
             "pagination": true,
             "paginationParts": ["pageInfoShort", "pageSize", "pageList"],

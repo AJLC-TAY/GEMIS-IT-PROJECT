@@ -1,12 +1,10 @@
-let page = new CardsPage('#curr-management', '#program', 'program', 'getProgramJSON')
-
 let prepareHTML = data => {
-    let html = ''
+    let html = ""
     data.forEach(element => {
         let prog_code = element.prog_code
         let cur_code = element.curr_code
         let prog_desc = element.prog_desc
-        html +=  `<div data-id='${prog_code}' class='card shadow-sm p-0'>
+        html += `<div data-id='${prog_code}' class='card shadow-sm p-0'>
                     <div class='card-body'>
                         <div class='dropdown'>
                             <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
@@ -39,24 +37,21 @@ let getDataResult = (dataList) => {
     return dataList.filter(filterFunc)
 }
 
-page.setPrepareHTMLDataFunc(prepareHTML) // preparing of cards
-page.setGetDataResultFunc(getDataResult) 
+setup('program', prepareHTML, getDataResult)
+reload()
 
 // custom script
 $(function() {
-    page.preload()
-    page.reload()
-
     $('#program-form').submit(function(event) {
         event.preventDefault()
-        page.spinner.show()
+        spinner.show()
         var form = $(this)
         var formData = form.serialize()
         $.post("action.php", formData, function(data) {
             form.trigger('reset')
-            page.addModal.modal('hide')
-            page.reload()
-            page.addToast.toast('show')
+            addModal.modal('hide')
+            reload()
+            addToast.toast('show')
         }).fail(function () {
 
         })

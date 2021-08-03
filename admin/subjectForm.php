@@ -1,16 +1,18 @@
 <?php
 
 function prepareEmptyProgramOptions($programs) {
-    $prog_opt = "<div id='app-spec-options' class='col-4'>"
-        ."<label>Options for Applied or Specialized Subjects</label>";
+    $prog_opt = "<div id='app-spec-options' class='row d-none overflow-auto'>"
+        ."<label class='col-sm-4'>Program Options</label>"
+        ."<div id='program-con' class='col-sm-8'>";
         foreach ($programs as $program) {
             $prog_code = $program->get_prog_code();
             $prog_name = $program->get_prog_name();
             $prog_opt .= "<div class='form-check'>"
                 ."<input class='form-check-input' type='radio' name='prog_code[]' id='$prog_code' value='$prog_code' readonly>"
-                ."<label class='form-check-label' for='$prog_name'>$prog_code</label></div>";
+                ."<label class='form-check-label' for='$prog_name'>$prog_code</label>
+                </div>";
         }
-    $prog_opt .= '</div>';
+    $prog_opt .= '</div></div>';
     return $prog_opt;
 }
 
@@ -65,11 +67,6 @@ function getSubjectPageContent($state) {
             $sub_type_opt = '<option selected>Specialized</option>';
             $sub_type_readonly = 'disabled';
 
-            // change subject type options
-            // foreach ($sub_opt as $id => $value) { 
-            //     $sub_type_opt .= '<option value="'. $id .'" '. (($id == "specialized" ) ? "selected" : "") .'>'. $value .'</option>';
-            // }
-            
         }
 
         $content->breadcrumb = "<nav aria-label='breadcrumb'>
@@ -121,6 +118,7 @@ function getSubjectPageContent($state) {
                                 
                                 <div id='req-table-con' class='collapse'>
                                     <div id='grade11-table'>
+                                        
                                         <div class='col-11'>
                                             <h3 class='pt-3'>Grade 11</h3>
                                         </div>
@@ -149,8 +147,8 @@ function getSubjectPageContent($state) {
                                                         <td scope='col'>$sub_code</td>
                                                         <td scope='col'>$sub_name</td>
                                                         <td scope='col'>$sub_type</td>
-                                                        <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='pre-$sub_code'></td>
-                                                        <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='co-$sub_code'></td>
+                                                        <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
+                                                        <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
                                                     </tr>";
                                                 }
                                             $form .= "</tbody>
@@ -186,8 +184,8 @@ function getSubjectPageContent($state) {
                                                             <td scope='col'>$sub_code</td>
                                                             <td scope='col'>$sub_name</td>
                                                             <td scope='col'>$sub_type</td>
-                                                            <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='pre-$sub_code'></td>
-                                                            <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='co-$sub_code'></td>
+                                                            <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
+                                                            <td scope='col'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
                                                         </tr>";
                                                     }
                                                 $form .= "</tbody>
@@ -209,6 +207,7 @@ function getSubjectPageContent($state) {
         $disabled = 'disabled';
         $sub_type_readonly = 'disabled';
         $edit_btn_editable = '';
+
     }
 
     if ($state === 'edit' || $state === 'view') {
@@ -223,20 +222,32 @@ function getSubjectPageContent($state) {
         if ($sub_type === 'applied' ) {
             $sub_programs = $subject->get_programs();
 
-            $prog_opt = "<div id='app-spec-options' class='col-4'>
-                <label>Programs</label>";
-        
+            $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>"
+                        ."<label class='col-sm-4'>". (($state !== 'edit') ? 'Program/s' : 'Program Options')."</label>"
+                        ."<div id='program-con' class='col-sm-8 p-0'>";
+            
             foreach ($programs as $program) {
                 $prog_code = $program->get_prog_code();
                 $prog_name = $program->get_prog_name();
-                $sub_program_state = (in_array($prog_code, $sub_programs)) ? " original' checked readonly" : "'";
+                
+                if ($state === 'view') {
+                    // $prog_opt .= "<ul class=''>
+                    // <li class='' style='font-size: 13px;'><a href='program.php?prog_code=$prog_code' target='_self'>$prog_code</a></li>
+                    // </ul>";
 
-                $prog_opt .= "<div class='form-check'>
-                    <input class='form-check-input $sub_program_state type='checkbox' name='prog_code[]' id='$prog_code' value='$prog_code'>
-                    <label class='form-check-label' for='$prog_name'>$prog_code</label>
-                </div>";
+                    $prog_opt .= "
+                        <a role='button' class='btn btn-outline-secondary shadow-none rounded m-1' href='program.php?prog_code=$prog_code' target='_self'>$prog_code</a>
+                    ";
+                } else if ($state === 'edit') {
+                    $sub_program_state = (in_array($prog_code, $sub_programs)) ? " original' checked" : "'";
+
+                    $prog_opt .= "<div class='form-check'>
+                        <input class='form-check-input $sub_program_state type='checkbox' name='prog_code[]' id='$prog_code' value='$prog_code'>
+                        <label class='form-check-label' for='$prog_name'>$prog_code</label>
+                    </div>";
+                }
             }
-            $prog_opt .= '</div>';
+            $prog_opt .= '</div></div>';
         }
 
         if (isset($_GET['prog_code'])) {                // view/edit page is accessed from a program page
@@ -253,17 +264,18 @@ function getSubjectPageContent($state) {
 
             $header = "<h3>$sub_name</h3><hr><h6>$prog_name</h6>";
 
-            $prog_opt = "<div id='app-spec-options' class='col-4'>
-                <label>Programs</label>";
+            $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>
+                <label class='col-sm-4'>Program Options</label>
+                <div id='program-con' class='col-sm-8'>";
             foreach ($programs as $program) {
                 $prog_code_data = $program->get_prog_code();
                 $prog_name_data = $program->get_prog_name();
                 $prog_opt .= "<div class='form-check'>
-                    <input class='form-check-input' type='radio' name='prog_code[]' id='$prog_code_data' value='$prog_code_data' ". (($prog_code == $prog_code_data) ? 'checked': '') ." readonly>
+                    <input class='form-check-input' type='radio' name='prog_code[]' id='$prog_code_data' value='$prog_code_data' ". (($prog_code == $prog_code_data) ? 'checked': '') ." $disabled>
                     <label class='form-check-label' for='$prog_name_data'>$prog_code_data</label>
                 </div>";
             }
-            $prog_opt .= '</div>';
+            $prog_opt .= '</div></div>';
         }
         $prereq = $subject->get_prerequisite();
         $coreq = $subject->get_corequisite();
@@ -275,124 +287,150 @@ function getSubjectPageContent($state) {
                                     </ol>
                                 </nav>";
 
-        $form = $header ."<form id='add-subject-form' class='container' method='POST'>
+        $form = $header ."<form id='add-subject-form' method='POST'>
                             $input_sub_with_prog
-                            <div class='row mt'>
-                                <div class='col-8'>
-                                    <div class='form-group row'>
-                                        <label for='subjectCode1'  class='col-sm-2 col-form-label'>Subject code</label>
-                                        <div class='col-sm-10'>
-                                            <input type='text' name = 'code' class='form-control' id='sub-code' value='". $subject->get_sub_code() ."' $disabled>
-                                        </div>
-                                        <label for='subjectName1' class='col-sm-2 col-form-label'>Subject name</label>
-                                        <div class='col-sm-10'>
-                                            <input type='text' name = 'name' class='form-control' id='sub-name' value='$sub_name' $disabled>
-                                        </div>
-                                        <label for='subjectType1' class='col-sm-2 col-form-label'>Subject type</label>
-                                        <div class='col-sm-10'>
-                                            <select name='sub-type' class='form-select' id='sub-type' $sub_type_readonly>";
-                                                foreach ($sub_opt as $id => $value) { 
-                                                    $form .= "<option value='$id' ". (($id == $subject->get_sub_type()) ? 'selected' : '') .">$value</option>";
+                            <div class='row card bg-light w-100 h-auto text-start mx-auto'>
+                                <h5 class='text-start p-0'>Information</h5>
+                                <hr class='mt-1'>
+                                <div class='row p-0'>
+                                    <div class='col-7'>
+                                        <div class='form-group row'>
+                                            <label for='subjectCode1'  class='col-sm-3 col-form-label'>Subject code</label>
+                                            <div class='col-sm-9'>
+                                                <input type='text' name = 'code' class='form-control' id='sub-code' value='". $subject->get_sub_code() ."' $disabled>
+                                            </div>
+                                            <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
+                                            <div class='col-sm-9'>
+                                                <input type='text' name = 'name' class='form-control' id='sub-name' value='$sub_name' $disabled>
+                                            </div>
+                                            <label for='subjectSemester1' class='col-sm-3 col-form-label'>Semester</label>
+                                            <div class='col-sm-9'>
+                                                <select name='semester' class='form-select' id='semester' $disabled>";
+                                                foreach ($semesters as $id => $value) { 
+                                                    $form .= "<option value='$id' ". (($id == $subject->get_sub_semester()) ? 'selected' : '') .">$value</option>";
                                                 }
-                                            $form .= "</select>
+                                                $form .= "</select>
+                                            </div>
+                                            <label for='grade-level' class='col-sm-3 col-form-label'>Grade Level</label>
+                                            <div class='col-sm-9'>
+                                                <select name='grade-level' class='form-select' id='grade-level' $disabled>";
+                                                foreach ($grd_lvl as $id => $value) { 
+                                                    $form .= "<option value='$id' ". (($id == $subject->get_for_grd_level()) ? 'selected' : '') .">$value</option>";
+                                                }
+                                                $form .= "</select>
+                                            </div>
                                         </div>
-                                        <label for='subjectSemester1' class='col-sm-2 col-form-label'>Subject Semester</label>
-                                        <div class='col-sm-10'>
-                                            <select name='semester' class='form-select' id='semester' $disabled>";
-                                            foreach ($semesters as $id => $value) { 
-                                                $form .= "<option value='$id' ". (($id == $subject->get_sub_semester()) ? 'selected' : '') .">$value</option>";
-                                            }
-                                            $form .= "</select>
-                                        </div>
-                                        <label for='grade-level' class='col-sm-2 col-form-label'>Grade Level</label>
-                                        <div class='col-sm-10'>
-                                            <select name='grade-level' class='form-select' id='grade-level' $disabled>";
-                                            foreach ($grd_lvl as $id => $value) { 
-                                                $form .= "<option value='$id' ". (($id == $subject->get_for_grd_level()) ? 'selected' : '') .">$value</option>";
-                                            }
-                                            $form .= "</select>
+                                    </div>
+                                    <div class='col-5'>
+                                        <div class='form-group row'>
+                                            <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
+                                            <div class='col-sm-9'>
+                                                <select name='sub-type' class='form-select' id='sub-type' $sub_type_readonly>";
+                                                    foreach ($sub_opt as $id => $value) { 
+                                                        $form .= "<option value='$id' ". (($id == $subject->get_sub_type()) ? 'selected' : '') .">$value</option>";
+                                                    }
+                                                $form .= "</select>
+                                            </div>
+                                            $prog_opt
                                         </div>
                                     </div>
                                 </div>";
                                 
-                                $form .= $prog_opt ."</div>
-                                    <input id='req-btn' class='btn btn-outline-secondary ' data-bs-toggle='collapse' data-bs-target='#req-table-con' type='button' value='Prerequisite | Corequisite Subjects'>
-                                
-                                    <div id='req-table-con' class='collapse'>
-                                        <div id='grade11-table'>
-                                            <div class='col-11'>
-                                                <h3 class='pt-3'>Grade 11</h3>
-                                            </div>
-                
-                                            <div class='col-1'>
-                                                <input class='btn btn-outline-secondary' type='button' value='Clear'>
-                                            </div>
-                                            
-                                            <table class='table table-bordered table-hover table-striped'>
-                                                <thead>
-                                                    <tr class='text-center'>
-                                                        <th scope='col'>CODE</th>
-                                                        <th scope='col'>SUBJECT NAME</th>
-                                                        <th scope='col'>TYPE</th>
-                                                        <th scope='col'>PRE</th>
-                                                        <th scope='col'>CO</th>
-                                                    </tr>
-                                                </thead>
-    
-                                                <tbody>";
-                                                    foreach ($subjectGrade11 as $subGr11) {
-                                                        $sub_code = $subGr11->get_sub_code();
-                                                        $sub_name = $subGr11->get_sub_name();
-                                                        $sub_type = $subGr11->get_sub_type();
-                                                        $form .= "<tr class='text-center'>
-                                                            <td scope='col'>$sub_code</td>
-                                                            <td scope='col'>$sub_name</td>
-                                                            <td scope='col'>$sub_type</td>
-                                                            <td scope='col'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='pre-$sub_code' $disabled></td>
-                                                            <td scope='col'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='co-$sub_code' $disabled></td>
-                                                        </tr>";
-                                                    }
-                                                    $form .="
-                                                </tbody>
-                                            </table>
-                                        </div>
-    
-                                        <div id='grade12-table' >
-                                            <div class='col-11'>
-                                                    <h3 class='pt-3'>Grade 12</h3>
+                            $form .= "</div>
+                                    <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
+                                        <h5 class='text-start'>Prerequisite | Corequisite Subjects (if applicable)</h5>
+                                        <div class='accordion' id='accordionPanelsStayOpenExample'>
+                                            <div class='accordion-item'>
+                                                <h2 class='accordion-header' id='panelsStayOpen-headingOne'>
+                                                    <button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#panelsStayOpen-collapseOne' aria-expanded='true' aria-controls='panelsStayOpen-collapseOne'>
+                                                        Grade 11
+                                                    </button>
+                                                </h2>
+                                                <div id='panelsStayOpen-collapseOne' class='accordion-collapse collapse show' aria-labelledby='panelsStayOpen-headingOne'>
+                                                    <div class='accordion-body'>
+                                                        <div id='grade11-table'>
+                                                            <div class='d-flex justify-content-between align-items-center mb-2'>
+                                                                <h6>Subjects</h6>
+                                                                <span><button data-desc='11' id='clear-table' class='float-right btn btn-success'>Clear</button></span>
+                                                            </div>
+                                                            <div class='requisite-table overflow-auto'>
+                                                                <table class='table table-bordered table-hover table-striped'>
+                                                                    <thead>
+                                                                        <tr class='text-center'>
+                                                                            <th scope='col'>CODE</th>
+                                                                            <th scope='col'>SUBJECT NAME</th>
+                                                                            <th scope='col'>TYPE</th>
+                                                                            <th scope='col'>PRE</th>
+                                                                            <th scope='col'>CO</th>
+                                                                        </tr>
+                                                                    </thead>
+                        
+                                                                    <tbody>";
+                                                                        foreach ($subjectGrade11 as $subGr11) {
+                                                                            $sub_code = $subGr11->get_sub_code();
+                                                                            $sub_name = $subGr11->get_sub_name();
+                                                                            $sub_type = $subGr11->get_sub_type();
+                                                                            $form .= "<tr>
+                                                                                <td scope='col'>$sub_code</td>
+                                                                                <td scope='col'>$sub_name</td>
+                                                                                <td scope='col'>$sub_type</td>
+                                                                                <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code' $disabled></td>
+                                                                                <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code' $disabled></td>
+                                                                            </tr>";
+                                                                        }
+                                                                        $form .="
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                    
-                                                <div class='col-1'>
-                                                    <input class='btn btn-outline-secondary' type='button' value='Clear'>
+                                            </div>
+                                            <div class='accordion-item'>
+                                                <h2 class='accordion-header' id='panelsStayOpen-headingTwo'>
+                                                    <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#panelsStayOpen-collapseTwo' aria-expanded='false' aria-controls='panelsStayOpen-collapseTwo'>
+                                                        Grade 12
+                                                    </button>
+                                                </h2>
+                                                <div id='panelsStayOpen-collapseTwo' class='accordion-collapse collapse' aria-labelledby='panelsStayOpen-headingTwo'>
+                                                    <div class='accordion-body'>
+                                                        <div id='grade12-table'>
+                                                            <div class='d-flex justify-content-between align-items-center mb-2'>
+                                                                <h6>Subjects</h6>
+                                                                <span><button data-desc='12' id='clear-table' class='float-right btn btn-success'>Clear</button></span>
+                                                            </div>
+                                                        
+                                                            <div class='requisite-table overflow-auto'>
+                                                                <table class='table table-bordered table-hover table-striped'>
+                                                                    <thead>
+                                                                        <tr class='text-center'>
+                                                                            <th scope='col'>CODE</th>
+                                                                            <th scope='col'>SUBJECT NAME</th>
+                                                                            <th scope='col'>TYPE</th>
+                                                                            <th scope='col'>PRE</th>
+                                                                            <th scope='col'>CO</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>";
+                                                                        foreach ($subjectGrade12 as $subGr12) {
+                                                                            $sub_code = $subGr12->get_sub_code();
+                                                                            $sub_name = $subGr12->get_sub_name();
+                                                                            $sub_type = $subGr12->get_sub_type();
+                                                                            $form .= "<tr>
+                                                                                <td scope='col'>$sub_code</td>
+                                                                                <td scope='col'>$sub_name</td>
+                                                                                <td scope='col'>$sub_type</td>
+                                                                                <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code' $disabled></td>
+                                                                                <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code' $disabled></td>
+                                                                            </tr>";
+                                                                        }
+                                                                        $form .="
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>                   
+                                                    </div>
                                                 </div>
-                                                
-                                                <table class='table table-bordered table-hover table-striped'>
-    
-                                                <thead>
-                                                    <tr class='text-center'>
-                                                        <th scope='col'>CODE</th>
-                                                        <th scope='col'>SUBJECT NAME</th>
-                                                        <th scope='col'>TYPE</th>
-                                                        <th scope='col'>PRE</th>
-                                                        <th scope='col'>CO</th>
-                                                    </tr>
-                                                </thead>
-                                                    <tbody>";
-                                                        foreach ($subjectGrade12 as $subGr12) {
-                                                            $sub_code = $subGr12->get_sub_code();
-                                                            $sub_name = $subGr12->get_sub_name();
-                                                            $sub_type = $subGr12->get_sub_type();
-                                                            $form .= "<tr class='text-center'>
-                                                                <td scope='col'>$sub_code</td>
-                                                                <td scope='col'>$sub_name</td>
-                                                                <td scope='col'>$sub_type</td>
-                                                                <td scope='col'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='pre-$sub_code' $disabled></td>
-                                                                <td scope='col'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='co-$sub_code' $disabled></td>
-                                                            </tr>";
-                                                        }
-                                                        $form .="
-                                                    </tbody>
-                                                </table>
                                             </div>
                                         </div>
                                     </div>

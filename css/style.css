@@ -407,8 +407,16 @@ ul.sidebar-menu li a.active i {
     padding: 30px;
     text-align: center;
     background-color: #f1f1f1;
-  }
+}
 
+
+.requisite-table {
+    height: 450px;
+}
+
+#app-spec-options {
+    height: 150px;
+}
 
 
 /* .active-sub::before {

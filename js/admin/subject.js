@@ -13,21 +13,25 @@ $(function () {
     })
 
     $('#sub-type').change(function() {
+        let options = $('#app-spec-options')
         switch($(this).val()) {
             case 'applied':
-                $('#app-spec-options').find('input').each(function() {
+                options.removeClass('d-none')
+                options.find('input').each(function() {
                     $(this).prop('disabled', false)
                     $(this).attr('type', 'checkbox')
                 })
                 break;
             case 'specialized':
-                $('#app-spec-options').find('input').each(function() {
+                options.removeClass('d-none')
+                options.find('input').each(function() {
                     $(this).prop('disabled', false)
                     $(this).attr('type', 'radio')
                 })
                 break;
             default:
-                $('#app-spec-options').find('input').each(function() {
+                options.addClass('d-none')
+                options.find('input').each(function() {
                     $(this).prop('disabled', true)
                 })
         }
@@ -47,9 +51,9 @@ $(function () {
         formData = formData.filter(function(item) {
             let value = item.value
             if (item.name.includes('radio-')) {
-                if (value.includes('pre-')) { 
+                if (value.includes('PRE-')) { 
                     prereq.push(value)
-                } else if (value.includes('co-')) {
+                } else if (value.includes('CO-')) {
                     coreq.push(value)
                 } 
                 return false
@@ -67,21 +71,22 @@ $(function () {
             
             codeList.forEach(code => {  
                 code = code.substring(code.indexOf("-") + 1)
-                formData.push( {'name': requisite, 'value': code}) // store subject code value; from pre-ABM to ABM
+                formData.push( {'name': requisite, 'value': code}) // store subject code value; from PRE-ABM to ABM
             })
         }
 
-        saveRequisiteCodes('pre[]', prereq)
-        saveRequisiteCodes('co[]', coreq)
+        saveRequisiteCodes('PRE[]', prereq)
+        saveRequisiteCodes('CO[]', coreq)
 
         console.log(formData)
 
         $.post("action.php", formData, function() {
             // window.location.href = 'subjectList.php' 
+            spinner.fadeOut(500)
         })
     })
 
-    $(document).on('click', '#edit-btn', function() {
+    $(document).on('click', '#edit-btn', function(event) {
         let editBtn = $('#edit-btn')
         editBtn.addClass('d-none')
         let cancelBtn = $('.cancel-btn')
@@ -90,6 +95,12 @@ $(function () {
         cancelBtn.removeClass('disabled')
         cancelBtn.removeClass('d-none')
     })
+
+    // $(document).on('click', '#clear-table', function() {
+    //     let grade = $(this).attr('data-desc').val()
+    //     console.log(grade)
+    //     $(`#grade${grade}-table input[name*='radio']`).prop('checked', false)
+    // })
 
         
     spinner.fadeOut(500)

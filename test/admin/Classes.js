@@ -141,6 +141,7 @@ class CardsPage extends Page {
 
     /** Shows only the matching cards with the keyword */
     showResults(results) {
+
         var len = results.length
         var cards = $('.card')
         if (len === this.dataList.length) return this.showAllCards()
