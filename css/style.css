@@ -441,6 +441,7 @@ input::-webkit-inner-spin-button {
 /*footer*/
 
 .site-footer {
+    margin-top: 20px;
     color: gray;
     padding: 15px 0;
 }

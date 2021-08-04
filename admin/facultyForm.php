@@ -36,35 +36,37 @@
                                     <label>First Name</label>
                                     <input type="text" class="form-control" id="" placeholder="First Name">
                                 </div>
-                            </div>
-                            <div class="form-row row">
                                 <div class="form-group col-md-4">
                                     <label>Middle Name</label>
                                     <input type="text" class="form-control" id="" placeholder="Middle Name">
                                 </div>
+                            </div>
+                            <div class="form-row row">
                                 <div class="form-group col-md-4">
                                     <label>Extension Name</label>
                                     <input type="text" class="form-control" id="" placeholder="Extension Name">
                                 </div>
-                            </div>
-                            <div class="form-row row">
                                 <div class="form-group col-md-4">
                                     <label>Cellphone No.</label>
                                     <input type="number" class="form-control" id="" placeholder="Cellphone No.">
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" id="" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-row row">
                                 <div class="form-group col-md-2">
                                     <label>Age</label>
                                     <input type="text" class="form-control" id="" placeholder="Age">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Sex</label>
-                                    <input type="text" class="form-control" id="" placeholder="Sex">
-                                </div>
-                            </div>
-                            <div class="form-row row">
-                                <div class="form-group col-md-4">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" id="" placeholder="Email">
+                                    <select class="form-select form-select">
+                                        <option selected disabled hidden>Sex</option>
+                                        <option value="">Female</option>
+                                        <option value="">Male</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Department</label>
@@ -78,19 +80,19 @@
                                 <div class="form-group col-md-4">
                                     <label>Faculty Access</label>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="">
+                                        <input class="form-check-input" type="checkbox">
                                         <label class="form-check-label">
                                             Edit Grades
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="">
+                                        <input class="form-check-input" type="checkbox">
                                         <label class="form-check-label">
                                             Enrollment
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="">
+                                        <input class="form-check-input" type="checkbox">
                                         <label class="form-check-label">
                                             Award Report
                                         </label>
@@ -102,12 +104,45 @@
                                 </div>
                             </div>
                             <br>
-                            <button type="submit" class="btn btn-primary" data-toggle="modal">Assign Subjects</button>
+                            <div class="collapse-table">
+                                <input class='btn btn-primary' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign Subject'>
+                                <div id='assign-subj-table' class='collapse'>
+                                    <div>
+                                        <div class="form-row row" style="margin-top:10px">
+                                            <!-- To whom it may concern, we can use jQuery to filter / search for something instead of a filter button? -->
+                                            <div class="form-group col-md-8">
+                                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <input class='btn btn-outline-secondary' type='button' value='Clear'>
+                                            </div>
+                                        </div>
+                                        <table class='table table-bordered table-hover table-striped'>
+                                            <thead>
+                                                <tr class='text-center'>
+                                                    <th scope="col"><input type="checkbox" /></th>
+                                                    <th scope='col'>CODE</th>
+                                                    <th scope='col'>SUBJECT NAME</th>
+                                                    <th scope='col'>TYPE</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr class='text-center'>
+                                                    <td scope="col"><input type="checkbox" /></td>
+                                                    <td scope='col'></td>
+                                                    <td scope='col'></td>
+                                                    <td scope='col'></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="back-btn d-flex justify-content-end">
+                                            <button type="button" class="btn btn-secondary btn-space">Back</button>
+                                            <button type="button" class="btn btn-success btn-space save-btn">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
                         </form>
-                        <div class="back-btn d-flex justify-content-end col-md-8">
-                            <button type="button" class="btn btn-secondary btn-space">Back</button>
-                            <button type="button" class="btn btn-success btn-space save-btn">Save</button>
-                        </div>
                     </div>
                 </div>
             </div>
