@@ -1,8 +1,3 @@
-.card {
-    width: 275px;
-    height: 250px;
-}
-
 .curriculum-con {
     height: 80vh;
 }
@@ -20,7 +15,9 @@
     box-shadow: none;
 }
 
+
 /* TOAST */
+
 [class*='-toast'] {
     position: fixed;
     z-index: 99;
@@ -29,10 +26,15 @@
     right: 0.5in;
     bottom: 0.5in;
 }
+
+
 /* END TOAST */
 
+
 /* SPINNER */
-.spinner-border, .spinner-con {
+
+.spinner-border,
+.spinner-con {
     position: fixed;
     overflow: show;
     margin: auto;
@@ -43,14 +45,16 @@
 }
 
 .spinner-border {
-  z-index: 99;
+    z-index: 99;
 }
 
 .spinner-con {
-  z-index: 98;
-  background: black; 
-  opacity: 0.40;
-  width: 100%;
-  height: 100%;
+    z-index: 98;
+    background: black;
+    opacity: 0.40;
+    width: 100%;
+    height: 100%;
 }
+
+
 /* END SPINNER */
