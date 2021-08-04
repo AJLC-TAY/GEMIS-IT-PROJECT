@@ -14,6 +14,8 @@
     } else {
         return;
     }
+
+    session_start();
 ?>
 <body>
     <!-- SPINNER -->
@@ -43,10 +45,32 @@
             </section>
         </section>
     </section>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div class="position-absolute bottom-0 end-0">
+            <div class="toast-container">
+                <div class="toast warning-toast bg-danger text-white mt-5"  role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body"></div>
+                </div>
+    
+                <div class="toast success-toast bg-success text-white mt-5" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body"></div>
+                </div>
+    
+                <div class="toast normal-toast mt-5" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END TOAST -->
+
 </body>
 
 <script type='text/javascript'>
     var isAddPageUnderProgram = <?php echo json_encode($isAddPageUnderProgram); ?>;
 </script>
+<script type='text/javascript' src="../test/admin/common.js"></script>
 <script type='text/javascript' src="../js/admin/subject.js"></script>
 </html>

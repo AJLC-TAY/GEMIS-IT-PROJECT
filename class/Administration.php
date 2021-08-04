@@ -339,7 +339,7 @@ class Administration extends Dbconfig
         mysqli_multi_query($this->dbConnect, $query);
     }
     
-    public function processRequisiteUpdateQry($code, $requisite) {
+    public function getUpdateRequisiteQry($code, $requisite) {
         $query = '';
         if (isset($_POST["$requisite"])) {
             $req_code_list = $_POST["$requisite"];
@@ -387,7 +387,16 @@ class Administration extends Dbconfig
         // end of validation
 
         $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', for_grd_level='$grdLvl', sub_semester='$sem', sub_type='$type' WHERE sub_code='$code';";
+        $query .= $this->getUpdateProgramQuery($code, $type);
+        $query .= $this->getUpdateRequisiteQry($code, 'PRE');
+        $query .= $this->getUpdateRequisiteQry($code, 'CO');
+        print_r($query);
+        mysqli_multi_query($this->dbConnect, $query);
+    }
 
+    private function getUpdateProgramQuery($code, $type)
+    {
+        $query = '';
         // insert program and subject info in sharedsubject table
         if ($type === 'applied') {
             $prog_code_list = $_POST['prog_code'];
@@ -401,7 +410,7 @@ class Administration extends Dbconfig
             }
 
             // delete rows with program codes not found in the submitted program code list
-            $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in the array 2
+            $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in array 2
             if (count($prog_codes_to_delete) > 0) {
                 foreach ($prog_codes_to_delete as $code_to_delete) {
                     $query .= "DELETE FROM sharedsubject WHERE program_prog_code='$code_to_delete' AND subject_sub_code='$code';";
@@ -415,28 +424,35 @@ class Administration extends Dbconfig
                     $query .= "INSERT INTO sharedsubject VALUES ('$code', '$new_code');";
                 }
             } 
+            return $query;
         }
 
         if ($type === 'specialized') {
-            $prog_code = $_POST['prog_code'];
+            $prog_code = $_POST['prog_code'][0];
 
             // get current program/s from db
             $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
             $result = mysqli_query($this->dbConnect, $queryTwo);
-            $current_program = mysqli_fetch_array($result, MYSQLI_NUM)[0];
+            $current_program = [];
 
-            // update current record if new code is different w/ the current code
-            if ($current_program !== $prog_code) {
-                $query .= "UPDATE sharedsubject SET program_prog_code='$prog_code' WHERE program_prog_code='$current_program' AND subject_sub_code='$code';";
+            while($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                $current_program[] = $row[0];
             }
+
+            if (count($current_program) > 1) {
+                $query .= "DELETE FROM sharedsubject WHERE subject_sub_code='$code';";
+                $query .= "INSERT INTO sharedsubject VALUES('$code', '$prog_code');";
+                // print_r($query);
+                return $query;
+            }
+
+            $current_program = $current_program[0];
+            $query .= "UPDATE sharedsubject SET program_prog_code='$prog_code' WHERE program_prog_code='{$current_program}' AND subject_sub_code='$code';";
+            return $query;
         }
 
-        $query .= $this->processRequisiteUpdateQry($code, 'PRE');
-        $query .= $this->processRequisiteUpdateQry($code, 'CO');
-
-        echo $query;
-
-        mysqli_multi_query($this->dbConnect, $query);
+        // subject type is core at this point
+        return "DELETE FROM sharedsubject WHERE subject_sub_code='$code'";
     }
 
     

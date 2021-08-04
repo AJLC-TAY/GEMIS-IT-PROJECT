@@ -1,16 +1,5 @@
-var spinner = $('.spinner-con')
 $(function () {
-    spinner.show()
-    $('.no-subject-msg').hide()
-    let timeout = null;
-
-    $('#curr-management a:first').click()
-    if (isAddPageUnderProgram) $('#program').addClass('active-sub')
-    else $('#subject').addClass('active-sub')
-
-    $('#req-btn').click(function () {
-        $('#req-table-con').removeClass('d-none')  
-    })
+    preload()
 
     $('#sub-type').change(function() {
         let options = $('#app-spec-options')
@@ -81,8 +70,21 @@ $(function () {
         console.log(formData)
 
         $.post("action.php", formData, function() {
-            // window.location.href = 'subjectList.php' 
             spinner.fadeOut(500)
+            // setToast('success', 'Subject successfully updated!')
+            // setToast('normal', 'Redirecting to subject list page ...')
+
+            // $('.success-toast').toast('show')
+            // setTimeout(function () {
+            //     $('.normal-toast').toast('show')
+            // }, 3000)
+
+            // setTimeout(function () {
+            // Set session variables
+            // $.session.set("success", "Subject successfully updated!")
+            sessionStorage.setItem("success", "Subject successfully updated!");
+                window.location.href = 'subjectList.php'
+            // }, 3000)
         })
     })
 
@@ -103,5 +105,5 @@ $(function () {
     // })
 
         
-    spinner.fadeOut(500)
+    hideSpinner();
 })

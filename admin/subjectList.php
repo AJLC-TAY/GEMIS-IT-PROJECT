@@ -80,9 +80,8 @@
                 <div class="toast-body"></div>
             </div>
 
-            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast success-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body">
-                    Subject successfully added
                 </div>
             </div>
         </div>
@@ -93,21 +92,17 @@
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script type="text/javascript"> //javascript to be edited
-    var spinner = $('.spinner-con')
+
+<script type='text/javascript' src="../test/admin/common.js"></script>
+<script type="text/javascript">
     var $table
-    var code = 'k12acad'
 
     function onPostBodyOfTable() {
 
     }
 
-    $(document).ready(function() {
-        spinner.show()
-        /** Display active menu item */
-        $('#curr-management a:first').click()
-        $('#subject').addClass('active-sub')
-
+    $(function() {
+        preload()
         var $table = $('#table').bootstrapTable({
             "url": `getAction.php?data=subjects`,
             "method": 'GET',
@@ -140,6 +135,6 @@
         //     })
         // })
 
-        spinner.fadeOut(500)
+        hideSpinner()
     })
 </script>

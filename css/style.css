@@ -403,6 +403,19 @@ ul.sidebar-menu li a.active i {
     border-bottom: 1px dashed white;
 }
 
+.alert-con {
+    position: fixed; 
+    bottom: 5%; 
+    right: 5%;
+    z-index: 99; 
+    width: 350px;
+    height: auto;
+}
+
+.alert {
+    display: none;
+}
+
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 20px;
