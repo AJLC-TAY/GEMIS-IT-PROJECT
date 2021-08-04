@@ -221,6 +221,7 @@ a.logo span {
     margin-top: .25in;
 }
 
+
 /*top menu*/
 
 #top_menu .nav>li,
@@ -248,7 +249,6 @@ ul.top-menu>li>a:focus {
     -webkit-border-radius: 4px;
     color: #b6b6b6 !important;
 }
-
 
 
 /*--sidebar toggle---*/
@@ -406,15 +406,19 @@ ul.sidebar-menu li a.active i {
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 20px;
-    text-align: center;
+    text-align: left;
     background-color: #f1f1f1;
-  }
+}
+
+.dropdown {
+    text-align: right;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-  }
+}
 
 .back-btn {
     margin-top: 20px;
@@ -422,14 +426,11 @@ input::-webkit-inner-spin-button {
 
 .btn-space {
     margin-right: 5px;
-
 }
 
 .save-btn {
     width: 90px;
 }
-
-
 
 
 /* .active-sub::before {
