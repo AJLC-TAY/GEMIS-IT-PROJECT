@@ -59,8 +59,6 @@ $(function () {
         saveRequisiteCodes('PRE[]', prereq)
         saveRequisiteCodes('CO[]', coreq)
 
-        console.log(formData)
-
         $.post("action.php", formData, function() {
             spinner.fadeOut(500)
             // setToast('success', 'Subject successfully updated!')
@@ -75,7 +73,7 @@ $(function () {
             // Set session variables
             // $.session.set("success", "Subject successfully updated!")
             // sessionStorage.setItem("success", "Subject successfully updated!");
-            //     window.location.href = 'subjectList.php'
+            window.location.href = 'subject.php?code'
             // }, 3000)
         })
     })

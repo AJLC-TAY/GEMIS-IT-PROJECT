@@ -74,7 +74,7 @@
         </section>
     </section>
        <!-- TOAST -->
-       <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+       <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute" style="bottom: 20px; right: 25px;">
             <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body"></div>

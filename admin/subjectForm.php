@@ -390,7 +390,7 @@ function getSubjectViewContent() {
     <hr>
     <h6>$prog_name</h6>
     <div id='add-subject-info' class='row justify-content-around mt-3'>
-        <div class='col-sm-12 col-lg-6 col-xl-5 card bg-light shadow-sm text-start mb-4'>
+        <div class='col-sm-12 col-lg-6 col-xl-5 shadow-sm p-4 bg-light border rounded-3 text-start mb-4'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
             <div class='row p-0'>
@@ -416,7 +416,7 @@ function getSubjectViewContent() {
                     </div>
                 </div>
             </div>
-            <div class='col-sm-12 col-lg-5 col-xl-6 card shadow-sm bg-light mb-4'>  
+            <div class='col-sm-12 col-lg-5 col-xl-6 shadow-sm p-4 bg-light border rounded-3 mb-4'>  
                 <h6 class='col-xl-4 fw-bold'>PROGRAM/S</h6>
                 <hr class='mt-1'>
                 <div id='program-con' class='d-flex flex-wrap'>";
