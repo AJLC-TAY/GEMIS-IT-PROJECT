@@ -111,7 +111,6 @@ function getSubjectForm($state) {
             $prog_opt = '';
 
             $sub_type_opt = '<option selected>Specialized</option>';
-            $sub_type_editable = 'disabled';
         }
     }
 
@@ -150,7 +149,8 @@ function getSubjectForm($state) {
             $sub_code = $subGr11->get_sub_code();
             $sub_name = $subGr11->get_sub_name();
             $sub_type = $subGr11->get_sub_type();
-            $reqRowsGrd11 .= "<tr>
+
+            $reqRowsGrd11 .= ($subject_code == $sub_code) ? "" : "<tr>
                 <td scope='col'>$sub_code</td>
                 <td scope='col'>$sub_name</td>
                 <td scope='col'>$sub_type</td>
@@ -164,7 +164,7 @@ function getSubjectForm($state) {
             $sub_code = $subGr12->get_sub_code();
             $sub_name = $subGr12->get_sub_name();
             $sub_type = $subGr12->get_sub_type();
-            $reqRowsGrd12 .= "<tr>
+            $reqRowsGrd12 .= ($subject_code == $sub_code) ? "" :"<tr>
                 <td scope='col'>$sub_code</td>
                 <td scope='col'>$sub_name</td>
                 <td scope='col'>$sub_type</td>
@@ -357,9 +357,7 @@ function getSubjectViewContent() {
     $sub_type = $subject->get_sub_type();
     $sub_semester = $subject->get_sub_semester();
     $sub_grd_lvl = $subject->get_for_grd_level();
-
     $prog_name = '';
-
     if (isset($_GET['prog_code'])) {
         // get program data
         $program = $admin->getProgram();
@@ -378,7 +376,6 @@ function getSubjectViewContent() {
                                     <li class='breadcrumb-item active' aria-current='page'>View Subject</li>
                                 </ol>
                             </nav>";
-
 
     $details = "<div class='d-flex justify-content-between'>
         <h3>$sub_name</h3>
@@ -467,7 +464,6 @@ function getSubjectViewContent() {
                 <div class='flex-grow-1'>$requisite</div>
             </div>
         </div>";
-
     $content->main = $details;
     return $content;
 }
