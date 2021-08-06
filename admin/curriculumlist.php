@@ -42,7 +42,7 @@
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>
                             </div>
-                            <div class="curriculum-con d-flex flex-wrap container">
+                            <div class="cards-con d-flex flex-wrap container">
                 
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
@@ -194,6 +194,7 @@
             </div>
         </div>
 </body>
-
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" src="../js/admin/cardPage.js"></script>
 <script type="text/javascript" src="../js/admin/curriculumlist.js"></script>
 </html>

@@ -1,22 +1,22 @@
-$(document).ready(function(){
-    spinner.fadeOut("slow")
-        /** Display active menu item */
-        //$('#curr-management a:first').click()
-        //$('#curriculum').addClass('active-sub')
-    
-        $('#program-form').submit(function(event) {
-            event.preventDefault()
-            spinner.show()
-            var form = $(this)
-            var formData = form.serialize()
-            $.post("action.php", formData, function(data) {
-                form.trigger('reset')
-                $('#add-curr-modal').modal('hide')
-                reloadCurriculum()
-            }).fail(function () {
+let tableId, url, method, id
 
-            })
+tableId = '#table'
+url = `getAction.php?prog_code=${code}&data=subjects`
+method = 'GET'
+id = 'sub_code'
+height = 300
+
+preload("#curr-management", "#program")
+let subject_table = new Table(tableId, url, method, id, id, height)
+
+$(function() {
+    $('#edit-btn').click(function() {
+        $(this).prop("disabled", true)
+        $("#save-btn").prop("disabled", false)
+        $(this).closest('form').find('.form-input').each(function() {
+            $(this).prop('disabled', false)
         })
-
-        
-});
+    })
+    
+    hideSpinner()
+})

@@ -93,48 +93,6 @@
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 
-<script type='text/javascript' src="../test/admin/common.js"></script>
-<script type="text/javascript">
-    var $table
-
-    function onPostBodyOfTable() {
-
-    }
-
-    $(function() {
-        preload()
-        var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?data=subjects`,
-            "method": 'GET',
-            "search": true,
-            "searchSelector": '#search-input',
-            "uniqueId": "code",
-            "idField": "code",
-            "height": 425,
-            // "exportDataType": "All",
-            "pagination": true,
-            "paginationParts": ["pageInfoShort", "pageSize", "pageList"],
-            "pageSize": 10,
-            "pageList": "[10, 25, 50, All]",
-            // "onPostBody": onPostBodyOfTable
-        })
-
-        $('#edit-btn').click(function() {
-            $(this).prop("disabled", true)
-            $("#save-btn").prop("disabled", false)
-            $(this).closest('form').find('.form-input').each(function() {
-                $(this).prop('disabled', false)
-            })
-        })
-
-        // $('#save-btn').click(function() {
-        //     $(this).prop("disabled", true)
-        //     $("#edit-btn").prop("disabled", false)
-        //     $(this).closest('form').find('input').each(function() {
-        //         $(this).prop('disabled', true)
-        //     })
-        // })
-
-        hideSpinner()
-    })
-</script>
+<script type='text/javascript' src="../js/common-custom.js"></script>
+<script type='text/javascript' src="../js/admin/Class.js"></script>
+<script type="text/javascript" src="../js/admin/subjectlist.js"></script>

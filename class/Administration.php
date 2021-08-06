@@ -187,7 +187,14 @@ class Administration extends Dbconfig
     {
         $subjectList = [];
      
-        $queryOne = "SELECT * FROM subject";
+
+        $queryOne = (!isset($_GET['prog_code'])) 
+            ? "SELECT * FROM subject;" 
+            : "SELECT * FROM subject WHERE sub_code 
+                IN (SELECT sub_code FROM sharedsubject 
+                WHERE prog_code='{$_GET['prog_code']}')
+               UNION SELECT * FROM `subject` WHERE sub_type='CORE';";
+
         $resultOne = mysqli_query($this->dbConnect, $queryOne);
         
         while ($row = mysqli_fetch_assoc($resultOne)) {
@@ -195,7 +202,7 @@ class Administration extends Dbconfig
             $sub_type = $row['sub_type'];
             $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
             if ($sub_type == 'specialized') {
-                $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+                $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
                 $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
                 $rowTwo = mysqli_fetch_row($resultTwo);
                 $subject->set_program($rowTwo[0]);
@@ -212,11 +219,11 @@ class Administration extends Dbconfig
 
     private function setParentPrograms($code, $sub_type, $subject) 
     {
-        $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+        $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
         $resultFour = mysqli_query($this->dbConnect, $queryTwo);
         $programs = [];
         while ($rowFour = mysqli_fetch_assoc($resultFour)) {
-            $programs[] = $rowFour['program_prog_code'];
+            $programs[] = $rowFour['prog_code'];
         }
 
         if ($sub_type == 'applied') {
@@ -230,12 +237,12 @@ class Administration extends Dbconfig
 
     public function listSubUnderProgJSON() {
         $subjectList = [];
-        $query = "SELECT subject_sub_code FROM sharedsubject WHERE program_prog_code='". $_GET['prog_code'] ."';";
+        $query = "SELECT sub_code FROM sharedsubject WHERE prog_code='". $_GET['prog_code'] ."';";
         $result = mysqli_query($this->dbConnect, $query);
 
         $subjects = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjects[] = $row['subject_sub_code'];
+            $subjects[] = $row['sub_code'];
         }
 
         foreach($subjects as $sub) {
@@ -270,23 +277,23 @@ class Administration extends Dbconfig
             $subject = $this->setParentPrograms($code, $sub_type, $subject);
         }
 
-        $queryTwo = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='PRE';";
+        $queryTwo = "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='PRE';";
         $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
         $prereq = [];
         if ($resultTwo) {
             while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
                 // $prereq[] = $rowTwo['req_sub_code'];
-                $prereq[] = $rowTwo['subject_sub_code1'];
+                $prereq[] = $rowTwo['req_sub_code'];
             }
         }
 
-        $queryThree = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='CO'";
+        $queryThree = "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='CO'";
         $resultThree = mysqli_query($this->dbConnect, $queryThree);
         $coreq = [];
         if ($resultThree) {
             while ($rowThree = mysqli_fetch_assoc($resultThree)) {
                 // $coreq[] = $rowThree['req_sub_code'];
-                $coreq[] = $rowThree['subject_sub_code1'];
+                $coreq[] = $rowThree['req_sub_code'];
             }
         }
 
@@ -323,14 +330,14 @@ class Administration extends Dbconfig
             }
         }
 
-        if (isset($_POST['pre'])) {
-            foreach($_POST['pre'] as $req_code) {
+        if (isset($_POST['PRE'])) {
+            foreach($_POST['PRE'] as $req_code) {
                 $query .= "INSERT INTO requisite VALUES ('$code', 'PRE', '$req_code');";
             }
         }
 
-        if (isset($_POST['co'])) {
-            foreach($_POST['co'] as $req_code) {
+        if (isset($_POST['CO'])) {
+            foreach($_POST['CO'] as $req_code) {
                 $query .= "INSERT INTO requisite VALUES ('$code', 'CO', '$req_code');";
             }
         }
@@ -345,18 +352,18 @@ class Administration extends Dbconfig
             $req_code_list = $_POST["$requisite"];
 
             // get current requisite subjects
-            $queryThree = "SELECT subject_sub_code1 FROM requisite WHERE subject_sub_code='$code' AND type='$requisite';";
+            $queryThree = "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='$requisite';";
             $result = mysqli_query($this->dbConnect, $queryThree);
             $current_subjects = [];
             while($row = mysqli_fetch_assoc($result)) {
-                $current_subjects[] = $row['subject_sub_code1']; 
+                $current_subjects[] = $row['req_sub_code']; 
             }
 
             // delete req subject not found in the submitted requisite code list
             $sub_codes_to_delete = array_diff($current_subjects, $req_code_list);
             if (count($sub_codes_to_delete) > 0) {
                 foreach ($sub_codes_to_delete as $code_to_delete) {
-                    $query .= "DELETE FROM requisite WHERE subject_sub_code='$code' AND subject_sub_code1='$code_to_delete' AND  type='$requisite';";
+                    $query .= "DELETE FROM requisite WHERE sub_code='$code' AND req_sub_code='$code_to_delete' AND  type='$requisite';";
                 }
             }
 
@@ -368,7 +375,7 @@ class Administration extends Dbconfig
                 }
             } 
         } else {
-            $query .= "DELETE FROM requisite WHERE subject_sub_code='$code' AND  type='$requisite';";
+            $query .= "DELETE FROM requisite WHERE sub_code='$code' AND  type='$requisite';";
         }
 
         return $query;
@@ -402,7 +409,7 @@ class Administration extends Dbconfig
             $prog_code_list = $_POST['prog_code'];
 
             // get current program/s from db
-            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+            $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
             $result = mysqli_query($this->dbConnect, $queryTwo);
             $current_programs = [];
             while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
@@ -413,7 +420,7 @@ class Administration extends Dbconfig
             $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in array 2
             if (count($prog_codes_to_delete) > 0) {
                 foreach ($prog_codes_to_delete as $code_to_delete) {
-                    $query .= "DELETE FROM sharedsubject WHERE program_prog_code='$code_to_delete' AND subject_sub_code='$code';";
+                    $query .= "DELETE FROM sharedsubject WHERE prog_code='$code_to_delete' AND sub_code='$code';";
                 }
             }
 
@@ -431,7 +438,7 @@ class Administration extends Dbconfig
             $prog_code = $_POST['prog_code'][0];
 
             // get current program/s from db
-            $queryTwo = "SELECT program_prog_code FROM sharedsubject WHERE subject_sub_code='$code';";
+            $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
             $result = mysqli_query($this->dbConnect, $queryTwo);
             $current_program = [];
 
@@ -440,19 +447,19 @@ class Administration extends Dbconfig
             }
 
             if (count($current_program) > 1) {
-                $query .= "DELETE FROM sharedsubject WHERE subject_sub_code='$code';";
+                $query .= "DELETE FROM sharedsubject WHERE sub_code='$code';";
                 $query .= "INSERT INTO sharedsubject VALUES('$code', '$prog_code');";
                 // print_r($query);
                 return $query;
             }
 
             $current_program = $current_program[0];
-            $query .= "UPDATE sharedsubject SET program_prog_code='$prog_code' WHERE program_prog_code='{$current_program}' AND subject_sub_code='$code';";
+            $query .= "UPDATE sharedsubject SET prog_code='$prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code';";
             return $query;
         }
 
         // subject type is core at this point
-        return "DELETE FROM sharedsubject WHERE subject_sub_code='$code'";
+        return "DELETE FROM sharedsubject WHERE sub_code='$code';";
     }
 
     

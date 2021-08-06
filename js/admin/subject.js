@@ -1,28 +1,21 @@
+preload("#curr-management", "#subject")
+
 $(function () {
-    preload()
 
     $('#sub-type').change(function() {
         let options = $('#app-spec-options')
-        switch($(this).val()) {
-            case 'applied':
-                options.removeClass('d-none')
-                options.find('input').each(function() {
-                    $(this).prop('disabled', false)
-                    $(this).attr('type', 'checkbox')
-                })
-                break;
-            case 'specialized':
-                options.removeClass('d-none')
-                options.find('input').each(function() {
-                    $(this).prop('disabled', false)
-                    $(this).attr('type', 'radio')
-                })
-                break;
-            default:
-                options.addClass('d-none')
-                options.find('input').each(function() {
-                    $(this).prop('disabled', true)
-                })
+        let type = $(this).val()
+        if (type == 'applied' || type == 'specialized') {
+            options.removeClass('d-none')
+            options.find('input').each(function() {
+                $(this).prop('disabled', false)
+                $(this).attr('type', (type == 'applied') ? 'checkbox' : 'radio')
+            })
+        } else if (type == 'core') {
+            options.addClass('d-none')
+            options.find('input').each(function() {
+                $(this).prop('disabled', true)
+            })
         }
     })
 
@@ -82,8 +75,8 @@ $(function () {
             // setTimeout(function () {
             // Set session variables
             // $.session.set("success", "Subject successfully updated!")
-            sessionStorage.setItem("success", "Subject successfully updated!");
-                window.location.href = 'subjectList.php'
+            // sessionStorage.setItem("success", "Subject successfully updated!");
+            //     window.location.href = 'subjectList.php'
             // }, 3000)
         })
     })

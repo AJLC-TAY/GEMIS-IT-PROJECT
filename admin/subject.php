@@ -4,13 +4,19 @@
 
 <?php 
     $content = null;
-    $isAddPageUnderProgram = FALSE;
+    // $isAddPageUnderProgram = FALSE;
     include_once ('../class/Administration.php');
     include_once ('subjectForm.php');
     
     if (isset($_GET['state'])) {
-        $isAddPageUnderProgram = isset($_GET['code']) ? TRUE : FALSE;
-        $content = getSubjectPageContent($_GET['state']);
+        // $isAddPageUnderProgram = isset($_GET['code']) ? TRUE : FALSE;
+        // $content = getSubjectPageContent($_GET['state']);
+        $state = $_GET['state'];
+        if ($state !== 'view') {
+            $content = getSubjectForm($state);
+        } else {
+            $content = getSubjectViewContent();
+        }
     } else {
         return;
     }
@@ -34,7 +40,7 @@
                     <div class="row mt ps-3">
                         <?php echo $content->breadcrumb; ?>
                         <div class="row">
-                            <?php echo $content->form; ?>
+                            <?php echo $content->main; ?>
                         </div>
                     </div>
                 </div>
@@ -46,7 +52,7 @@
         </section>
     </section>
     <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute bottom-0 end-0">
             <div class="toast-container">
                 <div class="toast warning-toast bg-danger text-white mt-5"  role="alert" aria-live="assertive" aria-atomic="true">
@@ -68,9 +74,6 @@
 
 </body>
 
-<script type='text/javascript'>
-    var isAddPageUnderProgram = <?php echo json_encode($isAddPageUnderProgram); ?>;
-</script>
-<script type='text/javascript' src="../test/admin/common.js"></script>
+<script type='text/javascript' src="../js/common-custom.js"></script>
 <script type='text/javascript' src="../js/admin/subject.js"></script>
 </html>

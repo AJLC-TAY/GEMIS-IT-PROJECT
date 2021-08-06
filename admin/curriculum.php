@@ -146,6 +146,8 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
 <script type="text/javascript">
     var code = <?php echo json_encode($curr_code);?>;
 </script>
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" src="../js/admin/Class.js"></script>
 <script type="text/javascript" src="../js/admin/curriculum.js"></script>
 
 </html>

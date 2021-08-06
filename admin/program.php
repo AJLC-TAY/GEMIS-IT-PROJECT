@@ -115,41 +115,12 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+
 <script type="text/javascript">
     var code = <?php echo json_encode($prog_code);?>;
-    var spinner = $('.spinner-con')
-    $(document).ready(function() {
-        spinner.show()
-        /** Display active menu item */
-        $('#curr-management a:first').click()
-        $('#program').addClass('active-sub')
-
-        var $table = $('#table').bootstrapTable({
-            "url": `getAction.php?prog_code=${code}&data=subjects`,
-            "method": 'GET',
-            // "search": true,
-            // "searchSelector": '#search-curr',
-            "uniqueId": "code",
-            "idField": "code",
-            "height": 450,
-            // "exportDataType": "All",
-            "pagination": true,
-            "paginationParts": ["pageInfoShort", "pageSize", "pageList"],
-            "pageSize": 10,
-            "pageList": "[10, 25, 50, All]",
-            // "onPostBody": onPostBodyOfTable
-        })
-
-        $('#edit-btn').click(function() {
-            $(this).prop("disabled", true)
-            $("#save-btn").prop("disabled", false)
-            $(this).closest('form').find('.form-input').each(function() {
-                $(this).prop('disabled', false)
-            })
-        })
-        
-        spinner.fadeOut(500)
-    })
 </script>
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" src="../js/admin/Class.js"></script>
+<script type="text/javascript" src="../js/admin/program.js"></script>
 
 </html>
