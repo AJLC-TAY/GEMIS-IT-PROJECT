@@ -1,7 +1,6 @@
 preload("#curr-management", "#subject")
 
 $(function () {
-
     $('#sub-type').change(function() {
         let options = $('#app-spec-options')
         let type = $(this).val()
