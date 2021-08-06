@@ -56,15 +56,6 @@ $(function() {
 
         })
     })
+
+    // eventDelegations()
 })
-
-
-
-
-
-
-
-
-
-
-

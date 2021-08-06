@@ -48,7 +48,7 @@ function getSubjectForm($state) {
         // prepare semester options
         $semester_opt = '';
         foreach ($semesters as $id => $value) { 
-            $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') ."'>$value</option>";
+            $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
         }
 
         // prepare subject type options
@@ -59,7 +59,7 @@ function getSubjectForm($state) {
 
         $grade_level_opt = '';
         foreach ($grd_lvl as $id => $value) { 
-            $grade_level_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') ."'>$value</option>";
+            $grade_level_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
         }
 
         $reqRowsGrd11 = '';
@@ -233,8 +233,8 @@ function getSubjectForm($state) {
 
     $form = $header ."<form id='add-subject-form' method='POST'>
                         $input_sub_with_prog
-                        <div class='row card bg-light w-100 h-auto text-start mx-auto'>
-                            <h5 class='text-start p-0'>Information</h5>
+                        <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
+                            <h5 class='text-start p-0'>SUBJECT DETAILS</h5>
                             <hr class='mt-1'>
                             <div class='row p-0'>
                                 <div class='col-7'>
@@ -271,7 +271,7 @@ function getSubjectForm($state) {
                             
                         $form .= "
                                 <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
-                                    <h5 class='text-start'>Prerequisite | Corequisite Subjects (if applicable)</h5>
+                                    <h5 class='text-start mb-3'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
                                     <div class='accordion' id='accordionPanelsStayOpenExample'>
                                         <div class='accordion-item'>
                                             <h2 class='accordion-header' id='panelsStayOpen-headingOne'>

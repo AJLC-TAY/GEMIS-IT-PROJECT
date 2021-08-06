@@ -42,7 +42,7 @@
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>
                             </div>
-                            <div class="cards-con d-flex flex-wrap container">
+                            <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                                 
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Programs</button>
@@ -58,7 +58,7 @@
     </section>
 
     <!-- MODAL -->
-    <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
             <form id="program-form" method="post">
                 <div class="modal-content">
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <div class="modal" id="view-arch-prog-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
+    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

@@ -42,7 +42,7 @@
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>
                             </div>
-                            <div class="cards-con d-flex flex-wrap container">
+                            <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                 
                             </div>
                             <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
@@ -57,7 +57,7 @@
         </section>
     </section>
         <!-- MODAL -->
-        <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+        <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="curriculum-form" method="post">
                     <div class="modal-content">
@@ -132,7 +132,7 @@
             </div>
         </div>
 
-        <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+        <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -180,7 +180,7 @@
         </div>
 
         <!-- TOAST -->
-        <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
             <div class="position-absolute" style="bottom: 20px; right: 25px;">
                 <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body"></div>

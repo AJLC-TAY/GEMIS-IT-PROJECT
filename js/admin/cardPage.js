@@ -102,57 +102,59 @@ const showWarning = () => {
     showWarningToast(`${camelized} successfully deleted`)
 }
 
-/*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
-// search 
-$(document).on('search', '#search-input', () => {
-    if ($('#search-input').val().length == 0) showAllCards()
-})
-
-$(document).on('keyup', '#search-input', () => {
-    spinner.show()
-    clearTimeout(timeout) // resets the timer
-    timeout = setTimeout(() => { // executes the function after the specified milliseconds
-        let results = getDataResult(dataList)
-        showResults(results.map((element) => { // map function returns an array containing the specified component of the element
-            return element[elementAccess]
-        }))
-        hideSpinner()
-    }, 500)
-})
-// add, delete, and view archive buttons
-$(document).on('click', '.add-btn', () => $('#add-modal').modal('toggle'))
-$(document).on('click', '.view-archive', () => $('#view-arch-modal').modal('toggle'))
-$(document).on('click', '.delete-btn', function() {
-    var code = $(this).attr('id')
-    var action = `delete${camelized}`
-    $.post("action.php", {code, action}, function(data) {	
-        $('#delete-modal').modal('hide')		
-        reload()
-        showWarningToast()
+// const eventDelegations = () => {
+    /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
+    // search 
+    $(document).on('search', '#search-input', () => {
+        if ($('#search-input').val().length == 0) showAllCards()
     })
-})
 
-// Modal Options 
-$(document).on('click', '.archive-btn', function() {
-    let name = $(this).attr('data-name')
-    $('#modal-identifier').html(`${name} ${camelized}`)
-    $('.modal-msg').html(archiveMessage)
-    $('#archive-modal').modal('toggle')
-})
+    $(document).on('keyup', '#search-input', () => {
+        spinner.show()
+        clearTimeout(timeout) // resets the timer
+        timeout = setTimeout(() => { // executes the function after the specified milliseconds
+            let results = getDataResult(dataList)
+            showResults(results.map((element) => { // map function returns an array containing the specified component of the element
+                return element[elementAccess]
+            }))
+            hideSpinner()
+        }, 500)
+    })
+    // add, delete, and view archive buttons
+    $(document).on('click', '.add-btn', () => $('#add-modal').modal('toggle'))
+    $(document).on('click', '.view-archive', () => $('#view-arch-modal').modal('toggle'))
+    $(document).on('click', '.delete-btn', function() {
+        var code = $(this).attr('id')
+        var action = `delete${camelized}`
+        $.post("action.php", {code, action}, function(data) {	
+            $('#delete-modal').modal('hide')		
+            reload()
+            showWarningToast()
+        })
+    })
 
-$(document).on('click', '.delete-option', function() {
-    var code = $(this).attr('id')
-    let name = $(this).attr('data-name')
-    let deleteModal = $('#delete-modal')
-    deleteModal.find('.modal-identifier').html(`${name} ${camelized}`)
-    deleteModal.find('.modal-msg').html(deleteMessage)
-    deleteModal.find('.delete-btn').attr('id', code)
-    deleteModal.modal('toggle')
-})
+    // Modal Options 
+    $(document).on('click', '.archive-btn', function() {
+        let name = $(this).attr('data-name')
+        $('#modal-identifier').html(`${name} ${camelized}`)
+        $('.modal-msg').html(archiveMessage)
+        $('#archive-modal').modal('toggle')
+    })
 
-/*** Footer modal buttons */
-/*** Reset form and hide error messages */
-$(document).on('click', ".close", () => {
-    $(`#${page}-form`).trigger('reset')              // reset form
-    $("[class*='error-msg']").addClass('invisible')     // hide error messages
-})
+    $(document).on('click', '.delete-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let deleteModal = $('#delete-modal')
+        deleteModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        deleteModal.find('.modal-msg').html(deleteMessage)
+        deleteModal.find('.delete-btn').attr('id', code)
+        deleteModal.modal('toggle')
+    })
+
+    /*** Footer modal buttons */
+    /*** Reset form and hide error messages */
+    $(document).on('click', ".close", () => {
+        $(`#${page}-form`).trigger('reset')              // reset form
+        $("[class*='error-msg']").addClass('invisible')     // hide error messages
+    })
+// } 
