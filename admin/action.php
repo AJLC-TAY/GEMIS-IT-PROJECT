@@ -19,6 +19,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
     $admin = $admin->updateCurriculum();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'archiveCurriculum') {
+    echo 'console.log("from archiveCurriculum action")';
+    $admin = $admin->transferCurriculum('archived_curriculum','curriculum');
+}
+
 
 /******** PROGRAM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addProgram') {
@@ -52,5 +57,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
 
 if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
     $admin->updateSubject();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
+    $admin->transferSubject('archived_subject','subject');
 }
 ?>

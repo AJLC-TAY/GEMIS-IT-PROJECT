@@ -68,10 +68,12 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                                 <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                             </div>
                                         </div>
+
                                         <div class="d-flex justify-content-end col-sm-11">
-                                            <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
                                             <input type="hidden" name="action" value="updateCurriculum">
-                                            <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
+                                            <button id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
+                                            <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
+                                            <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
                                         </div>
                                     </form>
 
@@ -109,7 +111,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
         </section>
     </section>
     <!-- ADD PROGRAM MODAL -->
-    <div class="modal" id="add-prog-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -146,6 +148,8 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
 <script type="text/javascript">
     var code = <?php echo json_encode($curr_code);?>;
 </script>
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" src="../js/admin/Class.js"></script>
 <script type="text/javascript" src="../js/admin/curriculum.js"></script>
 
 </html>

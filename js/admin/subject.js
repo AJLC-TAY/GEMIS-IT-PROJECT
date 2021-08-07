@@ -1,35 +1,20 @@
-var spinner = $('.spinner-con')
+preload("#curr-management", "#subject")
+
 $(function () {
-    spinner.show()
-    $('.no-subject-msg').hide()
-    let timeout = null;
-
-    $('#curr-management a:first').click()
-    if (isAddPageUnderProgram) $('#program').addClass('active-sub')
-    else $('#subject').addClass('active-sub')
-
-    $('#req-btn').click(function () {
-        $('#req-table-con').removeClass('d-none')  
-    })
-
     $('#sub-type').change(function() {
-        switch($(this).val()) {
-            case 'applied':
-                $('#app-spec-options').find('input').each(function() {
-                    $(this).prop('disabled', false)
-                    $(this).attr('type', 'checkbox')
-                })
-                break;
-            case 'specialized':
-                $('#app-spec-options').find('input').each(function() {
-                    $(this).prop('disabled', false)
-                    $(this).attr('type', 'radio')
-                })
-                break;
-            default:
-                $('#app-spec-options').find('input').each(function() {
-                    $(this).prop('disabled', true)
-                })
+        let options = $('#app-spec-options')
+        let type = $(this).val()
+        if (type == 'applied' || type == 'specialized') {
+            options.removeClass('d-none')
+            options.find('input').each(function() {
+                $(this).prop('disabled', false)
+                $(this).attr('type', (type == 'applied') ? 'checkbox' : 'radio')
+            })
+        } else if (type == 'core') {
+            options.addClass('d-none')
+            options.find('input').each(function() {
+                $(this).prop('disabled', true)
+            })
         }
     })
 
@@ -47,9 +32,9 @@ $(function () {
         formData = formData.filter(function(item) {
             let value = item.value
             if (item.name.includes('radio-')) {
-                if (value.includes('pre-')) { 
+                if (value.includes('PRE-')) { 
                     prereq.push(value)
-                } else if (value.includes('co-')) {
+                } else if (value.includes('CO-')) {
                     coreq.push(value)
                 } 
                 return false
@@ -67,21 +52,33 @@ $(function () {
             
             codeList.forEach(code => {  
                 code = code.substring(code.indexOf("-") + 1)
-                formData.push( {'name': requisite, 'value': code}) // store subject code value; from pre-ABM to ABM
+                formData.push( {'name': requisite, 'value': code}) // store subject code value; from PRE-ABM to ABM
             })
         }
 
-        saveRequisiteCodes('pre[]', prereq)
-        saveRequisiteCodes('co[]', coreq)
-
-        console.log(formData)
+        saveRequisiteCodes('PRE[]', prereq)
+        saveRequisiteCodes('CO[]', coreq)
 
         $.post("action.php", formData, function() {
-            // window.location.href = 'subjectList.php' 
+            spinner.fadeOut(500)
+            // setToast('success', 'Subject successfully updated!')
+            // setToast('normal', 'Redirecting to subject list page ...')
+
+            // $('.success-toast').toast('show')
+            // setTimeout(function () {
+            //     $('.normal-toast').toast('show')
+            // }, 3000)
+
+            // setTimeout(function () {
+            // Set session variables
+            // $.session.set("success", "Subject successfully updated!")
+            // sessionStorage.setItem("success", "Subject successfully updated!");
+            window.location.href = 'subject.php?code'
+            // }, 3000)
         })
     })
 
-    $(document).on('click', '#edit-btn', function() {
+    $(document).on('click', '#edit-btn', function(event) {
         let editBtn = $('#edit-btn')
         editBtn.addClass('d-none')
         let cancelBtn = $('.cancel-btn')
@@ -91,6 +88,12 @@ $(function () {
         cancelBtn.removeClass('d-none')
     })
 
+    // $(document).on('click', '#clear-table', function() {
+    //     let grade = $(this).attr('data-desc').val()
+    //     console.log(grade)
+    //     $(`#grade${grade}-table input[name*='radio']`).prop('checked', false)
+    // })
+
         
-    spinner.fadeOut(500)
+    hideSpinner();
 })

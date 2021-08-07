@@ -34,7 +34,13 @@
                                         <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
                                     </ol>
                                 </nav>
-                                <h2>Curriculum</h2>
+                                <div class="d-flex justify-content-between">
+                                    <h2>Curriculum</h2>
+                                    <span>
+                                        <!-- <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button> -->
+                                        <a class="view-archive btn btn-secondary" href="archivedCurr.php" role ="button"><i class="bi bi-eye me-1"></i>View Archived</a>
+                                    </span>
+                                </div>
                                 <!-- SEARCH BAR -->
                                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                             </header>
@@ -42,10 +48,9 @@
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>
                             </div>
-                            <div class="curriculum-con d-flex flex-wrap container">
+                            <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                 
                             </div>
-                            <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
                         </div>
                     </div>
                 </div>
@@ -57,7 +62,7 @@
         </section>
     </section>
         <!-- MODAL -->
-        <div class="modal" id="add-curr-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+        <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <form id="curriculum-form" method="post">
                     <div class="modal-content">
@@ -105,7 +110,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-primary close-btn">Archive</button>
+                        <button class="btn btn-primary close-btn archive-btn">Archive</button>
                     </div>
                 </div>
             </div>
@@ -132,7 +137,7 @@
             </div>
         </div>
 
-        <div class="modal" id="view-arch-curr-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+        <!-- <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -177,10 +182,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- TOAST -->
-        <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
             <div class="position-absolute" style="bottom: 20px; right: 25px;">
                 <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body"></div>
@@ -194,6 +199,7 @@
             </div>
         </div>
 </body>
-
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" src="../js/admin/cardPage.js"></script>
 <script type="text/javascript" src="../js/admin/curriculumlist.js"></script>
 </html>
