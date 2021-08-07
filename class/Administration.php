@@ -110,6 +110,17 @@ class Administration extends Dbconfig
         header("Location: curriculum.php?code=$code");
     }
 
+    public function transferCurriculum($dest, $org)
+    {
+        echo 'console.log("inside transferCurriculum")';
+        $code = $_POST['code'];
+        $query = "INSERT INTO " . $this->$dest . "SELECT * FROM " . $this->origin . "WHERE curr_code = '{$code}';";
+        $query .= "DELETE FROM " . $this->origin . "WHERE curr_code = '{$code}'";
+        echo ($query);
+        #mysqli_query($this->dbConnect, $query);
+        mysqli_multi_query($this->dbConnect, $query);
+    }
+
     /*** Program Methods */
     public function listPrograms()
     {
@@ -526,6 +537,16 @@ class Administration extends Dbconfig
     public function listSubjectsGrade12JSON()
     {
         echo json_encode($this->listSubjectsGrade12());
+    }
+
+    public function transferSubject($dest, $origin)
+    {
+        $code = $_POST['code'];
+        $query = "INSERT INTO '$dest' SELECT * FROM '$origin' WHERE sub_code = '$code';";
+        $query .= "DELETE FROM '$origin' WHERE sub_code = '$code'";
+        $this->dbConnect->multi_query($query);
+        #$mysqli->multi_query($query);
+        #mysqli_query($this->dbConnect, $query);
     }
 
 }
