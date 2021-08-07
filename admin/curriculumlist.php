@@ -34,7 +34,12 @@
                                         <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
                                     </ol>
                                 </nav>
-                                <h2>Curriculum</h2>
+                                <div class="d-flex justify-content-between">
+                                    <h2>Curriculum</h2>
+                                    <span>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button>
+                                    </span>
+                                </div>
                                 <!-- SEARCH BAR -->
                                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                             </header>
@@ -45,7 +50,6 @@
                             <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                 
                             </div>
-                            <button type="button" class="view-archive btn btn-link">View Archived Curriculums</button>
                         </div>
                     </div>
                 </div>

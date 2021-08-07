@@ -32,6 +32,7 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <h2>Subject</h2>
                                     <div>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
                                         <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</a>
                                     </div>
                                 </div>
