@@ -10,11 +10,23 @@ preload("#curr-management", "#program")
 let subject_table = new Table(tableId, url, method, id, id, height)
 
 $(function() {
-    $('#edit-btn').click(function() {
-        $(this).prop("disabled", true)
-        $("#save-btn").prop("disabled", false)
+    $('#edit-btn').click(function(event) {
+        event.preventDefault()
+        $('[type=submit]').removeClass('d-none')
+        $('#cancel-btn').removeClass('d-none')
+        $(this).addClass('d-none')
         $(this).closest('form').find('.form-input').each(function() {
             $(this).prop('disabled', false)
+        })
+    })
+
+    $('#cancel-btn').click(function(event) {
+        event.preventDefault()
+        $('[type=submit]').addClass('d-none')
+        $(this).addClass('d-none')
+        $('#edit-btn').removeClass('d-none')
+        $(this).closest('form').find('.form-input').each(function() {
+            $(this).prop('disabled', true)
         })
     })
     

@@ -55,7 +55,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- Form -->
                             <div class="container mt-4">
                                 <div class="card w-100 h-auto">
-                                    <h5 class="text-start fw-bold">Information</h5><hr class="mt-1 mb-4">
+                                    <h5 class="text-start fw-bold">PROGRAM DETAILS</h5><hr class="mt-1 mb-4">
                                     <form action="action.php" method="POST">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
@@ -70,9 +70,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end col-sm-12">
-                                            <?php echo "<button id='edit-btn' class='btn btn-secondary btn-sm' $edit_btn_state>Edit</button>"; ?>
                                             <input type="hidden" name="action" value="updateProgram">
-                                            <?php echo "<input type='submit' id='save-btn' class='btn btn-success btn-sm' value='Save' $state>"; ?>
+                                            <button id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
+                                            <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
+                                            <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
                                         </div>
                                     </form>
                                 </div>
@@ -83,7 +84,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     <table id="table" class="table-striped">
                                         <thead class='thead-dark'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h5 class="fw-bold">Subjects</h5>
+                                                <h5 class="fw-bold">SUBJECTS</h5>
                                                 <a href="subject.php?state=add&prog_code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
                                             </div><hr class="mt-1 mb-4">
                                             <div class="d-flex flex-row-reverse mb-3">
