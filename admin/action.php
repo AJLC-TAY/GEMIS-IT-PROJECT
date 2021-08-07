@@ -20,10 +20,18 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveCurriculum') {
-    echo 'console.log("from archiveCurriculum action")';
     $admin = $admin->transferCurriculum('archived_curriculum','curriculum');
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'unarchiveCurriculum') {
+    echo("from unarchiveCurriculum");
+    $admin = $admin->transferCurriculum('curriculum','archived_curriculum');
+    
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'getArchivedCurrJSON') {
+    $admin = $admin->listArchivedCurrJSON();
+}
 
 /******** PROGRAM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addProgram') {
