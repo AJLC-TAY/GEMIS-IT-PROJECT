@@ -17,7 +17,7 @@ const setup = (page, prepareHTML, filter) => {
             preload("#curr-management", "#curriculum")
             programString = "programs/strands, "
             elementAccess = "cur_code"
-            action = "getCurriculumJSON" 
+            action = "getArchivedCurrJSON" 
             break;
         case 'program':
             preload("#curr-management", "#program")
@@ -38,6 +38,8 @@ const setup = (page, prepareHTML, filter) => {
     addModal = $('#add-modal')
     warningToast = $('.warning-toast')
     
+    archiveMessage = `Unarchiving this ${page} will also unarchive all ${programString}subjects and student grades under this ${page}.`
+
     // functions
     prepareHTMLOfData = prepareHTML
 
@@ -109,6 +111,29 @@ const showResults = (results) => {
             }))
             hideSpinner()
         }, 500)
+    })
+
+    $(document).on('click', '.unarchive-btn', function() {
+        var code = $(this).attr('id')
+        var action = `unarchive${camelized}`
+        console.log('from cardPage')
+        console.log(action)
+        $.post("action.php", {code, action}, function(data) {	
+            $('#unarchive-modal').modal('hide')		
+            reload()
+            showWarningToast()
+        })
+    })
+
+    // Modal Options 
+    $(document).on('click', '.unarchive-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let archiveModal = $('#unarchive-modal')
+        archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.unarchive-btn').attr('id', code)
+        archiveModal.modal('toggle')
     })
 
 
