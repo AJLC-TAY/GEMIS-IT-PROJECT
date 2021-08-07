@@ -31,7 +31,7 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
+                                        <li class="breadcrumb-item active" aria-current="page"><a href="curriculumlist.php">Curriculum</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Archived Curriculum</li>
                                     </ol>
                                 </nav>
@@ -58,6 +58,27 @@
             </section>
         </section>
     </section>
+
+    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Confirmation</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>
+                        <p class="modal-msg"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="text/javascript" src="../js/admin/archivedCards.js"></script>

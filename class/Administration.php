@@ -110,15 +110,35 @@ class Administration extends Dbconfig
         header("Location: curriculum.php?code=$code");
     }
 
-    public function transferCurriculum($dest, $org)
+    public function transferCurriculum($dest, $origin)
     {
-        echo 'console.log("inside transferCurriculum")';
+        echo("from transferCurriculum");
         $code = $_POST['code'];
-        $query = "INSERT INTO " . $this->$dest . "SELECT * FROM " . $this->origin . "WHERE curr_code = '{$code}';";
-        $query .= "DELETE FROM " . $this->origin . "WHERE curr_code = '{$code}'";
-        echo ($query);
+        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE curr_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
+        //insert other queries 
+        $query .= "DELETE FROM $origin WHERE curr_code = '{$code}'";
+        echo($query);
         #mysqli_query($this->dbConnect, $query);
         mysqli_multi_query($this->dbConnect, $query);
+    }
+
+    public function listArchivedCurr()
+    {
+        $query = "SELECT * FROM archived_curriculum";
+        $result = mysqli_query($this->dbConnect, $query);
+        $archivedCurrList = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
+            $curriculum->add_cur_desc($row['curr_desc']);
+            $archivedCurrList[] = $curriculum;
+        }
+        return $archivedCurrList;
+    }
+
+    public function listArchivedCurrJSON()
+    {
+        echo json_encode($this->listArchivedCurr());
     }
 
     /*** Program Methods */
@@ -191,6 +211,20 @@ class Administration extends Dbconfig
         $updateQuery = "UPDATE program SET prog_code='" . $code . "', description='" . $prog_description . "' WHERE prog_code = '" . $old_code . "'";
         mysqli_query($this->dbConnect, $updateQuery);
         header("Location: program.php?prog_code=$code");
+    }
+
+    public function transferProgram($dest, $origin)
+    {
+        $code = $_POST['code'];
+        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE prog_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
+        //insert other queries 
+        $query .= "DELETE FROM $origin} WHERE prog_code = '{$code}'";
+        mysqli_multi_query($this->dbConnect, $query);
+    }
+
+    public function listArchivedProgJSON()
+    {
+
     }
 
     /*** Subject Methods */

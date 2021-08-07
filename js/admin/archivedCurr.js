@@ -9,8 +9,7 @@ let prepareHTML = data => {
                     <div class='dropdown'>
                         <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                         <ul class='dropdown-menu'>
-                            <li><button data-name='${name}' class='archive-btn dropdown-item'>Unarchive</button></li>
-                            <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>View</button></li>
+                        <li><button data-name='${name}' class='unarchive-option dropdown-item' id='${code}'>Unarchive</button></li>
                         </ul>
                     </div>
                     <h4>${name}</h4>
