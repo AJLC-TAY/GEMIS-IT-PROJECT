@@ -59,23 +59,15 @@ $(function () {
         saveRequisiteCodes('PRE[]', prereq)
         saveRequisiteCodes('CO[]', coreq)
 
-        $.post("action.php", formData, function() {
+        $.post("action.php", formData, function(data) {
             spinner.fadeOut(500)
-            // setToast('success', 'Subject successfully updated!')
-            // setToast('normal', 'Redirecting to subject list page ...')
-
-            // $('.success-toast').toast('show')
-            // setTimeout(function () {
-            //     $('.normal-toast').toast('show')
-            // }, 3000)
-
-            // setTimeout(function () {
-            // Set session variables
-            // $.session.set("success", "Subject successfully updated!")
-            // sessionStorage.setItem("success", "Subject successfully updated!");
-            window.location.href = 'subject.php?code'
-            // }, 3000)
+            data = JSON.parse(data)
+          
+            //Set session variables
+            sessionStorage.setItem("message", data.status)
+            window.location.href = `subject.php?${data.redirect}`
         })
+
     })
 
     $(document).on('click', '#edit-btn', function(event) {
@@ -88,12 +80,13 @@ $(function () {
         cancelBtn.removeClass('d-none')
     })
 
+ 
+
     // $(document).on('click', '#clear-table', function() {
     //     let grade = $(this).attr('data-desc').val()
     //     console.log(grade)
     //     $(`#grade${grade}-table input[name*='radio']`).prop('checked', false)
     // })
 
-        
     hideSpinner();
 })
