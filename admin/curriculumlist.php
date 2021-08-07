@@ -37,7 +37,8 @@
                                 <div class="d-flex justify-content-between">
                                     <h2>Curriculum</h2>
                                     <span>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button>
+                                        <!-- <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button> -->
+                                        <a class="view-archive btn btn-secondary" href="archivedCurr.php" role ="button"><i class="bi bi-eye me-1"></i>View Archived</a>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
@@ -109,7 +110,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-primary close-btn">Archive</button>
+                        <button class="btn btn-primary close-btn archive-btn">Archive</button>
                     </div>
                 </div>
             </div>
@@ -136,7 +137,7 @@
             </div>
         </div>
 
-        <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+        <!-- <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -181,7 +182,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- TOAST -->
         <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">

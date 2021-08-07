@@ -37,10 +37,6 @@ const setup = (page, prepareHTML, filter) => {
     addToast = $('.add-toast')
     addModal = $('#add-modal')
     warningToast = $('.warning-toast')
-
-    // delete and arhive messages
-    deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`
-    archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`
     
     // functions
     prepareHTMLOfData = prepareHTML
@@ -56,10 +52,7 @@ const reload = () => {
     spinner.show()
     $.post('action.php', {action}, (data) => {
         dataList = JSON.parse(data)
-        let addBtn = `<div class='btn add-btn card shadow-sm'>
-            <div class='card-body'>Add ${camelized}</div>
-        </div>`
-        $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
+        $('.cards-con').html(prepareHTMLOfData(dataList))
     })
     hideSpinner()
 }
@@ -98,9 +91,6 @@ const showResults = (results) => {
     })
 }
 
-const showWarning = () => {
-    showWarningToast(`${camelized} successfully deleted`)
-}
 
 // const eventDelegations = () => {
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
@@ -120,56 +110,6 @@ const showWarning = () => {
             hideSpinner()
         }, 500)
     })
-    // add, delete, archive and view archive buttons
-    $(document).on('click', '.add-btn', () => $('#add-modal').modal('toggle'))
-    $(document).on('click', '.view-archive', () => $('#view-arch-modal').modal('toggle'))
-    $(document).on('click', '.delete-btn', function() {
-        var code = $(this).attr('id')
-        var action = `delete${camelized}`
-        $.post("action.php", {code, action}, function(data) {	
-            $('#delete-modal').modal('hide')		
-            reload()
-            showWarningToast()
-        })
-    })
 
-    $(document).on('click', '.archive-btn', function() {
-        var code = $(this).attr('id')
-        var action = `archive${camelized}`
-        $.post("action.php", {code, action}, function(data) {	
-            console.log('from cardPage')
-            console.log(data)
-            $('#archive-modal').modal('hide')		
-            reload()
-            showWarningToast()
-        })
-    })
 
-    // Modal Options 
-    $(document).on('click', '.archive-option', function() {
-        var code = $(this).attr('id')
-        let name = $(this).attr('data-name')
-        let archiveModal = $('#archive-modal')
-        archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
-        archiveModal.find('.modal-msg').html(archiveMessage)
-        archiveModal.find('.archive-btn').attr('id', code)
-        archiveModal.modal('toggle')
-    })
-
-    $(document).on('click', '.delete-option', function() {
-        var code = $(this).attr('id')
-        let name = $(this).attr('data-name')
-        let deleteModal = $('#delete-modal')
-        deleteModal.find('.modal-identifier').html(`${name} ${camelized}`)
-        deleteModal.find('.modal-msg').html(deleteMessage)
-        deleteModal.find('.delete-btn').attr('id', code)
-        deleteModal.modal('toggle')
-    })
-
-    /*** Footer modal buttons */
-    /*** Reset form and hide error messages */
-    $(document).on('click', ".close", () => {
-        $(`#${page}-form`).trigger('reset')              // reset form
-        $("[class*='error-msg']").addClass('invisible')     // hide error messages
-    })
 // } 

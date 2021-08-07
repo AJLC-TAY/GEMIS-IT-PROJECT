@@ -9,9 +9,8 @@ let prepareHTML = data => {
                     <div class='dropdown'>
                         <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
                         <ul class='dropdown-menu'>
-                            <li><a class='dropdown-item' href='curriculum.php?code=${code}&state=edit'>Edit</a></li>
-                            <li><button data-name='${name}' class='archive-option dropdown-item' id='${code}'>Archive</button></li>
-                            <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>Delete</button></li>
+                            <li><button data-name='${name}' class='archive-btn dropdown-item'>Unarchive</button></li>
+                            <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>View</button></li>
                         </ul>
                     </div>
                     <h4>${name}</h4>
@@ -39,23 +38,3 @@ let getDataResult = (dataList) => {
 
 setup('curriculum', prepareHTML, getDataResult)
 reload()
-
-// custom script
-$(function() {
-    $('#curriculum-form').submit(function(event) {
-        event.preventDefault()
-        spinner.show()
-        var form = $(this)
-        var formData = form.serialize()
-        $.post("action.php", formData, function(data) {
-            form.trigger('reset')
-            addModal.modal('hide')
-            reload()
-            addToast.toast('show')
-        }).fail(function () {
-
-        })
-    })
-
-    // eventDelegations()
-})
