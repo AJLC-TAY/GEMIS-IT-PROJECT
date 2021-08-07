@@ -102,7 +102,7 @@ function getSubjectForm($state) {
             // update link data
             // $link = "program.php?prog_code=$prog_code";
             $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
-                . "<li class='breadcrumb-item'><a href='program.php?code='$prog_code'>$prog_code</a></li>"
+                . "<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
                 . "<li class='breadcrumb-item active' aria-current='page'>Add Subject</li>";
             $header = "<h2>$prog_name</h2>"
                 . "<h4>Add Subject</h4>";
@@ -110,6 +110,7 @@ function getSubjectForm($state) {
             // overwrite program options
             $prog_opt = '';
 
+            $sub_type_editable = 'disabled';
             $sub_type_opt = '<option selected>Specialized</option>';
         }
     }
@@ -204,7 +205,7 @@ function getSubjectForm($state) {
     
             // prepare links for bread crumb
             $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
-                    ."<li class='breadcrumb-item'><a href='program.php?code='$prog_code'>$prog_code</a></li>"
+                    ."<li class='breadcrumb-item'><a href='program.php?prog_code='$prog_code'>$prog_code</a></li>"
                     ."<li class='breadcrumb-item active' aria-current='page'>Edit Subject</li>";
     
             $header = "<h3>$sub_name</h3><hr><h6>$prog_name</h6>";
@@ -261,7 +262,7 @@ function getSubjectForm($state) {
                                     <div class='form-group row'>
                                         <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
                                         <div class='col-sm-9'>
-                                            <select name='sub-type' class='form-select' id='sub-type'>$sub_type_opt</select>
+                                            <select name='sub-type' class='form-select' id='sub-type' $sub_type_editable>$sub_type_opt</select>
                                         </div>
                                         $prog_opt
                                     </div>
