@@ -36,7 +36,7 @@
                         </div>
                          <!-- Form -->
                          <div class="container mt-4 col-9">
-                                <div class="card w-100 h-auto">
+                                <div class="card body w-100 h-auto">
                                     <form action="action.php" method="POST">
                                         <h4>STUDENT INFORMATION</h4>
                                         <div class="form-group row">
@@ -90,10 +90,132 @@
                                                     <option value="female">Female</option>
                                                 </select>
                                             </div>
-                                            
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Belonging to any Indeginous Group</label>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">If yes, please specify</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother Tongue</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Religion</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
                                         </div>
-                                       
+                                        <div class="form-group row">
+                                            <h5>ADDRESS</h5>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">House No.</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="number" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Street</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Barangay</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">City</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Province</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Zip Code</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                        </div>
                                     </form>
+                                </div>
+                                <div class="card w-100 h-auto">
+                                    <form action="action.php" method="POST">
+                                        <h4> PARENT/GUARDIAN'S INFORMATION</h4>
+                                        <div class="form-group row">
+                                            <h5>FATHER</h5>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's Last Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's First Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's Middle Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <h5>MOTHER</h5>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Last Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's First Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Middle Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <h5>GUARDIAN</h5>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's Last Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's First Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's Middle Name</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                            <label class="col-xl-2 col-lg-3 col-form-label text-start">Relationship to the Guardian</label>
+                                            <div class='col-xl-10 col-lg-9'>
+                                                <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
+                                            </div>
+                                        </div>
+
+                                    </form>
+
                                 </div>
                          </div>
 
