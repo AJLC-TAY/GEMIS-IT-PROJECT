@@ -172,4 +172,29 @@ const showWarning = () => {
         $(`#${page}-form`).trigger('reset')              // reset form
         $("[class*='error-msg']").addClass('invisible')     // hide error messages
     })
+
+
+    //archive script
+    $(document).on('click', '.unarchive-btn', function() {
+        var code = $(this).attr('id')
+        var action = `unarchive${camelized}`
+        console.log('from cardPage')
+        console.log(action)
+        $.post("action.php", {code, action}, function(data) {	
+            $('#unarchive-modal').modal('hide')		
+            reload()
+            showWarningToast()
+        })
+    })
+
+    // Modal Options 
+    $(document).on('click', '.unarchive-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let archiveModal = $('#unarchive-modal')
+        archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.unarchive-btn').attr('id', code)
+        archiveModal.modal('toggle')
+    })
 // } 
