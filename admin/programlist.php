@@ -83,7 +83,7 @@
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
                             <select id="curr-code" class="form-control" name="curr-code">
                             <option selected>Select...</option>
-                                <?php $currList = $admin->listCurriculum();
+                                <?php $currList = $admin->listCurriculum('curriculum');
                                 foreach ($currList as  $cur) {
                                    $curr_code = $cur->get_cur_code();
                                     echo "<option> " . $curr_code . "</option>";

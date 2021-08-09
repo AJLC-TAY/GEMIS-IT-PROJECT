@@ -40,9 +40,9 @@ class Administration extends Dbconfig
     /*** Curriculum Methods */
 
     /** Returns the list of curriculum. */
-    public function listCurriculum()
+    public function listCurriculum($tbl)
     {
-        $query = "SELECT * FROM curriculum";
+        $query = "SELECT * FROM {$tbl}";
         $result = mysqli_query($this->dbConnect, $query);
         $curriculumList = array();
 
@@ -54,9 +54,9 @@ class Administration extends Dbconfig
         return $curriculumList;
     }
 
-    public function listCurriculumJSON()
+    public function listCurriculumJSON($tbl)
     {
-        echo json_encode($this->listCurriculum());
+        echo json_encode($this->listCurriculum($tbl));
     }
 
     /** Get curriculum object from a specified curriculum code */
@@ -116,48 +116,48 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE curr_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
         //insert other queries 
-        $query .= "DELETE FROM $origin WHERE curr_code = '{$code}'";
+        $query .= "DELETE FROM {$origin} WHERE curr_code = '{$code}'";
         echo($query);
         #mysqli_query($this->dbConnect, $query);
         mysqli_multi_query($this->dbConnect, $query);
     }
 
-    public function listArchivedCurr()
-    {
-        $query = "SELECT * FROM archived_curriculum";
-        $result = mysqli_query($this->dbConnect, $query);
-        $archivedCurrList = array();
+    // public function listArchivedCurr()
+    // {
+    //     $query = "SELECT * FROM archived_curriculum";
+    //     $result = mysqli_query($this->dbConnect, $query);
+    //     $archivedCurrList = array();
 
-        while ($row = mysqli_fetch_assoc($result)) {
-            $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
-            $curriculum->add_cur_desc($row['curr_desc']);
-            $archivedCurrList[] = $curriculum;
-        }
-        return $archivedCurrList;
-    }
+    //     while ($row = mysqli_fetch_assoc($result)) {
+    //         $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
+    //         $curriculum->add_cur_desc($row['curr_desc']);
+    //         $archivedCurrList[] = $curriculum;
+    //     }
+    //     return $archivedCurrList;
+    // }
 
-    public function listArchivedCurrJSON()
-    {
-        echo json_encode($this->listArchivedCurr());
-    }
+    // public function listArchivedCurrJSON()
+    // {
+    //     echo json_encode($this->listArchivedCurr());
+    // }
 
     /*** Program Methods */
-    public function listPrograms()
+    public function listPrograms($tbl)
     {
-        $query = "SELECT * FROM program";
+        $query = "SELECT * FROM {$tbl}";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
 
-        
+    
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
         }
         return $programList;
     }
 
-    public function listProgramsJSON()
+    public function listProgramsJSON($tbl)
     {
-        echo json_encode($this->listPrograms());
+        echo json_encode($this->listPrograms($tbl));
     }
 
     public function getProgram()
@@ -213,12 +213,15 @@ class Administration extends Dbconfig
         header("Location: program.php?prog_code=$code");
     }
 
-    public function transferProgram($dest, $origin)
+    public function transferProgram($dest, $origin, $sub_dest, $sub_origin, $req_dest, $req_org, $shared_dest, $shared_org )
     {
         $code = $_POST['code'];
-        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE prog_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
-        //insert other queries 
-        $query .= "DELETE FROM $origin} WHERE prog_code = '{$code}'";
+        $query = "INSERT INTO $dest SELECT * FROM $origin where prog_code = '$code';";
+        $query .= "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
+        $query .= "INSERT INTO $req_dest SELECT * FROM $req_org where sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
+        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_org WHERE sub_code = '$code';";
+        $query .= "DELETE FROM $shared_org WHERE prog_code = '$code'";
+        $query .= "DELETE FROM $origin WHERE prog_code = '$code';";
         mysqli_multi_query($this->dbConnect, $query);
     }
 
@@ -583,14 +586,14 @@ class Administration extends Dbconfig
         echo json_encode($this->listSubjectsGrade12());
     }
 
-    public function transferSubject($dest, $origin)
+    public function transferSubject($sub_dest, $sub_origin, $shared_dest , $shared_org, $req_dest,$req_org)
     {
         $code = $_POST['code'];
-        $query = "INSERT INTO '$dest' SELECT * FROM '$origin' WHERE sub_code = '$code';";
-        $query .= "DELETE FROM '$origin' WHERE sub_code = '$code'";
-        $this->dbConnect->multi_query($query);
-        #$mysqli->multi_query($query);
-        #mysqli_query($this->dbConnect, $query);
+        $query = "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';";
+        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_org WHERE sub_code = '$code';";
+        $query .= "INSERT INTO $req_dest SELECT * FROM $req_org where sub_code = '$code';";
+        $query .= "DELETE FROM $shared_org WHERE sub_code = '$code'";
+        mysqli_multi_query($this->dbConnect, $query);
     }
 
 }
