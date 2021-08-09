@@ -173,13 +173,18 @@ const showWarning = () => {
         $("[class*='error-msg']").addClass('invisible')     // hide error messages
     })
 
-
+    $("#unarchive-modal").on('show.bs.modal', function (e) {
+        $("#view-arch-modal").modal("hide");
+    });
+    
     //archive script
     $(document).on('click', '.unarchive-btn', function() {
+        $('#view-arch-modal').modal('hide')	
         var code = $(this).attr('id')
         var action = `unarchive${camelized}`
         console.log('from cardPage')
         console.log(action)
+        console.log(code)
         $.post("action.php", {code, action}, function(data) {	
             $('#unarchive-modal').modal('hide')		
             reload()

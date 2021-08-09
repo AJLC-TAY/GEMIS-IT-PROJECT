@@ -213,14 +213,16 @@ class Administration extends Dbconfig
         header("Location: program.php?prog_code=$code");
     }
 
-    public function transferProgram($dest, $origin)
+    public function transferProgram($dest, $origin, $sub_dest, $sub_origin, $req_dest, $req_org, $shared_dest, $shared_org )
     {
         $code = $_POST['code'];
-        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE prog_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
-        //insert other queries 
-        $query .= "DELETE FROM $origin} WHERE prog_code = '{$code}'";
+        $query = "INSERT INTO $dest SELECT * FROM $origin where prog_code = '$code';";
+        $query .= "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
+        $query .= "INSERT INTO $req_dest SELECT * FROM $req_org where sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
+        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_org WHERE sub_code = '$code';";
+        $query .= "DELETE FROM $shared_org WHERE prog_code = '$code'";
+        $query .= "DELETE FROM $origin WHERE prog_code = '$code';";
         mysqli_multi_query($this->dbConnect, $query);
-        
     }
 
     public function listArchivedProgJSON()

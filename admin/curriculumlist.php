@@ -137,7 +137,7 @@
         </div>
     </div>
 
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedCurriculum" aria-hidden="true">
+    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculumc" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,17 +149,17 @@
                 <div class="modal-body">
                     <div class="overflow-auto" style="height: 50vh;">
 
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <?php $currList = $admin->listCurriculum('archived_curriculum');
-                                foreach ($currList as  $cur) {
-                                    $name = $cur->get_cur_name();
-                                    $code = $cur->get_cur_code();
-                                    echo $name;
-                                    echo "<a href='#modal-2' data-toggle='modal' data-dismiss='modal'><button data-name='$name' class='archive-option btn btn-link' id='${code}'>Unarchive</button></a>";
-                                }
-                                ?> 
-                            </li>
+                        <ul class="list-group" id="arch-list">
+                            <?php $currList = $admin->listCurriculum('archived_curriculum');
+                            foreach ($currList as  $cur) {
+                                echo "<li class='list-group-item d-flex justify-content-between align-items-center'>";
+                                $name = $cur->get_cur_name();
+                                $code = $cur->get_cur_code();
+                                echo $name;
+                                echo "<button data-name='$name' class='unarchive-option btn btn-link' id='${code}'>Unarchive</button>";
+                                echo "</li>";
+                            }
+                            ?>
                         </ul>
                     </div>
                 </div>
@@ -169,6 +169,28 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
