@@ -39,7 +39,7 @@ function getSubjectForm($state) {
     
     // prepare program options
     $prog_opt = prepareEmptyProgramOptions($programs);
-    $input_sub_with_prog = "";
+    $input_sub_with_prog = '';
 
     if ($state === 'add') {
         $header = '<h3>Add Subject</h3><h6>Please complete the following:</h6>';
@@ -100,7 +100,6 @@ function getSubjectForm($state) {
             $prog_code = $program->get_prog_code();
             
             // update link data
-            // $link = "program.php?prog_code=$prog_code";
             $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
                 . "<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
                 . "<li class='breadcrumb-item active' aria-current='page'>Add Subject</li>";
@@ -120,7 +119,7 @@ function getSubjectForm($state) {
         $subject = $admin->getSubject();
         $subject_code = $subject->get_sub_code();
         $subject_name = $subject->get_sub_name();
-        $sub_type = $subject->get_sub_type();
+        $subject_type = $subject->get_sub_type();
         $prereq = $subject->get_prerequisite();
         $coreq = $subject->get_corequisite();
 
@@ -177,7 +176,7 @@ function getSubjectForm($state) {
         $button = "<input type='hidden' name='action' value='updateSubject'>"
                  ."<input class='btn btn-success form-control' style='width: 150px;' type='submit' value='Save'>";
 
-        if ($sub_type === 'applied' ) {
+        if ($subject_type === 'applied' ) {
             $sub_programs = $subject->get_programs();
     
             $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>"

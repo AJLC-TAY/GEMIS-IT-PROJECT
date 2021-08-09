@@ -1,4 +1,4 @@
-let tableId, url, method, id
+let tableId, url, method, id, height
 
 tableId = '#table'
 url = `getAction.php?prog_code=${code}&data=subjects`

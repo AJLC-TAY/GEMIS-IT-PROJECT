@@ -368,8 +368,14 @@ class Administration extends Dbconfig
 
         $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES ('$code', '$subName', '$grdLvl', '$sem', '$type');";
 
+
         // insert program and subject info in sharedsubject table
-        if ($type == 'applied' || $type == 'specialized') {
+        if ($type == 'specialized') {
+            $program_code = $_POST['prog_code'];
+            $query .= "INSERT INTO sharedsubject VALUES ('$code', '$program_code');";
+        }
+
+        if ($type == 'applied') {
             $prog_code_list = $_POST['prog_code'];
             foreach($prog_code_list as $prog_code) {
                 $query .= "INSERT INTO sharedsubject VALUES ('$code', '$prog_code');";
@@ -388,8 +394,9 @@ class Administration extends Dbconfig
             }
         }
 
-        echo $query;
         mysqli_multi_query($this->dbConnect, $query);
+        $redirect = (($type === 'specialized') ? "prog_code={$program_code}&" : "") ."code=$code&state=view&success=added" ;
+        echo json_encode((object) ["redirect" =>$redirect, "status" => 'Subject successfully added!']);
     }
     
     public function getUpdateRequisiteQry($code, $requisite) {
@@ -440,11 +447,14 @@ class Administration extends Dbconfig
         // end of validation
 
         $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', for_grd_level='$grdLvl', sub_semester='$sem', sub_type='$type' WHERE sub_code='$code';";
-        $query .= $this->getUpdateProgramQuery($code, $type);
+        
+        $program_info = $this->getUpdateProgramQuery($code, $type);
+        $query .= ($type === 'specialized') ? $program_info[1] : $program_info;
         $query .= $this->getUpdateRequisiteQry($code, 'PRE');
         $query .= $this->getUpdateRequisiteQry($code, 'CO');
-        print_r($query);
         mysqli_multi_query($this->dbConnect, $query);
+        $redirect = (($type === 'specialized') ? "prog_code={$program_info[0]}&" : "") ."code=$code&state=view&success=updated" ;
+        echo json_encode((object) ["redirect" =>$redirect, "status" => 'Subject successfully updated!']);
     }
 
     private function getUpdateProgramQuery($code, $type)
@@ -501,7 +511,7 @@ class Administration extends Dbconfig
 
             $current_program = $current_program[0];
             $query .= "UPDATE sharedsubject SET prog_code='$prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code';";
-            return $query;
+            return [$prog_code, $query];
         }
 
         // subject type is core at this point
