@@ -73,6 +73,7 @@ function getSubjectForm($state) {
                 <td scope='col'>$sub_type</td>
                 <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
                 <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
+                <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
             </tr>";
         }
 
@@ -87,8 +88,11 @@ function getSubjectForm($state) {
                 <td scope='col'>$sub_type</td>
                 <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
                 <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
+                <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
             </tr>";
         }
+
+        $grade_level_state = '';
 
         $button = "<input type='hidden' name='action' value='addSubject'>"
                  ."<input class='btn btn-success form-control' style='width: 150px' type='submit' value='ADD SUBJECT'>";
@@ -120,6 +124,7 @@ function getSubjectForm($state) {
         $subject_code = $subject->get_sub_code();
         $subject_name = $subject->get_sub_name();
         $subject_type = $subject->get_sub_type();
+        $subject_grd = $subject->get_for_grd_level();
         $prereq = $subject->get_prerequisite();
         $coreq = $subject->get_corequisite();
 
@@ -156,9 +161,11 @@ function getSubjectForm($state) {
                 <td scope='col'>$sub_type</td>
                 <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
                 <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
+                <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
             </tr>";
         }
 
+        $grade_level_state = ($subject_grd == 11) ? 'disabled': '';
         $reqRowsGrd12 = '';
         foreach ($subjectGrade12 as $subGr12) {
             $sub_code = $subGr12->get_sub_code();
@@ -168,8 +175,9 @@ function getSubjectForm($state) {
                 <td scope='col'>$sub_code</td>
                 <td scope='col'>$sub_name</td>
                 <td scope='col'>$sub_type</td>
-                <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
-                <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
+                <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code' $grade_level_state></td>
+                <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code' $grade_level_state></td>
+                <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
             </tr>";
         }
 
@@ -284,7 +292,7 @@ function getSubjectForm($state) {
                                                     <div id='grade11-table'>
                                                         <div class='d-flex justify-content-between align-items-center mb-2'>
                                                             <h6>Subjects</h6>
-                                                            <span><button data-desc='11' id='clear-table' class='float-right btn btn-dark'>Clear</button></span>
+                                                            <span><button data-desc='11' class='clear-table-btn float-right btn btn-dark'>CLEAR TABLE</button></span>
                                                         </div>
                                                         <div class='requisite-table overflow-auto'>
                                                             <table class='table table-bordered table-hover table-striped'>
@@ -295,6 +303,7 @@ function getSubjectForm($state) {
                                                                         <th scope='col'>TYPE</th>
                                                                         <th scope='col'>PRE</th>
                                                                         <th scope='col'>CO</th>
+                                                                        <th scope='col'>ACTION</th>
                                                                     </tr>
                                                                 </thead>
                     
@@ -316,7 +325,7 @@ function getSubjectForm($state) {
                                                     <div id='grade12-table'>
                                                         <div class='d-flex justify-content-between align-items-center mb-2'>
                                                             <h6>Subjects</h6>
-                                                            <span><button data-desc='12' id='clear-table' class='float-right btn btn-dark'>Clear</button></span>
+                                                            <span><button data-desc='12' class='clear-table-btn float-right btn btn-dark'>CLEAR TABLE</button></span>
                                                         </div>
                                                     
                                                         <div class='requisite-table overflow-auto'>
@@ -328,6 +337,7 @@ function getSubjectForm($state) {
                                                                         <th scope='col'>TYPE</th>
                                                                         <th scope='col'>PRE</th>
                                                                         <th scope='col'>CO</th>
+                                                                        <th scope='col'>ACTION</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>$reqRowsGrd12</tbody>

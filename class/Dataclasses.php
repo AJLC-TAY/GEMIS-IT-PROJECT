@@ -256,6 +256,7 @@ class Faculty implements JsonSerializable
     private $middle_name;
     private $first_name;
     private $ext_name;
+    private $name;
     private $birthdate;
     private $age;
     private $sex;
@@ -266,6 +267,7 @@ class Faculty implements JsonSerializable
     private $enable_enroll;
     private $enable_edit_grd;
     private $id_photo;
+    private $action;
 
     public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo)
     {
@@ -273,6 +275,7 @@ class Faculty implements JsonSerializable
         $this->last_name = $last_name;
         $this->middle_name = $middle_name;
         $this->first_name = $first_name;
+        $this->name = "$last_name, $first_name $middle_name";
         $this->ext_name = $ext_name;
         $this->birthdate = $birthdate;
         $this->age = $age;
@@ -284,6 +287,8 @@ class Faculty implements JsonSerializable
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
         $this->id_photo = $id_photo;
+        $this->action = "<a href='faculty.php?sid=$teacher_id&state=edit' class='btn btn-secondary'>Edit</a>"
+                      . "<a href='faculty.php?sid=$teacher_id&state=view' class='btn btn-primary'>View</a>";
         /** $this->id_photo = "data:id_photo;base64,". base64_encode($id_photo); */
     }
 
@@ -352,20 +357,18 @@ class Faculty implements JsonSerializable
     {
         return [
             'teacher_id' => $this->teacher_id,
-            'last_name' => $this->last_name,
-            'middle_name' => $this->middle_name,
-            'first_name' => $this->first_name,
-            'ext_name' => $this->ext_name,
-            'birthdate' => $this->birthdate,
-            'age' => $this->age,
-            'sex' => $this->sex,
+            'name' => $this->name,
+            // 'birthdate' => $this->birthdate,
+            // 'age' => $this->age,
+            // 'sex' => $this->sex,
             'department' => $this->department,
-            'cp_no' => $this->cp_no,
-            'email' => $this->email,
-            'award_coor' => $this->award_coor,
-            'enable_enroll' => $this->enable_enroll,
-            'enable_edit_grd' => $this->enable_edit_grd,
-            'id_photo' => $this->id_photo
+            // 'cp_no' => $this->cp_no,
+            // 'email' => $this->email,
+            // 'award_coor' => $this->award_coor,
+            // 'enable_enroll' => $this->enable_enroll,
+            // 'enable_edit_grd' => $this->enable_edit_grd,
+            // 'id_photo' => $this->id_photo
+            'action' => $this->action
         ];
     }
 }

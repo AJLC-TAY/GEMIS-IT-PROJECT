@@ -28,13 +28,14 @@ class Administration extends Dbconfig
     {
         $result = mysqli_query($this->dbConnect, $sqlQuery);
         if (!$result) {
-            die('Error in query: ' . mysqli_error());
+            die('Error in query: ' . mysqli_error($this->dbConnect));
         }
-        $data = array();
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            $data[] = $row;
-        }
-        return $data;
+        // $data = array();
+        // while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+        //     $data[] = $row;
+        // }
+        // return $data;
+        return mysqli_fetch_array($result, MYSQLI_ASSOC);
     }
 
     /*** Curriculum Methods */
@@ -144,11 +145,10 @@ class Administration extends Dbconfig
     /*** Program Methods */
     public function listPrograms()
     {
-        $query = "SELECT * FROM program";
+        $query = isset($_GET['code']) ? "SELECT * FROM program WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
 
-        
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
         }
@@ -327,7 +327,6 @@ class Administration extends Dbconfig
         $prereq = [];
         if ($resultTwo) {
             while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
-                // $prereq[] = $rowTwo['req_sub_code'];
                 $prereq[] = $rowTwo['req_sub_code'];
             }
         }
@@ -337,7 +336,6 @@ class Administration extends Dbconfig
         $coreq = [];
         if ($resultThree) {
             while ($rowThree = mysqli_fetch_assoc($resultThree)) {
-                // $coreq[] = $rowThree['req_sub_code'];
                 $coreq[] = $rowThree['req_sub_code'];
             }
         }
@@ -567,13 +565,12 @@ class Administration extends Dbconfig
     /** Returns the list of Grade 12 subjects. */
     public function listSubjectsGrade12()
     {
-        $query = "SELECT * FROM subject WHERE for_grd_level = 12";
+        $query = "SELECT * FROM subject WHERE for_grd_level = 12;";
         $result = mysqli_query($this->dbConnect, $query);
         $subjGrade12List = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjectGrade12 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
-            $subjGrade12List[] = $subjectGrade12;
+            $subjGrade12List[] = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
         }
         return $subjGrade12List;
     }
@@ -591,6 +588,21 @@ class Administration extends Dbconfig
         $this->dbConnect->multi_query($query);
         #$mysqli->multi_query($query);
         #mysqli_query($this->dbConnect, $query);
+    }
+
+    public function listFacultyJSON() {
+        $query = 'SELECT * FROM faculty;';
+        $result = mysqli_query($this->dbConnect, $query);
+        $faculty = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $faculty[] = new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+                                $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $row['department'],
+                                $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
+                                $row['enable_edit_grd'], $row['id_picture']);
+        }
+        echo json_encode($faculty,JSON_UNESCAPED_UNICODE);
+       
     }
 
 }

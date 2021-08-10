@@ -14,7 +14,7 @@
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
-        <!--main content start-->
+        <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
@@ -34,7 +34,7 @@
                                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
 
                             </header>
-                            <!-- Subject table -->
+                            <!-- FACULTY TABLE -->
                             <div class="container mt-5">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>
@@ -50,25 +50,27 @@
 
                                         <tr>
                                             <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="500" data-align="left" data-sortable="true" data-field="">Name</th>
-                                            <th scope='col' data-width="600" data-align="center" data-field="">Department</th>
-                                            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                            <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="teacher_id">UID</th>
+                                            <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                            <th scope='col' data-width="300" data-align="center" data-field="department">Department</th>
+                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
+                            <!-- FACULTY TABLE END -->
                         </div>
                     </div>
                 </div>
-                <!--main content end-->
-                <!--footer start-->
+                <!--MAIN CONTENT END-->
+                <!--FOOTER START-->
                 <?php include_once("../inc/footer.html"); ?>
-                <!--footer end-->
+                <!--FOOTER END-->
             </section>
         </section>
     </section>
-       <!-- TOAST -->
-       <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute" style="bottom: 20px; right: 25px;">
             <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body"></div>
@@ -87,6 +89,7 @@
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script type="text/javascript"> //javascript to be edited
-  
-</script>
+
+<script src="../js/common-custom.js"></script>
+<script src="../js/admin/Class.js"></script>
+<script src="../js/admin/facultylist.js"></script>

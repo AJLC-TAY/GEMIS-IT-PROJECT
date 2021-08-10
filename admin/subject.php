@@ -76,15 +76,4 @@
 
 <script type='text/javascript' src="../js/common-custom.js"></script>
 <script type='text/javascript' src="../js/admin/subject.js"></script>
-<?php 
-    // if (isset($_GET['success'])) {
-    //     echo "<script>
-    //         // $(document).ready(function() {showToast('success', 'Subject successfully {$_GET['success']}')})
-    //         $(document).ready(function() {
-    //             $('.success-toast').find('.toast-body').text('Subject successfully {$_GET['success']}')
-    //             $('.success-toast').toast('show')
-    //         })
-    //     </script>";
-    // }
-?>
 </html>

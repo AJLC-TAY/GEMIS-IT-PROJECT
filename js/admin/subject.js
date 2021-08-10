@@ -79,14 +79,28 @@ $(function () {
         cancelBtn.removeClass('disabled')
         cancelBtn.removeClass('d-none')
     })
-
  
+    // Clears all the radio buttons contained in a grade level table
+    $(document).on('click', '.clear-table-btn', function(event) {
+        event.preventDefault()
+        let grade = $(this).attr('data-desc')
+        $(`#grade${grade}-table input[name*='radio']`).prop('checked', false)
+    })
 
-    // $(document).on('click', '#clear-table', function() {
-    //     let grade = $(this).attr('data-desc').val()
-    //     console.log(grade)
-    //     $(`#grade${grade}-table input[name*='radio']`).prop('checked', false)
-    // })
+    // Clears the radio buttons on the same row as the clicked clear button
+    $(document).on('click', '.spec-clear-btn', function(event) {
+        event.preventDefault()
+
+        $(this).closest('tr').find('td').slice(3, 5).each(function() {
+            $(this).find('input').prop('checked', false)
+        })
+    })
+    
+    // Disables radio buttons in grade 12 table when 'Grade level' is 11; otherwise, enables them
+    $('#grade-level').change(function() {
+        let isDisabled =  ($(this).val() == 11) ? true : false
+        $(`#grade12-table input[name*='radio']`).prop('disabled', isDisabled)
+    })
 
     hideSpinner();
 })
