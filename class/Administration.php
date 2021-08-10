@@ -143,15 +143,16 @@ class Administration extends Dbconfig
     // }
 
     /*** Program Methods */
-    public function listPrograms($tbl)
+    public function listPrograms()
+    // public function listPrograms($tbl)
     {
-        // $query = isset($_GET['code']) ? "SELECT * FROM program WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
-        // $result = mysqli_query($this->dbConnect, $query);
-        // $programList = array();
-
-        $query = "SELECT * FROM {$tbl}";
+        $query = isset($_GET['code']) ? "SELECT * FROM program WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
+
+        // $query = "SELECT * FROM {$tbl}";
+        // $result = mysqli_query($this->dbConnect, $query);
+        // $programList = array();
 
     
         while ($row = mysqli_fetch_assoc($result)) {
