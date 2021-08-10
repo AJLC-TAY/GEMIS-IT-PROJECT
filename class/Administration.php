@@ -161,10 +161,15 @@ class Administration extends Dbconfig
         return $programList;
     }
 
-    public function listProgramsJSON($tbl)
+    public function listProgramsJSON()
     {
-        echo json_encode($this->listPrograms($tbl));
+        echo json_encode($this->listPrograms());
     }
+    
+    // public function listProgramsJSON($tbl)
+    // {
+    //     echo json_encode($this->listPrograms($tbl));
+    // }
 
     public function getProgram()
     {
