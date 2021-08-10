@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Edit Student Information | GEMIS</title>
+<title>Student Information | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
