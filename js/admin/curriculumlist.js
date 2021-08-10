@@ -46,7 +46,9 @@ $(function() {
         event.preventDefault()
         spinner.show()
         var form = $(this)
+        console.log(form)
         var formData = form.serialize()
+        console.log(formData)
         $.post("action.php", formData, function(data) {
             form.trigger('reset')
             addModal.modal('hide')

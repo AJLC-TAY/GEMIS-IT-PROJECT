@@ -404,10 +404,10 @@ ul.sidebar-menu li a.active i {
 }
 
 .alert-con {
-    position: fixed; 
-    bottom: 5%; 
+    position: fixed;
+    bottom: 5%;
     right: 5%;
-    z-index: 99; 
+    z-index: 99;
     width: 350px;
     height: auto;
 }
@@ -423,6 +423,16 @@ ul.sidebar-menu li a.active i {
     background-color: #f1f1f1;
 }
 
+.photo {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    background-color: #f1f1f1;
+    height: 2in;
+    width: 2in;
+    margin: auto;
+}
+
 .dropdown {
     text-align: right;
 }
@@ -434,6 +444,7 @@ ul.sidebar-menu li a.active i {
 #app-spec-options {
     height: 150px;
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
