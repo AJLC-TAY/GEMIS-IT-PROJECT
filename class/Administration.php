@@ -111,12 +111,13 @@ class Administration extends Dbconfig
         header("Location: curriculum.php?code=$code");
     }
 
-    public function transferCurriculum($dest, $origin)
+    public function moveCurriculum($dest, $origin, $prog_dest, $prog_origin, $shared_dest, $shared_origin)
     {
-        echo("from transferCurriculum");
+        echo("from moveCurriculum");
         $code = $_POST['code'];
-        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE curr_code = '{$code}';"; //{dest} {origin} lang ung sa tables kong saan macocopy kasi kapag meron siyang qoutation iproprocess siya as string hindi as a table
-        //insert other queries 
+        $query = "INSERT INTO {$dest} SELECT * FROM {$origin} WHERE curr_code = '{$code}';";
+        $query .= "INSERT INTO {$prog_dest} SELECT * FROM $prog_origin WHERE curriculum_curr_code = '{$code}';";
+        $query .= "INSERT INTO {$shared_dest} SELECT * FROM $shared_origin WHERE prog_code IN (SELECT prog_code FROM $prog_origin WHERE curriculum_curr_code = '{$code}');";
         $query .= "DELETE FROM {$origin} WHERE curr_code = '{$code}'";
         echo($query);
         #mysqli_query($this->dbConnect, $query);
@@ -224,22 +225,16 @@ class Administration extends Dbconfig
         header("Location: program.php?prog_code=$code");
     }
 
-    public function transferProgram($dest, $origin, $sub_dest, $sub_origin, $req_dest, $req_org, $shared_dest, $shared_org )
+    public function moveProgram($dest, $origin, $shared_dest, $shared_origin )
     {
         $code = $_POST['code'];
         $query = "INSERT INTO $dest SELECT * FROM $origin where prog_code = '$code';";
-        $query .= "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
-        $query .= "INSERT INTO $req_dest SELECT * FROM $req_org where sub_code IN (SELECT sub_code FROM $shared_org WHERE prog_code = '$code');";
-        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_org WHERE sub_code = '$code';";
-        $query .= "DELETE FROM $shared_org WHERE prog_code = '$code'";
+        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';";
+        $query .= "DELETE FROM $shared_origin WHERE prog_code = '$code'";
         $query .= "DELETE FROM $origin WHERE prog_code = '$code';";
         mysqli_multi_query($this->dbConnect, $query);
     }
 
-    public function listArchivedProgJSON()
-    {
-
-    }
 
     /*** Subject Methods */
     public function listSubjects()
@@ -594,13 +589,14 @@ class Administration extends Dbconfig
         echo json_encode($this->listSubjectsGrade12());
     }
 
-    public function transferSubject($sub_dest, $sub_origin, $shared_dest , $shared_org, $req_dest,$req_org)
+    public function moveSubject($sub_dest, $sub_origin, $shared_dest , $shared_origin, $req_dest,$req_origin)
     {
         $code = $_POST['code'];
         $query = "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';";
-        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_org WHERE sub_code = '$code';";
-        $query .= "INSERT INTO $req_dest SELECT * FROM $req_org where sub_code = '$code';";
-        $query .= "DELETE FROM $shared_org WHERE sub_code = '$code'";
+        $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';";
+        $query .= "INSERT INTO $req_dest SELECT * FROM $req_origin where sub_code = '$code';";
+        $query .= "DELETE FROM $shared_origin WHERE sub_code = '$code'";
+        $query .= "DELETE FROM $$req_origin WHERE sub_code = '$code'";
         mysqli_multi_query($this->dbConnect, $query);
     }
 

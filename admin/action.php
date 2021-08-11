@@ -20,12 +20,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveCurriculum') {
-    $admin = $admin->transferCurriculum('archived_curriculum','curriculum');
+    $admin = $admin->moveCurriculum('archived_curriculum','curriculum','archived_program','program','archived_sharedsubject','sharedsubject');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveCurriculum') {
     echo("from unarchiveCurriculum");
-    $admin = $admin->transferCurriculum('curriculum','archived_curriculum');
+    $admin = $admin->moveCurriculum('curriculum','archived_curriculum','program','archived_program','sharedsubject','archived_sharedsubject');
     
 }
 
@@ -43,7 +43,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getProgramJSON') {
-    $admin->listProgramsJSON('program');
+    $admin->listProgramsJSON();
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
@@ -51,12 +51,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveProgram') {
-    $admin = $admin->transferCurriculum('archived_program','program');
+    $admin = $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveProgram') {
-    echo("from unarchiveCurriculum");
-    $admin = $admin->transferCurriculum('program','archived_program');
+    $admin = $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getArchiveProgJSON') {
@@ -83,6 +82,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
-    $admin->transferSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
+    $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
+    $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
 ?>
