@@ -117,7 +117,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary close-btn">Archive</button>
+                    <button class="btn btn-primary archive-btn">Archive</button>
                 </div>
             </div>
         </div>
@@ -165,6 +165,27 @@
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Do you want to delete <span class="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger close-btn delete-btn">Delete</button>
                 </div>
             </div>
         </div>

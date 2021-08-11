@@ -144,10 +144,10 @@ class Administration extends Dbconfig
     // }
 
     /*** Program Methods */
-    public function listPrograms()
-    // public function listPrograms($tbl)
+    // public function listPrograms()
+    public function listPrograms($tbl)
     {
-        $query = isset($_GET['code']) ? "SELECT * FROM program WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
+        $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
 
@@ -162,15 +162,15 @@ class Administration extends Dbconfig
         return $programList;
     }
 
-    public function listProgramsJSON()
-    {
-        echo json_encode($this->listPrograms());
-    }
-    
-    // public function listProgramsJSON($tbl)
+    // public function listProgramsJSON()
     // {
-    //     echo json_encode($this->listPrograms($tbl));
+    //     echo json_encode($this->listPrograms());
     // }
+    
+    public function listProgramsJSON($tbl)
+    {
+        echo json_encode($this->listPrograms($tbl));
+    }
 
     public function getProgram()
     {

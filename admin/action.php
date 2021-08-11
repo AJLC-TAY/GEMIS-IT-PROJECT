@@ -43,7 +43,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getProgramJSON') {
-    $admin->listProgramsJSON();
+    $admin->listProgramsJSON('program');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
