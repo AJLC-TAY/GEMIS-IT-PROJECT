@@ -26,37 +26,44 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="facultyList.php">Faculty</a></li>
+                                        <li class="breadcrumb-item active">Faculty</li>
                                     </ol>
                                 </nav>
-                                <h2>Faculty Members</h2>
-                                <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h2>Faculty Members</h2>
+                                    <div>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>VIEW ARCHIVED FACULTY</button>
+                                        <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a>
+                                    </div>
+                                </div>
                             </header>
                             <!-- FACULTY TABLE -->
-                            <div class="container mt-5">
-                                <table id="table" class="table-striped">
-                                    <thead class='thead-dark'>
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <h4>Faculty Members</h4>
-                                            <div>
-                                                <a href="" id="add-btn" class="btn btn-success">Add Faculty Member</a>
-                                                <button class="btn btn-secondary" title='Deactivate Faculty'>Deactivate</button>
-                                                <button class="btn btn-secondary" title='Reset Password'>Reset Password</button>
-                                                <button class="btn btn-secondary" title='Export'>Export</button>
+                            <div class="container mt-1">
+                                <div class="card w-100 h-auto bg-light">
+                                    <table id="table" class="table-striped">
+                                        <thead class='thead-dark'>
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <!-- SEARCH BAR -->
+                                                <span class="flex-grow-1 me-5"> 
+                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                                </span>
+                                                <div>
+                                                    <button class="btn btn-outline-danger" title='Deactivate Faculty'>DEACTIVATE</button>
+                                                    <button class="btn btn-outline-secondary" title='Reset Password'>RESET PASSWORD</button>
+                                                    <button class="btn btn-outline-primary" title='Export'>EXPORT</button>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="teacher_id">UID</th>
-                                            <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                            <th scope='col' data-width="300" data-align="center" data-field="department">Department</th>
-                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="teacher_id">UID</th>
+                                                <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">NAME</th>
+                                                <th scope='col' data-width="300" data-align="center" data-sortable="true" data-field="department">DEPARTMENT</th>
+                                                <th scope='col' data-width="200" data-align="center" data-field="action">ACTIONS</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                             <!-- FACULTY TABLE END -->
                         </div>

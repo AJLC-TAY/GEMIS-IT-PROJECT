@@ -275,21 +275,26 @@ class Faculty implements JsonSerializable
         $this->last_name = $last_name;
         $this->middle_name = $middle_name;
         $this->first_name = $first_name;
-        $this->name = "$last_name, $first_name $middle_name";
+        $this->name = "$last_name, $first_name $middle_name $ext_name";
         $this->ext_name = $ext_name;
         $this->birthdate = $birthdate;
         $this->age = $age;
-        $this->sex = $sex;
+        $this->sex = ($sex == 'm') ? "Male" : "Female";
         $this->department = $department;
         $this->cp_no = $cp_no;
         $this->email = $email;
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
-        $this->id_photo = $id_photo;
-        $this->action = "<a href='faculty.php?sid=$teacher_id&state=edit' class='btn btn-secondary'>Edit</a>"
-                      . "<a href='faculty.php?sid=$teacher_id&state=view' class='btn btn-primary'>View</a>";
-        /** $this->id_photo = "data:id_photo;base64,". base64_encode($id_photo); */
+        $this->action = "<a href='profile.php?pt=F&id=$teacher_id&state='edit' class='btn btn-primary'>Edit</a>"
+                      . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary'>View</a>";
+        // $this->action = "<form action='../profile.php' method='POST'>
+        //     <input type='hidden' name='id' value='$teacher_id'>
+        //     <input type='hidden' name='user' value='Faculty'>
+        //     <input type='submit' name='state' class='profile-btn btn btn-secondary' value='Edit'>
+        //     <input type='submit' name='state' class='profile-btn btn btn-primary' value='View'>
+        // </form>";
+        $this->id_photo = "data:id_photo;base64,". base64_encode($id_photo); 
     }
 
     public function get_teacher_id()
@@ -311,6 +316,11 @@ class Faculty implements JsonSerializable
     public function get_ext_name()
     {
         return $this->ext_name;
+    }
+
+    public function get_name() 
+    {
+        return $this->name;
     }
     public function get_birthdate()
     {

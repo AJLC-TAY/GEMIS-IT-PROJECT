@@ -1,13 +1,14 @@
 let menuItem, subMenuItem, spinner
 
 /** Display active menu item */
-function preload(menuItem, subMenuItem) {
-    menuItem = $(`${menuItem} a:first`)
-    subMenuItem = $(`${subMenuItem}`)
+function preload(menuItem, subMenuItem=null) {
     spinner = $('.spinner-con')
     spinner.show()
+    if (!subMenuItem) return $(menuItem).click()
+    menuItem = $(`${menuItem} a:first`)
+    subMenuItem = $(`${subMenuItem}`)
     menuItem.addClass('active')
-    if (subMenuItem) subMenuItem.addClass('active-sub')
+    subMenuItem.addClass('active-sub')
 }
 
 /** Fades out spinner */

@@ -34,5 +34,6 @@ class Table {
 
         this.table = $(`${tableId}`).bootstrapTable(tableSetup)
     }
+    
 }
 
