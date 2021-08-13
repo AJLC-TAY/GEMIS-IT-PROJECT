@@ -41,6 +41,7 @@ const setup = (page, prepareHTML, filter) => {
     // delete and arhive messages
     deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`
     archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`
+    unarchiveMessage = `Unarchiving this ${page} will also unarchive all ${programString}subjects and student grades under this ${page}.`
     
     // functions
     prepareHTMLOfData = prepareHTML
@@ -126,10 +127,11 @@ const showWarning = () => {
     $(document).on('click', '.delete-btn', function() {
         var code = $(this).attr('id')
         var action = `delete${camelized}`
+        console.log(action)
         $.post("action.php", {code, action}, function(data) {	
             $('#delete-modal').modal('hide')		
             reload()
-            showWarningToast()
+            showWarningToast('archive')
         })
     })
 
@@ -137,9 +139,10 @@ const showWarning = () => {
         var code = $(this).attr('id')
         var action = `archive${camelized}`
         $.post("action.php", {code, action}, function(data) {	
+            $('#archive-modal').modal('hide')
             console.log('from cardPage')
-            console.log(data)
-            $('#archive-modal').modal('hide')		
+            console.log(action)
+            console.log(code)		
             reload()
             showWarningToast()
         })
@@ -188,7 +191,7 @@ const showWarning = () => {
         $.post("action.php", {code, action}, function(data) {	
             $('#unarchive-modal').modal('hide')		
             reload()
-            showWarningToast()
+            showWarningToast('unarchive')
         })
     })
 
@@ -198,7 +201,7 @@ const showWarning = () => {
         let name = $(this).attr('data-name')
         let archiveModal = $('#unarchive-modal')
         archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
-        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.modal-msg').html(unarchiveMessage)
         archiveModal.find('.unarchive-btn').attr('id', code)
         archiveModal.modal('toggle')
     })
