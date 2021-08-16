@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                             </header>
-                            <!-- Subject table -->
+                            <!-- SUBJECT TABLE -->
                             <div class="container mt-1">
                                 <div class="card w-100 h-auto bg-light">
                                     <table id="table" class="table-striped">

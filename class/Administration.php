@@ -20,6 +20,7 @@ class Administration extends Dbconfig
                 die("Error failed to connect to MySQL: " . $conn->connect_error);
             } else {
                 $this->dbConnect = $conn;
+                mysqli_set_charset($this->dbConnect, 'utf8');
             }
         }
     }
@@ -404,7 +405,7 @@ class Administration extends Dbconfig
         }
 
         mysqli_multi_query($this->dbConnect, $query);
-        $redirect = (($type === 'specialized') ? "prog_code={$program_code}&" : "") ."code=$code&state=view&success=added" ;
+        $redirect = (($type === 'specialized') ? "prog_code=$program_code&" : "") ."code=$code&state=view&success=added" ;
         echo json_encode((object) ["redirect" =>$redirect, "status" => 'Subject successfully added!']);
     }
     
@@ -603,19 +604,45 @@ class Administration extends Dbconfig
         mysqli_multi_query($this->dbConnect, $query);
     }
 
-    public function listFacultyJSON() {
+    public function listFaculty() {
         $query = 'SELECT * FROM faculty;';
         $result = mysqli_query($this->dbConnect, $query);
-        $faculty = array();
+        $facultyList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $faculty[] = new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+            $facultyList[] = new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
                                 $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $row['department'],
                                 $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
                                 $row['enable_edit_grd'], $row['id_picture']);
         }
-        echo json_encode($faculty,JSON_UNESCAPED_UNICODE);
-       
+        return $facultyList;
+    }
+
+    public function listFacultyJSON() {
+        echo json_encode($this->listFaculty());
+    }
+
+    /** User Profile */
+    public function getProfile() {
+        $user = $_GET['pt'];
+        $id = $_GET['id'];
+
+        if ($user === 'F') {
+            $query = "SELECT * FROM faculty WHERE teacher_id='$id';";
+            $result = mysqli_query($this->dbConnect, $query);
+            $row = mysqli_fetch_assoc($result);
+            return new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+                $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $row['department'],
+                $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
+                $row['enable_edit_grd'], $row['id_picture']);
+        }
+
+        if ($user === 'Student') {
+            $query = "SELECT * FROM student WHERE stud_id='$id';";
+            $result = mysqli_query($this->dbConnect, $query);
+            $row = mysqli_fetch_assoc($result);
+            return [];
+        }
     }
 
 }
