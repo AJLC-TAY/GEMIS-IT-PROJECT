@@ -36,8 +36,18 @@ let getDataResult = (dataList) => {
     return dataList.filter(filterFunc)
 }
 
-
-setup('curriculum', prepareHTML, getDataResult)
+let prepareArchiveHTML = archivedData => {
+    console.log("from prepareArchiveHTML")
+    let html = ''
+    archivedData.forEach(element => {
+        var code = element.cur_code
+        var name = element.cur_name
+        html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
+                <button data-name='$name' class='unarchive-option btn btn-link' id='${code}'>Unarchive</button></li>`
+    })
+    return html
+}
+setup('curriculum', prepareHTML, prepareArchiveHTML, getDataResult)
 reload()
 
 // custom script

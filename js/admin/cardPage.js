@@ -6,9 +6,9 @@ let page, camelized, action, deleteMessage, archiveMessage, keywords, dataList,
     timeout, elementAccess
 
 // Function
-let prepareHTMLOfData, filter
+let prepareHTMLOfData, prepareHTMLofArchive, filter
 
-const setup = (page, prepareHTML, filter) => {
+const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
     // string detail to be added in the delete and archive modal messages
     page = page
     var programString = ""
@@ -45,6 +45,7 @@ const setup = (page, prepareHTML, filter) => {
     
     // functions
     prepareHTMLOfData = prepareHTML
+    prepareHTMLofArchive = prepareArchiveHTML
 
     filter = filter
 
@@ -54,13 +55,20 @@ const setup = (page, prepareHTML, filter) => {
 }
 
 const reload = () => {
+    console.log("from reload")
     spinner.show()
+    getArchiveAction = `getArchived${camelized}JSON`
     $.post('action.php', {action}, (data) => {
         dataList = JSON.parse(data)
         let addBtn = `<div class='btn add-btn card shadow-sm'>
             <div class='card-body'>Add ${camelized}</div>
         </div>`
         $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
+    })
+    $.post('action.php', {action:getArchiveAction} ,(data) => {
+        console.log(getArchiveAction)
+        archivedData = JSON.parse(data)
+        $('.arch-list').html(prepareHTMLofArchive(archivedData))
     })
     hideSpinner()
 }
@@ -138,11 +146,8 @@ const showWarning = () => {
     $(document).on('click', '.archive-btn', function() {
         var code = $(this).attr('id')
         var action = `archive${camelized}`
-        $.post("action.php", {code, action}, function(data) {	
-            $('#archive-modal').modal('hide')
-            console.log('from cardPage')
-            console.log(action)
-            console.log(code)		
+        $.post("action.php", {code, action:action}, function(data) {	
+            $('#archive-modal').modal('hide')		
             reload()
             showWarningToast()
         })
@@ -191,7 +196,7 @@ const showWarning = () => {
         $.post("action.php", {code, action}, function(data) {	
             $('#unarchive-modal').modal('hide')		
             reload()
-            showWarningToast('unarchive')
+            showWarningToast()
         })
     })
 
@@ -199,10 +204,10 @@ const showWarning = () => {
     $(document).on('click', '.unarchive-option', function() {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')
-        let archiveModal = $('#unarchive-modal')
-        archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
-        archiveModal.find('.modal-msg').html(unarchiveMessage)
-        archiveModal.find('.unarchive-btn').attr('id', code)
-        archiveModal.modal('toggle')
+        let unarchiveModal = $('#unarchive-modal')
+        unarchiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        unarchiveModal.find('.modal-msg').html(unarchiveMessage)
+        unarchiveModal.find('.unarchive-btn').attr('id', code)
+        unarchiveModal.modal('toggle')
     })
 // } 

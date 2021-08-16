@@ -82,14 +82,14 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <div class="container mt-5">
                                 <div class="card w-100 h-auto">
                                     <table id="table" class="table-striped">
-                                        <thead class='thead-dark'>
+                                        <thead class='thead-dark track-table'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fw-bold">SUBJECTS</h5>
                                                 <a href="subject.php?state=add&prog_code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
                                             </div><hr class="mt-1 mb-4">
                                             <div class="d-flex flex-row-reverse mb-3">
                                             <!-- <div class="d-flex mb-3"> -->
-                                                <button class="btn btn-secondary" title='Archive subject'>Archive</button>
+                                                <button class="btn btn-secondary track-archive-btn" title='Archive subject'>Archive</button>
                                             </div>
                                             
                                             <tr>

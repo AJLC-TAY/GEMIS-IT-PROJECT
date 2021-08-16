@@ -123,6 +123,27 @@
         </div>
     </div>
 
+    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -135,31 +156,7 @@
                 <div class="modal-body">
                     <div class="overflow-auto" style="height: 50vh;">
 
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Junior High School
-                                <button class="btn btn-link">Unarchive</button>
-                            </li>
+                        <ul class="list-group arch-list">
                         </ul>
                     </div>
                 </div>

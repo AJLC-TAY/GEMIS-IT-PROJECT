@@ -147,7 +147,7 @@ class Administration extends Dbconfig
     // public function listPrograms()
     public function listPrograms($tbl)
     {
-        $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM program;";
+        $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
 
@@ -228,10 +228,13 @@ class Administration extends Dbconfig
     public function moveProgram($dest, $origin, $shared_dest, $shared_origin )
     {
         $code = $_POST['code'];
-        $query = "INSERT INTO $dest SELECT * FROM $origin where prog_code = '$code';";
+        $query = "SET FOREIGN_KEY_CHECKS = 0;";
+        $query .= "INSERT INTO $dest SELECT * FROM $origin where prog_code = '$code';";
         $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';";
-        $query .= "DELETE FROM $shared_origin WHERE prog_code = '$code'";
+        $query .= "DELETE FROM $shared_origin WHERE prog_code = '$code';";
         $query .= "DELETE FROM $origin WHERE prog_code = '$code';";
+
+        echo($query);
         mysqli_multi_query($this->dbConnect, $query);
     }
 
