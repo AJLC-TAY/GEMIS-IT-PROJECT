@@ -149,17 +149,7 @@
                 <div class="modal-body">
                     <div class="overflow-auto" style="height: 50vh;">
 
-                        <ul class="list-group" id="arch-list">
-                            <?php $currList = $admin->listCurriculum('archived_curriculum');
-                            foreach ($currList as  $cur) {
-                                echo "<li class='list-group-item d-flex justify-content-between align-items-center'>";
-                                $name = $cur->get_cur_name();
-                                $code = $cur->get_cur_code();
-                                echo $name;
-                                echo "<button data-name='$name' class='unarchive-option btn btn-link' id='${code}'>Unarchive</button>";
-                                echo "</li>";
-                            }
-                            ?>
+                        <ul class="list-group arch-list">
                         </ul>
                     </div>
                 </div>

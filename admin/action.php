@@ -20,17 +20,18 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveCurriculum') {
-    $admin = $admin->moveCurriculum('archived_curriculum','curriculum','archived_program','program','archived_sharedsubject','sharedsubject');
+    $admin->moveCurriculum('archived_curriculum','curriculum','archived_program','program','archived_sharedsubject','sharedsubject');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveCurriculum') {
     echo("from unarchiveCurriculum");
-    $admin = $admin->moveCurriculum('curriculum','archived_curriculum','program','archived_program','sharedsubject','archived_sharedsubject');
+    $admin->moveCurriculum('curriculum','archived_curriculum','program','archived_program','sharedsubject','archived_sharedsubject');
     
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'getArchivedCurrJSON') {
-    $admin = $admin->listCurriculumJSON('archived_curriculum');
+if (isset($_POST['action']) && $_POST['action'] === 'getArchivedCurriculumJSON') {
+    echo ("from getArchivedCurriculumJSON");
+    $admin->listCurriculumJSON('archived_curriculum');
 }
 
 /******** PROGRAM ********/
@@ -51,14 +52,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveProgram') {
-    $admin = $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
+    echo("from action.php: archiveProgram");
+    $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveProgram') {
-    $admin = $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
+    $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'getArchiveProgJSON') {
+if (isset($_POST['action']) && $_POST['action'] === 'getArchivedProgramJSON') {
     $admin->listProgramsJSON('archived_program');
 }
 

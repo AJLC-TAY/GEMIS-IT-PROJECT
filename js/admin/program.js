@@ -29,6 +29,11 @@ $(function() {
             $(this).prop('disabled', true)
         })
     })
+
+    $('.track-archive-btn').click(function(event){
+        console.log("track archived clikcedss")
+        alert($('#track-table:checked').val() );
+    })
     
     hideSpinner()
 })
