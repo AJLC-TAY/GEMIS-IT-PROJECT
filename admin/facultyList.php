@@ -33,7 +33,8 @@
                                     <h2>Faculty Members</h2>
                                     <div>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>VIEW ARCHIVED FACULTY</button>
-                                        <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a>
+                                        <a href="facultyform.php" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a>
+                                        <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
                             </header>
