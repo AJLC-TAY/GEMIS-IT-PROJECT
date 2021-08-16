@@ -88,4 +88,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
     $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
+
+/******** FACULTY ********/
+if (isset($_POST['action']) && $_POST['action'] === 'addFaculty') {
+    $admin->addFaculty();
+}
+
 ?>

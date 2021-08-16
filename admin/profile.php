@@ -13,17 +13,8 @@
 
     $userType = ucwords( $_SESSION['userType']);
 
-
-    // if ($profileType == 'A') {
-    //     $profileType = 'Admin';
-    // } else if ($profileType == 'F') {
-    //     $profileType = 'Faculty';
-    // } else if ($profileType == 'S') {
-    //     $profileType = 'Student';
-    // }
-    $link = "{$profileType}list.php";
+    $link = "{$profileType}list.php";  // ex. AdminList.php / Facultylist.php
     $userProfile = $admin->getProfile();
-    // print_r($userProfile);
 
     echo "<title>Faculty Profile | GEMIS</title>";
 ?>

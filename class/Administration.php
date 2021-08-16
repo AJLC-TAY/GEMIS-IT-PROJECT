@@ -642,4 +642,88 @@ class Administration extends Dbconfig
         }
     }
 
+    /** Faculty Methods */
+    public function addFaculty() {
+        $allowTypes = array('jpg', 'png', 'jpeg');
+        $statusMsg = '';
+        if (isset($_POST['submit'])) {
+            // General information
+            $lastname = $_POST['lastname'];
+            $firstname = $_POST['firstname'];
+            $middlename = $_POST['middlename'];
+            $extname = isset($_POST['extensionname']) ? "'{$_POST['extensionname']}'" : "";
+            $lastname = $_POST['lastname'];
+            $age = $_POST['age'];
+            $birthdate = $_POST['birthdate'];
+            $sex = $_POST['gender'];
+
+            // Contact information
+            $cp_no = isset($_POST['cpnumber']) ? "'{$_POST['cpnumber']}'" : "";
+            $email = isset($_POST['email']) ? "'{$_POST['email']}'" : "";
+
+            // School information
+            $user_id = '2021990';
+            $department = isset($_POST['department']) ? "'{$_POST['department']}'" : "";
+            $editGrades = 0;
+            $enrollment = 0;
+            $awardRep = 0;
+            if (isset($_POST['access'])) {
+                foreach ($_POST['access'] as $accessRoles) {
+                    if ($accessRoles == 'editGrades') {
+                        $editGrades = 1;
+                    }
+                    if ($accessRoles == 'enrollment') {
+                        $enrollment = 1;
+                    }
+                    if ($accessRoles == 'awardreport') {
+                        $awardRep = 1;
+                    }
+                }
+            }
+            // Initialize query to add new user
+            $query = "INSERT INTO user VALUES ($user_id, $user_id, NOW(), 'FA');";
+            
+            $imgContent = '';
+            if (isset($_FILES['image'])) {
+                // Profile picture
+                $filename = basename($_FILES['image']['name']);
+                $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+                if (in_array($fileType, $allowTypes)) {
+                    $image = $_FILES['image']['tmp_name'];
+                    $imgContent = addslashes(file_get_contents($image));
+                } else {
+                    $statusMsg = 'Sorry, only JPG, JPEG, & PNG files are allowed to upload.'; 
+                    echo $statusMsg;
+                    return;
+                }
+            } 
+
+            $query .= "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
+                   ." VALUES('$user_id', '$lastname', '$firstname', '$middlename', '$extname', '$birthdate', '$age', '$sex',  '$email',  '$awardRep', '$enrollment', '$editGrades',"
+                   ." NULLIF($department, ''), NULLIF($cp_no, ''), NULLIF($imgContent, '') );";
+
+            $query .= "SELECT LAST_INSERT_ID();";
+
+            $id = mysqli_multi_query($this->dbConnect, $query);
+
+            if (isset($_POST['subjects'])) {
+                $subjects = $_POST['subjects'];
+                $queryTwo = '';
+                foreach($subjects as $subject) {
+                    $queryTwo .= "INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES ('$subject', '$id');";
+                }
+                $subjectStatus = mysqli_multi_query($this->dbConnect, $queryTwo);
+            }
+
+
+            if ($id && $subjectStatus) {
+                $statusMsg = 'Faculty successully added!';
+                header("Location: profile.php?pt=F&id=$id");
+            } else {
+                $statusMsg = 'Faculty unsuccessfully added.';
+            }
+            echo $statusMsg;
+        }
+    }
+
 }
