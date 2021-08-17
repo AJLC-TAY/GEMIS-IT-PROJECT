@@ -25,18 +25,18 @@ class Administration extends Dbconfig
         }
     }
 
-    private function getData($sqlQuery)
+    public function prepared_query($sql, $params, $types = "")
     {
-        $result = mysqli_query($this->dbConnect, $sqlQuery);
-        if (!$result) {
-            die('Error in query: ' . mysqli_error($this->dbConnect));
-        }
-        // $data = array();
-        // while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        //     $data[] = $row;
-        // }
-        // return $data;
-        return mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $types = $types ?: str_repeat("s", count($params));
+        $stmt = mysqli_prepare($this->dbConnect, $sql);
+        mysqli_stmt_bind_param($stmt, $types, ...$params);
+        mysqli_stmt_execute($stmt);
+        return $stmt;
+    }
+
+    public function prepared_select($sql, $params, $types = "")
+    {
+        return mysqli_stmt_get_result($this->prepared_query($sql, $params, $types));
     }
 
     /*** Curriculum Methods */
@@ -44,7 +44,7 @@ class Administration extends Dbconfig
     /** Returns the list of curriculum. */
     public function listCurriculum($tbl)
     {
-        $query = "SELECT * FROM {$tbl}";
+        $query = "SELECT * FROM {$tbl};";
         $result = mysqli_query($this->dbConnect, $query);
         $curriculumList = array();
 
@@ -64,51 +64,51 @@ class Administration extends Dbconfig
     /** Get curriculum object from a specified curriculum code */
     public function getCurriculum()
     {
-        $code = $_GET['code'];
-        $query = "SELECT * FROM curriculum WHERE curr_code='$code'";
-        $result = mysqli_query($this->dbConnect, $query);
+        $result = $this->prepared_select("SELECT * FROM curriculum WHERE curr_code=?", [$_GET['code']], 'i');
         $row = mysqli_fetch_assoc($result);
-        $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
-        $curriculum->add_cur_desc($row['curr_desc']);
-        return $curriculum;
+        return new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
     }
 
     /** Adds a new curriculum */   
     public function addCurriculum()
     {
-        $code = $_POST['code'];
-        $name = $_POST['name'];
-        $description = $_POST['curriculum-desc'];
+        $param = [$_POST['code'], $_POST['name'], $_POST['curriculum-desc']];
         // start of validation
 
         // end of validation
 
-        $query = "INSERT INTO curriculum VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($this->dbConnect, $query);
-        mysqli_stmt_bind_param($stmt, 'sss', $code, $name, $description);
-        mysqli_stmt_execute($stmt);
+        $this->prepared_query("INSERT INTO curriculum VALUES (?, ?, ?)", $param); // can be written the same as the code below
+
+        // $query = "INSERT INTO curriculum VALUES (?, ?, ?)";
+        // $stmt = mysqli_prepare($this->dbConnect, $query);
+        // mysqli_stmt_bind_param($stmt, 'sss', $code, $name, $description);
+        // mysqli_stmt_execute($stmt);
     }
 
     public function deleteCurriculum()
     {
-        $code = $_POST['code'];
-        $query = "DELETE FROM curriculum WHERE curr_code='$code'";
-        mysqli_query($this->dbConnect, $query);
+        $this->prepared_query("DELETE FROM curriculum WHERE curr_code=?;", [$_POST['code']]);
+        // $code = $_POST['code'];
+        // $query = "DELETE FROM curriculum WHERE curr_code='$code'";
+        // mysqli_query($this->dbConnect, $query);
     }
 
     public function updateCurriculum()
     {
         $code = $_POST['code'];
         $old_code = $_POST['current_code'];
-        $name = $_POST['name'];
-        $description = $_POST['curriculum-desc']; 
+        // $name = $_POST['name'];
+        // $description = $_POST['curriculum-desc']; 
+        $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
 
         // $updateQuery = "UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE=?";//kasama ata ung where statement para alam kong anong curr and iaupdate?
         // $stmt = mysqli_prepare($this->dbConnect, $updateQuery);
         // mysqli_stmt_bind_param($stmt, 'ssss', $code, $name, $description, $old_code);
         // mysqli_stmt_execute($stmt);
-        $updateQuery = "UPDATE curriculum SET curr_code='{$code}', curr_name='{$name}', curr_desc='{$description}' WHERE curr_code = '{$old_code}';";
-        mysqli_query($this->dbConnect, $updateQuery);
+        // $updateQuery = "UPDATE curriculum SET curr_code='{$code}', curr_name='{$name}', curr_desc='{$description}' WHERE curr_code = '{$old_code}';";
+        // mysqli_query($this->dbConnect, $updateQuery);
+
+        $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
         header("Location: curriculum.php?code=$code");
     }
 
@@ -175,9 +175,10 @@ class Administration extends Dbconfig
 
     public function getProgram()
     {
-        $code = $_GET['prog_code'];
-        $query = "SELECT * FROM program WHERE prog_code='$code'";
-        $result = mysqli_query($this->dbConnect, $query);
+        // $code = $_GET['prog_code'];
+        // $query = "SELECT * FROM program WHERE prog_code='$code'";
+        // $result = mysqli_query($this->dbConnect, $query);
+        $result = $this->prepared_select("SELECT * FROM program WHERE prog_code=?;", [$_GET['prog_code']]);
         $row = mysqli_fetch_assoc($result);
         $program = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
         return $program;
@@ -193,17 +194,19 @@ class Administration extends Dbconfig
 
         // end of validation
 
-        $query = "INSERT INTO program VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($this->dbConnect, $query);
-        mysqli_stmt_bind_param($stmt, 'sss', $code, $description, $currCode);
-        mysqli_stmt_execute($stmt);
+        $this->prepared_query("INSERT INTO program VALUES (?, ?, ?);", [$code, $currCode, $description]);
+        // $query = "INSERT INTO program VALUES (?, ?, ?)";
+        // $stmt = mysqli_prepare($this->dbConnect, $query);
+        // mysqli_stmt_bind_param($stmt, 'sss', $code, $description, $currCode);
+        // mysqli_stmt_execute($stmt);
     }
 
     public function deleteProgram()
     {
-        $code = $_POST['code'];
-        $query = "DELETE FROM program WHERE prog_code='$code'";
-        mysqli_query($this->dbConnect, $query);
+        $this->prepared_query("DELETE FROM program WHERE prog_code=?;", [$_POST['code']]);
+        // $code = $_POST['code'];
+        // $query = "DELETE FROM program WHERE prog_code='$code'";
+        // mysqli_query($this->dbConnect, $query);
     }
 
     public function updateProgram()
@@ -221,6 +224,7 @@ class Administration extends Dbconfig
         // $isUpdated = mysqli_query($this->dbConnect, $updateQuery);
 
         //if($_POST['code']) {	}	 
+        // $this->prepared_query("UPDATE program SET prog_code=?, description=? WHERE prog_code=?", [$code, $currCode, $prog_description, $old_code]);
         $updateQuery = "UPDATE program SET prog_code='" . $code . "', description='" . $prog_description . "' WHERE prog_code = '" . $old_code . "'";
         mysqli_query($this->dbConnect, $updateQuery);
         header("Location: program.php?prog_code=$code");
@@ -260,8 +264,9 @@ class Administration extends Dbconfig
             $sub_type = $row['sub_type'];
             $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
             if ($sub_type == 'specialized') {
-                $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
-                $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
+                $resultTwo = $this->prepared_select("SELECT prog_code FROM sharedsubject WHERE sub_code=?;", [$code]);
+                // $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
+                // $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
                 $rowTwo = mysqli_fetch_row($resultTwo);
                 $subject->set_program($rowTwo[0]);
             }
@@ -325,8 +330,9 @@ class Administration extends Dbconfig
     public function getSubject()
     {
         $code = $_GET['code'];
-        $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
-        $result = mysqli_query($this->dbConnect, $queryOne);
+        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
+        // $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
+        // $result = mysqli_query($this->dbConnect, $queryOne);
         $row = mysqli_fetch_assoc($result);
         $sub_type = $row['sub_type'];
         $subject = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
@@ -556,41 +562,22 @@ class Administration extends Dbconfig
     }
 
         
-    /** Returns the list of Grade 11 subjects. */
-    public function listSubjectsGrade11()
+    /** Returns the list of subjects by specified grade level. */
+    public function listSubjectsByLevel($grd)
     {
-        $query = "SELECT * FROM subject WHERE for_grd_level = 11";
+        $query = "SELECT * FROM subject WHERE for_grd_level = $grd;";
         $result = mysqli_query($this->dbConnect, $query);
-        $subjGrade11List = array();
+        $subjects = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjectGrade11 = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
-            $subjGrade11List[] = $subjectGrade11;
+            $subjects[] = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
         }
-        return $subjGrade11List;
+        return $subjects;
     }
 
-    public function listSubjectsGrade11JSON()
+    public function listSubjectbyLevelJSON($grd)
     {
-        echo json_encode($this->listSubjectsGrade11());
-    }
-
-    /** Returns the list of Grade 12 subjects. */
-    public function listSubjectsGrade12()
-    {
-        $query = "SELECT * FROM subject WHERE for_grd_level = 12;";
-        $result = mysqli_query($this->dbConnect, $query);
-        $subjGrade12List = array();
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $subjGrade12List[] = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'],$row['sub_type']);
-        }
-        return $subjGrade12List;
-    }
-
-    public function listSubjectsGrade12JSON()
-    {
-        echo json_encode($this->listSubjectsGrade12());
+        echo json_encode($this->listSubjectsByLevel($grd));
     }
 
     public function moveSubject($sub_dest, $sub_origin, $shared_dest , $shared_origin, $req_dest,$req_origin)
@@ -628,13 +615,7 @@ class Administration extends Dbconfig
         $id = $_GET['id'];
 
         if ($user === 'F') {
-            $query = "SELECT * FROM faculty WHERE teacher_id='$id';";
-            $result = mysqli_query($this->dbConnect, $query);
-            $row = mysqli_fetch_assoc($result);
-            return new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
-                $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $row['department'],
-                $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
-                $row['enable_edit_grd'], $row['id_picture']);
+            return $this->getFaculty($id);
         }
 
         if ($user === 'Student') {
@@ -651,22 +632,28 @@ class Administration extends Dbconfig
         $statusMsg = '';
         if (isset($_POST['submit'])) {
             // General information
-            $lastname = $_POST['lastname'];
-            $firstname = $_POST['firstname'];
-            $middlename = $_POST['middlename'];
-            $extname = isset($_POST['extensionname']) ? "'{$_POST['extensionname']}'" : "";
-            $lastname = $_POST['lastname'];
-            $age = $_POST['age'];
-            $birthdate = $_POST['birthdate'];
+            $lastname = trim($_POST['lastname']);
+            $firstname = trim($_POST['firstname']);
+            $middlename = trim($_POST['middlename']);
+            $extname = isset($_POST['extensionname']) 
+                ? trim($_POST['extensionname']) 
+                : NULL;
+            $lastname = trim($_POST['lastname']);
+            $age = trim($_POST['age']);
+            $birthdate = trim($_POST['birthdate']);
             $sex = $_POST['gender'];
 
             // Contact information
-            $cp_no = isset($_POST['cpnumber']) ? "'{$_POST['cpnumber']}'" : "";
-            $email = isset($_POST['email']) ? "'{$_POST['email']}'" : "";
+            $cp_no = isset($_POST['cpnumber']) 
+                ? trim($_POST['cpnumber']) 
+                : NULL;
+            $email = trim($_POST['email']);
 
             // School information
-            $user_id = '2021990';
-            $department = isset($_POST['department']) ? "'{$_POST['department']}'" : "";
+            $user_id = '2021999';
+            $department = ($_POST['department'] == '0') 
+                ? NULL
+                : trim($_POST['department']);
             $editGrades = 0;
             $enrollment = 0;
             $awardRep = 0;
@@ -684,49 +671,68 @@ class Administration extends Dbconfig
                 }
             }
             // Initialize query to add new user
-            $query = "INSERT INTO user VALUES ($user_id, $user_id, NOW(), 'FA');";
-            
-            $imgContent = '';
-            if (isset($_FILES['image'])) {
+            $this->prepared_select("INSERT INTO user VALUES (?, ?, NOW(), 'FA');", [$user_id, $user_id], "ds");
+            // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO user VALUES (?, ?, NOW(), 'FA');");
+            // mysqli_stmt_bind_param($stmt, "ds", $user_id, $user_id);
+            // mysqli_stmt_execute($stmt);
+
+            $imgContent = NULL;   
+            if ($_FILES['image']['size'] > 0) {
                 // Profile picture
                 $filename = basename($_FILES['image']['name']);
                 $fileType = pathinfo($filename, PATHINFO_EXTENSION);
                 if (in_array($fileType, $allowTypes)) {
-                    $image = $_FILES['image']['tmp_name'];
-                    $imgContent = addslashes(file_get_contents($image));
+                    $imgContent = file_get_contents($_FILES['image']['tmp_name']);
                 } else {
                     $statusMsg = 'Sorry, only JPG, JPEG, & PNG files are allowed to upload.'; 
                     echo $statusMsg;
                     return;
                 }
-            } 
-
-            $query .= "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
-                   ." VALUES('$user_id', '$lastname', '$firstname', '$middlename', '$extname', '$birthdate', '$age', '$sex',  '$email',  '$awardRep', '$enrollment', '$editGrades',"
-                   ." NULLIF($department, ''), NULLIF($cp_no, ''), NULLIF($imgContent, '') );";
-
-            $query .= "SELECT LAST_INSERT_ID();";
-
-            $id = mysqli_multi_query($this->dbConnect, $query);
-
-            if (isset($_POST['subjects'])) {
-                $subjects = $_POST['subjects'];
-                $queryTwo = '';
-                foreach($subjects as $subject) {
-                    $queryTwo .= "INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES ('$subject', '$id');";
-                }
-                $subjectStatus = mysqli_multi_query($this->dbConnect, $queryTwo);
             }
 
+
+            
+            $query = "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
+                   ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $enrollment, $editGrades, $department, $cp_no, $imgContent];
+            $this->prepared_select($query, $params, "dsssssdssiiisds");
+            
+            // $stmt = mysqli_prepare($this->dbConnect, $query);
+            // mysqli_stmt_bind_param($stmt, 'dsssssdssiiisds', $user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $enrollment, $editGrades, $department, $cp_no, $imgContent);
+            // mysqli_stmt_execute($stmt);
+
+            $id = mysqli_insert_id($this->dbConnect);
+
+            $subjectStatus = TRUE;
+            if (isset($_POST['subjects'])) {
+                $subjects = $_POST['subjects'];
+                foreach($subjects as $subject) {
+                    $this->prepared_query("INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
+                    // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);");
+                    // mysqli_stmt_bind_param($stmt, 'sd', $subject, $id);
+                    // mysqli_stmt_execute($stmt);
+                }
+            }
 
             if ($id && $subjectStatus) {
                 $statusMsg = 'Faculty successully added!';
                 header("Location: profile.php?pt=F&id=$id");
             } else {
+                echo mysqli_error($this->dbConnect);
                 $statusMsg = 'Faculty unsuccessfully added.';
             }
             echo $statusMsg;
         }
     }
 
+    public function getFaculty($id) {
+        $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
+        $row = mysqli_fetch_assoc($result);
+        $department = $row['department'];
+        $department = is_null($row['department']) ? NULL : [$department];
+        return new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+            $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $department,
+            $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
+            $row['enable_edit_grd'], $row['id_picture']);
+    }
 }

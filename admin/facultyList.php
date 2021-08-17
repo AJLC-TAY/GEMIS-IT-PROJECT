@@ -1,4 +1,8 @@
-<?php include_once("../inc/head.html"); ?>
+<?php include_once("../inc/head.html"); 
+    session_start();
+    // $previousLink = $_SESSION['previousLink'];
+    $_SESSION['previousLink'] = 'facultylist.php';
+?>
 <title>Faculty Members List | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
@@ -33,7 +37,7 @@
                                     <h2>Faculty Members</h2>
                                     <div>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>VIEW ARCHIVED FACULTY</button>
-                                        <a href="facultyform.php" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a>
+                                        <a href="faculty.php?state=add" id="add-btn" class="btn btn-success" title='Add new faculty'>ADD FACULTY</a>
                                         <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>

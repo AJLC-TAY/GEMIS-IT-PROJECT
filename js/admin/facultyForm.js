@@ -64,9 +64,24 @@ $(function () {
         if (selectedSubjects.length == 0) $('#emptyMsg').removeClass('d-none')
     })
 
-    $('#faculty-form').submit(function(event) {
-        event.preventDefault()
-        console.log($(this).serialize())
-    })
+    /** Handling image upload */
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#resultImg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#upload").change(function(){
+        readURL(this);
+    }); 
+
+    // $('#faculty-form').submit(function(event) {
+    //     event.preventDefault()
+    //     console.log($(this).serialize())
+    // })
     hideSpinner()
 })

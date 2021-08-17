@@ -16,6 +16,8 @@
     $link = "{$profileType}list.php";  // ex. AdminList.php / Facultylist.php
     $userProfile = $admin->getProfile();
 
+    $id = $userProfile->get_teacher_id();
+
     echo "<title>Faculty Profile | GEMIS</title>";
 ?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -54,15 +56,18 @@
                             <div class="d-flex justify-content-between mb-2">
                                 <h4>Profile</h4>
                                 <span>
-                                    <button class="btn btn-outline-secondary">EDIT FACULTY PROFILE</button>
+                                    <a href="faculty.php?id=<?php echo $id;?>&state=edit" role="button" class="btn text-primary"><i class="bi bi-pencil-square me-1"></i>EDIT</a>
                                 </span>
                             </div>
                             <hr>
                             <div class="row">
                                 <!-- PROFILE PICTURE -->
                                 <div class="col-xl-5">
-                                    <img src=<?php echo $userProfile->get_id_photo(); ?> alt='Profile image' style='width: 300px; height: 300px;'>
-                                    <?php echo "<p>Faculty ID: {$userProfile->get_teacher_id()}</p>"?>
+                                    <?php 
+                                        $image = is_null($userProfile->get_id_photo()) ? "../assets/profile.png" : $userProfile->get_id_photo();
+                                        echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>";
+                                        echo "<p>Faculty ID: $id</p>";
+                                    ?> 
                                     <div class="row">
                                         <button class="btn btn-outline-primary w-auto">ASSIGN SUBJECT</button>
                                     </div>
@@ -85,19 +90,43 @@
                                     <div class="row">
                                         <h6><b>Department</b></h6>
                                         <div class="tag-con">
-                                            <?php echo "<button class='btn btn-outline-secondary btn-sm rounded-pill w-auto'>{$userProfile->get_department()}</button>"; ?>
+                                            <?php 
+                                                $departments = $userProfile->get_department();
+                                                print_r($departments);
+                                                if (is_null($departments)) {
+                                                    echo "<p class='text-center'>No department set</p>";
+                                                } else {
+                                                    foreach($departments as $department) {
+                                                        echo "<button class='btn btn-outline-secondary btn-sm rounded-pill w-auto'>$department</button>"; 
+                                                    }
+                                                }
+                                            ?>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <h6><b>Roles</b></h6>
                                         <div class="tag-con">
                                             <?php 
+                                                $roleCounter = 0;
+                                                $isAwardCoordinator = $userProfile->get_award_coor();
+                                                $canEditGrades = $userProfile->get_enable_edit_grd();
+                                                $canEnroll = $userProfile->get_enable_enroll();
+                                                if ($isAwardCoordinator) {
+                                                    $roleCounter += 1;
+                                                    echo "<button class='btn btn-outline-primary btn-sm rounded-pill w-auto'>Edit Grade</button>";
+                                                } 
                                                 if ($userProfile->get_enable_edit_grd()) {
+                                                    $roleCounter += 1;
                                                     echo "<button class='btn btn-outline-primary btn-sm rounded-pill w-auto'>Edit Grade</button>";
                                                 } 
                                                 
-                                                if ($userProfile->get_enable_enroll()) {
+                                                if ($canEnroll) {
+                                                    $roleCounter += 1;
                                                     echo "<button class='btn btn-outline-primary btn-sm rounded-pill w-auto'>Can Enroll</button>";
+                                                }
+
+                                                if(!$roleCounter) {
+                                                    echo "<p class='text-center'>No roles/access set</p>";
                                                 }
                                             ?>
                                         </div>

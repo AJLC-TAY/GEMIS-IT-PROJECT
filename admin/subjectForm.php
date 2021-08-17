@@ -26,10 +26,10 @@ function getSubjectForm($state) {
 
 
      // retrieve subjects for each grade level
-    $subjectGrade11 = $admin->listSubjectsGrade11();
-    $subjectGrade12 = $admin->listSubjectsGrade12();
+    $subjectGrade11 = $admin->listSubjectsbyLevel(11);
+    $subjectGrade12 = $admin->listSubjectsbyLevel(12);
     // retrieve programs
-    $programs = $admin->listPrograms();
+    $programs = $admin->listPrograms('program');
 
     // default link for Bread crumb 
     $links = "<li class='breadcrumb-item'><a href='subjectlist.php'>Subject</a></li>"
