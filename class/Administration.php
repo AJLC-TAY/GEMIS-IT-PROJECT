@@ -49,9 +49,7 @@ class Administration extends Dbconfig
         $curriculumList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
-            $curriculum->add_cur_desc($row['curr_desc']);
-            $curriculumList[] = $curriculum;
+            $curriculumList[] = new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
         }
         return $curriculumList;
     }
@@ -677,7 +675,12 @@ class Administration extends Dbconfig
             // mysqli_stmt_execute($stmt);
 
             $imgContent = NULL;   
-            if ($_FILES['image']['size'] > 0) {
+            $fileSize = $_FILES['image']['size'];
+            if ($fileSize > 0) {
+                // if ($fileSize > 120000) {
+                //     $statusMsg = 'Sorry, image should not be greater than 120 MB';
+                //     return;
+                // }
                 // Profile picture
                 $filename = basename($_FILES['image']['name']);
                 $fileType = pathinfo($filename, PATHINFO_EXTENSION);
