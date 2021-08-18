@@ -44,7 +44,7 @@ class Administration extends Dbconfig
     /** Returns the list of curriculum. */
     public function listCurriculum($tbl)
     {
-        $query = "SELECT * FROM {$tbl};";
+        $query = "SELECT * FROM $tbl;";
         $result = mysqli_query($this->dbConnect, $query);
         $curriculumList = array();
 
@@ -70,13 +70,13 @@ class Administration extends Dbconfig
     /** Adds a new curriculum */   
     public function addCurriculum()
     {
-        $param = [$_POST['code'], $_POST['name'], $_POST['curriculum-desc']];
+        $code = $_POST['code'];
+        $name = $_POST['name'];
+        $desc = $_POST['curriculum-desc'];
         // start of validation
-
+        
         // end of validation
-
-        $this->prepared_query("INSERT INTO curriculum VALUES (?, ?, ?)", $param); // can be written the same as the code below
-
+        $this->prepared_query("INSERT INTO curriculum VALUES (?, ?, ?)", [$code, $name, $desc]); // can be written the same as the code below
         // $query = "INSERT INTO curriculum VALUES (?, ?, ?)";
         // $stmt = mysqli_prepare($this->dbConnect, $query);
         // mysqli_stmt_bind_param($stmt, 'sss', $code, $name, $description);
@@ -149,23 +149,12 @@ class Administration extends Dbconfig
         $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curriculum_curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
         $result = mysqli_query($this->dbConnect, $query);
         $programList = array();
-
-        // $query = "SELECT * FROM {$tbl}";
-        // $result = mysqli_query($this->dbConnect, $query);
-        // $programList = array();
-
-    
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
         }
         return $programList;
     }
 
-    // public function listProgramsJSON()
-    // {
-    //     echo json_encode($this->listPrograms());
-    // }
-    
     public function listProgramsJSON($tbl)
     {
         echo json_encode($this->listPrograms($tbl));
@@ -178,8 +167,7 @@ class Administration extends Dbconfig
         // $result = mysqli_query($this->dbConnect, $query);
         $result = $this->prepared_select("SELECT * FROM program WHERE prog_code=?;", [$_GET['prog_code']]);
         $row = mysqli_fetch_assoc($result);
-        $program = new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
-        return $program;
+        return new Program($row['prog_code'], $row['curriculum_curr_code'], $row['description']);
     }
 
     /** Adds a new program */
@@ -191,7 +179,6 @@ class Administration extends Dbconfig
         // start of validation
 
         // end of validation
-
         $this->prepared_query("INSERT INTO program VALUES (?, ?, ?);", [$code, $currCode, $description]);
         // $query = "INSERT INTO program VALUES (?, ?, ?)";
         // $stmt = mysqli_prepare($this->dbConnect, $query);
@@ -251,8 +238,8 @@ class Administration extends Dbconfig
         $queryOne = (!isset($_GET['prog_code'])) 
             ? "SELECT * FROM subject;" 
             : "SELECT * FROM subject WHERE sub_code 
-                IN (SELECT sub_code FROM sharedsubject 
-                WHERE prog_code='{$_GET['prog_code']}')
+               IN (SELECT sub_code FROM sharedsubject 
+               WHERE prog_code='{$_GET['prog_code']}')
                UNION SELECT * FROM `subject` WHERE sub_type='CORE';";
 
         $resultOne = mysqli_query($this->dbConnect, $queryOne);
@@ -280,11 +267,10 @@ class Administration extends Dbconfig
 
     private function setParentPrograms($code, $sub_type, $subject) 
     {
-        $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
-        $resultFour = mysqli_query($this->dbConnect, $queryTwo);
+        $result = mysqli_query($this->dbConnect, "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
         $programs = [];
-        while ($rowFour = mysqli_fetch_assoc($resultFour)) {
-            $programs[] = $rowFour['prog_code'];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $programs[] = $row['prog_code'];
         }
 
         if ($sub_type == 'applied') {
@@ -298,18 +284,15 @@ class Administration extends Dbconfig
 
     public function listSubUnderProgJSON() {
         $subjectList = [];
-        $query = "SELECT sub_code FROM sharedsubject WHERE prog_code='". $_GET['prog_code'] ."';";
+        $query = "SELECT sub_code FROM sharedsubject WHERE prog_code='{$_GET['prog_code']}';";
         $result = mysqli_query($this->dbConnect, $query);
-
         $subjects = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $subjects[] = $row['sub_code'];
         }
 
-        foreach($subjects as $sub) {
-            $query = "SELECT * FROM subject WHERE sub_code='$sub';";
-            $result = mysqli_query($this->dbConnect, $query);
-
+        foreach($subjects as $sub_code) {
+            $result = mysqli_query($this->dbConnect, "SELECT * FROM subject WHERE sub_code='$sub_code';");
             while ($row = mysqli_fetch_assoc($result)) {
                 $code = $row['sub_code'];
                 $sub_type = $row['sub_type'];
@@ -327,7 +310,7 @@ class Administration extends Dbconfig
 
     public function getSubject()
     {
-        $code = $_GET['code'];
+        $code = $_GET['sub_code'];
         $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
         // $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
         // $result = mysqli_query($this->dbConnect, $queryOne);
@@ -339,8 +322,7 @@ class Administration extends Dbconfig
             $subject = $this->setParentPrograms($code, $sub_type, $subject);
         }
 
-        $queryTwo = "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='PRE';";
-        $resultTwo = mysqli_query($this->dbConnect, $queryTwo);
+        $resultTwo = mysqli_query($this->dbConnect, "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='PRE';");
         $prereq = [];
         if ($resultTwo) {
             while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
@@ -348,8 +330,7 @@ class Administration extends Dbconfig
             }
         }
 
-        $queryThree = "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='CO'";
-        $resultThree = mysqli_query($this->dbConnect, $queryThree);
+        $resultThree = mysqli_query($this->dbConnect, "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='CO';");
         $coreq = [];
         if ($resultThree) {
             while ($rowThree = mysqli_fetch_assoc($resultThree)) {
@@ -380,36 +361,36 @@ class Administration extends Dbconfig
 
         // end of validation
 
-        $query = "INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES ('$code', '$subName', '$grdLvl', '$sem', '$type');";
-
+        $this->prepared_query("INSERT INTO subject (sub_code, sub_name, for_grd_level, sub_semester, sub_type) VALUES (?, ?, ?, ?, ?);",
+                              [$code, $subName, $grdLvl, $sem, $type],
+                              "ssiis");
 
         // insert program and subject info in sharedsubject table
         if ($type == 'specialized') {
             $program_code = $_POST['prog_code'];
-            $query .= "INSERT INTO sharedsubject VALUES ('$code', '$program_code');";
+            $this->prepared_query("INSERT INTO sharedsubject VALUES (?, ?);", [$code, $program_code]);
         }
 
         if ($type == 'applied') {
             $prog_code_list = $_POST['prog_code'];
             foreach($prog_code_list as $prog_code) {
-                $query .= "INSERT INTO sharedsubject VALUES ('$code', '$prog_code');";
+                $this->prepared_query("INSERT INTO sharedsubject VALUES (?, ?);", [$code, $prog_code]);
             }
         }
 
         if (isset($_POST['PRE'])) {
             foreach($_POST['PRE'] as $req_code) {
-                $query .= "INSERT INTO requisite VALUES ('$code', 'PRE', '$req_code');";
+                $this->prepared_query("INSERT INTO requisite VALUES (?, 'PRE', ?);", [$code, $req_code]);
             }
         }
-
+        
         if (isset($_POST['CO'])) {
             foreach($_POST['CO'] as $req_code) {
-                $query .= "INSERT INTO requisite VALUES ('$code', 'CO', '$req_code');";
+                $this->prepared_query("INSERT INTO requisite VALUES (?, 'CO', ?);", [$code, $req_code]);
             }
         }
 
-        mysqli_multi_query($this->dbConnect, $query);
-        $redirect = (($type === 'specialized') ? "prog_code=$program_code&" : "") ."code=$code&state=view&success=added" ;
+        $redirect = "#offCanvasRight/" (($type === 'specialized') ? "prog_code=$program_code&" : "") ."sub_code=$code&state=view" ;
         echo json_encode((object) ["redirect" =>$redirect, "status" => 'Subject successfully added!']);
     }
     
@@ -467,7 +448,7 @@ class Administration extends Dbconfig
         $query .= $this->getUpdateRequisiteQry($code, 'PRE');
         $query .= $this->getUpdateRequisiteQry($code, 'CO');
         mysqli_multi_query($this->dbConnect, $query);
-        $redirect = (($type === 'specialized') ? "prog_code={$program_info[0]}&" : "") ."code=$code&state=view&success=updated" ;
+        $redirect = (($type === 'specialized') ? "prog_code={$program_info[0]}&" : "") ."sub_code=$code&state=view&success=updated" ;
         echo json_encode((object) ["redirect" =>$redirect, "status" => 'Subject successfully updated!']);
     }
 

@@ -34,6 +34,7 @@ function getSubjectForm($state) {
     // default link for Bread crumb 
     $links = "<li class='breadcrumb-item'><a href='subjectlist.php'>Subject</a></li>"
             ."<li class='breadcrumb-item active' aria-current='page'>Add Subject</li>";
+
     // subject type input is editable by default 
     $sub_type_editable = '';
     
@@ -94,8 +95,11 @@ function getSubjectForm($state) {
 
         $grade_level_state = '';
 
-        $button = "<input type='hidden' name='action' value='addSubject'>"
-                 ."<input class='btn btn-success form-control' style='width: 150px' type='submit' value='ADD SUBJECT'>";
+        $button = "<div class='btn-con'>"
+                 ."<input type='hidden' name='action' value='addSubject'>"
+                 ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>SUBMIT & ADD ANOTHER</button>"
+                 ."<button class='submit-btn btn btn-success form-control w-auto'>SUBMIT</button>"
+                 ."</div>";
 
         if (isset($_GET['prog_code'])) {                // add subject page is accessed from a program page
             // get program data
@@ -391,7 +395,7 @@ function getSubjectViewContent() {
         <h3>$sub_name</h3>
         <div class='buttons-con d-flex'>
             <button class='btn m-auto text-danger pt-1 px-1'><i class='bi bi-archive me-1'></i>Archive</button>
-            <a href='subject.php?code=$sub_code&state=edit' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
+            <a href='subject.php?sub_code=$sub_code&state=edit' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
         </div>
     </div>
     <hr>

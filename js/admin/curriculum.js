@@ -1,3 +1,5 @@
+import {Table} from "./Class.js"
+
 let tableId, url, method, id, height
 
 tableId = '#table'

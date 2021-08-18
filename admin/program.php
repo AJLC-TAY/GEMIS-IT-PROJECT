@@ -121,7 +121,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     var code = <?php echo json_encode($prog_code);?>;
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="text/javascript" src="../js/admin/Class.js"></script>
-<script type="text/javascript" src="../js/admin/program.js"></script>
+<script type="module" src="../js/admin/program.js"></script>
 
 </html>

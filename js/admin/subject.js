@@ -1,5 +1,5 @@
 preload("#curr-management", "#subject")
-
+let addAgain = false
 $(function () {
     $('#sub-type').change(function() {
         let options = $('#app-spec-options')
@@ -18,9 +18,16 @@ $(function () {
         }
     })
 
+    $(".submit-and-again-btn").click(() => {
+        addAgain = true
+        $('#add-subject-form').submit()
+    })
+
+    $(".submit-btn").click(() => {$('#add-subject-form').submit()})
+
     $('#add-subject-form').submit(function(event) {
         event.preventDefault()
-        spinner.show()
+        showSpinner()
         var form  = $(this)
         var formData = form.serializeArray()
 
@@ -51,7 +58,7 @@ $(function () {
             if (codeList.length == 0) return                       // return if list of codes is empty
             
             codeList.forEach(code => {  
-                code = code.substring(code.indexOf("-") + 1)
+                code = code.substring(code.indcmnOf("-") + 1)
                 formData.push( {'name': requisite, 'value': code}) // store subject code value; from PRE-ABM to ABM
             })
         }
@@ -60,11 +67,13 @@ $(function () {
         saveRequisiteCodes('CO[]', coreq)
 
         $.post("action.php", formData, function(data) {
-            spinner.fadeOut(500)
+            hideSpinner(500)
+            if (addAgain) {
+                $('#add-subject-form').trigger('reset')
+                addAgain = false
+                return showToast('success', 'Subject successfully added!')
+            }
             data = JSON.parse(data)
-          
-            //Set session variables
-            sessionStorage.setItem("message", data.status)
             window.location.href = `subject.php?${data.redirect}`
         })
 
@@ -103,4 +112,10 @@ $(function () {
     })
 
     hideSpinner();
+    // if (message) showToast('success', message)
+    // if (message) {
+    //     let toast = $('.success-toast')
+    //     toast.find('.toast-body').tcmnt(message)
+    //     toast.toast('show')
+    // } 
 })

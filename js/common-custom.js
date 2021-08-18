@@ -11,11 +11,16 @@ function preload(menuItem, subMenuItem=null) {
     subMenuItem.addClass('active-sub')
 }
 
+/** Shows the spinner */
+function showSpinner() {
+    spinner.show()
+}
+
 /** Fades out spinner */
 function hideSpinner() {
     spinner.fadeOut(500)
 }
-
+    
 /** 
  *  Show toast basing from the specified toast type, message, and/or delay.
  * 
@@ -26,7 +31,6 @@ function hideSpinner() {
 function showToast(type, msg, delay = 0) {
     let toast = $(`.${type}-toast`)
     toast.find('.toast-body').text(msg)
-
     if (delay == 0) {
         toast.toast('show')
     } else {

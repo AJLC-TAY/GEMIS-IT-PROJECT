@@ -96,12 +96,11 @@
         </div>
     </div>
     <!-- TOAST END -->
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+
+    <script src="../js/common-custom.js"></script>
+    <script type="module" src="../js/admin/facultylist.js"></script>
 </body>
-
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-
-<script src="../js/common-custom.js"></script>
-<script src="../js/admin/Class.js"></script>
-<script src="../js/admin/facultylist.js"></script>
+</html>

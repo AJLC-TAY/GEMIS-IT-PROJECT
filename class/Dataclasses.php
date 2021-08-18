@@ -55,8 +55,10 @@ class Program implements JsonSerializable
         $this->prog_code = $prog_code;
         $this->curr_code = $curr_code;
         $this->prog_desc = $prog_desc;
-        $this->action = "<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary'>Edit</a>"
-                      . "<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary'>View</a>";
+        $this->action = "<div class='d-flex justify-content-center'>"
+                      . "<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary w-auto me-1' title='Edit Program'>Edit</a>"
+                      . "<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary w-auto' title='View Program'>View</a>"
+                      . "</div>";
     }
 
     public function get_curr_code()
@@ -115,8 +117,10 @@ class Subject implements JsonSerializable
         $this->for_grd_level = $for_grd_level;
         $this->sub_semester = $sub_semester;
         $this->sub_type = $sub_type;
-        $this->action =  "<a href='subject.php?code=".$sub_code."&state=edit' class='btn btn-secondary'>Edit</a>"
-                    . "<a href='subject.php?code=".$sub_code."&state=view' class='btn btn-primary'>View</a>";
+        $this->action = "<div class='d-flex justify-content-center'>"
+                    ."<a href='subject.php?sub_code=".$sub_code."&state=edit' class='btn btn-secondary w-auto me-1' title='Edit Subject'>Edit</a>"
+                    ."<a href='subject.php?sub_code=".$sub_code."&state=view' class='btn btn-primary w-auto' title='View Subject'>View</a>"
+                    ."</div>";
     }
 
     public function get_sub_code()
@@ -163,8 +167,10 @@ class Subject implements JsonSerializable
     {
         $this->program = $program;
         $sub_code = $this->get_sub_code();
-        $this->action =  "<a href='subject.php?prog_code=". $program ."&code=". $sub_code ."&state=edit' class='btn btn-secondary'>Edit</a>"
-                        . "<a href='subject.php?prog_code=". $program ."&code=". $sub_code ."&state=view' class='btn btn-primary'>View</a>";
+        $this->action = "<div class='d-flex justify-content-center'>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&state=edit' class='btn btn-secondary w-auto me-1' title='Edit Subject'>Edit</a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&state=view' class='btn btn-primary w-auto' title='View Subject'>View</a>"
+                        ."</div>";
     }
 
     public function get_programs()
@@ -282,8 +288,10 @@ class Faculty implements JsonSerializable
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
-        $this->action = "<a href='faculty.php?id=$teacher_id&state=edit' class='btn btn-primary'>Edit</a>"
-                      . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary'>View</a>";
+        $this->action = "<div class='d-flex justify-content-center'>"
+                      ."<a href='faculty.php?id=$teacher_id&state=edit' class='btn btn-primary w-auto me-1' title='Edit Faculty'>Edit</a>"
+                      . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary w-auto' title='View Faculty'>View</a>"
+                      ."</div>";
         $this->id_photo = is_null($id_photo) ? NULL : ("data:image; base64,". base64_encode($id_photo));
     }
 

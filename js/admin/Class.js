@@ -1,4 +1,4 @@
-class Table {
+export class Table {
     constructor(tableId, url, method, uniqueId, idField, height, search = false, 
         searchSelector = '', exportDataType = 'All', onPostBody = null) {
         
