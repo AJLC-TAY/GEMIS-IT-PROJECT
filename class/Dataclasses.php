@@ -271,7 +271,7 @@ class Faculty implements JsonSerializable
     private $id_photo;
     private $action;
 
-    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo)
+    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo, $subjects=[])
     {
         $this->teacher_id = $teacher_id;
         $this->last_name = $last_name;
@@ -288,6 +288,7 @@ class Faculty implements JsonSerializable
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
+        $this->subjects = $subjects;
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id&state=edit' class='btn btn-primary w-auto me-1' title='Edit Faculty'>Edit</a>"
                       . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary w-auto' title='View Faculty'>View</a>"
@@ -359,6 +360,10 @@ class Faculty implements JsonSerializable
     public function get_id_photo()
     {
         return $this->id_photo;
+    }
+    public function get_subjects()
+    {
+        return $this->subjects;
     }
 
     public function jsonSerialize()

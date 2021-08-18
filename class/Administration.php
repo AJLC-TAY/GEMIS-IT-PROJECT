@@ -44,8 +44,7 @@ class Administration extends Dbconfig
     /** Returns the list of curriculum. */
     public function listCurriculum($tbl)
     {
-        $query = "SELECT * FROM $tbl;";
-        $result = mysqli_query($this->dbConnect, $query);
+        $result = mysqli_query($this->dbConnect, "SELECT * FROM $tbl;");
         $curriculumList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -54,9 +53,10 @@ class Administration extends Dbconfig
         return $curriculumList;
     }
 
-    public function listCurriculumJSON($tbl)
+    public function listCurriculumJSON()
     {
-        echo json_encode($this->listCurriculum($tbl));
+        echo json_encode(['data' => $this->listCurriculum('curriculum'),
+                          'archived' => $this->listCurriculum('archived_curriculum')]);
     }
 
     /** Get curriculum object from a specified curriculum code */
@@ -673,8 +673,6 @@ class Administration extends Dbconfig
                     return;
                 }
             }
-
-
             
             $query = "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
                    ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -691,10 +689,7 @@ class Administration extends Dbconfig
             if (isset($_POST['subjects'])) {
                 $subjects = $_POST['subjects'];
                 foreach($subjects as $subject) {
-                    $this->prepared_query("INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
-                    // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);");
-                    // mysqli_stmt_bind_param($stmt, 'sd', $subject, $id);
-                    // mysqli_stmt_execute($stmt);
+                    $this->prepared_query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
                 }
             }
 
@@ -714,9 +709,18 @@ class Administration extends Dbconfig
         $row = mysqli_fetch_assoc($result);
         $department = $row['department'];
         $department = is_null($row['department']) ? NULL : [$department];
-        return new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+
+        $subjects = array();
+        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM subjectfaculty WHERE teacher_id=?);", [$id], "i");
+        while ($s_row = mysqli_fetch_assoc($result)) {
+            $subjects[] = new Subject ($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']); 
+        };
+
+        $faculty = new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
             $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $department,
             $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
-            $row['enable_edit_grd'], $row['id_picture']);
+            $row['enable_edit_grd'], $row['id_picture'], $subjects);
+        
+        return $faculty;
     }
 }

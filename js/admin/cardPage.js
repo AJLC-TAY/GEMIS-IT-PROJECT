@@ -10,7 +10,7 @@ let prepareHTMLOfData, prepareHTMLofArchive, filter
 
 const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
     // string detail to be added in the delete and archive modal messages
-    page = page
+    // page = page
     var programString = ""
     switch (page) {
         case 'curriculum':
@@ -56,20 +56,27 @@ const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
 
 const reload = () => {
     console.log("from reload")
-    spinner.show()
-    getArchiveAction = `getArchived${camelized}JSON`
-    $.post('action.php', {action}, (data) => {
-        dataList = JSON.parse(data)
+    showSpinner()
+    // getArchiveAction = `getArchived${camelized}JSON`
+    // $.post('action.php', {action}, (data) => {
+    //     dataList = JSON.parse(data)
+    //     let addBtn = `<div class='btn add-btn card shadow-sm'>
+    //         <div class='card-body'>Add ${camelized}</div>
+    //     </div>`
+    //     $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
+    // })
+    $.post('action.php', {action} ,(response) => {
         let addBtn = `<div class='btn add-btn card shadow-sm'>
             <div class='card-body'>Add ${camelized}</div>
         </div>`
-        $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
+        $('.cards-con').html(prepareHTMLOfData(reponse.data) + addBtn)
+        $('.arch-list').html(prepareHTMLofArchive(response.archived))
     })
-    $.post('action.php', {action:getArchiveAction} ,(data) => {
-        console.log(getArchiveAction)
-        archivedData = JSON.parse(data)
-        $('.arch-list').html(prepareHTMLofArchive(archivedData))
-    })
+    // $.post('action.php', {action:getArchiveAction} ,(data) => {
+    //     console.log(getArchiveAction)
+    //     archivedData = JSON.parse(data)
+    //     $('.arch-list').html(prepareHTMLofArchive(archivedData))
+    // })
     hideSpinner()
 }
 

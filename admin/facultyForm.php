@@ -6,6 +6,8 @@ function getFacultyFormContent() {
     $content->subjects = $subjects;
     $state = $_GET['state'];
     $PROFILEPATH = "../assets/profile.png";
+    $handledSubjects = "<td colspan='5'>No assigned subject</td>";
+
 
     // Content
     if ($state == 'add') {
@@ -26,7 +28,6 @@ function getFacultyFormContent() {
         $enrollmentChecked = "";
         $awardReportChecked = "";
         $image = $PROFILEPATH;
-        $handledSubjects = "<td colspan='5'>No assigned subject</td>";
         $finalBtn = "SUBMIT";
     } else if ($state == 'edit') {
         $id = $_GET['id'];
@@ -43,14 +44,27 @@ function getFacultyFormContent() {
                        ."<option value='f' ". (($gender == 'Female') ? "selected" : ""). ">Female</option>"
                        ."<option value='m' ". (($gender == 'Male') ? "selected" : "") .">Male</option>";
         $date = strftime('%Y-%m-%d', strtotime($faculty->get_birthdate()));
-        $birthdateInput = "<input type='date' class='form-control' name='birthdate' value='$date'> required";
+        $birthdateInput = "<input type='date' class='form-control' name='birthdate' value='$date' required> ";
         $departmentOption = "<option selected value='NULL'>-- Select department --</option>"
                            ."<option value=''></option>";
         $editGradesChecked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
         $enrollmentChecked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";;
         $awardReportChecked = ($faculty->get_award_coor() == 0) ? "" : "checked";;
         $image = is_null($faculty->get_id_photo()) ? $PROFILEPATH : $faculty->get_id_photo();
-        $handledSubjects = "<td colspan='5'>No assigned subject</td>";
+        $handledSubjectsList = $faculty->get_subjects();
+        $handledSubjects = '';
+        if (count($handledSubjectsList) > 0) {
+            foreach ($handledSubjectsList as $sub) {
+                $code = $sub->get_sub_code();
+                $handledSubjects .= "<tr class='text-center'>
+                    <td scope='col'><input type='checkbox' value='{$code}' /></td>
+                    <td scope='col'><input type='hidden' name='subjects[]' value='{$code}'/>{$code}</td>
+                    <td scope='col'>{$sub->get_sub_name()}</td>
+                    <td scope='col'>{$sub->get_sub_type()}</td>
+                    <td scope='col'><button id='{$code}' class='remove-btn btn btn-sm btn-outline-danger m-auto'>REMOVE</button></td>
+                </tr>";
+            }
+        }
         $finalBtn = "SAVE";
     }
 
@@ -135,28 +149,38 @@ function getFacultyFormContent() {
                     </div>
                 </div>
                 <br>
-                <div class='collapse-table'>
-                    <input class='btn btn-primary' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='ASSIGN SUBJECT'>
-                    <div id='assign-subj-table' class='collapse mt-3'>
-                        <div class='overflow-auto bg-white p-3 rounded-sm shadow-sm' style='height: 300px;'>
+                <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto mt-4 rounded-3'>
+                    <div class='d-flex justify-content-between'>
+                        <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
+                        <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='ASSIGN'>
+                    </div>
+                    <div id='assign-subj-table' class='collapse'><hr>
+                        <div class='overflow-auto' style='height: 300px;'>
+                        <div class='d-flex mb-3 pt-1'>
+                                
+                                <div class='my-auto'>
+                                    <a id='instruction' tabindex='0' class='btn btn-sm btn-light mx-1 rounded-circle shadow-sm ' role='button' data-bs-toggle='popover' data-bs-placement='right' data-bs-trigger='focus' title='Instruction' data-bs-content='Find the subject code to be assigned to the faculty, then click the '+ SUBJECT' button'>
+                                        <i class='bi bi-info-circle'></i>
+                                    </a>
+                                </div>
+                                
+                                <div class='flex-grow-1'>
+                                    <input class='form-control my-auto' list='subjectOptions' id='search-input' placeholder='Search subject code here ...'>
+                                    <datalist id='subjectOptions'>";
+                                    foreach($subjects as $subject) {
+                                        $code = $subject->get_sub_code();
+                                        $main .= "<option value='$code' class='sub-option'>$code - {$subject->get_sub_name()}</option>";
+                                    }
+                                    $main .= "</datalist>
+                                </div>
+                                <div class='ms-1'>
+                                    <button class='add-subject btn btn-dark'><i class='bi bi-plus-lg me-1'></i> SUBJECT</button>
+                                    <button class='remove-all-btn btn btn-outline-danger'><i class='bi bi-x-lg me-1'></i>SELECTED</button>
+                                </div>
+                            </div>
                             <table class='table table-bordered table-hover table-striped' style='height: auto;'>
                                 <thead>
                                     <tr class='text-center'>
-                                        <div class='d-flex'>
-                                            <div class='flex-grow-1'>
-                                                <input class='form-control' list='subjectOptions' id='search-input' placeholder='Search subject name to get subject code here ...'>
-                                                <datalist id='subjectOptions'>";
-                                                        foreach($subjects as $subject) {
-                                                            $code = $subject->get_sub_code();
-                                                            $main .= "<option value='$code' class='sub-option'>$code - {$subject->get_sub_name()}</option>";
-                                                        }
-                                                $main .= "</datalist>
-                                            </div>
-                                            <div class='ms-1'>
-                                                <button class='add-subject btn btn-dark'><i class='bi bi-plus-lg me-1'></i> SUBJECT</button>
-                                                <button class='remove-all-btn btn btn-outline-danger'><i class='bi bi-x-lg me-1'></i>SELECTED</button>
-                                            </div>
-                                        </div>
                                         <th scope='col'><input type='checkbox' /></th>
                                         <th scope='col'>CODE</th>
                                         <th scope='col'>SUBJECT NAME</th>
@@ -164,14 +188,13 @@ function getFacultyFormContent() {
                                         <th scope='col'>ACTION</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     <tr id='emptyMsg' class='text-center'>
                                         $handledSubjects
                                     </tr>
                                 </tbody>
+                            </table>
                         </div>
-                        </table>
                     </div>
                 </div>
                 <div class='back-btn d-flex justify-content-end'>
