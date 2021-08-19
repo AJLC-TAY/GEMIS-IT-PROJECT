@@ -423,6 +423,13 @@ ul.sidebar-menu li a.active i {
     background-color: #f1f1f1;
 }
 
+.currcard {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: left;
+    background-color: #f1f1f1;
+}
+
 .photo {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 20px;
