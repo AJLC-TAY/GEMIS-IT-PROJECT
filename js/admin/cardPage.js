@@ -57,19 +57,20 @@ const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
 const reload = () => {
     console.log("from reload")
     spinner.show()
-    getArchiveAction = `getArchived${camelized}JSON`
-    $.post('action.php', {action}, (data) => {
-        dataList = JSON.parse(data)
+    // getArchiveAction = `getArchived${camelized}JSON`
+    $.post('action.php', {action}, (response) => {
+        dataList = JSON.parse(response)
         let addBtn = `<div class='btn add-btn card shadow-sm'>
             <div class='card-body'>Add ${camelized}</div>
         </div>`
-        $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
+        $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn)
+        $('.arch-list').html(prepareHTMLofArchive(dataList.archived))
     })
-    $.post('action.php', {action:getArchiveAction} ,(data) => {
-        console.log(getArchiveAction)
-        archivedData = JSON.parse(data)
-        $('.arch-list').html(prepareHTMLofArchive(archivedData))
-    })
+    // $.post('action.php', {action:getArchiveAction} ,(data) => {
+    //     console.log(getArchiveAction)
+    //     archivedData = JSON.parse(data)
+        
+    // })
     hideSpinner()
 }
 

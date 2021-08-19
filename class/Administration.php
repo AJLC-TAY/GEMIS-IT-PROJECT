@@ -54,15 +54,17 @@ class Administration extends Dbconfig
         return $curriculumList;
     }
 
-    public function listCurriculumJSON($tbl)
+    public function listCurriculumJSON()
     {
-        echo json_encode($this->listCurriculum($tbl));
+        // echo json_encode($this->listCurriculum('curriculum'));
+        echo json_encode(['data' => $this->listCurriculum('curriculum'),
+                            'archived' => $this->listCurriculum('archived_curriculum')]);
     }
 
     /** Get curriculum object from a specified curriculum code */
     public function getCurriculum()
     {
-        $result = $this->prepared_select("SELECT * FROM curriculum WHERE curr_code=?", [$_GET['code']], 'i');
+        $result = $this->prepared_select("SELECT * FROM curriculum WHERE curr_code=?", [$_GET['code']]);
         $row = mysqli_fetch_assoc($result);
         return new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
     }
@@ -155,7 +157,14 @@ class Administration extends Dbconfig
         return $programList;
     }
 
-    public function listProgramsJSON($tbl)
+    public function listProgramsJSON()
+    {
+        // echo json_encode($this->listPrograms($tbl));
+        echo json_encode(['data' => $this->listPrograms('program'),
+                            'archived' => $this->listPrograms('archived_program')]);
+    }
+
+    public function listProgramsUnderCurrJSON($tbl)
     {
         echo json_encode($this->listPrograms($tbl));
     }
@@ -263,6 +272,17 @@ class Administration extends Dbconfig
     public function listSubjectsJSON()
     {
         echo json_encode($this->listSubjects());
+    }
+
+    public function listAllSub($tbl){
+        $query = "SELECT * FROM {$tbl}";
+        $result = mysqli_query($this->dbConnect, $query);
+        $subjectList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subject =  new Subject($row['sub_code'],$row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $row['sub_type']);
+            $subjectList[] = $subject;
+        }
+        echo json_encode($subjectList);
     }
 
     private function setParentPrograms($code, $sub_type, $subject) 
