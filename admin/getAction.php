@@ -7,7 +7,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'program') {
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'subjects') {
-    $admin->listAllSub('subject');
+    $admin->listSubjectsJSON();
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'faculty') {
