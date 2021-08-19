@@ -1,6 +1,8 @@
 .card {
     width: 275px;
     height: 250px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .curriculum-con {
