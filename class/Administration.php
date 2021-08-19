@@ -739,4 +739,21 @@ class Administration extends Dbconfig
             $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
             $row['enable_edit_grd'], $row['id_picture']);
     }
+
+    public function listStudent() {
+        $query = 'SELECT * FROM student;';
+        $result = mysqli_query($this->dbConnect, $query);
+        $studentList = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $studentList[] = new Student($row['stud_id'], $row['user_id_no'],$row['LRN'], $row['first_name'], $row['middle_name'], $row['last_name'], 
+                                $row['ext_name'],$row['sex'],$row['age'], $row['birthdate'],  $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'],
+                                $row['religion'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture']);
+        }
+        return $studentList;
+    }
+
+    public function listStudentJSON() {
+        echo json_encode($this->listStudent());
+    }
 }

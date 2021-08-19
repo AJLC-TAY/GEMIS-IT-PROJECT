@@ -43,9 +43,9 @@
                                     <tr>
                                         <th data-checkbox="true"></th>
                                         <th scope='col' data-width="100" data-align="right" data-field='lrn'>LRN</th>
-                                        <th scope='col' data-width="600" data-sortable="true" data-field='stud_name'>Student Name</th>
-                                        <th scope='col' data-width="100" data-align="right" data-field='stud_section'>Section</th>
-                                        <th scope='col' data-width="300" data-align="center" data-field='actions'>Actions</th>
+                                        <th scope='col' data-width="600" data-sortable="true" data-field='name'>Student Name</th>
+                                        <th scope='col' data-width="100" data-align="right" data-field='section'>Section</th>
+                                        <th scope='col' data-width="300" data-align="center" data-field='action'>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -67,8 +67,12 @@
             <!--footer end-->
         </section>
     </section>
+<script src="../assets/js/bootstrap-table.min.js"></script>
+<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+<script src="../js/common-custom.js"></script>  
+<script type="module" src="../js/admin/studentlist.js"></script>
 </body>
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
+<!-- JQUERY FOR BOOTSTRAP TABLE
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript"> //javascript to be edited
@@ -112,6 +116,6 @@
 
         spinner.fadeOut(500)
     })
-</script>
+</script> -->
 
 </html>
