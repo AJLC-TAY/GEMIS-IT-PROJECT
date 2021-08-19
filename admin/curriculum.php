@@ -49,7 +49,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                         <form action="action.php" method="POST">
                             <div class="container">
                                 <h4>Information</h4>
-                                <div class="col-12 card">
+                                <div class="col-12 currcard">
                                     <form>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>
