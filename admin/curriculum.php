@@ -7,7 +7,7 @@
 <?php
 include('../class/Administration.php');
 $admin = new Administration();
-$curriculum = $admin->getCurriculum('curriculum'); // define var
+$curriculum = $admin->getCurriculum(); // define var
 $curr_name = $curriculum->get_cur_name();
 $curr_code = $curriculum->get_cur_code();
 $curr_desc = $curriculum->get_cur_desc();

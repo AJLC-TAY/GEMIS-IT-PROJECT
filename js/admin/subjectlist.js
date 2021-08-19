@@ -26,6 +26,17 @@ $(function() {
         })
     })
 
+    $('.view-archive').click(function(){
+        $('#view-arch-modal').modal('toggle')
+    })
+
+    $('#view-arch-modal').on('shown.bs.modal', function(){
+        $.post('action.php', {action:'getArchiveSubjectJSON'} ,(data) => {
+            var archiveData = JSON.parse(data)
+            $('.arch-list').html(prepareArchiveHTML(archiveData))
+        })
+    })
+
     // $('#save-btn').click(function() {
     //     $(this).prop("disabled", true)
     //     $("#edit-btn").prop("disabled", false)
@@ -36,3 +47,14 @@ $(function() {
 
     hideSpinner()
 })
+
+let prepareArchiveHTML = archivedData => {
+    let html = ''
+    archivedData.forEach(element => {
+        var code = element.sub_code
+        var name = element.sub_name
+        html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
+                <button data-name='$name' class='unarchive-option btn' id='${code}'>Unarchive</button></li>`
+    })
+    return html
+}
