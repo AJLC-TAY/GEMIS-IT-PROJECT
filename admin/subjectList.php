@@ -74,6 +74,29 @@
             </section>
         </section>
     </section>
+
+    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedSubjects" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Archived Subjects</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="overflow-auto" style="height: 50vh;">
+
+                        <ul class="list-group arch-list">
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
        <!-- TOAST -->
        <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute" style="bottom: 20px; right: 25px;">

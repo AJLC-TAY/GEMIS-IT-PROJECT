@@ -24,6 +24,7 @@ $(function () {
     })
 
     $(".submit-btn").click(() => {$('#add-subject-form').submit()})
+    // $(".archive-option").click(()=> console.log("archive clicked"))
 
     $('#add-subject-form').submit(function(event) {
         event.preventDefault()
@@ -109,6 +110,26 @@ $(function () {
     $('#grade-level').change(function() {
         let isDisabled =  ($(this).val() == 11) ? true : false
         $(`#grade12-table input[name*='radio']`).prop('disabled', isDisabled)
+    })
+
+    $(document).on('click', '.archive-btn', function() {
+        var code = $(this).attr('id')
+        var action = 'archiveSubject'
+        $.post("action.php", {code, action}, function(data) {	
+            $('#archive-modal').modal('hide')
+            showWarningToast()
+        })
+    })
+
+    archiveMessage = `Archiving this subject will also archive all student grades under it.`
+    $(document).on('click', '.archive-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let archiveModal = $('#archive-modal')
+        archiveModal.find('.modal-identifier').html(`${name} Subject`)
+        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.archive-btn').attr('id', code)
+        archiveModal.modal('toggle')
     })
 
     hideSpinner();

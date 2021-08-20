@@ -7,7 +7,7 @@
 <?php
 include('../class/Administration.php');
 $admin = new Administration();
-$curriculum = $admin->getCurriculum('curriculum'); // define var
+$curriculum = $admin->getCurriculum(); // define var
 $curr_name = $curriculum->get_cur_name();
 $curr_code = $curriculum->get_cur_code();
 $curr_desc = $curriculum->get_cur_desc();
@@ -49,7 +49,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                         <form action="action.php" method="POST">
                             <div class="container">
                                 <h4>Information</h4>
-                                <div class="col-12 card">
+                                <div class="col-12 currcard">
                                     <form>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>

@@ -79,6 +79,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
     $admin->listSubjectsJSON();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'getAllSubjectJSON') {
+    $admin->listAllSub('subject');
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'getArchiveSubjectJSON') {
+    $admin->listAllSub('archived_subject');
+}
+
 if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
     $admin->updateSubject();
 }

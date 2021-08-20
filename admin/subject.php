@@ -51,6 +51,29 @@
             </section>
         </section>
     </section>
+
+    <!-- Archive modal -->
+    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary archive-btn">Archive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute bottom-0 end-0">

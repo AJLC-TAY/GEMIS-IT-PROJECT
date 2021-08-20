@@ -55,15 +55,15 @@ class Administration extends Dbconfig
 
     public function listCurriculumJSON()
     {
-        echo json_encode($this->listCurriculum('curriculum'));
-        // echo json_encode(['data' => $this->listCurriculum('curriculum'),
-        //                   'archived' => $this->listCurriculum('archived_curriculum')]);
+        // echo json_encode($this->listCurriculum('curriculum'));
+        echo json_encode(['data' => $this->listCurriculum('curriculum'),
+                            'archived' => $this->listCurriculum('archived_curriculum')]);
     }
 
     /** Get curriculum object from a specified curriculum code */
     public function getCurriculum()
     {
-        $result = $this->prepared_select("SELECT * FROM curriculum WHERE curr_code=?", [$_GET['code']], 'i');
+        $result = $this->prepared_select("SELECT * FROM curriculum WHERE curr_code=?", [$_GET['code']]);
         $row = mysqli_fetch_assoc($result);
         return new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
     }
@@ -156,7 +156,14 @@ class Administration extends Dbconfig
         return $programList;
     }
 
-    public function listProgramsJSON($tbl)
+    public function listProgramsJSON()
+    {
+        // echo json_encode($this->listPrograms($tbl));
+        echo json_encode(['data' => $this->listPrograms('program'),
+                            'archived' => $this->listPrograms('archived_program')]);
+    }
+
+    public function listProgramsUnderCurrJSON($tbl)
     {
         echo json_encode($this->listPrograms($tbl));
     }
@@ -264,6 +271,17 @@ class Administration extends Dbconfig
     public function listSubjectsJSON()
     {
         echo json_encode($this->listSubjects());
+    }
+
+    public function listAllSub($tbl){
+        $query = "SELECT * FROM {$tbl}";
+        $result = mysqli_query($this->dbConnect, $query);
+        $subjectList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subject =  new Subject($row['sub_code'],$row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $row['sub_type']);
+            $subjectList[] = $subject;
+        }
+        echo json_encode($subjectList);
     }
 
     private function setParentPrograms($code, $sub_type, $subject) 
@@ -736,5 +754,22 @@ class Administration extends Dbconfig
         $param[] = $_POST['teacher_id'];
         $this->prepared_query("UPDATE faculty SET enable_edit_grd=?, enable_enroll=?, award_coor=? WHERE teacher_id=?;",
                                $param, "iiii");
+    }
+
+    public function listStudent() {
+        $query = 'SELECT * FROM student;';
+        $result = mysqli_query($this->dbConnect, $query);
+        $studentList = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $studentList[] = new Student($row['stud_id'], $row['user_id_no'],$row['LRN'], $row['first_name'], $row['middle_name'], $row['last_name'], 
+                                $row['ext_name'],$row['sex'],$row['age'], $row['birthdate'],  $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'],
+                                $row['religion'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture']);
+        }
+        return $studentList;
+    }
+
+    public function listStudentJSON() {
+        echo json_encode($this->listStudent());
     }
 }

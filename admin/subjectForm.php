@@ -394,7 +394,7 @@ function getSubjectViewContent() {
     $details = "<div class='d-flex justify-content-between'>
         <h3>$sub_name</h3>
         <div class='buttons-con d-flex'>
-            <button class='btn m-auto text-danger pt-1 px-1'><i class='bi bi-archive me-1'></i>Archive</button>
+            <button class='btn m-auto text-danger pt-1 px-1 archive-option'  id = '$sub_code'  > <i class='bi bi-archive me-1 ' ></i>Archive</button>
             <a href='subject.php?sub_code=$sub_code&state=edit' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
         </div>
     </div>
@@ -412,7 +412,7 @@ function getSubjectViewContent() {
                     <div class='row mb-3'>
                         <div class='col-xl-4 fw-bold'>Name</div>
                         <div class='col-xl-8'>$sub_name</div>
-                    </div>
+                    </div>s
                     <div class='row mb-3'>
                         <div class='col-xl-4 fw-bold'>Semester</div>
                         <div class='col-xl-8'>$sub_semester</div>
@@ -481,3 +481,4 @@ function getSubjectViewContent() {
     $content->main = $details;
     return $content;
 }
+
