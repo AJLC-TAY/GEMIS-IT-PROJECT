@@ -103,5 +103,8 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
 if (isset($_POST['action']) && $_POST['action'] === 'addFaculty') {
     $admin->addFaculty();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'updateFacultyRoles') {
+    $admin->updateFacultyRoles();
+}
 
 ?>

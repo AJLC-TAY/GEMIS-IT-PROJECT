@@ -45,6 +45,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                 <h2><?php echo $curr_name; ?> Curriculum</h2>
                             </header>
 
+<<<<<<< HEAD
                             <!-- Form -->
                             <div class="container mt-4">
                                 <div class="card w-100 h-auto">
@@ -54,6 +55,14 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                     </div>
                                     <hr class="mt-1 mb-4">
                                     <form action="action.php" method="POST">
+=======
+                        <!-- Form -->
+                        <form action="action.php" method="POST">
+                            <div class="container">
+                                <h4>Information</h4>
+                                <div class="col-12 currcard">
+                                    <form>
+>>>>>>> b298ab55c580945ce96fce56ce1a72177ee2b131
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>
                                             <div class="col-sm-8">
@@ -113,6 +122,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                     <!--footer end-->
             </section>
         </section>
+<<<<<<< HEAD
         <!-- ADD PROGRAM MODAL -->
         <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
             <div class="modal-dialog">
@@ -120,6 +130,30 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                     <div class="modal-header">
                         <div class="modal-title">
                             <h4 class="mb-0">Add Strand/Program</h4>
+=======
+    </section>
+    <!-- ADD MODAL -->
+    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Strand/Program</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prog-form" action="">
+                        <div class="form-group">
+                            <label for="prog-code">Strand Code</label>
+                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                            <label for="prog-name">Strand Name</label>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
+                            <label for="prog-curr">Curriculum</label>
+                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+>>>>>>> b298ab55c580945ce96fce56ce1a72177ee2b131
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -144,6 +178,11 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+=======
+    </div>
+    <!-- ADD MODAL  -->
+>>>>>>> b298ab55c580945ce96fce56ce1a72177ee2b131
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>

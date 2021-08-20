@@ -10,7 +10,7 @@ let prepareHTMLOfData, prepareHTMLofArchive, filter
 
 const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
     // string detail to be added in the delete and archive modal messages
-    page = page
+    // page = page
     var programString = ""
     switch (page) {
         case 'curriculum':

@@ -28,13 +28,17 @@ function hideSpinner() {
  *  @param {String} msg     Text to be showed.
  *  @param {Number} delay   Milliseconds to wait before fading out.
  */
-function showToast(type, msg, delay = 0) {
-    let toast = $(`.${type}-toast`)
-    toast.find('.toast-body').text(msg)
-    if (delay == 0) {
-        toast.toast('show')
-    } else {
-        toast.toast({delay})
-        toast.toast('show')
-    }
+function showToast(type, msg, options=null) {
+    let toast = $(`<div class="toast bg-${type} text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">${msg}</div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>`)
+    toast.prependTo('#toast-con')
+    let newToast = new bootstrap.Toast(toast, options)
+    toast.bind('hidden.bs.toast', function () {
+        $(this).remove();
+    })
+    newToast.show()
 }

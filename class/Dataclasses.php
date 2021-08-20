@@ -265,13 +265,14 @@ class Faculty implements JsonSerializable
     private $department;
     private $cp_no;
     private $email;
+    private $access;
     private $award_coor;
     private $enable_enroll;
     private $enable_edit_grd;
     private $id_photo;
     private $action;
 
-    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo)
+    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo, $subjects=[])
     {
         $this->teacher_id = $teacher_id;
         $this->last_name = $last_name;
@@ -285,9 +286,11 @@ class Faculty implements JsonSerializable
         $this->department = $department;
         $this->cp_no = $cp_no;
         $this->email = $email;
+        $this->access = [];
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
+        $this->subjects = $subjects;
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id&state=edit' class='btn btn-primary w-auto me-1' title='Edit Faculty'>Edit</a>"
                       . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary w-auto' title='View Faculty'>View</a>"
@@ -359,6 +362,46 @@ class Faculty implements JsonSerializable
     public function get_id_photo()
     {
         return $this->id_photo;
+    }
+    public function get_subjects()
+    {
+        return $this->subjects;
+    }
+
+    public function get_access_data() {
+        $roles = [];
+        $size = 0;
+
+        $disp = "d-none";
+        $aCoor = ["value" => 'awardReport',
+                  "desc"  => "Award Coordinator", 
+                  "disp"  => $disp];
+        $cEdit = ["value" => "canEdit",
+                  "desc"  => "Can Edit Grade", 
+                  "disp"  => $disp];          
+        $cEnrl = ["value" => "canEnroll",
+                  "desc"  => "Can Enroll", 
+                  "disp"  => $disp];          
+
+        if ($this->get_enable_edit_grd()) {
+            $roles[] = $cEdit['value'];
+            $cEdit['disp'] = "";
+            $size += 1;
+        }
+
+        if ($this->get_enable_enroll()) {
+            $roles[] = $cEnrl['value'];
+            $cEnrl['disp'] = "";
+            $size += 1;
+        }
+
+        if ($this->get_award_coor()) {
+            $roles[] = $aCoor['value'];
+            $aCoor['disp'] = "";
+            $size += 1;
+        }
+
+        return ['roles' => $roles, 'data' => [$cEdit, $cEnrl, $aCoor], 'size' => $size];
     }
 
     public function jsonSerialize()
@@ -1346,221 +1389,250 @@ class StudentAward extends Award implements JsonSerializable
     //                 $this->semester;
     //             }
 
-    //             class Student //extends User
-    // {
-    //     public $stud_id;
-    //     public $id_no;
-    //     public $lrn;
-    //     public $first_name;
-    //     public $middle_name;
-    //     public $last_name;
-    //     public $ext_name;
-    //     public $sex;
-    //     public $age;
-    //     public $birthdate;
-    //     public $birth_place;
-    //     public $indigenous_group;
-    //     public $mother_tongue;
-    //     public $religion;
-    //     public $cp_no;
-    //     public $psa_birth_cert;
-    //     public $belong_to_ipcc;
-    //     public $id_picture;
+    class Student implements JsonSerializable
+    {
+        private $stud_id;
+        private $id_no;
+        private $lrn;
+        private $first_name;
+        private $middle_name;
+        private $last_name;
+        private $ext_name;
+        private $name;
+        private $sex;
+        private $age;
+        private $birthdate;
+        private $birth_place;
+        private $indigenous_group;
+        private $mother_tongue;
+        private $religion;
+        private $cp_no;
+        private $psa_birth_cert;
+        private $belong_to_ipcc;
+        private $id_picture;
+        private $action;
 
-    //     public function __construct($id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture)
-    //     {
-    //         $this->id_no = $id_no;
-    //         $this->lrn = $lrn;
-    //         $this->first_name = $first_name;
-    //         $this->middle_name = $middle_name;
-    //         $this->last_name = $last_name;
-    //         $this->ext_name = $ext_name;
-    //         $this->sex = $sex;
-    //         $this->age = $age;
-    //         $this->birthdate = $birthdate;
-    //         $this->birth_place = $birth_place;
-    //         $this->indigenous_group = $indigenous_group;
-    //         $this->mother_tongue = $mother_tongue;
-    //         $this->religion = $religion;
-    //         $this->cp_no = $cp_no;
-    //         $this->psa_birth_cert = $psa_birth_cert;
-    //         $this->belong_to_ipcc = $belong_to_ipcc;
-    //         $this->id_picture = $id_picture;
-    //     }
+        public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture)
+        {
+            $this->stud_id = $stud_id;
+            $this->id_no = $id_no;
+            $this->lrn = $lrn;
+            $this->first_name = $first_name;
+            $this->middle_name = $middle_name;
+            $this->last_name = $last_name;
+            $this->ext_name = $ext_name;
+            $this->name = "$last_name, $first_name $middle_name $ext_name";
+            $this->sex = $sex;
+            $this->age = $age;
+            $this->birthdate = $birthdate;
+            $this->birth_place = $birth_place;
+            $this->indigenous_group = $indigenous_group;
+            $this->mother_tongue = $mother_tongue;
+            $this->religion = $religion;
+            $this->cp_no = $cp_no;
+            $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
+            $this->belong_to_ipcc = $belong_to_ipcc;
+            $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
+            $this->action = "<div class='d-flex justify-content-center'>"
+                            ."<a href='studentForm?id=$id_no' class='btn btn-primary w-auto me-1' title='Edit Student'>Edit</a>"
+                            . "<a href='studentInfo?id=$id_no' role='button' class='btn btn-secondary w-auto' title='View Student'>View</a>"
+                            ."</div>";
+        }
 
-    //     //getter functions
-    //     public function get_stud_id()
-    //     {
-    //         return $this->stud_id;
-    //     }
+        //getter functions
+        public function get_stud_id()
+        {
+            return $this->stud_id;
+        }
 
-    //     public function get_id_no(){ //extended function?
-    //         return $this->id_no;
-    //     }
+        public function get_id_no(){ //extended function?
+            return $this->id_no;
+        }
 
-    //     public function get_lrn(){
-    //         return $this->lrn;
-    //     }
+        public function get_lrn(){
+            return $this->lrn;
+        }
 
-    //     public function get_first_name()
-    //     {
-    //         return $this->first_name;
-    //     }
+        public function get_first_name()
+        {
+            return $this->first_name;
+        }
 
-    //     public function get_middle_name()
-    //     {
-    //         return $this->middle_name;
-    //     }
+        public function get_middle_name()
+        {
+            return $this->middle_name;
+        }
 
-    //     public function get_last_name()
-    //     {
-    //         return $this->last_name;
-    //     }
+        public function get_last_name()
+        {
+            return $this->last_name;
+        }
 
-    //     public function get_ext_name()
-    //     {
-    //         return $this->ext_name;
-    //     }
+        public function get_ext_name()
+        {
+            return $this->ext_name;
+        }
 
-    //     public function get_sex()
-    //     {
-    //         return $this->sex;
-    //     }
+        public function get_sex()
+        {
+            return $this->sex;
+        }
 
-    //     public function get_age()
-    //     {
-    //         return $this->age;
-    //     }
+        public function get_age()
+        {
+            return $this->age;
+        }
 
-    //     public function get_birthdate()
-    //     {
-    //         return $this->birthdate;
-    //     }
+        public function get_birthdate()
+        {
+            return $this->birthdate;
+        }
 
-    //     public function get_birth_place()
-    //     {
-    //         return $this->birth_place;
-    //     }
+        public function get_birth_place()
+        {
+            return $this->birth_place;
+        }
 
-    //     public function get_indigenous_group()
-    //     {
-    //         return $this->indigenous_group;
-    //     }
+        public function get_indigenous_group()
+        {
+            return $this->indigenous_group;
+        }
 
-    //     public function get_mother_tongue()
-    //     {
-    //         return $this->mother_tongue;
-    //     }
+        public function get_mother_tongue()
+        {
+            return $this->mother_tongue;
+        }
 
-    //     public function get_religion()
-    //     {
-    //         return $this->religion;
-    //     }
+        public function get_religion()
+        {
+            return $this->religion;
+        }
 
-    //     public function get_cp_no()
-    //     {
-    //         return $this->cp_no;
-    //     }
+        public function get_cp_no()
+        {
+            return $this->cp_no;
+        }
 
-    //     public function get_psa_birth_cert()
-    //     {
-    //         return $this->psa_birth_cert;
-    //     }
+        public function get_psa_birth_cert()
+        {
+            return $this->psa_birth_cert;
+        }
 
-    //     public function get_belong_to_ipcc()
-    //     {
-    //         return $this->belong_to_ipcc;
-    //     }
+        public function get_belong_to_ipcc()
+        {
+            return $this->belong_to_ipcc;
+        }
 
-    //     public function get_id_picture()
-    //     {
-    //         return $this->id_picture;
-    //     }
+        public function get_id_picture()
+        {
+            return $this->id_picture;
+        }
 
-    //     //setter function
-    //     //no stud_id, auto-incremented
+        // //setter function
+        // //no stud_id, auto-incremented
 
-    //     public function set_lrn($lrn)
-    //     {
-    //         $this->lrn = $lrn;
-    //     }
+        // public function set_lrn($lrn)
+        // {
+        //     $this->lrn = $lrn;
+        // }
 
-    //     public function set_first_name($first_name)
-    //     {
-    //         $this->first_name = $first_name;
-    //     }
+        // public function set_first_name($first_name)
+        // {
+        //     $this->first_name = $first_name;
+        // }
 
-    //     public function set_middle_name($middle_name)
-    //     {
-    //         $this->middle_name = $middle_name;
-    //     }
+        // public function set_middle_name($middle_name)
+        // {
+        //     $this->middle_name = $middle_name;
+        // }
 
-    //     public function set_last_name($last_name)
-    //     {
-    //         $this->last_name = $last_name;
-    //     }
+        // public function set_last_name($last_name)
+        // {
+        //     $this->last_name = $last_name;
+        // }
 
-    //     public function set_ext_name($ext_name)
-    //     {
-    //         $this->ext_name = $ext_name;
-    //     }
+        // public function set_ext_name($ext_name)
+        // {
+        //     $this->ext_name = $ext_name;
+        // }
 
-    //     public function set_sex($sex)
-    //     {
-    //         $this->sex = $sex;
-    //     }
+        // public function set_sex($sex)
+        // {
+        //     $this->sex = $sex;
+        // }
 
-    //     public function set_age($age)
-    //     {
-    //         $this->age = $age;
-    //     }
+        // public function set_age($age)
+        // {
+        //     $this->age = $age;
+        // }
 
-    //     public function set_birthdate($birthdate)
-    //     {
-    //         $this->birthdate = $birthdate;
-    //     }
+        // public function set_birthdate($birthdate)
+        // {
+        //     $this->birthdate = $birthdate;
+        // }
 
-    //     public function set_birth_place($birth_place)
-    //     {
-    //         $this->birth_place = $birth_place;
-    //     }
+        // public function set_birth_place($birth_place)
+        // {
+        //     $this->birth_place = $birth_place;
+        // }
 
-    //     public function set_indigenous_group($indigenous_group)
-    //     {
-    //         $this->indigenous_group = $indigenous_group;
-    //     }
+        // public function set_indigenous_group($indigenous_group)
+        // {
+        //     $this->indigenous_group = $indigenous_group;
+        // }
 
-    //     public function set_mother_tongue($mother_tongue)
-    //     {
-    //         $this->mother_tongue = $mother_tongue;
-    //     }
+        // public function set_mother_tongue($mother_tongue)
+        // {
+        //     $this->mother_tongue = $mother_tongue;
+        // }
 
-    //     public function set_religion($religion)
-    //     {
-    //         $this->religion = $religion;
-    //     }
+        // public function set_religion($religion)
+        // {
+        //     $this->religion = $religion;
+        // }
 
-    //     public function set_cp_no($cp_no)
-    //     {
-    //         $this->cp_no = $cp_no;
-    //     }
+        // public function set_cp_no($cp_no)
+        // {
+        //     $this->cp_no = $cp_no;
+        // }
 
-    //     public function set_psa_birth_cert($psa_birth_cert)
-    //     {
-    //         $this->psa_birth_cert = $psa_birth_cert;
-    //     }
+        // public function set_psa_birth_cert($psa_birth_cert)
+        // {
+        //     $this->psa_birth_cert = $psa_birth_cert;
+        // }
 
-    //     public function set_belong_to_ipcc($belong_to_ipcc)
-    //     {
-    //         $this->belong_to_ipcc = $belong_to_ipcc;
-    //     }
+        // public function set_belong_to_ipcc($belong_to_ipcc)
+        // {
+        //     $this->belong_to_ipcc = $belong_to_ipcc;
+        // }
 
-    //     public function set_id_picture($id_picture)
-    //     {
-    //         $this->id_picture = $id_picture;
-    //     }
+        // public function set_id_picture($id_picture)
+        // {
+        //     $this->id_picture = $id_picture;
+        // }
 
-    // }    
+        public function jsonSerialize()
+    {
+        return [
+            'stud_id' => $this->stud_id,
+            'lrn' => $this->lrn,
+            'user_id_no' => $this->id_no,
+            'name' => $this->name,
+            'birthdate' => $this->birthdate,
+            'age' => $this->age,
+            'sex' => $this->sex,
+            'birth_place' => $this->birth_place,
+            'indigenous_group' => $this->indigenous_group,
+            'mother_tongue'=> $this->mother_tongue,
+            'religion'=> $this->religion,
+            'cp_no' => $this->cp_no,
+            'psa_birth_cert' => $this->psa_birth_cert,
+            'belong_to_ipcc'=> $this->belong_to_ipcc,
+            'action' => $this->action,
+        ];
+    }
+
+    }    
 
     
     // class Subject extends Faculty { private $sub_code; }

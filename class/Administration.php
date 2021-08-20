@@ -44,8 +44,7 @@ class Administration extends Dbconfig
     /** Returns the list of curriculum. */
     public function listCurriculum($tbl)
     {
-        $query = "SELECT * FROM $tbl;";
-        $result = mysqli_query($this->dbConnect, $query);
+        $result = mysqli_query($this->dbConnect, "SELECT * FROM $tbl;");
         $curriculumList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -653,22 +652,8 @@ class Administration extends Dbconfig
             $department = ($_POST['department'] == '0') 
                 ? NULL
                 : trim($_POST['department']);
-            $editGrades = 0;
-            $enrollment = 0;
-            $awardRep = 0;
-            if (isset($_POST['access'])) {
-                foreach ($_POST['access'] as $accessRoles) {
-                    if ($accessRoles == 'editGrades') {
-                        $editGrades = 1;
-                    }
-                    if ($accessRoles == 'enrollment') {
-                        $enrollment = 1;
-                    }
-                    if ($accessRoles == 'awardreport') {
-                        $awardRep = 1;
-                    }
-                }
-            }
+
+            [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
             // Initialize query to add new user
             $this->prepared_select("INSERT INTO user VALUES (?, ?, NOW(), 'FA');", [$user_id, $user_id], "ds");
             // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO user VALUES (?, ?, NOW(), 'FA');");
@@ -693,12 +678,10 @@ class Administration extends Dbconfig
                     return;
                 }
             }
-
-
             
             $query = "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
                    ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $enrollment, $editGrades, $department, $cp_no, $imgContent];
+            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
             $this->prepared_select($query, $params, "dsssssdssiiisds");
             
             // $stmt = mysqli_prepare($this->dbConnect, $query);
@@ -711,10 +694,7 @@ class Administration extends Dbconfig
             if (isset($_POST['subjects'])) {
                 $subjects = $_POST['subjects'];
                 foreach($subjects as $subject) {
-                    $this->prepared_query("INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
-                    // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO subclass (subject_sub_code, faculty_teacher_id) VALUES (?, ?);");
-                    // mysqli_stmt_bind_param($stmt, 'sd', $subject, $id);
-                    // mysqli_stmt_execute($stmt);
+                    $this->prepared_query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
                 }
             }
 
@@ -734,9 +714,62 @@ class Administration extends Dbconfig
         $row = mysqli_fetch_assoc($result);
         $department = $row['department'];
         $department = is_null($row['department']) ? NULL : [$department];
-        return new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
+
+        $subjects = array();
+        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM subjectfaculty WHERE teacher_id=?);", [$id], "i");
+        while ($s_row = mysqli_fetch_assoc($result)) {
+            $subjects[] = new Subject ($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']); 
+        };
+
+        $faculty = new Faculty($row['teacher_id'], $row['last_name'], $row['middle_name'], $row['first_name'],
             $row['ext_name'], $row['birthdate'], $row['age'], $row['sex'], $department,
             $row['cp_no'], $row['email'], $row['award_coor'], $row['enable_enroll'], 
-            $row['enable_edit_grd'], $row['id_picture']);
+            $row['enable_edit_grd'], $row['id_picture'], $subjects);
+        
+        return $faculty;
+    }
+
+
+    private function prepareFacultyRolesValue() {
+        $editGrades = 0;
+        $canEnroll = 0;
+        $awardRep = 0;
+        if (isset($_POST['access'])) {
+            foreach ($_POST['access'] as $accessRole) {
+                if ($accessRole == 'editGrades') {
+                    $editGrades = 1;
+                }
+                if ($accessRole == 'canEnroll') {
+                    $canEnroll = 1;
+                }
+                if ($accessRole == 'awardReport') {
+                    $awardRep = 1;
+                }
+            }
+        }
+        return [$editGrades, $canEnroll, $awardRep];
+    }
+    public function updateFacultyRoles() {
+        $param = $this->prepareFacultyRolesValue();
+        $param[] = $_POST['teacher_id'];
+        $this->prepared_query("UPDATE faculty SET enable_edit_grd=?, enable_enroll=?, award_coor=? WHERE teacher_id=?;",
+                               $param, "iiii");
+    }
+
+    public function listStudent() {
+        $query = 'SELECT * FROM student;';
+        $result = mysqli_query($this->dbConnect, $query);
+        $studentList = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $studentList[] = new Student($row['stud_id'], $row['user_id_no'],$row['LRN'], $row['first_name'], $row['middle_name'], $row['last_name'], 
+                                $row['ext_name'],$row['sex'],$row['age'], $row['birthdate'],  $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'],
+                                $row['religion'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture']);
+        }
+        return $studentList;
+    }
+
+    public function listStudentJSON() {
+        echo json_encode($this->listStudent());
     }
 }
