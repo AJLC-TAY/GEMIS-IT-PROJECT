@@ -30,7 +30,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-9">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
@@ -42,41 +42,41 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                     <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                 </ol>
                             </nav>
-                            <h2><?php echo $curr_name; ?> Curriculum</h2>
-                        </header>
+                            <h2><?php echo $curr_name; ?></h2><hr class="my-2">
+                            <h6 class='text-secondary mb-3'>Curriculum</h6>
 
+                        </header>
                         <!-- Form -->
                         <form action="action.php" method="POST">
-                            <div class="container">
-                                <h4>Information</h4>
-                                <div class="col-12 currcard">
-                                    <form>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Curriculum Code</label>
-                                            <div class="col-sm-8">
+                            <div class="currcard container">
+                                <div class="d-flex justify-content-between">
+                                    <h4>Information</h4>
+                                    <div class="btn-con my-a">
+                                        <input type="hidden" name="action" value="updateCurriculum">
+                                        <button id='edit-btn' class='btn text-primary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
+                                        <button id="cancel-btn" class="btn btn-dark btn-sm d-none me-1">CANCEL</button>
+                                        <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
+                                    </div>
+                                </div><hr class='mt-2 mb-4'>
+                                <section class="w-100">
+                                    <div class="ps-3 row w-100">
+                                            <div class="col-sm-3"><label class="my-auto">Code</label></div>
+                                            <div class="col-sm-9">
                                                 <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
                                                 <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
                                             </div>
-                                            <label class="col-sm-3 col-form-label">Curriculum name</label>
-                                            <div class="col-sm-8">
+                                            <label class="col-sm-3">Name</label>
+                                            <div class="col-sm-9">
                                                 <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
                                                 <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
                                             </div>
-                                            <label class="col-sm-3 col-form-label">Description</label>
-                                            <div class="col-sm-8">
+                                            <label class="col-sm-3">Description</label>
+                                            <div class="col-sm-9">
                                                 <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
                                                 <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                             </div>
                                         </div>
-
-                                        <div class="d-flex justify-content-end col-sm-11">
-                                            <input type="hidden" name="action" value="updateCurriculum">
-                                            <button id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
-                                            <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
-                                            <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
-                                        </div>
-                                    </form>
-
+                                </section>
                                 </div>
                             </div>
                         </form>

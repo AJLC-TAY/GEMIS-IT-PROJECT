@@ -38,7 +38,7 @@
                                 <div class="d-flex justify-content-between">
                                     <h2>Curriculum</h2>
                                     <span>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button>
+                                        <button type="button" class="view-archive btn btn-secondary">View Archived</button>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->

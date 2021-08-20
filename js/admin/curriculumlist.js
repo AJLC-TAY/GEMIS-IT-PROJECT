@@ -4,7 +4,7 @@ let prepareHTML = data => {
         var code = element.cur_code
         var name = element.cur_name
         var desc = element.cur_desc
-        html += `<div data-id='${code}' class='card shadow-sm p-0'>
+        html += `<div data-id='${code}' class='card shadow-sm p-0 bg-white'>
                 <div class='card-body'>
                     <div class='dropdown'>
                         <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>
@@ -14,21 +14,21 @@ let prepareHTML = data => {
                             <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>Delete</button></li>
                         </ul>
                     </div>
-                    <h4>${name}</h4>
-                    <p>${desc}</p>
+                    <h4 class='card-title'>${name}</h4>
+                    <p class='card-text'>${desc}</p>
                 </div>
                 <div class='modal-footer p-0'>
-                    <a role='button' class='btn' href='curriculum.php?code=${code}'>View</a>
+                    <a role='button' class='btn btn-primary btn-sm m-3 shadow-sm' href='curriculum.php?code=${code}'>View</a>
                 </div>
             </div>`
     })
     return html
 }
 
-let getDataResult = (dataList) => {
+let getDataResult = dataList => {
     var keywords = $('#search-input').val().trim().toLowerCase()
 
-    let filterFunc = (curriculum) => { // returns the curriculum info that contain the keyword
+    let filterFunc = curriculum => { // returns the curriculum info that contain the keyword
         return (curriculum.cur_code.toLowerCase().includes(keywords) || 
                 curriculum.cur_desc.toLowerCase().includes(keywords) || 
                 curriculum.cur_name.toLowerCase().includes(keywords))
