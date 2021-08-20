@@ -265,6 +265,7 @@ class Faculty implements JsonSerializable
     private $department;
     private $cp_no;
     private $email;
+    private $access;
     private $award_coor;
     private $enable_enroll;
     private $enable_edit_grd;
@@ -285,6 +286,7 @@ class Faculty implements JsonSerializable
         $this->department = $department;
         $this->cp_no = $cp_no;
         $this->email = $email;
+        $this->access = [];
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
@@ -364,6 +366,42 @@ class Faculty implements JsonSerializable
     public function get_subjects()
     {
         return $this->subjects;
+    }
+
+    public function get_access_data() {
+        $roles = [];
+        $size = 0;
+
+        $disp = "d-none";
+        $aCoor = ["value" => 'awardReport',
+                  "desc"  => "Award Coordinator", 
+                  "disp"  => $disp];
+        $cEdit = ["value" => "canEdit",
+                  "desc"  => "Can Edit Grade", 
+                  "disp"  => $disp];          
+        $cEnrl = ["value" => "canEnroll",
+                  "desc"  => "Can Enroll", 
+                  "disp"  => $disp];          
+
+        if ($this->get_enable_edit_grd()) {
+            $roles[] = $cEdit['value'];
+            $cEdit['disp'] = "";
+            $size += 1;
+        }
+
+        if ($this->get_enable_enroll()) {
+            $roles[] = $cEnrl['value'];
+            $cEnrl['disp'] = "";
+            $size += 1;
+        }
+
+        if ($this->get_award_coor()) {
+            $roles[] = $aCoor['value'];
+            $aCoor['disp'] = "";
+            $size += 1;
+        }
+
+        return ['roles' => $roles, 'data' => [$cEdit, $cEnrl, $aCoor], 'size' => $size];
     }
 
     public function jsonSerialize()

@@ -61,7 +61,7 @@
                             <div class="row card bg-light w-100 h-auto text-start mx-auto rounded-3">
                                 <h5>GENERAL INFORMATION</h5>
                                 <hr>
-                                <div class="row">
+                                <div class="row p-0">
                                     <!-- PROFILE PICTURE -->
                                     <div class="col-xl-5">
                                         <?php 
@@ -89,7 +89,6 @@
                                             <div class="tag-con">
                                                 <?php 
                                                     $departments = $userProfile->get_department();
-                                                    print_r($departments);
                                                     if (is_null($departments)) {
                                                         echo "<p class='text-center'>No department set</p>";
                                                     } else {
@@ -101,58 +100,77 @@
                                                 ?>
                                             </div>
                                         </div>
-                                        <div class="row mt-3">
-                                            <form id="role-form" class="d-flex justify-content-between">
-                                                <!-- v1 -->
-                                                <h6><b>Roles
-                                                    <span class="badge">
-                                                        <button id='edit-role-btn' class='btn btn-sm btn-link'><i class='bi bi-pencil-square'></i></button>
-                                                        <button id='role-cancel-btn' class='btn btn-sm btn-outline-secondary d-none'>CANCEL</button>
-                                                        <input id='role-save-btn' type='submit' class='btn btn-sm btn-outline-success d-none' value='SAVE'/>
-                                                    </span></b>
-                                                </h6>
-                                                <!-- v2 -->
-                                                <!-- <h6><b>Roles</b></h6> -->
-                                                <!-- <button class='btn btn-sm btn-link'><i class='bi bi-pencil-square'></i></button> -->
+                                        <!-- ROLE SECTION -->
+                                        <div id="role-section" class="row mt-3 d-flex-column py-2">
+                                            <form id='role-form'>
+                                                <input type="hidden" name="teacher_id" value="<?php echo $id; ?>">
+                                                <input type="hidden" name="action" value="updateFacultyRoles">
                                             </form>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="my-auto"><h6 class='m-0 fw-bold'>Roles
+                                                    <span class="badge"><button id='role-edit-btn' class='btn btn-sm btn-link'><i class='bi bi-pencil-square'></i></button></span>
+                                                </h6></div>
+                                                <div id="role-decide-con" class='d-none my-auto'>
+                                                    <button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
+                                                    <button id='role-save-btn' class='btn btn-sm btn-success'>Save</button>
+                                                </div>
+                                            </div>
                                             <div id="role-tag-con">
                                                 <?php 
-                                                    $roles = [];
-                                                    $isAwardCoordinator = $userProfile->get_award_coor();
-                                                    $canEditGrades = $userProfile->get_enable_edit_grd();
-                                                    $canEnroll = $userProfile->get_enable_enroll();
-                                                    if ($isAwardCoordinator) {
-                                                        $roles[] = "awardReport";
-                                                        echo "<div class='rounded-pill border border-secondary d-inline-block me-1'><span class='ms-3'>Award Coordinator</span><button class='btn btn-link text-dark btn-sm '><i class='bi bi-x-circle-fill d-none' data-value='awardReport'></i></button></div>";
-                                                    } 
-                                                    if ($userProfile->get_enable_edit_grd()) {
-                                                        $roles[] = "editGrades";
-                                                        echo "<div class='rounded-pill border border-secondary d-inline-block me-1'><span class='ms-3'>Edit Grade</span><button class='btn btn-link text-dark btn-sm '><i class='bi bi-x-circle-fill d-none' data-value='editGrades'></i></button></div>";
-                                                    } 
+                                                    function renderRoleHTML($role){
+                                                        $iconState = 'd-none';
+                                                        echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>
+                                                                    <span class='ms-3 me-2'>{$role['desc']}</span>
+                                                                    <button class='btn btn-link text-danger btn-sm p-0 me-2 $iconState'>
+                                                                        <i class='bi bi-x-square-fill '></i>
+                                                                    </button>
+                                                                </div>";
+                                                    }
+                                                
                                                     
-                                                    if ($canEnroll) {
-                                                        $roles[] = "canEnroll";
-                                                        echo "<div class='rounded-pill border border-secondary d-inline-block me-1'><span class='ms-3'>Can Enroll</span><button class='btn btn-link text-dark btn-sm '><i class='bi bi-x-circle-fill d-none' data-value='canEnroll'></i></button></div>";
+                                                    $data = $userProfile->get_access_data();
+                                                    $roles = $data['roles'];
+                                                    $rData = $data['data'];
+                                                    $rSize = $data['size'];
+                                                    foreach($rData as $role) {
+                                                        renderRoleHTML($role);
                                                     }
-
-                                                    if(!count($roles)) {
-                                                        echo "<p id='role-empty-msg' class='text-center'>No roles/access set</p>";
+                                                    $rolesMsg = (!$rSize) ? "" : "d-none";
+                                                    echo "<p id='role-empty-msg' class='text-center $rolesMsg'>No roles/access set</p>";
+                                                    // echo "
+                                                    // <div id='role-add-btn' class='btn-group dropend d-none'>
+                                                    //     <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
+                                                    //         <i class='bi bi-plus'></i>
+                                                    //     </button>
+                                                    //     <ul id='role-dropdown' class='dropdown-menu'>
+                                                    //         <li><button class='dropdown-item' data-value='editGrades'>Edit Grade</button></li>
+                                                    //         <li><button class='dropdown-item' data-value='canEnroll'>Can Enroll</button></li>
+                                                    //         <li><button class='dropdown-item' data-value='awardReport'>Award Coordinator</button></li>
+                                                    //     </ul>
+                                                    // </div>";
+                                                ?>
+                                            </div>
+                                            <div id='role-option-tag-con' class='d-none'><hr class='m-2 '>
+                                                <div class="my-auto d-inline-block mx-2"><small>Options:</small></div>
+                                                <?php 
+                                                    function renderRoleOptHTML($role){
+                                                        echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>
+                                                                    <i class='bi bi-plus-square me-2'></i>{$role['desc']}
+                                                                </button>";
                                                     }
-                                                    echo "
-                                                    <div id='role-add-btn' class='btn-group dropend d-none'>
-                                                        <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
-                                                            <i class='bi bi-plus'></i>
-                                                        </button>
-                                                        <ul id='role-dropdown' class='dropdown-menu'>
-                                                            <li><button class='dropdown-item' data-value='editGrades'>Edit Grade</button></li>
-                                                            <li><button class='dropdown-item' data-value='canEnroll'>Can Enroll</button></li>
-                                                            <li><button class='dropdown-item' data-value='awardReport'>Award Coordinator</button></li>
-                                                        </ul>
-                                                    </div>";
+                                                    foreach($rData as $role) {
+                                                        if ($role['disp'] == "") {
+                                                            $role['disp'] = "d-none";
+                                                        } else {
+                                                            $role['disp'] = "";
+                                                        }
+                                                        renderRoleOptHTML($role);
+                                                    }    
                                                 ?>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- ROLE SECTION END -->
                                     <!-- INFORMATION DETAILS END -->
                                 </div>
                             </div>
@@ -161,7 +179,7 @@
                             <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto mt-4 rounded-3'>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="my-auto">ASSIGNED SUBJECTS</h5>
-                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='ASSIGN'>
+                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>
                                 </div>
                                 <div id='assign-subj-table' class='collapse'><hr>
                                     <div class='overflow-auto' style='height: 300px;'>
@@ -186,8 +204,8 @@
                                                 </datalist>
                                             </div>
                                             <div class='ms-1'>
-                                                <button class='add-subject btn btn-dark'><i class='bi bi-plus-lg me-1'></i> SUBJECT</button>
-                                                <button class='remove-all-btn btn btn-outline-danger'><i class='bi bi-x-lg me-1'></i>SELECTED</button>
+                                                <button class='add-subject btn btn-dark'><i class='bi bi-plus-lg me-1'></i> Subject</button>
+                                                <button class='remove-all-btn btn btn-outline-danger'><i class='bi bi-x-lg me-1'></i>Selected</button>
                                             </div>
                                         </div>
                                         <table class='table table-bordered table-hover table-striped' style='height: auto;'>
@@ -213,7 +231,7 @@
                                                                 <td scope='col'><input type='hidden' name='subjects[]' value='{$code}'/>{$code}</td>
                                                                 <td scope='col'>{$sub->get_sub_name()}</td>
                                                                 <td scope='col'>{$sub->get_sub_type()}</td>
-                                                                <td scope='col'><button id='{$code}' class='remove-btn btn btn-sm btn-outline-danger m-auto'>REMOVE</button></td>
+                                                                <td scope='col'><button id='{$code}' class='remove-btn btn btn-sm btn-outline-danger m-auto'>Remove</button></td>
                                                             </tr>";
                                                         }
                                                     }
@@ -229,7 +247,7 @@
                             <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto mt-4 rounded-3'>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="my-auto">CLASSES</h5>
-                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-class-con' type='button' value='ASSIGN'>
+                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-class-con' type='button' value='Assign'>
                                 </div>
                                 <div id='assign-class-con' class='collapse'>
                                     <hr>
@@ -242,7 +260,7 @@
                             <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto mt-4 rounded-3'>
                                 <div class="d-flex justify-content-between">
                                     <h5 class="my-auto">CLASSES HISTORY</h5>
-                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#class-hist-con' type='button' value='VIEW'>
+                                    <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#class-hist-con' type='button' value='View'>
                                 </div>
                                 <div id='class-hist-con' class='collapse'>
                                     <hr>
@@ -265,27 +283,38 @@
             <!--footer end-->
         </section>
     </section>
-    <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
-        <div class="position-absolute" style="bottom: 20px; right: 25px;">
-            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body"></div>
-            </div>
-
-            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    Curriculum successfully added
+    <!-- MODAL -->
+    <div class="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0"></h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" name="" form="" class="submit btn btn-primary">SUBMIT</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- MODAL END -->
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse " style="z-index: 99999; min-height: 50vh; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
     // var code = <?php // echo json_encode($curr_code);?>;
-    var roles = <?php echo json_encode(empty($roles) ? 0 : $roles);?>;
+    var roles = <?php echo json_encode($roles);?>;
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="text/javascript" src="../js/admin/profile.js"></script>

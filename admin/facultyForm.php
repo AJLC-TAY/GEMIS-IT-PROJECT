@@ -130,13 +130,13 @@ function getFacultyFormContent() {
                             </label>
                         </div>
                         <div class='form-check'>
-                            <input class='form-check-input' name='access[]' type='checkbox' value='enrollment' $enrollmentChecked>
+                            <input class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollmentChecked>
                             <label class='form-check-label'>
                                 Enrollment
                             </label>
                         </div>
                         <div class='form-check'>
-                            <input class='form-check-input' name='access[]' type='checkbox' value='awardreport' $awardReportChecked>
+                            <input class='form-check-input' name='access[]' type='checkbox' value='awardReport' $awardReportChecked>
                             <label class='form-check-label'>
                                 Award Report
                             </label>
