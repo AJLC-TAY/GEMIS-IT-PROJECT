@@ -55,8 +55,9 @@ class Administration extends Dbconfig
 
     public function listCurriculumJSON()
     {
-        echo json_encode(['data' => $this->listCurriculum('curriculum'),
-                          'archived' => $this->listCurriculum('archived_curriculum')]);
+        echo json_encode($this->listCurriculum('curriculum'));
+        // echo json_encode(['data' => $this->listCurriculum('curriculum'),
+        //                   'archived' => $this->listCurriculum('archived_curriculum')]);
     }
 
     /** Get curriculum object from a specified curriculum code */
@@ -633,22 +634,8 @@ class Administration extends Dbconfig
             $department = ($_POST['department'] == '0') 
                 ? NULL
                 : trim($_POST['department']);
-            $editGrades = 0;
-            $enrollment = 0;
-            $awardRep = 0;
-            if (isset($_POST['access'])) {
-                foreach ($_POST['access'] as $accessRoles) {
-                    if ($accessRoles == 'editGrades') {
-                        $editGrades = 1;
-                    }
-                    if ($accessRoles == 'enrollment') {
-                        $enrollment = 1;
-                    }
-                    if ($accessRoles == 'awardreport') {
-                        $awardRep = 1;
-                    }
-                }
-            }
+
+            [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
             // Initialize query to add new user
             $this->prepared_select("INSERT INTO user VALUES (?, ?, NOW(), 'FA');", [$user_id, $user_id], "ds");
             // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO user VALUES (?, ?, NOW(), 'FA');");
@@ -676,7 +663,7 @@ class Administration extends Dbconfig
             
             $query = "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
                    ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $enrollment, $editGrades, $department, $cp_no, $imgContent];
+            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
             $this->prepared_select($query, $params, "dsssssdssiiisds");
             
             // $stmt = mysqli_prepare($this->dbConnect, $query);
@@ -722,5 +709,32 @@ class Administration extends Dbconfig
             $row['enable_edit_grd'], $row['id_picture'], $subjects);
         
         return $faculty;
+    }
+
+
+    private function prepareFacultyRolesValue() {
+        $editGrades = 0;
+        $canEnroll = 0;
+        $awardRep = 0;
+        if (isset($_POST['access'])) {
+            foreach ($_POST['access'] as $accessRole) {
+                if ($accessRole == 'editGrades') {
+                    $editGrades = 1;
+                }
+                if ($accessRole == 'canEnroll') {
+                    $canEnroll = 1;
+                }
+                if ($accessRole == 'awardReport') {
+                    $awardRep = 1;
+                }
+            }
+        }
+        return [$editGrades, $canEnroll, $awardRep];
+    }
+    public function updateFacultyRoles() {
+        $param = $this->prepareFacultyRolesValue();
+        $param[] = $_POST['teacher_id'];
+        $this->prepared_query("UPDATE faculty SET enable_edit_grd=?, enable_enroll=?, award_coor=? WHERE teacher_id=?;",
+                               $param, "iiii");
     }
 }

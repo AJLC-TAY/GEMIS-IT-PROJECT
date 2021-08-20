@@ -58,20 +58,20 @@ const reload = () => {
     console.log("from reload")
     showSpinner()
     // getArchiveAction = `getArchived${camelized}JSON`
-    // $.post('action.php', {action}, (data) => {
-    //     dataList = JSON.parse(data)
-    //     let addBtn = `<div class='btn add-btn card shadow-sm'>
-    //         <div class='card-body'>Add ${camelized}</div>
-    //     </div>`
-    //     $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
-    // })
-    $.post('action.php', {action} ,(response) => {
+    $.post('action.php', {action}, (data) => {
+        dataList = JSON.parse(data)
         let addBtn = `<div class='btn add-btn card shadow-sm'>
             <div class='card-body'>Add ${camelized}</div>
         </div>`
-        $('.cards-con').html(prepareHTMLOfData(reponse.data) + addBtn)
-        $('.arch-list').html(prepareHTMLofArchive(response.archived))
+        $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn)
     })
+    // $.post('action.php', {action} ,(response) => {
+    //     let addBtn = `<div class='btn add-btn card shadow-sm'>
+    //         <div class='card-body'>Add ${camelized}</div>
+    //     </div>`
+    //     $('.cards-con').html(prepareHTMLOfData(reponse.data) + addBtn)
+    //     $('.arch-list').html(prepareHTMLofArchive(response.archived))
+    // })
     // $.post('action.php', {action:getArchiveAction} ,(data) => {
     //     console.log(getArchiveAction)
     //     archivedData = JSON.parse(data)

@@ -110,7 +110,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             <!--footer end-->
         </section>
     </section>
-    <!-- ADD PROGRAM MODAL -->
+    <!-- ADD MODAL -->
     <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -141,6 +141,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             </div>
         </div>
     </div>
+    <!-- ADD MODAL  -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
