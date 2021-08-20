@@ -55,7 +55,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- Form -->
                             <div class="container mt-4">
                                 <div class="card w-100 h-auto">
-                                    <h5 class="text-start fw-bold">PROGRAM DETAILS</h5><hr class="mt-1 mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="text-start fw-bold">PROGRAM DETAILS</h5>
+                                    <a href="" id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
+                                </div><hr class="mt-1 mb-4">
                                     <form action="action.php" method="POST">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
@@ -71,7 +74,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         </div>
                                         <div class="d-flex justify-content-end col-sm-12">
                                             <input type="hidden" name="action" value="updateProgram">
-                                            <button id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
                                             <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
                                             <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
                                         </div>

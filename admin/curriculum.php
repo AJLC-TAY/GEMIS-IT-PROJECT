@@ -28,29 +28,32 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
-            <section class="wrapper"></section>
-            <div class="row">
-                <div class="col-lg-10">
-                    <div class="row mt ps-3">
-                        <!-- HEADER -->
-                        <header>
-                            <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
-                                </ol>
-                            </nav>
-                            <h2><?php echo $curr_name; ?> Curriculum</h2>
-                        </header>
+            <section class="wrapper ps-4">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav class="mb-4" aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
+                                    </ol>
+                                </nav>
+                                <h2><?php echo $curr_name; ?> Curriculum</h2>
+                            </header>
 
-                        <!-- Form -->
-                        <form action="action.php" method="POST">
-                            <div class="container">
-                                <h4>Information</h4>
-                                <div class="col-12 card">
-                                    <form>
+                            <!-- Form -->
+                            <div class="container mt-4">
+                                <div class="card w-100 h-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="text-start fw-bold">INFORMATION</h5>
+                                        <a href="" id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
+                                    </div>
+                                    <hr class="mt-1 mb-4">
+                                    <form action="action.php" method="POST">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Curriculum Code</label>
                                             <div class="col-sm-8">
@@ -68,85 +71,85 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                                 <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                             </div>
                                         </div>
-
                                         <div class="d-flex justify-content-end col-sm-11">
                                             <input type="hidden" name="action" value="updateCurriculum">
-                                            <button id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
                                             <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
                                             <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
-                        </form>
-                        <!-- Track table -->
-                        <div class="container mt-5">
-                            <table id="table" class="table-striped">
-                                <thead class='thead-dark'>
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <h4>Strand List</h4>
-                                        <div>
-                                            <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                            <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
-                                        </div>
-                                    </div>
+                            </form>
+                            <!-- Track table -->
+                            <div class="container mt-5">
+                                <div class="card w-100 h-auto">
+                                    <table id="table" class="table-striped">
+                                        <thead class='thead-dark track-table'>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h5 class="fw-bold">STRAND LIST</h5>
+                                                <a href="" id="add-btn" class="btn btn-success">Add subject</a>
+                                            </div>
+                                            <hr class="mt-1 mb-4">
+                                            <div class="d-flex flex-row-reverse mb-3">
+                                                <!-- <div class="d-flex mb-3"> -->
+                                                <button class="btn btn-secondary track-archive-btn" title='Archive subject'>Archive</button>
+                                            </div>
 
-                                    <tr>
-                                        <th data-checkbox="true"></th>
-                                        <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
-                                        <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
-                                        <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
+                                                <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
+                                                <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!--main content end-->
-            <!--footer start-->
-            <?php include_once("../inc/footer.html"); ?>
-            <!--footer end-->
+                    <!--main content end-->
+                    <!--footer start-->
+                    <?php include_once("../inc/footer.html"); ?>
+                    <!--footer end-->
+            </section>
         </section>
-    </section>
-    <!-- ADD PROGRAM MODAL -->
-    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Strand/Program</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="prog-form" action="">
-                        <div class="form-group">
-                            <label for="prog-code">Strand Code</label>
-                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
-                            <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
-                            <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+        <!-- ADD PROGRAM MODAL -->
+        <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Add Strand/Program</h4>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="prog-form" action="">
+                            <div class="form-group">
+                                <label for="prog-code">Strand Code</label>
+                                <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                                <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                                <label for="prog-name">Strand Name</label>
+                                <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
+                                <label for="prog-curr">Curriculum</label>
+                                <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
-    var code = <?php echo json_encode($curr_code);?>;
+    var code = <?php echo json_encode($curr_code); ?>;
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="../js/admin/curriculum.js"></script>
