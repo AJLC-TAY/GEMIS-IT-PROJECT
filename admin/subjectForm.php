@@ -33,7 +33,7 @@ function getSubjectForm($state) {
 
     // default link for Bread crumb 
     $links = "<li class='breadcrumb-item'><a href='subjectlist.php'>Subject</a></li>"
-            ."<li class='breadcrumb-item active' aria-current='page'>Add Subject</li>";
+            ."<li class='breadcrumb-item active' aria-current='page'>Add</li>";
 
     // subject type input is editable by default 
     $sub_type_editable = '';
@@ -43,7 +43,7 @@ function getSubjectForm($state) {
     $input_sub_with_prog = '';
 
     if ($state === 'add') {
-        $header = '<h3>Add Subject</h3><h6>Please complete the following:</h6>';
+        $header = "<h3>Add Subject</h3><h6 class='text-secondary'>Please complete the following:</h6>";
         $subject_code = '';
         $subject_name = '';
         // prepare semester options
@@ -110,7 +110,7 @@ function getSubjectForm($state) {
             // update link data
             $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
                 . "<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
-                . "<li class='breadcrumb-item active' aria-current='page'>Add Subject</li>";
+                . "<li class='breadcrumb-item active' aria-current='page'>Add</li>";
             $header = "<h2>$prog_name</h2>"
                 . "<h4>Add Subject</h4>";
          
@@ -136,7 +136,7 @@ function getSubjectForm($state) {
         $input_sub_with_prog = '';
 
         $links = "<li class='breadcrumb-item'><a href='subjectlist.php'>Subject</a></li>"
-                ."<li class='breadcrumb-item active' aria-current='page'>Edit Subject</li>";
+                ."<li class='breadcrumb-item active' aria-current='page'>Edit</li>";
 
         $semester_opt = '';
         foreach ($semesters as $id => $value) { 
@@ -217,7 +217,7 @@ function getSubjectForm($state) {
             // prepare links for bread crumb
             $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
                     ."<li class='breadcrumb-item'><a href='program.php?prog_code='$prog_code'>$prog_code</a></li>"
-                    ."<li class='breadcrumb-item active' aria-current='page'>Edit Subject</li>";
+                    ."<li class='breadcrumb-item active' aria-current='page'>Edit</li>";
     
             $header = "<h3>$sub_name</h3><hr><h6>$prog_name</h6>";
     
@@ -257,7 +257,7 @@ function getSubjectForm($state) {
                                         </div>
                                         <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
                                         <div class='col-sm-9'>
-                                            <input type='text' name = 'name' class='form-control' id='sub-name' value='$subject_name' placeholder='Enter subject name'>
+                                            <textarea name = 'name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>$subject_name</textarea>
                                         </div>
                                         <label for='subjectSemester1' class='col-sm-3 col-form-label'>Semester</label>
                                         <div class='col-sm-9'>
@@ -412,7 +412,7 @@ function getSubjectViewContent() {
                     <div class='row mb-3'>
                         <div class='col-xl-4 fw-bold'>Name</div>
                         <div class='col-xl-8'>$sub_name</div>
-                    </div>s
+                    </div>
                     <div class='row mb-3'>
                         <div class='col-xl-4 fw-bold'>Semester</div>
                         <div class='col-xl-8'>$sub_semester</div>

@@ -4,7 +4,7 @@ let prepareHTML = data => {
         let prog_code = element.prog_code
         let cur_code = element.curr_code
         let prog_desc = element.prog_desc
-        html += `<div data-id='${prog_code}' class='card shadow-sm p-0'>
+        html += `<div data-id='${prog_code}' class='tile card shadow-sm p-0'>
                     <div class='card-body'>
                         <div class='dropdown'>
                             <button type='button' class='kebab btn btn-link rounded-circle' data-bs-toggle='dropdown'></button>

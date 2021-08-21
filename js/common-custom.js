@@ -42,3 +42,15 @@ function showToast(type, msg, options=null) {
     })
     newToast.show()
 }
+
+/**
+ * Function responsible for not allowing non-numeric characters 
+ * to be entered in an input tag
+ */
+function isNumberKey(e){
+	var charCode = (e.which) ? e.which : e.keyCode
+	if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
+	return true;
+}
+
+$(document).on("keypress", ".number", isNumberKey)

@@ -292,8 +292,8 @@ class Faculty implements JsonSerializable
         $this->enable_edit_grd = $enable_edit_grd;
         $this->subjects = $subjects;
         $this->action = "<div class='d-flex justify-content-center'>"
-                      ."<a href='faculty.php?id=$teacher_id&state=edit' class='btn btn-primary w-auto me-1' title='Edit Faculty'>Edit</a>"
-                      . "<a href='profile.php?pt=F&id=$teacher_id' role='button' class='btn btn-secondary w-auto' title='View Faculty'>View</a>"
+                      ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-primary w-auto me-1' title='Edit Faculty'>Edit</a>"
+                      . "<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-secondary w-auto' title='View Faculty'>View</a>"
                       ."</div>";
         $this->id_photo = is_null($id_photo) ? NULL : ("data:image; base64,". base64_encode($id_photo));
     }
@@ -376,7 +376,7 @@ class Faculty implements JsonSerializable
         $aCoor = ["value" => 'awardReport',
                   "desc"  => "Award Coordinator", 
                   "disp"  => $disp];
-        $cEdit = ["value" => "canEdit",
+        $cEdit = ["value" => "editGrades",
                   "desc"  => "Can Edit Grade", 
                   "disp"  => $disp];          
         $cEnrl = ["value" => "canEnroll",

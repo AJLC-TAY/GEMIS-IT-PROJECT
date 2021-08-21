@@ -29,8 +29,14 @@ class Administration extends Dbconfig
     {
         $types = $types ?: str_repeat("s", count($params));
         $stmt = mysqli_prepare($this->dbConnect, $sql);
+        if ( !$stmt ) {
+            die('mysqli error: '.mysqli_error($this->dbConnect));
+        }
         mysqli_stmt_bind_param($stmt, $types, ...$params);
-        mysqli_stmt_execute($stmt);
+        if (!mysqli_stmt_execute($stmt)) {
+            die( 'stmt error: '.mysqli_stmt_error($stmt) );
+        };
+        
         return $stmt;
     }
 
@@ -608,15 +614,14 @@ class Administration extends Dbconfig
     }
 
     /** User Profile */
-    public function getProfile() {
-        $user = $_GET['pt'];
+    public function getProfile($type) {
         $id = $_GET['id'];
 
-        if ($user === 'F') {
+        if ($type === 'FA') {
             return $this->getFaculty($id);
         }
 
-        if ($user === 'Student') {
+        if ($type === 'S') {
             $query = "SELECT * FROM student WHERE stud_id='$id';";
             $result = mysqli_query($this->dbConnect, $query);
             $row = mysqli_fetch_assoc($result);
@@ -625,7 +630,9 @@ class Administration extends Dbconfig
     }
 
     /** Faculty Methods */
-    public function addFaculty() {
+    public function processFaculty() {
+        $action = $_POST['action'];
+
         $allowTypes = array('jpg', 'png', 'jpeg');
         $statusMsg = '';
         if (isset($_POST['submit'])) {
@@ -633,41 +640,29 @@ class Administration extends Dbconfig
             $lastname = trim($_POST['lastname']);
             $firstname = trim($_POST['firstname']);
             $middlename = trim($_POST['middlename']);
-            $extname = isset($_POST['extensionname']) 
-                ? trim($_POST['extensionname']) 
-                : NULL;
+            $extname = trim($_POST['extensionname']) ?: NULL; // return null if first value is '', otherwise return first value
             $lastname = trim($_POST['lastname']);
             $age = trim($_POST['age']);
             $birthdate = trim($_POST['birthdate']);
-            $sex = $_POST['gender'];
+            $sex = $_POST['sex'];
 
             // Contact information
-            $cp_no = isset($_POST['cpnumber']) 
-                ? trim($_POST['cpnumber']) 
-                : NULL;
+            $cp_no = trim($_POST['cpnumber']) ?: NULL;
             $email = trim($_POST['email']);
 
+
             // School information
-            $user_id = '2021999';
-            $department = ($_POST['department'] == '0') 
-                ? NULL
-                : trim($_POST['department']);
-
+            $department = trim($_POST['department']) ?: NULL;
             [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-            // Initialize query to add new user
-            $this->prepared_select("INSERT INTO user VALUES (?, ?, NOW(), 'FA');", [$user_id, $user_id], "ds");
-            // $stmt = mysqli_prepare($this->dbConnect, "INSERT INTO user VALUES (?, ?, NOW(), 'FA');");
-            // mysqli_stmt_bind_param($stmt, "ds", $user_id, $user_id);
-            // mysqli_stmt_execute($stmt);
 
+            // Profile image
             $imgContent = NULL;   
             $fileSize = $_FILES['image']['size'];
             if ($fileSize > 0) {
-                // if ($fileSize > 120000) {
-                //     $statusMsg = 'Sorry, image should not be greater than 120 MB';
-                //     return;
-                // }
-                // Profile picture
+                if ($fileSize > 120000) {
+                    $statusMsg = 'Sorry, image should not be greater than 120 MB';
+                    return;
+                }
                 $filename = basename($_FILES['image']['name']);
                 $fileType = pathinfo($filename, PATHINFO_EXTENSION);
                 if (in_array($fileType, $allowTypes)) {
@@ -678,33 +673,70 @@ class Administration extends Dbconfig
                     return;
                 }
             }
-            
-            $query = "INSERT INTO faculty (user_id_no, last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture) "
-                   ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            $params = [$user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
-            $this->prepared_select($query, $params, "dsssssdssiiisds");
-            
-            // $stmt = mysqli_prepare($this->dbConnect, $query);
-            // mysqli_stmt_bind_param($stmt, 'dsssssdssiiisds', $user_id, $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $enrollment, $editGrades, $department, $cp_no, $imgContent);
-            // mysqli_stmt_execute($stmt);
 
-            $id = mysqli_insert_id($this->dbConnect);
-
+            $params = [$lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
+            $types = "sssssdssiiisss";
+            print_r($cp_no);
+            
             $subjectStatus = TRUE;
-            if (isset($_POST['subjects'])) {
-                $subjects = $_POST['subjects'];
-                foreach($subjects as $subject) {
-                    $this->prepared_query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
-                }
-            }
+            if ($action == 'add') {
+                $user_id = '2022001';
+                // Implementation of generating user id
 
-            if ($id && $subjectStatus) {
-                $statusMsg = 'Faculty successully added!';
-                header("Location: profile.php?pt=F&id=$id");
-            } else {
-                echo mysqli_error($this->dbConnect);
-                $statusMsg = 'Faculty unsuccessfully added.';
+                // Initialize query to add new user
+                $this->prepared_query("INSERT INTO user VALUES (?, ?, NOW(), 'FA');", [$user_id, $user_id], "ds");
+                $params[] = $user_id;
+                $types .= "i";
+
+                $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, user_id_no) "
+                        ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+         
+                $this->prepared_query($query, $params, $types);
+                $id = mysqli_insert_id($this->dbConnect);           // store 
+                if (isset($_POST['subjects'])) {
+                    $subjects = $_POST['subjects'];
+                    foreach($subjects as $subject) {
+                        $this->prepared_query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES (?, ?);", [$subject, $id], "sd");
+                    }
+                }
+                if ($id && $subjectStatus) {
+                    $statusMsg = 'Faculty successully added!';
+                    header("Location: faculty.php?id=$id");
+                } 
             }
+           
+            $id = 0; // teacher ID
+            if ($action == 'edit') {
+                $imgQuery = ", id_picture=?";
+
+                if (is_null($imgContent)) {
+                    $imgQuery = "";
+                    array_pop($params);                      // remove image in params
+                    $types = substr_replace($types, "", -1); // remove last type
+                } 
+
+                $params[] = $id = $_POST['teacher_id'];
+                $types .= "i";
+
+                $query = "UPDATE faculty SET last_name=?, first_name=?, middle_name=?, ext_name=?, birthdate=?, age=?, sex=?, "
+                        ."email=?, award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=?$imgQuery WHERE teacher_id=?;";
+
+                $this->prepared_query($query, $params, $types);
+
+                $this->updateFacultySubjects($id);
+                if ($id && $subjectStatus) {
+                    $statusMsg = 'Faculty successully added!';
+                    header("Location: faculty.php?id=$id");
+                } 
+            }
+           
+            // if ($id && $subjectStatus) {
+            //     $statusMsg = 'Faculty successully added!';
+            //     header("Location: profile.php?pt=F&id=$id");
+            // } else {
+            //     echo mysqli_error($this->dbConnect);
+            //     $statusMsg = 'Faculty unsuccessfully added.';
+            // }
             echo $statusMsg;
         }
     }
@@ -755,6 +787,44 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE faculty SET enable_edit_grd=?, enable_enroll=?, award_coor=? WHERE teacher_id=?;",
                                $param, "iiii");
     }
+    public function updateFacultyDepartment() {
+        $param = [$_POST['department'],$_POST['teacher_id']];
+        $this->prepared_query("UPDATE faculty SET department=? WHERE teacher_id=?;",
+                               $param, "si");
+    }
+
+    public function updateFacultySubjects($id) {
+        if (isset($_POST['subjects'])) {
+            $subjects = $_POST['subjects'];
+            $result = mysqli_query($this->dbConnect, "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
+            $current_subjects = [];
+            while ($row =  mysqli_fetch_row($result)) {
+                $current_subjects[] = $row[0];
+            }
+                           
+            // delete rows with subject codes not found in the submitted subject code list
+            $sub_codes_to_delete = array_diff($current_subjects, $subjects); // compares the two arrays, and returns an array of elements not found in array 2
+            if (count($sub_codes_to_delete) > 0) {
+                foreach ($sub_codes_to_delete as $code_to_delete) {
+                    mysqli_query($this->dbConnect, "DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
+                }
+            }
+
+            // add new row with new subject codes found in the submitted subject code list
+            $new_sub_codes = array_diff($subjects, $current_subjects);       // codes not found in the current subjects will be added as new row in the db
+            if (count($new_sub_codes) > 0 ){
+                foreach ($new_sub_codes as $new_code) {
+                    mysqli_query($this->dbConnect, "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
+                }
+            } 
+        } else {
+            $result = mysqli_query($this->dbConnect, "DELETE FROM subjectfaculty 
+                                                      WHERE teacher_id='$id' 
+                                                      AND (SELECT COUNT(sub_code) WHERE teacher_id='$id');") > 0;
+        }
+    }
+
+    /** Faculty End */
 
     public function listStudent() {
         $query = 'SELECT * FROM student;';
@@ -771,5 +841,15 @@ class Administration extends Dbconfig
 
     public function listStudentJSON() {
         echo json_encode($this->listStudent());
+    }
+
+    public function listDepartments() {
+        $result = mysqli_query($this->dbConnect, "SELECT DISTINCT(department) FROM faculty;");
+        $departments = [];
+        while($row = mysqli_fetch_row($result)) {
+            $departments[] = $row[0];
+        }
+
+        return $departments;
     }
 }

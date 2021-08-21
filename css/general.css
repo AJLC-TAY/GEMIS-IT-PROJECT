@@ -1,8 +1,13 @@
-.card {
+.tile {
     width: 275px;
     height: 250px;
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.redirect-card {
+    width: 120px !important;
+    text-align: center;
 }
 
 .curriculum-con {
@@ -22,6 +27,13 @@
     box-shadow: none;
 }
 
+.link:hover {
+    color:  #0d6efd;
+}
+
+span[class='badge'] {
+    padding: 0;
+}
 
 /* TOAST */
 

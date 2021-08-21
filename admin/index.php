@@ -1,11 +1,167 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Administration | GEMIS</title>
+<title>Home | GEMIS</title>
 </head>
 
-<body>
-    <main class="container">
-        <?php include("../inc/footer.html"); ?>
-    </main>
-</body>
 
+<?php
+
+?>
+
+<body>
+    <!-- SPINNER -->
+    <div class="spinner-con">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
+    <section id="container">
+        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header class="mb-4">
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">Home</li>
+                                    </ol>
+                                </nav>
+                                <h3>Welcome!</h3>
+                            </header>
+                            <div class="container row mb-5">
+                                <!-- PEOPLE MANAGEMENT -->
+                                <section class='mt-4 col-md-5'>
+                                    <h5>People Management</h5>
+                                    <div class="card bg-white rounded shadow-sm mt-3">
+                                        <div class="d-flex flex-wrap">
+                                            <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
+                                                <div class="d-flex justify-content-between">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <span>Admin</span>
+                                                </div>
+                                            </a>
+                                            <a href="facultylist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
+                                                <div class="d-flex justify-content-between">
+                                                    <i class="bi bi-person-fill"></i>
+                                                    Faculty
+                                                </div>
+                                            </a>
+                                            <a href="studentlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
+                                                <div class="d-flex justify-content-between">
+                                                    <i class="bi bi-person-fill"></i>
+                                                    Student
+                                                </div>
+                                            </a>
+
+                                            <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
+                                                <div class="d-flex justify-content-between">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Signatory
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- PEOPLE MANAGEMENT END -->
+                                <!-- SCHOOL MANAGEMENT -->
+                                <section class='mt-4 col-md-7'>
+                                    <h5>School Management</h5>
+                                    <div class="card bg-white rounded shadow-sm mt-3">
+                                        <!-- CURRICULUM -->
+                                        <section class="mb-4">
+                                            <h6 class='mb-0'>Curriculum</h6>
+                                            <hr class="mt-1 mb-3">
+                                            <div class="d-flex flex-wrap">
+                                                <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
+                                                    School year
+                                                </a>
+                                                <a href="curriculumlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
+                                                    Curriculum
+                                                </a>
+                                                <a href="programlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
+                                                    Program
+                                                </a>
+                                                <a href="studentlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
+                                                    Subject
+                                                </a>
+                                            </div>
+                                        </section>
+                                        <!-- CURRICULUM END -->
+                                        <!-- ENROLLMENT -->
+                                        <section class="mb-4">
+                                            <h6 class='mb-0'>Enrollment</h6>
+                                            <hr class="mt-1 mb-3">
+                                            <div class="d-flex flex-wrap">
+                                                <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
+                                                    Enrollment
+                                                </a>
+                                                <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
+                                                    Set Up
+                                                </a>
+                                                <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
+                                                    Section
+                                                </a>
+                                            </div>
+                                        </section>
+                                        <!-- ENROLLMENT END -->
+                                    </div>
+                                </section>
+                                <!-- SCHOOL MANAGEMENT END -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--main content end-->
+            <!--footer start-->
+            <?php include_once("../inc/footer.html"); ?>
+            <!--footer end-->
+        </section>
+    </section>
+    <!-- ADD MODAL -->
+    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Strand/Program</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prog-form" action="">
+                        <div class="form-group">
+                            <label for="prog-code">Strand Code</label>
+                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                            <label for="prog-name">Strand Name</label>
+                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
+                            <label for="prog-curr">Curriculum</label>
+                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ADD MODAL  -->
+</body>
+<!-- JQUERY FOR BOOTSTRAP TABLE -->
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<script type="text/javascript" >
+    $(function() {
+        preload("#home")
+        hideSpinner()
+    }) 
+</script>
 </html>

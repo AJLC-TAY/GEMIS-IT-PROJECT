@@ -36,8 +36,8 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <h2>Faculty Members</h2>
                                     <div>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>VIEW ARCHIVED FACULTY</button>
-                                        <a href="faculty.php?state=add" id="add-btn" class="btn btn-success" title='Add new faculty'>ADD FACULTY</a>
+                                        <button type="button" class="view-archive btn btn-secondary">View Archived Faculty</button>
+                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'>Add Faculty</a>
                                         <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
@@ -53,18 +53,18 @@
                                                     <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button class="btn btn-outline-danger" title='Deactivate Faculty'>DEACTIVATE</button>
-                                                    <button class="btn btn-outline-secondary" title='Reset Password'>RESET PASSWORD</button>
-                                                    <button class="btn btn-outline-primary" title='Export'>EXPORT</button>
+                                                    <button class="btn btn-danger" title='Deactivate Faculty'>Deactivate</button>
+                                                    <button class="btn btn-secondary" title='Reset Password'>Reset Password</button>
+                                                    <button class="btn btn-dark" title='Export'>Export</button>
                                                 </div>
                                             </div>
 
                                             <tr>
                                                 <th data-checkbox="true"></th>
                                                 <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="teacher_id">UID</th>
-                                                <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">NAME</th>
-                                                <th scope='col' data-width="300" data-align="center" data-sortable="true" data-field="department">DEPARTMENT</th>
-                                                <th scope='col' data-width="200" data-align="center" data-field="action">ACTIONS</th>
+                                                <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="300" data-align="left" data-sortable="true" data-field="department">Department</th>
+                                                <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>
                                             </tr>
                                         </thead>
                                     </table>

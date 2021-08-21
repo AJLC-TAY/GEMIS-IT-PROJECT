@@ -60,7 +60,7 @@ const reload = () => {
     // getArchiveAction = `getArchived${camelized}JSON`
     $.post('action.php', {action}, (response) => {
         dataList = JSON.parse(response)
-        let addBtn = `<div class='btn add-btn card shadow-sm'>
+        let addBtn = `<div class='card tile btn add-btn card shadow-sm'>
             <div class='card-body'>Add ${camelized}</div>
         </div>`
         $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn)
