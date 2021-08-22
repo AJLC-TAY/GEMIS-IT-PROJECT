@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Curriculum Page | GEMIS</title>
+<title>Curriculum List | GEMIS</title>
 <link rel="stylesheet" href="../css/general.css">
 </link>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
@@ -36,13 +36,13 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between">
-                                    <h2>Curriculum</h2>
+                                    <h3>Curriculum</h3>
                                     <span>
-                                        <button type="button" class="view-archive btn btn-secondary">View Archived</button>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
                             </header>
                             <!-- No result message -->
                             <div class="msg w-100 d-flex justify-content-center d-none">

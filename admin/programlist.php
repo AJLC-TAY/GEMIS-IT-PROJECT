@@ -37,11 +37,11 @@
                                 <div class="d-flex justify-content-between">
                                     <h2>Programs</h2>
                                     <span>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived</button>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
                             </header>
                             <!-- No result message -->
                             <div class="msg w-100 d-flex justify-content-center d-none">

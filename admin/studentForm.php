@@ -11,7 +11,7 @@
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
@@ -24,7 +24,7 @@
                                     <li class="breadcrumb-item active"><a href="studentForm.php">Edit</a></li>
                                 </ol>
                             </nav>
-                            <h2>Edit Student Information</h2>
+                            <h3 class="fw-bold">Edit Student Information</h3>
                         </header>
                         <!-- MAIN CONTENT -->
                         <!-- Photo -->
@@ -39,10 +39,10 @@
 
                         </div>
                          <!-- Form -->
-                         <div class="container mt-4 col-9">
+                         <div class="container mt-4 col-8">
                                 <div class="card body w-100 h-auto">
                                     <form action="action.php" method="POST">
-                                        <h4>STUDENT INFORMATION</h4>
+                                        <h4 class="fw-bold">STUDENT INFORMATION</h4>
                                         <div class="form-group row">
                                             
                                             <div class="col-6">
@@ -171,48 +171,48 @@
                                 </div>
                                 <div class="card w-100 h-auto mt-4">
                                     <form action="action.php" method="POST">
-                                        <h4> PARENT/GUARDIAN'S INFORMATION</h4>
+                                        <h4 class="fw-bold"> PARENT/GUARDIAN'S INFORMATION</h4>
                                         <div class="form-group row">
                                             <h5>FATHER</h5>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's Last Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's First Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Father's Middle Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <h5>MOTHER</h5>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Last Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's First Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Middle Name</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
-                                            <div class='col-xl-10 col-lg-9'>
+                                            <div class='col-xl-9 col-lg-8'>
                                                 <input class="form-control" type="text" placeholder="" aria-label="default input example"> 
                                             </div>
                                             <h5>GUARDIAN</h5>

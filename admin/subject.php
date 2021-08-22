@@ -36,7 +36,7 @@
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
-                <div class="col-lg-9">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <?php echo $content->breadcrumb; ?>
                         <div class="row">

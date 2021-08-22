@@ -34,10 +34,10 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
-                                    <h2>Faculty Members</h2>
+                                    <h3>Faculty Members</h3>
                                     <div>
-                                        <button type="button" class="view-archive btn btn-secondary">View Archived Faculty</button>
-                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'>Add Faculty</a>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Faculty</button>
+                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Add Faculty</a>
                                         <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
@@ -53,9 +53,9 @@
                                                     <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button class="btn btn-danger" title='Deactivate Faculty'>Deactivate</button>
-                                                    <button class="btn btn-secondary" title='Reset Password'>Reset Password</button>
-                                                    <button class="btn btn-dark" title='Export'>Export</button>
+                                                    <button class="btn btn-danger btn-sm" title='Deactivate Faculty'>Deactivate</button>
+                                                    <button class="btn btn-secondary btn-sm" title='Reset Password'>Reset Password</button>
+                                                    <button class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                                 </div>
                                             </div>
 

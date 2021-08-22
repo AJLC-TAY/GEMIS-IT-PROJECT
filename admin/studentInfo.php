@@ -11,7 +11,7 @@
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
@@ -24,7 +24,7 @@
                                     
                                 </ol>
                             </nav>
-                            <h2>Student Information</h2>
+                            <h3 class="fw-bold">Student Information</h3>
                         </header>
                         <!-- MAIN CONTENT -->
                         <!-- Photo -->
@@ -41,10 +41,10 @@
 
                         </div>
                         <!-- Personal Details -->
-                        <div class="container mt-4 col-9">
+                        <div class="container mt-4 col-8">
                             <div class="card body w-100 h-auto">
                                 <div class="row col-12">
-                                    <h4>GENERAL INFORMATION</h4>
+                                    <h4 class="fw-bold">GENERAL INFORMATION</h4>
                                     <ul class="list-group ms-3">
                                         <li class="list-group-item">Name:</li>
                                         <li class="list-group-item">Gender:</li>
@@ -57,7 +57,7 @@
                                     </ul>
                                 </div>
                                 <div class="row col-12">
-                                    <h4 class="mt-3">CONTACT INFORMATION</h4>
+                                    <h4 class="mt-3 fw-bold">CONTACT INFORMATION</h4>
                                     <ul class="list-group ms-3">
                                         <li class="list-group-item">Home Address: </li>
                                         <li class="list-group-item">Contact Number:</li>
@@ -65,7 +65,7 @@
                                 </div>
 
                                 <div class="row col-12">
-                                     <h4 class="mt-3">CONTACT PERSONS</h4>
+                                     <h4 class="mt-3 fw-bold">CONTACT PERSONS</h4>
                                      <h5>PARENT/S</h5>
                                      <ul class="list-group ms-3">
                                         <li class="list-group-item">Father's Name:</li>
@@ -75,7 +75,7 @@
                                         <li class="list-group-item">Occupation:</li>
                                         <li class="list-group-item">Contact Number:</li>
                                     </ul>
-                                    <h5 class="mt-3">GUARDIAN/S</h5>
+                                    <h5 class="mt-3 fw-bold">GUARDIAN/S</h5>
                                     <ul class="list-group ms-3">
                                         <li class="list-group-item">Guardian's Name:</li>
                                         <li class="list-group-item">Occupation:</li>

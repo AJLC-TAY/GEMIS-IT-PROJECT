@@ -22,8 +22,8 @@
                                     <li class="breadcrumb-item active"><a href="studentList.php">Student</a></li>
                                 </ol>
                             </nav>
-                            <h2> Student</h2>
-                            <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                            <h3 class="fw-bold"> Student</h3>
+                            <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
                         </header>
 
                         <!-- Student List -->
@@ -32,10 +32,10 @@
                                 <thead class='thead-dark'>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         
-                                        <div>
+                                        <div class="mb-3">
                                             <button class="btn btn-secondary" title='Reset Password'>Reset Password</button>
-                                            <button class="btn btn-secondary" title='Archive Student'>Archive</button>
-                                            <button id="add-btn" class="btn btn-success add-prog" title='Export Student'>Export</button>
+                                            <button class="btn btn-secondary" title='Archive Student'><i class="bi bi-archive me-2"></i>Archive</button>
+                                            <button id="add-btn" class="btn btn-success add-prog" title='Export Student'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                             <button class="btn btn-danger" title='Deactivate Student'>Deactivate</button>
                                         </div>
                                     </div>

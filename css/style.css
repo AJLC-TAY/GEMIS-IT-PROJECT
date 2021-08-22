@@ -427,13 +427,6 @@ ul.sidebar-menu li a.active i {
     background-color: #f1f1f1;
 }
 
-.currcard {
-    box-shadow: var(--shad);
-    padding: 20px;
-    text-align: left;
-    background-color: #f1f1f1;
-}
-
 .photo {
     box-shadow: var(--shad);
     padding: 20px;
@@ -442,6 +435,7 @@ ul.sidebar-menu li a.active i {
     height: 2in;
     width: 2in;
     margin: auto;
+    margin-top: 13px;
 }
 
 .dropdown {
@@ -474,6 +468,9 @@ input::-webkit-inner-spin-button {
     width: 90px;
 }
 
+.search {
+    margin-top: 15px;
+}
 
 /* .active-sub::before {
     content: '*'

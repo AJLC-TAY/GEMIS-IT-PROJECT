@@ -45,20 +45,23 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $prog_name; ?></li>
                                     </ol>
                                 </nav>
-                                <h2><?php //echo $prog_name;?></h2>
-                                <h6><?php //echo $prog_curr_code;?></h6>
+                                <h2><?php //echo $prog_name;
+                                    ?></h2>
+                                <h5><?php //echo $prog_curr_code;
+                                    ?></h5>
                                 <!-- <hr> -->
-                                <h2><?php echo $prog_name;?></h2>
-                                <h6><?php echo $prog_curr_code;?></h6>
+                                <h2><?php echo $prog_name; ?></h2>
+                                <h5><?php echo $prog_curr_code; ?></h5>
                             </header>
 
                             <!-- Form -->
                             <div class="container mt-4">
                                 <div class="card w-100 h-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="text-start fw-bold">PROGRAM DETAILS</h5>
-                                    <a href="" id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
-                                </div><hr class="mt-1 mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="text-start fw-bold">PROGRAM DETAILS</h5>
+                                        <a href="" id='edit-btn' class='btny text-primary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
+                                    </div>
+                                    <hr class="mt-1 mb-4">
                                     <form action="action.php" method="POST">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
@@ -68,7 +71,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Description</label>
                                             <div class='col-xl-10 col-lg-9'>
-                                                <!-- <input name="name" value="<?php //echo $prog_name; ?>" disabled> -->
+                                                <!-- <input name="name" value="<?php //echo $prog_name; 
+                                                                                ?>" disabled> -->
                                                 <?php echo "<textarea class='form-input form-control' name='name' $state>" . $prog_name . "</textarea>"; ?>
                                             </div>
                                         </div>
@@ -87,13 +91,13 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <thead class='thead-dark track-table'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fw-bold">SUBJECTS</h5>
-                                                <a href="subject.php?state=add&prog_code=<?php echo $prog_code;?>" id="add-btn" class="btn btn-success add-subject" title='Add new subject'>Add subject</a>
-                                            </div><hr class="mt-1 mb-4">
-                                            <div class="d-flex flex-row-reverse mb-3">
-                                            <!-- <div class="d-flex mb-3"> -->
-                                                <button class="btn btn-secondary track-archive-btn" title='Archive subject'>Archive</button>
+                                                <a href="subject.php?state=add&prog_code=<?php echo $prog_code; ?>" id="add-btn" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add subject</a>
                                             </div>
-                                            
+                                            <hr class="mt-1 mb-4">
+                                            <div class="d-flex flex-row-reverse mb-3">
+                                                <!-- <div class="d-flex mb-3"> -->
+                                                <button class="btn btn-secondary btn-sm track-archive-btn"><i class="bi bi-archive me-2"></i>Archive</button>
+                                            </div>
                                             <tr>
                                                 <th data-checkbox="true"></th>
                                                 <th scope='col' data-width="100" data-align="right" data-field='sub_code'>Code</th>
@@ -120,7 +124,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 
 <script type="text/javascript">
-    var code = <?php echo json_encode($prog_code);?>;
+    var code = <?php echo json_encode($prog_code); ?>;
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="../js/admin/program.js"></script>

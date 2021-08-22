@@ -30,10 +30,10 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
-                                    <h2>Subject</h2>
+                                    <h3 class="fw-bold">Subject</h3>
                                     <div>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
-                                        <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add Subject</a>
+                                        <a href="subject.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
                                     </div>
                                 </div>
                             </header>
@@ -48,8 +48,8 @@
                                                     <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                    <button class="btn btn-secondary" title='Archive strand'>Export</button>
+                                                    <button class="btn btn-secondary btn-sm" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
+                                                    <button class="btn btn-dark btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                                 </div>
                                             </div>
 
