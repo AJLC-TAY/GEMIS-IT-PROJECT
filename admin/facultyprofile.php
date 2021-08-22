@@ -67,7 +67,7 @@
                                 <span class="badge"><button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
                             </h6></div>
                             <div id="dept-decide-con" class='d-none my-auto'>
-                                <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-2'>Cancel</button>
+                                <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
                                 <button id='dept-save-btn' class='btn btn-sm btn-success'>Save</button>
                             </div>
                         </div>
@@ -78,33 +78,34 @@
                                 foreach($depOpt as $dep) {
                                     $departmentOption .= "<option value='$dep'>";
                                 }
-                                $department = $userProfile->get_department()[0];
+                                $department = $userProfile->get_department();
                                 $deptExist = TRUE;
                                 if ($department == '') {
                                     $deptExist = FALSE;
                                     $department = 'No department set';
                                 } 
-                                echo "<form id='dept-form'>
-                                    <input type='hidden' name='teacher_id' value='$id'>
-                                    <input type='hidden' name='action' value='editDepartment'>
-                                    <div class='d-flex-column mb-2'>
-                                        <div class='d-flex'>
-                                            <div class='flex-grow-1'>
-                                                <input id='dept-input' class='form-control m-0' value='$department' name='department' list='departmentListOptions' placeholder='Type to search or add...' readonly>
-                                                <datalist id='departmentListOptions'>
-                                                    $departmentOption
-                                                </datalist>
-                                            </div>
-                                            <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1 d-none'><i class='bi bi-x-square-fill'></i></button></span>
-                                        </div>
-                                        <small class='dept-ins ms-1 d-none text-secondary'>Clear field to remove department</small>
-                                    </div>
-                                </form>";
-                                    // foreach($departments as $department) {
+
+                                  // foreach($departments as $department) {
                                     //     // echo "<button class='btn btn-outline-secondary btn-sm rounded-pill w-auto'>$department</button>"; 
                                     //     echo "<div class='rounded-pill border border-secondary d-inline-block me-1'><span class='mx-3'>$department</span></div>";
                                     // }
                             ?>
+                            <form id='dept-form'>
+                                <input type='hidden' name='teacher_id' value='$id'>
+                                <input type='hidden' name='action' value='editDepartment'>
+                                <div class='d-flex-column mb-2'>
+                                    <div class='d-flex'>
+                                        <div class='flex-grow-1'>
+                                            <input id='dept-input' class='form-control m-0' value='<?php echo $department; ?>' name='department' list='departmentListOptions' placeholder='Type to search or add...' readonly>
+                                            <datalist id='departmentListOptions'>
+                                                <?php echo $departmentOption; ?>
+                                            </datalist>
+                                        </div>
+                                        <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1 d-none'><i class='bi bi-x-square-fill'></i></button></span>
+                                    </div>
+                                    <small class='dept-ins ms-1 d-none text-secondary'>Clear field to remove department</small>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <!-- ROLE SECTION -->

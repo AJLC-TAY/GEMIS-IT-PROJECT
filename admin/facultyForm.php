@@ -92,7 +92,7 @@
         <h6 class='text-secondary'>Please complete the following:</h6>
     </header>
     <!-- CONTENT  -->
-    <form id='faculty-form' action='action.php' method='POST' enctype='multipart/form-data'>
+    <form id='faculty-form' method='POST' enctype='multipart/form-data'>
         <div class='form-row row'>
             <div class='form-group col-md-4'>
                 <label for='lastname'>Last Name</label>
@@ -179,7 +179,12 @@
             </div>
             <div class='form-group col-md-5 d-flex flex-column'>
                 <label for='photo' class='form-label'>Faculty ID Photo</label>
-                <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'/>
+                <div class="image-preview-con">
+                    <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100'/>
+                    <div class='edit-img-con text-center'>
+                        <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
+                    </div>
+                </div>
                 <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
             </div>
         </div>

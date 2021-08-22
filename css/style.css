@@ -416,22 +416,26 @@ ul.sidebar-menu li a.active i {
     display: none;
 }
 
+:root{
+    --shad: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shad);
     padding: 20px;
     text-align: left;
     background-color: #f1f1f1;
 }
 
 .currcard {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shad);
     padding: 20px;
     text-align: left;
     background-color: #f1f1f1;
 }
 
 .photo {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shad);
     padding: 20px;
     text-align: center;
     background-color: #f1f1f1;

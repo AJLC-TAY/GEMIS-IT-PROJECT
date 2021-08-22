@@ -35,6 +35,40 @@ span[class='badge'] {
     padding: 0;
 }
 
+/* IMAGE PREVIEW */
+.image-preview-con {
+    width: 250px; height: 250px;
+    position: relative;
+}
+
+#resultImg {
+    position: absolute;
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.image-preview-con:hover #resultImg {
+    opacity: 0.3;
+}
+.image-preview-con:hover .edit-text{
+    opacity: 1;
+}
+
+.edit-text {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+/* IMAGE PREVIEW END */
+
 /* TOAST */
 
 [class*='-toast'] {

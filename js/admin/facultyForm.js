@@ -21,11 +21,16 @@ $(function () {
 
     $("#upload").change(function(){
         readURL(this);
-    }); 
+    })
 
-    // $('#faculty-form').submit(function(event) {
-    //     event.preventDefault()
-    //     console.log($(this).serialize())
-    // })
+    $('#faculty-form').submit(function(event) {
+        event.preventDefault()
+
+        $.post("action.php", $(this).serialize()).fail(function(error) {
+            console.log(error.responseText)
+        }) 
+    })
+
+    $(".edit-text").click(()=> $("#upload").click())
     hideSpinner()
 })
