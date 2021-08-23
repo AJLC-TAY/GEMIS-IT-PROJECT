@@ -33,7 +33,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         <section id="main-content">
             <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>

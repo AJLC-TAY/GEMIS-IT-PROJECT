@@ -24,7 +24,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -191,7 +191,7 @@
 
             <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body">
-                    Curriculum successfully added
+                    Curriculum successfully added!
                 </div>
             </div>
         </div>

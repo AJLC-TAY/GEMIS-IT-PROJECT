@@ -31,7 +31,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-9">
-                        <div class="row mt ps-3">
+                        <div class="row ps-3">
                             <!-- HEADER -->
                             <header>
                                 <!-- BREADCRUMB -->
@@ -42,16 +42,14 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                     </ol>
                                 </nav>
-                                <h2><?php echo $curr_name; ?></h2>
+                                <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
                                 <hr class="my-2">
-                                <h5 class='text-secondary mb-3'>Curriculum</h5>
                             </header>
                             <!-- Form -->
-                            <div class="container mt-4">
+                            <div class="container mt-1">
                                 <div class="card w-100 h-auto">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <h5 class="text-start fw-bold">CURRICULUM INFORMATION</h5>
-
                                         <a href="" id='edit-btn' class='btny text-primary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
                                     </div>
                                     <hr class="mt-1 mb-4">
@@ -112,6 +110,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                     <!--footer start-->
                     <?php include_once("../inc/footer.html"); ?>
                     <!--footer end-->
+                </div>
             </section>
         </section>
         <!-- Archive confirmation modal -->
@@ -167,6 +166,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             </div>
         </div>
         <!-- ADD MODAL  -->
+    </section>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
