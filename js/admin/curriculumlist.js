@@ -16,8 +16,8 @@ let prepareHTML = data => {
             </div>
             <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
                 <div class='tile-content'>
-                    <h4 class='card-title'>${name}</h4>
-                    <p class='card-text'>${desc}</p>
+                    <h4 class='card-title text-break'>${name}</h4>
+                    <p class='card-text text-break'>${desc}</p>
                 </div>
             </div>
         </div>`

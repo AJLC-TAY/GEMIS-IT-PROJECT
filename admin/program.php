@@ -12,11 +12,13 @@ $prog_code = $program->get_prog_code();
 $prog_curr_code = $program->get_curr_code();
 $state = "disabled";
 $edit_btn_state = "";
-
+$display = "d-none";
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
-    $state = "";
+    $state = '';
     $edit_btn_state = "disabled";
-}
+    $display = "";
+    $edit_btn_display = "d-none";
+} 
 ?>
 
 <body>
@@ -57,11 +59,16 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- Form -->
                             <div class="container mt-4">
                                 <div class="card w-100 h-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="text-start fw-bold">PROGRAM DETAILS</h5>
-                                    <a href="" id='edit-btn' class='btn link btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
-                                </div><hr class="mt-1 mb-4">
-                                    <form action="action.php" method="POST">
+                                    <div class="d-flex justify-content-between">
+                                        <h4>Information</h4>
+                                        <div class="btn-con my-a">
+                                            <input type="hidden" name="action" value="updateCurriculum">
+                                            <button id='edit-btn' class='btn link btn-sm <?php echo $edit_btn_display;?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                            <button id="cancel-btn" class="btn btn-dark btn-sm me-1 <?php echo $display;?>">Cancel</button>
+                                            <input type="submit" form='program-view-form' class="btn btn-success btn-sm <?php echo $display; ?>" value="Save">
+                                        </div>
+                                    </div><hr class='mt-2 mb-4'>
+                                    <form id='program-view-form'  method="POST">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
                                             <div class="col-xl-10 col-lg-9">
@@ -74,11 +81,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                                                 ?>" disabled> -->
                                                 <?php echo "<textarea class='form-input form-control' name='name' $state>" . $prog_name . "</textarea>"; ?>
                                             </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end col-sm-12">
-                                            <input type="hidden" name="action" value="updateProgram">
-                                            <button id="cancel-btn" class="btn btn-secondary btn-sm d-none me-2">CANCEL</button>
-                                            <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
                                         </div>
                                     </form>
                                 </div>
@@ -117,6 +119,11 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <!--footer end-->
             </section>
         </section>
+        <!-- TOAST -->
+        <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+            <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+        </div>
+        <!-- TOAST END -->
         <!-- Archive subject confirmation -->
         <div class="modal" id="subject-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
                 <div class="modal-dialog">

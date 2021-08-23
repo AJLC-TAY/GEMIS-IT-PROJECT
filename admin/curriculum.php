@@ -12,8 +12,15 @@ $curr_name = $curriculum->get_cur_name();
 $curr_code = $curriculum->get_cur_code();
 $curr_desc = $curriculum->get_cur_desc();
 
-$state = (isset($_GET['state']) && $_GET['state'] == 'edit') ? "" : "disabled";
-$edit_btn_state = ($state == "disabled") ? "" : "disabled";
+$state = "disabled";
+$edit_btn_state = "";
+$display = "d-none";
+if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+    $state = '';
+    $edit_btn_state = "disabled";
+    $display = "";
+    $edit_btn_display = "d-none";
+} 
 ?>
 
 <body>
@@ -54,29 +61,29 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                         <h4>Information</h4>
                                         <div class="btn-con my-a">
                                             <input type="hidden" name="action" value="updateCurriculum">
-                                            <button id='edit-btn' class='btn link btn-sm'><i class="bi bi-pencil-square me-2"></i>Edit</button>
-                                            <button id="cancel-btn" class="btn btn-dark btn-sm d-none me-1">Cancel</button>
-                                            <input type="submit" class="btn btn-success btn-sm d-none" value="Save">
+                                            <button id='edit-btn' class='btn link btn-sm <?php echo $edit_btn_display;?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                            <button id="cancel-btn" class="btn btn-dark btn-sm me-1 <?php echo $display;?>">Cancel</button>
+                                            <input type="submit" form="curriculum-form" class="btn btn-success btn-sm <?php echo $display;?>" value="Save">
                                         </div>
                                     </div><hr class='mt-2 mb-4'>
                                     <section class="w-100">
                                         <div class="ps-3 row w-100">
-                                            <form action="action.php" method="POST">
+                                            <form id='curriculum-form' method="POST">
                                                 <div class="form-group row">
                                                     <div class="col-sm-3"><label class="my-auto">Code</label></div>
                                                     <div class="col-sm-9">
                                                         <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                                        <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
+                                                        <?php echo "<input class='form-control form-input $display' type='text' name='code' value='$curr_code' $state required>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Name</label>
                                                     <div class="col-sm-9">
                                                         <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
-                                                        <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
+                                                        <?php echo "<input class='form-input form-control $display' type='text' name='name' value='$curr_name' $state required>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Description</label>
                                                     <div class="col-sm-9">
                                                         <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
-                                                        <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
+                                                        <?php echo "<textarea  class='form-input form-control  $display' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                                     </div>
                                                 </div>
                                             </form>

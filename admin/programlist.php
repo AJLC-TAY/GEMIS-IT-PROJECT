@@ -60,6 +60,11 @@
             </section>
         </section>
     </section>
+    <!-- TOAST -->
+     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 
     <!-- MODAL -->
     <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
@@ -73,7 +78,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <h6>Please complete the following:</h6>
+                        <p><small class='text-secondary'>Please complete the following: </small></p>
                         <div class="form-group">
                             <label for="prog-code">Code</label>
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
@@ -81,13 +86,15 @@
                             <label for="prog-desc">Description</label>
                             <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
-                            <select id="curr-code" class="form-control" name="curr-code">
-                            <option selected>Select...</option>
+                            <label for="curr-code">Curriculum</label>
+                            <select id="curr-code" class="select form-select" name="curr-code">
+                                <option value="0" selected>Select...</option>
                                 <?php $currList = $admin->listCurriculum('curriculum');
-                                foreach ($currList as  $cur) {
-                                   $curr_code = $cur->get_cur_code();
-                                    echo "<option> " . $curr_code . "</option>";
-                                }
+                                    foreach ($currList as  $cur) {
+                                        $curr_code = $cur->get_cur_code();
+                                        $curr_name = $cur->get_cur_name();
+                                        echo "<option value='$curr_code'> $curr_code | $curr_name </option>";
+                                    }
                                 ?>
                             </select>
                         </div>

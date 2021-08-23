@@ -12,13 +12,15 @@ let subject_table = new Table(tableId, url, method, id, id, height)
 
 var archiveMessage = 'Archiving this subject will also archive all student grades under it.'
 
+var tempData = []
 $(function() {
     $('#edit-btn').click(function(event) {
         event.preventDefault()
         $('[type=submit]').removeClass('d-none')
         $('#cancel-btn').removeClass('d-none')
         $(this).addClass('d-none')
-        $(this).closest('form').find('.form-input').each(function() {
+        $("#program-view-form").find('.form-input').each(function() {
+            tempData.push($(this).val())
             $(this).prop('disabled', false)
         })
     })
@@ -28,9 +30,18 @@ $(function() {
         $('[type=submit]').addClass('d-none')
         $(this).addClass('d-none')
         $('#edit-btn').removeClass('d-none')
-        $(this).closest('form').find('.form-input').each(function() {
+        let i = 0;
+        let inputs = $("#program-view-form").find('.form-input')
+        if (tempData.length != 0) {
+            inputs.each(function() {
+                $(this).val(tempData[i])
+                i++
+            })
+        } 
+        inputs.each(function () {
             $(this).prop('disabled', true)
         })
+        tempData = []
     })
 
     $('#subject-archive-btn').click(function(event){
@@ -58,6 +69,21 @@ $(function() {
 
         $('#subject-archive-modal').modal('hide')	
 
+    })
+
+     $('#program-form').submit(function(event) {
+        event.preventDefault()
+        showSpinner()
+        var form = $(this)
+        var formData = $(this).serialize()
+        $.post("action.php", formData, function(data) {
+            form.trigger('reset')
+            addModal.modal('hide')
+            reload()
+            showToast('success', 'Program successfully updated')
+        }).fail(function () {
+
+        })
     })
     
     hideSpinner()
