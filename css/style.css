@@ -1,8 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 body {
     color: #333333;
     background: #fff5ee;
-    font-family: 'Ruda', sans-serif;
+    font-family: 'Poppins', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
     font-size: 15px;
@@ -218,7 +218,7 @@ a.logo span {
 }
 
 .breadcrumb {
-    margin-top: .25in;
+    margin-top: 40px;
 }
 
 
@@ -427,13 +427,6 @@ ul.sidebar-menu li a.active i {
     background-color: #f1f1f1;
 }
 
-.currcard {
-    box-shadow: var(--shad);
-    padding: 20px;
-    text-align: left;
-    background-color: #f1f1f1;
-}
-
 .photo {
     box-shadow: var(--shad);
     padding: 20px;
@@ -442,6 +435,7 @@ ul.sidebar-menu li a.active i {
     height: 2in;
     width: 2in;
     margin: auto;
+    margin-top: 13px;
 }
 
 .dropdown {
@@ -474,6 +468,9 @@ input::-webkit-inner-spin-button {
     width: 90px;
 }
 
+.search {
+    margin-top: 15px;
+}
 
 /* .active-sub::before {
     content: '*'

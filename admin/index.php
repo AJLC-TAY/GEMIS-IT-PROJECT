@@ -21,7 +21,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header class="mb-4">
@@ -35,8 +35,8 @@
                             </header>
                             <div class="container row mb-5">
                                 <!-- PEOPLE MANAGEMENT -->
-                                <section class='mt-4 col-md-5'>
-                                    <h5>People Management</h5>
+                                <section class='col-md-4'>
+                                    <h5 class="hw-bold">People Management</h5>
                                     <div class="card bg-white rounded shadow-sm mt-3">
                                         <div class="d-flex flex-wrap">
                                             <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
@@ -60,7 +60,7 @@
 
                                             <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
                                                 <div class="d-flex justify-content-between">
-                                                    <i class="bi bi-pencil"></i>
+                                                    <i class="bi bi-pencil me-2"></i>
                                                     Signatory
                                                 </div>
                                             </a>
@@ -69,8 +69,8 @@
                                 </section>
                                 <!-- PEOPLE MANAGEMENT END -->
                                 <!-- SCHOOL MANAGEMENT -->
-                                <section class='mt-4 col-md-7'>
-                                    <h5>School Management</h5>
+                                <section class='col-md-8'>
+                                    <h5 class="hw-bold">School Management</h5>
                                     <div class="card bg-white rounded shadow-sm mt-3">
                                         <!-- CURRICULUM -->
                                         <section class="mb-4">

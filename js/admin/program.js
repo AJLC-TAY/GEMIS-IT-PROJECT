@@ -10,6 +10,8 @@ height = 300
 preload("#curr-management", "#program")
 let subject_table = new Table(tableId, url, method, id, id, height)
 
+var archiveMessage = 'Archiving this subject will also archive all student grades under it.'
+
 $(function() {
     $('#edit-btn').click(function(event) {
         event.preventDefault()
@@ -31,9 +33,31 @@ $(function() {
         })
     })
 
-    $('.track-archive-btn').click(function(event){
-        console.log("track archived clikcedss")
-        alert($('#track-table:checked').val() );
+    $('#subject-archive-btn').click(function(event){
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let archiveModal = $('#subject-archive-modal')
+        archiveModal.find('.modal-identifier').html(`${name} Subject`)
+        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.archive-btn').attr('id', code)
+        archiveModal.modal('toggle')
+    })
+
+    $('.archive-btn').click(function(event){
+        var $table = $(tableId)
+        var action = 'archiveSubject'
+    
+        let selected = $table.bootstrapTable('getSelections')
+        console.log(selected)
+        selected.forEach(element => {
+            var code = element.sub_code
+            $.post("action.php", {code, action:action}, function(data) {	
+                $table.bootstrapTable('refresh')
+            })
+        })
+
+        $('#subject-archive-modal').modal('hide')	
+
     })
     
     hideSpinner()

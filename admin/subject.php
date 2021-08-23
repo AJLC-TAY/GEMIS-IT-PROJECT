@@ -36,7 +36,7 @@
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
-                <div class="col-lg-9">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <?php echo $content->breadcrumb; ?>
                         <div class="row">
@@ -73,6 +73,7 @@
             </div>
         </div>
     </div>
+    
     
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">

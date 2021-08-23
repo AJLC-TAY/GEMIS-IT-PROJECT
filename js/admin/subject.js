@@ -24,7 +24,6 @@ $(function () {
     })
 
     $(".submit-btn").click(() => {$('#add-subject-form').submit()})
-    // $(".archive-option").click(()=> console.log("archive clicked"))
 
     $('#add-subject-form').submit(function(event) {
         event.preventDefault()
@@ -117,11 +116,11 @@ $(function () {
         var action = 'archiveSubject'
         $.post("action.php", {code, action}, function(data) {	
             $('#archive-modal').modal('hide')
-            showWarningToast()
+            document.location.href = "subjectlist.php"
         })
     })
 
-    archiveMessage = `Archiving this subject will also archive all student grades under it.`
+    archiveMessage = 'Archiving this subject will also archive all student grades under it.'
     $(document).on('click', '.archive-option', function() {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')

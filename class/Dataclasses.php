@@ -1406,13 +1406,25 @@ class StudentAward extends Award implements JsonSerializable
         private $indigenous_group;
         private $mother_tongue;
         private $religion;
+        private $address;
         private $cp_no;
         private $psa_birth_cert;
         private $belong_to_ipcc;
         private $id_picture;
         private $action;
+        private $section;
+        private $father_name;
+        private $father_occupation;
+        private $father_cp_no;
+        private $mother_name;
+        private $mother_occupation;
+        private $mother_cp_no;
+        private $guardian_name;
+        private $guardian_occupation;
+        private $guardian_cp_no;
+        private $guardian_relationship;
 
-        public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture)
+        public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, $father_name, $father_occupation, $father_cp_no, $mother_name,$mother_occupation, $mother_cp_no, $guardian_name, $guardian_occupation, $guardian_cp_no, $guardian_relationship)
         {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1422,21 +1434,33 @@ class StudentAward extends Award implements JsonSerializable
             $this->last_name = $last_name;
             $this->ext_name = $ext_name;
             $this->name = "$last_name, $first_name $middle_name $ext_name";
-            $this->sex = $sex;
+            $this->sex = ($sex == 'm') ? "Male" : "Female";
             $this->age = $age;
             $this->birthdate = $birthdate;
             $this->birth_place = $birth_place;
             $this->indigenous_group = $indigenous_group;
             $this->mother_tongue = $mother_tongue;
             $this->religion = $religion;
+            $this->address = $address;
             $this->cp_no = $cp_no;
             $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
-                            ."<a href='studentForm?id=$id_no' class='btn btn-primary w-auto me-1' title='Edit Student'>Edit</a>"
-                            . "<a href='studentInfo?id=$id_no' role='button' class='btn btn-secondary w-auto' title='View Student'>View</a>"
+                            ."<a href='studentForm.php?id=$stud_id' class='btn btn-primary w-auto me-1' title='Edit Student'>Edit</a>"
+                            . "<a href='studentInfo.php?id=$stud_id' role='button' class='btn btn-secondary w-auto' title='View Student'>View</a>"
                             ."</div>";
+            $this->section = $section;
+            $this->father_name = $father_name;
+            $this->father_occupation = $father_occupation;
+            $this->father_cp_no = $father_cp_no;
+            $this->mother_name = $mother_name;
+            $this->mother_occupation = $mother_occupation;
+            $this->mother_cp_no = $mother_cp_no;
+            $this->guardian_name = $guardian_name;
+            $this->guardian_occupation = $guardian_occupation;
+            $this->guardian_cp_no = $guardian_cp_no;
+            $this->guardian_relationship = $guardian_relationship;
         }
 
         //getter functions
@@ -1445,7 +1469,7 @@ class StudentAward extends Award implements JsonSerializable
             return $this->stud_id;
         }
 
-        public function get_id_no(){ //extended function?
+        public function get_id_no(){
             return $this->id_no;
         }
 
@@ -1471,6 +1495,10 @@ class StudentAward extends Award implements JsonSerializable
         public function get_ext_name()
         {
             return $this->ext_name;
+        }
+
+        public function get_name(){
+            return $this->name;
         }
 
         public function get_sex()
@@ -1528,88 +1556,45 @@ class StudentAward extends Award implements JsonSerializable
             return $this->id_picture;
         }
 
-        // //setter function
-        // //no stud_id, auto-incremented
+        public function get_section()
+        {
+            return $this->section;
+        }
 
-        // public function set_lrn($lrn)
-        // {
-        //     $this->lrn = $lrn;
-        // }
-
-        // public function set_first_name($first_name)
-        // {
-        //     $this->first_name = $first_name;
-        // }
-
-        // public function set_middle_name($middle_name)
-        // {
-        //     $this->middle_name = $middle_name;
-        // }
-
-        // public function set_last_name($last_name)
-        // {
-        //     $this->last_name = $last_name;
-        // }
-
-        // public function set_ext_name($ext_name)
-        // {
-        //     $this->ext_name = $ext_name;
-        // }
-
-        // public function set_sex($sex)
-        // {
-        //     $this->sex = $sex;
-        // }
-
-        // public function set_age($age)
-        // {
-        //     $this->age = $age;
-        // }
-
-        // public function set_birthdate($birthdate)
-        // {
-        //     $this->birthdate = $birthdate;
-        // }
-
-        // public function set_birth_place($birth_place)
-        // {
-        //     $this->birth_place = $birth_place;
-        // }
-
-        // public function set_indigenous_group($indigenous_group)
-        // {
-        //     $this->indigenous_group = $indigenous_group;
-        // }
-
-        // public function set_mother_tongue($mother_tongue)
-        // {
-        //     $this->mother_tongue = $mother_tongue;
-        // }
-
-        // public function set_religion($religion)
-        // {
-        //     $this->religion = $religion;
-        // }
-
-        // public function set_cp_no($cp_no)
-        // {
-        //     $this->cp_no = $cp_no;
-        // }
-
-        // public function set_psa_birth_cert($psa_birth_cert)
-        // {
-        //     $this->psa_birth_cert = $psa_birth_cert;
-        // }
-
-        // public function set_belong_to_ipcc($belong_to_ipcc)
-        // {
-        //     $this->belong_to_ipcc = $belong_to_ipcc;
-        // }
-
-        // public function set_id_picture($id_picture)
-        // {
-        //     $this->id_picture = $id_picture;
-        // }
+        public function get_address()
+        {
+            return $this->address;
+        }
+        public function get_father_name(){
+            return $this->father_name;
+        }
+        public function get_father_occupation(){
+            return $this->father_occupation;
+        }
+        public function get_father_cp_no(){
+            return $this->father_cp_no;
+        }
+        public function get_mother_name(){
+            return $this->mother_name;
+        }
+        public function get_mother_occupation(){
+            return $this->mother_occupation;
+        }
+        public function get_mother_cp_no(){
+            return $this->mother_cp_no;
+        }
+        public function get_guardian_name(){
+            return $this->guardian_name;
+        }
+        public function get_guardian_occupation(){
+            return $this->guardian_occupation;
+        }
+        public function get_guardian_cp_no(){
+            return $this->guardian_cp_no;
+        }
+        public function get_guardian_relationship(){
+            return $this->guardian_relationship;
+        }
 
         public function jsonSerialize()
     {
@@ -1629,6 +1614,7 @@ class StudentAward extends Award implements JsonSerializable
             'psa_birth_cert' => $this->psa_birth_cert,
             'belong_to_ipcc'=> $this->belong_to_ipcc,
             'action' => $this->action,
+            'section' => 'waley pa'
         ];
     }
 

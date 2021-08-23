@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Curriculum Page | GEMIS</title>
+<title>Curriculum List | GEMIS</title>
 <link rel="stylesheet" href="../css/general.css">
 </link>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
@@ -24,7 +24,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -36,13 +36,13 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between">
-                                    <h2>Curriculum</h2>
+                                    <h3>Curriculum</h3>
                                     <span>
-                                        <button type="button" class="view-archive btn btn-secondary">View Archived</button>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
                             </header>
                             <!-- No result message -->
                             <div class="msg w-100 d-flex justify-content-center d-none">
@@ -184,7 +184,21 @@
 
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+<<<<<<< HEAD
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+=======
+        <div class="position-absolute" style="bottom: 20px; right: 25px;">
+            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"></div>
+            </div>
+
+            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body">
+                    Curriculum successfully added!
+                </div>
+            </div>
+        </div>
+>>>>>>> aa8a624a5548afc0eb6279a69fe24e301048e370
     </div>
     <!-- TOAST END -->
 

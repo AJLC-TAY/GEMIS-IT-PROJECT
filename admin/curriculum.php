@@ -28,10 +28,10 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-9">
-                        <div class="row mt ps-3">
+                        <div class="row ps-3">
                             <!-- HEADER -->
                             <header>
                                 <!-- BREADCRUMB -->
@@ -42,14 +42,14 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                     </ol>
                                 </nav>
-                                <!-- BREADCRUMB END -->
-                                <h2><?php echo $curr_name; ?></h2><hr class="my-2">
-                                <h6 class='text-secondary mb-3'>Curriculum</h6>
+                                <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
+                                <hr class="my-2">
+                                <h6>Curriculum</h6>
                             </header>
-                            <!-- HEADER END -->
-                            <!-- FORM -->
-                            <form action="action.php" method="POST">
-                                <div class="currcard container">
+                            <!-- Form -->
+
+                            <div class="currcard container">
+                                <div class='card'>
                                     <div class="d-flex justify-content-between">
                                         <h4>Information</h4>
                                         <div class="btn-con my-a">
@@ -61,51 +61,62 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                     </div><hr class='mt-2 mb-4'>
                                     <section class="w-100">
                                         <div class="ps-3 row w-100">
-                                                <div class="col-sm-3"><label class="my-auto">Code</label></div>
-                                                <div class="col-sm-9">
-                                                    <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                                    <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
+                                            <form action="action.php" method="POST">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-3"><label class="my-auto">Code</label></div>
+                                                    <div class="col-sm-9">
+                                                        <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
+                                                        <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
+                                                    </div>
+                                                    <label class="col-sm-3">Name</label>
+                                                    <div class="col-sm-9">
+                                                        <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
+                                                        <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
+                                                    </div>
+                                                    <label class="col-sm-3">Description</label>
+                                                    <div class="col-sm-9">
+                                                        <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
+                                                        <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
+                                                    </div>
                                                 </div>
-                                                <label class="col-sm-3">Name</label>
-                                                <div class="col-sm-9">
-                                                    <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
-                                                    <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
-                                                </div>
-                                                <label class="col-sm-3">Description</label>
-                                                <div class="col-sm-9">
-                                                    <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
-                                                    <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
-                                                </div>
-                                            </div>
+                                            </form>
+                                        </div>
                                     </section>
-                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Strand table -->
+                            <div class="container mt-5">
+                                <div class="card w-100 h-auto">
+                                    <table id="table" class="table-striped">
+                                        <thead class='thead-dark track-table'>
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h5 class="fw-bold">STRAND LIST</h5>
+                                                <a href="#add-modal" id="add-btn" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add subject</a>
+                                            </div>
+                                            <hr class="mt-1 mb-4">
+                                            <div class="d-flex flex-row-reverse mb-3">
+                                                <!-- <div class="d-flex mb-3"> -->
+                                                <button id="track-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
+                                            </div>
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-align="center" data-field='prog_code'>Code</th>
+                                                <th scope='col' data-width="600" data-align="center" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
+                                                <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </form>
                             <!-- FORM END -->
-                            <!-- TRACK TABLE -->
-                            <div class="container mt-5">
-                                <table id="table" class="table-striped">
-                                    <thead class='thead-dark'>
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <h4>Strand List</h4>
-                                            <div>
-                                                <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
-                                            </div>
-                                        </div>
-
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
-                                            <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
-                                            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <!-- TRACK TABLE END -->
                         </div>
                     </div>
+                    <!--main content end-->
+                    <!--footer start-->
+                    <?php include_once("../inc/footer.html"); ?>
+                    <!--footer end-->
                 </div>
             </section>
             <!-- MAIN CONTENT END-->
@@ -113,34 +124,55 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             <?php include_once("../inc/footer.html"); ?>
             <!-- FOOTER END -->
         </section>
-    </section>
-    <!-- ADD MODAL -->
-    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Strand/Program</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="prog-form" action="">
-                        <div class="form-group">
-                            <label for="prog-code">Strand Code</label>
-                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
-                            <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
-                            <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+        <!-- Archive confirmation modal -->
+        <div class="modal" id="track-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <h4 class="mb-0">Confirmation</h4>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </form>
+                        <div class="modal-body">
+                            <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
+                            <p class="modal-msg"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary close-btn archive-btn">Archive</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+            </div>
+        <!-- ADD MODAL -->
+        <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">Add Strand/Program</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="prog-form" action="">
+                            <div class="form-group">
+                                <label for="prog-code">Strand Code</label>
+                                <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                                <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                                <label for="prog-name">Strand Name</label>
+                                <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
+                                <label for="prog-curr">Curriculum</label>
+                                <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -151,7 +183,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript">
-    var code = <?php echo json_encode($curr_code);?>;
+    var code = <?php echo json_encode($curr_code); ?>;
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="../js/admin/curriculum.js"></script>
