@@ -623,10 +623,7 @@ class Administration extends Dbconfig
         }
 
         if ($type === 'S') {
-            $query = "SELECT * FROM student WHERE stud_id='$id';";
-            $result = mysqli_query($this->dbConnect, $query);
-            $row = mysqli_fetch_assoc($result);
-            return [];
+            return $this->getStudent($id);
         }
     }
 
@@ -915,16 +912,32 @@ class Administration extends Dbconfig
         $result = mysqli_query($this->dbConnect, $query);
         $studentList = array();
 
+        $section = "to follow";
+        $address = "to follow";
         while ($row = mysqli_fetch_assoc($result)) {
             $studentList[] = new Student($row['stud_id'], $row['user_id_no'],$row['LRN'], $row['first_name'], $row['middle_name'], $row['last_name'], 
                                 $row['ext_name'],$row['sex'],$row['age'], $row['birthdate'],  $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'],
-                                $row['religion'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture']);
+                                $row['religion'], $address, $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture'], $section ,$section,$section,$section,$section,$section,$section,
+                                $section,$section,$section,$section);
         }
         return $studentList;
     }
 
     public function listStudentJSON() {
         echo json_encode($this->listStudent());
+    }
+
+    public function getStudent($id) {
+        $result = $this->prepared_select("SELECT * FROM student WHERE stud_id=?;", [$id], "i");
+        $row = mysqli_fetch_assoc($result);
+
+        $section = "to follow";
+        $address = "to follow";
+        return new Student($row['stud_id'], $row['user_id_no'], $row['LRN'], $row['first_name'],
+            $row['middle_name'], $row['last_name'], $row['ext_name'], $row['sex'], $row['age'],
+            $row['birthdate'], $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'], 
+            $row['religion'], $address, $row['cp_no'], $row['psa_birth_cert'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture'], $section,
+            $section,$section,$section,$section,$section,$section,$section,$section,$section,$section);
     }
 
     public function listDepartments() {

@@ -14,7 +14,7 @@
                 <div class="col-lg-10">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
-                        <header> 
+                        <header>
                             <!-- BREADCRUMB -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -22,41 +22,41 @@
                                     <li class="breadcrumb-item active"><a href="studentList.php">Student</a></li>
                                 </ol>
                             </nav>
-                            <h3 class="fw-bold"> Student</h3>
-                            <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
+                            <div class="d-flex justify-content-between mb-3">
+                                    <h3>Students</h3>
+                                    <div>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Students</button>
+                                    </div>
+                                </div>
                         </header>
 
                         <!-- Student List -->
-                        <div class="container mt-2">
-                            <table id="table" class="table-striped">
-                                <thead class='thead-dark'>
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        
-                                        <div class="mb-3">
-                                            <button class="btn btn-secondary" title='Reset Password'>Reset Password</button>
-                                            <button class="btn btn-secondary" title='Archive Student'><i class="bi bi-archive me-2"></i>Archive</button>
-                                            <button id="add-btn" class="btn btn-success add-prog" title='Export Student'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                                            <button class="btn btn-danger" title='Deactivate Student'>Deactivate</button>
+                        <div class="container mt-1">
+                            <div class="card w-100 h-auto bg-light">
+                                <table id="table" class="table-striped">
+                                    <thead class='thead-dark'>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <!-- SEARCH BAR -->
+                                            <span class="flex-grow-1 me-5">
+                                                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                            </span>
+                                            <div>
+                                                <button class="btn btn-danger btn-sm" title='Deactivate Faculty'>Deactivate</button>
+                                                <button class="btn btn-secondary btn-sm" title='Reset Password'>Reset Password</button>
+                                                <button class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <tr>
-                                        <th data-checkbox="true"></th>
-                                        <th scope='col' data-width="100" data-align="right" data-field='lrn'>LRN</th>
-                                        <th scope='col' data-width="600" data-sortable="true" data-field='name'>Student Name</th>
-                                        <th scope='col' data-width="100" data-align="right" data-field='section'>Section</th>
-                                        <th scope='col' data-width="300" data-align="center" data-field='action'>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class='text-center'>
-                                        <td scope="col"><input type="checkbox" /></td>
-                                        <td scope='col'></td>
-                                        <td scope='col'></td>
-                                        <td scope='col'></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <th data-checkbox="true"></th>
+                                            <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field='lrn'>LRN</th>
+                                            <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field='name'>Student Name</th>
+                                            <th scope='col' data-width="300" data-align="left" data-sortable="true" data-field='section'>Section</th>
+                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,10 +67,10 @@
             <!--footer end-->
         </section>
     </section>
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script src="../js/common-custom.js"></script>  
-<script type="module" src="../js/admin/studentlist.js"></script>
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script src="../js/common-custom.js"></script>
+    <script type="module" src="../js/admin/studentlist.js"></script>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE
 <script src="../assets/js/bootstrap-table.min.js"></script>
