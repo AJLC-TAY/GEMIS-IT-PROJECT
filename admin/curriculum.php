@@ -26,7 +26,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
-        <!--main content start-->
+        <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
@@ -42,74 +42,76 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                     </ol>
                                 </nav>
+                                <!-- BREADCRUMB END -->
                                 <h2><?php echo $curr_name; ?></h2><hr class="my-2">
                                 <h6 class='text-secondary mb-3'>Curriculum</h6>
-
                             </header>
-                                <!-- Form -->
-                                <form action="action.php" method="POST">
-                                    <div class="currcard container">
-                                        <div class="d-flex justify-content-between">
-                                            <h4>Information</h4>
-                                            <div class="btn-con my-a">
-                                                <input type="hidden" name="action" value="updateCurriculum">
-                                                <button id='edit-btn' class='btn text-primary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</button>
-                                                <button id="cancel-btn" class="btn btn-dark btn-sm d-none me-1">CANCEL</button>
-                                                <input type="submit" class="btn btn-success btn-sm d-none" value="SAVE">
-                                            </div>
-                                        </div><hr class='mt-2 mb-4'>
-                                        <section class="w-100">
-                                            <div class="ps-3 row w-100">
-                                                    <div class="col-sm-3"><label class="my-auto">Code</label></div>
-                                                    <div class="col-sm-9">
-                                                        <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                                        <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
-                                                    </div>
-                                                    <label class="col-sm-3">Name</label>
-                                                    <div class="col-sm-9">
-                                                        <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
-                                                        <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
-                                                    </div>
-                                                    <label class="col-sm-3">Description</label>
-                                                    <div class="col-sm-9">
-                                                        <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
-                                                        <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
-                                                    </div>
-                                                </div>
-                                        </section>
+                            <!-- HEADER END -->
+                            <!-- FORM -->
+                            <form action="action.php" method="POST">
+                                <div class="currcard container">
+                                    <div class="d-flex justify-content-between">
+                                        <h4>Information</h4>
+                                        <div class="btn-con my-a">
+                                            <input type="hidden" name="action" value="updateCurriculum">
+                                            <button id='edit-btn' class='btn link btn-sm'><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                            <button id="cancel-btn" class="btn btn-dark btn-sm d-none me-1">Cancel</button>
+                                            <input type="submit" class="btn btn-success btn-sm d-none" value="Save">
                                         </div>
-                                    </div>
-                                </form>
-                                <!-- Track table -->
-                                <div class="container mt-5">
-                                    <table id="table" class="table-striped">
-                                        <thead class='thead-dark'>
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <h4>Strand List</h4>
-                                                <div>
-                                                    <button class="btn btn-secondary" title='Archive strand'>Archive</button>
-                                                    <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                    </div><hr class='mt-2 mb-4'>
+                                    <section class="w-100">
+                                        <div class="ps-3 row w-100">
+                                                <div class="col-sm-3"><label class="my-auto">Code</label></div>
+                                                <div class="col-sm-9">
+                                                    <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
+                                                    <?php echo "<input class='form-control form-input' type='text' name='code' value='$curr_code' $state required>"; ?>
+                                                </div>
+                                                <label class="col-sm-3">Name</label>
+                                                <div class="col-sm-9">
+                                                    <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
+                                                    <?php echo "<input class='form-input form-control' type='text' name='name' value='$curr_name' $state required>"; ?>
+                                                </div>
+                                                <label class="col-sm-3">Description</label>
+                                                <div class="col-sm-9">
+                                                    <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
+                                                    <?php echo "<textarea  class='form-input form-control' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                                 </div>
                                             </div>
-
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
-                                                <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
-                                                <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                    </section>
+                                    </div>
                                 </div>
+                            </form>
+                            <!-- FORM END -->
+                            <!-- TRACK TABLE -->
+                            <div class="container mt-5">
+                                <table id="table" class="table-striped">
+                                    <thead class='thead-dark'>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <h4>Strand List</h4>
+                                            <div>
+                                                <button class="btn btn-secondary" title='Archive strand'>Archive</button>
+                                                <button id="add-btn" class="btn btn-success add-prog" title='Add new strand'>Add strand</button>
+                                            </div>
+                                        </div>
+
+                                        <tr>
+                                            <th data-checkbox="true"></th>
+                                            <th scope='col' data-width="100" data-align="right" data-field='prog_code'>Code</th>
+                                            <th scope='col' data-width="600" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
+                                            <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
+                            <!-- TRACK TABLE END -->
                         </div>
                     </div>
                 </div>
             </section>
-            <!--main content end-->
-            <!--footer start-->
+            <!-- MAIN CONTENT END-->
+            <!-- FOOTER -->
             <?php include_once("../inc/footer.html"); ?>
-            <!--footer end-->
+            <!-- FOOTER END -->
         </section>
     </section>
     <!-- ADD MODAL -->
@@ -143,7 +145,7 @@ $edit_btn_state = ($state == "disabled") ? "" : "disabled";
             </div>
         </div>
     </div>
-    <!-- ADD MODAL  -->
+    <!-- ADD MODAL END -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>

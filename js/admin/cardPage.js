@@ -1,14 +1,14 @@
 // HTML elements
-let addBtn, cardCon, kebab, noResultMsg,searchInput, addToast, addModal, warningToast
+let addBtn, cardCon, kebab, noResultMsg, searchInput, addModal, form
 
 // Data
 let page, camelized, action, deleteMessage, archiveMessage, keywords, dataList, 
     timeout, elementAccess
 
 // Function
-let prepareHTMLOfData, prepareHTMLofArchive, filter
+let prepareHTMLOfData, prepareHTMLofArchive, filterDataFn
 
-const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
+const setup = (page, prepareHTML, prepareArchiveHTML, filterFn) => {
     // string detail to be added in the delete and archive modal messages
     // page = page
     var programString = ""
@@ -34,9 +34,8 @@ const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
     kebab = $('.kebab')
     noResultMsg = $('.msg')
     searchInput = $('#search-input')
-    addToast = $('.add-toast')
     addModal = $('#add-modal')
-    warningToast = $('.warning-toast')
+    form = $(`${page}-form`)
 
     // delete and arhive messages
     deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`
@@ -47,7 +46,7 @@ const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
     prepareHTMLOfData = prepareHTML
     prepareHTMLofArchive = prepareArchiveHTML
 
-    filter = filter
+    filterDataFn = filterFn
 
     keywords = ""
     timeout = null
@@ -56,29 +55,29 @@ const setup = (page, prepareHTML, prepareArchiveHTML, filter) => {
 
 const reload = () => {
     console.log("from reload")
-    spinner.show()
+    showSpinner()
     // getArchiveAction = `getArchived${camelized}JSON`
+    console.log("Action: ", action)
     $.post('action.php', {action}, (response) => {
         dataList = JSON.parse(response)
-        let addBtn = `<div class='card tile btn add-btn card shadow-sm'>
-            <div class='card-body'>Add ${camelized}</div>
-        </div>`
+        let addBtn = 
+        `   <div class='tile card shadow-sm p-0 position-relative'>
+                <a role='button' class='card-link add-btn btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;'></a>
+                <div class='card-body position-absolute d-flex-column justify-content-between'>
+                    Add ${camelized}
+                </div>
+            </div>`
         $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn)
         $('.arch-list').html(prepareHTMLofArchive(dataList.archived))
     })
-    // $.post('action.php', {action:getArchiveAction} ,(data) => {
-    //     console.log(getArchiveAction)
-    //     archivedData = JSON.parse(data)
-        
-    // })
     hideSpinner()
 }
 
 
 /** Shows all curriculum cards with the add button */
-const showAllCards = () => {
-    spinner.show()
-    $('.card').each(function() {
+const showAllTiles = () => {
+    showSpinner()
+    $('.tile').each(function() {
         $(this).show()
     })
     noResultMsg.addClass('d-none') // hide 'No result' message
@@ -86,14 +85,14 @@ const showAllCards = () => {
 }
 
 /** Shows only the matching cards with the keyword */
-const showResults = (results) => {
+const showResults = results => {
     var len = results.length
-    var cards = $('.card')
-    if (len === dataList.length) return showAllCards()
+    var tiles = $('.tile')
+    if (len === dataList.data.length) return showAllTiles()
 
     if (len > 0) {
         noResultMsg.addClass('d-none')
-        cards.each(function() {
+        tiles.each(function() {
             var card = $(this)
             if (results.includes(card.attr('data-id'))) card.show()
             else card.hide()
@@ -102,7 +101,7 @@ const showResults = (results) => {
     }
 
     // no results found at this point
-    cards.each(function() {
+    tiles.each(function() {
         $(this).hide()
         noResultMsg.removeClass('d-none')
     })
@@ -115,18 +114,22 @@ const showWarning = () => {
 // const eventDelegations = () => {
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
     // search 
-    $(document).on('search', '#search-input', () => {
-        if ($('#search-input').val().length == 0) showAllCards()
-    })
+
+    const showAllTilesIfEmpty = () => {
+        if ($('#search-input').val().length == 0) showAllTiles()
+    } 
+
+    $(document).on('search', '#search-input', () => showAllTilesIfEmpty())
 
     $(document).on('keyup', '#search-input', () => {
-        spinner.show()
+        showSpinner()
         clearTimeout(timeout) // resets the timer
         timeout = setTimeout(() => { // executes the function after the specified milliseconds
-            let results = getDataResult(dataList)
+            let results = filterDataFn(dataList.data)
             showResults(results.map((element) => { // map function returns an array containing the specified component of the element
                 return element[elementAccess]
             }))
+            showAllTilesIfEmpty()
             hideSpinner()
         }, 500)
     })
@@ -136,21 +139,10 @@ const showWarning = () => {
     $(document).on('click', '.delete-btn', function() {
         var code = $(this).attr('id')
         var action = `delete${camelized}`
-        console.log(action)
         $.post("action.php", {code, action}, function(data) {	
             $('#delete-modal').modal('hide')		
             reload()
-            showWarningToast('archive')
-        })
-    })
-
-    $(document).on('click', '.archive-btn', function() {
-        var code = $(this).attr('id')
-        var action = `archive${camelized}`
-        $.post("action.php", {code, action:action}, function(data) {	
-            $('#archive-modal').modal('hide')		
-            reload()
-            showWarningToast()
+            showWarning()
         })
     })
 
@@ -159,7 +151,7 @@ const showWarning = () => {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')
         let archiveModal = $('#archive-modal')
-        archiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        archiveModal.find('#modal-identifier').html(`${name} ${camelized}`)
         archiveModal.find('.modal-msg').html(archiveMessage)
         archiveModal.find('.archive-btn').attr('id', code)
         archiveModal.modal('toggle')
@@ -169,7 +161,7 @@ const showWarning = () => {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')
         let deleteModal = $('#delete-modal')
-        deleteModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        deleteModal.find('#modal-identifier').html(`${name} ${camelized}`)
         deleteModal.find('.modal-msg').html(deleteMessage)
         deleteModal.find('.delete-btn').attr('id', code)
         deleteModal.modal('toggle')
@@ -187,6 +179,16 @@ const showWarning = () => {
     });
     
     //archive script
+    $(document).on('click', '.archive-btn', function() {
+        var code = $(this).attr('id')
+        var action = `archive${camelized}`
+        $.post("action.php", {code, action}, function(data) {	
+            $('#archive-modal').modal('hide')		
+            reload()
+            showToast('success', `${camelized} successfully archived`)
+        })
+    })
+
     $(document).on('click', '.unarchive-btn', function() {
         $('#view-arch-modal').modal('hide')	
         var code = $(this).attr('id')
@@ -197,7 +199,7 @@ const showWarning = () => {
         $.post("action.php", {code, action}, function(data) {	
             $('#unarchive-modal').modal('hide')		
             reload()
-            showWarningToast()
+            showToast('success', `${camelized} successfully unarchived`)
         })
     })
 
@@ -206,9 +208,12 @@ const showWarning = () => {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')
         let unarchiveModal = $('#unarchive-modal')
-        unarchiveModal.find('.modal-identifier').html(`${name} ${camelized}`)
+        unarchiveModal.find('#modal-identifier').html(`${name} ${camelized}`)
         unarchiveModal.find('.modal-msg').html(unarchiveMessage)
         unarchiveModal.find('.unarchive-btn').attr('id', code)
         unarchiveModal.modal('toggle')
     })
+
+
+
 // } 

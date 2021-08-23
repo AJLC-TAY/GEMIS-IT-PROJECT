@@ -45,7 +45,7 @@
         $age = $faculty->get_age();
         // $gender = $faculty->get_sex();
         $sex = $faculty->get_sex();
-        $department = $faculty->get_department()[0];
+        $department = $faculty->get_department();
         // $genderOption = "<option value='NULL'>-- Select gender --</option>"
         //                ."<option value='f' ". (($gender == 'Female') ? "selected" : ""). ">Female</option>"
         //                ."<option value='m' ". (($gender == 'Male') ? "selected" : "") .">Male</option>";

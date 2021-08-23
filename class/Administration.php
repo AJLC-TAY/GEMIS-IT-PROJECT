@@ -45,6 +45,110 @@ class Administration extends Dbconfig
         return mysqli_stmt_get_result($this->prepared_query($sql, $params, $types));
     }
 
+
+    /*** School Year Methods */
+
+    public function initializeSY()
+    {
+        $curr_code = $_POST['curr-code'];
+        $school_year = 43;
+        $start_yr= $_POST['start-year'];
+        $end_yr = $_POST['end-year'];
+        $grd_level = $_POST['grade-level'];
+        $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
+        $this->prepared_query("INSERT INTO schoolyear VALUES (?, ?, ?, ?, ?, ?, ?);", [$school_year, $start_yr, $end_yr, $grd_level, 1, 1, $enrollment], "iiiiiii");
+        echo "School year successfully initialized.";
+        header("Location: schoolyear.php");
+    }
+
+    public function listSYJSON()
+    {
+        $result = mysqli_query($this->dbConnect, "SELECT * FROM schoolyear ORDER BY end_year DESC;");
+        $sy_list = [];
+        $grd_list = array('11' => '11', '12' => '12'); 
+        $quarter_list = array('1' => 'First', '2' => 'Second', '3' => 'Third', '4' => 'Fourth'); 
+        $semester_list = array('1' => 'First', '2' => 'Second');   
+        while($row = mysqli_fetch_assoc($result)) {
+            $sy_id = $row['sy_id'];
+            $quarter = $row['current_quarter'];
+            $semester = $row['current_semester'];
+            $enrollment = $row['can_enroll'];
+            $grd_level = $row['grd_level'];
+
+            // grade options
+            $grd_opt = "<select data-id='$sy_id' name='grade-level' class='form-select' disabled>";
+            foreach($grd_list as $id => $value) {
+                $grd_opt .= "<option value='$id' ". (($id == $grd_level) ? "selected" : "") .">$value</option>";
+            }
+            $grd_opt .= "</select>";
+
+            // quarter options
+            $quarter_opt = "<select data-id='$sy_id' name='quarter' class='form-select' disabled>";
+            foreach($quarter_list as $id => $value) {
+                $quarter_opt .= "<option value='$id' ". (($id == $quarter) ? "selected" : "") .">$value</option>";
+            }
+            $quarter_opt .= "</select>";
+
+            // semester options
+            $sem_opt = "<select data-id='$sy_id' name='semester' class='form-select' disabled>";
+            foreach($semester_list as $id => $value) {
+                $sem_opt .= "<option value='$id' ". (($id == $semester) ? "selected" : "") .">$value</option>";
+            }
+            $sem_opt .= "</select>";
+
+
+            $enroll_opt = ($enrollment ? "On-going" : "Ended");
+            $enroll_opt = "<div class='form-check form-switch ms-3 my-auto'>
+                    <input ". ($enrollment ? "checked" : "") ." name='enrollment' data-id='$sy_id' class='form-check-input' type='checkbox' title='Turn ". ($enrollment ? "off" : "on")." enrollment'>
+                    <label class='form-check-label status'>$enroll_opt</label>
+            </div>";
+             
+            $sy_list[] = ['id' => $sy_id, 
+                            's_year' => $row['start_year'], 
+                            'e_year' => $row['end_year'], 
+                            'sy_year' => $row['start_year']." - ".$row['end_year'], 
+                            'current_grd_val' => $grd_level, 
+                            'grd_level' => $grd_opt, 
+                            'current_qtr_val' => $quarter, 
+                            'current_qtr' => $quarter_opt, 
+                            'current_sem_val' =>  $semester,
+                            'current_sem' => $sem_opt,
+                            'enrollment_val' => $enrollment, 
+                            'enrollment' => $enroll_opt, 
+                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm'>Edit</button>"
+                                       ."<div class='edit-options d-none'><button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm me-1'>Cancel</button>"
+                                       ."<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button></div>"];
+                                        //  "<a href='schoolyear.php?sy_id=$id&action=edit' role='button' class='btn btn-secondary edit-btn'>Edit</a>"];
+        }
+        echo json_encode($sy_list);
+    }
+
+    public function editEnrollStatus() {
+        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
+        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $_POST['sy_id']], "ii");
+        echo "test";
+    }
+    public function get_sy() 
+    {
+        $result = $this->prepared_select("SELECT * FROM schoolyear WHERE sy_id=?", [$_GET['sy_id']], "i");
+        $row = mysqli_fetch_assoc($result);
+        return ['id' => $row['sy_id'], 
+                's_year' => $row['start_year'], 
+                'e_year' => $row['end_year'], 
+                'grd_level' => $row['grd_level'], 
+                'current_qtr' => $row['current_quarter'], 
+                'current_sem' => $row['current_semester'],
+                'enrollment' => $row['can_enroll']];
+    }
+
+    public function editSY()
+    {
+        $sy_id = $_POST['sy_id'];
+        $grd_level = $_POST['grade-level'];
+        $quarter = $_POST['quarter'];
+        $semester = $_POST['semester'];
+        $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
+    }
     /*** Curriculum Methods */
 
     /** Returns the list of curriculum. */
@@ -61,9 +165,8 @@ class Administration extends Dbconfig
 
     public function listCurriculumJSON()
     {
-        // echo json_encode($this->listCurriculum('curriculum'));
-        echo json_encode(['data' => $this->listCurriculum('curriculum'),
-                            'archived' => $this->listCurriculum('archived_curriculum')]);
+        echo json_encode(['data'        => $this->listCurriculum('curriculum'),
+                          'archived'    => $this->listCurriculum('archived_curriculum')]);
     }
 
     /** Get curriculum object from a specified curriculum code */
@@ -102,17 +205,8 @@ class Administration extends Dbconfig
     {
         $code = $_POST['code'];
         $old_code = $_POST['current_code'];
-        // $name = $_POST['name'];
-        // $description = $_POST['curriculum-desc']; 
+        // parameter order: new code, current code, name, description, current code
         $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
-
-        // $updateQuery = "UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE=?";//kasama ata ung where statement para alam kong anong curr and iaupdate?
-        // $stmt = mysqli_prepare($this->dbConnect, $updateQuery);
-        // mysqli_stmt_bind_param($stmt, 'ssss', $code, $name, $description, $old_code);
-        // mysqli_stmt_execute($stmt);
-        // $updateQuery = "UPDATE curriculum SET curr_code='{$code}', curr_name='{$name}', curr_desc='{$description}' WHERE curr_code = '{$old_code}';";
-        // mysqli_query($this->dbConnect, $updateQuery);
-
         $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
         header("Location: curriculum.php?code=$code");
     }
@@ -927,7 +1021,7 @@ class Administration extends Dbconfig
     }
 
     public function listDepartments() {
-        $result = mysqli_query($this->dbConnect, "SELECT DISTINCT(department) FROM faculty;");
+        $result = mysqli_query($this->dbConnect, "SELECT DISTINCT(department) FROM faculty WHERE department!=NULL;");
         $departments = [];
         while($row = mysqli_fetch_row($result)) {
             $departments[] = $row[0];

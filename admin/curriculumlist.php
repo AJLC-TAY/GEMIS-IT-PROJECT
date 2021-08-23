@@ -184,18 +184,10 @@
 
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
-        <div class="position-absolute" style="bottom: 20px; right: 25px;">
-            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body"></div>
-            </div>
-
-            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    Curriculum successfully added
-                </div>
-            </div>
-        </div>
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
+    <!-- TOAST END -->
+
 </body>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="text/javascript" src="../js/admin/cardPage.js"></script>

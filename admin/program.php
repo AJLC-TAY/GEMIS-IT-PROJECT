@@ -57,7 +57,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 <div class="card w-100 h-auto">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="text-start fw-bold">PROGRAM DETAILS</h5>
-                                    <a href="" id='edit-btn' class='btn btn-secondary btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
+                                    <a href="" id='edit-btn' class='btn link btn-sm'><i class="bi bi-pencil-square me-2"></i>EDIT</a>
                                 </div><hr class="mt-1 mb-4">
                                     <form action="action.php" method="POST">
                                         <div class="form-group row">

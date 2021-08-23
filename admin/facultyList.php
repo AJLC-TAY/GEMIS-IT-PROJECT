@@ -1,7 +1,5 @@
 <?php include_once("../inc/head.html"); 
     session_start();
-    // $previousLink = $_SESSION['previousLink'];
-    $_SESSION['previousLink'] = 'facultylist.php';
 ?>
 <title>Faculty Members List | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -82,18 +80,8 @@
         </section>
     </section>
     <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
-        <div class="position-absolute" style="bottom: 20px; right: 25px;">
-            <div class="toast warning-toast bg-danger text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body"></div>
-            </div>
-
-            <div class="toast add-toast bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body">
-                    Faculty successfully added
-                </div>
-            </div>
-        </div>
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
