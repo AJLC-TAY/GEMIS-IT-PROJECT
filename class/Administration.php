@@ -590,8 +590,9 @@ class Administration extends Dbconfig
         $query = "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';";
         $query .= "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';";
         $query .= "INSERT INTO $req_dest SELECT * FROM $req_origin where sub_code = '$code';";
-        $query .= "DELETE FROM $shared_origin WHERE sub_code = '$code'";
-        $query .= "DELETE FROM $$req_origin WHERE sub_code = '$code'";
+        $query .= "DELETE FROM $shared_origin WHERE sub_code = '$code';";
+        $query .= "DELETE FROM $req_origin WHERE sub_code = '$code';";
+        $query .= "DELETE FROM $sub_origin WHERE sub_code = '$code';";
         mysqli_multi_query($this->dbConnect, $query);
     }
 

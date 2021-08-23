@@ -84,7 +84,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     </form>
                                 </div>
                             </div>
-                            <!-- Track table -->
+                            <!-- Subject table -->
                             <div class="container mt-5">
                                 <div class="card w-100 h-auto">
                                     <table id="table" class="table-striped">
@@ -96,7 +96,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             <hr class="mt-1 mb-4">
                                             <div class="d-flex flex-row-reverse mb-3">
                                                 <!-- <div class="d-flex mb-3"> -->
-                                                <button class="btn btn-secondary btn-sm track-archive-btn"><i class="bi bi-archive me-2"></i>Archive</button>
+                                                <button id = "subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
                                             </div>
                                             <tr>
                                                 <th data-checkbox="true"></th>
@@ -118,6 +118,27 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <!--footer end-->
             </section>
         </section>
+        <!-- Archive subject confirmation -->
+        <div class="modal" id="subject-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <h4 class="mb-0">Confirmation</h4>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
+                            <p class="modal-msg"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary close-btn archive-btn">Archive</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>

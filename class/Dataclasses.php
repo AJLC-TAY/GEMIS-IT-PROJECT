@@ -1411,6 +1411,7 @@ class StudentAward extends Award implements JsonSerializable
         private $belong_to_ipcc;
         private $id_picture;
         private $action;
+        private $section;
 
         public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture)
         {
@@ -1527,89 +1528,12 @@ class StudentAward extends Award implements JsonSerializable
         {
             return $this->id_picture;
         }
+        public function set_section($sec)
+        {
+            $this->section = $sec;
+        }
 
-        // //setter function
-        // //no stud_id, auto-incremented
-
-        // public function set_lrn($lrn)
-        // {
-        //     $this->lrn = $lrn;
-        // }
-
-        // public function set_first_name($first_name)
-        // {
-        //     $this->first_name = $first_name;
-        // }
-
-        // public function set_middle_name($middle_name)
-        // {
-        //     $this->middle_name = $middle_name;
-        // }
-
-        // public function set_last_name($last_name)
-        // {
-        //     $this->last_name = $last_name;
-        // }
-
-        // public function set_ext_name($ext_name)
-        // {
-        //     $this->ext_name = $ext_name;
-        // }
-
-        // public function set_sex($sex)
-        // {
-        //     $this->sex = $sex;
-        // }
-
-        // public function set_age($age)
-        // {
-        //     $this->age = $age;
-        // }
-
-        // public function set_birthdate($birthdate)
-        // {
-        //     $this->birthdate = $birthdate;
-        // }
-
-        // public function set_birth_place($birth_place)
-        // {
-        //     $this->birth_place = $birth_place;
-        // }
-
-        // public function set_indigenous_group($indigenous_group)
-        // {
-        //     $this->indigenous_group = $indigenous_group;
-        // }
-
-        // public function set_mother_tongue($mother_tongue)
-        // {
-        //     $this->mother_tongue = $mother_tongue;
-        // }
-
-        // public function set_religion($religion)
-        // {
-        //     $this->religion = $religion;
-        // }
-
-        // public function set_cp_no($cp_no)
-        // {
-        //     $this->cp_no = $cp_no;
-        // }
-
-        // public function set_psa_birth_cert($psa_birth_cert)
-        // {
-        //     $this->psa_birth_cert = $psa_birth_cert;
-        // }
-
-        // public function set_belong_to_ipcc($belong_to_ipcc)
-        // {
-        //     $this->belong_to_ipcc = $belong_to_ipcc;
-        // }
-
-        // public function set_id_picture($id_picture)
-        // {
-        //     $this->id_picture = $id_picture;
-        // }
+       
 
         public function jsonSerialize()
     {
@@ -1629,6 +1553,7 @@ class StudentAward extends Award implements JsonSerializable
             'psa_birth_cert' => $this->psa_birth_cert,
             'belong_to_ipcc'=> $this->belong_to_ipcc,
             'action' => $this->action,
+            'section' => 'waley pa'
         ];
     }
 
