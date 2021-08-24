@@ -156,7 +156,7 @@ ul.top-menu>li>.logout {
 /* MAIN CONTENT CONFIGURATION */
 
 #main-content {
-    margin-left: 230px;
+    margin-left: 16%;
 }
 
 .header,
@@ -218,9 +218,8 @@ a.logo span {
 }
 
 .breadcrumb {
-    margin-top: 40px;
+    margin-top: 30px;
 }
-
 
 /*top menu*/
 
@@ -461,7 +460,7 @@ input::-webkit-inner-spin-button {
 }
 
 .btn-space {
-    margin-right: 5px;
+    margin-right: 7px;
 }
 
 .save-btn {

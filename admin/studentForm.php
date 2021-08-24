@@ -187,13 +187,13 @@
                                                 <label for='middlename'>Middle Name</label>
                                                 <input type='text' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
                                             </div>
-                                            <div class='form-group col-md-4'>
+                                            <div class='form-group col-md-6'>
                                                 <label for='extensionname'>Extension Name</label>
                                                 <input type='text' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
                                             </div>
                                         </div>
                                         <div class='form-row row'>
-                                            <div class='form-group col-md-5'>
+                                            <div class='form-group col-md-6'>
                                                 <label for='middlename'>Contact Number</label>
                                                 <input type='text' class='form-control' id='contactnumber' name='contactnumber' placeholder='Contact Number'>
                                             </div>
@@ -204,50 +204,62 @@
                                         </div>
 
                                         <h5>MOTHER</h5>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Last Name</label>
-                                        <div class='col-xl-9 col-lg-8'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
+                                        <div class='form-row row'>
+                                            <div class='form-group col-md-6'>
+                                                <label for='lastname'>Last Name</label>
+                                                <input type='text' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='firstname'>First Name</label>
+                                                <input type='text' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='middlename'>Middle Name</label>
+                                                <input type='text' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='extensionname'>Extension Name</label>
+                                                <input type='text' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
+                                            </div>
                                         </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's First Name</label>
-                                        <div class='col-xl-9 col-lg-8'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Mother's Middle Name</label>
-                                        <div class='col-xl-9 col-lg-8'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
-                                        <div class='col-xl-9 col-lg-8'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
-                                        <div class='col-xl-9 col-lg-8'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
+                                        <div class='form-row row'>
+                                            <div class='form-group col-md-6'>
+                                                <label for='middlename'>Contact Number</label>
+                                                <input type='text' class='form-control' id='contactnumber' name='contactnumber' placeholder='Contact Number'>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='extensionname'>Occupation</label>
+                                                <input type='text' class='form-control' id='occupation' name='occupation' placeholder='Occupation'>
+                                            </div>
                                         </div>
                                         <h5>GUARDIAN</h5>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's Last Name</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
+                                        <div class='form-row row'>
+                                            <div class='form-group col-md-6'>
+                                                <label for='lastname'>Last Name</label>
+                                                <input type='text' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='firstname'>First Name</label>
+                                                <input type='text' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='middlename'>Middle Name</label>
+                                                <input type='text' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='extensionname'>Extension Name</label>
+                                                <input type='text' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
+                                            </div>
                                         </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's First Name</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Guardian's Middle Name</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Contact Number</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Occupation</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
-                                        </div>
-                                        <label class="col-xl-2 col-lg-3 col-form-label text-start">Relationship to the Guardian</label>
-                                        <div class='col-xl-10 col-lg-9'>
-                                            <input class="form-control" type="text" placeholder="" aria-label="default input example">
+                                        <div class='form-row row'>
+                                            <div class='form-group col-md-6'>
+                                                <label for='middlename'>Contact Number</label>
+                                                <input type='text' class='form-control' id='contactnumber' name='contactnumber' placeholder='Contact Number'>
+                                            </div>
+                                            <div class='form-group col-md-6'>
+                                                <label for='extensionname'>Occupation</label>
+                                                <input type='text' class='form-control' id='occupation' name='occupation' placeholder='Occupation'>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -256,8 +268,8 @@
                             </div>
                             <div class="row">
                                 <div class="mt-4 d-flex flex-row-reverse">
-                                    <button type="button" class="btn btn-danger">Cancel</button>
                                     <button type="button" class="btn btn-success me-2">Save</button>
+                                    <button type="button" class="btn btn-danger btn-space">Cancel</button>
                                 </div>
                             </div>
 

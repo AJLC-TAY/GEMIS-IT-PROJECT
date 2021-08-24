@@ -11,7 +11,7 @@
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
@@ -23,7 +23,7 @@
                                 </ol>
                             </nav>
                             <div class="d-flex justify-content-between mb-3">
-                                    <h3>Students</h3>
+                                    <h3 class="fw-bold">Students</h3>
                                     <div>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Students</button>
                                     </div>
@@ -31,7 +31,7 @@
                         </header>
 
                         <!-- Student List -->
-                        <div class="container mt-1">
+                        <div class="container mt-3">
                             <div class="card w-100 h-auto bg-light">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>

@@ -52,7 +52,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 </nav>
                                 <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
                                 <hr class="my-2">
-                                <h6>Curriculum</h6>
+                                <h6 class="fw-bold">Curriculum</h6>
                             </header>
                             <!-- Form -->
 
