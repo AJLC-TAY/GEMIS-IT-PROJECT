@@ -36,7 +36,7 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between">
-                                    <h3>Curriculum</h3>
+                                    <h4 class="fw-bold">Curriculum</h4>
                                     <span>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>

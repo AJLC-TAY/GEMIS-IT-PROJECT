@@ -20,7 +20,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <?php 
                                 if (isset($_GET['action'])) {
@@ -45,7 +45,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">School Year</h4>
+                        <h4 class="mb-0 fw-bold">School Year</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
