@@ -16,6 +16,7 @@ let onPostBodyOfTable = () => {
 let subject_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
 
 var unarchiveMessage = 'Unarchiving this subject will also unarchive all student grades under it.'
+var archiveMessage = 'Archiving this subject will also archive all student grades under it.'
 let prepareArchiveHTML = archivedData => {
     let html = ''
     archivedData.forEach(element => {
@@ -77,6 +78,32 @@ $(function() {
         unarchiveModal.modal('toggle')
     })
 
+    $(document).on('click', '.archive-btn', function() {
+        var $table = $(tableId)
+        var action = 'archiveSubject'
+    
+        let selected = $table.bootstrapTable('getSelections')
+        console.log(selected)
+        selected.forEach(element => {
+            var code = element.sub_code
+            $.post("action.php", {code, action}, function(data) {	
+                $table.bootstrapTable('refresh')
+                
+            })
+        })
+        $('#archive-modal').modal('hide')
+    })
+
+    
+    $(document).on('click', '.archive-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let archiveModal = $('#archive-modal')
+        archiveModal.find('.modal-identifier').html(`${name} Subject`)
+        archiveModal.find('.modal-msg').html(archiveMessage)
+        archiveModal.find('.archive-btn').attr('id', code)
+        archiveModal.modal('toggle')
+    })
     // $('#save-btn').click(function() {
     //     $(this).prop("disabled", true)
     //     $("#edit-btn").prop("disabled", false)

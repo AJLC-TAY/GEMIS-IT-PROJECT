@@ -5,7 +5,7 @@ let tableId, url, method, id, search, searchSelector, height
 tableId = '#table'
 url = 'getAction.php?data=student'
 method = 'GET'
-id = 'teacher_id'
+id = 'student_id'
 search = true
 searchSelector = '#search-input'
 height = 425

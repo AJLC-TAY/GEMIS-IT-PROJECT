@@ -14,21 +14,36 @@
     $indigenous_group = $userProfile->get_indigenous_group();
     $mother_tongue = $userProfile->get_mother_tongue();
     $religion = $userProfile->get_religion();
-    $add = $userProfile->get_address(); 
+    $address = $userProfile->get_address(); 
+    $add = $address['address'];
     $cp_no = $userProfile->get_cp_no();
     $psa_birth_cert = $userProfile->get_psa_birth_cert();
     $belong_to_ipcc = $userProfile->get_belong_to_ipcc();
     $id_picture = $userProfile->get_id_picture();
-    $father_name = $userProfile->get_father_name();
-    $father_occupation = $userProfile->get_father_occupation();
-    $father_cp_no = $userProfile->get_father_cp_no();
-    $mother_name = $userProfile->get_mother_name();
-    $mother_occupation = $userProfile->get_mother_occupation();
-    $mother_cp_no = $userProfile->get_mother_cp_no();
-    $guardian_name = $userProfile->get_guardian_name();
-    $guardian_occupation = $userProfile->get_guardian_occupation();
-    $guardian_cp_no = $userProfile->get_guardian_cp_no();
-    $guardian_relationship = $userProfile->get_guardian_relationship();
+    $section = $userProfile->get_section();
+    $parents = $userProfile->get_parents();
+    // $father_name = $userProfile->get_father_name();
+    // $father_occupation = $userProfile->get_father_occupation();
+    // $father_cp_no = $userProfile->get_father_cp_no();
+    // $mother_name = $parents['f']['name'];
+    // $mother_occupation = $parents['f']['occupation'];
+    // $mother_cp_no = $parents['f']['cp_no'];
+
+    // $father_name = $userProfile->get_father_name();
+    // $father_occupation = $userProfile->get_father_occupation();
+    // $father_cp_no = $userProfile->get_father_cp_no();
+    // $mother_name = $userProfile->get_mother_name();
+    // $mother_occupation = $userProfile->get_mother_occupation();
+    // $mother_cp_no = $userProfile->get_mother_cp_no();
+
+    // $guardian_name = $userProfile->get_guardian_name();
+    // $guardian_cp_no = $userProfile->get_guardian_cp_no();
+    // $guardian_relationship = $userProfile->get_guardian_relationship();
+    // $guardian = $userProfile->get_guardians();
+    // var_dump(array_values($guardian));
+    // $guardian_name = $guardian['name'];
+    // $guardian_cp_no = $guardian['cp_no'];
+    // $guardian_relationship = $guardian['relationship'];
 ?>
 
 <title>Student Information | GEMIS</title>
@@ -93,7 +108,7 @@
                                     <h4 class="mt-3 fw-bold">CONTACT INFORMATION</h4>
                                     <ul class="list-group ms-3">
                                         <?php echo "<li class='list-group-item'>Home Address: $add </li>
-                                        <li class='list-group-item'>Contact Number: $cp_no $</li>"?>
+                                        <li class='list-group-item'>Contact Number: $cp_no </li>"?>
                                         
                                     </ul>
                                 </div>
@@ -102,9 +117,8 @@
                                      <h4 class="mt-3 fw-bold">CONTACT PERSONS</h4>
                                      <h5>PARENT/S</h5>
                                      <ul class="list-group ms-3">
-                                         <?php echo "<li class='list-group-item'>Father's Name: $father_name</li>
-                                        <li class='list-group-item'>Occupation: $father_occupation</li>
-                                        <li class='list-group-item'>Contact Number: $father_cp_no</li>
+                                         <?php echo "
+                                        
                                         <li class='list-group-item'>Mother's Name: $mother_name</li>
                                         <li class='list-group-item'>Occupation: $mother_occupation</li>
                                         <li class='list-group-item'>Contact Number: $mother_cp_no</li>";?>
@@ -112,7 +126,6 @@
                                     <h5 class="mt-3 fw-bold">GUARDIAN/S</h5>
                                     <ul class="list-group ms-3">
                                         <?php echo "<li class='list-group-item'>Guardian's Name: $guardian_name</li>
-                                        <li class='list-group-item'>Occupation: $guardian_occupation</li>
                                         <li class='list-group-item'>Relationship to the Guardian: $guardian_cp_no</li>
                                         <li class='list-group-item'>Contact Number: $guardian_relationship</li>"?>
                                         

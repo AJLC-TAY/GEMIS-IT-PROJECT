@@ -1413,19 +1413,24 @@ class StudentAward extends Award implements JsonSerializable
         private $id_picture;
         private $action;
         private $section;
-        private $father_name;
-        private $father_occupation;
-        private $father_cp_no;
-        private $mother_name;
-        private $mother_occupation;
-        private $mother_cp_no;
-        private $guardian_name;
-        private $guardian_occupation;
-        private $guardian_cp_no;
-        private $guardian_relationship;
+        // private $father_name;
+        // private $father_occupation;
+        // private $father_cp_no;
+        // private $mother_name;
+        // private $mother_occupation;
+        // private $mother_cp_no;
+        // private $guardian_name;
+        // private $guardian_cp_no;
+        // private $guardian_relationship;
+        private $parents;
+        private $guardians;
 
-        public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, $father_name, $father_occupation, $father_cp_no, $mother_name,$mother_occupation, $mother_cp_no, $guardian_name, $guardian_occupation, $guardian_cp_no, $guardian_relationship)
-        {
+        // public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, 
+        //                     $father_name, $father_occupation, $father_cp_no, 
+        //                     $mother_name, $mother_occupation, $mother_cp_no, $guardian_name, $guardian_cp_no, $guardian_relationship)
+        // {
+            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, $parents, $guardians)
+            {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
             $this->lrn = $lrn;
@@ -1451,18 +1456,21 @@ class StudentAward extends Award implements JsonSerializable
                             . "<a href='studentInfo.php?id=$stud_id' role='button' class='btn btn-secondary w-auto' title='View Student'>View</a>"
                             ."</div>";
             $this->section = $section;
-            $this->father_name = $father_name;
-            $this->father_occupation = $father_occupation;
-            $this->father_cp_no = $father_cp_no;
-            $this->mother_name = $mother_name;
-            $this->mother_occupation = $mother_occupation;
-            $this->mother_cp_no = $mother_cp_no;
-            $this->guardian_name = $guardian_name;
-            $this->guardian_occupation = $guardian_occupation;
-            $this->guardian_cp_no = $guardian_cp_no;
-            $this->guardian_relationship = $guardian_relationship;
+            // $this->father_name = $father_name;
+            // $this->father_occupation = $father_occupation;
+            // $this->father_cp_no = $father_cp_no;
+            // $this->mother_name = $mother_name;
+            // $this->mother_occupation = $mother_occupation;
+            // $this->mother_cp_no = $mother_cp_no;
+            // $this->guardian_name = $guardian_name;
+            // $this->guardian_cp_no = $guardian_cp_no;
+            // $this->guardian_relationship = $guardian_relationship;
+            $this->parents = $parents;
+            $this->guardians = $guardians;
         }
 
+        
+        
         //getter functions
         public function get_stud_id()
         {
@@ -1565,36 +1573,52 @@ class StudentAward extends Award implements JsonSerializable
         {
             return $this->address;
         }
-        public function get_father_name(){
-            return $this->father_name;
+
+        public function get_parents()
+        {
+            return $this->parents;
         }
-        public function get_father_occupation(){
-            return $this->father_occupation;
+
+        public function get_guardians()
+        {
+            return $this->guardians;
         }
-        public function get_father_cp_no(){
-            return $this->father_cp_no;
-        }
-        public function get_mother_name(){
-            return $this->mother_name;
-        }
-        public function get_mother_occupation(){
-            return $this->mother_occupation;
-        }
-        public function get_mother_cp_no(){
-            return $this->mother_cp_no;
-        }
-        public function get_guardian_name(){
-            return $this->guardian_name;
-        }
-        public function get_guardian_occupation(){
-            return $this->guardian_occupation;
-        }
-        public function get_guardian_cp_no(){
-            return $this->guardian_cp_no;
-        }
-        public function get_guardian_relationship(){
-            return $this->guardian_relationship;
-        }
+
+        // public function get_father_name(){
+        //     return $this->father_name;
+        // }
+
+        // public function get_father_occupation(){
+        //     return $this->father_occupation;
+        // }
+
+        // public function get_father_cp_no(){
+        //     return $this->father_cp_no;
+        // }
+
+        // public function get_mother_name(){
+        //     return $this->mother_name;
+        // }
+        
+        // public function get_mother_occupation(){
+        //     return $this->mother_occupation;
+        // }
+
+        // public function get_mother_cp_no(){
+        //     return $this->mother_cp_no;
+        // }
+
+        // public function get_guardian_name(){
+        //     return $this->guardian_name;
+        // }
+
+        // public function get_guardian_cp_no(){
+        //     return $this->guardian_cp_no;
+        // }
+
+        // public function get_guardian_relationship(){
+        //     return $this->guardian_relationship;
+        // }
 
         public function jsonSerialize()
     {
@@ -1614,7 +1638,7 @@ class StudentAward extends Award implements JsonSerializable
             'psa_birth_cert' => $this->psa_birth_cert,
             'belong_to_ipcc'=> $this->belong_to_ipcc,
             'action' => $this->action,
-            'section' => 'waley pa'
+            'section' => 'waley pa',
         ];
     }
 

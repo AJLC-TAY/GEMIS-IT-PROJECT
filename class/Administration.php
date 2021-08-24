@@ -1008,11 +1008,11 @@ class Administration extends Dbconfig
 
         $section = "to follow";
         $address = "to follow";
+        $parent = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $studentList[] = new Student($row['stud_id'], $row['user_id_no'],$row['LRN'], $row['first_name'], $row['middle_name'], $row['last_name'], 
                                 $row['ext_name'],$row['sex'],$row['age'], $row['birthdate'],  $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'],
-                                $row['religion'], $address, $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture'], $section ,$section,$section,$section,$section,$section,$section,
-                                $section,$section,$section,$section);
+                                $row['religion'], $address, $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture'], $section ,$parent,$parent);
         }
         return $studentList;
     }
@@ -1021,17 +1021,68 @@ class Administration extends Dbconfig
         echo json_encode($this->listStudent());
     }
 
+    /**
+     * Returns Student with the specified student ID.
+     * 1.   Get Student Personal Information
+     * 2.   Get Student Parent Information
+     * 3.   Get Student Guardian Information 
+     * 3.   Initialize Student object
+     * 
+     * @return Student Student object.
+     */
     public function getStudent($id) {
-        $result = $this->prepared_select("SELECT * FROM student WHERE stud_id=?;", [$id], "i");
-        $row = mysqli_fetch_assoc($result);
+        // Step 1
+        $result = $this->prepared_select("SELECT * FROM student as s
+                                        JOIN address as a ON a.student_stud_id = s.stud_id 
+                                        WHERE stud_id=?;", [$id], "i");
+        $personalInfo = mysqli_fetch_assoc($result);
+
+        // Step 2
+        $result = $this->prepared_select("SELECT * FROM parent WHERE student_stud_id=?;", [$id], "i");
+        $parent = array();
+        while ($parentInfo = mysqli_fetch_assoc($result)){
+            $name = $parentInfo['last_name']. ", ". $parentInfo['first_name'] . $parentInfo['middle_name']; // to be added: $parentInfo['ext_name']
+            $parent[$parentInfo['sex']] = array('name' => $name,
+                                            'fname' => $parentInfo['first_name'],
+                                            'mname' => $parentInfo['middle_name'],
+                                            'lname' => $parentInfo['last_name'],
+                                            'sex' => $parentInfo['sex'],
+                                            'cp_no' => $parentInfo['cp_no'],
+                                            'occupation' => "occu");//is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
+        };
+
+        // Step 3
+        $result = $this->prepared_select("SELECT * FROM guardian WHERE student_stud_id=?;", [$id], "i");
+        
+        while ($guardianInfo = mysqli_fetch_assoc($result)){
+            $name = $guardianInfo['guardian_last_name']. ", ". $guardianInfo['guardian_first_name'] . $guardianInfo['guardian_middle_name']; // to be added: $parentInfo['ext_name']
+            $guardian = ['name' => $name, 
+                        'fname' => $guardianInfo['guardian_first_name'],
+                        'mname' => $guardianInfo['guardian_last_name'],
+                        'lname' => $guardianInfo['guardian_middle_name'],
+                        'relationship' => $guardianInfo['relationship'],
+                        'cp_no' => $guardianInfo['cp_no']]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
+        };
 
         $section = "to follow";
-        $address = "to follow";
-        return new Student($row['stud_id'], $row['user_id_no'], $row['LRN'], $row['first_name'],
-            $row['middle_name'], $row['last_name'], $row['ext_name'], $row['sex'], $row['age'],
-            $row['birthdate'], $row['birth_place'], $row['indigenous_group'], $row['mother_tongue'], 
-            $row['religion'], $address, $row['cp_no'], $row['psa_birth_cert'], $row['cp_no'], $row['psa_birth_cert'], $row['belong_to_IPCC'], $row['id_picture'], $section,
-            $section,$section,$section,$section,$section,$section,$section,$section,$section,$section);
+        $address = $personalInfo['home_no'] ." " . $personalInfo['street'] . ", " . $personalInfo['mun_city'] . ", " . $personalInfo['zip_code'] . " " . $personalInfo['province'];
+        $add = ['address' => $address,
+                'home_no' => $personalInfo['home_no'],
+                'street' => $personalInfo['street'],
+                'mun_city' => $personalInfo['mun_city'],
+                'provice' => $personalInfo['mun_city'],
+                'zipcode' => $personalInfo['zip_code']];
+        // return new Student($personalInfo['stud_id'], $personalInfo['user_id_no'], $personalInfo['LRN'], $personalInfo['first_name'],
+        // $personalInfo['middle_name'], $personalInfo['last_name'], $personalInfo['ext_name'], $personalInfo['sex'], $personalInfo['age'],
+        // $personalInfo['birthdate'], $personalInfo['birth_place'], $personalInfo['indigenous_group'], $personalInfo['mother_tongue'], 
+        // $personalInfo['religion'], $address, $personalInfo['cp_no'], $personalInfo['psa_birth_cert'], $personalInfo['cp_no'], $personalInfo['psa_birth_cert'], $personalInfo['belong_to_IPCC'], $personalInfo['id_picture'], $section,
+        // $parent['m']['name'], $parent['m']['occupation'], $parent['m']['cp_no'],$parent['f']['name'],$parent['f']['occupation'],$parent['f']['cp_no'],
+        // $guardian_name, $guardianInfo['cp_no'], $guardianInfo['relationship']);
+        
+        return new Student($personalInfo['stud_id'], $personalInfo['user_id_no'], $personalInfo['LRN'], $personalInfo['first_name'],
+        $personalInfo['middle_name'], $personalInfo['last_name'], $personalInfo['ext_name'], $personalInfo['sex'], $personalInfo['age'],
+        $personalInfo['birthdate'], $personalInfo['birth_place'], $personalInfo['indigenous_group'], $personalInfo['mother_tongue'], 
+        $personalInfo['religion'], $add, $personalInfo['cp_no'], $personalInfo['psa_birth_cert'], $personalInfo['cp_no'], $personalInfo['psa_birth_cert'], $personalInfo['belong_to_IPCC'], $personalInfo['id_picture'], $section, $parent, $guardian);
     }
 
     public function listDepartments() {

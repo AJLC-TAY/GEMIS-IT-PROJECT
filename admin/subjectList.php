@@ -48,7 +48,7 @@
                                                     <input id="search-input" type="search" class="form-control" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button class="btn btn-secondary btn-sm" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
+                                                    <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
                                                     <button class="btn btn-dark btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                                 </div>
                                             </div>
@@ -75,6 +75,27 @@
         </section>
     </section>
 
+    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary close-btn archive-btn">Archive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedSubjects" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -118,6 +139,8 @@
             </div>
         </div>
     </div>
+
+
        <!-- TOAST -->
        <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
         <div class="position-absolute" style="bottom: 20px; right: 25px;">
