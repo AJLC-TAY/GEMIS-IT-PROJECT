@@ -11,7 +11,7 @@
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-10">
+                <div class="col-lg-11">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
@@ -31,7 +31,7 @@
                         </header>
 
                         <!-- Student List -->
-                        <div class="container mt-1">
+                        <div class="container mt-3">
                             <div class="card w-100 h-auto bg-light">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>
