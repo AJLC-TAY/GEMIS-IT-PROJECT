@@ -287,7 +287,7 @@ class Administration extends Dbconfig
         // start of validation
 
         // end of validation
-        $this->prepared_query("INSERT INTO program VALUES (?, ?, ?);", [$code, $currCode, $description]);
+        $this->prepared_query("INSERT INTO program (prog_code, description, curriculum_curr_code) VALUES (?, ?, ?);", [$code, $description, $currCode]);
         // $query = "INSERT INTO program VALUES (?, ?, ?)";
         // $stmt = mysqli_prepare($this->dbConnect, $query);
         // mysqli_stmt_bind_param($stmt, 'sss', $code, $description, $currCode);
