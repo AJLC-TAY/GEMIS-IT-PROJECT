@@ -31,7 +31,7 @@
                         </header>
 
                         <!-- Student List -->
-                        <div class="container mt-1">
+                        <div class="container mt-3">
                             <div class="card w-100 h-auto bg-light">
                                 <table id="table" class="table-striped">
                                     <thead class='thead-dark'>

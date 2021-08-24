@@ -21,29 +21,27 @@
     $belong_to_ipcc = $userProfile->get_belong_to_ipcc();
     $id_picture = $userProfile->get_id_picture();
     $section = $userProfile->get_section();
+
     $parents = $userProfile->get_parents();
-    // $father_name = $userProfile->get_father_name();
-    // $father_occupation = $userProfile->get_father_occupation();
-    // $father_cp_no = $userProfile->get_father_cp_no();
-    // $mother_name = $parents['f']['name'];
-    // $mother_occupation = $parents['f']['occupation'];
-    // $mother_cp_no = $parents['f']['cp_no'];
+    if(is_null($parents)){
+        $parents = NULL;
+    } else {
+        foreach($parents as $par){
+            $parent = $par['sex'] == 'f'?'mother':'father';
+            ${$parent.'_name'} = $par['name'];
+            ${$parent.'_occupation'} = $par['occupation'];
+            ${$parent.'_cp_no'} = $par['cp_no'];
+    }}
 
-    // $father_name = $userProfile->get_father_name();
-    // $father_occupation = $userProfile->get_father_occupation();
-    // $father_cp_no = $userProfile->get_father_cp_no();
-    // $mother_name = $userProfile->get_mother_name();
-    // $mother_occupation = $userProfile->get_mother_occupation();
-    // $mother_cp_no = $userProfile->get_mother_cp_no();
-
-    // $guardian_name = $userProfile->get_guardian_name();
-    // $guardian_cp_no = $userProfile->get_guardian_cp_no();
-    // $guardian_relationship = $userProfile->get_guardian_relationship();
-    // $guardian = $userProfile->get_guardians();
-    // var_dump(array_values($guardian));
-    // $guardian_name = $guardian['name'];
-    // $guardian_cp_no = $guardian['cp_no'];
-    // $guardian_relationship = $guardian['relationship'];
+    $guardian = $userProfile->get_guardians();
+    if(is_null($guardian)){
+        $guardian = NULL;
+    } else {
+        $guardian_name = $guardian['name'];
+        $guardian_cp_no = $guardian['cp_no'];
+        $guardian_relationship = $guardian['relationship'];
+    }
+    
 ?>
 
 <title>Student Information | GEMIS</title>
@@ -75,7 +73,7 @@
                         </header>
                         <!-- MAIN CONTENT -->
                         <!-- Photo -->
-                        <div class="container mt-2 col-3">
+                        <div class="container mt-3 col-3">
                             <div class="photo">
                                 Insert 2x2 ID
                             </div>
@@ -117,17 +115,29 @@
                                      <h4 class="mt-3 fw-bold">CONTACT PERSONS</h4>
                                      <h5>PARENT/S</h5>
                                      <ul class="list-group ms-3">
-                                         <?php echo "
-                                        
-                                        <li class='list-group-item'>Mother's Name: $mother_name</li>
-                                        <li class='list-group-item'>Occupation: $mother_occupation</li>
-                                        <li class='list-group-item'>Contact Number: $mother_cp_no</li>";?>
+                                         <?php if($parents == NULL){
+                                            echo "<li class='list-group-item'>No parent. (pero mawawala nalang si parent mismo na  label sana)</li>";
+                                         } else {
+                                             foreach($parents as $par){
+                                            $parent = $par['sex'] == 'f'?'mother':'father';
+                                            $name = ${$parent.'_name'};
+                                            $occupation = ${$parent.'_occupation'};
+                                            $no = ${$parent.'_cp_no'};
+                                            echo "<li class='list-group-item'>$parent's Name: $name </li>
+                                                 <li class='list-group-item'>Occupation: $occupation</li>
+                                                 <li class='list-group-item'>Contact Number: $no</li>";
+                                        }}?>
                                     </ul>
                                     <h5 class="mt-3 fw-bold">GUARDIAN/S</h5>
                                     <ul class="list-group ms-3">
-                                        <?php echo "<li class='list-group-item'>Guardian's Name: $guardian_name</li>
-                                        <li class='list-group-item'>Relationship to the Guardian: $guardian_cp_no</li>
-                                        <li class='list-group-item'>Contact Number: $guardian_relationship</li>"?>
+                                        <?php if($guardian == NULL){
+                                            echo "<li class='list-group-item'>No guardian. (pero mawawala nalang si guardian mismo na  label sana)</li>";
+                                        } else {
+                                            echo "<li class='list-group-item'>Guardian's Name: $guardian_name</li>
+                                        <li class='list-group-item'>Relationship to the Guardian: $guardian_relationship</li>
+                                        <li class='list-group-item'>Contact Number: $guardian_cp_no</li>";
+                                        }
+                                        ?>
                                         
                                     </ul>
                                 </div>
