@@ -21,6 +21,7 @@ let onPostBodyOfTable = () => {
     })
 
     $(".edit-btn").click(function() {
+        showSpinner()
         let element = $(this)
         element.toggleClass('d-none')
         element.next(".edit-options").toggleClass('d-none')
@@ -28,8 +29,7 @@ let onPostBodyOfTable = () => {
         row.find("select").prop("disabled", false)
         $("input.switch").removeClass("d-none")
 
-        let data = []
-
+        hideSpinner()
     })
 
     const toggleEditOnInputs = (element, selectInputs) => {

@@ -15,6 +15,7 @@ $curr_desc = $curriculum->get_cur_desc();
 $state = "disabled";
 $edit_btn_state = "";
 $display = "d-none";
+$input_display = "";
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = '';
     $edit_btn_state = "disabled";
@@ -73,17 +74,17 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                     <div class="col-sm-3"><label class="my-auto">Code</label></div>
                                                     <div class="col-sm-9">
                                                         <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                                        <?php echo "<input class='form-control form-input $display' type='text' name='code' value='$curr_code' $state required>"; ?>
+                                                        <?php echo "<input class='form-control form-input $input_display' type='text' name='code' value='$curr_code' $state required>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Name</label>
                                                     <div class="col-sm-9">
                                                         <!-- <input type="text" name="name" value="<?php echo $curr_name; ?>" disabled required> -->
-                                                        <?php echo "<input class='form-input form-control $display' type='text' name='name' value='$curr_name' $state required>"; ?>
+                                                        <?php echo "<input class='form-input form-control $input_display' type='text' name='name' value='$curr_name' $state required>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Description</label>
                                                     <div class="col-sm-9">
                                                         <!-- <input name="curriculum-desc" value="<?php echo $curr_desc; ?>" disabled> -->
-                                                        <?php echo "<textarea  class='form-input form-control  $display' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
+                                                        <?php echo "<textarea  class='form-input form-control $input_display' name='curriculum-desc' $state>" . $curr_desc . "</textarea>"; ?>
                                                     </div>
                                                 </div>
                                             </form>
