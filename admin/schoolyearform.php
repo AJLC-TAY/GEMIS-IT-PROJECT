@@ -34,7 +34,7 @@
             <li class="breadcrumb-item active" aria-current="page">Initialize</li>
         </ol>
     </nav>
-    <h3>Initialize School Year</h3>
+    <h3 class="fw-bold">Initialize School Year</h3>
 </header>
 <!-- HEADER END -->
 <!-- SUBJECT TABLE -->
