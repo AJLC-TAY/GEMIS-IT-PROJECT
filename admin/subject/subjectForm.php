@@ -260,24 +260,31 @@ if ($action === 'edit') {
             <h5 class='text-start p-0'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
             <div class='row p-0'>
-                <div class='col-7'>
-                    <div class='form-group row'>
+                <div class='form-row row'>
+                    <div class='form-group col-md-6'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
-                        <div class='col-sm-9'>
-                            <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
-                        </div>
+                        <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
+                    </div>
+
+                    <div class='form-group col-md-6'>
+                        <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
+                        <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
+                    </div>
+                </div>
+                <div class='form-group row'>
+                    <div class='form-group col-md-12'>
                         <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
-                        <div class='col-sm-9'>
-                            <textarea name = 'name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'><?php echo $subject_name;?></textarea>
-                        </div>
+                        <input name = 'name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'><?php echo $subject_name; ?></input>
+                    </div>
+                </div>
+                <div class='form-row row'>
+                    <div class='form-group col-md-6'>
                         <label for='subjectSemester1' class='col-sm-3 col-form-label'>Semester</label>
-                        <div class='col-sm-9'>
-                            <select name='semester' class='form-select' id='semester'><?php echo $semester_opt; ?></select>
-                        </div>
+                        <select name='semester' class='form-select' id='semester'><?php echo $semester_opt; ?></select>
+                    </div>
+                    <div class='form-group col-md-6'>
                         <label for='grade-level' class='col-sm-3 col-form-label'>Grade Level</label>
-                        <div class='col-sm-9'>
-                            <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
-                        </div>
+                        <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
                     </div>
                 </div>
                 <div class='col-5'>
@@ -307,7 +314,7 @@ if ($action === 'edit') {
                             <div id='grade11-table'>
                                 <div class='d-flex justify-content-between align-items-center mb-2'>
                                     <h6>Subjects</h6>
-                                    <span><button data-desc='11' class='clear-table-btn float-right btn btn-dark'>CLEAR TABLE</button></span>
+                                    <span><button data-desc='11' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear Table</button></span>
                                 </div>
                                 <div class='requisite-table overflow-auto'>
                                     <table class='table table-bordered table-hover table-striped'>
@@ -340,7 +347,7 @@ if ($action === 'edit') {
                             <div id='grade12-table'>
                                 <div class='d-flex justify-content-between align-items-center mb-2'>
                                     <h6>Subjects</h6>
-                                    <span><button data-desc='12' class='clear-table-btn float-right btn btn-dark'>CLEAR TABLE</button></span>
+                                    <span><button data-desc='12' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear Table</button></span>
                                 </div>
                             
                                 <div class='requisite-table overflow-auto'>
