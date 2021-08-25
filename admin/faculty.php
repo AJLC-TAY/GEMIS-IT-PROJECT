@@ -2,7 +2,6 @@
       session_start();
 ?>
 <title>Faculty | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'></link>
 </head>
 
 <body>
@@ -22,12 +21,18 @@
                     <div class="col-lg-9">
                         <div class="row mt ps-3">
                         <?php 
+                        $bootstrapJSScript = "";
                         if (isset($_GET['action'])) {
-                            include_once("facultyform.php");
+                            include_once("faculty/facultyform.php");
                             $jsFilePath = "../js/admin/facultyform.js";
+                        } else if (isset($_GET['id'])){
+                            include_once("faculty/facultyprofile.php"); 
+                            $jsFilePath = "../js/admin/faculty.js";
                         } else {
-                            include_once("facultyprofile.php"); 
-                            $jsFilePath = "../js/admin/profile.js";
+                            include_once("faculty/facultylist.php"); 
+                            echo "<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'></link>";
+                            $bootstrapJSScript = "<script src='../assets/js/bootstrap-table.min.js'></script>"
+                                                ."<script src='../assets/js/bootstrap-table-en-US.min.js'></script>";
                         }
                         ?>
                         </div>
@@ -46,6 +51,9 @@
     <!-- TOAST END -->
 
 </body>
+
+<?php echo $bootstrapJSScript; ?>
+<script type="module" src="../js/admin/facultylist.js"></script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="<?php echo $jsFilePath; ?>"></script>
 </html>

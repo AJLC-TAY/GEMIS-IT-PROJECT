@@ -84,7 +84,7 @@
         <nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
                 <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
-                <li class='breadcrumb-item'><a href='facultyList.php'>Faculty</a></li>
+                <li class='breadcrumb-item'><a href='faculty.php'>Faculty</a></li>
                 <li class='breadcrumb-item active'><?php echo $camel_state; ?> Faculty</li>
             </ol>
         </nav>
@@ -92,7 +92,7 @@
         <h6 class='text-secondary'>Please complete the following:</h6>
     </header>
     <!-- CONTENT  -->
-    <form id='faculty-form' method='POST' enctype='multipart/form-data'>
+    <form id='faculty-form' method='POST' action='action.php' enctype='multipart/form-data'>
         <div class='form-row row'>
             <div class='form-group col-md-4'>
                 <label for='lastname'>Last Name</label>

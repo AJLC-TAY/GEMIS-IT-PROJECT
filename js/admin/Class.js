@@ -1,4 +1,4 @@
-export class Table {
+class Table {
     constructor(tableId, url, method, uniqueId, idField, height, search = false, 
         searchSelector = '', exportDataType = 'All', onPostBody = null) {
         
@@ -37,3 +37,8 @@ export class Table {
     
 }
 
+function test () {
+
+}
+
+export {test, Table}

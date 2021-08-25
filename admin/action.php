@@ -112,7 +112,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
 /******** FACULTY ********/
 if ((isset($_POST['profile']) && $_POST['profile'] == 'faculty') 
      && 
-     ($_POST['action'] === 'add' or $_POST['action'] === 'edit')) {
+     ($_POST['action'] === 'add' || $_POST['action'] === 'edit')) {
     $admin->processFaculty();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'updateFacultyRoles') {

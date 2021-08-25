@@ -77,7 +77,7 @@
                                             <h6 class='mb-0'>Curriculum</h6>
                                             <hr class="mt-1 mb-3">
                                             <div class="d-flex flex-wrap">
-                                                <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
+                                                <a href="schoolyear.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
                                                     School year
                                                 </a>
                                                 <a href="curriculumlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">

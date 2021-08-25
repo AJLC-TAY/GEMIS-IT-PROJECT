@@ -23,13 +23,16 @@ $(function () {
         readURL(this);
     })
 
-    $('#faculty-form').submit(function(event) {
-        event.preventDefault()
+    // $('#faculty-form').submit(function(event) {
+    //     event.preventDefault()
 
-        $.post("action.php", $(this).serialize()).fail(function(error) {
-            console.log(error.responseText)
-        }) 
-    })
+    //     console.log($(this).serializeArray())
+    //     $.post("action.php", $(this).serializeArray(), function(data) {
+    //         console.log(data)
+    //     }).fail(function(error) {
+    //         console.log(error.responseText)
+    //     }) 
+    // })
 
     $(".edit-text").click(()=> $("#upload").click())
     hideSpinner()

@@ -11,74 +11,118 @@ searchSelector = '#search-input'
 height = 425
 
 let onPostBodyOfTable = () => {
-    $(".view-btn").click(function() {
-        let data = $("#table").bootstrapTable("getRowByUniqueId", $(this).attr("data-id"))
-        console.log(data)
-        let modal = $("#view-modal")
-        modal.find("#school-year").html(data.sy_year)
-        modal.find("#enrollment-status").click()
-        modal.modal("show")
-    })
+   /**
+    * Displays the current values of the row to the given html tag
+    * @param {Number} id        School Year ID, which is also the unique ID of the row
+    * @param {Object} row       Record containing all html elements
+    * @param {String} inputs    Receiving HTML tag of the current values
+    */
+    const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
+        let data, grade, quarter, semester, inputsToDisplay, inputsToHide
+        // get values from table
+        data = $("#table").bootstrapTable("getRowByUniqueId", id)
+        grade = data.current_grd_val
+        quarter = data.current_qtr_val
+        semester = data.current_sem_val
+
+        // show all the elements with the provided html tag
+        inputsToDisplay = row.find(inputs)
+        inputsToDisplay.removeClass("d-none")
+        
+        // hide select elements if the provided tag is input, or vise versa
+        inputsToHide = (inputs == "select") ? "input[class*='form-control']" : "select"
+        row.find(inputsToHide).addClass("d-none")
+
+        if (inputs == "input") {
+            const SELECTOR = `select[data-id=${id}]`
+            let grd = $(`${SELECTOR} [value=${grade}]`).text()
+            let qtr = $(`${SELECTOR} [value=${quarter}]`).text()
+            let sem = $(`${SELECTOR} [value=${semester}]`).text()
+
+            const INPUT = `input[data-id=${id}]`
+            $(`${INPUT} [data_name=grade-level]`).val(grd)
+            $(`${INPUT} [data_name=quarter]`).val(qtr)
+            $(`${INPUT} [data_name=semester]`).val(sem)
+            return
+        }
+        
+        inputsToDisplay.eq(0).val(grade)
+        inputsToDisplay.eq(1).val(quarter)
+        inputsToDisplay.eq(2).val(semester)
+    }
 
     $(".edit-btn").click(function() {
         showSpinner()
-        let element = $(this)
-        element.toggleClass('d-none')
-        element.next(".edit-options").toggleClass('d-none')
-        let row = element.closest("tr")
-        row.find("select").prop("disabled", false)
-        $("input.switch").removeClass("d-none")
+        let element, row, id
+        element = $(this)
+        id = element.attr("data-id")                        // store the id of the row 
+        element.toggleClass('d-none')                       // hide edit button
+        element.next(".edit-options").toggleClass('d-none') // show the edit options div, which contains the cancel and save buttons
+        row = element.closest("tr")                         // get the row
+        $(".edit-btn").prop("disabled", true)               // disable other edit buttons
 
+        setCurrentValuesToInput(id, row, "select")               
         hideSpinner()
     })
 
-    const toggleEditOnInputs = (element, selectInputs) => {
-        selectInputs.prop("disabled", true)
-        $("input.switch").removeClass("d-none")
-
-        let editOptionsCon = element.closest(".edit-options")
-        editOptionsCon.toggleClass('d-none')
-        editOptionsCon.prev(".edit-btn").toggleClass('d-none')
-        hideSpinner()
-    }
-
     $(".cancel-btn").click(function() {
         showSpinner()
-        let element = $(this)
-        let row = element.closest("tr")
-        let selectInputs = row.find("select")
+        let element, id, row, editOptions
+        element = $(this)
+        id = element.attr("data-id")
+        row = element.closest("tr")
+        $(".edit-btn").prop("disabled", false)              // enable all edit button
 
-        // get original data 
-        let data = $("#table").bootstrapTable("getRowByUniqueId", $(this).attr("data-id"))
-        let oldGrd = data.current_grd_val
-        let oldQtr = data.current_qtr_val
-        let oldSem = data.current_sem_val
-        data = [oldGrd, oldQtr, oldSem]
-
-        // put original data to options
-        let i = 0
-        selectInputs.each(function() {      // order of select inputs: grade, quarter, semester
-            $(this).val(data[i])
-            i++
-        })
-
-        toggleEditOnInputs(element, selectInputs)
+        setCurrentValuesToInput(id, row)
+        editOptions = element.closest(".edit-options")      // hide the edit options
+        editOptions.toggleClass("d-none")
+        editOptions.prev(".edit-btn").toggleClass("d-none")
+        hideSpinner()
     })
 
     $(".save-btn").click(function() {
         showSpinner()
-        let element = $(this)
-        let id = element.attr("data-id")
-        let row = element.closest("tr")
-        let selectInputs = row.find("select")
-        let formData = selectInputs.serialize()
+        let element, id, record, selectInputs, formData
+        element = $(this)
+        id = element.attr("data-id") 
+        record = element.closest("tr")
+        selectInputs = record.find("select")
+
+        // add additional post variables to form data
+        formData = selectInputs.serialize()
         formData += `&sy_id=${id}`
         formData += "&action=editSY"
 
-        // alert(formData)
         $.post("action.php", formData)
+
+        let newGradeVal, newQtrVal, newSemVal
+        newGradeVal = selectInputs.eq(0).val() // .eq() is like getting the element through its index
+        newQtrVal = selectInputs.eq(1).val()
+        newSemVal = selectInputs.eq(2).val()
+
+        // update the current values in the record of bootstrap table with 
+        // the given row ID, and row values
+        $("#table").bootstrapTable('updateByUniqueId', {
+            id,
+            row: {
+                current_grd_val: newGradeVal,
+                current_qtr_val: newQtrVal,
+                current_sem_val: newSemVal
+            }}
+        )
+
+        let grade, quarter, semester, inputsToDisplay
+        // find select inputs get their labels and set them to the input html tags
+        grade = selectInputs.eq(0).find(`[value='${newGradeVal}']`).text()
+        quarter = selectInputs.eq(1).find(`[value='${newQtrVal}']`).text()
+        semester = selectInputs.eq(2).find(`[value='${newSemVal}']`).text()
         
-        toggleEditOnInputs(element, selectInputs)
+        inputsToDisplay = $(`input[class*='form-control'][data-id='${id}']`)
+        inputsToDisplay.eq(0).val(grade)
+        inputsToDisplay.eq(1).val(quarter)
+        inputsToDisplay.eq(2).val(semester)
+
+        $(".edit-btn").prop("disabled", false)          // enable all edit buttons
         hideSpinner()
         showToast('success', 'Successfully updated!')
     })
@@ -98,7 +142,7 @@ let onPostBodyOfTable = () => {
         }
         console.log(formData)
         $.post("action.php", formData, function() {
-            showToast("success", "Enrollment successfully updated!")
+            // showToast("success", "Enrollment status updated")
         })
 
         hideSpinner()
@@ -114,5 +158,6 @@ $(function() {
         if ($(this).is(":checked")) enrollStat.html("System will start accepting enrollees once submitted")
         else enrollStat.html("No enrollment temporarily")
     })
+
     hideSpinner()
 })

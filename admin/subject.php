@@ -1,28 +1,9 @@
-<?php include_once ("../inc/head.html"); ?>
+<?php include_once ("../inc/head.html"); 
+    echo (!isset($_GET["action"]) ? "<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>" : "");
+?>
     <title>PCNHS GEMIS</title>
 </head>
 
-<?php 
-    $content = null;
-    // $isAddPageUnderProgram = FALSE;
-    include_once ('../class/Administration.php');
-    include_once ('subjectForm.php');
-    
-    if (isset($_GET['state'])) {
-        // $isAddPageUnderProgram = isset($_GET['code']) ? TRUE : FALSE;
-        // $content = getSubjectPageContent($_GET['state']);
-        $state = $_GET['state'];
-        if ($state !== 'view') {
-            $content = getSubjectForm($state);
-        } else {
-            $content = getSubjectViewContent();
-        }
-    } else {
-        return;
-    }
-
-    session_start();
-?>
 <body>
     <!-- SPINNER -->
     <div class="spinner-con">
@@ -38,10 +19,17 @@
             <section class="wrapper">
                 <div class="col-lg-11">
                     <div class="row mt ps-3">
-                        <?php echo $content->breadcrumb; ?>
-                        <div class="row">
-                            <?php echo $content->main; ?>
-                        </div>
+                        <?php 
+                            if (isset($_GET['action'])) {
+                                include("subject/subjectForm.php");
+                            } 
+                            else if (isset($_GET['sub_code'])){
+                                include("subject/subjectView.php");
+                            } 
+                            else {
+                                include("subject/subjectList.php");
+                            }
+                        ?>
                     </div>
                 </div>
                 <!--main content end-->
@@ -73,29 +61,25 @@
             </div>
         </div>
     </div>
-    
-    
-    <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px;">
-        <div class="position-absolute bottom-0 end-0">
-            <div class="toast-container">
-                <div class="toast warning-toast bg-danger text-white mt-5"  role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body"></div>
-                </div>
-    
-                <div class="toast success-toast bg-success text-white mt-5" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body"></div>
-                </div>
-    
-                <div class="toast normal-toast mt-5" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- END TOAST -->
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
+    <?php // echo (isset($_GET["action"]) 
+          //       ? "<!-- JQUERY FOR BOOTSTRAP TABLE -->"
+          //           ."<script src='../assets/js/bootstrap-table.min.js'></script>"
+          //           ."<script src='../assets/js/bootstrap-table-en-US.min.js'></script>"
+          //       : "");
+    ?>
+    
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->"
+    <script src='../assets/js/bootstrap-table.min.js'></script>
+    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script type='text/javascript' src="../js/common-custom.js"></script>
-    <script type='text/javascript' src="../js/admin/subject.js"></script>
+    <script type='module' src="../js/admin/subject.js"></script>
+    <!-- <script type='text/javascript' src="../js/admin/subject.js"></script> -->
+    <!-- <script type="module" src="../js/admin/subjectlist.js"></script> -->
 </body>
 </html>
