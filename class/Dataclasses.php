@@ -1413,22 +1413,10 @@ class StudentAward extends Award implements JsonSerializable
         private $id_picture;
         private $action;
         private $section;
-        // private $father_name;
-        // private $father_occupation;
-        // private $father_cp_no;
-        // private $mother_name;
-        // private $mother_occupation;
-        // private $mother_cp_no;
-        // private $guardian_name;
-        // private $guardian_cp_no;
-        // private $guardian_relationship;
         private $parents;
         private $guardians;
 
-        // public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, 
-        //                     $father_name, $father_occupation, $father_cp_no, 
-        //                     $mother_name, $mother_occupation, $mother_cp_no, $guardian_name, $guardian_cp_no, $guardian_relationship)
-        // {
+        
             public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, $parents, $guardians)
             {
             $this->stud_id = $stud_id;
@@ -1443,11 +1431,11 @@ class StudentAward extends Award implements JsonSerializable
             $this->age = $age;
             $this->birthdate = $birthdate;
             $this->birth_place = $birth_place;
-            $this->indigenous_group = $indigenous_group;
+            $this->indigenous_group = is_null($indigenous_group)?NULL:$indigenous_group;
             $this->mother_tongue = $mother_tongue;
             $this->religion = $religion;
             $this->address = $address;
-            $this->cp_no = $cp_no;
+            $this->cp_no = "+63" . $cp_no;
             $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
@@ -1456,15 +1444,6 @@ class StudentAward extends Award implements JsonSerializable
                             . "<a href='studentInfo.php?id=$stud_id' role='button' class='btn btn-secondary w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."</div>";
             $this->section = $section;
-            // $this->father_name = $father_name;
-            // $this->father_occupation = $father_occupation;
-            // $this->father_cp_no = $father_cp_no;
-            // $this->mother_name = $mother_name;
-            // $this->mother_occupation = $mother_occupation;
-            // $this->mother_cp_no = $mother_cp_no;
-            // $this->guardian_name = $guardian_name;
-            // $this->guardian_cp_no = $guardian_cp_no;
-            // $this->guardian_relationship = $guardian_relationship;
             $this->parents = $parents;
             $this->guardians = $guardians;
         }
@@ -1584,44 +1563,8 @@ class StudentAward extends Award implements JsonSerializable
             return $this->guardians;
         }
 
-        // public function get_father_name(){
-        //     return $this->father_name;
-        // }
 
-        // public function get_father_occupation(){
-        //     return $this->father_occupation;
-        // }
-
-        // public function get_father_cp_no(){
-        //     return $this->father_cp_no;
-        // }
-
-        // public function get_mother_name(){
-        //     return $this->mother_name;
-        // }
-        
-        // public function get_mother_occupation(){
-        //     return $this->mother_occupation;
-        // }
-
-        // public function get_mother_cp_no(){
-        //     return $this->mother_cp_no;
-        // }
-
-        // public function get_guardian_name(){
-        //     return $this->guardian_name;
-        // }
-
-        // public function get_guardian_cp_no(){
-        //     return $this->guardian_cp_no;
-        // }
-
-        // public function get_guardian_relationship(){
-        //     return $this->guardian_relationship;
-        // }
-
-        public function jsonSerialize()
-    {
+        public function jsonSerialize(){
         return [
             'stud_id' => $this->stud_id,
             'lrn' => $this->lrn,
@@ -1638,11 +1581,63 @@ class StudentAward extends Award implements JsonSerializable
             'psa_birth_cert' => $this->psa_birth_cert,
             'belong_to_ipcc'=> $this->belong_to_ipcc,
             'action' => $this->action,
-            'section' => 'waley pa',
-        ];
-    }
+            'section' => $this->section,
+        ];}
 
-    }    
+    }
+    
+    class Section implements JsonSerializable{
+
+        private $code;
+        private $name;
+        private $grd_level;
+        private $max_stud;
+        private $stud_no;
+        private $teacher_id;
+
+        public function __construct($code,$name, $grd_level, $max_stud, $stud_no,$teacher_id){
+            $this->code = $code;
+            $this->name = $name;
+            $this->grd_level = $grd_level;
+            $this->max_stud = $max_stud;
+            $this->stud_no = $stud_no;
+            $this->teacher_id = $teacher_id;
+        }
+
+        public function get_code(){
+            return $this->code;
+        }
+
+        public function get_name(){
+            return $this->name;
+        }
+
+        public function get_grd_level(){
+            return $this->grd_level;
+        }
+
+        public function get_max_stud(){
+            return $this->max_stud;
+        }
+
+        public function get_stud_no(){
+            return $this->stud_no;
+        }
+
+        public function get_teacher_id(){
+            return $this->teacher_id;
+        }
+        
+        public function jsonSerialize(){
+            return [
+                'code' => $this->code,
+                'name'=> $this->name,
+                'grd_level'=> $this->grd_level,
+                'max_stud'=> $this->max_stud,
+                'stud_no'=> $this->stud_no,
+                'teacher_id'=> $this->teacher_id
+            ];}
+    }
 
     
     // class Subject extends Faculty { private $sub_code; }

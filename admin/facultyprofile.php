@@ -1,8 +1,8 @@
 <?php include_once("../inc/head.html"); 
     require_once("../class/Administration.php");
     $admin = new Administration();
-    $_SESSION['userType'] = 'admin';
-    $_SESSION['userID'] = 'alvin';
+    // $_SESSION['userType'] = 'admin';
+    // $_SESSION['userID'] = 'alvin';
 
     $userType = ucwords( $_SESSION['userType']);
     $link = "facultylist.php";
