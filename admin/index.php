@@ -31,7 +31,7 @@
                                         <li class="breadcrumb-item active">Home</li>
                                     </ol>
                                 </nav>
-                                <h3>Welcome!</h3>
+                                <h3 class="fw-bold">Welcome!</h3>
                             </header>
                             <div class="container row mb-5">
                                 <!-- PEOPLE MANAGEMENT -->

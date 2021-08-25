@@ -40,7 +40,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- HEADER -->
                             <header>
                                 <!-- BREADCRUMB -->
-                                <nav class="mb-4" aria-label="breadcrumb">
+                                <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                                         <li class="breadcrumb-item"><a href="programlist.php">Programs</a></li>

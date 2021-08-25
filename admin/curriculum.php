@@ -39,7 +39,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         <section id="main-content">
             <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row ps-3">
                             <!-- HEADER -->
                             <header>
@@ -53,7 +53,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 </nav>
                                 <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
                                 <hr class="my-2">
-                                <h6>Curriculum</h6>
+                                <h6 class="fw-bold">Curriculum</h6>
                             </header>
                             <!-- Form -->
 
