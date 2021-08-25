@@ -32,7 +32,7 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
-                                    <h3>Faculty Members</h3>
+                                    <h3 class="fw-bold">Faculty Members</h3>
                                     <div>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Faculty</button>
                                         <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Add Faculty</a>
@@ -47,8 +47,8 @@
                                         <thead class='thead-dark'>
                                             <div class="d-flex justify-content-between mb-3">
                                                 <!-- SEARCH BAR -->
-                                                <span class="flex-grow-1 me-5"> 
-                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                                <span class="flex-grow-1 me-3"> 
+                                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                                 </span>
                                                 <div>
                                                     <button class="btn btn-danger btn-sm" title='Deactivate Faculty'>Deactivate</button>

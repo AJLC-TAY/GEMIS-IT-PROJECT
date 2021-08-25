@@ -22,7 +22,7 @@
         <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row mt ps-3">
@@ -36,8 +36,9 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between">
-                                    <h4 class="fw-bold">Curriculum</h4>
+                                    <h3 class="fw-bold">Curriculum</h3>
                                     <span>
+                                        <button type="button" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
@@ -137,7 +138,7 @@
         </div>
     </div>
 
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculumc" aria-hidden="true">
+    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

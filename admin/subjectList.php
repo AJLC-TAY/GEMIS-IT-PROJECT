@@ -18,7 +18,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -44,8 +44,8 @@
                                         <thead class='thead-dark'>
                                             <div class="d-flex justify-content-between mb-3">
                                                 <!-- SEARCH BAR -->
-                                                <span class="flex-grow-1 me-5"> 
-                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+                                                <span class="flex-grow-1 me-2"> 
+                                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                                 </span>
                                                 <div>
                                                     <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
