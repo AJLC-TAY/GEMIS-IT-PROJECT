@@ -24,9 +24,9 @@
                         <div class="row mt ps-3">
                             <?php 
                                 if (isset($_GET['action'])) {
-                                    include_once("schoolyearform.php");
+                                    include_once("schoolyear/schoolyearform.php");
                                 } else {
-                                    include_once("schoolyearlist.php");
+                                    include_once("schoolyear/schoolyearlist.php");
                                 }
                             ?>
                         </div>

@@ -16,6 +16,7 @@ $state = "disabled";
 $edit_btn_state = "";
 $display = "d-none";
 $input_display = "";
+$edit_btn_display = "";
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = '';
     $edit_btn_state = "disabled";
@@ -38,7 +39,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         <section id="main-content">
             <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row ps-3">
                             <!-- HEADER -->
                             <header>
@@ -97,7 +98,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- Strand table -->
                             <div class="container mt-5">
                                 <div class="card w-100 h-auto">
-                                    <table id="table" class="table-striped">
+                                    <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark track-table'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fw-bold">STRAND LIST</h5>

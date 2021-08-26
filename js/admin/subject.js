@@ -1,4 +1,36 @@
+import {Table} from "./Class.js"
+
+/** SUBJECT TABLE LIST */
+let tableId, url, method, id, search, searchSelector, height
+
+tableId = '#table'
+url = 'getAction.php?data=subjects'
+method = 'GET'
+id = 'sub_code'
+search = true
+searchSelector = '#search-input'
+height = 425
+let onPostBodyOfTable = () => {
+
+}
+let subject_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
+/** SUBJECT TABLE LIST END */
+
+/** CARD PAGE METHOD */
+var unarchiveMessage = 'Unarchiving this subject will also unarchive all student grades under it.'
+let prepareArchiveHTML = archivedData => {
+    let html = ''
+    archivedData.forEach(element => {
+        var code = element.sub_code
+        var name = element.sub_name
+        html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
+                <button data-name='$name' class='unarchive-option btn' id='${code}'>Unarchive</button></li>`
+    })
+    return html
+}
+/** CARD PAGE METHOD END */
 preload("#curr-management", "#subject")
+
 let addAgain = false
 $(function () {
     $('#sub-type').change(function() {
@@ -58,7 +90,7 @@ $(function () {
             if (codeList.length == 0) return                       // return if list of codes is empty
             
             codeList.forEach(code => {  
-                code = code.substring(code.indcmnOf("-") + 1)
+                code = code.substring(code.indexOf("-") + 1)
                 formData.push( {'name': requisite, 'value': code}) // store subject code value; from PRE-ABM to ABM
             })
         }
@@ -70,9 +102,12 @@ $(function () {
             hideSpinner(500)
             if (addAgain) {
                 $('#add-subject-form').trigger('reset')
+                $('#app-spec-options').addClass('d-none')
+                $('#sub-code').attr("autofocus")
                 addAgain = false
                 return showToast('success', 'Subject successfully added!')
             }
+            console.log(data)
             data = JSON.parse(data)
             window.location.href = `subject.php?${data.redirect}`
         })
@@ -120,7 +155,7 @@ $(function () {
         })
     })
 
-    archiveMessage = 'Archiving this subject will also archive all student grades under it.'
+    let archiveMessage = 'Archiving this subject will also archive all student grades under it.'
     $(document).on('click', '.archive-option', function() {
         var code = $(this).attr('id')
         let name = $(this).attr('data-name')
@@ -131,11 +166,54 @@ $(function () {
         archiveModal.modal('toggle')
     })
 
+
+    $('#edit-btn').click(function() {
+        $(this).prop("disabled", true)
+        $("#save-btn").prop("disabled", false)
+        $(this).closest('form').find('.form-input').each(function() {
+            $(this).prop('disabled', false)
+        })
+    })
+
+    $('.view-archive').click(function(){
+        $('#view-arch-modal').modal('toggle')
+    })
+
+    $('#view-arch-modal').on('shown.bs.modal', function(){
+        $.post('action.php', {action:'getArchiveSubjectJSON'} ,(data) => {
+            var archiveData = JSON.parse(data)
+            $('.arch-list').html(prepareArchiveHTML(archiveData))
+        })
+    })
+
+    $("#unarchive-modal").on('show.bs.modal', function (e) {
+        $("#view-arch-modal").modal("hide");
+    });
+    
+    $(document).on('click', '.unarchive-btn', function() {
+        $('#view-arch-modal').modal('hide')	
+        var code = $(this).attr('id')
+        var action = `unarchiveSubject`
+        console.log(action)
+        console.log(code)
+        $.post("action.php", {code, action}, function(data) {	
+            $('#unarchive-modal').modal('hide')		
+            reload()
+            showWarningToast()
+        })
+    })
+
+
+    $(document).on('click', '.unarchive-option', function() {
+        var code = $(this).attr('id')
+        let name = $(this).attr('data-name')
+        let unarchiveModal = $('#unarchive-modal')
+        unarchiveModal.find('.modal-identifier').html(`${name} Subject`)
+        unarchiveModal.find('.modal-msg').html(unarchiveMessage)
+        unarchiveModal.find('.unarchive-btn').attr('id', code)
+        unarchiveModal.modal('toggle')
+    })
+
+
     hideSpinner();
-    // if (message) showToast('success', message)
-    // if (message) {
-    //     let toast = $('.success-toast')
-    //     toast.find('.toast-body').tcmnt(message)
-    //     toast.toast('show')
-    // } 
 })

@@ -40,7 +40,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- HEADER -->
                             <header>
                                 <!-- BREADCRUMB -->
-                                <nav class="mb-4" aria-label="breadcrumb">
+                                <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                                         <li class="breadcrumb-item"><a href="programlist.php">Programs</a></li>
@@ -88,7 +88,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <!-- Subject table -->
                             <div class="container mt-5">
                                 <div class="card w-100 h-auto">
-                                    <table id="table" class="table-striped">
+                                    <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark track-table'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fw-bold">SUBJECTS</h5>

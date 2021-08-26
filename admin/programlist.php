@@ -23,7 +23,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -35,8 +35,9 @@
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between">
-                                    <h2>Programs</h2>
+                                    <h3 class="fw-bold">Programs</h3>
                                     <span>
+                                        <button type="button" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add Program</button>
                                         <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
