@@ -3,15 +3,20 @@ let prepareSectionHTML = section => {
     section.forEach(element => {
         var code = element.code
         html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${code}
-                <button data-name='$name' class='transfer-option btn' id='${code}'>Transfer</button></li>`
+                <button class='transfer-option btn' id='${code}'>Transfer</button></li>`
     })
     return html
 }
 var message = 'Are you sure you want to transfer the student?'
+var stud_id;
 $(function() {
     // Data Picker Initialization
     // $('#datepicker').datepicker();
-    $('.transfer-stud').click(function(){
+    // $('.transfer-stud').click(function(){
+    //     $('#select-section-modal').modal('toggle')
+    // })
+    $(document).on('click','.transfer-stud', function(){
+        stud_id = $(this).attr('id');
         $('#select-section-modal').modal('toggle')
     })
 
@@ -22,25 +27,27 @@ $(function() {
         })
     })
 
-    $("transfer-student-confirmation").on('shown.bs.modal', function (e) {
+    $("#transfer-student-confirmation").on('shown.bs.modal', function (e) {
         $("#select-section-modal").modal("hide");
     });
 
     $(document).on('click', '.transfer-btn', function() {
-        $('#transfer-student-confirmation').modal('hide')	
         var code = $(this).attr('id')
         var action = `transferStudent`
-        $.post("action.php", {code, action}, function(data) {	
+        var info = {'code':code, 'stud_id': stud_id};
+
+        $.post("action.php", {info, action}, function(data) {	
             $('#transfer-student-confirmation').modal('hide')	
         })
+        
     })
 
 
     $(document).on('click', '.transfer-option', function() {
+        var name = $(this).attr('name')
         var code = $(this).attr('id')
         let transferModal = $('#transfer-student-confirmation')
-        transferModal.find('#modal-identifier').html(`adf`)
-        transferModal.find('.modal-msg').html(message)
+        transferModal.find('#modal-identifier').html(`${code}`)
         transferModal.find('.transfer-btn').attr('id', code)
         transferModal.modal('toggle')
     })

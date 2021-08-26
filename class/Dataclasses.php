@@ -1435,7 +1435,7 @@ class StudentAward extends Award implements JsonSerializable
             $this->mother_tongue = $mother_tongue;
             $this->religion = $religion;
             $this->address = $address;
-            $this->cp_no = "+63" . $cp_no;
+            $this->cp_no = $cp_no;
             $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
@@ -1510,7 +1510,7 @@ class StudentAward extends Award implements JsonSerializable
 
         public function get_indigenous_group()
         {
-            return $this->indigenous_group;
+            return ((is_null($this->indigenous_group))? NULL:$this->indigenous_group);
         }
 
         public function get_mother_tongue()

@@ -1107,14 +1107,15 @@ class Administration extends Dbconfig
         $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
         $parent = array();
         while ($parentInfo = mysqli_fetch_assoc($result)) {
-            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name']; // to be added: $parentInfo['ext_name']
+            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " ". $personalInfo['ext_name']; 
             $parent[$parentInfo['sex']] = array(
                 'name' => $name,
                 'fname' => $parentInfo['first_name'],
                 'mname' => $parentInfo['middle_name'],
                 'lname' => $parentInfo['last_name'],
+                'extname' => $personalInfo['ext_name'],
                 'sex' => $parentInfo['sex'],
-                'cp_no' => "+63" . $parentInfo['cp_no'],
+                'cp_no' => $parentInfo['cp_no'],
                 'occupation' => is_null($parentInfo['occupation']) ? NULL : $parentInfo['occupation']
             );
         };
@@ -1129,7 +1130,7 @@ class Administration extends Dbconfig
                 'mname' => $guardianInfo['guardian_last_name'],
                 'lname' => $guardianInfo['guardian_middle_name'],
                 'relationship' => $guardianInfo['relationship'],
-                'cp_no' => "+63" . $guardianInfo['cp_no']
+                'cp_no' => $guardianInfo['cp_no']
             ]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
         };
 
@@ -1137,13 +1138,14 @@ class Administration extends Dbconfig
         sizeof($guardian) != 0 ?: $guardian = NULL;
 
         $section = "to follow";
-        $complete_add = $personalInfo['home_no'] . " " . $personalInfo['street'] . ", " . $personalInfo['mun_city'] . ", " . $personalInfo['zip_code'] . " " . $personalInfo['province'];
+        $complete_add = $personalInfo['home_no'] . " " . $personalInfo['street'] . ", " . $personalInfo['barangay'] . ", " . $personalInfo['mun_city'] . ", " . $personalInfo['zip_code'] . " " . $personalInfo['province'];
         $add = [
             'address' => $complete_add,
             'home_no' => $personalInfo['home_no'],
             'street' => $personalInfo['street'],
+            'barangay' => $personalInfo['barangay'],
             'mun_city' => $personalInfo['mun_city'],
-            'provice' => $personalInfo['mun_city'],
+            'province' => $personalInfo['mun_city'],
             'zipcode' => $personalInfo['zip_code']
         ];
         return new Student(
@@ -1197,8 +1199,13 @@ class Administration extends Dbconfig
     }
 
     public function transferStudent(){
-        $id = $_POST['id'];
-        echo $id;
-        $query = "UPDATE enrollment SET section_code='TVLE11' WHERE stud_id = $id";
+        $sec_code = $_POST['code'];
+        $id = $_POST['stud_id'];
+        echo("from tranferStudent: admin");
+        echo ($sec_code);
+        echo ($id);
+        // $query = "UPDATE enrollment SET section_code='TVLE11' WHERE stud_id = $id";
+        // $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
+        // $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
     }
 }
