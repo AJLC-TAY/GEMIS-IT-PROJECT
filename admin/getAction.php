@@ -20,5 +20,8 @@ if (isset($_GET['data']) && $_GET['data'] == 'student') {
 if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
     $admin->listSYJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'section') {
+    $admin->listSectionJSON();
+}
 ?>
 

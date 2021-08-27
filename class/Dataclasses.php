@@ -1589,19 +1589,26 @@ class StudentAward extends Award implements JsonSerializable
     class Section implements JsonSerializable{
 
         private $code;
+        private $program;
         private $name;
         private $grd_level;
         private $max_stud;
         private $stud_no;
         private $teacher_id;
+        private $action;
 
-        public function __construct($code,$name, $grd_level, $max_stud, $stud_no,$teacher_id){
+        public function __construct($code, $name, $grd_level, $max_stud, $stud_no, $teacher_id){
             $this->code = $code;
             $this->name = $name;
             $this->grd_level = $grd_level;
             $this->max_stud = $max_stud;
             $this->stud_no = $stud_no;
             $this->teacher_id = $teacher_id;
+            $this->action = 
+                        "<div class='d-flex justify-content-center'>"
+                            ."<a href='section.php?code=$code' class='btn btn-secondary btn-sm w-auto me-1' title='View Section'><i class='bi bi-eye'></i></a>"
+                            ."<a href='section.php?code=$code&action=edit' class='btn btn-primary btn-sm w-auto' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                        ."</div>";
         }
 
         public function get_code(){
@@ -1635,7 +1642,8 @@ class StudentAward extends Award implements JsonSerializable
                 'grd_level'=> $this->grd_level,
                 'max_stud'=> $this->max_stud,
                 'stud_no'=> $this->stud_no,
-                'teacher_id'=> $this->teacher_id
+                'teacher_id'=> $this->teacher_id,
+                'action' => $this->action
             ];}
     }
 

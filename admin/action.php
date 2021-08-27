@@ -131,6 +131,14 @@ if (isset($_POST['action']) && $_POST['action'] === 'getSectionJSON') {
     $admin->listSectionJSON();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'addSection') {
+    $admin->addSection();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'editSection') {
+    $admin->editSection();
+}
+
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
     $admin->transferStudent();

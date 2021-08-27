@@ -44,6 +44,8 @@
         </table>
     </div>
 </div>
+<!-- SUBJECT TABLE END -->
+
 <!-- MAIN CONTENT END -->
 
 <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

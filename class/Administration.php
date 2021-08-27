@@ -160,6 +160,62 @@ class Administration extends Dbconfig
         $semester = $_POST['semester'];
         $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
     }
+
+    /** Section Methods */
+    public function listSectionJSON()
+    {
+        $query = 'SELECT * from section';
+        $result = mysqli_query($this->dbConnect, $query);
+        $sectionList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $sectionList[] = new Section($row['section_code'], $row['section_name'],$row['grd_level'],$row['stud_no_max'],$row['stud_no'],$row['teacher_id']);
+        }
+        echo json_encode($sectionList);
+    }
+
+    public function addSection() 
+    {
+
+        $code = $_POST['code'];
+        $program = $_POST['program'];
+        $grade_level = $_POST['grade-level'];
+        $max_no = $_POST['max-no'];
+        $section_name = $_POST['section-name'];
+        $adviser = $_POST['adviser'] ?: NULL;
+
+        $this->prepared_query("INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id) VALUES (?, ?, ?, ?, ?, ?); ",
+                             [$code, $section_name, $grade_level, $max_no, $adviser],
+                            "sssiii");
+    }
+
+    public function editSection() 
+    {
+        $max_no = $_POST['max-no'];
+        $adviser = $_POST['adviser'] ?: NULL;
+        $section = $_POST['section'];
+        
+        $this->prepared_query("UPDATE section SET stud_no_max=?, teacher_id=? WHERE section_code=?;",
+                             [$max_no, $adviser, $section],
+                            "iis");
+    }
+
+    public function getSection() 
+    {
+        $result = $this->prepared_select("SELECT * FROM section WHERE section_code=?", [$_GET["code"]], "s");
+        $row = mysqli_fetch_assoc($result);
+        $adv_result = mysqli_query($this->dbConnect, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
+        $adviser = mysqli_fetch_assoc($adv_result);
+        if ($adviser) {
+            $name = "{$adviser['last_name']}, {$adviser['first_name']} {$adviser['middle_name']} {$adviser['ext_name']}";
+            $adviser = ["teacher_id" => $adviser['teacher_id'],
+                        "name" => $name];
+        }
+        return new Section($row['section_code'], $row['section_name'], $row['grd_level'],
+                            $row['stud_no_max'], $row['stud_no'], $adviser);
+    }
+    public function listSectionStudentJSON() 
+    {
+    }
     /*** Curriculum Methods */
 
     /** Returns the list of curriculum. */
@@ -1045,8 +1101,10 @@ class Administration extends Dbconfig
 
     public function listStudent()
     {
-        $query = 'SELECT * from student as s
-                  JOIN enrollment as e on e.stud_id = s.stud_id';
+
+        $query = "SELECT * from student AS s
+                  JOIN enrollment AS e ON e.stud_id = s.stud_id "
+                . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : ";");
         $result = mysqli_query($this->dbConnect, $query);
         $studentList = array();
 
@@ -1184,17 +1242,7 @@ class Administration extends Dbconfig
     }
 
 
-    public function listSectionJSON()
-    {
-        $query = 'SELECT * from section';
-        $result = mysqli_query($this->dbConnect, $query);
-        $sectionList = array();
-        while ($row = mysqli_fetch_assoc($result)) {
-            $sectionList[] = new Section($row['section_code'],$row['section_name'],$row['grd_level'],$row['stud_no_max'],$row['stud_no'],$row['teacher_id'],
-            );
-        }
-        echo json_encode($sectionList);
-    }
+  
 
     public function transferStudent(){
         $id = $_POST['id'];

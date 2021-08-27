@@ -32,6 +32,9 @@
 .link:hover {
     color:  #0d6efd;
 }
+.link-green:hover {
+    color:  #28a745;
+}
 
 span[class='badge'] {
     padding: 0;

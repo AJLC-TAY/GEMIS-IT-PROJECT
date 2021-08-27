@@ -5,24 +5,24 @@
 
 
 <?php
-include('../class/Administration.php');
-$admin = new Administration();
-$curriculum = $admin->getCurriculum(); // define var
-$curr_name = $curriculum->get_cur_name();
-$curr_code = $curriculum->get_cur_code();
-$curr_desc = $curriculum->get_cur_desc();
+    include('../class/Administration.php');
+    $admin = new Administration();
+    $curriculum = $admin->getCurriculum(); // define var
+    $curr_name = $curriculum->get_cur_name();
+    $curr_code = $curriculum->get_cur_code();
+    $curr_desc = $curriculum->get_cur_desc();
 
-$state = "disabled";
-$edit_btn_state = "";
-$display = "d-none";
-$input_display = "";
-$edit_btn_display = "";
-if (isset($_GET['state']) && $_GET['state'] == 'edit') {
-    $state = '';
-    $edit_btn_state = "disabled";
-    $display = "";
-    $edit_btn_display = "d-none";
-} 
+    $state = "disabled";
+    $edit_btn_state = "";
+    $display = "d-none";
+    $input_display = "";
+    $edit_btn_display = "";
+    if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+        $state = '';
+        $edit_btn_state = "disabled";
+        $display = "";
+        $edit_btn_display = "d-none";
+    } 
 ?>
 
 <body>
@@ -55,8 +55,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 <hr class="my-2">
                                 <h6 class="fw-bold">Curriculum</h6>
                             </header>
-                            <!-- Form -->
-
+                            <!-- HEADER END -->
+                            <!-- FORM -->
                             <div class="currcard container">
                                 <div class='card'>
                                     <div class="d-flex justify-content-between">
@@ -93,7 +93,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     </section>
                                 </div>
                             </div>
-                            
+                            <!-- FORM END -->
 
                             <!-- Strand table -->
                             <div class="container mt-5">
@@ -118,8 +118,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         </thead>
                                     </table>
                                 </div>
-                            </form>
-                            <!-- FORM END -->
+                            </div>
                         </div>
                     </div>
                     <!--main content end-->
