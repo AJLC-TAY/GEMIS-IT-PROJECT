@@ -133,7 +133,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'getSectionJSON') {
 
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
-    echo('from action');
+    echo('from action:transferStud');
     $admin->transferStudent();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
+    echo('from action:update');
 }
 ?>

@@ -15,6 +15,7 @@ $(function() {
     // $('.transfer-stud').click(function(){
     //     $('#select-section-modal').modal('toggle')
     // })
+    // preload('#student')
     $(document).on('click','.transfer-stud', function(){
         stud_id = $(this).attr('id');
         $('#select-section-modal').modal('toggle')
@@ -33,15 +34,15 @@ $(function() {
 
     $(document).on('click', '.transfer-btn', function() {
         var code = $(this).attr('id')
-        var action = `transferStudent`
+        var action = 'archiveProgram'
         var info = {'code':code, 'stud_id': stud_id};
-
-        $.post("action.php", {info, action}, function(data) {	
+        console.log(info)
+        
+        $.post('action.php', {action:'transferStudent'} ,(data) => {
             $('#transfer-student-confirmation').modal('hide')	
         })
         
     })
-
 
     $(document).on('click', '.transfer-option', function() {
         var name = $(this).attr('name')
@@ -50,5 +51,11 @@ $(function() {
         transferModal.find('#modal-identifier').html(`${code}`)
         transferModal.find('.transfer-btn').attr('id', code)
         transferModal.modal('toggle')
+    })
+
+    $("#stud-save-btn").click(() =>$('#student-form').submit())
+
+    $('#student-form').submit(function(e){
+        console.log("submit")
     })
 })
