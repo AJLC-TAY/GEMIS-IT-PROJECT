@@ -141,6 +141,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSection') {
 
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
+    echo('from action:transferStud');
     $admin->transferStudent();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
+    echo('from action:update');
 }
 ?>

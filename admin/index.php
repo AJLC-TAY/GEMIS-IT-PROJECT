@@ -37,33 +37,50 @@
                                 <!-- PEOPLE MANAGEMENT -->
                                 <section class='col-md-4'>
                                     <h5 class="hw-bold">People Management</h5>
-                                    <div class="card bg-white rounded shadow-sm mt-3">
-                                        <div class="d-flex flex-wrap">
-                                            <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
-                                                <div class="d-flex justify-content-between">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <span>Admin</span>
-                                                </div>
-                                            </a>
-                                            <a href="facultylist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
-                                                <div class="d-flex justify-content-between">
-                                                    <i class="bi bi-person-fill"></i>
-                                                    Faculty
-                                                </div>
-                                            </a>
-                                            <a href="studentlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
-                                                <div class="d-flex justify-content-between">
-                                                    <i class="bi bi-person-fill"></i>
-                                                    Student
-                                                </div>
-                                            </a>
-
-                                            <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
-                                                <div class="d-flex justify-content-between">
-                                                    <i class="bi bi-pencil me-2"></i>
-                                                    Signatory
-                                                </div>
-                                            </a>
+                                    <div class="card-box bg-blue">
+                                        <div class="inner">
+                                            <h3> 10 </h3>
+                                            <p>Admin</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                        </div>
+                                        <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-6">
+                                        <div class="card-box bg-green">
+                                            <div class="inner">
+                                                <h3> 20 </h3>
+                                                <p>Faculty</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-users" aria-hidden="true"></i>
+                                            </div>
+                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-6">
+                                        <div class="card-box bg-orange">
+                                            <div class="inner">
+                                                <h3> 300 </h3>
+                                                <p> Student </p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                            </div>
+                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-sm-6">
+                                        <div class="card-box bg-red">
+                                            <div class="inner">
+                                                <h3> 5 </h3>
+                                                <p> Signatory </p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-pencil-square-o"></i>
+                                            </div>
+                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </section>
@@ -158,10 +175,11 @@
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="text/javascript" >
+<script type="text/javascript">
     $(function() {
         preload("#home")
         hideSpinner()
-    }) 
+    })
 </script>
+
 </html>

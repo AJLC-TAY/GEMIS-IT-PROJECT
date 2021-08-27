@@ -79,11 +79,11 @@ if (is_null($guardian)) {
                             <div class="buttons mt-3">
                                 <?php $image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
                                 echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
-                                <h5 class='mb-4'>STUDENT ID: $stud_id</h5>"
+                                <h5 class='mb-4'>STUDENT LRN: $lrn</h5>
+                                <a href='studentForm.php?id=${stud_id}' class = 'btn btn-success ms-2 mb-2 w-100'>EDIT PROFILE</a>
+                                <button type = 'button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' id='${stud_id}'>TRANSFER STUDENT</button>
+                                <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>"
                                 ?>
-                                <button class="btn btn-success ms-2 mb-2 w-100" title='Edit Profile'>EDIT PROFILE</button>
-                                <button type = "button" class="transfer-stud btn btn-success ms-2 mb-2 w-100 " title='Transfer Student'>TRANSFER STUDENT</button>
-                                <button class="btn btn-secondary ms-2 mb-2 w-100" title='Reset Password'>RESET PASSWORD</button>
                             </div>
 
                         </div>
@@ -181,7 +181,7 @@ if (is_null($guardian)) {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <h5>Do you want to transfer <span id="modal-identifier"></span>?</h5>
+                            <h5>Do you want to transfer the student to <span id="modal-identifier"></span>?</h5>
                             <p class="modal-msg"></p>
                         </div>
                         <div class="modal-footer">
