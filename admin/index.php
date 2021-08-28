@@ -56,7 +56,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="faculty.php" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-sm-6">
@@ -68,7 +68,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="student.php" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-sm-6">
@@ -80,7 +80,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-pencil-square-o"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="signatory" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </section>

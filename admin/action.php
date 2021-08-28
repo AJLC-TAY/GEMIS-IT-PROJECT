@@ -12,6 +12,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSY') {
 if (isset($_POST['action']) && $_POST['action'] === 'editEnrollStatus') {
     $admin->editEnrollStatus();
 }
+
+/******** USER ********/
+if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {
+    // $admin->deactivate();
+}
+
 /******** CURRICULUM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addCurriculum') {
     $admin->addCurriculum();

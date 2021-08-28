@@ -46,14 +46,10 @@
     </div>
     <!-- TOAST END -->
 </body>
-
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-
 <script type="text/javascript" src="../js/common-custom.js"></script>
-
-
 <script type="module" src="../js/admin/section.js"></script>
 
 </html>

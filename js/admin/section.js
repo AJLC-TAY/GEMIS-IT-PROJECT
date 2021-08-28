@@ -58,7 +58,7 @@ $(function() {
 
     $('#edit-btn').click(function(e) {
         e.preventDefault()
-        $("#empty-msg").toggleClass("d-none")
+        $("#empty-msg").addClass("d-none")
         $(".edit-opt").removeClass("d-none")
         $(this).addClass('d-none')
         $("#section-edit-form").find('input').each(function() {
@@ -75,6 +75,8 @@ $(function() {
         $(".edit-opt").addClass("d-none")
         $('#edit-btn').toggleClass('d-none')
 
+        if (!adviser) $("#empty-msg").removeClass("d-none")     // show empty message if no assigned adviser originally 
+
         let inputs = $("#section-edit-form").find('input')
         let maxInput = inputs.eq(0)
         maxInput.val(tempData[0])
@@ -90,24 +92,27 @@ $(function() {
 
     $("#section-edit-form").submit(function(e) {
         e.preventDefault()
+        showSpinner()
         let form = $(this)
         let formData= form.serializeArray()
-        $.post("action.php", formData, function(data) {
+        // $.post("action.php", formData, function(data) {
             let teacherID, inputs, teacherInput, teacherLink
 
             inputs = form.find("input")
             inputs.eq(0).prop("disabled", true)
 
             teacherID = formData[1].value
+            teacherLink = $("a.link")
             if (teacherID.trim().length == 0) {
-                console.log("test")
                 $("#empty-msg").removeClass("d-none")
-            } 
-            else {
+                teacherLink = $("a.link")
+                teacherLink.attr("href", "")
+                teacherLink.html("")
+                teacherLink.addClass("d-none")
+            } else {
                 teacherInput = inputs.eq(1)
                 teacherInput.val(teacherID)
 
-                teacherLink = $("a.link")
                 teacherLink.attr("href", `faculty.php?id=${teacherID}`)
                 let name = $(`#adviser-list option[value*='${teacherID}']`).html()
                 name = "Teacher " + name.substring(name.indexOf("-") + 2)
@@ -120,13 +125,19 @@ $(function() {
             $(".edit-opt").addClass('d-none')
 
             tempData = []
+            hideSpinner()
             showToast("success", "Successfully updated section")
-        })
+        // })
     })
 
+    /** Clears the teacher input if clear button is clicked */
     $("#adviser-clear-btn").click(function(e) {
         e.preventDefault()
         $("input[name='adviser']").val("")
+    })
+
+    $("#transfer-btn").click(function() {
+                
     })
 
 

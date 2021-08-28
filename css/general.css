@@ -24,9 +24,13 @@
     height: 40px;
 }
 
-.kebab:focus, .kebab:hover {
+.kebab:hover {
     background-color: #DCDCDC;
     box-shadow: none;
+}
+
+.instruction:hover {
+    box-shadow: var(--shad);
 }
 
 .link:hover {

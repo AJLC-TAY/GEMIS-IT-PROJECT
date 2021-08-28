@@ -268,5 +268,9 @@ $(function () {
         })
     })
 
+    $("#deactivate-btn").click(function () {
+        $("#confirmation-modal").modal("show")
+    })
+
     hideSpinner()
 })

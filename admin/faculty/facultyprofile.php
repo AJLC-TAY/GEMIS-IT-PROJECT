@@ -5,7 +5,7 @@
     $_SESSION['userID'] = 'alvin';
 
     $userType = ucwords( $_SESSION['userType']);
-    $link = "facultylist.php";
+    $link = "faculty.php";
     $userProfile = $admin->getProfile("FA");
 
     $id = $userProfile->get_teacher_id();
@@ -24,9 +24,12 @@
     <!-- BREADCRUMB END -->
 </header>
 <!-- HEADER END -->
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between align-items-center">
     <h4 class="my-auto">Profile</h4>
-    <a href="faculty.php?id=<?php echo $id;?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+    <div class="d-flex justify-content-center">
+        <button id="deactivate-btn" class="btn btn-danger me-3">Deactivate</button>
+        <a href="faculty.php?id=<?php echo $id;?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+    </div>
 </div>
 <div class='container mt-3'>
     <!-- GENERAL INFORMATION -->
@@ -49,7 +52,8 @@
                     <?php 
                         $birthdate = $userProfile->get_birthdate();
                         $birthdate = date("F j, Y", strtotime($birthdate)); 
-                        echo "<p>Name: {$userProfile->get_name()}<br>
+                        $name = $userProfile->get_name();
+                        echo "<p>Name: $name<br>
                                 Gender: {$userProfile->get_sex()}<br>
                                 Age: {$userProfile->get_age()}<br>
                                 Birthdate: {$birthdate}</p>"; 
@@ -184,6 +188,82 @@
                 </div>
             </div>
             <!-- ROLE SECTION END -->
+            <!-- ADVISORY CLASS SECTION -->
+            <div id="adviser-section" class="row d-flex-column pt-2">
+                <!-- INITIAL FORM -->
+                <form id='adviser-form'>
+                    <input type="hidden" name="teacher_id" value="<?php echo $id; ?>">
+                    <input type="hidden" name="action" value="updateAdvisoryClass">
+                </form>
+                <!-- ADVISORY HEADER -->
+                <div class="d-flex justify-content-between">
+                    <div class="my-auto"><h6 class='m-0 fw-bold'>Advisory Class
+                        <span class="badge"><button id='adviser-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
+                    </h6></div>
+                    <div id="adviser-decide-con" class='d-none my-auto'>
+                        <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
+                        <button id='adviser-save-btn' class='btn btn-sm btn-success'>Save</button>
+                    </div>
+                </div>
+                <!-- ADVISORY HEADER END -->
+                <!-- ADVISORY CONTENT -->
+                <div id="advisory-tag-con">
+                    <?php 
+                        // function renderRoleHTML($role){
+                        //     $iconState = 'd-none';
+                        //     echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>
+                        //                 <span class='ms-3 me-2'>{$role['desc']}</span>
+                        //                 <button class='btn btn-link text-danger btn-sm p-0 me-2 $iconState'>
+                        //                     <i class='bi bi-x-square-fill '></i>
+                        //                 </button>
+                        //             </div>";
+                        // }
+                    
+                        
+                        $data = $userProfile->get_access_data();
+                        $roles = $data['roles'];
+                        $rData = $data['data'];
+                        $rSize = $data['size'];
+                        foreach($rData as $role) {
+                            renderRoleHTML($role);
+                        }
+                        $rolesMsg = (!$rSize) ? "" : "d-none";
+                        echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $rolesMsg'>No roles/access set</p>";
+                        // echo "
+                        // <div id='role-add-btn' class='btn-group dropend d-none'>
+                        //     <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
+                        //         <i class='bi bi-plus'></i>
+                        //     </button>
+                        //     <ul id='role-dropdown' class='dropdown-menu'>
+                        //         <li><button class='dropdown-item' data-value='editGrades'>Edit Grade</button></li>
+                        //         <li><button class='dropdown-item' data-value='canEnroll'>Can Enroll</button></li>
+                        //         <li><button class='dropdown-item' data-value='awardReport'>Award Coordinator</button></li>
+                        //     </ul>
+                        // </div>";
+                    ?>
+                </div>
+                <div id='role-option-tag-con' class='d-none'><hr class='m-2 '>
+                    <div class="my-auto d-inline-block mx-2"><small>Options:</small></div>
+                    <?php 
+                        // function renderRoleOptHTML($role){
+                        //     echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>
+                        //                 <i class='bi bi-plus-square me-2'></i>{$role['desc']}
+                        //             </button>";
+                        // }
+                        foreach($rData as $role) {
+                            if ($role['disp'] == "") {
+                                $role['disp'] = "d-none";
+                            } else {
+                                $role['disp'] = "";
+                            }
+                            renderRoleOptHTML($role);
+                        }    
+                    ?>
+                </div>
+                <!-- ROLE CONTENT END -->
+            </div>
+        </div>
+        <!-- ROLE SECTION END -->
             <!-- INFORMATION DETAILS END -->
         </div>
     </div>
@@ -207,7 +287,7 @@
                 <div class='finder-con d-flex mb-3 pt-1 d-none'>
                     <!-- INSTRUCTION -->
                     <div class="my-auto">
-                        <a id="instruction" tabindex="0" class="btn btn-sm btn-light mx-1 rounded-circle shadow-sm " role="button" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" title="Instruction" data-bs-content="Find the subject code to be assigned to the faculty, then click the '+ SUBJECT' button">
+                        <a id="instruction" tabindex="0" class="instruction btn btn-sm btn-light mx-1 rounded-circle " role="button" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="focus" title="Instruction" data-bs-content="Find the subject code to be assigned to the faculty, then click the '+ SUBJECT' button">
                             <i class="bi bi-info-circle"></i>
                         </a>
                     </div>
@@ -237,7 +317,7 @@
                             <tr class='text-center'>
                                 <th class='d-none' scope='col'><input type='checkbox' id="selectAll" /></th>
                                 <th scope='col'>Code</th>
-                                <th scope='col'>Subjec Name</th>
+                                <th scope='col'>Subject Name</th>
                                 <th scope='col'>Type</th>
                                 <th scope='col'>Action</th>
                             </tr>
@@ -299,20 +379,26 @@
     <!-- CLASSES HISTORY END -->
 </div>
 <!-- MODAL -->
-<div class="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-    <div class="modal-dialog">
+<div id="confirmation-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4 class="mb-0"></h4>
+                    <h4 class="mb-0">Confirmation</h4>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                Deactivate Teacher <?php echo $name; ?>?<br>
+                <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </small>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">CANCEL</button>
-                <button type="submit" name="" form="" class="submit btn btn-primary">SUBMIT</button>
+                <form id="deactivate-form" action="action.php">
+                    <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+                    <input type="hidden" name="action" value="deactivate"/>
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
+                </form>
             </div>
         </div>
     </div>

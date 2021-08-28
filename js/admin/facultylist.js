@@ -26,6 +26,7 @@ let onPostBodyOfTable = () => {
 }
 
 let faculty_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
+let selection
 
 $(function() {
     preload('#faculty')
@@ -36,6 +37,51 @@ $(function() {
             $(this).prop('disabled', false)
         })
     })
+
+    /** 
+     *  Counts the number of selected records, then shows a warning if empty and returns false; 
+     *  otherwise, return true.
+     */
+    const countSelection = () => {
+        selection = faculty_table.getSelections()
+        let length = selection.length 
+        if (length < 1) showToast("danger", "No faculty selected")
+        return length
+    }
+
+    $("#deactivate-opt").click(function() {
+        let length = countSelection()
+        if (length) {
+            let modal = $("#deactivate-modal")         
+            let question = (length == 1) ? "this faculty?" : `${length} faculties?`
+            modal.find("#question").html(question)
+            modal.modal("show")
+        }
+    })
+
+    $("#deactivate-btn").click(() => $("#deactivate-form").submit())
+
+    $("#deactivate-form").submit(function(e) {
+        e.preventDefault()
+        let formData = $(this).serializeArray()
+
+        formData.push(...selection.map(e => {return {name: "id[]", value: `${e.teacher_id}`}}))
+        $.post("action.php")
+
+    })
+
+    $("#reset-pass-opt").click(function() {
+        if (countSelection()) {
+            
+        }
+    })
+
+    $("#export-opt").click(function() {
+        if (countSelection()) {
+
+        }
+    })
+
 
     
 
