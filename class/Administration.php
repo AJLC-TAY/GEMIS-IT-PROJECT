@@ -792,6 +792,18 @@ class Administration extends Dbconfig
             return $this->getStudent($id);
         }
     }
+    public function getUserCounts() 
+    {
+        $query = "SELECT (
+            SELECT COUNT(teacher_id) FROM faculty
+        ) as teachers,
+        (
+            SELECT COUNT(stud_id) FROM student
+        ) as students";
+        $result = mysqli_query($this->dbConnect, $query);
+        $row = mysqli_fetch_row($result);
+        return [0, $row[0], $row[1], 0];
+    }
 
     /**
      * Resets the password of the user with the given User ID.

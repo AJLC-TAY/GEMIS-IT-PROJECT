@@ -1,4 +1,8 @@
-<?php include_once("../inc/head.html"); ?>
+<?php include_once("../inc/head.html"); 
+    require_once("../class/Administration.php");
+    $admin = new Administration();
+    [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+?>
 <title>Home | GEMIS</title>
 </head>
 
@@ -40,7 +44,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div class="card-box bg-blue">
                                             <div class="inner">
-                                                <h3> 10 </h3>
+                                                <h3> <?php echo $admins; ?> </h3>
                                                 <p>Admin</p>
                                             </div>
                                             <div class="icon">
@@ -52,7 +56,7 @@
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-green">
                                             <div class="inner">
-                                                <h3> 20 </h3>
+                                                <h3> <?php echo $faculties; ?> </h3>
                                                 <p>Faculty</p>
                                             </div>
                                             <div class="icon">
@@ -64,7 +68,7 @@
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-orange">
                                             <div class="inner">
-                                                <h3> 300 </h3>
+                                                <h3> <?php echo $students; ?> </h3>
                                                 <p> Student </p>
                                             </div>
                                             <div class="icon">
@@ -76,7 +80,7 @@
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-red">
                                             <div class="inner">
-                                                <h3> 5 </h3>
+                                                <h3> <?php echo $signatories; ?> </h3>
                                                 <p> Signatory </p>
                                             </div>
                                             <div class="icon">
