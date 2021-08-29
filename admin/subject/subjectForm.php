@@ -267,14 +267,14 @@ if ($action === 'edit') {
                     </div>
 
                     <div class='form-group col-md-6'>
-                        <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
+                        <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
                     </div>
                 </div>
                 <div class='form-group row'>
                     <div class='form-group col-md-12'>
                         <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
-                        <input name = 'name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'><?php echo $subject_name; ?></input>
+                        <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
                     </div>
                 </div>
                 <div class='form-row row'>
@@ -285,15 +285,6 @@ if ($action === 'edit') {
                     <div class='form-group col-md-6'>
                         <label for='grade-level' class='col-sm-3 col-form-label'>Grade Level</label>
                         <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
-                    </div>
-                </div>
-                <div class='col-5'>
-                    <div class='form-group row'>
-                        <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
-                        <div class='col-sm-9'>
-                            <select name='sub-type' class='form-select' id='sub-type' $sub_type_editable><?php echo $sub_type_opt; ?></select>
-                        </div>
-                        <?php echo $prog_opt; ?>
                     </div>
                 </div>
             </div>

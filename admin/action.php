@@ -131,6 +131,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editDepartment') {
 if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
     $admin->updateFacultySubjects($_POST['teacher_id']);
 }
+if (isset($_POST['action']) && $_POST['action'] === 'advisoryChange') {
+    $admin->changeAdvisory();
+}
 
 /******** SECTION ********/
 if (isset($_POST['action']) && $_POST['action'] === 'getSectionJSON') {

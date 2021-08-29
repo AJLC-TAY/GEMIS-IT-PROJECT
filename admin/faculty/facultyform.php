@@ -92,7 +92,7 @@ $camel_state = ucwords($state);
     <h6 class='text-secondary'>Please complete the following:</h6>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' method='POST' enctype='multipart/form-data'>
+<form id='faculty-form' method='POST' action='action.php' enctype='multipart/form-data'>
     <div class='form-row row'>
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>

@@ -963,9 +963,10 @@ class Administration extends Dbconfig
         $this->prepared_query($query, $params, $types);
 
         // Step 3
-        $this->updateFacultySubjects($id);
+        // $this->updateFacultySubjects($id);
 
-        header("Location: faculty.php?id=$id");
+        echo "test";
+        // header("Location: faculty.php?id=$id");
     }
 
     /**
@@ -1107,6 +1108,11 @@ class Administration extends Dbconfig
             $param,
             "si"
         );
+    }
+
+    public function changeAdvisory()
+    {
+        
     }
 
     /** Faculty End */

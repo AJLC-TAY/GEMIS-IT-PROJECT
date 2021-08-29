@@ -23,6 +23,17 @@ $(function () {
     // Popover for the instruction
     let popover = new bootstrap.Popover($("#instruction"))
 
+    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+        triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+
+
     // If rolesTmp is 0, empty message is shown, else hidden
     let checkRolesTagForMsg = () => {
         let emptyMsg = $("#role-empty-msg")
@@ -271,6 +282,53 @@ $(function () {
     $("#deactivate-btn").click(function () {
         $("#confirmation-modal").modal("show")
     })
+
+    $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
+
+    $("input[type='radio'][name='section']").click(function() {
+        let element = $(this)
+        let sectionCode = element.val()
+        let sectionName = element.attr("data-section-name")
+        $("#selected-section").val(`${sectionCode} - ${sectionName}`)
+        $("[name=teacher-of-selected]").val(element.attr("data-current-teacher"))
+    })
+
+    $("#advisory-form").submit(function(e) {
+        e.preventDefault()
+        let formData = $(this).serializeArray()
+        console.log(formData)
+        // $.post("action.php", $(this).serializeArray())
+        // console.log($("input[type='radio']:checked"))
+    })
+
+    $("#search-section").on("keyup", function() {
+        var value = $(this).val().toLowerCase()
+        $("#section-list li").filter(function() {
+            if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
+            return $(this).addClass("d-none")
+            // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        })
+    })
+
+    $("#all-section-btn").click(function() {
+        $("#section-list li").removeClass("d-none")
+    })
+
+    const filterSection = (parameter) => {
+        $("#section-list li").filter(function() {
+            if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
+            return $(this).addClass("d-none")
+         })
+    }
+    
+    $("#no-adv-btn").click(function() {
+        filterSection("available")
+    })
+    $("#with-adv-btn").click(function() {
+        filterSection("unavailable")
+    })
+
+
 
     hideSpinner()
 })

@@ -104,9 +104,10 @@
                 <label for="enrollment-status" class="col-lg-3 col-form-label">Enrollment Status</label>
                 <div class="col-lg-9">
                     <div class="mt-1 my-auto">
-                        <div class="form-check form-switch my-auto ms-2 me-3 d-flex align-items-center">
-                            <input name='enrollment'  class="form-check-input my-auto me-3" type="checkbox" id="enrollment-switch" title='Start/End enrollment'>
-                            <label id='enrollment-status' class="form-check-label" for="flexSwitchCheckDefault"><?php echo $enroll_stat_msg; ?></label>
+                        <div class="form-check y-auto ms-2 me-3 d-flex align-items-center">
+                            <input name='enrollment'  class="form-check-input my-auto me-3" type="checkbox" id="enrollment-btn" title='Start/End enrollment'>
+                            <!-- <label id='enrollment-status' class="form-check-label" for="flexSwitchCheckDefault"><?php echo $enroll_stat_msg; ?></label> -->
+                            <label id='enrollment-status' class="form-check-label" for="flexSwitchCheckDefault">Enable enrollment. Accept enrollees after submitting.</label>
                         </div>
                     </div>
                 </div>

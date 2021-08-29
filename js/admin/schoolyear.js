@@ -153,11 +153,11 @@ var sy_table = new Table(tableId, url, method, id, id, height, search, searchSel
 
 preload('#curr-management', '#school-yr')
 $(function() {
-    $("#enrollment-switch").click(function() {
-        let enrollStat = $("#enrollment-status")
-        if ($(this).is(":checked")) enrollStat.html("System will start accepting enrollees once submitted")
-        else enrollStat.html("No enrollment temporarily")
-    })
+    // $("#enrollment-btn").click(function() {
+    //     let enrollStat = $("#enrollment-status")
+    //     if ($(this).is(":checked")) enrollStat.html("System will start accepting enrollees once submitted")
+    //     else enrollStat.html("No enrollment temporarily")
+    // })
 
     hideSpinner()
 })
