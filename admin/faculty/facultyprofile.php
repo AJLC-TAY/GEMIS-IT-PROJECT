@@ -7,7 +7,8 @@
     $userType = ucwords( $_SESSION['userType']);
     $link = "faculty.php";
     $userProfile = $admin->getProfile("FA");
-
+    $advisory_class = $admin->getAdvisoryClass();
+    $advisory_code = $advisory_class["section_code"] ?: "";
     $id = $userProfile->get_teacher_id();
 ?>
 
@@ -291,9 +292,11 @@
                             <div class="col-md-5  d-flex align-items-center">
                                 <div class="my-auto w-100">
                                     <div class="form-group">
-                                        <label for="current-advisory" class="col-form-label">Current</label>
+                                        <label for="current-advisory" class="col-form-label fw-bold">Current</label>
                                         <!-- <div class="col-md-9"> -->
-                                            <input id="current-advisory" type="text" class="form-control" value="test" readonly>
+                                        <?php $advisory = ($advisory_class) ? "$advisory_code - {$advisory_class['section_name']}" : "No advisory class set"; 
+                                            echo "<p id='current-advisory'>$advisory</p>";
+                                        ?>
                                         <!-- </div> -->
                                     </div>
                                     <div class="d-flex justify-content-end">
@@ -304,7 +307,7 @@
                                     <p>Sections:</p>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input id="no-advisers" type="radio" name="section" checked class="form-check-input" >
+                                            <!-- <input id="no-advisers" type="radio" name="section" checked class="form-check-input" > -->
                                             <label for="no-advisers" class="form-check-label">With No Adviser</label>
                                         </div>
                                         <div class="col-md-6">
@@ -830,82 +833,70 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="advisory-form" action="action.php">
-                    <p class="text-secondary"><small>Select one section to be assigned or switched</small></p>
-                    <div class="search-con d-flex">
-                        <input id="search-section" type="text" class="form-control flex-grow-1 me-3" placeholder="Search section here ...">
-                        <div class="dropdown">
-                            <button class="btn shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">
-                                Filter
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="section-filter">
-                                <li><button id="all-section-btn" class="dropdown-item" >All</button></li>
-                                <li><button id="no-adv-btn" class="dropdown-item" >No Adviser</button></li>
-                                <li><button id="with-adv-btn" class="dropdown-item" >With Adviser</button></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                        <!-- <input id="selected-section" type="text" class="form-control m-0" aria-describedby="selected-section-label" readonly> -->
-                        <!-- <input name="current-section" type="hidden"> -->
+                <form id="advisory-form" method="POST" action="action.php">
+                    <?php 
+                        $editable = "disabled";
+                        if ($advisory_code) {
+                            $editable = "";
+                        }
+                    ?>
+                    <input name="current-section" type="hidden" value="<?php echo $advisory_code; ?>" <?php echo $editable; ?>>
                     <input type="hidden" name="teacher-id" value="<?php echo $id; ?>"/>
                     <input type="hidden" name="action" value="advisoryChange"/>
-                    <ul class="list-group" id="section-list">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="section-info">
-                                <input class="form-check-input me-1"  name="section" type="radio" value="" aria-label="...">
-                                <span class="text-secondary">Section Code</span> - Section Name
+                    <div class="form-group mb-3">
+                        <input type="checkbox" <?php echo ($advisory_code ? "" : "disabled"); ?> name="unassign" class="form-check-input me-1">
+                        <span>Unassign class to this faculty</span>
+                    </div>
+                    <div id="section-opt-con" class="border p-3">
+                        <p class="text-secondary"><small>Select one section to be assigned or switched</small></p>
+                        <div class="search-con d-flex">
+                            <input id="search-section" type="text" class="form-control flex-grow-1 me-3" placeholder="Search section here ...">
+                            <div class="dropdown">
+                                <button class="btn shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filter
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="section-filter">
+                                    <li><button id="all-section-btn" class="dropdown-item" >All</button></li>
+                                    <li><button id="no-adv-btn" class="dropdown-item" >No Adviser</button></li>
+                                    <li><button id="with-adv-btn" class="dropdown-item" >With Adviser</button></li>
+                                </ul>
                             </div>
-                            <div class="teacher-con" title="teacher name"></div>
-                            <span class="badge available"><div class="bg-success rounded-circle" style="width: 15px; height: 15px;"></div></span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="section-info">
-                                <input class="form-check-input me-1"  name="section" type="radio" value="" aria-label="...">
-                                <span class="text-secondary">ABM11</span>- Gradelskdjfowie kdjf kjrewo
-                            </div>
-                            <div title="teacher name">icon</div>
-                            <span class="badge unavailable"><div class="bg-warning rounded-circle" style="width: 15px; height: 15px;"></div></span>
-                        </li>
-                    </ul>  
-                    <!-- <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active p-3" id="no-adv-list" role="tabpanel">
-                            <ul class="list-group overflow-auto" style='height: 250px;'>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1"  name="section" type="radio" value="" aria-label="...">
-                                    <span class="text-secondary">Section Code</span> - Section Name
-                                </li>
-                                <li class="list-group-item ">
-                                    <input class="form-check-input me-1"  name="section"type="radio" value="ABM11" aria-label="...">
-                                    <span class="text-secondary">ABM11</span> - Gradelskdjfowie kdjf kjrewo
-                                </li>
-                            </ul>
                         </div>
-                        <div class="tab-pane fade p-3" id="with-adv-list" role="tabpanel" >
-                            <ul class="list-group overflow-auto" style='height: 250px;'>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <input class="form-check-input me-1" data-current-teacher="31" data-section-name="Gradelskdjfowie kdjf kjrewo" name="section" type="radio" value="STEM11" aria-label="...">
-                                    <span class="text-secondary">ABM11</span> Gradelskdjfowie kdjf kjrewo
-                                    <span class="badge text-dark">Teacher Alvin John Cutay</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <input class="form-check-input me-1" data-current-teacher="31" data-section-name="Gradelskdjfowie kdjf kjrewo" name="section" type="radio" value="STEM11" aria-label="...">
-                                    <span class="text-secondary">ABM11</span> Gradelskdjfowie kdjf kjrewo
-                                    <span class="badge text-dark">Teacher Alvin John Cutay</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <input class="form-check-input me-1" data-current-teacher="31" data-section-name="Gradelskdjfowie kdjf kjrewo" name="section" type="radio" value="STEM11" aria-label="...">
-                                    <span class="text-secondary">ABM11</span> Gradelskdjfowie kdjf kjrewo
-                                    <span class="badge text-dark">Teacher Alvin John Cutay</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> -->
+    
+                            <!-- <input id="selected-section" type="text" class="form-control m-0" aria-describedby="selected-section-label" readonly> -->
+                       
+                        <ul class="list-group overflow-auto" id="section-list" style="height: 250px;">
+                            <?php 
+                                $section_list = $admin->listSectionOption($id);
+                                foreach($section_list as $section) {
+                                    $sect_code = $section["section_code"];
+                                    $sect_name = $section["section_name"];
+                                    $sect_grd = $section["section_grd"];
+                                    $sect_adviser_id = $section["adviser_id"];
+                                    $sect_adviser = $section["adviser_name"];
+                                    $color_badge = $sect_adviser ? "warning" : "success";
+                                    echo "<li class='list-group-item'>
+                                            <div class='form-row row'>
+                                                <span class='col-1'><input class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>
+                                                <div class='section-info d-flex justify-content-between col-sm-6'>
+                                                    <span>$sect_code - $sect_name </span> 
+                                                    <span class='text-secondary'>G$sect_grd</span>
+                                                </div>
+                                                <div class='section-status d-flex justify-content-between col-sm-5'>
+                                                    <div class='teacher-con' title='Current class adviser'>$sect_adviser</div>
+                                                    <span class='badge available'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                                                </div>
+                                            </div>
+                                        </li>";
+                                }
+                            ?>
+                        </ul>  
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
-                    <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" form="advisory-form" class="submit btn btn-success" value="Save">
+                <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" form="advisory-form" class="submit btn btn-success" value="Save">
             </div>
         </div>
     </div>

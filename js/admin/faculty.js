@@ -283,25 +283,87 @@ $(function () {
         $("#confirmation-modal").modal("show")
     })
 
+    /** Advisory Methods */
+
     $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
 
-    $("input[type='radio'][name='section']").click(function() {
-        let element = $(this)
-        let sectionCode = element.val()
-        let sectionName = element.attr("data-section-name")
-        $("#selected-section").val(`${sectionCode} - ${sectionName}`)
-        $("[name=teacher-of-selected]").val(element.attr("data-current-teacher"))
-    })
+    // $("input[type='radio'][name='section']").click(function() {
+    //     let element = $(this)
+    //     let sectionCode = element.val()
+    // })
+
+    const reloadSectionSelection = data => {
+        let html = "", container = $("#section-list")
+        data.forEach(e => {
+            const sectionCd = e.section_code
+            const teacherID = e.adviser_id;
+            const sectionNm = e.section_name;
+            const sectionGr = e.section_grd;
+            const sectionAd = e.adviser_name;
+            const colorBadge = teacherID ? "warning" : "success";
+            html += ` <li class='list-group-item'>
+                    <div class='form-row row'>
+                        <span class='col-1'><input class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
+                        <div class='section-info d-flex justify-content-between col-sm-6'>
+                            <span>${sectionCd} - ${sectionNm} </span> 
+                            <span class='text-secondary'>G${sectionGr}</span>
+                        </div>
+                        <div class='section-status d-flex justify-content-between col-sm-5'>
+                            <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
+                            <span class='badge available'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                        </div>
+                    </div>
+                </li>`
+        })
+        container.html(html)
+    }
 
     $("#advisory-form").submit(function(e) {
         e.preventDefault()
-        let formData = $(this).serializeArray()
-        console.log(formData)
-        // $.post("action.php", $(this).serializeArray())
+        showSpinner()
+        let form = $(this)
+        let formData = form.serializeArray()
+
+        let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
+        if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
+        $.post("action.php", formData, function(data) {
+            let sectionData = JSON.parse(data)
+            form.trigger("reset")
+          
+            let currentSectValue = sectionData.section_code
+            let sectionDetail = `${currentSectValue} - ${sectionData.section_name}`
+            
+            // toggle editable state of the unassign checkbox
+            let cbEditable = false
+            if (!sectionData.section_code) {
+                cbEditable = true
+                currentSectValue = ""
+                sectionDetail = sectionData.section_name
+            }
+            $("#current-advisory").html(`${sectionDetail}`)
+            $("input[name='current-section']").val(currentSectValue)
+            $("input[name='unassign']").prop("disabled", cbEditable)
+
+            reloadSectionSelection(sectionData.data)
+            $("#section-opt-con input, #section-filter").prop("disabled", false)
+            $("#advisory-modal").modal("hide")
+            hideSpinner()
+            showToast("success", "Successfully updated advisory class")
+        })
         // console.log($("input[type='radio']:checked"))
     })
 
-    $("#search-section").on("keyup", function() {
+    // Disable all section input when unassign checkbox is checked
+    $(document).on("click", "input[name='unassign']", function() {
+        let bool = false
+        if ($(this).is(":checked")) {
+            bool = true
+            $("#section-opt-con [type='radio']").prop("checked", false)
+        }
+        $("#section-opt-con input, #section-filter").prop("disabled", bool)
+    })
+
+    $(document).on("keyup", "#search-section", function() {
         var value = $(this).val().toLowerCase()
         $("#section-list li").filter(function() {
             if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
@@ -310,7 +372,7 @@ $(function () {
         })
     })
 
-    $("#all-section-btn").click(function() {
+    $(document).on("click", "#all-section-btn", function() {
         $("#section-list li").removeClass("d-none")
     })
 
@@ -318,13 +380,16 @@ $(function () {
         $("#section-list li").filter(function() {
             if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
             return $(this).addClass("d-none")
-         })
+        })
     }
-    
-    $("#no-adv-btn").click(function() {
+
+    $("#no-adv-btn").click(function(e) {
+        e.preventDefault()
         filterSection("available")
     })
-    $("#with-adv-btn").click(function() {
+
+    $("#with-adv-btn").click(function(e) {
+        e.preventDefault()
         filterSection("unavailable")
     })
 

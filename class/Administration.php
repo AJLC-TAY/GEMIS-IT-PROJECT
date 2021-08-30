@@ -162,15 +162,46 @@ class Administration extends Dbconfig
     }
 
     /** Section Methods */
-    public function listSectionJSON()
+    public function listSection() 
     {
-        $query = 'SELECT * from section';
+        $query = "SELECT * FROM section;";
         $result = mysqli_query($this->dbConnect, $query);
         $sectionList = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $sectionList[] = new Section($row['section_code'], $row['section_name'],$row['grd_level'],$row['stud_no_max'],$row['stud_no'],$row['teacher_id']);
         }
-        echo json_encode($sectionList);
+        return $sectionList;
+    }
+
+    public function listSectionOption($teacher_id)
+    {
+        $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
+                ."LEFT JOIN faculty AS f USING (teacher_id) "
+                ."WHERE teacher_id != '$teacher_id' "
+                ."OR teacher_id IS NULL ORDER BY teacher_id;";
+        $result = mysqli_query($this->dbConnect, $query);
+        $sectionList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $teacher_id = $row['teacher_id'];
+            $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
+            $sectionList[] = ["section_code" => $row['section_code'], 
+                              "section_name" => $row['section_name'],
+                              "section_grd"  => $row['grd_level'],
+                              "adviser_id"   => $teacher_id,
+                              "adviser_name" => $name
+                            ];
+        }
+        return $sectionList;
+    }
+
+    public function listSectionJSON()
+    {
+        echo json_encode($this->listSection());
+    }
+
+    public function listSectionOptionJSON($teacher_id)
+    {
+        echo json_encode($this->listSectionOption($teacher_id));
     }
 
     public function addSection() 
@@ -1102,17 +1133,79 @@ class Administration extends Dbconfig
      */
     public function updateFacultyDepartment()
     {
-        $param = [$_POST['department'], $_POST['teacher_id']];
         $this->prepared_query(
             "UPDATE faculty SET department=? WHERE teacher_id=?;",
-            $param,
+            [$_POST['department'], $_POST['teacher_id']],
             "si"
         );
     }
 
+    private function getSectionName($section_id) {
+        $result = mysqli_query($this->dbConnect, "SELECT section_name FROM section WHERE section_code='$section_id'");
+        return mysqli_fetch_row($result)[0];
+    }
+
+    private function prepareSectionResult($section_dest, $teacher_id) 
+    {
+        echo json_encode(["section_code" => $section_dest,
+                          "section_name" => $this->getSectionName($section_dest),
+                          "data"         => $this->listSectionOption($teacher_id)]);
+    }
+
     public function changeAdvisory()
     {
-        
+        $teacher_id = $_POST['teacher-id'];
+        if (isset($_POST["unassign"])) {
+            mysqli_query($this->dbConnect, "UPDATE section SET teacher_id=NULL WHERE section_code='{$_POST['current-section']}';");
+  
+            echo json_encode(["section_code" => NULL, 
+                              "section_name" => "No advisory class set", 
+                              "data" => $this->listSectionOption($teacher_id)]);
+            return;
+        }
+
+        $section_dest = $_POST['section'];
+      
+        // if (!$section_dest) {
+        //     // faculty will be unassigned to any section
+        //     $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
+        //     return;
+        // }
+
+        // faculty will be assigned to new section
+        if (!isset($_POST['current-adviser'])) { 
+            // no adviser to the section where the faculty will be transfered
+            $query_1 = "UPDATE section SET teacher_id=NULL WHERE teacher_id='$teacher_id';";
+            $query_2 = "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';";
+                 
+            mysqli_query($this->dbConnect, $query_1);
+            mysqli_query($this->dbConnect, $query_2);
+            $this->prepareSectionResult($section_dest, $teacher_id);
+            return;
+        }
+
+        // there is an adviser to the section destination
+        $current_section = $_POST['current-section'];
+        if (!$current_section) {
+            // the current adviser will be replaced as the new adviser of the section destination
+            mysqli_query($this->dbConnect, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+            $this->prepareSectionResult($section_dest, $teacher_id);
+            return;
+        }
+
+        // switch of advisory classes
+        $section_adviser = $_POST['current-adviser'];
+        mysqli_query($this->dbConnect, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+        mysqli_query($this->dbConnect, "UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
+        $this->prepareSectionResult($section_dest, $teacher_id);
+    }
+
+    public function getAdvisoryClass() {
+        $data = mysqli_fetch_row($this->prepared_select("SELECT section_code, section_name FROM section WHERE teacher_id=?", [$_GET['id']], "i"));
+        if ($data) {
+            return ["section_code" => $data[0], "section_name" => $data[1]];
+        }
+        return false;
     }
 
     /** Faculty End */
