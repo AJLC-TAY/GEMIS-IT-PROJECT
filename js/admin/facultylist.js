@@ -8,7 +8,7 @@ method = 'GET'
 id = 'teacher_id'
 search = true
 searchSelector = '#search-input'
-height = 425
+height = 440
 
 let onPostBodyOfTable = () => {
     // $('.profile-btn').click(function() {
