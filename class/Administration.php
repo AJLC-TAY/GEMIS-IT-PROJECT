@@ -994,7 +994,7 @@ class Administration extends Dbconfig
         $this->prepared_query($query, $params, $types);
 
         // Step 3
-        // $this->updateFacultySubjects($id);
+        $this->updateFacultySubjects($id);
 
         echo "test";
         // header("Location: faculty.php?id=$id");
@@ -1057,7 +1057,7 @@ class Administration extends Dbconfig
         if (isset($_POST['subjects'])) {
             // Step 1
             $subjects = $_POST['subjects'];
-            $result = mysqli_query($this->dbConnect, "SELECT sub_code FROM subjectclass WHERE teacher_id='$id'");
+            $result = mysqli_query($this->dbConnect, "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
             $current_subjects = [];
             while ($row =  mysqli_fetch_row($result)) {
                 $current_subjects[] = $row[0];
@@ -1065,22 +1065,18 @@ class Administration extends Dbconfig
 
             // Step 2
             $sub_codes_to_delete = array_diff($current_subjects, $subjects); // compares the two arrays, and returns an array of elements not found in array 2
-            if (count($sub_codes_to_delete) > 0) {
-                foreach ($sub_codes_to_delete as $code_to_delete) {
-                    mysqli_query($this->dbConnect, "DELETE FROM subjectclass WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
-                }
+            foreach($sub_codes_to_delete as $code_to_delete) {
+                mysqli_query($this->dbConnect, "DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
             }
 
             // Step 3
             $new_sub_codes = array_diff($subjects, $current_subjects);       // codes not found in the current subjects will be added as new row in the db
-            if (count($new_sub_codes) > 0) {
-                foreach ($new_sub_codes as $new_code) {
-                    mysqli_query($this->dbConnect, "INSERT INTO subjectclass (sub_code, teacher_id) VALUES ('$new_code', '$id');");
-                }
+            foreach ($new_sub_codes as $new_code) {
+                mysqli_query($this->dbConnect, "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
             }
         } else {
             // Delete all subject rows handled by the faculty
-            $result = mysqli_query($this->dbConnect, "DELETE FROM subjectclass 
+            $result = mysqli_query($this->dbConnect, "DELETE FROM subjectfaculty 
                                                       WHERE teacher_id='$id' 
                                                       AND (SELECT COUNT(sub_code) WHERE teacher_id='$id');") > 0;
         }
@@ -1101,7 +1097,7 @@ class Administration extends Dbconfig
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
-        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM subjectclass WHERE teacher_id=?);", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM subjectfaculty WHERE teacher_id=?);", [$id], "i");
         $subjects = array();
         while ($s_row = mysqli_fetch_assoc($result)) {
             $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']);
