@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Subject Page | GEMIS</title>
+<title>Enrollment Page | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
