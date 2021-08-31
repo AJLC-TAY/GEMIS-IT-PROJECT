@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Curriculum List | GEMIS</title>
+<title>Enrollment | GEMIS</title>
 <link rel="stylesheet" href="../css/general.css">
 </link>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
