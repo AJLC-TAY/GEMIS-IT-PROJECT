@@ -31,7 +31,8 @@
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="150" data-align="center" data-field="code">Section Code</th>
-                    <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field="name">Section Name</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="name">Section Name</th>
+                    <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="sy">SY ID</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
                     <th scope='col' data-width="100" data-align="center" data-field="max_stud">Maximum Students</th>
                     <th scope='col' data-width="100" data-align="center" data-field="stud_no">Student Number</th>

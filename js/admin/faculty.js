@@ -1,3 +1,4 @@
+preload('#faculty')
 // import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
 //          selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
 
@@ -13,7 +14,6 @@ let inputData
 // Subjects Handled
 // setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
 
-preload('#faculty')
 $(function () {
     /** Initialization */
     // Modal

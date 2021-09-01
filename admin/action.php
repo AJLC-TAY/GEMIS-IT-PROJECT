@@ -32,17 +32,17 @@ if (isset($_POST['action']) && $_POST['action'] === 'getCurriculumJSON') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'updateCurriculum') {
-    $admin = $admin->updateCurriculum();
+    $admin->updateCurriculum();
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveCurriculum') {
-    $admin->moveCurriculum('archived_curriculum','curriculum','archived_program','program','archived_sharedsubject','sharedsubject');
+    // $admin->moveCurriculum('archived_curriculum','curriculum','archived_program','program','archived_sharedsubject','sharedsubject');
+    $admin->moveCurriculum("", "archived_");
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveCurriculum') {
-    echo("from unarchiveCurriculum");
-    $admin->moveCurriculum('curriculum','archived_curriculum','program','archived_program','sharedsubject','archived_sharedsubject');
-    
+    // $admin->moveCurriculum('curriculum','archived_curriculum','program','archived_program','sharedsubject','archived_sharedsubject');
+    $admin->moveCurriculum("archived_", "");
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getArchivedCurriculumJSON') {
@@ -68,12 +68,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveProgram') {
-    echo("from action.php: archiveProgram");
-    $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
+    // echo("from action.php: archiveProgram");
+    // $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
+    $admin->moveProgram('', 'archived_');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveProgram') {
-    $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
+    // $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
+    $admin->moveProgram('archived_', '');
+
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getArchivedProgramJSON') {
@@ -108,11 +111,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
-    $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
+    $admin->moveSubject("", "archived_");
+    $admin->listArchSubjectsJSON();
+    // $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
-    $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
+    $admin->moveSubject("archived_", "");
+    $admin->listArchSubjectsJSON();
+    // $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
 
 /******** FACULTY ********/

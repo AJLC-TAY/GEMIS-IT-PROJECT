@@ -96,8 +96,8 @@ if ($action === 'add') {
 
     $button = "<div class='btn-con'>"
                 ."<input type='hidden' name='action' value='addSubject'>"
-                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>SUBMIT & ADD ANOTHER</button>"
-                ."<button class='submit-btn btn btn-success form-control w-auto'>SUBMIT</button>"
+                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</button>"
+                ."<button class='submit-btn btn btn-success form-control w-auto'>Submit</button>"
             ."</div>";
 
     if (isset($_GET['prog_code'])) {                // add subject page is accessed from a program page
@@ -269,6 +269,7 @@ if ($action === 'edit') {
                     <div class='form-group col-md-6'>
                         <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
+                        <?php echo $prog_opt; ?>
                     </div>
                 </div>
                 <div class='form-group row'>
@@ -289,7 +290,6 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
-                        
   
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
             <h5 class='text-start mb-3'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>

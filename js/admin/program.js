@@ -1,14 +1,19 @@
-import {Table} from "./Class.js"
-
-let tableId, url, method, id, height
-tableId = '#table'
-url = `getAction.php?prog_code=${code}&data=subjects`
-method = 'GET'
-id = 'sub_code'
-height = 300
-
 preload("#curr-management", "#program")
-let subject_table = new Table(tableId, url, method, id, id, height)
+
+const tableSetup = {
+    url:                `getAction.php?prog_code=${code}&data=subjects`,
+    method:             'GET',
+    uniqueId:           'sub_code',
+    idField:            'sub_code',
+    height:             300,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+}
+
+let programTable = $("#table").bootstrapTable(tableSetup)
 
 var archiveMessage = 'Archiving this subject will also archive all student grades under it.'
 

@@ -1,14 +1,22 @@
-import {Table} from "./Class.js"
-    
-let tableId, url, method, id, search, searchSelector, height
+preload('#enrollment', '#section')
 
-tableId = '#table'
-url = "getAction.php?" + (isViewPage ? `data=student&section=${sectionCode}` : 'data=section')
-method = 'GET'
-id = 'code'
-search = true
-searchSelector = '#search-input'
-height = 425
+let tableSetup = {
+    method:             'GET',
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+}
+
+let studSetUp = {...tableSetup}
+studSetUp.url = "getAction.php?" + (isViewPage ? `data=student&section=${sectionCode}` : 'data=section')
+studSetUp.idField = 'lrn'
+studSetUp.uniqueId = 'lrn'
+studSetUp.height = 300
+
+let studentTable = $("#table").bootstrapTable(studSetUp)
+let subjectTable
 
 let onPostBodyOfTable = () => {
     // $('.profile-btn').click(function() {
@@ -25,11 +33,9 @@ let onPostBodyOfTable = () => {
     // })
 }
 
-let sectionTable = new Table(tableId, url, method, id, id, height, search, searchSelector)
 let addAnother = false
-let tempData = []
 
-preload('#enrollment', '#section')
+
 $(function() {
     $('#add-btn').click(function() {
         $("#add-modal").modal("show")
@@ -63,7 +69,7 @@ $(function() {
         $(this).addClass('d-none')
         $("#section-edit-form").find('input').each(function() {
             let input = $(this)
-            tempData.push(input.val())
+            // tempData.push(input.val())
             input.removeClass('d-none')
             input.prop("disabled", false)
             $("a.link").addClass("d-none")
@@ -87,7 +93,6 @@ $(function() {
         // teacherInput.addClass("d-none")
         
         $("a.link").removeClass("d-none")
-        tempData = []
     })
 
     $("#section-edit-form").submit(function(e) {
@@ -95,8 +100,9 @@ $(function() {
         showSpinner()
         let form = $(this)
         let formData= form.serializeArray()
-        // $.post("action.php", formData, function(data) {
+        $.post("action.php", formData, function(data) {
             let teacherID, inputs, teacherInput, teacherLink
+            data = JSON.parse(data)
 
             inputs = form.find("input")
             inputs.eq(0).prop("disabled", true)
@@ -104,11 +110,11 @@ $(function() {
             teacherID = formData[1].value
             teacherLink = $("a.link")
             if (teacherID.trim().length == 0) {
-                $("#empty-msg").removeClass("d-none")
-                teacherLink = $("a.link")
-                teacherLink.attr("href", "")
-                teacherLink.html("")
-                teacherLink.addClass("d-none")
+                // $("#empty-msg").removeClass("d-none")
+                // teacherLink = $("a.link")
+                // teacherLink.attr("href", "")
+                // teacherLink.html("")
+                // teacherLink.addClass("d-none")
             } else {
                 teacherInput = inputs.eq(1)
                 teacherInput.val(teacherID)
@@ -118,16 +124,18 @@ $(function() {
                 name = "Teacher " + name.substring(name.indexOf("-") + 2)
                 teacherLink.html(name)
                 teacherLink.removeClass("d-none")
+
             }
+            location.replace(`section.php?code=${data.section}`)
           
 
-            $("#edit-btn").toggleClass('d-none')
-            $(".edit-opt").addClass('d-none')
+            // $("#edit-btn").toggleClass('d-none')
+            // $(".edit-opt").addClass('d-none')
 
-            tempData = []
-            hideSpinner()
-            showToast("success", "Successfully updated section")
-        // })
+            // tempData = []
+            // hideSpinner()
+            // showToast("success", "Successfully updated section")
+        })
     })
 
     /** Clears the teacher input if clear button is clicked */
@@ -140,6 +148,26 @@ $(function() {
                 
     })
 
+    /** Specific subject */
+    $("#add-subject-btn").click(function() {
+        let subSetUp = {...tableSetup}
+        subSetUp.url = "getAction.php?data=subjects"
+        subSetUp.idField = 'sub_code'
+        subSetUp.uniqueId = 'sub_code'
+        subSetUp.height = 300
+        subSetUp.search = true
+        subSetUp.searchSelector = "#search-sub-input"
+
+        subjectTable = $("#subject-table").bootstrapTable(subSetUp)
+
+    })
+
+     // clear button for search subject input in the as-modal
+     $(document).on("click", ".clear-table-btn", () => {
+        showSpinner()
+        $("#subject-table").bootstrapTable("resetSearch")
+        hideSpinner()
+    })
 
 
     

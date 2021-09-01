@@ -92,7 +92,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         <thead class='thead-dark track-table'>
                                             <div class="d-flex justify-content-between align-items-center mb-3">
                                                 <h5 class="fw-bold">SUBJECTS</h5>
-                                                <a href="subject.php?state=add&prog_code=<?php echo $prog_code; ?>" id="add-btn" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add subject</a>
+                                                <a href="subject.php?prog_code=<?php echo $prog_code; ?>&action=add" id="add-btn" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add subject</a>
                                             </div>
                                             <hr class="mt-1 mb-4">
                                             <div class="d-flex flex-row-reverse mb-3">

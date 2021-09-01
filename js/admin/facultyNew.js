@@ -1,25 +1,28 @@
 preload('#faculty')
+
 // Deleted roles
 let rolesDel = []
 let rolesTmp = []
 
 // Department
 let inputData
-let setup = {
-    data : subjects,
-    uniqueId : "sub_code",
-    idField : "sub_code",
-    search : true,
-    searchSelector : '#search-input',
-    pageSize : "10",
-    paginationParts : ["pageInfoShort", "pageSize", "pageList"],
-    pagination : true,
-    pageList : "[10, 25, 50, All]",
-    onPostBody : () => {$("#subject-table").bootstrapTable("checkBy",  
-                     {field: 'sub_code', values: assigned})}
+
+let tableSetup = {
+    data:               subjects,
+    uniqueId:           "sub_code",
+    idField:            "sub_code",
+    search:             true,
+    searchSelector:     '#search-sub-input',
+    // pageSize:           "10",
+    // paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    // pagination:         true,
+    // pageList:           "[10, 25, 50, All]",
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    onPostBody:         () => {$("#subject-table").bootstrapTable("checkBy",  
+                                                                  {field: 'sub_code', values: assigned})}
 }
 
-let subjectTable = $("#subject-table").bootstrapTable(setup)
+let subjectTable = $("#subject-table").bootstrapTable(tableSetup)
 
 $(function() {
 
@@ -197,6 +200,8 @@ $(function() {
         // show
         $("#dept-edit-btn").removeClass("d-none")
         $("#dept-empty-msg").toggleClass('d-none')
+
+        
     })
 
 
@@ -234,7 +239,8 @@ $(function() {
 
     $(".edit-as-btn, #edit-as-btn").click(function() {
         // show
-        subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
+        console.log(assigned);
+        // subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
     })
 
     $("#cancel-as-btn").click(() => {
@@ -252,7 +258,6 @@ $(function() {
         formData = [...formData, ...newSubjects]
         $.post("action.php", formData, function() {
             assigned = newSubCodes
-            console.log(assigned.length)
             let emptyMsg = $("#empty-as-msg")
             let emptySubjectCon = () => $(".assigned-sub-con a").remove()
             if (assigned.length == 0) {
@@ -278,41 +283,49 @@ $(function() {
             showToast('success', "Handled subjects successfully updated")
         })
     })
+
+    // clear button for search subject input in the as-modal
+    $(document).on("click", ".clear-table-btn", () => {
+        showSpinner()
+        subjectTable.bootstrapTable("resetSearch")
+        hideSpinner()
+    })
                              
-      /** Advisory Methods */
+    /** Advisory Methods */
 
-      $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
+    const reloadSectionSelection = data => {
+        let html = "", container = $("#section-list")
+        data.forEach(e => {
+            const sectionCd = e.section_code
+            const teacherID = e.adviser_id;
+            const sectionNm = e.section_name;
+            const sectionGr = e.section_grd;
+            const sectionAd = e.adviser_name;
 
-      // $("input[type='radio'][name='section']").click(function() {
-      //     let element = $(this)
-      //     let sectionCode = element.val()
-      // })
-  
-      const reloadSectionSelection = data => {
-          let html = "", container = $("#section-list")
-          data.forEach(e => {
-              const sectionCd = e.section_code
-              const teacherID = e.adviser_id;
-              const sectionNm = e.section_name;
-              const sectionGr = e.section_grd;
-              const sectionAd = e.adviser_name;
-              const colorBadge = teacherID ? "warning" : "success";
-              html += ` <li class='list-group-item'>
-                      <div class='form-row row'>
-                          <span class='col-1'><input class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
-                          <div class='section-info d-flex justify-content-between col-sm-6'>
-                              <span>${sectionCd} - ${sectionNm} </span> 
-                              <span class='text-secondary'>G${sectionGr}</span>
-                          </div>
-                          <div class='section-status d-flex justify-content-between col-sm-5'>
-                              <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
-                              <span class='badge available'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
-                          </div>
-                      </div>
-                  </li>`
-          })
-          container.html(html)
-      }
+            let colorBadge = "success";
+            let availability = "available";
+
+            if (teacherID) {
+                colorBadge = "warning";
+                availability = "unavailable";
+            }
+
+            html += ` <li class='list-group-item'>
+                    <div class='form-row row'>
+                        <span class='col-1'><input id='${sectionCd}' class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
+                        <div class='section-info d-flex justify-content-between col-sm-6'>
+                            <label for='${sectionCd}'>${sectionCd} - ${sectionNm} </label> 
+                            <span class='text-secondary'>G${sectionGr}</span>
+                        </div>
+                        <div class='section-status d-flex justify-content-between col-sm-5'>
+                            <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
+                            <span class='badge ${availability}'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                        </div>
+                    </div>
+                </li>`
+        })
+        container.html(html)
+    }
   
       $("#advisory-form").submit(function(e) {
           e.preventDefault()
@@ -385,7 +398,7 @@ $(function() {
   
     const filterSection = (parameter) => {
         $("#section-list li").filter(function() {
-            if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
+            if ($(this).find(".form-row .section-status span").hasClass(parameter)) return $(this).removeClass("d-none")
             return $(this).addClass("d-none")
         })
     }
@@ -399,7 +412,6 @@ $(function() {
         e.preventDefault()
         filterSection("unavailable")
     })
-
 
 
 

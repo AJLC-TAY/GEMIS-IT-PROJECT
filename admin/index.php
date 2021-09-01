@@ -1,15 +1,6 @@
-<?php include_once("../inc/head.html"); 
-    require_once("../class/Administration.php");
-    $admin = new Administration();
-    [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
-?>
+<?php include_once("../inc/head.html"); ?>
 <title>Home | GEMIS</title>
 </head>
-
-
-<?php
-
-?>
 
 <body>
     <!-- SPINNER -->
@@ -27,6 +18,11 @@
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row mt ps-3">
+                            <?php
+                            require_once("../class/Administration.php");
+                            $admin = new Administration();
+                            [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+                            ?>
                             <!-- HEADER -->
                             <header class="mb-4">
                                 <!-- BREADCRUMB -->

@@ -21,7 +21,7 @@
                         <div class="row ps-3">
                             <?php 
                                 $isViewPage = TRUE;
-                                if (isset($_GET["code"])) {
+                                if (isset($_GET["sec_code"])) {
                                     include_once("section/sectionview.php");
                                 } else {
                                     $isViewPage = FALSE;
