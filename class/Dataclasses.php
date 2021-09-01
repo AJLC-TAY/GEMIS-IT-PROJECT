@@ -119,7 +119,7 @@ class Subject implements JsonSerializable
         $this->sub_type = $sub_type;
         $this->action = "<div class='d-flex justify-content-center'>"
                     ."<a href='subject.php?sub_code=".$sub_code."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
-                    ."<a href='subject.php?sub_code=".$sub_code."&action=view' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                    ."<a href='subject.php?sub_code=".$sub_code."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
                     ."</div>";
     }
 
@@ -169,7 +169,7 @@ class Subject implements JsonSerializable
         $sub_code = $this->get_sub_code();
         $this->action = "<div class='d-flex justify-content-center'>"
                         ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
-                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&action=view' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
                         ."</div>";
     }
 

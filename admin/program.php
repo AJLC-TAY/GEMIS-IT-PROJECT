@@ -62,13 +62,15 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     <div class="d-flex justify-content-between">
                                         <h4>Information</h4>
                                         <div class="btn-con my-a">
-                                            <input type="hidden" name="action" value="updateCurriculum">
                                             <button id='edit-btn' class='btn link btn-sm <?php echo $edit_btn_display;?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
-                                            <button id="cancel-btn" class="btn btn-dark btn-sm me-1 <?php echo $display;?>">Cancel</button>
-                                            <input type="submit" form='program-view-form' class="btn btn-success btn-sm <?php echo $display; ?>" value="Save">
+                                            <div class="decide-con <?php echo $display; ?>">
+                                                <button id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</button>
+                                                <input type="submit" form='program-view-form' class="btn btn-success btn-sm" value="Save">
+                                            </div>
                                         </div>
                                     </div><hr class='mt-2 mb-4'>
-                                    <form id='program-view-form'  method="POST">
+                                    <form id='program-view-form' method="POST">
+                                        <input type="hidden" name="action" value="updateProgram">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
                                             <div class="col-xl-10 col-lg-9">

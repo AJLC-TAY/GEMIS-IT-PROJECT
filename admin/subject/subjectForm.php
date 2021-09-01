@@ -41,28 +41,35 @@ $sub_type_editable = '';
 $prog_opt = prepareEmptyProgramOptions($programs);
 $input_sub_with_prog = '';
 
+
+// subject data
+$title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
+$subject_code = '';
+$subject_name = '';
+$semester_opt = '';
+$sub_type_opt = '';
+$grade_level_opt = '';
+$reqRowsGrd11 = '';
+$reqRowsGrd12 = '';
+$grade_level_state = '';
+$button = '';
+
 if ($action === 'add') {
-    $title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
-    $subject_code = '';
-    $subject_name = '';
+
     // prepare semester options
-    $semester_opt = '';
-    foreach ($semesters as $id => $value) { 
+    foreach ($semesters as $id => $value) {
         $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
     }
 
     // prepare subject type options
-    $sub_type_opt = '';
-    foreach ($sub_opt as $id => $value) { 
+    foreach ($sub_opt as $id => $value) {
         $sub_type_opt .= "<option value='$id' ". (($id == "core" ) ? "selected" : "") .">$value</option>"; // Default = Core subject type
     }
 
-    $grade_level_opt = '';
     foreach ($grd_lvl as $id => $value) { 
         $grade_level_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
     }
 
-    $reqRowsGrd11 = '';
     foreach ($subjectGrade11 as $subGr11) {
         $sub_code = $subGr11->get_sub_code();
         $sub_name = $subGr11->get_sub_name();
@@ -77,7 +84,6 @@ if ($action === 'add') {
         </tr>";
     }
 
-    $reqRowsGrd12 = '';
     foreach ($subjectGrade12 as $subGr12) {
         $sub_code = $subGr12->get_sub_code();
         $sub_name = $subGr12->get_sub_name();
@@ -91,8 +97,6 @@ if ($action === 'add') {
             <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
         </tr>";
     }
-
-    $grade_level_state = '';
 
     $button = "<div class='btn-con'>"
                 ."<input type='hidden' name='action' value='addSubject'>"

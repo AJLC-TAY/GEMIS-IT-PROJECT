@@ -70,13 +70,14 @@ $(function () {
 
     })
 
-    // $("#curriculum-form").submit(function(e) {
-    //     e.preventDefault()
-    //     $.post("action.php", $(this).serialize(), (data) => {
-    //         $(this).find("input, textarea").prop("disabled", true)
-    //         $("#edit-btn, .decide-con").toggleClass("d-none")
-    //         showToast("success", "Successfully updated curriculum")
-    //     })
-    // })
+    $("#curriculum-form").submit(function(e) {
+        e.preventDefault()
+        // console.log($(this).serializeArray())
+        $.post("action.php", $(this).serializeArray(), (data) => {
+            $(this).find("input, textarea").prop("disabled", true)
+            $("#edit-btn, .decide-con").toggleClass("d-none")
+            showToast("success", "Successfully updated curriculum")
+        })
+    })
     hideSpinner()
 })

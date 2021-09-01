@@ -326,9 +326,9 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $old_code = $_POST['current_code'];
         // parameter order: new code, current code, name, description, current code
-        $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
+        $param = [$code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
         $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
-        header("Location: curriculum.php?code=$code");
+//        header("Location: curriculum.php?code=$code");
     }
 
     public function moveCurriculum($pref_og, $pref_dest)
@@ -420,22 +420,11 @@ class Administration extends Dbconfig
     public function updateProgram()
     {
         $code = $_POST['code'];
-        $currCode = $_GET['curr-code']; //uneditable yung curr_code here noh?
         $prog_description = $_POST['name'];
         $old_code = $_POST['current_code'];
 
-        //$updateQuery = "UPDATE program SET prog_code = '$code', description = '$description' WHERE prog_code = '$code'";
-
-        // $updateQuery = "UPDATE ".$this->program." 
-        // SET prog_code = '".$_POST["code"]."', description = '".$_POST["description"]."'
-        // WHERE prog_code ='".$_POST["code"]."'";
-        // $isUpdated = mysqli_query($this->db, $updateQuery);
-
-        //if($_POST['code']) {	}	 
-        // $this->prepared_query("UPDATE program SET prog_code=?, description=? WHERE prog_code=?", [$code, $currCode, $prog_description, $old_code]);
-        $updateQuery = "UPDATE program SET prog_code='" . $code . "', description='" . $prog_description . "' WHERE prog_code = '" . $old_code . "'";
-        mysqli_query($this->db, $updateQuery);
-        header("Location: program.php?prog_code=$code");
+         $this->prepared_query("UPDATE program SET prog_code=?, description=? WHERE prog_code=?;", [$code, $prog_description, $old_code]);
+//        header("Location: program.php?prog_code=$code");
     }
 
     public function moveProgram($pref_og, $pref_dest)

@@ -74,10 +74,11 @@
                                     <hr class='mt-2 mb-4'>
                                     <section class="w-100">
                                         <div class="ps-3 row w-100">
-                                            <form id='curriculum-form' method="POST">
+                                            <form id='curriculum-form' action="action.php" method="POST">
                                                 <div class="form-group row">
                                                     <div class="col-sm-3"><label class="my-auto">Code</label></div>
                                                     <div class="col-sm-9">
+                                                        <input type="hidden" name="action" value="updateCurriculum">
                                                         <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
                                                         <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>"; ?>
                                                     </div>
@@ -183,8 +184,13 @@
                 </div>
             </div>
         </div>
-        </div>
-        <!-- ADD MODAL END -->
+    </section>
+    <!-- ADD MODAL END -->
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
