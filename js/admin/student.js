@@ -15,7 +15,7 @@ $(function() {
     // $('.transfer-stud').click(function(){
     //     $('#select-section-modal').modal('toggle')
     // })
-    // preload('#student')
+    preload('#student')
     $(document).on('click','.transfer-stud', function(){
         stud_id = $(this).attr('id');
         $('#select-section-modal').modal('toggle')
@@ -58,4 +58,6 @@ $(function() {
     $('#student-form').submit(function(e){
         console.log("submit")
     })
+
+    hideSpinner()
 })

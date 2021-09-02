@@ -1440,8 +1440,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
-                            ."<a href='studentForm.php?id=$stud_id' class='btn btn-primary btn-sm w-auto me-1' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"
-                            . "<a href='studentInfo.php?id=$stud_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
+                            ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-primary btn-sm w-auto me-1' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"
+                            . "<a href='student.php?id=$stud_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."</div>";
             $this->section = $section;
             $this->parents = $parents;
