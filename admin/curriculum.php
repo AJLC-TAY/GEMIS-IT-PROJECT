@@ -1,4 +1,26 @@
-<?php include_once("../inc/head.html"); ?>
+<?php
+include_once("../inc/head.html");
+include_once('../class/Administration.php');
+
+$admin = new Administration();
+$curriculum = $admin->getCurriculum();
+$curr_name = $curriculum->get_cur_name();
+$curr_code = $curriculum->get_cur_code();
+$curr_desc = $curriculum->get_cur_desc();
+
+$edit = "disabled";
+$disable_when_edit = "";
+$none_when_edit = "";
+$display_when_edit = "d-none";
+
+if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+    $edit = '';
+    $display_when_edit = "";
+    $disable_when_edit = "disabled";
+    $none_when_edit = "d-none";
+}
+
+?>
 
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -20,27 +42,6 @@
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row ps-3">
-                            <?php
-                            include_once('../class/Administration.php');
-
-                            $admin = new Administration();
-                            $curriculum = $admin->getCurriculum();
-                            $curr_name = $curriculum->get_cur_name();
-                            $curr_code = $curriculum->get_cur_code();
-                            $curr_desc = $curriculum->get_cur_desc();
-
-                            $edit = "disabled";
-                            $disable_when_edit = "";
-                            $none_when_edit = "";
-                            $display_when_edit = "d-none";
-
-                            if (isset($_GET['state']) && $_GET['state'] == 'edit') {
-                                $edit = '';
-                                $display_when_edit = "";
-                                $disable_when_edit = "disabled";
-                                $none_when_edit = "d-none";
-                            }
-                            ?>
                             <!-- HEADER -->
                             <header>
                                 <!-- BREADCRUMB -->
@@ -201,5 +202,4 @@
 </script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="../js/admin/curriculum.js"></script>
-
 </html>
