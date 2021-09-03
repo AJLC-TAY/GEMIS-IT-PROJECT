@@ -58,7 +58,8 @@ if (is_null($guardian)) {
     $guardian_relationship = $guardian['relationship'];
 }
 
-
+$profile_image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
+$psa_image = is_null($id_picture) ? "../assets/psa_preview.jpg" : $psa_birth_cert;
 ?>
 
 <!-- HEADER -->
@@ -77,12 +78,26 @@ if (is_null($guardian)) {
 <form id='student-form' method='POST' action='action.php' enctype='multipart/form-data'>
     <!-- Photo -->
     <div class="form-row row">
-        <div class="buttons mt-3">
-        <?php $image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
-        echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
-                                
-                                "
-        ?>
+        <div class='form-group col-md-4 d-flex flex-column'>
+            <label for='photo' class='form-label'>Student Photo</label>
+            <div class="image-preview-con">
+                <img id='resultImg' src='<?php echo $profile_image; ?>' alt='Profile image' class='rounded-circle w-100 h-100' />
+                <div class='edit-img-con text-center'>
+                    <p role='button' class="edit-text profile-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
+                </div>
+            </div>
+            <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
+        </div>
+
+        <div class='form-group col-md-4 d-flex flex-column'>
+            <label for='photo' class='form-label'>PSA Birth Certificate</label>
+            <div class="image-preview-con">
+                <img id='psaResult' src='<?php echo $psa_image; ?>' alt='PSA image' class = "img-thumbnail w-100 h-100" />
+                <div class='edit-img-con text-center'>
+                    <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
+                </div>
+            </div>
+            <input id='psaUpload' class='form-control form-control-sm' id='psaPhoto' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
     </div>
     
@@ -91,11 +106,6 @@ if (is_null($guardian)) {
 
                 <h4 class="fw-bold">STUDENT INFORMATION</h4>
                 <div class="form-group row">
-
-                    <div class="col-6">
-                        <label class="col-form-label">PSA Birth Certificate</label>
-                        <!-- image heree -->
-                    </div>
 
                     <div class="col-6">
                         <label class="col-form-label">Learner's Reference Number</label>

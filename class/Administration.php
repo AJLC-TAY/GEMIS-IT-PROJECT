@@ -1473,6 +1473,172 @@ class Administration extends Dbconfig
     public function unassignSubClasses() {
         $this->assignSubClasses(NULL);
     }
+
+    public function editStudent(){
+
+
+        $statusMsg = array();
+        $allowTypes = array('jpg', 'png', 'jpeg'); 
+
+        //general info
+        $stud_id = trim($_POST['student_id']);
+        $lrn = trim($_POST['lrn']) ?: NULL;
+        $first_name = trim($_POST['first_name']);
+        $middle_name = trim($_POST['middl_name']) ?: NULL;
+        $last_name = trim($_POST['last_name']);
+        $ext_name = trim($_POST['suffix']) ?: NULL;
+        $sex = trim($_POST['sex']);
+        $age = trim($_POST['age']);
+        $birthdate = trim($_POST['birthdate']);
+        $birth_place = trim($_POST['birthplace']) ?: NULL;
+        $indigenous_group = trim($_POST['group']) ?: NULL;
+        $mother_tongue = trim($_POST['mother_tongue']);
+        $religion = trim($_POST['religion']) ?: NULL;
+        $cp_no = trim($_POST['contact_no']) ?: NULL;
+        $belong_to_ipcc = trim($_POST['belong_group']) == 'No' ? '0': '1';
+
+        //address
+        $house_no = trim($_POST['house_no']);
+        $street = trim($_POST['street']);
+        $barangay = trim($_POST['barangay']);
+        $city = trim($_POST['city']);
+        $province = trim($_POST['province']);
+        $zip = trim($_POST['zip']);
+
+        //parent
+        $f_firstname = trim($_POST['f_firstname']) ?: NULL;
+        $m_firstname = trim($_POST['m_firstname']) ?: NULL;
+        $parent = array();
+
+        if ($f_firstname != NULL){
+            $parent[trim($_POST['f_sex'])] = array(
+                'fname' => trim($_POST['f_lastname']),
+                'mname' => trim($_POST['f_middlename']) ?: NULL,
+                'lname' => trim($_POST['f_lastname']),
+                'extname' => trim($_POST['f_extensionname']) ?: NULL,
+                'sex' => trim($_POST['f_sex']),
+                'cp_no' => trim($_POST['f_contactnumber']),
+                'occupation' => trim($_POST['f_occupation']) ?: NULL
+            );
+        }
+
+        if ($m_firstname != NULL){
+            $parent[trim($_POST['m_sex'])] = array(
+                'fname' => trim($_POST['m_lastname']),
+                'mname' => trim($_POST['m_middlename']) ?: NULL,
+                'lname' => trim($_POST['m_lastname']),
+                'sex' => trim($_POST['m_sex']),
+                'cp_no' => trim($_POST['m_contactnumber']),
+                'occupation' => trim($_POST['m_occupation']) ?: NULL
+            );
+        }
+
+        $g_firstname = trim($_POST['g_firstname']) ?: NULL;
+        if ($g_firstname != NULL){
+            $g_lastname = trim($_POST['g_lastname']);
+            $g_middlename = trim($_POST['g_middlename']) ?: NULL;
+            $g_cp_no = trim($_POST['g_contactnumber']);
+            $relationship = trim($_POST['relationship']);
+        }
+
+        //profile image
+        $profile_img = NULL;
+        $fileSize = $_FILES['image']['size'];
+        // print_r($_FILES);
+        if ($fileSize > 0) {
+            if ($fileSize > 5242880) { //  file is greater than 5MB
+                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
+            }
+            $filename = basename($_FILES['image']['name']);
+            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+            if (in_array($fileType, $allowTypes)) {
+                $profile_img = file_get_contents($_FILES['image']['tmp_name']);
+            } else {
+                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
+                http_response_code(400);
+                die(json_encode($statusMsg));
+                return;
+            }
+        }
+
+        //psa
+        $psa_img = NULL;
+        $fileSize = $_FILES['image']['size'];
+
+        if ($fileSize > 0) {
+            if ($fileSize > 5242880) { //  file is greater than 5MB
+                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
+            }
+            $filename = basename($_FILES['psaImage']['name']);
+            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+            if (in_array($fileType, $allowTypes)) {
+                $psa_img = file_get_contents($_FILES['psaImage']['tmp_name']);
+            } else {
+                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
+                http_response_code(400);
+                die(json_encode($statusMsg));
+                return;
+            }
+        }
+
+        //defining update student 
+        $stud_params = [
+            $lrn, $first_name, $middle_name, $last_name, $ext_name, $sex, $age, $birthdate, $birth_place,
+            $indigenous_group, $mother_tongue, $religion, $cp_no, $belong_to_ipcc
+        ];
+        $stud_types = "isssssdsssssii";
+
+        #Add picture parameter if images are not null
+        $imgQuery = $psaQuery = "";
+        if ($profile_img !== NULL) {                     
+            $imgQuery = ", id_picture=?";
+            $stud_params[] = $profile_img;                     
+            $stud_types .= "s";   
+        }
+
+        if ($psa_img !== NULL) {                     
+            $psaQuery = ", psa_birth_cert=?";
+            $stud_params[] = $psa_img;                       
+            $stud_types .= "s";   
+        }
+
+        $stud_params[] = $id = $_POST['student_id'];
+        $stud_types .= "i";
+
+        $stud_query = "UPDATE student SET LRN=?, first_name=?, middle_name=?, last_name=?, ext_name=?, sex=?, age=?, birthdate=?, birth_place=?,
+        indigenous_group=?,mother_tongue=?,religion=?,cp_no=?,belong_to_IPCC=? $imgQuery $psaQuery WHERE stud_id= ?";
+        $this->prepared_query($stud_query, $stud_params, $stud_types);
+        
+        $address_params= [
+            $house_no,$street,$barangay,$city,$province,$zip,$stud_id
+        ];
+        $address_types = "sssssii";
+
+        $query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
+        $this->prepared_query($query, $address_params, $address_types);
+
+        // foreach($parent as $parents){
+        //     $parents_params= [
+        //             $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
+        //         ];
+        //     $parents_types = "sssssii";
+            
+        // }
+        
+
+        
+
+        // $parents_params[] = $id = $_POST['student_id'];
+        // $parents_types .= "i";
+
+        // $guardian_params[] = $id = $_POST['student_id'];
+        // $guardian_types .= "i";
+
+        
+
+         header("Location: student.php?id=$stud_id");
+    }
+
 }
 
 
