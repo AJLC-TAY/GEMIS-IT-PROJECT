@@ -165,9 +165,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
     echo('from action:transferStud');
-    $admin->transferStudent();
+    // $admin->transferStudent();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
     echo('from action:update');
+    $admin->editStudent();
 }
 ?>
