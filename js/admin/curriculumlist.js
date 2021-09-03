@@ -51,11 +51,15 @@ $(function() {
         $.post("action.php", formData, function(data) {
             form.trigger('reset')
             addModal.modal('hide')
-            reload()
+            console.log("New data: \n")
+            console.log(data)
+            reload(JSON.parse(data))
             showToast('success', 'Curriculum successfully added')
+            hideSpinner()
         }).fail(function () {
 
         })
     })
     eventDelegations()
+    hideSpinner()
 })

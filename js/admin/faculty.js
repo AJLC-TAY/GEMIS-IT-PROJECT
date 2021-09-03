@@ -1,3 +1,5 @@
+import {implementAssignSubjectMethods as asMethods} from "./utilities.js";
+
 preload('#faculty')
 // import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
 //          selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
@@ -203,7 +205,7 @@ $(function () {
     })
 
 
-    $("#dept-save-btn").click(() => $("#dept-form").submit())
+    // $("#dept-save-btn").click(() => $("#dept-form").submit())
     $("#dept-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
@@ -230,63 +232,7 @@ $(function () {
     })
 
     /** Subject Methods */
-    // $(document).on('click', '.add-subject', addSubjectFn)
-    // $(document).on('click', '.remove-all-btn', removeAllBtnFn)
-    // $(document).on('click', '.remove-btn', removeSubjectBtnFn)
-    // $(document).on('click', '#selectAll', selectAll)
-
-    const addEmptySubjectMsg = () => $("#as-table tbody").html("<tr id='emptyMsg' class='text-center'><td colspan='5'>No subject set</td></tr>")
-    const hideEditSubjectElements = () => $(`.edit-con, .finder-con, .decision-as-con, .remove-btn, .view-btn, .cb-con, #as-table thead tr th:first-child`).toggleClass("d-none")
-
-    $("#edit-as-btn").click(function() {
-        // show
-        $(this).closest("div").toggleClass("d-none")
-        $(`.finder-con, .remove-btn, .view-btn, .decision-as-con, 
-           #as-table tr th:first-child, #as-table tr td:first-child`).toggleClass('d-none')
-    })
-
-    $("#cancel-as-btn").click(() => {
-        let con = $("#as-table tbody")
-        con.empty()
-        setSubjectSelected([])
-
-        if (assigned.length == 0) {
-            addEmptySubjectMsg()
-        } else {
-            assigned.forEach(e => {
-                let code = e.sub_code
-                // view button has d-none class since it will be toggled in the hideEditSubjectElements function; 
-                con.append(`<tr class='text-center content'>
-                    <td class='cb-con' scope='col'><input type='checkbox' value='${code}' /></td>
-                    <td scope='col'><input type='hidden' name='subjects[]' value='${code}'/>${code}</td>
-                    <td scope='col'>${e.sub_name}</td>
-                    <td scope='col'>${e.sub_type}</td>
-                    <td scope='col'>
-                        <button data-value='${code}' class='remove-btn btn btn-sm btn-danger m-auto shadow-sm' title='Remove'><i class='bi bi-x-square'></i></button>
-                        <a href='subject.php?sub_code=${code}&state=view' role='button' class='view-btn btn btn-sm btn-primary m-auto shadow-sm d-none' title='View subject'><i class='bi bi-eye'></i></a>
-                    </td>
-                </tr>`)
-            })
-        }
-        
-        hideEditSubjectElements()
-    })
-    $("#save-as-btn").click(() => $("#as-form").submit())
-    $("#as-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        $.post("action.php", $(this).serialize(), function() {
-            assigned = getSubjectSelected()
-            if (assigned.length == 0) addEmptySubjectMsg()
-            hideEditSubjectElements()
-            hideSpinner()
-            showToast('success', "Handled subjects successfully updated")
-        })
-    })
-
-    $("#deactivate-btn").click(function () {
-        $("#confirmation-modal").modal("show")
-    })
+    asMethods()
 
     /** Advisory Methods */
 

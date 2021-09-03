@@ -1,4 +1,12 @@
+import {
+    implementAssignSubjectClassMethods as scMethods,
+    implementAssignSubjectMethods as implementASMethods
+} from "./utilities.js";
+
 preload('#faculty')
+
+const ASSIGNEDSCID = "#assigned-sc-table"
+const SCID = "#sc-table"
 
 // Deleted roles
 let rolesDel = []
@@ -7,22 +15,78 @@ let rolesTmp = []
 // Department
 let inputData
 
-let tableSetup = {
+
+let commonSetup = {
+    search:             true,
+    maintainMetaDat:    true,        // set true to preserve the selected row even when the current table is empty
+    clickToSelect:      true
+}
+
+let setupWithPagination = {...commonSetup, ...{
+    pageSize:           "10",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]"
+}}
+
+let sTableSetup = {...commonSetup, ...{
     data:               subjects,
     uniqueId:           "sub_code",
     idField:            "sub_code",
-    search:             true,
     searchSelector:     '#search-sub-input',
-    // pageSize:           "10",
-    // paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-    // pagination:         true,
-    // pageList:           "[10, 25, 50, All]",
-    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
     onPostBody:         () => {$("#subject-table").bootstrapTable("checkBy",  
                                                                   {field: 'sub_code', values: assigned})}
+}}
+
+const detailFormatter = (index, row) => {
+    // row details for reference
+    // corequisite: []
+    // for_grd_level: "12"
+    // prerequisite: []
+    // school_yr: "0"
+    // section_code: "2"
+    // section_name: "ABM 12"
+    // sub_class_code: "9200"
+    // sub_code: "Project"
+    // sub_name: "Research Project"
+    // sub_semester: "2"
+    // sub_type: "applied"
+    // teacher_id: 1
+    return "<div class='container'>"
+        + `<h5 class='mb-1'>${row.section_name}</h5>`
+        + `<p class='text-secondary'><small>Section Code | ${row.section_code}</small></p>`
+        + `<div class='ms-1'>`
+        + `<p>Subject: ${row.sub_name}</p>`
+        + `<p>Subject Type: ${row.sub_type}</p>`
+        + `<p>Grade Level: ${row.for_grd_level}</p>`
+        + `<p>Semester: ${row.sub_semester}</p>`
+        + "</div>"
+    + "</div>"
 }
 
-let subjectTable = $("#subject-table").bootstrapTable(tableSetup)
+let assignedSCTableSetup = setupWithPagination.push(...{
+    data:               assignedSubClasses,
+    uniqueId:           "sub_class_code",
+    idField:            "sub_class_code",
+    searchSelector:     '#search-assigned-sc-input',
+    height:             "400",
+    detailView:         true,
+    detailFormatter:    detailFormatter
+})
+
+let scTableSetup = setupWithPagination.push(...{
+    data:               subjectClasses,
+    uniqueId:           "sub_class_code",
+    idField:            "sub_class_code",
+    searchSelector:     "#search-sc-input",
+    height:             "380"
+    // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
+    // detailFormatter:    detailFormatter
+})
+
+let subjectTable = $("#subject-table").bootstrapTable(sTableSetup)
+let assignedSubClassTable = $(ASSIGNEDSCID).bootstrapTable(assignedSCTableSetup)
+let subClassTable = $(SCID).bootstrapTable(scTableSetup)
 
 $(function() {
 
@@ -30,7 +94,6 @@ $(function() {
     var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
         triggerTabList.forEach(function (triggerEl) {
         var tabTrigger = new bootstrap.Tab(triggerEl)
-
         triggerEl.addEventListener('click', function (event) {
             event.preventDefault()
             tabTrigger.show()
@@ -129,7 +192,7 @@ $(function() {
         // console.log("Roles to Delete:", rolesDel)
     })
 
-    $("#role-save-btn").click(() => $("#role-form").submit())
+    // $("#role-save-btn").click(() => $("#role-form").submit())
 
     $("#role-form").submit(function(e) {
         e.preventDefault()
@@ -233,64 +296,8 @@ $(function() {
     /** Department methods end */
 
     /** Subject methods */
+    implementASMethods(assigned, subjectTable)
 
-    const addEmptySubjectMsg = () => $("#as-table tbody").html("<tr id='emptyMsg' class='text-center'><td colspan='5'>No subject set</td></tr>")
-    const hideEditSubjectElements = () => $(`.edit-con, .finder-con, .decision-as-con, .remove-btn, .view-btn, .cb-con, #as-table thead tr th:first-child`).toggleClass("d-none")
-
-    $(".edit-as-btn, #edit-as-btn").click(function() {
-        // show
-        console.log(assigned);
-        // subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
-    })
-
-    $("#cancel-as-btn").click(() => {
-        subjectTable.bootstrapTable("uncheckAll")
-    })
-    // $("#save-as-btn").click(() => $("#as-form").submit())
-    $("#as-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        let form = $(this)
-        let formData = form.serializeArray()
-        let selection = subjectTable.bootstrapTable("getSelections")
-        let newSubCodes = selection.map(e => {return e.sub_code})
-        let newSubjects = newSubCodes.map(value => {return {name: "subjects[]", value}})
-        formData = [...formData, ...newSubjects]
-        $.post("action.php", formData, function() {
-            assigned = newSubCodes
-            let emptyMsg = $("#empty-as-msg")
-            let emptySubjectCon = () => $(".assigned-sub-con a").remove()
-            if (assigned.length == 0) {
-                emptyMsg.removeClass("d-none")
-                emptySubjectCon()
-            }
-            else {
-                emptyMsg.addClass("d-none")
-                emptySubjectCon()
-                selection.forEach(e => {
-                    $(".assigned-sub-con").append(`<a target='_blank' href='subject.php?sub_code=${e.sub_code}' class='list-group-item list-group-item-action' aria-current='true'>
-                                            <div class='d-flex w-100 justify-content-between'>
-                                                <p class='mb-1'>${e.sub_name}</p>
-                                                <small>${e.sub_type}</small>
-                                            </div>
-                                            <small class='mb-1 text-secondary'><b>${e.for_grd_level}</b> | ${e.sub_code}</small>
-                                        </a>`)
-                })
-            }
-            form.trigger("reset")
-            $("#as-modal").modal("hide")
-            hideSpinner()
-            showToast('success', "Handled subjects successfully updated")
-        })
-    })
-
-    // clear button for search subject input in the as-modal
-    $(document).on("click", ".clear-table-btn", () => {
-        showSpinner()
-        subjectTable.bootstrapTable("resetSearch")
-        hideSpinner()
-    })
-                             
     /** Advisory Methods */
 
     const reloadSectionSelection = data => {
@@ -413,7 +420,12 @@ $(function() {
         filterSection("unavailable")
     })
 
+    /** Add Subject Class Methods */
+    scMethods(ASSIGNEDSCID, SCID)
 
+    $(document).on("show.bs.modal", "#add-sc-modal", function () {
+        $("#sc-form input[name='teacher_id']").val(teacherID)
+    })
 
     hideSpinner()
 })

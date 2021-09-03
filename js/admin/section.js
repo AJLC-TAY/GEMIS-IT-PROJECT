@@ -3,6 +3,7 @@ preload('#enrollment', '#section')
 let tableSetup = {
     method:             'GET',
     maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    clickToSelect:      true,
     pageSize:           10,
     pagination:         true,
     pageList:           "[10, 25, 50, All]",

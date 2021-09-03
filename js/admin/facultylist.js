@@ -1,14 +1,14 @@
-import {Table} from "./Class.js"
-    
-let tableId, url, method, id, search, searchSelector, height
-
-tableId = '#table'
-url = 'getAction.php?data=faculty'
-method = 'GET'
-id = 'teacher_id'
-search = true
-searchSelector = '#search-input'
-height = 440
+// import {Table} from "./Class.js"
+//
+// let tableId, url, method, id, search, searchSelector, height
+//
+// tableId = '#table'
+// url = 'getAction.php?data=faculty'
+// method = 'GET'
+// id = 'teacher_id'
+// search = true
+// searchSelector = '#search-input'
+// height = 440
 
 let onPostBodyOfTable = () => {
     // $('.profile-btn').click(function() {
@@ -25,7 +25,22 @@ let onPostBodyOfTable = () => {
     // })
 }
 
-let faculty_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
+const tableSetup = {
+    url:                'getAction.php?data=faculty',
+    method:             'GET',
+    uniqueId:           'teacher_id',
+    idField:            'teacher_id',
+    height:             440,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    clickToSelect:      true,
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    search:             true,
+    searchSelector:     '#search-input'
+}
+let facultyTable = $('#table').bootstrapTable(tableSetup)
 let selection
 
 $(function() {
@@ -43,7 +58,7 @@ $(function() {
      *  otherwise, return true.
      */
     const countSelection = () => {
-        selection = faculty_table.getSelections()
+        selection = facultyTable.getSelections()
         let length = selection.length 
         if (length < 1) showToast("danger", "No faculty selected")
         return length

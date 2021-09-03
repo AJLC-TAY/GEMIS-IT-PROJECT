@@ -25,6 +25,8 @@ echo $query;
 
 print_r($admin->listPrograms("program"));
 
+print_r($admin->listSubjectClasses());
+
 
 
 // $admin->listSYJSON();

@@ -1,45 +1,49 @@
 <?php
 include("../class/Administration.php");
 $admin = new Administration();
-$subjects = $admin->listSubjects();
+$subjects = $admin->listSubjects("subject");
 $departments = $admin->listDepartments();
 $state = $_GET['action'];
 
 $PROFILEPATH = "../assets/profile.png";
-$handledSubjects = "<td colspan='5'>No assigned subject</td>";
-$teacherIDInput = "";
+$handled_subjects = "<td colspan='5'>No assigned subject</td>";
+$current_teacher_id = 0;
+$teacher_id_input = "";
+$assigned_sub = [];
+$assigned_sub_classes = [];
+$sub_classes = [];
 
 // Content
 if ($state == 'add') {
-    $lastname = '';
-    $firstname = '';
-    $middlename = '';
-    $extname = '';
+    $last_name = '';
+    $first_name = '';
+    $middle_name = '';
+    $ext_name = '';
     $cp_no = '';
     $email = '';
     $age = '';
     $sex = "";
-    $genderOption = "<option selected value='NULL'>-- Select gender --</option>"
+    $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
-    $birthdateInput = "<input type='date' class='form-control' name='birthdate' required>";
-    $departmentOption = "";
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate' required>";
+    $department_option = "";
     foreach ($departments as $dep) {
-        $departmentOption .= "<option value='$dep'>";
+        $department_option .= "<option value='$dep'>";
     }
     $department = "";
-    $editGradesChecked = "";
-    $enrollmentChecked = "";
-    $awardReportChecked = "";
+    $edit_grades_checked = "";
+    $enrollment_checked = "";
+    $award_report_checked = "";
     $image = $PROFILEPATH;
-    $finalBtn = "Submit";
+    $final_btn = "Submit";
 } else if ($state == 'edit') {
-    $id = $_GET['id'];
-    $faculty = $admin->getFaculty($id);
-    $lastname = $faculty->get_last_name();
-    $firstname = $faculty->get_first_name();
-    $middlename = $faculty->get_middle_name();
-    $extname = $faculty->get_ext_name();
+    $current_teacher_id = $_GET['id'];
+    $faculty = $admin->getFaculty($current_teacher_id);
+    $last_name = $faculty->get_last_name();
+    $first_name = $faculty->get_first_name();
+    $middle_name = $faculty->get_middle_name();
+    $ext_name = $faculty->get_ext_name();
     $cp_no = $faculty->get_cp_no();
     $email = $faculty->get_email();
     $age = $faculty->get_age();
@@ -50,20 +54,20 @@ if ($state == 'add') {
     //                ."<option value='f' ". (($gender == 'Female') ? "selected" : ""). ">Female</option>"
     //                ."<option value='m' ". (($gender == 'Male') ? "selected" : "") .">Male</option>";
     $date = strftime('%Y-%m-%d', strtotime($faculty->get_birthdate()));
-    $birthdateInput = "<input type='date' class='form-control' name='birthdate' value='$date' required> ";
-    $departmentOption = "";
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate' value='$date' required> ";
+    $department_option = "";
     foreach ($departments as $dep) {
-        $departmentOption .= "<option value='$dep'>";
+        $department_option .= "<option value='$dep'>";
     }
-    $editGradesChecked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
-    $enrollmentChecked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
-    $awardReportChecked = ($faculty->get_award_coor() == 0) ? "" : "checked";
+    $edit_grades_checked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
+    $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
+    $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
     $image = is_null($faculty->get_id_photo()) ? $PROFILEPATH : $faculty->get_id_photo();
-    $handledSubjectsList = $faculty->get_subjects();
-    $handledSubjects = '';
-    foreach ($handledSubjectsList as $sub) {
+    $handled_subjects_list = $faculty->get_subjects();
+    $handled_subjects = '';
+    foreach ($handled_subjects_list as $sub) {
         $code = $sub->get_sub_code();
-        $handledSubjects .= "<tr class='text-center'>
+        $handled_subjects .= "<tr class='text-center'>
                 <td scope='col'><input type='checkbox' value='{$code}' /></td>
                 <td scope='col'><input type='hidden' name='subjects[]' value='{$code}'/>{$code}</td>
                 <td scope='col'>{$sub->get_sub_name()}</td>
@@ -71,8 +75,16 @@ if ($state == 'add') {
                 <td scope='col'><button id='{$code}' class='remove-btn btn btn-sm btn-danger m-auto' title='Remove'><i class='bi bi-x-square'></i></button></td>
             </tr>";
     }
-    $teacherIDInput = "<input type='hidden' name='teacher_id' value='$id'>";
-    $finalBtn = "Save";
+
+    $sub_classes = $admin->listSubjectClasses($current_teacher_id);
+    $assigned_sub = array_map(function($element) {
+        return $element->get_sub_code();
+    }, $handled_subjects_list);
+
+    $assigned_sub_classes = $faculty->get_handled_sub_classes();
+
+    $teacher_id_input = "<input type='hidden' name='teacher_id' value='$current_teacher_id'>";
+    $final_btn = "Save";
 }
 
 $camel_state = ucwords($state);
@@ -96,21 +108,21 @@ $camel_state = ucwords($state);
     <div class='form-row row'>
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>
-            <input type='text' value='<?php echo $lastname; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
+            <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
         </div>
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
-            <input type='text' value='<?php echo $firstname; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
+            <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
         </div>
         <div class='form-group col-md-4'>
             <label for='middlename'>Middle Name</label>
-            <input type='text' value='<?php echo $middlename; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+            <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
         </div>
     </div>
     <div class='form-row row'>
         <div class='form-group col-md-4'>
             <label for='extensionname'>Extension Name</label>
-            <input type='text' value='<?php echo $extname; ?>' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
+            <input type='text' value='<?php echo $ext_name; ?>' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
         </div>
         <div class='form-group col-md-4'>
             <label for='cpnumber'>Cellphone No.</label>
@@ -143,14 +155,14 @@ $camel_state = ucwords($state);
         <div class='form-group col-md-4'>
             <label for='birthdate'>Birthdate</label>
 
-            <?php echo $birthdateInput; ?>
+            <?php echo $birthdate_input; ?>
         </div>
         <div class='form-group col-md-4'>
             <label for='department'>Department</label>
             <!-- <select id='department' name='department' class='form-select form-select'> -->
             <input class='form-control' value='<?php echo $department; ?>' name='department' list='departmentListOptions' placeholder='Type to search or add...'>
             <datalist id='departmentListOptions'>
-                <?php echo $departmentOption; ?>
+                <?php echo $department_option; ?>
             </datalist>
             <!-- </select> -->
         </div>
@@ -169,19 +181,19 @@ $camel_state = ucwords($state);
         <div class='form-group col-md-4'>
             <label for='facultyAccess'>Faculty Access</label>
             <div class='form-check'>
-                <input class='form-check-input' name='access[]' type='checkbox' value='editGrades' <?php echo $editGradesChecked; ?>>
+                <input class='form-check-input' name='access[]' type='checkbox' value='editGrades' <?php echo $edit_grades_checked; ?>>
                 <label class='form-check-label'>
                     Edit Grades
                 </label>
             </div>
             <div class='form-check'>
-                <input class='form-check-input' name='access[]' type='checkbox' value='canEnroll' <?php echo $enrollmentChecked; ?>>
+                <input class='form-check-input' name='access[]' type='checkbox' value='canEnroll' <?php echo $enrollment_checked; ?>>
                 <label class='form-check-label'>
                     Enrollment
                 </label>
             </div>
             <div class='form-check'>
-                <input class='form-check-input' name='access[]' type='checkbox' value='awardReport' <?php echo $awardReportChecked; ?>>
+                <input class='form-check-input' name='access[]' type='checkbox' value='awardReport' <?php echo $award_report_checked; ?>>
                 <label class='form-check-label'>
                     Award Report
                 </label>
@@ -189,63 +201,90 @@ $camel_state = ucwords($state);
         </div>
     </div>
     <br>
+    <!-- SUBJECT CLASS -->
     <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3'>
         <div class='d-flex justify-content-between'>
-            <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
-            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>
+            <h5 class='my-auto'>SUBJECT CLASS</h5>
+<!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#sc-class-con' type='button' value='Assign'>-->
         </div>
-        <div id='assign-subj-table' class='collapse'>
-            <hr>
-            <div class='overflow-auto' style='height: 300px;'>
-                <div class='d-flex mb-3 pt-1'>
-                    <div class='my-auto'>
-                        <a id='instruction' tabindex='0' class='btn btn-sm btn-light mx-1 rounded-circle shadow-sm ' role='button' data-bs-toggle='popover' data-bs-placement='right' data-bs-trigger='focus' title='Instruction' data-bs-content="Find the subject code to be assigned to the faculty, then click the '+ SUBJECT' button">
-                            <i class='bi bi-info-circle'></i>
-                        </a>
+<!--        <div id='sc-class-con' class='collapse mt-3'>-->
+        <div id='sc-class-con' class='mt-3'>
+            <div class="d-flex justify-content-between mb-3">
+                <!-- SEARCH BAR - SUBJECT CLASS -->
+                <form>
+                    <div class="form-group d-flex flex-grow-1 me-3" >
+                        <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
+                        <input type="reset" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                     </div>
-
-                    <div class='flex-grow-1'>
-                        <input class='form-control my-auto form-control-sm' list='subjectOptions' id='search-input' placeholder='Search subject code here ...'>
-                        <datalist id='subjectOptions'>";
-                            <?php
-                            foreach ($subjects as $subject) {
-                                $code = $subject->get_sub_code();
-                                echo "<option value='$code' class='sub-option'>$code - {$subject->get_sub_name()}</option>";
-                            }
-                            ?>
-                        </datalist>
-                    </div>
-                    <div class='ms-1'>
-                        <button class='add-subject btn btn-success btn-sm'><i class='bi bi-plus-lg me-1'></i> Subject</button>
-                        <button class='remove-all-btn btn btn-outline-danger btn-sm'><i class='bi bi-x-lg me-1'></i>Selected</button>
-                    </div>
-                </div>
-                <table class='table table-bordered table-hover table-striped' style='height: auto;'>
-                    <thead>
-                        <tr class='text-center'>
-                            <th scope='col'><input type='checkbox' /></th>
-                            <th scope='col'>Code</th>
-                            <th scope='col'>Subject Name</th>
-                            <th scope='col'>Type</th>
-                            <th scope='col'>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id='emptyMsg' class='text-center'>
-                            <?php echo $handledSubjects; ?>
-                        </tr>
-                    </tbody>
-                </table>
+                </form>
+                <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
             </div>
+            <table id='assigned-sc-table' class="table-striped table-sm">
+                <thead>
+                    <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
+                    <tr>
+                        <th data-checkbox="true"></th>
+                        <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
+                        <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
+                        <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+<!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
+                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
-    <div class='back-btn d-flex justify-content-end'> <?php echo $teacherIDInput ?? ""; ?>
+    <!-- SUBJECT CLASS END -->
+    <!-- ASSIGN SUBJECTS -->
+    <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3 mt-4'>
+        <div class='d-flex justify-content-between'>
+            <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
+<!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>-->
+        </div>
+<!--        <div id='assign-subj-table' class='collapse'>-->
+        <div id='assign-subj-table'>
+            <p class='text-secondary'><small>Check subjects to be assigned to the faculty. Uncheck to unassign.</small></p>
+
+            <table id="subject-table" class="table-sm">
+                <thead class='thead-dark'>
+                    <div class="d-flex justify-content-between mb-1">
+                        <!-- SEARCH BAR - SUBJECTS -->
+                        <span class="flex-grow-1 me-3">
+                                <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
+                            </span>
+                        <span><button class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
+                    </div>
+                    <tr>
+                        <th data-checkbox="true"></th>
+                        <th scope='col' data-width="200" data-align="center" data-field="sub_code">Code</th>
+                        <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
+                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                        <!-- <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- ASSIGN SUBJECTS END -->
+
+    <div class='back-btn d-flex justify-content-end'> <?php echo $teacher_id_input ?? ""; ?>
         <input type='hidden' name='profile' value='faculty'>
         <input type='hidden' value='<?php echo $state; ?>' name='action'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
-        <input type='submit' value='<?php echo $finalBtn ?>' class='btn btn-success btn-space save-btn' name='submit'>
+        <input type='submit' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn' name='submit'>
     </div>
 </form>
+
 <script type="text/javascript">
+    let teacherID = <?php echo json_encode($current_teacher_id); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;
+    let assigned = <?php echo json_encode($assigned_sub); ?>;
+    let subjectClasses = <?php echo json_encode($sub_classes); ?>;
+    let assignedSubClasses = <?php echo json_encode($assigned_sub_classes); ?>;
 </script>

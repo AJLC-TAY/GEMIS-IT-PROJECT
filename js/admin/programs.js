@@ -43,19 +43,21 @@ reload()
 
 // custom script
 $(function() {
-    $('#program-form').submit(function(event) {
-        event.preventDefault()
-        spinner.show()
+    $('#program-form').submit(function(e) {
+        e.preventDefault()
+        showSpinner()
         var form = $(this)
         var formData = form.serialize()
         $.post("action.php", formData, function(data) {
             form.trigger('reset')
             addModal.modal('hide')
-            reload()
+            reload(JSON.parse(data))
+            hideSpinner()
             showToast("success", "Program successfully added")
         }).fail(function () {
 
         })
     })
     eventDelegations()
+    hideSpinner()
 })

@@ -54,9 +54,12 @@ export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
     timeout = null
 }
 
-export const reload = () => {
+export const reload = (data = '') => {
     console.log("from reload")
-    showSpinner()
+    if (data) {
+        dataList = data
+    }
+    // showSpinner()
     // getArchiveAction = `getArchived${camelized}JSON`
     console.log("Action: ", action)
     // $.post('action.php', {action}, (response) => {
@@ -73,7 +76,7 @@ export const reload = () => {
         $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn)
         $('.arch-list').html(prepareHTMLofArchive(dataList.archived))
     // })
-    hideSpinner()
+    // hideSpinner()
 }
 
 
@@ -112,11 +115,14 @@ export const reload = () => {
 
 export const eventDelegations = () => {
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
-    // search 
+    // search
+    $(document).on('search', '#search-input', () =>  $(".cards-con li").fadeIn())
+
     searchKeyBindEvent("#search-input", ".cards-con")
 
     // add, delete, archive and view archive buttons
     $(document).on('click', '.add-btn', () => $('#add-modal').modal('toggle'))
+
     $(document).on('click', '.delete-btn', function() {
         var code = $(this).attr('id')
         var action = `delete${camelized}`
