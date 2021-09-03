@@ -2,11 +2,6 @@
 <title>Home | GEMIS</title>
 </head>
 
-
-<?php
-
-?>
-
 <body>
     <!-- SPINNER -->
     <div class="spinner-con">
@@ -23,6 +18,11 @@
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row mt ps-3">
+                            <?php
+                            require_once("../class/Administration.php");
+                            $admin = new Administration();
+                            [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+                            ?>
                             <!-- HEADER -->
                             <header class="mb-4">
                                 <!-- BREADCRUMB -->
@@ -40,7 +40,7 @@
                                     <div class="col-lg-3 col-sm-6">
                                         <div class="card-box bg-blue">
                                             <div class="inner">
-                                                <h3> 10 </h3>
+                                                <h3> <?php echo $admins; ?> </h3>
                                                 <p>Admin</p>
                                             </div>
                                             <div class="icon">
@@ -52,37 +52,37 @@
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-green">
                                             <div class="inner">
-                                                <h3> 20 </h3>
+                                                <h3> <?php echo $faculties; ?> </h3>
                                                 <p>Faculty</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="faculty.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-orange">
                                             <div class="inner">
-                                                <h3> 300 </h3>
+                                                <h3> <?php echo $students; ?> </h3>
                                                 <p> Student </p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="student.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-5">
                                         <div class="card-box bg-red">
                                             <div class="inner">
-                                                <h3> 5 </h3>
+                                                <h3> <?php echo $signatories; ?> </h3>
                                                 <p> Signatory </p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-pencil-square-o"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="signatory.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </section>

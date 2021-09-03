@@ -1,51 +1,47 @@
-import {Table} from "./Class.js"
-
-let tableId, url, method, id, height
-
-tableId = '#table'
-url = `getAction.php?code=${code}&data=program`
-method = 'GET'
-id = 'code'
-height = 300
-
 preload("#curr-management", "#curriculum")
-let program_table = new Table(tableId, url, method, id, id, height)
+
+const tableSetup = {
+    url:                `getAction.php?code=${code}&data=program`,
+    method:             'GET',
+    uniqueId:           'code',
+    idField:            'code',
+    height:             300,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+}
+
+let programTable = $("#table").bootstrapTable(tableSetup)
 
 var archiveMessage = 'Archiving this program will also archive all subjects and student grades under it.'
+// var tempData = []
 
-var tempData = []
 $(function () {
-    $('#edit-btn').click(function(event) {
-        event.preventDefault()
-        $('[type=submit]').removeClass('d-none')
-        $('#cancel-btn').removeClass('d-none')
-        $(this).addClass('d-none')
-        $("#curriculum-form").find('.form-input').each(function() {
-            tempData.push($(this).val())
-            $(this).prop('disabled', false)
-        })
+    $('#edit-btn').click(function(e) {
+        e.preventDefault()
+        $(this).toggle()
+        $('.decide-con').removeClass('d-none')
+        $("#curriculum-form .form-input").prop('disabled', false)
     })
 
-    $('#cancel-btn').click(function(event) {
-        event.preventDefault()
-        $('[type=submit]').addClass('d-none')
-        $(this).addClass('d-none')
-        $('#edit-btn').removeClass('d-none')
-        let i = 0;
-        let inputs = $("#curriculum-form").find('.form-input')
-        if (tempData.length != 0) {
-            inputs.each(function() {
-                $(this).val(tempData[i])
-                i++
-            })
-        } 
-        inputs.each(function () {
-            $(this).prop('disabled', true)
-        })
-        tempData = []
-    })
-
-    $('#add-btn').click(() => $('#add-modal').modal('show'))
+    // $('#cancel-btn').click(function(event) {
+    //     event.preventDefault()
+    //     $('[type=submit]').addClass('d-none')
+    //     $(this).addClass('d-none')
+    //     $('#edit-btn').removeClass('d-none')
+    //     let i = 0;
+    //     let inputs = $("#curriculum-form").find('.form-input')
+    //     if (tempData.length != 0) {
+    //         inputs.each(function() {
+    //             $(this).val(tempData[i])
+    //             i++
+    //         })
+    //     } 
+    //     inputs.prop('disabled', true)
+    //     tempData = []
+    // })
 
     $('#track-archive-btn').click(function(event){
         var code = $(this).attr('id')
@@ -76,7 +72,10 @@ $(function () {
 
     $("#curriculum-form").submit(function(e) {
         e.preventDefault()
-        $.post("action.php", $(this).serialize(), function() {
+        // console.log($(this).serializeArray())
+        $.post("action.php", $(this).serializeArray(), (data) => {
+            $(this).find("input, textarea").prop("disabled", true)
+            $("#edit-btn, .decide-con").toggleClass("d-none")
             showToast("success", "Successfully updated curriculum")
         })
     })

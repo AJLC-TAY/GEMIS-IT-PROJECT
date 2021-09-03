@@ -37,8 +37,8 @@
                                 <div class="d-flex justify-content-between">
                                     <h3 class="fw-bold">Programs</h3>
                                     <span>
-                                        <button type="button" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add Program</button>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
+                                        <button type="button" class="view-archive btn btn-secondary" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-2"></i>View Archived</button>
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
@@ -48,9 +48,9 @@
                             <div class="msg w-100 d-flex justify-content-center d-none">
                                 <p class="m-auto">No results found</p>
                             </div>
-                            <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+                            <ul class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                                 
-                            </div>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
                             <label for="curr-code">Curriculum</label>
                             <select id="curr-code" class="select form-select" name="curr-code">
-                                <option value="0" selected>Select...</option>
+                                <option value="0" selected>-- Select curriculum --</option>
                                 <?php $currList = $admin->listCurriculum('curriculum');
                                     foreach ($currList as  $cur) {
                                         $curr_code = $cur->get_cur_code();
@@ -199,7 +199,9 @@
 
 <!-- Scripts -->
 <script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="text/javascript" src="../js/admin/cardPage.js"></script>
-<script type="text/javascript" src="../js/admin/programlist.js"></script>
+<script type="text/javascript">
+    let programs = <?php $admin->listProgramsJSON(); ?>;
+</script>
+<script type="module" src="../js/admin/programs.js"></script>
 
 </html>

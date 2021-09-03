@@ -5,7 +5,30 @@
 <?php
 require_once("../class/Administration.php");
 $admin = new Administration();
-$admin->listSYJSON();
+
+$sy_id = 9;
+$grade_level = [11, 12];
+$alphabet = range('A', 'Z');
+
+$program_count = 4;
+
+$query = "";
+foreach($grade_level as $grade) {
+    for ($i = 0; $i < $program_count; $i++) {
+        $section_name =  "$grade-{$alphabet[$i]}-1-Class";
+        $section_code = rand(10, 1000);
+        $query .= "INSERT INTO section (section_code, school_yr, section_name, grd_level, stud_no_max) VALUES ($section_code, $sy_id, '$section_name', $grade, 50 );";
+    }
+}
+
+echo $query;
+
+print_r($admin->listPrograms("program"));
+
+
+
+// $admin->listSYJSON();
+// print_r($admin->listSubjects('archived_subject'));
 // $txt = new stdClass();
 // $txt->name = 'Alvin';
 // $user = new stdClass();
@@ -16,14 +39,14 @@ $admin->listSYJSON();
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 
 
-<table
+<!-- <table
   id="table"
   data-toggle="table"
   data-url="getAction.php?data=school_yr">
   <thead>
     <tr>
         <!-- <th data-checkbox="true"></th> -->
-        <th scope='col' data-width="150" data-align="left" data-field="id">ID</th>
+        <!-- <th scope='col' data-width="150" data-align="left" data-field="id">ID</th>
         <th scope='col' data-width="200" data-align="left" data-sortable="true" data-field="sy_year">School Year</th>
         <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="grd_level">Grade Level</th>
         <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="current_qtr">Current Quarter</th>
@@ -34,7 +57,7 @@ $admin->listSYJSON();
   </thead>
 </table>
 <script src='../assets/js/bootstrap-table.min.js'></script>
-    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
+    <script src='../assets/js/bootstrap-table-en-US.min.js'></script> --> 
 
 <?php 
     // $user = uniqid("FA");

@@ -24,13 +24,20 @@
     height: 40px;
 }
 
-.kebab:focus, .kebab:hover {
+.kebab:hover {
     background-color: #DCDCDC;
     box-shadow: none;
 }
 
+.instruction:hover {
+    box-shadow: var(--shad);
+}
+
 .link:hover {
     color:  #0d6efd;
+}
+.link-green:hover {
+    color:  #28a745;
 }
 
 span[class='badge'] {
@@ -104,11 +111,11 @@ td .form-select {
 }
 
 .spinner-border {
-    z-index: 99;
+    z-index: 1070;
 }
 
 .spinner-con {
-    z-index: 98;
+    z-index: 1070;
     background: black;
     opacity: 0.40;
     width: 100%;

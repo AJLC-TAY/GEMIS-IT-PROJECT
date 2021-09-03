@@ -1,14 +1,19 @@
-import {Table} from "./Class.js"
-
-let tableId, url, method, id, height
-tableId = '#table'
-url = `getAction.php?prog_code=${code}&data=subjects`
-method = 'GET'
-id = 'sub_code'
-height = 300
-
 preload("#curr-management", "#program")
-let subject_table = new Table(tableId, url, method, id, id, height)
+
+const tableSetup = {
+    url:                `getAction.php?prog_code=${code}&data=subjects`,
+    method:             'GET',
+    uniqueId:           'sub_code',
+    idField:            'sub_code',
+    height:             300,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+}
+
+let programTable = $("#table").bootstrapTable(tableSetup)
 
 var archiveMessage = 'Archiving this subject will also archive all student grades under it.'
 
@@ -16,8 +21,7 @@ var tempData = []
 $(function() {
     $('#edit-btn').click(function(event) {
         event.preventDefault()
-        $('[type=submit]').removeClass('d-none')
-        $('#cancel-btn').removeClass('d-none')
+        $('.decide-con').removeClass('d-none')
         $(this).addClass('d-none')
         $("#program-view-form").find('.form-input').each(function() {
             tempData.push($(this).val())
@@ -27,8 +31,7 @@ $(function() {
 
     $('#cancel-btn').click(function(event) {
         event.preventDefault()
-        $('[type=submit]').addClass('d-none')
-        $(this).addClass('d-none')
+        $('.decide-con').addClass('d-none')
         $('#edit-btn').removeClass('d-none')
         let i = 0;
         let inputs = $("#program-view-form").find('.form-input')
@@ -71,16 +74,16 @@ $(function() {
 
     })
 
-     $('#program-form').submit(function(event) {
-        event.preventDefault()
+     $('#program-view-form').submit(function(e) {
+        e.preventDefault()
         showSpinner()
-        var form = $(this)
-        var formData = $(this).serialize()
-        $.post("action.php", formData, function(data) {
-            form.trigger('reset')
-            addModal.modal('hide')
-            reload()
+        var formData = $(this).serializeArray()
+        $.post("action.php", formData, () => {
+            $(this).find("input, textarea").prop("disabled", true)
+            $('#edit-btn').removeClass('d-none')
+            $('.decide-con').addClass('d-none')
             showToast('success', 'Program successfully updated')
+            hideSpinner()
         }).fail(function () {
 
         })

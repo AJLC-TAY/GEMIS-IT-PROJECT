@@ -1,11 +1,12 @@
+import {setup, reload, addModal, eventDelegations} from "./cardPage.js"
+
 let prepareHTML = data => {
     let html = ""
     data.forEach(element => {
         let prog_code = element.prog_code
         let cur_code = element.curr_code
         let prog_desc = element.prog_desc
-        
-        html += `<div data-id='${prog_code}' class='tile card shadow-sm p-0 position-relative'>
+        html += `<li data-id='${prog_code}' class='tile card shadow-sm p-0 position-relative'>
                     <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=${prog_code}'></a>
                     <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
                         <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
@@ -21,20 +22,9 @@ let prepareHTML = data => {
                             <p class='card-text'>${cur_code} | ${prog_code}</p>
                         </div>
                     </div>
-                </div>`
+                </li>`
     })
     return html
-}
-
-let getDataResult = (dataList) => {
-    var keywords = $('#search-input').val().trim().toLowerCase()
-
-    let filterFunc = (program) => { 
-        return program.prog_code.toLowerCase().includes(keywords) || 
-               program.prog_desc.toLowerCase().includes(keywords) || 
-               program.curr_code.toLowerCase().includes(keywords)
-    }
-    return dataList.filter(filterFunc)
 }
 
 let prepareArchiveHTML = archivedData => {
@@ -48,7 +38,7 @@ let prepareArchiveHTML = archivedData => {
     })
     return html
 }
-setup('program', prepareHTML, prepareArchiveHTML, getDataResult)
+setup('program', programs, prepareHTML, prepareArchiveHTML)
 reload()
 
 // custom script
@@ -58,14 +48,14 @@ $(function() {
         spinner.show()
         var form = $(this)
         var formData = form.serialize()
-        console.log(formData)
         $.post("action.php", formData, function(data) {
             form.trigger('reset')
             addModal.modal('hide')
             reload()
-            addToast.toast('show')
+            showToast("success", "Program successfully added")
         }).fail(function () {
 
         })
     })
+    eventDelegations()
 })

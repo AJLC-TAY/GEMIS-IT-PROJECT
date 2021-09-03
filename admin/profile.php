@@ -14,7 +14,7 @@
     $userType = ucwords( $_SESSION['userType']);
 
     $link = "{$profileType}list.php";  // ex. AdminList.php / Facultylist.php
-    $userProfile = $admin->getProfile();
+    $userProfile = $admin->getProfile("FA");
 
     $id = $userProfile->get_teacher_id();
 

@@ -9,6 +9,7 @@ const removeFromSelectedSubject = (subjectCode) => {
 export let setSubjectSelected = list => {
     selectedSubjects = list   
 }
+
 export let getSubjectSelected = () => {return selectedSubjects};
 
 export function addSubjectFn (e) {
@@ -70,4 +71,17 @@ export function selectAll () {
     $(this).prop('checked', this.checked)
     var table= this.closest('table')
     $('td input:checkbox', table).prop('checked', this.checked)
+}
+
+
+/** Search List */
+export const searchKeyBindEvent = (searchInputSelector, listContainer) => {
+    $(document).on("keyup", searchInputSelector, function() {
+        showSpinner()
+        var value = $(this).val().toLowerCase()
+        $(`${listContainer} li`).filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        })
+        hideSpinner()
+    })
 }

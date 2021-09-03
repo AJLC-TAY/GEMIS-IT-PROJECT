@@ -1,14 +1,4 @@
-import {Table} from "./Class.js"
-    
-let tableId, url, method, id, search, searchSelector, height
-
-tableId = '#table'
-url = 'getAction.php?data=school_year'
-method = 'GET'
-id = 'id'
-search = true
-searchSelector = '#search-input'
-height = 425
+preload('#curr-management', '#school-yr')
 
 let onPostBodyOfTable = () => {
    /**
@@ -142,22 +132,36 @@ let onPostBodyOfTable = () => {
         }
         console.log(formData)
         $.post("action.php", formData, function() {
-            // showToast("success", "Enrollment status updated")
+            // showToast("success", "Enrollment status changed")
         })
 
         hideSpinner()
     })
 }
 
-var sy_table = new Table(tableId, url, method, id, id, height, search, searchSelector, null, onPostBodyOfTable)
+const tableSetup = {
+    url:                'getAction.php?data=school_year',
+    method:             'GET',
+    uniqueId:           'code',
+    idField:            'code',
+    height:             425,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    search:             true,
+    searchSelector:     '#search-input',
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    onPostBody:         onPostBodyOfTable
+}
 
-preload('#curr-management', '#school-yr')
+var syTable = $("#table").bootstrapTable(tableSetup)
 $(function() {
-    $("#enrollment-switch").click(function() {
-        let enrollStat = $("#enrollment-status")
-        if ($(this).is(":checked")) enrollStat.html("System will start accepting enrollees once submitted")
-        else enrollStat.html("No enrollment temporarily")
-    })
+    // $("#enrollment-btn").click(function() {
+    //     let enrollStat = $("#enrollment-status")
+    //     if ($(this).is(":checked")) enrollStat.html("System will start accepting enrollees once submitted")
+    //     else enrollStat.html("No enrollment temporarily")
+    // })
 
     hideSpinner()
 })

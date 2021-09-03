@@ -41,28 +41,35 @@ $sub_type_editable = '';
 $prog_opt = prepareEmptyProgramOptions($programs);
 $input_sub_with_prog = '';
 
+
+// subject data
+$title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
+$subject_code = '';
+$subject_name = '';
+$semester_opt = '';
+$sub_type_opt = '';
+$grade_level_opt = '';
+$reqRowsGrd11 = '';
+$reqRowsGrd12 = '';
+$grade_level_state = '';
+$button = '';
+
 if ($action === 'add') {
-    $title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
-    $subject_code = '';
-    $subject_name = '';
+
     // prepare semester options
-    $semester_opt = '';
-    foreach ($semesters as $id => $value) { 
+    foreach ($semesters as $id => $value) {
         $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
     }
 
     // prepare subject type options
-    $sub_type_opt = '';
-    foreach ($sub_opt as $id => $value) { 
+    foreach ($sub_opt as $id => $value) {
         $sub_type_opt .= "<option value='$id' ". (($id == "core" ) ? "selected" : "") .">$value</option>"; // Default = Core subject type
     }
 
-    $grade_level_opt = '';
     foreach ($grd_lvl as $id => $value) { 
         $grade_level_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
     }
 
-    $reqRowsGrd11 = '';
     foreach ($subjectGrade11 as $subGr11) {
         $sub_code = $subGr11->get_sub_code();
         $sub_name = $subGr11->get_sub_name();
@@ -77,7 +84,6 @@ if ($action === 'add') {
         </tr>";
     }
 
-    $reqRowsGrd12 = '';
     foreach ($subjectGrade12 as $subGr12) {
         $sub_code = $subGr12->get_sub_code();
         $sub_name = $subGr12->get_sub_name();
@@ -92,12 +98,10 @@ if ($action === 'add') {
         </tr>";
     }
 
-    $grade_level_state = '';
-
     $button = "<div class='btn-con'>"
                 ."<input type='hidden' name='action' value='addSubject'>"
-                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>SUBMIT & ADD ANOTHER</button>"
-                ."<button class='submit-btn btn btn-success form-control w-auto'>SUBMIT</button>"
+                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</button>"
+                ."<button class='submit-btn btn btn-success form-control w-auto'>Submit</button>"
             ."</div>";
 
     if (isset($_GET['prog_code'])) {                // add subject page is accessed from a program page
@@ -267,14 +271,15 @@ if ($action === 'edit') {
                     </div>
 
                     <div class='form-group col-md-6'>
-                        <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
+                        <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
+                        <?php echo $prog_opt; ?>
                     </div>
                 </div>
                 <div class='form-group row'>
                     <div class='form-group col-md-12'>
                         <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
-                        <input name = 'name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'><?php echo $subject_name; ?></input>
+                        <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
                     </div>
                 </div>
                 <div class='form-row row'>
@@ -287,18 +292,8 @@ if ($action === 'edit') {
                         <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
                     </div>
                 </div>
-                <div class='col-5'>
-                    <div class='form-group row'>
-                        <label for='subjectType1' class='col-sm-3 col-form-label'>Type</label>
-                        <div class='col-sm-9'>
-                            <select name='sub-type' class='form-select' id='sub-type' $sub_type_editable><?php echo $sub_type_opt; ?></select>
-                        </div>
-                        <?php echo $prog_opt; ?>
-                    </div>
-                </div>
             </div>
         </div>
-                        
   
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
             <h5 class='text-start mb-3'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>

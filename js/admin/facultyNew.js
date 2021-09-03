@@ -1,8 +1,4 @@
 preload('#faculty')
-// import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
-//          selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
-
-// import {Table} from "./Class.js"
 
 // Deleted roles
 let rolesDel = []
@@ -11,20 +7,26 @@ let rolesTmp = []
 // Department
 let inputData
 
-// Subjects Handled
-// setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
+let tableSetup = {
+    data:               subjects,
+    uniqueId:           "sub_code",
+    idField:            "sub_code",
+    search:             true,
+    searchSelector:     '#search-sub-input',
+    // pageSize:           "10",
+    // paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    // pagination:         true,
+    // pageList:           "[10, 25, 50, All]",
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    onPostBody:         () => {$("#subject-table").bootstrapTable("checkBy",  
+                                                                  {field: 'sub_code', values: assigned})}
+}
 
-$(function () {
-    /** Initialization */
-    // Modal
-    let modalE = $('.modal')
-    // Toast 
-    let toastList = $('.toast').map(function (toastEl) {
-        return new bootstrap.Toast(toastEl)
-    })
-    // Popover for the instruction
-    let popover = new bootstrap.Popover($("#instruction"))
+let subjectTable = $("#subject-table").bootstrapTable(tableSetup)
 
+$(function() {
+
+    /** Tab pane initialization */
     var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
         triggerTabList.forEach(function (triggerEl) {
         var tabTrigger = new bootstrap.Tab(triggerEl)
@@ -34,11 +36,9 @@ $(function () {
             tabTrigger.show()
         })
     })
+    
 
-    // let subTable = $("#subject-table").bootstrapTable({data : assigned})
-    // console.log("test", assigned)
-
-
+    /** Role Methods */
     // If rolesTmp is 0, empty message is shown, else hidden
     let checkRolesTagForMsg = () => {
         let emptyMsg = $("#role-empty-msg")
@@ -46,7 +46,6 @@ $(function () {
         else emptyMsg.addClass('d-none')
     }
 
-    /** Role Methods */
     // Edit roles
     $("#role-edit-btn").click(function(e) {
         e.preventDefault()
@@ -199,7 +198,10 @@ $(function () {
         $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
         
         // show
-        $("#dept-edit-btn, #dept-empty-msg").fadeIn()
+        $("#dept-edit-btn").removeClass("d-none")
+        $("#dept-empty-msg").toggleClass('d-none')
+
+        
     })
 
 
@@ -228,74 +230,68 @@ $(function () {
             showToast('success', "Department successfully updated")
         })
     })
+    /** Department methods end */
 
-    /** Subject Methods */
-    // $(document).on('click', '.add-subject', addSubjectFn)
-    // $(document).on('click', '.remove-all-btn', removeAllBtnFn)
-    // $(document).on('click', '.remove-btn', removeSubjectBtnFn)
-    // $(document).on('click', '#selectAll', selectAll)
+    /** Subject methods */
 
     const addEmptySubjectMsg = () => $("#as-table tbody").html("<tr id='emptyMsg' class='text-center'><td colspan='5'>No subject set</td></tr>")
     const hideEditSubjectElements = () => $(`.edit-con, .finder-con, .decision-as-con, .remove-btn, .view-btn, .cb-con, #as-table thead tr th:first-child`).toggleClass("d-none")
 
-    $("#edit-as-btn").click(function() {
+    $(".edit-as-btn, #edit-as-btn").click(function() {
         // show
-        $(this).closest("div").toggleClass("d-none")
-        $(`.finder-con, .remove-btn, .view-btn, .decision-as-con, 
-           #as-table tr th:first-child, #as-table tr td:first-child`).toggleClass('d-none')
+        console.log(assigned);
+        // subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
     })
 
     $("#cancel-as-btn").click(() => {
-        let con = $("#as-table tbody")
-        con.empty()
-        setSubjectSelected([])
-
-        if (assigned.length == 0) {
-            addEmptySubjectMsg()
-        } else {
-            assigned.forEach(e => {
-                let code = e.sub_code
-                // view button has d-none class since it will be toggled in the hideEditSubjectElements function; 
-                con.append(`<tr class='text-center content'>
-                    <td class='cb-con' scope='col'><input type='checkbox' value='${code}' /></td>
-                    <td scope='col'><input type='hidden' name='subjects[]' value='${code}'/>${code}</td>
-                    <td scope='col'>${e.sub_name}</td>
-                    <td scope='col'>${e.sub_type}</td>
-                    <td scope='col'>
-                        <button data-value='${code}' class='remove-btn btn btn-sm btn-danger m-auto shadow-sm' title='Remove'><i class='bi bi-x-square'></i></button>
-                        <a href='subject.php?sub_code=${code}&state=view' role='button' class='view-btn btn btn-sm btn-primary m-auto shadow-sm d-none' title='View subject'><i class='bi bi-eye'></i></a>
-                    </td>
-                </tr>`)
-            })
-        }
-        
-        hideEditSubjectElements()
+        subjectTable.bootstrapTable("uncheckAll")
     })
-    $("#save-as-btn").click(() => $("#as-form").submit())
+    // $("#save-as-btn").click(() => $("#as-form").submit())
     $("#as-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
-        $.post("action.php", $(this).serialize(), function() {
-            assigned = getSubjectSelected()
-            if (assigned.length == 0) addEmptySubjectMsg()
-            hideEditSubjectElements()
+        let form = $(this)
+        let formData = form.serializeArray()
+        let selection = subjectTable.bootstrapTable("getSelections")
+        let newSubCodes = selection.map(e => {return e.sub_code})
+        let newSubjects = newSubCodes.map(value => {return {name: "subjects[]", value}})
+        formData = [...formData, ...newSubjects]
+        $.post("action.php", formData, function() {
+            assigned = newSubCodes
+            let emptyMsg = $("#empty-as-msg")
+            let emptySubjectCon = () => $(".assigned-sub-con a").remove()
+            if (assigned.length == 0) {
+                emptyMsg.removeClass("d-none")
+                emptySubjectCon()
+            }
+            else {
+                emptyMsg.addClass("d-none")
+                emptySubjectCon()
+                selection.forEach(e => {
+                    $(".assigned-sub-con").append(`<a target='_blank' href='subject.php?sub_code=${e.sub_code}' class='list-group-item list-group-item-action' aria-current='true'>
+                                            <div class='d-flex w-100 justify-content-between'>
+                                                <p class='mb-1'>${e.sub_name}</p>
+                                                <small>${e.sub_type}</small>
+                                            </div>
+                                            <small class='mb-1 text-secondary'><b>${e.for_grd_level}</b> | ${e.sub_code}</small>
+                                        </a>`)
+                })
+            }
+            form.trigger("reset")
+            $("#as-modal").modal("hide")
             hideSpinner()
             showToast('success', "Handled subjects successfully updated")
         })
     })
 
-    $("#deactivate-btn").click(function () {
-        $("#confirmation-modal").modal("show")
+    // clear button for search subject input in the as-modal
+    $(document).on("click", ".clear-table-btn", () => {
+        showSpinner()
+        subjectTable.bootstrapTable("resetSearch")
+        hideSpinner()
     })
-
+                             
     /** Advisory Methods */
-
-    $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
-
-    // $("input[type='radio'][name='section']").click(function() {
-    //     let element = $(this)
-    //     let sectionCode = element.val()
-    // })
 
     const reloadSectionSelection = data => {
         let html = "", container = $("#section-list")
@@ -305,85 +301,104 @@ $(function () {
             const sectionNm = e.section_name;
             const sectionGr = e.section_grd;
             const sectionAd = e.adviser_name;
-            const colorBadge = teacherID ? "warning" : "success";
+
+            let colorBadge = "success";
+            let availability = "available";
+
+            if (teacherID) {
+                colorBadge = "warning";
+                availability = "unavailable";
+            }
+
             html += ` <li class='list-group-item'>
                     <div class='form-row row'>
-                        <span class='col-1'><input class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
+                        <span class='col-1'><input id='${sectionCd}' class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
                         <div class='section-info d-flex justify-content-between col-sm-6'>
-                            <span>${sectionCd} - ${sectionNm} </span> 
+                            <label for='${sectionCd}'>${sectionCd} - ${sectionNm} </label> 
                             <span class='text-secondary'>G${sectionGr}</span>
                         </div>
                         <div class='section-status d-flex justify-content-between col-sm-5'>
                             <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
-                            <span class='badge available'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                            <span class='badge ${availability}'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
                         </div>
                     </div>
                 </li>`
         })
         container.html(html)
     }
-
-    $("#advisory-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        let form = $(this)
-        let formData = form.serializeArray()
-
-        let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
-        if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
-        $.post("action.php", formData, function(data) {
-            let sectionData = JSON.parse(data)
-            form.trigger("reset")
-          
-            let currentSectValue = sectionData.section_code
-            let sectionDetail = `${currentSectValue} - ${sectionData.section_name}`
+  
+      $("#advisory-form").submit(function(e) {
+          e.preventDefault()
+          showSpinner()
+          let form = $(this)
+          let formData = form.serializeArray()
+  
+          let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
+          if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
+          $.post("action.php", formData, function(data) {
+              let sectionData = JSON.parse(data)
+              form.trigger("reset")
             
-            // toggle editable state of the unassign checkbox
-            let cbEditable = false
-            if (!sectionData.section_code) {
-                cbEditable = true
-                currentSectValue = ""
-                sectionDetail = sectionData.section_name
-            }
-            $("#current-advisory").html(`${sectionDetail}`)
-            $("input[name='current-section']").val(currentSectValue)
-            $("input[name='unassign']").prop("disabled", cbEditable)
-
-            reloadSectionSelection(sectionData.data)
-            $("#section-opt-con input, #section-filter").prop("disabled", false)
-            $("#advisory-modal").modal("hide")
-            hideSpinner()
-            showToast("success", "Successfully updated advisory class")
+              let currentSectValue = sectionData.section_code
+              let sectionDetail = `${currentSectValue} - ${sectionData.section_name}`
+              
+              // toggle editable state of the unassign checkbox
+              let cbEditable = false
+              if (!sectionData.section_code) {
+                  cbEditable = true
+                  currentSectValue = ""
+                  sectionDetail = sectionData.section_name
+              }
+              $("#current-advisory").html(`${sectionDetail}`)
+              $("input[name='current-section']").val(currentSectValue)
+              $("input[name='unassign']").prop("disabled", cbEditable)
+  
+              reloadSectionSelection(sectionData.data)
+              $("#section-opt-con input, #section-filter").prop("disabled", false)
+              $("#advisory-modal").modal("hide")
+              hideSpinner()
+              showToast("success", "Successfully updated advisory class")
+          })
+          // console.log($("input[type='radio']:checked"))
+      })
+  
+      // Disable all section input when unassign checkbox is checked
+      $(document).on("click", "input[name='unassign']", function() {
+          let bool = false
+          if ($(this).is(":checked")) {
+              bool = true
+              $("#section-opt-con [type='radio']").prop("checked", false)
+          }
+          $("#section-opt-con input, #section-filter").prop("disabled", bool)
+      })
+  
+    /***
+     *  Adds search feature to the specified input inorder to filter 
+     *  the list of elements referred by the given selector. 
+     * @param {String} searchInputID    Search input selector
+     * @param {String} itemSelector     Item selector of the list 
+     * */
+    const listSearchEventBinder = (searchInputID, itemSelector) => {
+        $(document).on("keyup", searchInputID, function() {
+            var value = $(this).val().toLowerCase()
+            $(itemSelector).filter(function() {
+                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
+                return $(this).addClass("d-none")
+                // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
         })
-        // console.log($("input[type='radio']:checked"))
-    })
+    }
 
-    // Disable all section input when unassign checkbox is checked
-    $(document).on("click", "input[name='unassign']", function() {
-        let bool = false
-        if ($(this).is(":checked")) {
-            bool = true
-            $("#section-opt-con [type='radio']").prop("checked", false)
-        }
-        $("#section-opt-con input, #section-filter").prop("disabled", bool)
-    })
-
-    $(document).on("keyup", "#search-section", function() {
-        var value = $(this).val().toLowerCase()
-        $("#section-list li").filter(function() {
-            if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
-            return $(this).addClass("d-none")
-            // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        })
-    })
-
+    listSearchEventBinder("#search-section", "#section-list li")
+    listSearchEventBinder("#search-subject", ".assigned-sub-con a")
+  
     $(document).on("click", "#all-section-btn", function() {
         $("#section-list li").removeClass("d-none")
     })
-
+  
     const filterSection = (parameter) => {
         $("#section-list li").filter(function() {
-            if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
+            if ($(this).find(".form-row .section-status span").hasClass(parameter)) return $(this).removeClass("d-none")
             return $(this).addClass("d-none")
         })
     }
