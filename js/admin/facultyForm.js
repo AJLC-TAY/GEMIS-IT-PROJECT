@@ -43,6 +43,8 @@ const detailFormatter = (index, row) => {
             + "</div>"
         + "</div>"
 }
+
+
 let assignedSCTableSetup = {
     data:               assignedSubClasses,
     uniqueId:           "sub_class_code",
@@ -116,6 +118,40 @@ $(function () {
 
     /** Add Subject Class Methods */
     scMethods(ASSIGNEDSCID, SCID)
+
+    $(document).on("submit", "#faculty-form", function (e) {
+        e.preventDefault()
+        var formData = new FormData(document.getElementById("faculty-form"))
+        // let formData = $(this).serializeArray().filter(e => {  // remove unnecessary values in the formdata,
+        //     return !e.name.toLowerCase().includes("btselect")
+        // });
+
+        $(ASSIGNEDSCID).bootstrapTable("getData")
+                       .forEach(e => {
+                           formData.append("asgn-sub-class[]",  e.sub_class_code)
+                       })
+
+        subjectTable.bootstrapTable("getSelections")
+                           .forEach(e => {
+                               formData.append("subjects[]", e.sub_code)
+                           })
+
+        formData.append("profile", "faculty")
+        formData.append("action", "add")
+
+        $.ajax({
+            url: "action.php",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: data => {
+                let response = JSON.parse(data)
+                window.location.replace(`faculty.php?id=${response.teacher_id}`)
+            }
+        })
+
+    })
 
 
 

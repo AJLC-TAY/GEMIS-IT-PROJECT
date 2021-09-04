@@ -476,10 +476,11 @@ class Administration extends Dbconfig
             if ($sub_type == 'specialized') {
                 $resultTwo = mysqli_query($this->db,  "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
                 $rowTwo = mysqli_fetch_row($resultTwo);
-                $subject->set_program($rowTwo[0]);
+                $subject->set_program($rowTwo[0] ?? "");
             }
             $subjectList[] = $subject;
         }
+
         return $subjectList;
     }
 
@@ -951,7 +952,6 @@ class Administration extends Dbconfig
         // Profile image
         $imgContent = NULL;
         $fileSize = $_FILES['image']['size'];
-        print_r($_FILES);
         if ($fileSize > 0) {
             if ($fileSize > 5242880) { //  file is greater than 5MB
                 $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
@@ -990,6 +990,7 @@ class Administration extends Dbconfig
      *      auto increment value (that is maximum of column id_no + 1). ex. FA1234567890
      * 2.   Create faculty record
      * 3.   Insert every subject handled if exist
+     * 4.   Insert every subject class handled
      *  */
     private function addFaculty($params, $types)
     {
@@ -1012,8 +1013,17 @@ class Administration extends Dbconfig
             }
         }
 
+        // Step 4
+        if (isset($_POST['asgn-sub-class'])) {
+            $asgn_sub_classes = $_POST['asgn-sub-class'];
+            foreach ($asgn_sub_classes as $asgn_sub_class) {
+                $this->query("UPDATE subjectclass SET teacher_id='$id' WHERE sub_class_code='$asgn_sub_class';");
+            }
+        }
+
         if ($id) {
-            header("Location: faculty.php?id=$id");
+            echo json_encode(["teacher_id" => $id]);
+//            header("Location: faculty.php?id=$id");
         } else {
             return "Faculty unsuccessfully added.";
         }
@@ -1024,6 +1034,7 @@ class Administration extends Dbconfig
      * 1.   Remove image content from parameters and types if null
      * 2.   Add teacher id to the parameter and types before executing the query
      * 3.   Update every subject handled if exist
+     * 4.   Update every subject classes handled
      *  */
     private function editFaculty(array $params, String $types)
     {
@@ -1045,7 +1056,13 @@ class Administration extends Dbconfig
         // Step 3
         $this->updateFacultySubjects($id);
 
-        echo "test";
+        // Step 4
+//        $asgn_sub_classes = $_POST['asgn-sub-class'];
+//        foreach ($asgn_sub_classes as $asgn_sub_class) {
+//            $this->query("UPDATE subjectclass SET ")
+//        }
+
+
         // header("Location: faculty.php?id=$id");
     }
 
@@ -1155,9 +1172,9 @@ class Administration extends Dbconfig
 
         // Step 3
         $teacher_id = $row['teacher_id'];
-        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.school_yr, se.section_name 
+        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN subject AS s USING (sub_code) 
-                  JOIN section AS se USING (section_code) WHERE sc.teacher_id='$teacher_id'";
+                  JOIN section AS se USING (section_code) WHERE sc.teacher_id='$teacher_id';";
         $result = $this->query($query);
         $handled_sub_classes = array();
 
@@ -1171,7 +1188,7 @@ class Administration extends Dbconfig
                 $sc_row['sub_class_code'],
                 $sc_row['section_code'],
                 $sc_row['section_name'],
-                $sc_row['school_yr'],
+                $sc_row['sy_id'],
                 $teacher_id
             );
         }
@@ -1348,7 +1365,7 @@ class Administration extends Dbconfig
 
     public function listDepartments()
     {
-        $result = mysqli_query($this->db, "SELECT DISTINCT(department) FROM faculty WHERE department!=NULL;");
+        $result = mysqli_query($this->db, "SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
         $departments = [];
         while ($row = mysqli_fetch_row($result)) {
             $departments[] = $row[0];
@@ -1372,7 +1389,7 @@ class Administration extends Dbconfig
     public function listSubjectClasses($teacher_id = "")
     {
         $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
-        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.school_yr, se.section_name 
+        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN subject AS s USING (sub_code) 
                   JOIN section AS se USING (section_code) $condition ORDER BY sc.teacher_id ";
         $result = $this->query($query);
@@ -1388,7 +1405,7 @@ class Administration extends Dbconfig
                 $sc_row['sub_class_code'],
                 $sc_row['section_code'],
                 $sc_row['section_name'],
-                $sc_row['school_yr'],
+                $sc_row['sy_id'],
                 $sc_row['teacher_id']
             );
         }
@@ -1459,7 +1476,7 @@ class Administration extends Dbconfig
         if ($data) {
             return ["section_code" => $data[0], "section_name" => $data[1]];
         }
-        return false;
+        return NULL;
     }
 
     public function assignSubClasses($teacher_id) {

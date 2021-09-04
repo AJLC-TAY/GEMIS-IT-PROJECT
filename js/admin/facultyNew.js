@@ -64,7 +64,7 @@ const detailFormatter = (index, row) => {
     + "</div>"
 }
 
-let assignedSCTableSetup = setupWithPagination.push(...{
+let assignedSCTableSetup = {...setupWithPagination, ...{
     data:               assignedSubClasses,
     uniqueId:           "sub_class_code",
     idField:            "sub_class_code",
@@ -72,9 +72,9 @@ let assignedSCTableSetup = setupWithPagination.push(...{
     height:             "400",
     detailView:         true,
     detailFormatter:    detailFormatter
-})
+}}
 
-let scTableSetup = setupWithPagination.push(...{
+let scTableSetup = {...setupWithPagination, ...{
     data:               subjectClasses,
     uniqueId:           "sub_class_code",
     idField:            "sub_class_code",
@@ -82,7 +82,7 @@ let scTableSetup = setupWithPagination.push(...{
     height:             "380"
     // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
     // detailFormatter:    detailFormatter
-})
+}}
 
 let subjectTable = $("#subject-table").bootstrapTable(sTableSetup)
 let assignedSubClassTable = $(ASSIGNEDSCID).bootstrapTable(assignedSCTableSetup)

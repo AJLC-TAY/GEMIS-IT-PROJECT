@@ -2,11 +2,11 @@
 include_once("../inc/head.html"); 
 session_start();
 
-$page_path = "faculty/facultylist.php";
+$page_path = "faculty/facultyList.php";
 $jsFilePath = "../js/admin/facultylist.js";
 if (isset($_GET['action'])) {
-    $page_path = "faculty/facultyform.php";
-    $jsFilePath = "../js/admin/facultyform.js";
+    $page_path = "faculty/facultyForm.php";
+    $jsFilePath = "../js/admin/facultyForm.js";
 } else if (isset($_GET['id'])) {
     $page_path = "faculty/facultyprofile.php";
     // $jsFilePath = "../js/admin/faculty.js";

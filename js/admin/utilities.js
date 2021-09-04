@@ -96,7 +96,7 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
         let selection = subjectTable.bootstrapTable("getSelections")
         let newSubCodes = selection.map(e => {return e.sub_code})
         let newSubjects = newSubCodes.map(value => {return {name: "subjects[]", value}})
-        formData = [...formData, ...newSubjects]
+        formData.push(...newSubjects)
         $.post("action.php", formData, function() {
             assigned = newSubCodes
             let emptyMsg = $("#empty-as-msg")
@@ -192,9 +192,9 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         let selections = $(SCID).bootstrapTable('getSelections')
         let scCodes = []
         let subClasses = selections.map(e => {
-            let code = e.sub_class_code
-            // scCodes.push(code)
-            return {name: "sub_class_code[]", value: code}
+            let value = e.sub_class_code
+            // scCodes.push(value)
+            return { name: "sub_class_code[]", value }
         })
         formData.push(...subClasses)
         $.post("action.php", formData, function (data) {

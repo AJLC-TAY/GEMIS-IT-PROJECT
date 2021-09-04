@@ -1,15 +1,16 @@
-<?php include_once("../inc/head.html");
+<?php
 require_once("../class/Administration.php");
 $admin = new Administration();
 $_SESSION['userType'] = 'admin';
 $_SESSION['userID'] = 'alvin';
 
-$userType = ucwords($_SESSION['userType']);
+//$userType = ucwords($_SESSION['userType']);
 $link = "faculty.php";
 $faculty = $admin->getProfile("FA");
 $advisory_class = $admin->getAdvisoryClass();
-$advisory_code = $advisory_class["section_code"] ?: "";
+$advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
 $current_teacher_id = $faculty->get_teacher_id();
+$image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty->get_id_photo();
 ?>
 
 <!-- HEADER -->
@@ -53,11 +54,9 @@ $current_teacher_id = $faculty->get_teacher_id();
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-5">
-                            <?php
-                            $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty->get_id_photo();
-                            echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>";
-                            echo "<p>Faculty ID: $current_teacher_id</p>";
-                            ?>
+<!--                            <img id='resultImg' src='--><?php //echo $image; ?><!--' alt='Profile image' class='rounded-circle w-100 h-100' />-->
+                            <img src="<?php echo $image; ?>" alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
+                            <p>Faculty ID: <?php echo $current_teacher_id; ?></p>
                         </div>
                         <!-- PROFILE PICTURE END -->
                         <!-- INFORMATION DETAILS -->
