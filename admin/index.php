@@ -16,7 +16,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="pe-5">
                         <div class="row mt ps-3">
                             <?php
                             require_once("../class/Administration.php");
@@ -31,14 +31,29 @@
                                         <li class="breadcrumb-item active">Home</li>
                                     </ol>
                                 </nav>
-                                <h2 class="fw-bold">Welcome!</h2>
+                                <div class="card">
+                                    <div class="form-row row">
+                                        <div class="form-group col-md-6">
+                                            <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
+                                            <ul class="ms-4 list-style">
+                                                <li>
+                                                    <h4>Admin</h4>
+                                                </li>
+                                                <li>School Year: 2023 - 2024 </li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <img src="../assets/admin.png" style="width: 50%; display: block; margin-left: auto; float:right;">
+                                        </div>
+                                    </div>
+                                </div>
                             </header>
                             <div class="container mb-3">
                                 <!-- PEOPLE MANAGEMENT -->
                                 <section class="row">
                                     <h5 class="fw-bold">PEOPLE MANAGEMENT</h5>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <div class="card-box bg-blue">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-default">
                                             <div class="inner">
                                                 <h3> <?php echo $admins; ?> </h3>
                                                 <p>Admin</p>
@@ -49,8 +64,8 @@
                                             <a href="#" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-5">
-                                        <div class="card-box bg-green">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-forest">
                                             <div class="inner">
                                                 <h3> <?php echo $faculties; ?> </h3>
                                                 <p>Faculty</p>
@@ -61,8 +76,8 @@
                                             <a href="faculty.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-5">
-                                        <div class="card-box bg-orange">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-green">
                                             <div class="inner">
                                                 <h3> <?php echo $students; ?> </h3>
                                                 <p> Student </p>
@@ -73,8 +88,8 @@
                                             <a href="student.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-sm-5">
-                                        <div class="card-box bg-red">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-tea">
                                             <div class="inner">
                                                 <h3> <?php echo $signatories; ?> </h3>
                                                 <p> Signatory </p>
@@ -92,45 +107,112 @@
                             <div class="container">
                                 <section class="row">
                                     <h5 class="fw-bold">SCHOOL MANGEMENT</h5>
-                                    <section class="col-sm-7">
+                                    <section class="col-sm-6">
                                         <div class="card bg-white rounded shadow-sm mt-2">
                                             <!-- CURRICULUM -->
-                                            <section class="mb-4">
-                                                <h6 class='mb-0'>Curriculum</h6>
-                                                <hr class="mt-1 mb-3">
+                                            <section class="mb-2">
+                                                <h6 class='mb-0 fw-bold ms-3 mt-2'>CURRICULUM</h6>
+                                                <hr class="mt-1 mb-2">
                                                 <div class="d-flex flex-wrap">
-                                                    <a href="schoolyear.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
-                                                        School year
-                                                    </a>
-                                                    <a href="curriculumlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
-                                                        Curriculum
-                                                    </a>
-                                                    <a href="programlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
-                                                        Program
-                                                    </a>
-                                                    <a href="studentlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
-                                                        Subject
-                                                    </a>
+                                                    <div class='row'>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-calendar-o me-3" aria-hidden="true"></i>SCHOOL YEAR</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="schoolyear.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-book me-3" aria-hidden="true"></i>CURRICULUM</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="curriculumlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-list-alt  me-3" aria-hidden="true"></i>PROGRAM</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="programlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-file-text me-3" aria-hidden="true"></i>SUBJECT</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="studentlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </section>
                                         </div>
                                     </section>
 
-                                    <section class="col-md-5">
-                                        <div class="card bg-white rounded shadow-sm mt-2">
+                                    <section class="col-md-6">
+                                        <div class="card bg-pastel shadow-sm mt-2">
                                             <section class="mb-3">
-                                                <h6 class='mb-0'>Enrollment</h6>
+                                                <h6 class='mb-0 fw-bold ms-3 mt-2'>ENROLLMENT</h6>
                                                 <hr class="mt-1 mb-3">
                                                 <div class="d-flex flex-wrap">
-                                                    <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
-                                                        Enrollment
-                                                    </a>
-                                                    <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
-                                                        Set Up
-                                                    </a>
-                                                    <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
-                                                        Section
-                                                    </a>
+                                                    <div class='row'>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4  mt-3" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-tasks me-3" aria-hidden="true"></i>ENROLLMENT</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4 mt-1 mb-1" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4 mb-2" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-list-ul me-3" aria-hidden="true"></i>SECTION</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </section>
                                         </div>

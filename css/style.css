@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 body {
     color: #333333;
-    background: #fff5ee;
+    background: #eef0f2;
     font-family: 'Poppins', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -421,9 +421,10 @@ ul.sidebar-menu li a.active i {
 
 .card {
     box-shadow: var(--shad);
-    padding: 20px;
+    padding: 1.5%;
     text-align: left;
     background-color: #f1f1f1;
+    border-radius: 13px;
 }
 
 .photo {
@@ -471,6 +472,7 @@ input::-webkit-inner-spin-button {
     margin-top: 15px;
 }
 
+
 /*Home Cards*/
 
 .card-box {
@@ -478,7 +480,19 @@ input::-webkit-inner-spin-button {
     color: #fff;
     padding: 20px 10px 40px;
     margin: 20px 0px;
+    border-radius: 20px;
+    
 }
+
+.card-btn {
+    position: relative;
+    color: #05386B;
+    padding: 2%;
+    border-radius: 17px;
+    height: 70%;
+    
+}
+
 .card-box:hover {
     text-decoration: none;
     color: #f1f1f1;
@@ -521,22 +535,36 @@ input::-webkit-inner-spin-button {
     background: rgba(0, 0, 0, 0.1);
     width: 100%;
     text-decoration: none;
+    border-radius: 30px;
+}
+.card-link {
+    color: #05386B;
 }
 .card-box:hover .card-box-footer {
     background: rgba(0, 0, 0, 0.3);
 }
-.bg-blue {
-    background-color: #00c0ef !important;
+.bg-default {
+    background-color: #5dbb63 !important;
+}
+.bg-forest {
+    background-color: #416a59 !important;
 }
 .bg-green {
-    background-color: #00a65a !important;
+    background-color: #73a24e !important;
 }
-.bg-orange {
-    background-color: #f39c12 !important;
+.bg-tea {
+    background-color: #a9c25d !important;
 }
-.bg-red {
-    background-color: #d9534f !important;
+
+.bg-pastel {
+    background-color: #8ee4af !important;
 }
+
+.bg-deep {
+    background-color: #05386B;
+}
+
+
 
 
 /*footer*/
