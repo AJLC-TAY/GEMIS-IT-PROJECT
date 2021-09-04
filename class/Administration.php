@@ -1621,9 +1621,9 @@ class Administration extends Dbconfig
              $parents_params= [
                      $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
                  ];
-             $parents_types = "sssssii";
-            //  $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?);";
-            //  $this->prepared_query($query, $parents_params, $parents_types);
+             $parents_types = "sssssssi";
+              $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
+              $this->prepared_query($query, $parents_params, $parents_types);
          }
         
          
