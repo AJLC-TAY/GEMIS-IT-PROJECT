@@ -1,14 +1,14 @@
-import {Table} from "./Class.js"
-    
-let tableId, url, method, id, search, searchSelector, height
-
-tableId = '#table'
-url = 'getAction.php?data=faculty'
-method = 'GET'
-id = 'teacher_id'
-search = true
-searchSelector = '#search-input'
-height = 425
+// import {Table} from "./Class.js"
+//
+// let tableId, url, method, id, search, searchSelector, height
+//
+// tableId = '#table'
+// url = 'getAction.php?data=faculty'
+// method = 'GET'
+// id = 'teacher_id'
+// search = true
+// searchSelector = '#search-input'
+// height = 440
 
 let onPostBodyOfTable = () => {
     // $('.profile-btn').click(function() {
@@ -25,7 +25,60 @@ let onPostBodyOfTable = () => {
     // })
 }
 
-let faculty_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
+function buttons () {
+    return {
+        deactivateBtn: {
+            text: 'Highlight Users',
+            icon: '',
+            event: function () {
+                alert('Do some stuff to e.g. search all users which has logged in the last week')
+            },
+            attributes: {
+                title: 'Search all users which has logged in the last week'
+            }
+        },
+        resetPassword: {
+            text: 'Add new row',
+            icon: 'bi-box-arrow-up-left',
+            event: function () {
+                alert('Do some stuff to e.g. add a new row')
+            },
+            attributes: {
+                title: 'Add a new row to the table'
+            }
+        },
+        addBtn: {
+            text: 'Add new row',
+            icon: 'bi bi-plus-square-fill',
+            buttonClass: 'success',
+            event: function () {
+                alert('Do some stuff to e.g. add a new row')
+            },
+            attributes: {
+                title: 'Add a new row to the table'
+            }
+        }
+    }
+}
+
+const tableSetup = {
+    url:                'getAction.php?data=faculty',
+    method:             'GET',
+    uniqueId:           'teacher_id',
+    idField:            'teacher_id',
+    height:             440,
+    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
+    clickToSelect:      true,
+    pageSize:           10,
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    search:             true,
+    searchSelector:     '#search-input',
+ 
+}
+let facultyTable = $('#table').bootstrapTable(tableSetup)
+let selection
 
 $(function() {
     preload('#faculty')
@@ -36,6 +89,51 @@ $(function() {
             $(this).prop('disabled', false)
         })
     })
+
+    /** 
+     *  Counts the number of selected records, then shows a warning if empty and returns false; 
+     *  otherwise, return true.
+     */
+    const countSelection = () => {
+        selection = facultyTable.getSelections()
+        let length = selection.length 
+        if (length < 1) showToast("danger", "No faculty selected")
+        return length
+    }
+
+    $("#deactivate-opt").click(function() {
+        let length = countSelection()
+        if (length) {
+            let modal = $("#deactivate-modal")         
+            let question = (length == 1) ? "this faculty?" : `${length} faculties?`
+            modal.find("#question").html(question)
+            modal.modal("show")
+        }
+    })
+
+    $("#deactivate-btn").click(() => $("#deactivate-form").submit())
+
+    $("#deactivate-form").submit(function(e) {
+        e.preventDefault()
+        let formData = $(this).serializeArray()
+
+        formData.push(...selection.map(e => {return {name: "id[]", value: `${e.teacher_id}`}}))
+        $.post("action.php")
+
+    })
+
+    $("#reset-pass-opt").click(function() {
+        if (countSelection()) {
+            
+        }
+    })
+
+    $("#export-opt").click(function() {
+        if (countSelection()) {
+
+        }
+    })
+
 
     
 

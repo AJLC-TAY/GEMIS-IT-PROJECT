@@ -1,4 +1,4 @@
-class Table {
+export class Table {
     constructor(tableId, url, method, uniqueId, idField, height, search = false, 
         searchSelector = '', exportDataType = 'All', onPostBody = null) {
         
@@ -34,11 +34,9 @@ class Table {
 
         this.table = $(`${tableId}`).bootstrapTable(tableSetup)
     }
+
+    getSelections() {
+        return this.table.bootstrapTable("getSelections")
+    }
     
 }
-
-function test () {
-
-}
-
-export {test, Table}

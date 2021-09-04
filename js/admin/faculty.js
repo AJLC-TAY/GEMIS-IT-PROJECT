@@ -1,5 +1,10 @@
-import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
-         selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
+import {implementAssignSubjectMethods as asMethods} from "./utilities.js";
+
+preload('#faculty')
+// import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
+//          selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
+
+// import {Table} from "./Class.js"
 
 // Deleted roles
 let rolesDel = []
@@ -9,10 +14,9 @@ let rolesTmp = []
 let inputData
 
 // Subjects Handled
-setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
+// setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
 
 $(function () {
-    preload('#faculty')
     /** Initialization */
     // Modal
     let modalE = $('.modal')
@@ -22,6 +26,20 @@ $(function () {
     })
     // Popover for the instruction
     let popover = new bootstrap.Popover($("#instruction"))
+
+    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+        triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+
+    // let subTable = $("#subject-table").bootstrapTable({data : assigned})
+    // console.log("test", assigned)
+
 
     // If rolesTmp is 0, empty message is shown, else hidden
     let checkRolesTagForMsg = () => {
@@ -187,7 +205,7 @@ $(function () {
     })
 
 
-    $("#dept-save-btn").click(() => $("#dept-form").submit())
+    // $("#dept-save-btn").click(() => $("#dept-form").submit())
     $("#dept-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
@@ -214,59 +232,119 @@ $(function () {
     })
 
     /** Subject Methods */
-    $(document).on('click', '.add-subject', addSubjectFn)
-    $(document).on('click', '.remove-all-btn', removeAllBtnFn)
-    $(document).on('click', '.remove-btn', removeSubjectBtnFn)
-    $(document).on('click', '#selectAll', selectAll)
+    asMethods()
 
-    const addEmptySubjectMsg = () => $("#as-table tbody").html("<tr id='emptyMsg' class='text-center'><td colspan='5'>No subject set</td></tr>")
-    const hideEditSubjectElements = () => $(`.edit-con, .finder-con, .decision-as-con, .remove-btn, .view-btn, .cb-con, #as-table thead tr th:first-child`).toggleClass("d-none")
+    /** Advisory Methods */
 
-    $("#edit-as-btn").click(function() {
-        // show
-        $(this).closest("div").toggleClass("d-none")
-        $(`.finder-con, .remove-btn, .view-btn, .decision-as-con, 
-           #as-table tr th:first-child, #as-table tr td:first-child`).toggleClass('d-none')
-    })
+    $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
 
-    $("#cancel-as-btn").click(() => {
-        let con = $("#as-table tbody")
-        con.empty()
-        setSubjectSelected([])
+    // $("input[type='radio'][name='section']").click(function() {
+    //     let element = $(this)
+    //     let sectionCode = element.val()
+    // })
 
-        if (assigned.length == 0) {
-            addEmptySubjectMsg()
-        } else {
-            assigned.forEach(e => {
-                let code = e.sub_code
-                // view button has d-none class since it will be toggled in the hideEditSubjectElements function; 
-                con.append(`<tr class='text-center content'>
-                    <td class='cb-con' scope='col'><input type='checkbox' value='${code}' /></td>
-                    <td scope='col'><input type='hidden' name='subjects[]' value='${code}'/>${code}</td>
-                    <td scope='col'>${e.sub_name}</td>
-                    <td scope='col'>${e.sub_type}</td>
-                    <td scope='col'>
-                        <button data-value='${code}' class='remove-btn btn btn-sm btn-danger m-auto shadow-sm' title='Remove'><i class='bi bi-x-square'></i></button>
-                        <a href='subject.php?sub_code=${code}&state=view' role='button' class='view-btn btn btn-sm btn-primary m-auto shadow-sm d-none' title='View subject'><i class='bi bi-eye'></i></a>
-                    </td>
-                </tr>`)
-            })
-        }
-        
-        hideEditSubjectElements()
-    })
-    $("#save-as-btn").click(() => $("#as-form").submit())
-    $("#as-form").submit(function(e) {
+    const reloadSectionSelection = data => {
+        let html = "", container = $("#section-list")
+        data.forEach(e => {
+            const sectionCd = e.section_code
+            const teacherID = e.adviser_id;
+            const sectionNm = e.section_name;
+            const sectionGr = e.section_grd;
+            const sectionAd = e.adviser_name;
+            const colorBadge = teacherID ? "warning" : "success";
+            html += ` <li class='list-group-item'>
+                    <div class='form-row row'>
+                        <span class='col-1'><input class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
+                        <div class='section-info d-flex justify-content-between col-sm-6'>
+                            <span>${sectionCd} - ${sectionNm} </span> 
+                            <span class='text-secondary'>G${sectionGr}</span>
+                        </div>
+                        <div class='section-status d-flex justify-content-between col-sm-5'>
+                            <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
+                            <span class='badge available'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                        </div>
+                    </div>
+                </li>`
+        })
+        container.html(html)
+    }
+
+    $("#advisory-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
-        $.post("action.php", $(this).serialize(), function() {
-            assigned = getSubjectSelected()
-            if (assigned.length == 0) addEmptySubjectMsg()
-            hideEditSubjectElements()
+        let form = $(this)
+        let formData = form.serializeArray()
+
+        let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
+        if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
+        $.post("action.php", formData, function(data) {
+            let sectionData = JSON.parse(data)
+            form.trigger("reset")
+          
+            let currentSectValue = sectionData.section_code
+            let sectionDetail = `${currentSectValue} - ${sectionData.section_name}`
+            
+            // toggle editable state of the unassign checkbox
+            let cbEditable = false
+            if (!sectionData.section_code) {
+                cbEditable = true
+                currentSectValue = ""
+                sectionDetail = sectionData.section_name
+            }
+            $("#current-advisory").html(`${sectionDetail}`)
+            $("input[name='current-section']").val(currentSectValue)
+            $("input[name='unassign']").prop("disabled", cbEditable)
+
+            reloadSectionSelection(sectionData.data)
+            $("#section-opt-con input, #section-filter").prop("disabled", false)
+            $("#advisory-modal").modal("hide")
             hideSpinner()
-            showToast('success', "Handled subjects successfully updated")
+            showToast("success", "Successfully updated advisory class")
+        })
+        // console.log($("input[type='radio']:checked"))
+    })
+
+    // Disable all section input when unassign checkbox is checked
+    $(document).on("click", "input[name='unassign']", function() {
+        let bool = false
+        if ($(this).is(":checked")) {
+            bool = true
+            $("#section-opt-con [type='radio']").prop("checked", false)
+        }
+        $("#section-opt-con input, #section-filter").prop("disabled", bool)
+    })
+
+    $(document).on("keyup", "#search-section", function() {
+        var value = $(this).val().toLowerCase()
+        $("#section-list li").filter(function() {
+            if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
+            return $(this).addClass("d-none")
+            // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         })
     })
+
+    $(document).on("click", "#all-section-btn", function() {
+        $("#section-list li").removeClass("d-none")
+    })
+
+    const filterSection = (parameter) => {
+        $("#section-list li").filter(function() {
+            if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
+            return $(this).addClass("d-none")
+        })
+    }
+
+    $("#no-adv-btn").click(function(e) {
+        e.preventDefault()
+        filterSection("available")
+    })
+
+    $("#with-adv-btn").click(function(e) {
+        e.preventDefault()
+        filterSection("unavailable")
+    })
+
+
 
     hideSpinner()
 })

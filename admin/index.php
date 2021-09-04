@@ -18,7 +18,11 @@
                 <div class="row">
                     <div class="pe-5">
                         <div class="row mt ps-3">
-
+                            <?php
+                            require_once("../class/Administration.php");
+                            $admin = new Administration();
+                            [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+                            ?>
                             <!-- HEADER -->
                             <header class="mb-4">
                                 <!-- BREADCRUMB -->
@@ -51,7 +55,7 @@
                                     <div class="col-lg-3">
                                         <div class="card-box bg-default">
                                             <div class="inner">
-                                                <h3><?php echo $admins; ?></h3>
+                                                <h3> <?php echo $admins; ?> </h3>
                                                 <p>Admin</p>
                                             </div>
                                             <div class="icon">
@@ -63,7 +67,7 @@
                                     <div class="col-lg-3">
                                         <div class="card-box bg-forest">
                                             <div class="inner">
-                                                <h3><?php echo $faculties; ?></h3>
+                                                <h3> <?php echo $faculties; ?> </h3>
                                                 <p>Faculty</p>
                                             </div>
                                             <div class="icon">
@@ -75,19 +79,19 @@
                                     <div class="col-lg-3">
                                         <div class="card-box bg-green">
                                             <div class="inner">
-                                                <h3><?php echo $students; ?></h3>
+                                                <h3> <?php echo $students; ?> </h3>
                                                 <p> Student </p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                             </div>
-                                            <a href="studentlist.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="student.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="card-box bg-tea">
                                             <div class="inner">
-                                                <h3><?php echo $signatories; ?></h3>
+                                                <h3> <?php echo $signatories; ?> </h3>
                                                 <p> Signatory </p>
                                             </div>
                                             <div class="icon">
@@ -103,8 +107,8 @@
                             <div class="container">
                                 <section class="row">
                                     <h5 class="fw-bold">SCHOOL MANGEMENT</h5>
-                                    <section section class="col-sm-6">
-                                        <div class="card bg-white shadow-sm mt-2">
+                                    <section class="col-sm-7">
+                                        <div class="card bg-white rounded shadow-sm mt-2">
                                             <!-- CURRICULUM -->
                                             <section class="mb-2">
                                                 <h6 class='mb-0 fw-bold ms-3 mt-2'>CURRICULUM</h6>
