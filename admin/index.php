@@ -107,7 +107,7 @@
                             <div class="container">
                                 <section class="row">
                                     <h5 class="fw-bold">SCHOOL MANGEMENT</h5>
-                                    <section class="col-sm-7">
+                                    <section class="col-sm-6">
                                         <div class="card bg-white rounded shadow-sm mt-2">
                                             <!-- CURRICULUM -->
                                             <section class="mb-2">
