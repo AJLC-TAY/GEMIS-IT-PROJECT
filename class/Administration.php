@@ -1617,13 +1617,14 @@ class Administration extends Dbconfig
         $query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
         $this->prepared_query($query, $address_params, $address_types);
 
-        // foreach($parent as $parents){
-        //     $parents_params= [
-        //             $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
-        //         ];
-        //     $parents_types = "sssssii";
-            
-        // }
+        foreach($parent as $parents){
+             $parents_params= [
+                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
+                 ];
+             $parents_types = "sssssii";
+            //  $query = "CALL editStudentParent($parents['fname'], $parents['mname'], $parents['lname'], $parents['extname'], $parents['sex'], $parents['cp_no'], $parents['fname'], $stud_id);";
+            //  $this->prepared_query($this->db, $query);
+         }
         
 
         
