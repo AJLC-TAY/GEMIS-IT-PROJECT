@@ -24,9 +24,9 @@
                         <div class="row mt ps-3">
                             <?php 
                                 if (isset($_GET['action'])) {
-                                    include_once("schoolyear/schoolyearform.php");
+                                    include_once("schoolyear/syForm.php");
                                 } else {
-                                    include_once("schoolyear/schoolyearlist.php");
+                                    include_once("schoolyear/syList.php");
                                 }
                             ?>
                         </div>
@@ -126,6 +126,6 @@
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <script src="../js/common-custom.js"></script>
-    <script type="module" src="../js/admin/schoolyear.js"></script>
+    <script type="module" src="../js/admin/school-year.js"></script>
 </body>
 </html>

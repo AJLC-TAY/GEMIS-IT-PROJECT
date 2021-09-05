@@ -3,14 +3,14 @@ include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
-$jsFilePath = "../js/admin/facultylist.js";
+$jsFilePath = "../js/admin/faculty-list.js";
 if (isset($_GET['action'])) {
     $page_path = "faculty/facultyForm.php";
-    $jsFilePath = "../js/admin/facultyForm.js";
+    $jsFilePath = "../js/admin/faculty-form.js";
 } else if (isset($_GET['id'])) {
-    $page_path = "faculty/facultyprofile.php";
-    // $jsFilePath = "../js/admin/faculty.js";
-    $jsFilePath = "../js/admin/facultyNew.js";
+    $page_path = "faculty/facultyProfile.php";
+    // $jsFilePath = "../js/admin/faculty-temp.js";
+    $jsFilePath = "../js/admin/faculty.js";
 }
 ?>
 <title>Faculty | GEMIS</title>

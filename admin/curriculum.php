@@ -48,7 +48,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="curriculumlist.php">Curriculum</a></li>
+                                        <li class="breadcrumb-item"><a href="curriculumList.php">Curriculum</a></li>
                                         <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
                                     </ol>
                                 </nav>

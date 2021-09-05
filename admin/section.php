@@ -22,10 +22,10 @@
                             <?php 
                                 $isViewPage = TRUE;
                                 if (isset($_GET["sec_code"])) {
-                                    include_once("section/sectionview.php");
+                                    include_once("section/sectionView.php");
                                 } else {
                                     $isViewPage = FALSE;
-                                    include_once("section/sectionlist.php");
+                                    include_once("section/sectionList.php");
                                 }
                             ?>
 

@@ -30,7 +30,7 @@
                                 $jsFilePath = "../js/admin/student.js";
                             } else {
                                 include_once("student/studentList.php"); 
-                                $jsFilePath = "../js/admin/studentlist.js";
+                                $jsFilePath = "../js/admin/student-list.js";
                             }
                         ?>
                         </div>

@@ -122,7 +122,7 @@
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-calendar-o me-3" aria-hidden="true"></i>SCHOOL YEAR</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="schoolyear.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="schoolYear.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -134,7 +134,7 @@
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-book me-3" aria-hidden="true"></i>CURRICULUM</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="curriculumlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="curriculumList.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>

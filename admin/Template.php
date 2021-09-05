@@ -35,7 +35,6 @@
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-
-<script type="text/javascript" src="../js/common-custom.js"></script>
+<script src="../js/common-custom.js"></script>
 
 </html>

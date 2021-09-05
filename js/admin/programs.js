@@ -1,4 +1,4 @@
-import {setup, reload, addModal, eventDelegations} from "./cardPage.js"
+import {setup, reload, addModal, eventDelegations} from "./card-page.js"
 
 let prepareHTML = data => {
     let html = ""

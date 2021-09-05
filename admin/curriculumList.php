@@ -207,5 +207,5 @@
 <script type="text/javascript">
     let curricula = <?php $admin->listCurriculumJSON(); ?>;
 </script>
-<script type="module" src="../js/admin/curriculumlist.js"></script>
+<script type="module" src="../js/admin/curriculum-list.js"></script>
 </html>

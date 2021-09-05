@@ -86,7 +86,7 @@ class Administration extends Dbconfig
 
 
         echo "School year successfully initialized.";
-        // header("Location: schoolyear.php");
+        // header("Location: schoolYear.php");
     }
 
     public function listSYJSON()
