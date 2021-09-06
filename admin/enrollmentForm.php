@@ -1,4 +1,62 @@
-<?php include_once("../inc/head.html"); ?>
+<?php include_once("../inc/head.html"); 
+require_once("../class/Administration.php");
+$admin = new Administration();
+$userProfile = $admin->getProfile("S");
+$stud_id = $userProfile->get_stud_id();
+$user_id_no = $userProfile->get_id_no();
+$lrn = $userProfile->get_lrn();
+$lname = $userProfile->get_last_name();
+$fname = $userProfile->get_first_name();
+$mname = $userProfile->get_middle_name();
+$extname =$userProfile->get_ext_name();
+$sex = $userProfile->get_sex();
+$age = $userProfile->get_age();
+$birthdate = $userProfile->get_birthdate();
+$birth_place = $userProfile->get_birth_place();
+$indigenous_group = $userProfile->get_indigenous_group();
+$mother_tongue = $userProfile->get_mother_tongue();
+$religion = $userProfile->get_religion();
+
+$address = $userProfile->get_address();
+$house_no = $address['home_no'];
+$street = $address['street'];
+$barangay = $address['barangay'];
+$city = $address['mun_city'];
+$province =$address['province'];
+$zip =$address['zipcode'];
+
+$cp_no = $userProfile->get_cp_no();
+$psa_birth_cert = $userProfile->get_psa_birth_cert();
+$belong_to_ipcc = $userProfile->get_belong_to_ipcc();
+$id_picture = $userProfile->get_id_picture();
+$section = $userProfile->get_section();
+
+$parents = $userProfile->get_parents();
+if (is_null($parents)) {
+    $parents = NULL;
+} else {
+    foreach ($parents as $par) {
+        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
+        ${$parent . '_first_name'} = $par['fname'];
+        ${$parent . '_last_name'} = $par['lname'];
+        ${$parent . '_middle_name'} = $par['mname'];
+        ${$parent . '_ext_name'} = $par['extname'];
+        ${$parent . '_occupation'} = $par['occupation'];
+        ${$parent . '_cp_no'} = $par['cp_no'];
+    }
+}
+
+$guardian = $userProfile->get_guardians();
+if (is_null($guardian)) {
+    $guardian = NULL;
+} else {
+    $guardian_first_name = $guardian['fname'];
+    $guardian_last_name = $guardian['lname'];
+    $guardian_middle_name = $guardian['mname'];
+    $guardian_cp_no = $guardian['cp_no'];
+    $guardian_relationship = $guardian['relationship'];
+}
+?>
 <title>Enrollment Page | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
@@ -19,27 +77,22 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="studentList.php">Student</a></li>
-                                    <li class="breadcrumb-item"><a href="studentInfo.php">Personal Details</a></li>
-                                    <li class="breadcrumb-item active"><a href="studentForm.php">Edit</a></li>
+                                    <li class="breadcrumb-item active"><a href="">Enroll Student</a></li>
+                                   
                                 </ol>
                             </nav>
-                            <h3 class="fw-bold">Edit Student Information</h3>
+                            <h3 class="fw-bold">Enrollment</h3>
                         </header>
                         <!-- MAIN CONTENT -->
-                        <!-- Photo -->
-                        <div class="container mt-2 col-2">
-                            <div class="photo">
-                                Insert 2x2 ID
+                        <nav>
+                            <div class="nav nav-pills nav-fill" id="nav-tab" role="tablist">
+                                <a class="nav-link active" id="step1-tab" data-toggle="tab" href="#step1">Step 1</a>
+                                <a class="nav-link" id="step2-tab" data-toggle="tab" href="#step2">Step 2</a>
+                                <a class="nav-link" id="step3-tab" data-toggle="tab" href="#step3">Step 3</a>
                             </div>
-                            <div class="buttons mt-3">
-                                <h5 class="mb-4">STUDENT ID: </h5>
-
-                            </div>
-
-                        </div>
+                        </nav>
                         <!-- Form -->
-                        <div class="container mt-4 me-1 col-9">
+                        <div class="container mt-4 me-1">
                             <div class="card body w-100 h-auto">
                                 <form action="action.php" method="POST">
                                     <h4 class="fw-bold">STUDENT INFORMATION</h4>
