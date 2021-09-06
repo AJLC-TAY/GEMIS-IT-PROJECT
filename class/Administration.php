@@ -1,5 +1,4 @@
 <?php
-// session_start();
 require('config.php');
 require('Dataclasses.php');
 
@@ -11,6 +10,7 @@ class Administration extends Dbconfig
     protected $dbName;
 
     private $db = false;
+
     public function __construct()
     {
         if (!$this->db) {
@@ -50,6 +50,96 @@ class Administration extends Dbconfig
         return mysqli_query($this->db, $query);
     }
 
+    /*** Administrator Methods */
+    public function addAdministrator()
+    {
+        $user_id = $this->createUser("AD");
+        $this->prepared_query(
+            "INSERT INTO administrator (last_name, first_name, middle_name, ext_name, cp_no, sex, email, admin_user_no) "
+            ."VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+            , [
+                $_POST['lastname'],
+                $_POST['firstname'],
+                $_POST['middlename'],
+                $_POST['extensionname'],
+                $_POST['cpnumber'],
+                $_POST['sex'],
+                $_POST['email'],
+                $user_id
+            ],
+            "sssssssi");
+        header("Location: admin.php");
+    }
+    public function editAdministrator()
+    {
+        session_start();
+        $id = $_SESSION['id'];
+        $this->prepared_query(
+            "UPDATE administrator SET last_name=?, first_name=?, middle_name=?, ext_name=?, cp_no=?, sex=?, email=? "
+            ."WHERE admin_id=?;"
+            , [
+            $_POST['lastname'],
+            $_POST['firstname'],
+            $_POST['middlename'],
+            $_POST['extensionname'],
+            $_POST['cpnumber'],
+            $_POST['sex'],
+            $_POST['email'],
+            $id
+        ],
+            "sssssssi");
+        header("Location: admin.php?id=$id");
+    }
+    public function getAdministrator()
+    {
+        $result = $this->query(
+                "SELECT admin_id, "
+                ."last_name, first_name, middle_name, ext_name, "
+                ."CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex,"
+                ." cp_no, email, admin_user_no "
+                ."FROM administrator WHERE admin_id='{$_SESSION['id']}';");
+        $row = mysqli_fetch_assoc($result);
+        return [
+            "admin_id"  => $row['admin_id'],
+            "last_name" => $row['last_name'],
+            "first_name" => $row['first_name'],
+            "middle_name" => $row['middle_name'],
+            "ext_name" => $row['ext_name'],
+//                "age"       => $row['age'],
+            "sex"       => $row['sex'],
+            "cp_no"     => $row['cp_no'],
+            "email"     => $row['email'],
+            "admin_user_no" => $row['admin_user_no']
+        ];
+    }
+
+    public function listAdministrators()
+    {
+        $result = $this->query("SELECT admin_id, CONCAT(last_name,', ', first_name,' ', middle_name,' ', COALESCE(ext_name, '')) as full_name, "
+            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator;");
+        $administrators = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $admin_id = $row['admin_id'];
+            $administrators[] = [
+                "admin_id"  => $admin_id,
+                "full_name" => $row['full_name'],
+//                "age"       => $row['age'],
+                "sex"       => $row['sex'],
+                "cp_no"     => $row['cp_no'],
+                "email"     => $row['email'],
+                "action"    => "<div class='d-flex justify-content-center'>"
+                    ."<a href='admin.php?id=$admin_id$&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
+                    ."<a href='admin.php?id=$admin_id' role='button' class='btn btn-primary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
+                    ."</div>"
+            ];
+        }
+        return $administrators;
+    }
+
+    public function listAdministratorsJSON()
+    {
+        echo json_encode($this->listAdministrators());
+    }
     /*** School Year Methods */
 
     public function initializeSY()
@@ -913,7 +1003,7 @@ class Administration extends Dbconfig
      */
     public function createUser(String $type)
     {
-        $qry = mysqli_query($this->db, "SELECT CONCAT('FA', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
+        $qry = mysqli_query($this->db, "SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
         $PASSWORD = mysqli_fetch_row($qry)[0];
         mysqli_query($this->db, "INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
         return mysqli_insert_id($this->db);  // Return User ID ex. 123456789

@@ -31,15 +31,21 @@
                 </a>
             </li>
             <li class="sub-menu">
+                <a id="student" href="student.php">
+                    <i class="fa fa-user"></i>
+                    <span>Student</span>
+                </a>
+            </li>
+            <li class="sub-menu">
                 <a id="faculty" href="faculty.php">
                     <i class="fa fa-user"></i>
                     <span>Faculty</span>
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="student" href="student.php">
+                <a id="admin" href="admin.php?id=<?php echo $_SESSION['id'];?>">
                     <i class="fa fa-user"></i>
-                    <span>Student</span>
+                    <span>Admin</span>
                 </a>
             </li>
             <li id="curr-management" class="sub-menu">
@@ -48,8 +54,8 @@
                     <span>Curriculum Management</span>
                 </a>
                 <ul class="sub">
-                    <li><a id="school-yr" href="schoolyear.php">School Year</a></li>
-                    <li><a id="curriculum" href="curriculumlist.php">Curriculum</a></li>
+                    <li><a id="school-yr" href="schoolYear.php">School Year</a></li>
+                    <li><a id="curriculum" href="curriculumList.php">Curriculum</a></li>
                     <li><a id="program" href="programs.php">Program/Strand</a></li>
                     <li><a id="subject" href="subject.php">Subject</a></li>
                 </ul>

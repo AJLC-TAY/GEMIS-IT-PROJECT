@@ -5,6 +5,7 @@ import {
 
 preload('#faculty')
 
+const isViewPage = false
 const ASSIGNEDSCID = "#assigned-sc-table"
 const SCID = "#sc-table"
 
@@ -113,7 +114,7 @@ $(function() {
     $("#role-edit-btn").click(function(e) {
         e.preventDefault()
         // hide edit button
-        $(this).addClass('d-none') 
+        $(this).addClass('d-none')
 
         rolesTmp = [...roles] // clone current roles to roles temp
         rolesDel = []         // initialize roles to delete
@@ -226,8 +227,9 @@ $(function() {
         })
     })
 
-    /** Deparment Methods */
+    /** Department Methods */
     $("#dept-edit-btn").click(function() {
+        showSpinner()
         let input = $("#dept-input")
         // Get input value and store it to the input data
         inputData = input.val()
@@ -236,12 +238,15 @@ $(function() {
         
         // show
         $("#dept-section").addClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none')
-        input.removeClass('d-none')
+        // $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none')
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeIn()
+        // input.removeClass('d-none')
         input.prop('readonly', false)
         
         // hide
-        $(this, "#dept-empty-msg").addClass('d-none')
+        // $(this, "#dept-empty-msg").addClass('d-none')
+        $(this).fadeOut()
+        hideSpinner()
     })
 
     $("#dept-clear-btn").click(function(e) {
@@ -251,24 +256,25 @@ $(function() {
 
     $("#dept-cancel-btn").click(function(e) {
         e.preventDefault()
-        
+        showSpinner()
         let input = $("#dept-input")
         input.attr('readonly', true)
         input.val(inputData)
 
         // hide
         $("#dept-section").removeClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
-        
+        // $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeOut()
+
         // show
-        $("#dept-edit-btn").removeClass("d-none")
-        $("#dept-empty-msg").toggleClass('d-none')
+        $("#dept-edit-btn").fadeIn()
+        // $("#dept-edit-btn").removeClass("d-none")
+        // $("#dept-empty-msg").toggleClass('d-none')
+        hideSpinner()
 
         
     })
 
-
-    $("#dept-save-btn").click(() => $("#dept-form").submit())
     $("#dept-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
@@ -276,7 +282,7 @@ $(function() {
         $.post("action.php?", $(this).serialize(), function() {
             // hide
             $("#dept-section").removeClass("border")
-            $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+            $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeOut()
 
             let input = $("#dept-input")
             input.attr('readonly', true)
@@ -287,7 +293,7 @@ $(function() {
             } else deptExist = true
             
             // show
-            $("#dept-edit-btn, #dept-empty-msg").toggleClass('d-none')
+            $("#dept-edit-btn").fadeIn()
             
             hideSpinner()
             showToast('success', "Department successfully updated")

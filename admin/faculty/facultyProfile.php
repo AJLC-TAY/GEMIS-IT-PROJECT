@@ -1,4 +1,5 @@
 <?php
+const STYLE_DISPLAY_NONE = "style='display: none'";
 require_once("../class/Administration.php");
 $admin = new Administration();
 $_SESSION['userType'] = 'admin';
@@ -6,11 +7,12 @@ $_SESSION['userID'] = 'alvin';
 
 //$userType = ucwords($_SESSION['userType']);
 $link = "faculty.php";
-$faculty = $admin->getProfile("FA");
+$admin_user = $admin->getProfile("FA");
 $advisory_class = $admin->getAdvisoryClass();
 $advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
-$current_teacher_id = $faculty->get_teacher_id();
-$image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty->get_id_photo();
+$current_teacher_id = $admin_user->get_teacher_id();
+$image = is_null($admin_user->get_id_photo()) ? "../assets/profile.png" : $admin_user->get_id_photo();
+$display_style = STYLE_DISPLAY_NONE;
 ?>
 
 <!-- HEADER -->
@@ -54,8 +56,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-5">
-<!--                            <img id='resultImg' src='--><?php //echo $image; ?><!--' alt='Profile image' class='rounded-circle w-100 h-100' />-->
-                            <img src="<?php echo $image; ?>" alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
+                            <img src="<?php echo $image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
                             <p>Faculty ID: <?php echo $current_teacher_id; ?></p>
                         </div>
                         <!-- PROFILE PICTURE END -->
@@ -63,19 +64,19 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                         <div class="col-xl-7">
                             <div class="row">
                                 <?php
-                                $birthdate = $faculty->get_birthdate();
+                                $birthdate = $admin_user->get_birthdate();
                                 $birthdate = date("F j, Y", strtotime($birthdate));
-                                $name = $faculty->get_name();
+                                $name = $admin_user->get_name();
                                 echo "<p>Name: $name<br>
-                                            Gender: {$faculty->get_sex()}<br>
-                                            Age: {$faculty->get_age()}<br>
+                                            Gender: {$admin_user->get_sex()}<br>
+                                            Age: {$admin_user->get_age()}<br>
                                             Birthdate: {$birthdate}</p>";
                                 ?>
                             </div>
                             <div class="row">
                                 <h6><b>Contact Information</b></h6>
-                                <?php echo "<p>Cellphone No.: {$faculty->get_cp_no()}<br>
-                                            Email: {$faculty->get_email()}</p>"; ?>
+                                <?php echo "<p>Cellphone No.: {$admin_user->get_cp_no()}<br>
+                                            Email: {$admin_user->get_email()}</p>"; ?>
                             </div>
                             <!-- DEPARTMENT SECTION -->
                             <div id="dept-section" class="row pt-2 mb-2">
@@ -85,7 +86,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                                             <span class="badge"><button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
                                         </h6>
                                     </div>
-                                    <div id="dept-decide-con" class='d-none my-auto'>
+                                    <div id="dept-decide-con" class='my-auto' <?php echo $display_style; ?>>
                                         <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
                                         <input type="submit" form='dept-form' id='dept-save-btn' class='btn btn-sm btn-success' value="Save">
                                     </div>
@@ -97,7 +98,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                                     foreach ($depOpt as $dep) {
                                         $departmentOption .= "<option value='$dep'>";
                                     }
-                                    $department = $faculty->get_department();
+                                    $department = $admin_user->get_department();
                                     $deptExist = TRUE;
                                     if ($department == '') {
                                         $deptExist = FALSE;
@@ -120,9 +121,9 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                                                         <?php echo $departmentOption; ?>
                                                     </datalist>
                                                 </div>
-                                                <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1 d-none'><i class='bi bi-x-square-fill'></i></button></span>
+                                                <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1' <?php echo $display_style; ?>><i class='bi bi-x-square-fill'></i></button></span>
                                             </div>
-                                            <small class='dept-ins ms-1 d-none text-secondary'>Clear field to remove department</small>
+                                            <small class='dept-ins ms-1 text-secondary' <?php echo $display_style; ?>>Clear field to remove department</small>
                                         </div>
                                     </form>
                                 </div>
@@ -141,7 +142,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                                             <span class="badge"><button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
                                         </h6>
                                     </div>
-                                    <div id="role-decide-con" class='d-none my-auto'>
+                                    <div id="role-decide-con" class='my-auto d-none'<?php // echo $display_style; ?>>
                                         <button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
                                         <input type="submit" form="role-form" id='role-save-btn' class='btn btn-sm btn-success' value="Save">
                                     </div>
@@ -152,25 +153,25 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                                     <?php
                                     function renderRoleHTML($role)
                                     {
-                                        $iconState = 'd-none';
+                                        $icon_display = 'd-none';
                                         echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>
                                                         <span class='ms-3 me-2'>{$role['desc']}</span>
-                                                        <button class='btn btn-link text-danger btn-sm p-0 me-2 $iconState'>
+                                                        <button class='btn btn-link text-danger btn-sm p-0 me-2 $icon_display'>
                                                             <i class='bi bi-x-square-fill '></i>
                                                         </button>
                                                     </div>";
                                     }
 
 
-                                    $data = $faculty->get_access_data();
+                                    $data = $admin_user->get_access_data();
                                     $roles = $data['roles'];
                                     $rData = $data['data'];
                                     $rSize = $data['size'];
                                     foreach ($rData as $role) {
                                         renderRoleHTML($role);
                                     }
-                                    $rolesMsg = (!$rSize) ? "" : "d-none";
-                                    echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $rolesMsg'>No roles/access set</p>";
+                                    $role_msg_display = (!$rSize) ? "" : "d-none";
+                                    echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles/access set</p>";
                                     // echo "
                                     // <div id='role-add-btn' class='btn-group dropend d-none'>
                                     //     <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -376,7 +377,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
             <div class="tab-pane fade bg-white p-4" id="subjects" role="tabpanel" aria-labelledby="contact-tab">
                 <div class='row w-100 h-auto text-start mx-auto mt-3 '>
                     <div class="d-flex justify-content-between p-0">
-                        <h6 class="my-auto fw-bold">ASSIGNED SUBJECTS</h6>
+                        <h5 class="my-auto fw-bold">ASSIGNED SUBJECTS</h5>
                         <div class='edit-con my-auto'>
                             <a role="button" id='edit-as-btn' data-action='Edit handled subject' class='edit-as-btn btn link btn-sm' data-bs-toggle="modal" data-bs-target="#as-modal"><i class='bi bi-pencil-square me-2'></i></a>
                         </div>
@@ -390,7 +391,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                         <div class="assigned-sub-con list-group border">
                             <?php
                             $subjects = $admin->listSubjects('subject');
-                            $assigned_sub = $faculty->get_subjects();
+                            $assigned_sub = $admin_user->get_subjects();
                             echo "<div id='empty-as-msg' class='list-group-item " . (count($assigned_sub) > 0 ? "d-none" : "") . "' aria-current='true'>
                                     <div class='d-flex w-100'>
                                         <div class='mx-auto p-3 d-flex flex-column justify-content-center'>
@@ -517,10 +518,6 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                     <input name="current-section" type="hidden" value="<?php echo $advisory_code; ?>" <?php echo $editable; ?>>
                     <input type="hidden" name="teacher-id" value="<?php echo $current_teacher_id; ?>" />
                     <input type="hidden" name="action" value="advisoryChange" />
-                    <div class="form-group mb-3">
-                        <input id="unassign-cb" type="checkbox" <?php echo ($advisory_code ? "" : "disabled"); ?> name="unassign" class="form-check-input me-1">
-                        <label for="unassign-cb">Unassign class to this faculty</label>
-                    </div>
                     <div id="section-opt-con" class="border p-3">
                         <p class="text-secondary"><small>Select one section to be assigned or switched</small></p>
                         <div class="search-con d-flex">
@@ -572,6 +569,10 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
                             ?>
                         </ul>
                     </div>
+                    <div class="form-group my-3">
+                        <input id="unassign-cb" type="checkbox" <?php echo ($advisory_code ? "" : "disabled"); ?> name="unassign" class="form-check-input me-1 shadow-sm">
+                        <label for="unassign-cb">Unassign class to this faculty</label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -591,7 +592,7 @@ $image = is_null($faculty->get_id_photo()) ? "../assets/profile.png" : $faculty-
 
 <?php
 $sub_classes = $admin->listSubjectClasses($current_teacher_id);
-$assigned_sub_classes = $faculty->get_handled_sub_classes();
+$assigned_sub_classes = $admin_user->get_handled_sub_classes();
 ?>
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;

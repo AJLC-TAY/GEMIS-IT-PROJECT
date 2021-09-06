@@ -2,6 +2,10 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
+if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
+    $admin->listAdministratorsJSON();
+}
+
 if (isset($_GET['data']) && $_GET['data'] == 'program') {
     $admin->listProgramsUnderCurrJSON('program');
 }

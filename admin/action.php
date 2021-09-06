@@ -2,6 +2,15 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
+/******** ADMINISTRATOR ********/
+if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
+    $admin->addAdministrator();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'editAdministrator') {
+    $admin->editAdministrator();
+}
+
 /******** SCHOOL YEAR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'initializeSY') {
     $admin->initializeSY();

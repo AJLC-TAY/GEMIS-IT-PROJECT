@@ -1,9 +1,9 @@
 <?php
-include("../class/Administration.php");
+require_once("../class/Administration.php");
 $admin = new Administration();
 $subjects = $admin->listSubjects("subject");
 $departments = $admin->listDepartments();
-$state = $_GET['action'];
+$action = $_GET['action'];
 
 $PROFILE_PATH = "../assets/profile.png";
 $handled_subjects = "<td colspan='5'>No assigned subject</td>";
@@ -12,8 +12,9 @@ $teacher_id_input = "";
 $assigned_sub = [];
 $assigned_sub_classes = [];
 $sub_classes = [];
+
 // Content
-if ($state == 'add') {
+if ($action == 'add') {
     $last_name = '';
     $first_name = '';
     $middle_name = '';
@@ -25,7 +26,7 @@ if ($state == 'add') {
     $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
-    $birthdate_input = "<input type='date' class='form-control' name='birthdate' $$>";
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate' required>";
     $department_option = "";
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
@@ -37,7 +38,8 @@ if ($state == 'add') {
     $image = $PROFILE_PATH;
     $sub_classes = $admin->listSubjectClasses();
     $final_btn = "Submit";
-} else if ($state == 'edit') {
+} else if ($action == 'edit') {
+    // Get and prepare faculty information
     $current_teacher_id = $_GET['id'];
     $faculty = $admin->getFaculty($current_teacher_id);
     $last_name = $faculty->get_last_name();
@@ -47,14 +49,15 @@ if ($state == 'add') {
     $cp_no = $faculty->get_cp_no();
     $email = $faculty->get_email();
     $age = $faculty->get_age();
-    // $gender = $faculty->get_sex();
     $sex = $faculty->get_sex();
     $department = $faculty->get_department();
     // $genderOption = "<option value='NULL'>-- Select gender --</option>"
     //                ."<option value='f' ". (($gender == 'Female') ? "selected" : ""). ">Female</option>"
     //                ."<option value='m' ". (($gender == 'Male') ? "selected" : "") .">Male</option>";
     $date = strftime('%Y-%m-%d', strtotime($faculty->get_birthdate()));
-    $birthdate_input = "<input type='date' class='form-control' name='birthdate' value='$date' $$> ";
+
+    // prepare html elements and attributes
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate' value='$date' required> ";
     $department_option = "";
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
@@ -87,7 +90,7 @@ if ($state == 'add') {
     $final_btn = "Save";
 }
 
-$camel_state = ucwords($state);
+$camel_action = ucwords($action);
 ?>
 
 <!-- HEADER -->
@@ -97,10 +100,10 @@ $camel_state = ucwords($state);
         <ol class='breadcrumb'>
             <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
             <li class='breadcrumb-item'><a href='faculty.php'>Faculty</a></li>
-            <li class='breadcrumb-item active'><?php echo $camel_state; ?> Faculty</li>
+            <li class='breadcrumb-item active'><?php echo $camel_action; ?> Faculty</li>
         </ol>
     </nav>
-    <h3><?php echo $camel_state; ?> Faculty</h3>
+    <h3><?php echo $camel_action; ?> Faculty</h3>
     <h6 class='text-secondary'>Please complete the following:</h6>
 </header>
 <!-- CONTENT  -->
@@ -108,15 +111,15 @@ $camel_state = ucwords($state);
     <div class='form-row row'>
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>
-            <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' $$>
+            <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
         </div>
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
-            <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' $$>
+            <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
         </div>
         <div class='form-group col-md-4'>
             <label for='middlename'>Middle Name</label>
-            <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' $$>
+            <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
         </div>
     </div>
     <div class='form-row row'>
@@ -130,13 +133,13 @@ $camel_state = ucwords($state);
         </div>
         <div class='form-group col-md-4'>
             <label for='email'>Email</label>
-            <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' $$>
+            <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' required>
         </div>
     </div>
     <div class='form-row row'>
         <div class='form-group col-md-2'>
             <label for='age'>Age</label>
-            <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' $$>
+            <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
         </div>
         <div class='form-group col-md-2'>
             <label for='sex'>Sex</label>
@@ -144,16 +147,15 @@ $camel_state = ucwords($state);
             $sexOpt = ["m" => "Male", "f" => "Female"];
             foreach ($sexOpt as $id => $value) {
                 echo "<div class='form-check'>"
-                            ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                            ."<label class='form-check-label' for='$id'>$value"
-                            ."</label>"
-                        ."</div>";
+                        ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
+                        ."<label class='form-check-label' for='$id'>$value"
+                        ."</label>"
+                     ."</div>";
             }
             ?>
         </div>
         <div class='form-group col-md-4'>
             <label for='birthdate'>Birthdate</label>
-
             <?php echo $birthdate_input; ?>
         </div>
         <div class='form-group col-md-4'>
@@ -170,7 +172,7 @@ $camel_state = ucwords($state);
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>Faculty ID Photo</label>
             <div class="image-preview-con">
-                <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100' />
+                <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100 shadow border'' />
                 <div class='edit-img-con text-center'>
                     <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
@@ -274,7 +276,7 @@ $camel_state = ucwords($state);
 
     <div class='back-btn d-flex justify-content-end'> <?php echo $teacher_id_input ?? ""; ?>
         <input type='hidden' name='profile' value='faculty'>
-        <input type='hidden' value='<?php echo $state; ?>' name='action'>
+        <input type='hidden' value='<?php echo $action; ?>' name='action'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
         <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn' name='submit'>
     </div>

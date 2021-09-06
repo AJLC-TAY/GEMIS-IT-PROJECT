@@ -135,7 +135,6 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
 
 /** Assign subject class to faculty */
 
-
 export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
 
     $(document).on("click", "#add-sc-option", e => {
@@ -153,6 +152,12 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
             hideSpinner()
         }, 1000);
     })
+
+    // $(document).on('click', '#assigned-sc-btn', function (e) {
+    //     e.preventDefault()
+    //
+    //     $('#sc-form').submit()
+    // })
 
     const toggleSCFilterActive = (element) => {
         filterDropDownActiveEvent("ul[aria-labelledby='sc-filter']", element)
@@ -185,35 +190,11 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         hideSpinner()
     })
 
-    $(document).on("submit", "#sc-form", function (e) {
-        e.preventDefault()
-        showSpinner()
-        let formData = $(this).serializeArray()
-        let selections = $(SCID).bootstrapTable('getSelections')
-        let scCodes = []
-        let subClasses = selections.map(e => {
-            let value = e.sub_class_code
-            // scCodes.push(value)
-            return { name: "sub_class_code[]", value }
-        })
-        formData.push(...subClasses)
-        $.post("action.php", formData, function (data) {
-            // $(SCID).bootstrapTable({data})
-            // $(SCID).bootstrapTable('refresh')
-            // $(ASSIGNEDSCID).bootstrapTable('prepend', selections)
-            // selections.forEach(e => {
-            //     $(SCID).bootstrapTable('removeByUniqueId', e.sub_class_code )
-            // })
-            selections.forEach(e => {
-                moveData(e.sub_class_code, SCID, ASSIGNEDSCID)
-            })
-            $("#add-sc-modal").modal("hide")
-            hideSpinner()
-        })
+    const moveData = (dataList, origin, destination) => {
+        dataList.forEach(e => moveElement(e.sub_class_code, origin, destination))
+    }
 
-    })
-
-    const moveData = (uniqueID, origin, destination) => {
+    const moveElement = (uniqueID, origin, destination) => {
         let color = (origin == ASSIGNEDSCID) ? 'success' : 'warning'
         // change value of selected row
         let selected = $(origin).bootstrapTable('getRowByUniqueId', uniqueID)
@@ -227,19 +208,45 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         $(destination).bootstrapTable('prepend', selected)
     }
 
+    $(document).on("submit", "#sc-form", function (e) {
+        e.preventDefault()
+        showSpinner()
+
+        let form, formData, selections, subClasses
+        form = $(this)
+        selections = $(SCID).bootstrapTable('getSelections')
+
+        if (form.attr('data-page') === 'profile') { // allow database update on profile page only
+            // form page
+            formData = form.serializeArray()
+            subClasses = selections.map(e => {
+                return { name: "sub_class_code[]", value: e.sub_class_code }
+            })
+            formData.push(...subClasses)
+            $.post("action.php", formData)
+        }
+
+        moveData(selections, SCID, ASSIGNEDSCID)
+
+        $(ASSIGNEDSCID).bootstrapTable("uncheckAll")
+        $("#add-sc-modal").modal("hide")
+        hideSpinner()
+    })
+
     let createUnassignForm = () => {
         let formData = new FormData()
         formData.append("action", "unassignSubClasses")
         formData.append("teacher_id", teacherID)
         return formData
     }
+
     $(document).on("click", ".unassign-btn", function (e) {
         e.preventDefault()
         showSpinner()
         let subCode = $(this).attr("data-sc-code")
         let formData = createUnassignForm()
         formData.append("sub_class_code[]", subCode)
-        console.log(formData)
+
         $.ajax({
             url: "action.php",
             data: formData,

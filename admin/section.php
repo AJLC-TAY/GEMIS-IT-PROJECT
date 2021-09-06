@@ -12,7 +12,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper ps-4">

@@ -7,9 +7,11 @@
              <li class="breadcrumb-item active" aria-current="page">School Year</li>
          </ol>
      </nav>
-     <div class="d-flex justify-content-between mb-3">
+     <div class="d-flex justify-content-between align-items-center mb-3">
          <h3 class="fw-bold">School Year</h3>
-         <a href="schoolyear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
+         <span>
+            <a href="schoolyear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
+         </span>
      </div>
  </header>
  <!-- HEADER END -->

@@ -39,7 +39,7 @@
 <?php
 require_once("../class/Administration.php");
 $admin = new Administration();
-
+print_r($admin->listAdministratorsJSON());
 
 
 //

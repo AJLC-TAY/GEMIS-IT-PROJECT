@@ -1,4 +1,7 @@
-<?php include_once("../inc/head.html"); ?>
+<?php include_once("../inc/head.html");
+    session_start();
+    $_SESSION['id'] = $user_id = 5;
+?>
 <title>Home | GEMIS</title>
 </head>
 
@@ -11,7 +14,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -61,7 +64,7 @@
                                             <div class="icon">
                                                 <i class="fa fa-user-circle" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="admin.php?id=<?php echo $user_id;?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">

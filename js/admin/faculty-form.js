@@ -121,7 +121,7 @@ $(function () {
 
     $(document).on("submit", "#faculty-form", function (e) {
         e.preventDefault()
-        var formData = new FormData(document.getElementById("faculty-form"))
+        var formData = new FormData($(this)[0])
         // let formData = $(this).serializeArray().filter(e => {  // remove unnecessary values in the formdata,
         //     return !e.name.toLowerCase().includes("btselect")
         // });
@@ -152,9 +152,6 @@ $(function () {
         })
 
     })
-
-
-
 
     $(".edit-text").click(()=> $("#upload").click())
     hideSpinner()

@@ -1,15 +1,3 @@
-// import {Table} from "./Class.js"
-//
-// let tableId, url, method, id, search, searchSelector, height
-//
-// tableId = '#table'
-// url = 'getAction.php?data=faculty'
-// method = 'GET'
-// id = 'teacher_id'
-// search = true
-// searchSelector = '#search-input'
-// height = 440
-
 let onPostBodyOfTable = () => {
     // $('.profile-btn').click(function() {
     //     let id = $(this).attr('data-id')

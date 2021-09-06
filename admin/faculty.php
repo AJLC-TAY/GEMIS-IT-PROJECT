@@ -3,14 +3,17 @@ include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
-$jsFilePath = "../js/admin/faculty-list.js";
+$js_file_path = "../js/admin/faculty-list.js";
+$action = "";
 if (isset($_GET['action'])) {
+    $action = $_GET['action'];
     $page_path = "faculty/facultyForm.php";
-    $jsFilePath = "../js/admin/faculty-form.js";
+    $js_file_path = "../js/admin/faculty-form.js";
 } else if (isset($_GET['id'])) {
+    $action = "profile";
     $page_path = "faculty/facultyProfile.php";
+    $js_file_path = "../js/admin/faculty.js";
     // $jsFilePath = "../js/admin/faculty-temp.js";
-    $jsFilePath = "../js/admin/faculty.js";
 }
 ?>
 <title>Faculty | GEMIS</title>
@@ -21,12 +24,12 @@ if (isset($_GET['action'])) {
     <!-- SPINNER START -->
     <div class="spinner-con">
         <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">Loading...</span>x
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -44,7 +47,7 @@ if (isset($_GET['action'])) {
     </section>
     <!-- MAIN CONTENT END -->
     <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0; right: 0;">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
@@ -101,7 +104,7 @@ if (isset($_GET['action'])) {
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <form id="sc-form" method="POST" action="action.php">
+                    <form id="sc-form" method="POST" action="action.php" data-form="<?php echo $action; ?>">
                         <input type="hidden" name="teacher_id" value="" />
                         <input type="hidden" name="action" value="assignSubClasses">
                         <button id='cancel-as-btn' class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
@@ -114,8 +117,11 @@ if (isset($_GET['action'])) {
     <!--ADD SUBJECT CLASS MODAL END-->
 </body>
 
+<!--BOOTSTRAP TABLE JS-->
 <script src='../assets/js/bootstrap-table.min.js'></script>
 <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="<?php echo $jsFilePath; ?>"></script>
+
+<!--CUSTOM JS-->
+<script src="../js/common-custom.js"></script>
+<script type="module" src="<?php echo $js_file_path; ?>"></script>
 </html>
