@@ -59,7 +59,7 @@ if (is_null($guardian)) {
 }
 
 $profile_image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
-$psa_image = is_null($id_picture) ? "../assets/psa_preview.jpg" : $psa_birth_cert;
+$psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth_cert;
 ?>
 
 <!-- HEADER -->
@@ -97,7 +97,7 @@ $psa_image = is_null($id_picture) ? "../assets/psa_preview.jpg" : $psa_birth_cer
                     <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='psaUpload' class='form-control form-control-sm' id='psaPhoto' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='psaUpload' class='form-control form-control-sm' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
     </div>
     
@@ -231,7 +231,7 @@ $psa_image = is_null($id_picture) ? "../assets/psa_preview.jpg" : $psa_birth_cer
                 <h4 class="fw-bold"> PARENT/GUARDIAN'S INFORMATION</h4>
                 <div class="form-group row">
                     <h5>FATHER</h5>
-                    <input type='hidden' name='f_sex' value='<?php if (empty($father_sex)) {echo "";} else {echo $father_sex;} ?>'>
+                    <input type='hidden' name='f_sex' value='m'>
                     <div class='form-row row'>
                         <div class='form-group col-md-6'>
                             <label for='lastname'>Last Name</label>
@@ -262,7 +262,7 @@ $psa_image = is_null($id_picture) ? "../assets/psa_preview.jpg" : $psa_birth_cer
                     </div>
 
                     <h5>MOTHER</h5>
-                    <input type='hidden' name='m_sex' value='<?php if (empty($mother_sex)) {echo "";} else {echo $mother_sex;} ?>'>
+                    <input type='hidden' name='m_sex' value='f'>
 
                     <div class='form-row row'>
                         <div class='form-group col-md-6'>
