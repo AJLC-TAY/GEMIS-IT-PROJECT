@@ -126,11 +126,7 @@ class Administration extends Dbconfig
 //                "age"       => $row['age'],
                 "sex"       => $row['sex'],
                 "cp_no"     => $row['cp_no'],
-                "email"     => $row['email'],
-                "action"    => "<div class='d-flex justify-content-center'>"
-                    ."<a href='admin.php?id=$admin_id$&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
-                    ."<a href='admin.php?id=$admin_id' role='button' class='btn btn-primary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
-                    ."</div>"
+                "email"     => $row['email']
             ];
         }
         return $administrators;
@@ -401,10 +397,18 @@ class Administration extends Dbconfig
         $name = $_POST['name'];
         $desc = $_POST['curriculum-desc'];
         // start of validation
-
-        // end of validation
-        $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
-        $this->listCurriculumJSON();
+        $result = $this->query("SELECT * FROM curriculum WHERE curr_code = '$code';");
+        if ($result) {
+            if (mysqli_num_rows($result) > 0) {
+                die('Curriculum already exists');
+            } else {
+                // curriculum is valid
+                $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
+                $this->listCurriculumJSON();
+            }
+        } else {
+            die('Error: '.mysqli_error());
+        }
     }
 
     public function deleteCurriculum()

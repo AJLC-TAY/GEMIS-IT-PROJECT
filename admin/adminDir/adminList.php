@@ -24,6 +24,7 @@ $user = $admin->getAdministrator();
 <div class="container mt-1">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5>Information</h5>
+        div.flex
         <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
     </div>
     <div class="card w-100 h-auto bg-light">
@@ -68,7 +69,7 @@ $user = $admin->getAdministrator();
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="sex">Sex</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="cp_no">Contact Number</th>
                      <th scope='col' data-width="250" data-halign="center" data-align="left"  data-field="email">Email</th>
-                     <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
+<!--                     <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>-->
                  </tr>
              </thead>
          </table>
