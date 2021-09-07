@@ -1468,16 +1468,7 @@ class Administration extends Dbconfig
         return $departments;
     }
 
-    public function transferStudent(){
-        $sec_code = $_POST['code'];
-        $id = $_POST['stud_id'];
-        echo("from tranferStudent: admin");
-        echo ($sec_code);
-        echo ($id);
-        // $query = "UPDATE enrollment SET section_code='TVLE11' WHERE stud_id = $id";
-        // $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
-        // $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
-    }
+    
 
     /** Section Methods */
     public function listSubjectClasses($teacher_id = "")
@@ -1623,7 +1614,7 @@ class Administration extends Dbconfig
 
         if ($f_firstname != NULL){
             $parent[trim($_POST['f_sex'])] = array(
-                'fname' => trim($_POST['f_lastname']),
+                'fname' => trim($_POST['f_firstname']),
                 'mname' => trim($_POST['f_middlename']) ?: NULL,
                 'lname' => trim($_POST['f_lastname']),
                 'extname' => trim($_POST['f_extensionname']) ?: NULL,
@@ -1635,7 +1626,7 @@ class Administration extends Dbconfig
 
         if ($m_firstname != NULL){
             $parent[trim($_POST['m_sex'])] = array(
-                'fname' => trim($_POST['m_lastname']),
+                'fname' => trim($_POST['m_firstname']),
                 'mname' => trim($_POST['m_middlename']) ?: NULL,
                 'lname' => trim($_POST['m_lastname']),
                 'sex' => trim($_POST['m_sex']),
@@ -1674,8 +1665,7 @@ class Administration extends Dbconfig
 
         //psa
         $psa_img = NULL;
-        $fileSize = $_FILES['image']['size'];
-
+        $fileSize = $_FILES['psaImage']['size'];
         if ($fileSize > 0) {
             if ($fileSize > 5242880) { //  file is greater than 5MB
                 $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
@@ -1725,37 +1715,25 @@ class Administration extends Dbconfig
         ];
         $address_types = "sssssii";
 
-        $query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
-        $this->prepared_query($query, $address_params, $address_types);
+        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
+        $this->prepared_query($address_query, $address_params, $address_types);
 
         foreach($parent as $parents){
              $parents_params= [
-                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
+                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
                  ];
              $parents_types = "sssssssi";
-              $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
-              $this->prepared_query($query, $parents_params, $parents_types);
+              $parents_query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
+              $this->prepared_query($parents_query, $parents_params, $parents_types);
          }
         
-         
-        // foreach($guardian as $guardians){
-        //     $guardian_params= [
-        //             $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
-        //         ];
-        //     $parents_types = "sssssii";
-        //     $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?);";
-        //     $this->prepared_query($query, $parents_params, $parents_types);
-        // }
+        $guardian_params= [
+                $g_lastname, $g_middlename, $g_firstname, $g_cp_no , $relationship, $stud_id
+            ];
 
-        
-
-        // $parents_params[] = $id = $_POST['student_id'];
-        // $parents_types .= "i";
-
-        // $guardian_params[] = $id = $_POST['student_id'];
-        // $guardian_types .= "i";
-
-        
+        $guardian_types = "sssssi";
+        $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
+        $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
 
          header("Location: student.php?id=$stud_id");
     }
