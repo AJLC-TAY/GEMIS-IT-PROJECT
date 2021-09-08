@@ -1,11 +1,9 @@
-<?php include_once("../inc/head.html"); ?>
+<?php include_once("../inc/head.html");
+    session_start();
+    $_SESSION['id'] = $user_id = 5;
+?>
 <title>Home | GEMIS</title>
 </head>
-
-
-<?php
-
-?>
 
 <body>
     <!-- SPINNER -->
@@ -16,13 +14,18 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="pe-5">
                         <div class="row mt ps-3">
+                            <?php
+                            require_once("../class/Administration.php");
+                            $admin = new Administration();
+                            [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+                            ?>
                             <!-- HEADER -->
                             <header class="mb-4">
                                 <!-- BREADCRUMB -->
@@ -31,147 +34,204 @@
                                         <li class="breadcrumb-item active">Home</li>
                                     </ol>
                                 </nav>
-                                <h3 class="fw-bold">Welcome!</h3>
-                            </header>
-                            <div class="container row mb-5">
-                                <!-- PEOPLE MANAGEMENT -->
-                                <section class='col-md-4'>
-                                    <h5 class="hw-bold">People Management</h5>
-                                    <div class="card-box bg-blue">
-                                        <div class="inner">
-                                            <h3> 10 </h3>
-                                            <p>Admin</p>
+                                <div class="card">
+                                    <div class="form-row row">
+                                        <div class="form-group col-md-6">
+                                            <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
+                                            <ul class="ms-4 list-style">
+                                                <li>
+                                                    <h4>Admin</h4>
+                                                </li>
+                                                <li>School Year: 2023 - 2024 </li>
+                                            </ul>
                                         </div>
-                                        <div class="icon">
-                                            <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                        <div class="form-group col-md-6">
+                                            <img src="../assets/admin.png" style="width: 50%; display: block; margin-left: auto; float:right;">
                                         </div>
-                                        <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
-                                    <div class="col-lg-12 col-sm-6">
-                                        <div class="card-box bg-green">
+                                </div>
+                            </header>
+                            <div class="container mb-3">
+                                <!-- PEOPLE MANAGEMENT -->
+                                <section class="row">
+                                    <h5 class="fw-bold">PEOPLE MANAGEMENT</h5>
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-default">
                                             <div class="inner">
-                                                <h3> 20 </h3>
+                                                <h3> <?php echo $admins; ?> </h3>
+                                                <p>Admin</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <a href="admin.php?id=<?php echo $user_id;?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-forest">
+                                            <div class="inner">
+                                                <h3> <?php echo $faculties; ?> </h3>
                                                 <p>Faculty</p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-users" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="faculty.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-sm-6">
-                                        <div class="card-box bg-orange">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-green">
                                             <div class="inner">
-                                                <h3> 300 </h3>
+                                                <h3> <?php echo $students; ?> </h3>
                                                 <p> Student </p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="student.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-sm-6">
-                                        <div class="card-box bg-red">
+                                    <div class="col-lg-3">
+                                        <div class="card-box bg-tea">
                                             <div class="inner">
-                                                <h3> 5 </h3>
+                                                <h3> <?php echo $signatories; ?> </h3>
                                                 <p> Signatory </p>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-pencil-square-o"></i>
                                             </div>
-                                            <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="signatory.php" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </section>
-                                <!-- PEOPLE MANAGEMENT END -->
-                                <!-- SCHOOL MANAGEMENT -->
-                                <section class='col-md-8'>
-                                    <h5 class="hw-bold">School Management</h5>
-                                    <div class="card bg-white rounded shadow-sm mt-3">
-                                        <!-- CURRICULUM -->
-                                        <section class="mb-4">
-                                            <h6 class='mb-0'>Curriculum</h6>
-                                            <hr class="mt-1 mb-3">
-                                            <div class="d-flex flex-wrap">
-                                                <a href="schoolyear.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
-                                                    School year
-                                                </a>
-                                                <a href="curriculumlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
-                                                    Curriculum
-                                                </a>
-                                                <a href="programlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
-                                                    Program
-                                                </a>
-                                                <a href="studentlist.php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-primary" role="button">
-                                                    Subject
-                                                </a>
-                                            </div>
-                                        </section>
-                                        <!-- CURRICULUM END -->
-                                        <!-- ENROLLMENT -->
-                                        <section class="mb-4">
-                                            <h6 class='mb-0'>Enrollment</h6>
-                                            <hr class="mt-1 mb-3">
-                                            <div class="d-flex flex-wrap">
-                                                <a href="" class="redirect-card py-2 px-3 m-1 rounded shadow text-white btn-danger" role="button">
-                                                    Enrollment
-                                                </a>
-                                                <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow text-dark btn-warning" role="button">
-                                                    Set Up
-                                                </a>
-                                                <a href=".php" class="redirect-card py-2 px-3 m-1 rounded shadow btn-success" role="button">
-                                                    Section
-                                                </a>
-                                            </div>
-                                        </section>
-                                        <!-- ENROLLMENT END -->
-                                    </div>
+                            </div>
+                            <!-- PEOPLE MANAGEMENT END -->
+                            <!-- SCHOOL MANAGEMENT -->
+                            <div class="container">
+                                <section class="row">
+                                    <h5 class="fw-bold">SCHOOL MANGEMENT</h5>
+                                    <section class="col-sm-6">
+                                        <div class="card bg-white rounded shadow-sm mt-2">
+                                            <!-- CURRICULUM -->
+                                            <section class="mb-2">
+                                                <h6 class='mb-0 fw-bold ms-3 mt-2'>CURRICULUM</h6>
+                                                <hr class="mt-1 mb-2">
+                                                <div class="d-flex flex-wrap">
+                                                    <div class='row'>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-calendar-o me-3" aria-hidden="true"></i>SCHOOL YEAR</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="schoolYear.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-book me-3" aria-hidden="true"></i>CURRICULUM</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="curriculumList.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-list-alt  me-3" aria-hidden="true"></i>PROGRAM</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="programlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner">
+                                                            <div class="card-btn bg-pastel mx-4 mb-3">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-file-text me-3" aria-hidden="true"></i>SUBJECT</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="studentlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </section>
+
+                                    <section class="col-md-6">
+                                        <div class="card bg-pastel shadow-sm mt-2">
+                                            <section class="mb-3">
+                                                <h6 class='mb-0 fw-bold ms-3 mt-2'>ENROLLMENT</h6>
+                                                <hr class="mt-1 mb-3">
+                                                <div class="d-flex flex-wrap">
+                                                    <div class='row'>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4  mt-3" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-tasks me-3" aria-hidden="true"></i>ENROLLMENT</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4 mt-1 mb-1" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="inner mb-4">
+                                                            <div class="card-btn bg-white mx-4 mb-2" style="height: 81%;">
+                                                                <div class="inner row">
+                                                                    <div class="ms-4 col-sm-8">
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-list-ul me-3" aria-hidden="true"></i>SECTION</h5>
+                                                                    </div>
+                                                                    <div class="mt-1 col-sm-3">
+                                                                        <a href="#" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </section>
                                 </section>
-                                <!-- SCHOOL MANAGEMENT END -->
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!--main content end-->
-            <!--footer start-->
-            <?php include_once("../inc/footer.html"); ?>
-            <!--footer end-->
         </section>
+        <!--main content end-->
+        <!--footer start-->
+        <?php include_once("../inc/footer.html"); ?>
+        <!--footer end-->
     </section>
-    <!-- ADD MODAL -->
-    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Strand/Program</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="prog-form" action="">
-                        <div class="form-group">
-                            <label for="prog-code">Strand Code</label>
-                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
-                            <label for="prog-name">Strand Name</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
-                            <label for="prog-curr">Curriculum</label>
-                            <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ADD MODAL  -->
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script type="text/javascript" src="../js/common-custom.js"></script>

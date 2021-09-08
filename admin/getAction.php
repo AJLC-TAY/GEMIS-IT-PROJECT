@@ -2,6 +2,10 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
+if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
+    $admin->listAdministratorsJSON();
+}
+
 if (isset($_GET['data']) && $_GET['data'] == 'program') {
     $admin->listProgramsUnderCurrJSON('program');
 }
@@ -20,5 +24,11 @@ if (isset($_GET['data']) && $_GET['data'] == 'student') {
 if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
     $admin->listSYJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'section') {
+    $admin->listSectionJSON();
+}
+// if (isset($_GET['data']) && $_GET['data'] == 'sectionOption') {
+//     $admin->listSectionOptionJSON($_GET['teacher_id']);
+// }
 ?>
 

@@ -118,8 +118,8 @@ class Subject implements JsonSerializable
         $this->sub_semester = $sub_semester;
         $this->sub_type = $sub_type;
         $this->action = "<div class='d-flex justify-content-center'>"
-                    ."<a href='subject.php?sub_code=".$sub_code."&state=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
-                    ."<a href='subject.php?sub_code=".$sub_code."&state=view' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                    ."<a href='subject.php?sub_code=".$sub_code."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
+                    ."<a href='subject.php?sub_code=".$sub_code."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
                     ."</div>";
     }
 
@@ -168,8 +168,8 @@ class Subject implements JsonSerializable
         $this->program = $program;
         $sub_code = $this->get_sub_code();
         $this->action = "<div class='d-flex justify-content-center'>"
-                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&state=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
-                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&state=view' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
                         ."</div>";
     }
 
@@ -270,6 +270,7 @@ class Faculty implements JsonSerializable
     private $enable_enroll;
     private $enable_edit_grd;
     private $id_photo;
+    private $handled_sub_classes;
     private $action;
 
     public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo, $subjects=[])
@@ -291,11 +292,12 @@ class Faculty implements JsonSerializable
         $this->enable_enroll = $enable_enroll;
         $this->enable_edit_grd = $enable_edit_grd;
         $this->subjects = $subjects;
+        $this->handled_sub_classes = [];
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-primary btn-sm w-auto me-1' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
-                      . "<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
+                      ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."</div>";
-        $this->id_photo = is_null($id_photo) ? NULL : ("data:image; base64,". base64_encode($id_photo));
+        $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
     }
 
     public function get_teacher_id()
@@ -368,6 +370,17 @@ class Faculty implements JsonSerializable
         return $this->subjects;
     }
 
+    public function get_handled_sub_classes(): array
+    {
+        return $this->handled_sub_classes;
+    }
+
+    public function set_handled_sub_classes(array $handled_sub_classes): void
+    {
+        $this->handled_sub_classes = $handled_sub_classes;
+    }
+
+
     public function get_access_data() {
         $roles = [];
         $size = 0;
@@ -427,13 +440,23 @@ class Faculty implements JsonSerializable
 class SubjectClass extends Subject implements JsonSerializable
 {
     private $sub_class_code;
-
-    public function __construct($sub_class_code, $section_code, $teacher_id, $sub_code)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher_id)
     {
+        parent::__construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type);
         $this->sub_class_code = $sub_class_code;
         $this->section_code = $section_code;
         $this->teacher_id = $teacher_id;
         $this->sub_code = $sub_code;
+        $this->section_name = $section_name;
+        $this->school_yr = $school_yr;
+        $color_badge = "success";
+        $availability = "available";
+        if ($teacher_id) {
+            $color_badge = "warning";
+            $availability = "taken";
+        }
+        $this->status = $availability;
+        $this->statusImg = "<span class='badge $availability'><div class='bg-$color_badge rounded-circle me-2' style='width: 10px; height: 10px;' title='$availability'></div></span>";
     }
 
     public function get_sub_class_code()
@@ -455,12 +478,21 @@ class SubjectClass extends Subject implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return [
+        $jsonSerialize = parent::jsonSerialize();
+        $jsonSerialize['action'] = "<div class='d-flex'>"
+                                      ."<button data-sc-code='{$this->sub_class_code}' class='unassign-btn btn btn-sm btn-danger shadow me-1'>Unassign</button>"
+                                      ."<button data-sc-code='{$this->sub_class_code}' class='transfer-btn btn btn-sm shadow'>Transfer</button>"
+                                  ."</div>";
+        return array_merge($jsonSerialize, [
             'sub_class_code' => $this->sub_class_code,
             'section_code' => $this->section_code,
             'teacher_id' => $this->teacher_id,
-            'sub_code' => $this->sub_code
-        ];
+            'sub_code' => $this->sub_code,
+            'section_name' => $this->section_name,
+            'sy_id' => $this->school_yr,
+            'status' => $this->status,
+            'statusImg' => $this->statusImg
+        ]);
     }
 }
 
@@ -1440,8 +1472,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
-                            ."<a href='studentForm.php?id=$stud_id' class='btn btn-primary btn-sm w-auto me-1' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"
-                            . "<a href='studentInfo.php?id=$stud_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
+                            ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-primary btn-sm w-auto me-1' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"
+                            . "<a href='student.php?id=$stud_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."</div>";
             $this->section = $section;
             $this->parents = $parents;
@@ -1589,23 +1621,37 @@ class StudentAward extends Award implements JsonSerializable
     class Section implements JsonSerializable{
 
         private $code;
+        private $program;
         private $name;
         private $grd_level;
         private $max_stud;
         private $stud_no;
         private $teacher_id;
+        private $sy;
+        private $action;
 
-        public function __construct($code,$name, $grd_level, $max_stud, $stud_no,$teacher_id){
+        public function __construct($code, $sy, $name, $grd_level, $max_stud, $stud_no, $teacher_id){
             $this->code = $code;
+            $this->sy = $sy;
             $this->name = $name;
             $this->grd_level = $grd_level;
             $this->max_stud = $max_stud;
             $this->stud_no = $stud_no;
             $this->teacher_id = $teacher_id;
+            $this->action = 
+                        "<div class='d-flex justify-content-center'>"
+                            ."<a href='section.php?sec_code=$code' class='btn btn-secondary btn-sm w-auto me-1' title='View Section'><i class='bi bi-eye'></i></a>"
+                            ."<a href='section.php?sec_code=$code&action=edit' class='btn btn-primary btn-sm w-auto' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                        ."</div>";
         }
 
         public function get_code(){
             return $this->code;
+        }
+
+        public function get_sy()
+        {
+            return $this->sy;
         }
 
         public function get_name(){
@@ -1631,11 +1677,13 @@ class StudentAward extends Award implements JsonSerializable
         public function jsonSerialize(){
             return [
                 'code' => $this->code,
+                'sy' => $this->sy,
                 'name'=> $this->name,
                 'grd_level'=> $this->grd_level,
                 'max_stud'=> $this->max_stud,
                 'stud_no'=> $this->stud_no,
-                'teacher_id'=> $this->teacher_id
+                'teacher_id'=> $this->teacher_id,
+                'action' => $this->action
             ];}
     }
 

@@ -1,5 +1,13 @@
-import { addSubjectFn, removeAllBtnFn, removeSubjectBtnFn, 
-         selectAll, setSubjectSelected, getSubjectSelected } from "./utilities.js"
+import {
+    implementAssignSubjectClassMethods as scMethods,
+    implementAssignSubjectMethods as implementASMethods
+} from "./utilities.js";
+
+preload('#faculty')
+
+const isViewPage = false
+const ASSIGNEDSCID = "#assigned-sc-table"
+const SCID = "#sc-table"
 
 // Deleted roles
 let rolesDel = []
@@ -8,21 +16,93 @@ let rolesTmp = []
 // Department
 let inputData
 
-// Subjects Handled
-setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
 
-$(function () {
-    preload('#faculty')
-    /** Initialization */
-    // Modal
-    let modalE = $('.modal')
-    // Toast 
-    let toastList = $('.toast').map(function (toastEl) {
-        return new bootstrap.Toast(toastEl)
+let commonSetup = {
+    search:             true,
+    maintainMetaDat:    true,        // set true to preserve the selected row even when the current table is empty
+    clickToSelect:      true
+}
+
+let setupWithPagination = {...commonSetup, ...{
+    pageSize:           "10",
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    pagination:         true,
+    pageList:           "[10, 25, 50, All]"
+}}
+
+let sTableSetup = {...commonSetup, ...{
+    data:               subjects,
+    uniqueId:           "sub_code",
+    idField:            "sub_code",
+    searchSelector:     '#search-sub-input',
+    onPostBody:         () => {$("#subject-table").bootstrapTable("checkBy",  
+                                                                  {field: 'sub_code', values: assigned})}
+}}
+
+const detailFormatter = (index, row) => {
+    // row details for reference
+    // corequisite: []
+    // for_grd_level: "12"
+    // prerequisite: []
+    // school_yr: "0"
+    // section_code: "2"
+    // section_name: "ABM 12"
+    // sub_class_code: "9200"
+    // sub_code: "Project"
+    // sub_name: "Research Project"
+    // sub_semester: "2"
+    // sub_type: "applied"
+    // teacher_id: 1
+    return "<div class='container'>"
+        + `<h5 class='mb-1'>${row.section_name}</h5>`
+        + `<p class='text-secondary'><small>Section Code | ${row.section_code}</small></p>`
+        + `<div class='ms-1'>`
+        + `<p>Subject: ${row.sub_name}</p>`
+        + `<p>Subject Type: ${row.sub_type}</p>`
+        + `<p>Grade Level: ${row.for_grd_level}</p>`
+        + `<p>Semester: ${row.sub_semester}</p>`
+        + "</div>"
+    + "</div>"
+}
+
+let assignedSCTableSetup = {...setupWithPagination, ...{
+    data:               assignedSubClasses,
+    uniqueId:           "sub_class_code",
+    idField:            "sub_class_code",
+    searchSelector:     '#search-assigned-sc-input',
+    height:             "400",
+    detailView:         true,
+    detailFormatter:    detailFormatter
+}}
+
+let scTableSetup = {...setupWithPagination, ...{
+    data:               subjectClasses,
+    uniqueId:           "sub_class_code",
+    idField:            "sub_class_code",
+    searchSelector:     "#search-sc-input",
+    height:             "380"
+    // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
+    // detailFormatter:    detailFormatter
+}}
+
+let subjectTable = $("#subject-table").bootstrapTable(sTableSetup)
+let assignedSubClassTable = $(ASSIGNEDSCID).bootstrapTable(assignedSCTableSetup)
+let subClassTable = $(SCID).bootstrapTable(scTableSetup)
+
+$(function() {
+
+    /** Tab pane initialization */
+    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+        triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
     })
-    // Popover for the instruction
-    let popover = new bootstrap.Popover($("#instruction"))
+    
 
+    /** Role Methods */
     // If rolesTmp is 0, empty message is shown, else hidden
     let checkRolesTagForMsg = () => {
         let emptyMsg = $("#role-empty-msg")
@@ -30,12 +110,11 @@ $(function () {
         else emptyMsg.addClass('d-none')
     }
 
-    /** Role Methods */
     // Edit roles
     $("#role-edit-btn").click(function(e) {
         e.preventDefault()
         // hide edit button
-        $(this).addClass('d-none') 
+        $(this).addClass('d-none')
 
         rolesTmp = [...roles] // clone current roles to roles temp
         rolesDel = []         // initialize roles to delete
@@ -114,7 +193,7 @@ $(function () {
         // console.log("Roles to Delete:", rolesDel)
     })
 
-    $("#role-save-btn").click(() => $("#role-form").submit())
+    // $("#role-save-btn").click(() => $("#role-form").submit())
 
     $("#role-form").submit(function(e) {
         e.preventDefault()
@@ -148,8 +227,9 @@ $(function () {
         })
     })
 
-    /** Deparment Methods */
+    /** Department Methods */
     $("#dept-edit-btn").click(function() {
+        showSpinner()
         let input = $("#dept-input")
         // Get input value and store it to the input data
         inputData = input.val()
@@ -158,12 +238,15 @@ $(function () {
         
         // show
         $("#dept-section").addClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none')
-        input.removeClass('d-none')
+        // $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none')
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeIn()
+        // input.removeClass('d-none')
         input.prop('readonly', false)
         
         // hide
-        $(this, "#dept-empty-msg").addClass('d-none')
+        // $(this, "#dept-empty-msg").addClass('d-none')
+        $(this).fadeOut()
+        hideSpinner()
     })
 
     $("#dept-clear-btn").click(function(e) {
@@ -173,21 +256,25 @@ $(function () {
 
     $("#dept-cancel-btn").click(function(e) {
         e.preventDefault()
-        
+        showSpinner()
         let input = $("#dept-input")
         input.attr('readonly', true)
         input.val(inputData)
 
         // hide
         $("#dept-section").removeClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
-        
+        // $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeOut()
+
         // show
-        $("#dept-edit-btn, #dept-empty-msg").fadeIn()
+        $("#dept-edit-btn").fadeIn()
+        // $("#dept-edit-btn").removeClass("d-none")
+        // $("#dept-empty-msg").toggleClass('d-none')
+        hideSpinner()
+
+        
     })
 
-
-    $("#dept-save-btn").click(() => $("#dept-form").submit())
     $("#dept-form").submit(function(e) {
         e.preventDefault()
         showSpinner()
@@ -195,7 +282,7 @@ $(function () {
         $.post("action.php?", $(this).serialize(), function() {
             // hide
             $("#dept-section").removeClass("border")
-            $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+            $("#dept-decide-con, #dept-clear-btn, .dept-ins").fadeOut()
 
             let input = $("#dept-input")
             input.attr('readonly', true)
@@ -206,66 +293,144 @@ $(function () {
             } else deptExist = true
             
             // show
-            $("#dept-edit-btn, #dept-empty-msg").toggleClass('d-none')
+            $("#dept-edit-btn").fadeIn()
             
             hideSpinner()
             showToast('success', "Department successfully updated")
         })
     })
+    /** Department methods end */
 
-    /** Subject Methods */
-    $(document).on('click', '.add-subject', addSubjectFn)
-    $(document).on('click', '.remove-all-btn', removeAllBtnFn)
-    $(document).on('click', '.remove-btn', removeSubjectBtnFn)
-    $(document).on('click', '#selectAll', selectAll)
+    /** Subject methods */
+    implementASMethods(assigned, subjectTable)
 
-    const addEmptySubjectMsg = () => $("#as-table tbody").html("<tr id='emptyMsg' class='text-center'><td colspan='5'>No subject set</td></tr>")
-    const hideEditSubjectElements = () => $(`.edit-con, .finder-con, .decision-as-con, .remove-btn, .view-btn, .cb-con, #as-table thead tr th:first-child`).toggleClass("d-none")
+    /** Advisory Methods */
 
-    $("#edit-as-btn").click(function() {
-        // show
-        $(this).closest("div").toggleClass("d-none")
-        $(`.finder-con, .remove-btn, .view-btn, .decision-as-con, 
-           #as-table tr th:first-child, #as-table tr td:first-child`).toggleClass('d-none')
-    })
+    const reloadSectionSelection = data => {
+        let html = "", container = $("#section-list")
+        data.forEach(e => {
+            const sectionCd = e.section_code
+            const teacherID = e.adviser_id;
+            const sectionNm = e.section_name;
+            const sectionGr = e.section_grd;
+            const sectionAd = e.adviser_name;
 
-    $("#cancel-as-btn").click(() => {
-        let con = $("#as-table tbody")
-        con.empty()
-        setSubjectSelected([])
+            let colorBadge = "success";
+            let availability = "available";
 
-        if (assigned.length == 0) {
-            addEmptySubjectMsg()
-        } else {
-            assigned.forEach(e => {
-                let code = e.sub_code
-                // view button has d-none class since it will be toggled in the hideEditSubjectElements function; 
-                con.append(`<tr class='text-center content'>
-                    <td class='cb-con' scope='col'><input type='checkbox' value='${code}' /></td>
-                    <td scope='col'><input type='hidden' name='subjects[]' value='${code}'/>${code}</td>
-                    <td scope='col'>${e.sub_name}</td>
-                    <td scope='col'>${e.sub_type}</td>
-                    <td scope='col'>
-                        <button data-value='${code}' class='remove-btn btn btn-sm btn-danger m-auto shadow-sm' title='Remove'><i class='bi bi-x-square'></i></button>
-                        <a href='subject.php?sub_code=${code}&state=view' role='button' class='view-btn btn btn-sm btn-primary m-auto shadow-sm d-none' title='View subject'><i class='bi bi-eye'></i></a>
-                    </td>
-                </tr>`)
-            })
-        }
-        
-        hideEditSubjectElements()
-    })
-    $("#save-as-btn").click(() => $("#as-form").submit())
-    $("#as-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        $.post("action.php", $(this).serialize(), function() {
-            assigned = getSubjectSelected()
-            if (assigned.length == 0) addEmptySubjectMsg()
-            hideEditSubjectElements()
-            hideSpinner()
-            showToast('success', "Handled subjects successfully updated")
+            if (teacherID) {
+                colorBadge = "warning";
+                availability = "unavailable";
+            }
+
+            html += ` <li class='list-group-item'>
+                    <div class='form-row row'>
+                        <span class='col-1'><input id='${sectionCd}' class='form-check-input me-1' data-current-adviser='${teacherID ?? ""}' name='section' type='radio' value='${sectionCd}'></span>
+                        <div class='section-info d-flex justify-content-between col-sm-6'>
+                            <label for='${sectionCd}'>${sectionCd} - ${sectionNm} </label> 
+                            <span class='text-secondary'>G${sectionGr}</span>
+                        </div>
+                        <div class='section-status d-flex justify-content-between col-sm-5'>
+                            <div class='teacher-con' title='Current class adviser'>${sectionAd}</div>
+                            <span class='badge ${availability}'><div class='bg-${colorBadge} rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                        </div>
+                    </div>
+                </li>`
         })
+        container.html(html)
+    }
+  
+      $("#advisory-form").submit(function(e) {
+          e.preventDefault()
+          showSpinner()
+          let form = $(this)
+          let formData = form.serializeArray()
+  
+          let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
+          if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
+          $.post("action.php", formData, function(data) {
+              let sectionData = JSON.parse(data)
+              form.trigger("reset")
+            
+              let currentSectValue = sectionData.section_code
+              let sectionDetail = `${currentSectValue} - ${sectionData.section_name}`
+              
+              // toggle editable state of the unassign checkbox
+              let cbEditable = false
+              if (!sectionData.section_code) {
+                  cbEditable = true
+                  currentSectValue = ""
+                  sectionDetail = sectionData.section_name
+              }
+              $("#current-advisory").html(`${sectionDetail}`)
+              $("input[name='current-section']").val(currentSectValue)
+              $("input[name='unassign']").prop("disabled", cbEditable)
+  
+              reloadSectionSelection(sectionData.data)
+              $("#section-opt-con input, #section-filter").prop("disabled", false)
+              $("#advisory-modal").modal("hide")
+              hideSpinner()
+              showToast("success", "Successfully updated advisory class")
+          })
+          // console.log($("input[type='radio']:checked"))
+      })
+  
+      // Disable all section input when unassign checkbox is checked
+      $(document).on("click", "input[name='unassign']", function() {
+          let bool = false
+          if ($(this).is(":checked")) {
+              bool = true
+              $("#section-opt-con [type='radio']").prop("checked", false)
+          }
+          $("#section-opt-con input, #section-filter").prop("disabled", bool)
+      })
+  
+    /***
+     *  Adds search feature to the specified input inorder to filter 
+     *  the list of elements referred by the given selector. 
+     * @param {String} searchInputID    Search input selector
+     * @param {String} itemSelector     Item selector of the list 
+     * */
+    const listSearchEventBinder = (searchInputID, itemSelector) => {
+        $(document).on("keyup", searchInputID, function() {
+            var value = $(this).val().toLowerCase()
+            $(itemSelector).filter(function() {
+                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
+                return $(this).addClass("d-none")
+                // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            })
+        })
+    }
+
+    listSearchEventBinder("#search-section", "#section-list li")
+    listSearchEventBinder("#search-subject", ".assigned-sub-con a")
+  
+    $(document).on("click", "#all-section-btn", function() {
+        $("#section-list li").removeClass("d-none")
+    })
+  
+    const filterSection = (parameter) => {
+        $("#section-list li").filter(function() {
+            if ($(this).find(".form-row .section-status span").hasClass(parameter)) return $(this).removeClass("d-none")
+            return $(this).addClass("d-none")
+        })
+    }
+
+    $("#no-adv-btn").click(function(e) {
+        e.preventDefault()
+        filterSection("available")
+    })
+
+    $("#with-adv-btn").click(function(e) {
+        e.preventDefault()
+        filterSection("unavailable")
+    })
+
+    /** Add Subject Class Methods */
+    scMethods(ASSIGNEDSCID, SCID)
+
+    $(document).on("show.bs.modal", "#add-sc-modal", function () {
+        $("#sc-form input[name='teacher_id']").val(teacherID)
     })
 
     hideSpinner()
