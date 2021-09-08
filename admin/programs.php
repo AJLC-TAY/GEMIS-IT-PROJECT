@@ -1,7 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Program Page | GEMIS</title>
-<link rel="stylesheet" href="../css/general.css">
-</link>
 </head>
 
 <body>

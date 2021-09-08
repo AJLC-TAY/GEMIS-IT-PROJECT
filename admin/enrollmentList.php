@@ -1,7 +1,6 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Enrollment Page | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
 </head>
 
 <body>
@@ -32,39 +31,40 @@
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
                                     <h3 class="fw-bold">Enrollees</h3>
-                                    
                                     <div>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-1"></i>View Archived Student</button>
+                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
+                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Enroll</a>
+                                        <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
                             </header>
-                            <!-- SUBJECT TABLE -->
+                            <!-- ENROLLEES TABLE -->
                             <div class="container mt-1">
                                 <div class="card w-100 h-auto bg-light">
-                                    <table id="table" class="table-striped">
+                                    <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark'>
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <!-- SEARCH BAR -->
-                                                <span class="flex-grow-1 me-5"> 
-                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                                </span>
-                                                <div>
-                                                    <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
-                                                    <button class="btn btn-dark btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                                                </div>
-                                                <br>
-                                                <div class="text-left col-3">
-                                                <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'>Filter<i class="bi bi-funnel-fill"></i></button>
-                                                </div>
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <!-- SEARCH BAR -->
+                                            <span class="flex-grow-1 me-3">
+                                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                            </span>
+                                            <div>
+                                                <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-danger btn-sm" title='Deactivate Faculty' value="Archive">
+                                                <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                             </div>
+                                        </div>
 
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="100" data-align="left" data-field="sub_code">LRN</th>
-                                                <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="sub_name">Student Name</th>
-                                                <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Status</th>
-                                                <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
-                                            </tr>
+                                        <tr>
+                                            <th data-checkbox="true"></th>
+                                            <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
+                                            <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="false" data-field="LRN">LRN</th>
+                                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
+                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
+                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
+                                            <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                        </tr>
                                         </thead>
                                     </table>
                                 </div>
@@ -84,8 +84,8 @@
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-    
+    <!-- CUSTOM JS -->
     <script type='text/javascript' src="../js/common-custom.js"></script>
-    <script type="module" src="../js/admin/enrollmentlist.js"></script>
+    <script type="module" src="../js/admin/enrollment-list.js"></script>
 </body>
 </html>

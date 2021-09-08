@@ -994,7 +994,7 @@ class Administration extends Dbconfig
             return $this->getFaculty($id);
         }
 
-        if ($type === 'S') {
+        if ($type === 'ST') {
             return $this->getStudent($id);
         }
     }
@@ -1532,7 +1532,7 @@ class Administration extends Dbconfig
     {
         // Step 1
         $result = $this->prepared_select("SELECT * FROM student as s
-                                        JOIN `address` as a ON a.student_stud_id = s.stud_id 
+                                        JOIN `address` as a ON a.stud_id = s.stud_id 
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
