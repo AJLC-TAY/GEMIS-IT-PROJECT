@@ -35,7 +35,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper ps-4">

@@ -14,7 +14,7 @@ let studSetUp = {...tableSetup}
 studSetUp.url = "getAction.php?" + (isViewPage ? `data=student&section=${sectionCode}` : 'data=section')
 studSetUp.idField = 'lrn'
 studSetUp.uniqueId = 'lrn'
-studSetUp.height = 300
+studSetUp.height = 425
 
 let studentTable = $("#table").bootstrapTable(studSetUp)
 let subjectTable

@@ -2,6 +2,14 @@
 require('config.php');
 require('Dataclasses.php');
 
+//class EnrollStat
+//{
+//    const PENDING = 0;
+//    const ENROLLED = 1;
+//    const CANCELLED = 2;
+//}
+// EnrollStat::PENDING
+
 class Administration extends Dbconfig
 {
     protected $hostName;
@@ -51,6 +59,9 @@ class Administration extends Dbconfig
     }
 
     /*** Administrator Methods */
+    /**
+     * Creates an administrator user.
+     */
     public function addAdministrator()
     {
         $user_id = $this->createUser("AD");
@@ -68,8 +79,11 @@ class Administration extends Dbconfig
                 $user_id
             ],
             "sssssssi");
-        header("Location: admin.php");
+        $id = mysqli_insert_id($this->db);
+        header("Location: admin.php?id=$id");
     }
+
+
     public function editAdministrator()
     {
         session_start();
@@ -90,47 +104,50 @@ class Administration extends Dbconfig
             "sssssssi");
         header("Location: admin.php?id=$id");
     }
-    public function getAdministrator()
+    public function getAdministrator($id = NULL)
     {
+        $id = $id ?? $_SESSION['id'];
         $result = $this->query(
                 "SELECT admin_id, "
                 ."last_name, first_name, middle_name, ext_name, "
-                ."CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex,"
-                ." cp_no, email, admin_user_no "
-                ."FROM administrator WHERE admin_id='{$_SESSION['id']}';");
+                ."CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, "
+                ."age, cp_no, email, admin_user_no "
+                ."FROM administrator WHERE admin_id='$id';");
         $row = mysqli_fetch_assoc($result);
+        $last_name = $row['last_name'];
+        $first_name = $row['first_name'];
+        $middle_name = $row['middle_name'];
+        $ext_name = $row['middle_name'];
         return [
-            "admin_id"  => $row['admin_id'],
-            "last_name" => $row['last_name'],
-            "first_name" => $row['first_name'],
-            "middle_name" => $row['middle_name'],
-            "ext_name" => $row['ext_name'],
-//                "age"       => $row['age'],
-            "sex"       => $row['sex'],
-            "cp_no"     => $row['cp_no'],
-            "email"     => $row['email'],
-            "admin_user_no" => $row['admin_user_no']
+            "admin_id"          => $row['admin_id'],
+            "last_name"         => $last_name,
+            "first_name"        => $first_name,
+            "middle_name"       => $middle_name,
+            "ext_name"          => $ext_name,
+            "name"              => "$last_name, $first_name $ext_name",
+            "age"               => $row['age'],
+            "sex"               => $row['sex'],
+            "cp_no"             => $row['cp_no'],
+            "email"             => $row['email'],
+            "admin_user_no"     => $row['admin_user_no']
         ];
     }
 
     public function listAdministrators()
     {
+        session_start();
         $result = $this->query("SELECT admin_id, CONCAT(last_name,', ', first_name,' ', middle_name,' ', COALESCE(ext_name, '')) as full_name, "
-            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator;");
+            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $admin_id = $row['admin_id'];
             $administrators[] = [
                 "admin_id"  => $admin_id,
                 "full_name" => $row['full_name'],
-//                "age"       => $row['age'],
+                "age"       => $row['age'],
                 "sex"       => $row['sex'],
                 "cp_no"     => $row['cp_no'],
-                "email"     => $row['email'],
-                "action"    => "<div class='d-flex justify-content-center'>"
-                    ."<a href='admin.php?id=$admin_id$&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
-                    ."<a href='admin.php?id=$admin_id' role='button' class='btn btn-primary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
-                    ."</div>"
+                "email"     => $row['email']
             ];
         }
         return $administrators;
@@ -401,10 +418,18 @@ class Administration extends Dbconfig
         $name = $_POST['name'];
         $desc = $_POST['curriculum-desc'];
         // start of validation
-
-        // end of validation
-        $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
-        $this->listCurriculumJSON();
+        $result = $this->query("SELECT * FROM curriculum WHERE curr_code = '$code';");
+        if ($result) {
+            if (mysqli_num_rows($result) > 0) {
+                die('Curriculum already exists');
+            } else {
+                // curriculum is valid
+                $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
+                $this->listCurriculumJSON();
+            }
+        } else {
+            die('Error: '.mysqli_error());
+        }
     }
 
     public function deleteCurriculum()
@@ -951,21 +976,39 @@ class Administration extends Dbconfig
     }
 
     /** User Profile */
+    /**
+     * Returns the user Object of the specified user type.
+     * @param $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
+     * @return Faculty|Student|void
+     */
+
     public function getProfile($type)
     {
         $id = $_GET['id'];
+
+        if ($type === 'AD') {
+            return $this->getAdministrator($id ?? NULL);
+        }
 
         if ($type === 'FA') {
             return $this->getFaculty($id);
         }
 
-        if ($type === 'S') {
+        if ($type === 'ST') {
             return $this->getStudent($id);
         }
     }
+
+    /**
+     * Returns the count of current administrators, faculty, and students.
+     * @return array
+     */
     public function getUserCounts() 
     {
         $query = "SELECT (
+            SELECT COUNT(admin_id) FROM administrator
+        ) AS administrators, 
+        (    
             SELECT COUNT(teacher_id) FROM faculty
         ) as teachers,
         (
@@ -973,7 +1016,7 @@ class Administration extends Dbconfig
         ) as students";
         $result = mysqli_query($this->db, $query);
         $row = mysqli_fetch_row($result);
-        return [0, $row[0], $row[1], 0];
+        return [$row[0], $row[1], $row[2], 0];
     }
 
     /**
@@ -1320,11 +1363,122 @@ class Administration extends Dbconfig
 
     /** Faculty End */
 
+    public function enroll()
+    {
+        $student_id = $this->addStudent();
+        $this->prepared_query(
+            "INSERT INTO enrollment (date_of_enroll, date_first_attended, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, section_code) "
+                ."VALUES (NOW(), NULL, 0, ?, ?, ?, ?, NULL);",
+            [
+                $_POST[''],
+                $student_id,
+                $_SESSION['sy'],
+                $_POST['']
+            ],
+            "iiss"
+        );
+    }
+
+    public function getEnrollees()
+    {
+        $result = $this->query(
+            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+                 ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+                 ."JOIN student AS s USING (stud_id) "
+                 ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
+        );
+        $enrollees = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $user_id = $row['stud_id'];
+            $enrollees[] = [
+                "SY"          => $row['SY'],
+                "LRN"         => $row['LRN'],
+                "name"        => $row['name'],
+                "enroll-date" => $row['date_of_enroll'],
+                "grade-level" => $row['enrolled_in'],
+                "curriculum"  => $row['curr_code'],
+                "status"      => $row['status'],
+                "action"      => "<div class='d-flex justify-content-center'>"
+                    . "<button class='btn btn-danger w-auto me-1 btn-sm' title='Archive Enrollee'>Archive</button>"
+                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left me-2'></i></a>"
+                    . "<a href='enrollment.php?id=$user_id' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
+                    . "</div>"
+            ];
+        }
+        return $enrollees;
+    }
+
+    public function listEnrolleesJSON()
+    {
+        echo json_encode($this->getEnrollees());
+    }
+
+
+    public function addStudent()
+    {
+        $user_id = $this->createUser("ST");
+        $params = [
+            $_POST['lrn'], $_POST[''], $_POST[''], $_POST[''], $_POST[''],
+            $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST[''], $_POST[''],
+            $_POST[''], $_POST['religion'], $_POST[''], $_POST[''], $_POST[''], $user_id
+        ];
+        $this->prepared_query(
+            "INSERT INTO student (LRN, last_name, first_name, middle_name, ext_name, "
+                 ."birthdate, sex, age, birth_place, indigenous_group, "
+                 ."mother_tongue, religion, cp_no, psa_birth_cert, id_picture, id_no) "
+                ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?);",
+            $params,
+            "issss" . "siiss" . "sssssi"
+        );
+        return mysqli_insert_id($this->db);
+    }
+
+//    public function editStudent()
+//    {
+//        $id = $_POST['id'];
+//        $params = [
+//            $_POST['lrn'], $_POST[''], $_POST[''], $_POST[''], $_POST[''],
+//            $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST[''], $_POST[''],
+//            $_POST[''], $_POST['religion'], $_POST[''], $_POST[''], $_POST['']
+//        ];
+//        $this->prepared_query(
+//            "UPDATE student SET LRN=?, last_name=?, first_name=?, middle_name=?, ext_name=?, "
+//                 ."birthdate=?, sex=?, age=?, birth_place=?, indigenous_group=?, "
+//                 ."mother_tongue=?, religion=?, cp_no=?, psa_birth_cert=?, id_picture=?;",
+//            $params,
+//            "issss" . "siiss" . "sssss"
+//        );
+//        header("Location: student.php?id=$id");
+//    }
+    public function deleteUser($type)
+    {
+        $id = $_POST['id'];
+
+//        $user_table =  "";
+//        $id_attribute = "";
+//        switch ($type) {
+//            case 'AD':
+//                $user_table = 'administrator';
+//                $id_attribute = 'admin_id';
+//                break;
+//            case 'FA':
+//                $user_table = 'faculty';
+//                $id_attribute = 'teacher_id';
+//                break;
+//            case 'ST':
+//                $user_table = 'student';
+//                $id_attribute = 'stud_id';
+//                break;
+//        }
+
+        $this->query("DELETE FROM user WHERE id_no='$id' AND user_type='$type';");
+    }
+
     public function listStudent()
     {
 
-        $query = "SELECT * from student AS s
-                  JOIN enrollment AS e ON e.stud_id = s.stud_id "
+        $query = "SELECT * from student AS s "
+                ."JOIN enrollment AS e ON e.stud_id = s.stud_id "
                 . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : ";");
         $result = mysqli_query($this->db, $query);
         $studentList = array();
@@ -1378,7 +1532,7 @@ class Administration extends Dbconfig
     {
         // Step 1
         $result = $this->prepared_select("SELECT * FROM student as s
-                                        JOIN `address` as a ON a.student_stud_id = s.stud_id 
+                                        JOIN `address` as a ON a.stud_id = s.stud_id 
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
@@ -1464,16 +1618,7 @@ class Administration extends Dbconfig
         return $departments;
     }
 
-    public function transferStudent(){
-        $sec_code = $_POST['code'];
-        $id = $_POST['stud_id'];
-        echo("from tranferStudent: admin");
-        echo ($sec_code);
-        echo ($id);
-        // $query = "UPDATE enrollment SET section_code='TVLE11' WHERE stud_id = $id";
-        // $param = [$code, $old_code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
-        // $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
-    }
+    
 
     /** Section Methods */
     public function listSubjectClasses($teacher_id = "")
@@ -1581,9 +1726,8 @@ class Administration extends Dbconfig
         $this->assignSubClasses(NULL);
     }
 
-    public function editStudent(){
-
-
+    public function editStudent()
+    {
         $statusMsg = array();
         $allowTypes = array('jpg', 'png', 'jpeg'); 
 
@@ -1619,7 +1763,7 @@ class Administration extends Dbconfig
 
         if ($f_firstname != NULL){
             $parent[trim($_POST['f_sex'])] = array(
-                'fname' => trim($_POST['f_lastname']),
+                'fname' => trim($_POST['f_firstname']),
                 'mname' => trim($_POST['f_middlename']) ?: NULL,
                 'lname' => trim($_POST['f_lastname']),
                 'extname' => trim($_POST['f_extensionname']) ?: NULL,
@@ -1631,7 +1775,7 @@ class Administration extends Dbconfig
 
         if ($m_firstname != NULL){
             $parent[trim($_POST['m_sex'])] = array(
-                'fname' => trim($_POST['m_lastname']),
+                'fname' => trim($_POST['m_firstname']),
                 'mname' => trim($_POST['m_middlename']) ?: NULL,
                 'lname' => trim($_POST['m_lastname']),
                 'sex' => trim($_POST['m_sex']),
@@ -1670,8 +1814,7 @@ class Administration extends Dbconfig
 
         //psa
         $psa_img = NULL;
-        $fileSize = $_FILES['image']['size'];
-
+        $fileSize = $_FILES['psaImage']['size'];
         if ($fileSize > 0) {
             if ($fileSize > 5242880) { //  file is greater than 5MB
                 $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
@@ -1721,37 +1864,25 @@ class Administration extends Dbconfig
         ];
         $address_types = "sssssii";
 
-        $query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
-        $this->prepared_query($query, $address_params, $address_types);
+        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
+        $this->prepared_query($address_query, $address_params, $address_types);
 
         foreach($parent as $parents){
              $parents_params= [
-                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
+                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
                  ];
              $parents_types = "sssssssi";
-              $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
-              $this->prepared_query($query, $parents_params, $parents_types);
+              $parents_query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
+              $this->prepared_query($parents_query, $parents_params, $parents_types);
          }
         
-         
-        // foreach($guardian as $guardians){
-        //     $guardian_params= [
-        //             $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['fname'], $stud_id
-        //         ];
-        //     $parents_types = "sssssii";
-        //     $query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?);";
-        //     $this->prepared_query($query, $parents_params, $parents_types);
-        // }
+        $guardian_params= [
+                $g_lastname, $g_middlename, $g_firstname, $g_cp_no , $relationship, $stud_id
+            ];
 
-        
-
-        // $parents_params[] = $id = $_POST['student_id'];
-        // $parents_types .= "i";
-
-        // $guardian_params[] = $id = $_POST['student_id'];
-        // $guardian_types .= "i";
-
-        
+        $guardian_types = "sssssi";
+        $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
+        $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
 
          header("Location: student.php?id=$stud_id");
     }

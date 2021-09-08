@@ -191,14 +191,14 @@ if ($action === 'edit') {
     }
 
     $button = "<input type='hidden' name='action' value='updateSubject'>"
-             ."<input class='btn btn-success form-control' style='width: 150px;' type='submit' value='Save'>";
+             ."<input class='btn btn-success form-control' style='width: 120px;' type='submit' value='Save'>";
 
     if ($subject_type === 'applied' ) {
         $sub_programs = $subject->get_programs();
 
-        $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>"
-                    ."<label class='col-sm-4'>Program Options</label>"
-                    ."<div id='program-con' class='col-sm-8 p-0'>";
+        $prog_opt = "<div id='app-spec-options' class='form-group row overflow-auto'>"
+                    ."<label class='col-sm-6'>Program Options</label>"
+                    ."<div id='program-con' class='col-sm-8'>";
         
         foreach ($programs as $program) {
             $prog_code = $program->get_prog_code();
@@ -227,7 +227,7 @@ if ($action === 'edit') {
         $title = "<h3>$sub_name</h3><hr><h6>$prog_name</h6>";
 
         $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>
-            <label class='col-sm-4'>Program Options</label>
+            <label class='col-sm-6'>Program Options</label>
             <div id='program-con' class='col-sm-8'>";
                 foreach ($programs as $program) {
                     $prog_code_data = $program->get_prog_code();
@@ -261,42 +261,42 @@ if ($action === 'edit') {
     <form id='add-subject-form' method='POST'>
         <?php echo $input_sub_with_prog; ?>
         <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
-            <h5 class='text-start p-0'>SUBJECT DETAILS</h5>
+            <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
             <div class='row p-0'>
                 <div class='form-row row'>
-                    <div class='form-group col-md-6'>
+                    <div class='form-group col-md-3'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
                         <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
                     </div>
-
-                    <div class='form-group col-md-6'>
+                    <div class='form-group col-md-4'>
                         <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
                         <?php echo $prog_opt; ?>
                     </div>
-                </div>
-                <div class='form-group row'>
-                    <div class='form-group col-md-12'>
-                        <label for='subjectName1' class='col-sm-3 col-form-label'>Name</label>
+                    <div class='form-group col-md-5'>
+                        <label for='subjectName1' class='  col-form-label'>Name</label>
                         <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
                     </div>
                 </div>
-                <div class='form-row row'>
-                    <div class='form-group col-md-6'>
-                        <label for='subjectSemester1' class='col-sm-3 col-form-label'>Semester</label>
+                <div class='form-group row'>
+                    <div class='form-group col-md-4'>
+                        <label for='subjectSemester1' class='  col-form-label'>Semester</label>
                         <select name='semester' class='form-select' id='semester'><?php echo $semester_opt; ?></select>
                     </div>
-                    <div class='form-group col-md-6'>
-                        <label for='grade-level' class='col-sm-3 col-form-label'>Grade Level</label>
+                    <div class='form-group col-md-3'>
+                        <label for='grade-level' class='  col-form-label'>Grade Level</label>
                         <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
                     </div>
+                </div>
+                <div class='form-row row'>
+
                 </div>
             </div>
         </div>
   
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
-            <h5 class='text-start mb-3'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
+            <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
             <div class='accordion' id='accordionPanelsStayOpenExample'>
                 <div class='accordion-item'>
                     <h2 class='accordion-header' id='panelsStayOpen-headingOne'>

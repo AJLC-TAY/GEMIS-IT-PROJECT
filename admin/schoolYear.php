@@ -15,14 +15,14 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row mt ps-3">
-                            <?php 
+                            <?php
                                 if (isset($_GET['action'])) {
                                     include_once("schoolYear/syForm.php");
                                 } else {

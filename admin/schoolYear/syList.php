@@ -10,7 +10,7 @@
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h3 class="fw-bold">School Year</h3>
          <span>
-            <a href="schoolyear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
+            <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
          </span>
      </div>
  </header>
