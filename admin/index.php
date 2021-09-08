@@ -1,6 +1,11 @@
-<?php include_once("../inc/head.html");
-    session_start();
-    $_SESSION['id'] = $user_id = 5;
+<?php
+include_once("../inc/head.html");
+session_start();
+$_SESSION['id'] = $user_id = 1;
+require_once("../class/Administration.php");
+$admin = new Administration();
+$admin_user = $admin->getProfile('AD');
+
 ?>
 <title>Home | GEMIS</title>
 </head>
@@ -14,7 +19,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -40,7 +45,7 @@
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
                                             <ul class="ms-4 list-style">
                                                 <li>
-                                                    <h4>Admin</h4>
+                                                    <h4><?php echo $admin_user['name']; ?></h4>
                                                 </li>
                                                 <li>School Year: 2023 - 2024 </li>
                                             </ul>

@@ -22,10 +22,14 @@ $user = $admin->getAdministrator();
  </header>
  <!-- HEADER END -->
 <div class="container mt-1">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5>Information</h5>
-        div.flex
-        <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+    <div class="row justify-content-between align-items-center mb-3">
+        <div class="col-auto">
+            <h5>Information</h5>
+        </div>
+        <div class="col-auto d-flex">
+            <button class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="confirmation-modal">Delete Account</button>
+            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        </div>
     </div>
     <div class="card w-100 h-auto bg-light">
         <div class="row">
@@ -33,7 +37,7 @@ $user = $admin->getAdministrator();
                 <h6>Personal</h6>
                 <p>ID: <?php echo $user['admin_id']; ?></p>
                 <p>Name: <?php echo "{$user['last_name']}, {$user['first_name']} {$user['middle_name']} {$user['ext_name']}"; ?></p>
-    <!--            <p>Age: --><?php //echo $user['age']; ?><!--</p>-->
+                <p>Age: <?php echo $user['age']; ?></p>
                 <p>Sex: <?php echo $user['sex']; ?></p>
             </div>
             <div class="col-md-5">

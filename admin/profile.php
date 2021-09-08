@@ -32,7 +32,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once("../inc/$userType/sidebar.php");?>
+        <?php include_once("../inc/$userType/sidebar.html");?>
         <!-- MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper"></section>

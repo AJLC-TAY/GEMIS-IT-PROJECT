@@ -27,6 +27,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
 if (isset($_GET['data']) && $_GET['data'] == 'section') {
     $admin->listSectionJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'enrollees') {
+    $admin->listEnrolleesJSON();
+}
 // if (isset($_GET['data']) && $_GET['data'] == 'sectionOption') {
 //     $admin->listSectionOptionJSON($_GET['teacher_id']);
 // }
