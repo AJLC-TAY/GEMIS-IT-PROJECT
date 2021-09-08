@@ -1,21 +1,28 @@
 <?php include_once("../inc/head.html"); ?>
-<title>Enrollees | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
+<title>Enrollment | GEMIS</title>
+<link rel="stylesheet" href="../css/general.css">
+</link>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 </head>
 
+
 <body>
-    <!-- SPINNER START -->
+    <?php include('../class/Administration.php');
+    $admin = new Administration();
+    ?>
+    <!-- SPINNER -->
     <div class="spinner-con">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
+
     <section id="container">
         <?php include_once('../inc/admin/sidebar.html'); ?>
-        <!-- MAIN CONTENT START -->
+        <!--main content start-->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-11">
                         <div class="row mt ps-3">
