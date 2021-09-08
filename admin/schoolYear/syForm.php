@@ -30,7 +30,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="schoolyear.php">School Year</a></li>
+            <li class="breadcrumb-item"><a href="schoolYear.php">School Year</a></li>
             <li class="breadcrumb-item active" aria-current="page">Initialize</li>
         </ol>
     </nav>
@@ -117,7 +117,7 @@
             <div class="form-group row mt-5">
                 <div class="d-flex justify-content-end">
                     <input type='hidden' name='action' value='initializeSY'>
-                    <a href='schoolyear.php' class='btn btn-dark me-2'>Cancel</a>
+                    <a href='schoolYear.php' class='btn btn-dark me-2'>Cancel</a>
                     <input type='submit' form='school-year-form' class='btn btn-success' value='<?php echo $button; ?>'>
                 </div>
             </div>

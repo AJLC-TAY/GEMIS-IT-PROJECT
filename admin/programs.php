@@ -1,7 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Program Page | GEMIS</title>
-<link rel="stylesheet" href="../css/general.css">
-</link>
 </head>
 
 <body>
@@ -18,7 +16,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/admin/sidebar.html'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">

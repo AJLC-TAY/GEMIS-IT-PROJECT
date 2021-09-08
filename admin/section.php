@@ -4,7 +4,7 @@
 </head>
 
 <body>
-    <!-- SPINNER -->
+    <!-- SPINNER START -->
     <div class="spinner-con">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -12,13 +12,13 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
-        <!--MAIN CONTENT -->
+        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <!-- MAIN CONTENT START -->
         <section id="main-content">
-            <section class="wrapper ps-4">
+            <section class="wrapper">
                 <div class="row">
                     <div class="col-lg-11">
-                        <div class="row ps-3">
+                        <div class="row mt ps-3">
                             <?php 
                                 $isViewPage = TRUE;
                                 if (isset($_GET["sec_code"])) {
