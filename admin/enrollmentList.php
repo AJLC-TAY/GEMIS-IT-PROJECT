@@ -17,7 +17,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -48,8 +48,7 @@
                                             <span class="flex-grow-1 me-3">
                                                 <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                             </span>
-                                            <div>
-                                                <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-danger btn-sm" title='Deactivate Faculty' value="Archive">
+                                                <button id = "subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
                                                 <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                             </div>
                                         </div>
