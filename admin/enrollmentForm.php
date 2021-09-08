@@ -92,7 +92,9 @@ if (is_null($guardian)) {
                             </div>
                         </nav>
                         <!-- Form -->
-                        <div class="container mt-4 me-1">
+
+                        <div class="tab-content py-4" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="step1">
                             <div class="card body w-100 h-auto">
                                 <form action="action.php" method="POST">
                                     <h4 class="fw-bold">STUDENT INFORMATION</h4>
@@ -225,6 +227,8 @@ if (is_null($guardian)) {
                                     </div>
                                 </form>
                             </div>
+                            </div>
+                            <div class="tab-pane fade" id="step2">
                             <div class="card w-100 h-auto mt-4">
                                 <form action="action.php" method="POST">
                                     <h4 class="fw-bold"> PARENT/GUARDIAN'S INFORMATION</h4>
@@ -316,6 +320,15 @@ if (is_null($guardian)) {
                                 </form>
 
                             </div>
+                            </div>
+                            <div class="tab-pane fade" id="step3">
+
+                            </div>
+                        </div>
+
+                        <div class="container mt-4 me-1">
+                            
+                            
                             <div class="row">
                                 <div class="mt-4 d-flex flex-row-reverse">
                                     <button type="button" class="btn btn-success me-2">Save</button>
