@@ -192,11 +192,11 @@ if (is_null($guardian)) {
                                                     <div class="d-flex">
                                                         <?php 
                                                         echo "<div class='form-check me-4'>
-                                                                        <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                                                        <input class='form-check-input' type='radio' name='group' id='yes' value='1' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                                                         <label class='form-check-label' for='yes'> Yes </label>
                                                                 </div>
                                                                 <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                                                                    <input class='form-check-input' type='radio' name='group' id='no' value='0' " . (($indigenous_group == NULL) ? "checked" : "") . ">
                                                                         <label class='form-check-label' for='yes'> No </label>
                                                                 </div>";
                                                         ?>
@@ -369,11 +369,11 @@ if (is_null($guardian)) {
                                             <div class="d-flex">
                                                 <?php 
                                                 echo "<div class='form-check me-4'>
-                                                                <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                                                <input class='form-check-input' type='radio' name='balik-aral' id='yes' value='1' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                                                 <label class='form-check-label' for='yes'> Yes </label>
                                                         </div>
                                                         <div class='form-check'>
-                                                            <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                                                            <input class='form-check-input' type='radio' name='balik-aral' id='no' value='0' " . (($indigenous_group == NULL) ? "checked" : "") . ">
                                                                 <label class='form-check-label' for='yes'> No </label>
                                                         </div>";
                                                 ?>

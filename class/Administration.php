@@ -2,14 +2,6 @@
 require('config.php');
 require('Dataclasses.php');
 
-//class EnrollStat
-//{
-//    const PENDING = 0;
-//    const ENROLLED = 1;
-//    const CANCELLED = 2;
-//}
-// EnrollStat::PENDING
-
 class Administration extends Dbconfig
 {
     protected $hostName;
@@ -93,15 +85,15 @@ class Administration extends Dbconfig
             "UPDATE administrator SET last_name=?, first_name=?, middle_name=?, ext_name=?, cp_no=?, sex=?, email=? "
             ."WHERE admin_id=?;"
             , [
-            $_POST['lastname'],
-            $_POST['firstname'],
-            $_POST['middlename'],
-            $_POST['extensionname'],
-            $_POST['cpnumber'],
-            $_POST['sex'],
-            $_POST['email'],
-            $id
-        ],
+                $_POST['lastname'],
+                $_POST['firstname'],
+                $_POST['middlename'],
+                $_POST['extensionname'],
+                $_POST['cpnumber'],
+                $_POST['sex'],
+                $_POST['email'],
+                $id
+            ],
             "sssssssi");
         header("Location: admin.php?id=$id");
     }
@@ -115,41 +107,29 @@ class Administration extends Dbconfig
                 ."age, cp_no, email, admin_user_no "
                 ."FROM administrator WHERE admin_id='$id';");
         $row = mysqli_fetch_assoc($result);
-        $last_name = $row['last_name'];
-        $first_name = $row['first_name'];
-        $middle_name = $row['middle_name'];
-        $ext_name = $row['middle_name'];
-        return [
-            "admin_id"          => $row['admin_id'],
-            "last_name"         => $last_name,
-            "first_name"        => $first_name,
-            "middle_name"       => $middle_name,
-            "ext_name"          => $ext_name,
-            "name"              => "$last_name, $first_name $ext_name",
-            "age"               => $row['age'],
-            "sex"               => $row['sex'],
-            "cp_no"             => $row['cp_no'],
-            "email"             => $row['email'],
-            "admin_user_no"     => $row['admin_user_no']
-        ];
+        return new Administrator(
+            $row['admin_id'],   $row['last_name'],
+            $row['first_name'], $row['middle_name'],
+            $row['ext_name'],   $row['age'],
+            $row['sex'],        $row['cp_no'],
+            $row['email'],      $row['admin_user_no']
+        );
     }
 
     public function listAdministrators()
     {
         session_start();
-        $result = $this->query("SELECT admin_id, CONCAT(last_name,', ', first_name,' ', middle_name,' ', COALESCE(ext_name, '')) as full_name, "
+        $result = $this->query("SELECT admin_id, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $admin_id = $row['admin_id'];
-            $administrators[] = [
-                "admin_id"  => $admin_id,
-                "full_name" => $row['full_name'],
-                "age"       => $row['age'],
-                "sex"       => $row['sex'],
-                "cp_no"     => $row['cp_no'],
-                "email"     => $row['email']
-            ];
+            $administrators[] = new Administrator(
+                $row['admin_id'],   $row['last_name'],
+                $row['first_name'], $row['middle_name'],
+                $row['ext_name'],   $row['age'],
+                $row['sex'],        $row['cp_no'],
+                $row['email']
+            );
         }
         return $administrators;
     }
@@ -1409,8 +1389,8 @@ class Administration extends Dbconfig
         $school_info = [$_POST['semester'], $_POST['track'],  $_POST['program']];
         [$semester, $track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
-            "INSERT INTO enrollment (date_of_enroll, date_first_attended, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, section_code) "
-                ."VALUES (NOW(), NOW(), 0, ?, ?, ?, ?, 'ABM12');",  // null for date_first_attended, and section code
+            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code) "
+                ."VALUES (NOW(), 0, ?, ?, ?, ?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
@@ -1420,13 +1400,6 @@ class Administration extends Dbconfig
             "iiss"
         );
         echo "Add School info ended...<br>";
-
-        echo "Save Images starting...<br>";
-
-        // store uploaded document images
-        $this->saveImage($student_id, 'image-form', '../student_assets', '137');
-        $this->saveImage($student_id, 'image-psa', '../student_assets', 'psa');
-        echo "Images saved!<br>";
     }
 
     public function getEnrollees()
@@ -1466,6 +1439,7 @@ class Administration extends Dbconfig
     public function validateImage($file, $file_size)
     {
         echo "<br>Start validating image ... <br>";
+        // default values
         $status = 'invalid';
         $statusInfo = [];
         $this_file_size = $file['size'];
@@ -1547,7 +1521,7 @@ class Administration extends Dbconfig
         $params = [
             $_POST['lrn'], $_POST['last-name'], $_POST['first-name'], $_POST['middle-name'], $_POST['ext-name'],
             $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST['birth-place'], $_POST['group-name'],
-            $_POST['mother-tongue'], $_POST['religion'], $_POST['cp-no'], $_POST['psa']
+            $_POST['mother-tongue'], $_POST['religion'], $_POST['cp-no'], $_POST['psa'], $_POST['group']
         ];
 
         $address = [
@@ -1563,7 +1537,7 @@ class Administration extends Dbconfig
             }
             $parent[] =  $_POST["{$type}-contactnumber"];
 
-            if ($type === 'g') {
+            if ($type === 'g') { // if guardian, add relationship else occupation of parent
                 $parent[] = $_POST["{$type}-relationship"];
             } else {
                 $parent[] =  $type;
@@ -1580,13 +1554,16 @@ class Administration extends Dbconfig
         $address = $this->preprocessData($address);
 
         // Image validation
+        $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
+        $form_img = $this->validateImage($_FILES['image-form'], 8000000);
         $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
-        // add image to the parameters if valid
-        if ($profile_img['status'] == 'valid') {
-            $params[] = $profile_img['image'];
-        }
 
-        $params[] = 0; // IPCC
+        foreach([$psa_img, $form_img, $profile_img] as $image) {
+            // add image to the parameters if valid
+            if ($image['status'] == 'valid') {
+                $params[] = $image['image'];
+            }
+        }
 
         // Values are valid; hence, create a user and add the created user id to the parameter
         $user_id = $this->createUser("ST");
@@ -1596,11 +1573,11 @@ class Administration extends Dbconfig
         $this->prepared_query(
             "INSERT INTO student (LRN, last_name, first_name, middle_name, ext_name, "
                  ."birthdate, sex, age, birth_place, indigenous_group, "
-                 ."mother_tongue, religion, cp_no, psa_birth_cert, id_picture, "
-                 ."belong_to_IPCC, id_no) "
-                ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?);",
+                 ."mother_tongue, religion, cp_no, psa_num, belong_to_IPCC, "
+                 ."psa_birth_cert, form_137, id_picture, id_no) "
+                ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?, ?, ?);",
             $params,
-            "sssss" . "ssiss" . "sssss" . "ii"
+            "sssss" . "ssiss" . "ssssi" . "sssi"
         );
 
         echo "Student info added. <br>";
@@ -1611,8 +1588,9 @@ class Administration extends Dbconfig
         $guardian[] = $student_id;
 
         // insert parent info
-        $f_query = "INSERT INTO parent (last_name, first_name, middle_name, ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-        $m_query = "INSERT INTO parent (last_name, first_name, middle_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $general_q = "INSERT INTO parent (last_name, first_name, middle_name,";
+        $f_query = "$general_q ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        $m_query = "$general_q cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
         $g_query = "INSERT INTO guardian (guardian_last_name, guardian_first_name, guardian_middle_name, cp_no, relationship, stud_id) VALUES (?, ?, ?, ?, ?, ?);";
         $this->prepared_query($f_query, $father, "sssssssi");
         $this->prepared_query($m_query, $mother, "ssssssi");
