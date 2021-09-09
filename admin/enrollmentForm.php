@@ -59,8 +59,7 @@ if (is_null($guardian)) {
 }
 ?>
 <title>Enrollment Page | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
 <body>
