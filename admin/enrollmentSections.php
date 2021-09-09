@@ -24,7 +24,7 @@ $school_year = 12;
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
