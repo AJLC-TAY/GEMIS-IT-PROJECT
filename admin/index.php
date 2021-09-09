@@ -2,6 +2,7 @@
 include_once("../inc/head.html");
 session_start();
 $_SESSION['id'] = $user_id = 1;
+$_SESSION['sy'] = '2021-2022';
 require_once("../class/Administration.php");
 $admin = new Administration();
 $admin_user = $admin->getProfile('AD');

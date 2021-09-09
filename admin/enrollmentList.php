@@ -32,8 +32,8 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <h3 class="fw-bold">Enrollees</h3>
                                     <div>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
-                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Enroll</a>
+                                        <button type="button" class="view-archive btn btn-secondary btn-sm"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
+                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success btn-sm" title='Enroll a student'><i class="bi bi-plus me-2"></i>Enroll</a>
                                         <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
                                 <div class="card w-100 h-auto bg-light">
                                     <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark'>
-                                        <div class="d-flex justify-content-between mb-3">
+                                        <div class="row justify-content-between mb-3">
                                             <!-- SEARCH BAR -->
                                             <span class="flex-grow-1 me-3">
                                                 <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
