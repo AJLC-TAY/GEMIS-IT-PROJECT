@@ -1,7 +1,13 @@
-<?php include_once("../inc/head.html"); ?>
+<?php
+require ("../inc/head.html");
+require ("../class/Administration.php");
+//$admin = new Administration();
+//$sections = $admin->listSection();
+$school_year = 12;
+?>
+
 <title>Enrollment Setup 1 | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
 <body>
@@ -18,7 +24,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-11">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -51,15 +57,18 @@
 
                                             <tr>
                                                 <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="sub_name">Faculty Name</th>
-                                                <th scope='col' data-width="100" data-align="center" data-field="sub_type">Can Enroll</th>
+                                                <th scope='col' data-width="200" data-align="left" data-field="teacher_id">FID</th>
+                                                <th scope='col' data-width="500" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="300" data-align="center" data-field="can-enroll">Can Enroll</th>
                                             </tr>
                                         </thead>
                                     </table>
+                                    <div class="row justify-content-end mt-3">
+                                        <div class="col-auto">
+                                            <button class="btn btn-primary d-inline-flex">Next</button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mt-3">
-                                <button class="btn btn-primary" title=''>Next</button>
                             </div>
                         </div>
                     </div>
@@ -71,13 +80,23 @@
             </section>
         </section>
     </section>
-
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
  
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-    
+    <!-- CUSTOM JS -->
     <script type='text/javascript' src="../js/common-custom.js"></script>
-    <script type="module" src="../js/admin/enrollmentFacultyPriv.js"></script>
+    <script type="text/javascript" src="../js/admin/enroll-faculty-priv.js"></script>
+<!--    <script>-->
+<!--        function togglePrivilege (teacherID) {-->
+<!--            console.log($(this).hasClass("can-edit-btn"))-->
+<!--            console.log(teacherID)-->
+<!--        }-->
+<!--    </script>-->
 </body>
 </html>

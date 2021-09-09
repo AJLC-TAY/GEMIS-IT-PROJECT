@@ -2,6 +2,14 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
+/******** TEST ********/
+if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
+    echo "image";
+//    print_r($admin->validateImage('image', 5000000));
+    Administration::saveImage("2194014", 'image', "../student_assets", 'psa');
+}
+
+
 /******** ADMINISTRATOR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
     $admin->addAdministrator();
@@ -20,6 +28,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSY') {
 }
 if (isset($_POST['action']) && $_POST['action'] === 'editEnrollStatus') {
     $admin->editEnrollStatus();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'enroll') {
+    $admin->enroll();
 }
 
 /******** USER ********/
@@ -150,6 +162,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
 
 if (isset($_POST['action']) && $_POST['action'] === 'advisoryChange') {
     $admin->changeAdvisory();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'changeEnrollPriv') {
+    $admin->changeEnrollPriv();
 }
 
 /******** SECTION ********/
