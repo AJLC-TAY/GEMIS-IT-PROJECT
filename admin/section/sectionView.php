@@ -38,8 +38,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     <div class="d-flex justify-content-between">
         <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
         <span>
-            <button type="button" class="btn btn-secondary me-1">Archive Section</button>
-            <button class="btn btn-dark" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+            <button type="button" class="btn btn-secondary me-1"><i class="bi bi-archive me-2"></i>Archive Section</button>
+            <button class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
         </span>
     </div>
     <hr class="my-2">
@@ -50,7 +50,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container">
     <div class='card'>
         <div class="d-flex justify-content-between">
-            <h4>Information</h4>
+            <h5>Information</h5>
             <div class="btn-con my-a">
                 <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class='edit-opt <?php echo $display; ?>'>
@@ -65,19 +65,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                 <div class="ps-3 row w-100">
                     <div class="col-md-5">
                         <div class="row">
-                            <label for="code" class="col-sm-4 text-secondary">Code</label>
+                            <label for="code" class="col-sm-4 text-secondary fw-bold">Code</label>
                             <div class="col-sm-8">
                                 <p id="code"><?php echo $sect_code; ?></p>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="grd-level" class="col-sm-4 text-secondary">Grade Level</label>
+                            <label for="grd-level" class="col-sm-4 text-secondary fw-bold">Grade Level</label>
                             <div class="col-sm-8">
                                 <p id="grd-level"><?php echo $sect_grd_level; ?></p>
                             </div>
                         </div>
                         <div class="row">
-                            <label for="no-of-stud" class="col-sm-4 text-secondary">No of Students</label>
+                            <label for="no-of-stud" class="col-sm-4 text-secondary fw-bold">No of Students</label>
                             <div class="col-sm-8">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p id="no-of-stud" class="m-0"><?php echo $sect_stud_no; ?></p>
@@ -87,13 +87,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                     </div>
                     <div class="col-md-7">
                         <div class="row">
-                            <label for="sect-max-no" class="col-sm-4 text-secondary">Max Student No.</label>
+                            <label for="sect-max-no" class="col-sm-4 text-secondary fw-bold">Max Student No.</label>
                             <div class="col-sm-8">
                                 <input class="form-control" name="max-no" id="sect-max-no" value="<?php echo $sect_max_no; ?>" <?php echo $state; ?> />
                             </div>
                         </div>
                         <div class="row">
-                            <label for="adviser" class="col-sm-4 text-secondary">Class Adviser</label>
+                            <label for="adviser" class="col-sm-4 text-secondary fw-bold">Class Adviser</label>
                             <div class="col-sm-8">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p id='adviser' class='m-0'>
@@ -147,9 +147,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h5 class='m-0'>Student List</h5>
+            <h6 class='m-0 fw-bold'>Student List</h6>
         </span>
-        <span><button class="btn btn-success btn-sm">Add Student</button></span>
+        <span><button class="btn btn-success btn-sm"><i class="bi bi-plus me-2"></i>Add Student</button></span>
     </div>
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">
@@ -160,14 +160,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <button id="transfer-btn" class="btn btn-secondary btn-sm" title='Transfer student to another section'>Transfer student</button>
+                        <button id="transfer-btn" class="btn btn-secondary btn-sm" title='Transfer student to another section'><i class="bi bi-arrow-left-right me-2"></i>Transfer student</button>
                     </div>
                 </div>
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="100" data-align="left" data-field="lrn">LRN</th>
-                    <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                    <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                    <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
+                    <th scope='col' data-width="500" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                    <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
         </table>
@@ -178,7 +178,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h5 class='m-0'>Subject Checklist</h5>
+            <h6 class='m-0 fw-bold'>Subject Checklist</h6>
         </span>
         <!-- <span><button class="btn btn-success btn-sm">Add Student</button></span> -->
     </div>

@@ -1399,8 +1399,8 @@ class Administration extends Dbconfig
                 "curriculum"  => $row['curr_code'],
                 "status"      => $row['status'],
                 "action"      => "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-danger w-auto me-1 btn-sm' title='Archive Enrollee'>Archive</button>"
-                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left me-2'></i></a>"
+                    . "<button class='btn btn-secondary w-auto me-1 btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
+                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left'></i></a>"
                     . "<a href='enrollment.php?id=$user_id' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
                     . "</div>"
             ];

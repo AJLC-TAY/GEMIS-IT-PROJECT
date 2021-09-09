@@ -70,7 +70,7 @@ if (is_null($guardian)) {
         <section id="main-content">
             <section class="wrapper"></section>
             <div class="row">
-                <div class="col-lg-11">
+                <div class="col-lg-12">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
