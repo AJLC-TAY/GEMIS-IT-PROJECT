@@ -26,7 +26,7 @@ function togglePrivilege (teacherID, canEnroll) {
     formData.append('teacher-id', teacherID)
     formData.append('action', 'changeEnrollPriv' )
     formData.append('can-enroll', canEnroll)
-    msg = "Faculty can " + (canEnroll ? "now" : "no longer") + " enroll students"
+    msg = "Faculty can " + (canEnroll == 1 ? "now" : "no longer") + " enroll students"
     $.ajax({
         url:    "action.php",
         method: "POST",
@@ -34,13 +34,14 @@ function togglePrivilege (teacherID, canEnroll) {
         processData: false,
         contentType: false,
         success: () => {
-            facultyTable.bootstrapTable('refresh')
+            setTimeout(function () {
+                facultyTable.bootstrapTable('refresh')
+                facultyTable.bootstrapTable("hideLoading")
+            }, 500)
             showToast("success", msg)
         }
     })
-    setTimeout(function () {
-        facultyTable.bootstrapTable("hideLoading")
-    }, 3000)
+
 
 }
 

@@ -80,6 +80,11 @@ $school_year = 12;
             </section>
         </section>
     </section>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
  
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
