@@ -192,7 +192,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
     // $admin->transferStudent();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
-    echo('from action:update');
+    // echo('from action:update');
     $admin->editStudent();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'archiveStudent') {
