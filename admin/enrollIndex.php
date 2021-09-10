@@ -1,13 +1,10 @@
-<?php include_once("../inc/head.html"); 
-    session_start();
-?>
-<title>School Year | GEMIS</title>
+<?php include_once("../inc/head.html"); ?>
+<title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
 </head>
 
 <body>
-    <!-- SPINNER -->
+    <!-- SPINNER START -->
     <div class="spinner-con">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -23,20 +20,32 @@
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <?php
-                                if (isset($_GET['action'])) {
-                                    include_once("schoolYear/syForm.php");
-                                } else {
-                                    include_once("schoolYear/syList.php");
+                            $js = '';
+                            if (isset($_GET['page'])) {
+                                if ($_GET['page'] === 'enrollees') {
+                                    require("enrollment/enrollmentList.php");
+                                    $js = "<script type='module' src='../js/admin/enrollment-list.js'></script>";
                                 }
+
+                                if ($_GET['page'] === 'setup') {
+                                    require("enrollment/setup.php");
+                                }
+
+                                if ($_GET['page'] === 'form') {
+                                    require("enrollment/stepForm.php");
+                                }
+                            } else {
+                                require("enrollment/enrollment.php");
+                            }
                             ?>
                         </div>
                     </div>
                 </div>
-                <!--MAIN CONTENT END-->
-                <!--FOOTER START-->
-                <?php include_once("../inc/footer.html"); ?>
-                <!--FOOTER END-->
             </section>
+            <!-- MAIN CONTENT END-->
+            <!-- FOOTER -->
+            <?php include_once("../inc/footer.html"); ?>
+            <!-- FOOTER END -->
         </section>
     </section>
     <!-- TOAST -->
@@ -44,10 +53,12 @@
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script type="module" src="../js/admin/school-year.js"></script>
+    <?php echo $js; ?>
 </body>
+
 </html>

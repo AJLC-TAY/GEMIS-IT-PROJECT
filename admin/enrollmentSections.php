@@ -24,7 +24,7 @@ $school_year = 12;
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -44,15 +44,30 @@ $school_year = 12;
                                 <div class="card w-100 h-auto bg-light">
                                     <table id="table" class="table-striped">
                                         <thead class='thead-dark'>
-                                            <div class="d-flex justify-content-between mb-3">
+                                            <div class="row justify-content-between mb-3">
                                                 <!-- SEARCH BAR -->
-                                                <span class="flex-grow-1 me-5"> 
-                                                    <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                                </span>
-                                                <div>
-                                                    <button class="btn btn-secondary" title=''>Grant Enrollment Access</button>
+                                                <div class="col-md-7 d-flex">
+                                                    <form>
+                                                        <input id="search-input" type="search" class="form-control mb-0 me-2" placeholder="Search something here ...">
+                                                        <div class="d-flex">
+                                                            <input type="reset" class="form-control mb-0 me-1 btn-dark" value="Clear"/>
+                                                            <div class="dropdown">
+                                                                <button class="btn shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Filter
+                                                                </button>
+                                                                <ul class="dropdown-menu" aria-labelledby="section-filter">
+                                                                    <li><a id="all" class="filter-item dropdown-item active">All</a></li>
+                                                                    <li><a id="can-enroll" class="filter-item dropdown-item">Can enroll</a></li>
+                                                                    <li><a id="cant-enroll" class="filter-item dropdown-item">Cannot enroll</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                                
+                                                <div class="col-md-5 d-flex justify-content-end">
+                                                    <button id="rm-enroll-priv" class="enroll-priv-btn btn btn-secondary btn-sm me-1" title=''>Remove enrollment access</button>
+                                                    <button id="enroll-priv" class="enroll-priv-btn btn btn-primary btn-sm" title=''>Grant enrollment access</button>
+                                                </div>
                                             </div>
 
                                             <tr>

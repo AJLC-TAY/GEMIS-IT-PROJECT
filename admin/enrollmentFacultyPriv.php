@@ -1,7 +1,6 @@
 <?php include_once("../inc/head.html"); ?>
 <title>Enrollment Setup 1 | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
 <body>
@@ -18,7 +17,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -51,8 +50,8 @@
 
                                             <tr>
                                                 <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="sub_name">Faculty Name</th>
-                                                <th scope='col' data-width="100" data-align="center" data-field="sub_type">Can Enroll</th>
+                                                <th scope='col' data-width="600" data-align="left" data-sortable="true" data-field="name">Faculty Name</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="can-enroll">Can Enroll</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -78,6 +77,6 @@
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     
     <script type='text/javascript' src="../js/common-custom.js"></script>
-    <script type="module" src="../js/admin/enrollmentFacultyPriv.js"></script>
+    <script type="text/javascript" src="../js/admin/enrollmentFacultyPriv.js"></script>
 </body>
 </html>

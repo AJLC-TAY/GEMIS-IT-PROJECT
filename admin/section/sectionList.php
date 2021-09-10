@@ -9,7 +9,7 @@
     </nav>
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Section</h3>
-        <button id="add-btn" class="btn btn-success" title='Add section'>Add Section</button>
+        <button id="add-btn" class="btn btn-success" title='Add section'><i class="bi bi-plus me-2"></i>Add Section</button>
     </div>
 </header>
 <!-- HEADER END -->
@@ -24,8 +24,8 @@
                         <input id="search-input" type="search" class="form-control m-0" placeholder="Search something here">
                     </span>
                     <div class="button-con my-auto">
-                        <button class="btn btn-danger btn-sm">Archive</button>
-                        <button class="btn btn-dark btn-sm">Export</button>
+                        <button class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
+                        <button class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                     </div>
                 </div>
                 <tr>
@@ -51,7 +51,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">Add New Section</h4>
+                        <h4 class="mb-0 fw-bold">Add New Section</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -88,7 +88,7 @@
                                 <div class="form-row row">
                                     <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
                                     <div class="col-lg-8">
-                                        <textarea id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></textarea>
+                                        <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
                                     </div>
                                 </div>
                                 <div class="form-row row">
@@ -135,9 +135,9 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" id="action" value="addSection" />
-                    <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Close</button>
-                    <button class="submit-another btn btn-secondary">Submit and add again</button>
-                    <input type="submit" form="section-form" class="submit btn btn-success" value="Submit" />
+                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button class="submit-another btn btn-secondary btn-sm">Submit and add again</button>
+                    <input type="submit" form="section-form" class="submit btn btn-success btn-sm" value="Submit" />
                 </div>
             </div>
         </form>

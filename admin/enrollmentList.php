@@ -17,7 +17,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -45,11 +45,11 @@
                                         <thead class='thead-dark'>
                                         <div class="row justify-content-between mb-3">
                                             <!-- SEARCH BAR -->
-                                            <div class="col-md-9">
-                                                <input id="search-input" type="search" class="form-control m-0 form-control-sm" placeholder="Search something here">
-                                            </div>
-                                            <div class="col-md-3 d-flex justify-content-end">
-                                                <button id = "subject-archive-btn" class="btn btn-secondary btn-sm me-1"><i class="bi bi-archive me-2"></i>Archive</button>
+                                            <span class="flex-grow-1 me-3">
+                                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                            </span>
+                                            <div>
+                                                <button id = "subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
                                                 <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                             </div>
                                         </div>
@@ -57,18 +57,19 @@
                                         <tr>
                                             <th data-checkbox="true"></th>
                                             <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
-                                            <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="false" data-field="LRN">LRN</th>
-                                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
+                                            <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="false" data-field="LRN">LRN</th>
+                                            <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
+                                            <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
+                                            <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
+                                            <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                                            <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
                                             <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
                             </div>
+                            <!-- ENROLLMENT TABLE END-->
                         </div>
                     </div>
                 </div>
