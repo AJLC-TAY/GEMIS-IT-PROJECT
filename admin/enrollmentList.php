@@ -69,6 +69,7 @@
                                     </table>
                                 </div>
                             </div>
+                            <!-- ENROLLMENT TABLE END-->
                         </div>
                     </div>
                 </div>

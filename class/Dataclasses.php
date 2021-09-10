@@ -11,8 +11,8 @@ class Administrator implements JsonSerializable
         $this->middle_name = $middle_name;
         $this->ext_name = $ext_name;
         $this->full_name = "$last_name, $first_name $middle_name $ext_name";
-        $this->sex = $sex;
-        $this->age = $age;
+        $this->sex = $age;
+        $this->age = $sex;
         $this->cp_no = $cp_no;
         $this->email = $email;
         $this->admin_user_id = $admin_user_id;

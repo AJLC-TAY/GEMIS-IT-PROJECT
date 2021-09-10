@@ -931,7 +931,8 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $can_enroll_display = "";
             $cant_enroll_disp = "d-none";
-            if ($row['enable_enroll'] == 0) {
+            $enable_enroll = $row['enable_enroll'];
+            if ($enable_enroll == 0) {
                 $can_enroll_display = "d-none";
                 $cant_enroll_disp = "";
             }
@@ -945,6 +946,7 @@ class Administration extends Dbconfig
             $faculty_list[] = [
                 'teacher_id' => $teacher_id,
                 'name'       => $row['name'],
+                'status'     => $enable_enroll,
                 'can-enroll' => $action
             ];
         }
@@ -1224,7 +1226,10 @@ class Administration extends Dbconfig
 
     public function changeEnrollPriv()
     {
-        $this->query("UPDATE faculty SET enable_enroll='{$_POST['can-enroll']}' WHERE teacher_id='{$_POST['teacher-id']}';");
+        $teacher_id_list = $_POST['teacher-id'];
+        foreach($teacher_id_list as $teacher_id) {
+            $this->query("UPDATE faculty SET enable_enroll='{$_POST['can-enroll']}' WHERE teacher_id='$teacher_id';");
+        }
     }
 
     /**
