@@ -25,15 +25,14 @@ if ($action == 'add') {
     // Get and prepare faculty information
     $admin_user = $admin->getAdministrator();
     $id_header = "<h5 class='mb-3'>ID: {$_GET['id']}</h5>";
-    $last_name = $admin_user['last_name'];
-    $first_name = $admin_user['first_name'];
-    $middle_name = $admin_user['middle_name'];
-    $ext_name = $admin_user['ext_name'];
-    $cp_no = $admin_user['cp_no'];
-    $email = $admin_user['email'];
-    $age = '';
-//        $age = $admin_user['age'];
-    $sex = $admin_user['sex'];
+    $last_name = $admin_user->last_name;
+    $first_name = $admin_user->first_name;
+    $middle_name = $admin_user->middle_name;
+    $ext_name = $admin_user->ext_name;
+    $cp_no = $admin_user->cp_no;
+    $email = $admin_user->email;
+    $age = $admin_user->age;
+    $sex = $admin_user->sex;
     $button = "Save";
 }
 ?>

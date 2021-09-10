@@ -77,7 +77,7 @@ if (is_null($guardian)) {
     <section id="main-content">
         <section class="wrapper">
             <div class="row">
-                <div class="col-lg-11">
+                <div class="col-lg-12">
                     <div class="row mt ps-3">
                         <form id="enrollment-form" enctype="multipart/form-data" action="action.php" method="POST">
                             <div id="stepper" class="bs-stepper">
