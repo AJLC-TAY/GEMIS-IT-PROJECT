@@ -409,7 +409,7 @@ class Administration extends Dbconfig
                 $this->listCurriculumJSON();
             }
         } else {
-            die('Error: '.mysqli_error());
+            die('Error: '.mysqli_error($this->db));
         }
     }
 
@@ -1382,6 +1382,8 @@ class Administration extends Dbconfig
 
     /** Faculty End */
 
+    /** Enrollment Methods */
+
     public function enroll()
     {
         echo "Add student starting...<br>";
@@ -1441,6 +1443,12 @@ class Administration extends Dbconfig
         echo json_encode($this->getEnrollees());
     }
 
+
+    public function getEnrollmentReportData()
+    {
+        $school_year = 5;
+        $result = $this->query("SELECT prog_code, valid_stud_data, COUNT(stud_id) AS 'Number of Students' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+    }
     public function validateImage($file, $file_size)
     {
         echo "<br>Start validating image ... <br>";
