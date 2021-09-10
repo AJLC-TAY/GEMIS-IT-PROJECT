@@ -59,7 +59,7 @@ if (is_null($guardian)) {
     $guardian_relationship = $guardian['relationship'];
 }
 ?>
-<title>Step Sample | GEMIS</title>
+<title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
