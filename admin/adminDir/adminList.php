@@ -1,8 +1,8 @@
 <?php
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$user_id = $_SESSION['id'];
-$user = $admin->getAdministrator();
+$user_id = $_SESSION['id'] = 2;
+$user = $admin->getAdministrator($user_id);
 ?>
 <!-- HEADER -->
  <header>

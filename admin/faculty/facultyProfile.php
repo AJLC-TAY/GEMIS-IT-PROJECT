@@ -104,11 +104,6 @@ $display_style = STYLE_DISPLAY_NONE;
                                         $deptExist = FALSE;
                                         $department = 'No department set';
                                     }
-
-                                    // foreach($departments as $department) {
-                                    //     // echo "<button class='btn btn-outline-secondary btn-sm rounded-pill w-auto'>$department</button>";
-                                    //     echo "<div class='rounded-pill border border-secondary d-inline-block me-1'><span class='mx-3'>$department</span></div>";
-                                    // }
                                     ?>
                                     <form id='dept-form'>
                                         <input type='hidden' name='teacher_id' value='<?php echo $current_teacher_id; ?>'>
