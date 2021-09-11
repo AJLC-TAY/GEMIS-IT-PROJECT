@@ -378,6 +378,34 @@ if (is_null($guardian)) {
                                                         </div>";
                                                 ?>
                                             </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <label for="last-gradelevel" class="col-form-label">Last Grade Level Completed</label>
+                                                    <input id="last-gradelevel" class="form-control" name="last-gradelevel" type="number"  value="">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="last-schoolyear" class="col-form-label">Last School Year Completed</label>
+                                                    <input id="last-schoolyear" class="form-control" name="last-schoolyear" type="number"  value="">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="general-average" class="col-form-label">General Average</label>
+                                                    <input id="general-average" class="form-control" name="general-average" type="number"  value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-9">
+                                                    <label for="school-name" class="col-form-label">School Name</label>
+                                                    <input id="school-name" class="form-control" name="school-name" type="text"  value="">
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="id-number" class="col-form-label">School ID Number</label>
+                                                    <input id="id-number" class="form-control" name="id-number" type="number"  value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                    <label for="school-address" class="col-form-label">School Address</label>
+                                                    <input id="school-address" class="form-control" name="school-address" type="text"  value="">
+                                                </div>
                                             <div class='form-group col-md-5 d-flex flex-column'>
                                                 <label for='photo' class='form-label'>Student ID Photo</label>
                                                 <input id='upload' class='form-control form-control-sm' id='photo' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
@@ -460,31 +488,21 @@ if (is_null($guardian)) {
 <!-- BOOTSTRAP TABLE JS -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<!--CUSTOM JS-->
-<script src="../js/common-custom.js"></script>
+<!-- VALIDATION -->
 <script>
-    preload("#faculty")
+    var forms = document.querySelectorAll('.needs-validation');
 
-    var stepper = new Stepper($('#stepper')[0])
-    $(function() {
-        // var stepper = new Stepper($('.bs-stepper')[0])
-        //
-        // $("[form=enrollment-form]").click(() => $('#enrollment-form').submit())
-        //
-        // $('#enrollment-form').submit( function (e) {
-        //     e.preventDefault()
-        //     let formData = new FormData($(this)[0]);
-        //     $.ajax({
-        //         url: "action.php",
-        //         data: formData,
-        //         success: function (data) {
-        //             console.log(data);
-        //         }
-        //     });
-        // })
-        hideSpinner()
-    })
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
 </script>
-
+<script type="text/javascript" src="../js/admin/subject.js"></script>
 
 </html>

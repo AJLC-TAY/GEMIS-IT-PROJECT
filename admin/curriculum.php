@@ -75,17 +75,23 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                     <hr class='mt-2 mb-4'>
                                     <section class="w-100">
                                         <div class="ps-3 row w-100">
-                                            <form id='curriculum-form' action="action.php" method="POST">
+                                            <form id='curriculum-form' class="needs-validation" action="action.php" method="POST" novalidate>
                                                 <div class="form-group row">
                                                     <div class="col-sm-3"><label class="my-auto">Code</label></div>
                                                     <div class="col-sm-9">
                                                         <input type="hidden" name="action" value="updateCurriculum">
                                                         <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                                                        <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>"; ?>
+                                                        <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>
+                                                                    <div class='invalid-input'>
+                                                                        Please enter curriculum code
+                                                                    </div>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Name</label>
                                                     <div class="col-sm-9">
-                                                        <?php echo "<input class='form-input form-control ' type='text' name='name' value='$curr_name' $edit required>"; ?>
+                                                        <?php echo "<input class='form-input form-control ' type='text' name='name' value='$curr_name' $edit required>
+                                                                    <div class='invalid-input'>
+                                                                        Please entercurriculum name
+                                                                    </div>"; ?>
                                                     </div>
                                                     <label class="col-sm-3">Description</label>
                                                     <div class="col-sm-9">
@@ -166,12 +172,18 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                     </div>
                     <div class="modal-body">
                         <form id="prog-form" action="">
-                            <div class="form-group">
+                            <div class="form-group needs-validation" novalidate>
                                 <label for="prog-code">Strand Code</label>
                                 <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
+                                <div class="invalid-input">
+                                    Please enter a unique code
+                                </div>
                                 <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
                                 <label for="prog-name">Strand Name</label>
                                 <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                                <div class="invalid-input">
+                                    Please enter description
+                                </div>
                                 <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                                 <label for="prog-curr">Curriculum</label>
                                 <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
@@ -202,5 +214,24 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     <script type="text/javascript" src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/curriculum.js"></script>
 </body>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
+
+<!-- JQUERY FOR BOOTSTRAP TABLE -->
+<script src="../assets/js/bootstrap-table.min.js"></script>
+<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 
 </html>
