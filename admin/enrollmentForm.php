@@ -488,31 +488,21 @@ if (is_null($guardian)) {
 <!-- BOOTSTRAP TABLE JS -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<!--CUSTOM JS-->
-<script src="../js/common-custom.js"></script>
+<!-- VALIDATION -->
 <script>
-    preload("#faculty")
+    var forms = document.querySelectorAll('.needs-validation');
 
-    var stepper = new Stepper($('#stepper')[0])
-    $(function() {
-        // var stepper = new Stepper($('.bs-stepper')[0])
-        //
-        // $("[form=enrollment-form]").click(() => $('#enrollment-form').submit())
-        //
-        // $('#enrollment-form').submit( function (e) {
-        //     e.preventDefault()
-        //     let formData = new FormData($(this)[0]);
-        //     $.ajax({
-        //         url: "action.php",
-        //         data: formData,
-        //         success: function (data) {
-        //             console.log(data);
-        //         }
-        //     });
-        // })
-        hideSpinner()
-    })
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
 </script>
-
+<script type="text/javascript" src="../js/admin/subject.js"></script>
 
 </html>
