@@ -82,19 +82,20 @@ class Administration extends Dbconfig
         session_start();
         $id = $_SESSION['id'];
         $this->prepared_query(
-            "UPDATE administrator SET last_name=?, first_name=?, middle_name=?, ext_name=?, cp_no=?, sex=?, email=? "
+            "UPDATE administrator SET last_name=?, first_name=?, middle_name=?, ext_name=?, age=?, cp_no=?, sex=?, email=? "
             ."WHERE admin_id=?;"
             , [
                 $_POST['lastname'],
                 $_POST['firstname'],
                 $_POST['middlename'],
                 $_POST['extensionname'],
+                $_POST['age'],
                 $_POST['cpnumber'],
                 $_POST['sex'],
                 $_POST['email'],
                 $id
             ],
-            "sssssssi");
+            "ssssisssi");
         header("Location: admin.php?id=$id");
     }
     public function getAdministrator($id = NULL)
