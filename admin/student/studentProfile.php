@@ -1,7 +1,7 @@
 <?php include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-$userProfile = $admin->getProfile("S");
+$userProfile = $admin->getProfile("ST");
 
 $stud_id = $userProfile->get_stud_id();
 $user_id_no = $userProfile->get_id_no();

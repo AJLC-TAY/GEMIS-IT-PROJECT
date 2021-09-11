@@ -2,6 +2,7 @@
 include_once("../inc/head.html");
 session_start();
 $_SESSION['id'] = $user_id = 1;
+$_SESSION['sy'] = '2021-2022';
 require_once("../class/Administration.php");
 $admin = new Administration();
 $admin_user = $admin->getProfile('AD');
@@ -45,7 +46,7 @@ $admin_user = $admin->getProfile('AD');
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
                                             <ul class="ms-4 list-style">
                                                 <li>
-                                                    <h4><?php echo $admin_user['name']; ?></h4>
+                                                    <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
                                                 <li>School Year: 2023 - 2024 </li>
                                             </ul>

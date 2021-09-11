@@ -1,8 +1,8 @@
 <?php
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$user_id = $_SESSION['id'];
-$user = $admin->getAdministrator();
+$user_id = $_SESSION['id'] = 2;
+$user = $admin->getAdministrator($user_id);
 ?>
 <!-- HEADER -->
  <header>
@@ -35,15 +35,15 @@ $user = $admin->getAdministrator();
         <div class="row">
             <div class="col-md-7">
                 <h6>Personal</h6>
-                <p>ID: <?php echo $user['admin_id']; ?></p>
-                <p>Name: <?php echo "{$user['last_name']}, {$user['first_name']} {$user['middle_name']} {$user['ext_name']}"; ?></p>
-                <p>Age: <?php echo $user['age']; ?></p>
-                <p>Sex: <?php echo $user['sex']; ?></p>
+                <p>ID: <?php echo $user->admin_id; ?></p>
+                <p>Name: <?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?></p>
+                <p>Age: <?php echo $user->age; ?></p>
+                <p>Sex: <?php echo $user->sex; ?></p>
             </div>
             <div class="col-md-5">
                 <h6>Contact</h6>
-                <p>Cellphone No.: <?php echo $user['cp_no']; ?></p>
-                <p>Email: <?php echo $user['email']; ?></p>
+                <p>Cellphone No.: <?php echo $user->cp_no; ?></p>
+                <p>Email: <?php echo $user->email; ?></p>
             </div>
         </div>
     </div>

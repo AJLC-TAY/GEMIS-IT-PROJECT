@@ -2,14 +2,6 @@
 require('config.php');
 require('Dataclasses.php');
 
-//class EnrollStat
-//{
-//    const PENDING = 0;
-//    const ENROLLED = 1;
-//    const CANCELLED = 2;
-//}
-// EnrollStat::PENDING
-
 class Administration extends Dbconfig
 {
     protected $hostName;
@@ -18,6 +10,7 @@ class Administration extends Dbconfig
     protected $dbName;
 
     private $db = false;
+    const ALLOWED_IMG_TYPES = array('jpg', 'png', 'jpeg');
 
     public function __construct()
     {
@@ -92,15 +85,15 @@ class Administration extends Dbconfig
             "UPDATE administrator SET last_name=?, first_name=?, middle_name=?, ext_name=?, cp_no=?, sex=?, email=? "
             ."WHERE admin_id=?;"
             , [
-            $_POST['lastname'],
-            $_POST['firstname'],
-            $_POST['middlename'],
-            $_POST['extensionname'],
-            $_POST['cpnumber'],
-            $_POST['sex'],
-            $_POST['email'],
-            $id
-        ],
+                $_POST['lastname'],
+                $_POST['firstname'],
+                $_POST['middlename'],
+                $_POST['extensionname'],
+                $_POST['cpnumber'],
+                $_POST['sex'],
+                $_POST['email'],
+                $id
+            ],
             "sssssssi");
         header("Location: admin.php?id=$id");
     }
@@ -114,41 +107,29 @@ class Administration extends Dbconfig
                 ."age, cp_no, email, admin_user_no "
                 ."FROM administrator WHERE admin_id='$id';");
         $row = mysqli_fetch_assoc($result);
-        $last_name = $row['last_name'];
-        $first_name = $row['first_name'];
-        $middle_name = $row['middle_name'];
-        $ext_name = $row['middle_name'];
-        return [
-            "admin_id"          => $row['admin_id'],
-            "last_name"         => $last_name,
-            "first_name"        => $first_name,
-            "middle_name"       => $middle_name,
-            "ext_name"          => $ext_name,
-            "name"              => "$last_name, $first_name $ext_name",
-            "age"               => $row['age'],
-            "sex"               => $row['sex'],
-            "cp_no"             => $row['cp_no'],
-            "email"             => $row['email'],
-            "admin_user_no"     => $row['admin_user_no']
-        ];
+        return new Administrator(
+            $row['admin_id'],   $row['last_name'],
+            $row['first_name'], $row['middle_name'],
+            $row['ext_name'],   $row['age'],
+            $row['sex'],        $row['cp_no'],
+            $row['email'],      $row['admin_user_no'],
+        );
     }
 
     public function listAdministrators()
     {
         session_start();
-        $result = $this->query("SELECT admin_id, CONCAT(last_name,', ', first_name,' ', middle_name,' ', COALESCE(ext_name, '')) as full_name, "
+        $result = $this->query("SELECT admin_id, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $admin_id = $row['admin_id'];
-            $administrators[] = [
-                "admin_id"  => $admin_id,
-                "full_name" => $row['full_name'],
-                "age"       => $row['age'],
-                "sex"       => $row['sex'],
-                "cp_no"     => $row['cp_no'],
-                "email"     => $row['email']
-            ];
+            $administrators[] = new Administrator(
+                $row['admin_id'],   $row['last_name'],
+                $row['first_name'], $row['middle_name'],
+                $row['ext_name'],   $row['age'],
+                $row['sex'],        $row['cp_no'],
+                $row['email']
+            );
         }
         return $administrators;
     }
@@ -428,7 +409,7 @@ class Administration extends Dbconfig
                 $this->listCurriculumJSON();
             }
         } else {
-            die('Error: '.mysqli_error());
+            die('Error: '.mysqli_error($this->db));
         }
     }
 
@@ -942,6 +923,36 @@ class Administration extends Dbconfig
         // mysqli_multi_query($this->db, $query);
     }
 
+    public function listFacultyPrivilegeJSON()
+    {
+        $result = $this->query("SELECT teacher_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ',COALESCE(ext_name, '')) AS name, "
+            . "enable_enroll FROM faculty ORDER BY name;");
+        $faculty_list = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $can_enroll_display = "";
+            $cant_enroll_disp = "d-none";
+            $enable_enroll = $row['enable_enroll'];
+            if ($enable_enroll == 0) {
+                $can_enroll_display = "d-none";
+                $cant_enroll_disp = "";
+            }
+            $teacher_id = $row['teacher_id'];
+
+            $action = "<div>"
+                ."<button onClick='togglePrivilege(`{$teacher_id}`, `0`)' class='can-enroll-btn $can_enroll_display btn-sm btn btn-primary' title='Unallow teacher to enroll'>Yes</button>"
+                ."<button onClick='togglePrivilege(`{$teacher_id}`, `1`)' class='cant-enroll-btn $cant_enroll_disp btn-sm btn btn-secondary' title='Allow teacher to enroll'>No</a>"
+            ."</div>";
+
+            $faculty_list[] = [
+                'teacher_id' => $teacher_id,
+                'name'       => $row['name'],
+                'status'     => $enable_enroll,
+                'can-enroll' => $action
+            ];
+        }
+        echo json_encode($faculty_list);
+    }
+
     public function listFaculty()
     {
         $query = 'SELECT * FROM faculty;';
@@ -984,7 +995,7 @@ class Administration extends Dbconfig
 
     public function getProfile($type)
     {
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? $_SESSION['id'];
 
         if ($type === 'AD') {
             return $this->getAdministrator($id ?? NULL);
@@ -1213,6 +1224,14 @@ class Administration extends Dbconfig
         );
     }
 
+    public function changeEnrollPriv()
+    {
+        $teacher_id_list = $_POST['teacher-id'];
+        foreach($teacher_id_list as $teacher_id) {
+            $this->query("UPDATE faculty SET enable_enroll='{$_POST['can-enroll']}' WHERE teacher_id='$teacher_id';");
+        }
+    }
+
     /**
      * Evaluates the current faculty roles basing from the POST value 'access'
      * 
@@ -1363,20 +1382,31 @@ class Administration extends Dbconfig
 
     /** Faculty End */
 
+    /** Enrollment Methods */
+
     public function enroll()
     {
+        echo "Add student starting...<br>";
         $student_id = $this->addStudent();
+        echo "Add student finished.<br>";
+
+        // School information
+        echo "Add School info starting...<br>";
+
+        $school_info = [$_POST['semester'], $_POST['track'],  $_POST['program']];
+        [$semester, $track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
-            "INSERT INTO enrollment (date_of_enroll, date_first_attended, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, section_code) "
-                ."VALUES (NOW(), NULL, 0, ?, ?, ?, ?, NULL);",
+            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code) "
+                ."VALUES (NOW(), 0, ?, ?, ?, ?);",  // null for date_first_attended, and section code
             [
-                $_POST[''],
+                $_POST['grade-level'],
                 $student_id,
-                $_SESSION['sy'],
-                $_POST['']
+                12,  // should be replaced by the current school year
+                $track
             ],
             "iiss"
         );
+        echo "Add School info ended...<br>";
     }
 
     public function getEnrollees()
@@ -1399,8 +1429,8 @@ class Administration extends Dbconfig
                 "curriculum"  => $row['curr_code'],
                 "status"      => $row['status'],
                 "action"      => "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-danger w-auto me-1 btn-sm' title='Archive Enrollee'>Archive</button>"
-                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left me-2'></i></a>"
+                    . "<button class='btn btn-secondary w-auto me-1 btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
+                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left'></i></a>"
                     . "<a href='enrollment.php?id=$user_id' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
                     . "</div>"
             ];
@@ -1414,23 +1444,216 @@ class Administration extends Dbconfig
     }
 
 
+    private function in_multi_array($string, $array) {
+        $bool = false;
+        foreach($array as $id => $value) {
+            $bool = $string == $id;
+        }
+        return $bool;
+    }
+
+    public function getEnrollmentReportData($is_json = false)
+    {
+        $school_year = 5;
+        $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+        $data = [];
+
+        $track = "";
+        while($row = mysqli_fetch_assoc($result)) {
+            $track = $row['curr_code'];
+            $program = $row['prog_code'];
+            $count =  $row['count'];      
+            if (count($data) === 0) {
+                $program_array = [$count];
+                $data[$track] = [$program => $program_array];
+            } else {
+                if ($this->in_multi_array($track, $data)) {
+                    $data[$track][$program][] = $count;
+                } else {
+                    $program_array = [$count];
+                    $data[$track] = [$program => $program_array];
+                } 
+            }
+        }
+        
+        if ($is_json) {
+            echo json_encode($data);
+            return;
+        }
+        return $data;
+    
+    }
+    public function validateImage($file, $file_size)
+    {
+        echo "<br>Start validating image ... <br>";
+        // default values
+        $status = 'invalid';
+        $statusInfo = [];
+        $this_file_size = $file['size'];
+        $profile_img = NULL;
+        if ($this_file_size > 0) {
+            echo "<br>Image exists ... <br>";
+
+            if ($this_file_size > $file_size) {
+                echo "<br>Image is greater than size ... <br>";
+                $statusInfo['status'] = $status;
+                $statusInfo["imageSize"] = "Sorry, image size should not be greater than 5 MB";
+            }
+
+            $filename = basename($file['name']);
+            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+
+            if (in_array($fileType, Administration::ALLOWED_IMG_TYPES)) {
+                echo "<br>Image is valid ... <br>";
+                $profile_img = file_get_contents($file['tmp_name']);
+            } else {
+                $statusInfo['status'] = $status;
+                $statusInfo["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
+                return $statusInfo;
+            }
+
+            $statusInfo['status'] = 'valid';
+            $statusInfo['image'] = $profile_img;
+            return $statusInfo;
+        }
+    }
+
+
+    /**
+     * Trims each element of the array and make each null if empty.
+     * Returns a new array.
+     * @param   array   $params
+     * @return  array
+     */
+    public static function preprocessData($params)
+    {
+        return array_map(function($e) {
+            $e = trim($e);
+            return  $e ?? NULL;
+        }, $params);
+    }
+
+    public static function saveImage($id, $file_name, $target_dir, $file_type)
+    {
+        session_start();
+        $school_year = $_SESSION['sy'] = "2021-2020";
+        $target_dir = $target_dir."/".$file_type."/".$school_year;
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+
+        if (($_FILES[$file_name]['name']!="")){
+            // Where the file is going to be stored
+            $file = $_FILES[$file_name]['name'];
+            $path = pathinfo($file);
+//            $filename = $path['filename'];
+            $ext = $path['extension'];
+            $temp_name = $_FILES[$file_name]['tmp_name'];
+            $path_filename_ext = $target_dir."/$id-$file_type.$ext"; // ../student_assets/psa/2194014-*.jpg
+            // Check if file already exists
+            if (file_exists($path_filename_ext)) {
+                echo "Sorry, file already exists.";
+            }else{
+                move_uploaded_file($temp_name,$path_filename_ext);
+                echo "Congratulations! File Uploaded Successfully.";
+            }
+        }
+    }
+
+
     public function addStudent()
     {
-        $user_id = $this->createUser("ST");
+        // Preprocess data gathered
+        // Student personal info
         $params = [
-            $_POST['lrn'], $_POST[''], $_POST[''], $_POST[''], $_POST[''],
-            $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST[''], $_POST[''],
-            $_POST[''], $_POST['religion'], $_POST[''], $_POST[''], $_POST[''], $user_id
+            $_POST['lrn'], $_POST['last-name'], $_POST['first-name'], $_POST['middle-name'], $_POST['ext-name'],
+            $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST['birth-place'], $_POST['group-name'],
+            $_POST['mother-tongue'], $_POST['religion'], $_POST['cp-no'], $_POST['psa'], $_POST['group']
         ];
+
+        $address = [
+            $_POST['house-no'], $_POST['street'], $_POST['barangay'],
+            $_POST['city-muni'], $_POST['province'], $_POST['zip-code']
+        ];
+
+        function prepareParentData ($type)
+        {
+            $parent =  [$_POST["{$type}-lastname"], $_POST["{$type}-firstname"], $_POST["{$type}-middlename"]];
+            if ($type === 'f') {
+                $parent[] = $_POST["{$type}-extensionname"];
+            }
+            $parent[] =  $_POST["{$type}-contactnumber"];
+
+            if ($type === 'g') { // if guardian, add relationship else occupation of parent
+                $parent[] = $_POST["{$type}-relationship"];
+            } else {
+                $parent[] =  $type;
+                $parent[] =  $_POST["{$type}-occupation"];
+            }
+
+            return Administration::preprocessData($parent);
+        }
+        $father = prepareParentData('f');
+        $mother = prepareParentData('m');
+        $guardian = prepareParentData('g');
+
+        $params = $this->preprocessData($params);
+        $address = $this->preprocessData($address);
+
+        // Image validation
+        $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
+        $form_img = $this->validateImage($_FILES['image-form'], 8000000);
+        $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
+
+        foreach([$psa_img, $form_img, $profile_img] as $image) {
+            // add image to the parameters if valid
+            if ($image['status'] == 'valid') {
+                $params[] = $image['image'];
+            }
+        }
+
+        // Values are valid; hence, create a user and add the created user id to the parameter
+        $user_id = $this->createUser("ST");
+        $params[] = $user_id;
+
+        print_r(count($params));
         $this->prepared_query(
             "INSERT INTO student (LRN, last_name, first_name, middle_name, ext_name, "
                  ."birthdate, sex, age, birth_place, indigenous_group, "
-                 ."mother_tongue, religion, cp_no, psa_birth_cert, id_picture, id_no) "
-                ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?, ?, ?, ?);",
+                 ."mother_tongue, religion, cp_no, psa_num, belong_to_IPCC, "
+                 ."psa_birth_cert, form_137, id_picture, id_no) "
+                ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?, ?, ?);",
             $params,
-            "issss" . "siiss" . "sssssi"
+            "sssss" . "ssiss" . "ssssi" . "sssi"
         );
-        return mysqli_insert_id($this->db);
+
+        echo "Student info added. <br>";
+
+        $student_id = mysqli_insert_id($this->db);
+        $father[] = $student_id;
+        $mother[] = $student_id;
+        $guardian[] = $student_id;
+
+        // insert parent info
+        $general_q = "INSERT INTO parent (last_name, first_name, middle_name,";
+        $f_query = "$general_q ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        $m_query = "$general_q cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $g_query = "INSERT INTO guardian (guardian_last_name, guardian_first_name, guardian_middle_name, cp_no, relationship, stud_id) VALUES (?, ?, ?, ?, ?, ?);";
+        $this->prepared_query($f_query, $father, "sssssssi");
+        $this->prepared_query($m_query, $mother, "ssssssi");
+        $this->prepared_query($g_query, $guardian, "sssssi");
+        echo "Parent info added. <br>";
+
+
+        // insert address info
+        $address[] = $student_id;
+        $a_query = "INSERT INTO address (home_no, street, barangay, mun_city, province, zip_code, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $this->prepared_query($a_query, $address, "sssssii");
+
+        echo "Address info added. <br>";
+        echo "$student_id <br>";
+
+        return $student_id;
     }
 
 //    public function editStudent()
@@ -1864,12 +2087,12 @@ class Administration extends Dbconfig
         ];
         $address_types = "sssssii";
 
-        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
+        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE stud_id=?;";
         $this->prepared_query($address_query, $address_params, $address_types);
 
         foreach($parent as $parents){
              $parents_params= [
-                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
+                     $parents['lname'],$parents['mname'],$parents['fname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
                  ];
              $parents_types = "sssssssi";
               $parents_query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
@@ -1877,16 +2100,13 @@ class Administration extends Dbconfig
          }
         
         $guardian_params= [
-                $g_lastname, $g_middlename, $g_firstname, $g_cp_no , $relationship, $stud_id
+                $g_firstname, $g_middlename, $g_lastname, $relationship, $g_cp_no, $stud_id
             ];
 
         $guardian_types = "sssssi";
         $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
-
-         header("Location: student.php?id=$stud_id");
+        header("Location: student.php?id=$stud_id");
     }
-
 }
-
-
+?>

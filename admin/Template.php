@@ -17,7 +17,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
 
                         </div>
@@ -30,12 +30,13 @@
             <!-- FOOTER END -->
         </section>
     </section>
-</body>
 
-<!-- BOOTSTRAP TABLE JS -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<!--CUSTOM JS-->
-<script src="../js/common-custom.js"></script>
+    <!-- BOOTSTRAP TABLE JS -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <!--CUSTOM JS-->
+    <script src="../js/common-custom.js"></script>
+
+</body>
 
 </html>

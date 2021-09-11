@@ -1,5 +1,40 @@
 <?php
 
+
+class Administrator implements JsonSerializable
+{
+    public function __construct($admin_id, $last_name, $first_name, $middle_name, $ext_name, $sex, $age, $cp_no, $email, $admin_user_id = NULL)
+    {
+        $this->admin_id = $admin_id;
+        $this->last_name = $last_name;
+        $this->first_name = $first_name;
+        $this->middle_name = $middle_name;
+        $this->ext_name = $ext_name;
+        $this->name = "$last_name, $first_name $middle_name $ext_name";
+        $this->sex = $age;
+        $this->age = $sex;
+        $this->cp_no = $cp_no;
+        $this->email = $email;
+        $this->admin_user_id = $admin_user_id;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "admin_id"      => $this->admin_id,
+            "last_name"     => $this->last_name,
+            "first_name"    => $this->first_name,
+            "middle_name"   => $this->middle_name,
+            "ext_name"      => $this->ext_name,
+            "name"          => $this->name,
+            "age"           => $this->sex,
+            "sex"           => $this->age,
+            "cp_no"         => $this->cp_no,
+            "email"         => $this->email,
+            "admin_user_id" => $this->admin_user_id
+        ];
+    }
+}
 /**
  * Curriculum Class
  * @author Ben Carlo de los Santos

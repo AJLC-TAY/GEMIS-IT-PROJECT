@@ -40,7 +40,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         <section id="main-content">
             <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row ps-3">
                             <!-- HEADER -->
                             <header>
@@ -204,6 +204,15 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+
+    <script type="text/javascript">
+        var code = <?php echo json_encode($curr_code); ?>;
+    </script>
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script type="module" src="../js/admin/curriculum.js"></script>
 </body>
 <!-- VALIDATION -->
 <script>
@@ -225,9 +234,4 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 
-<script type="text/javascript">
-    var code = <?php echo json_encode($curr_code); ?>;
-</script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="../js/admin/curriculum.js"></script>
 </html>

@@ -17,7 +17,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
                             <header>
@@ -32,8 +32,8 @@
                                 <div class="d-flex justify-content-between mb-3">
                                     <h3 class="fw-bold">Enrollees</h3>
                                     <div>
-                                        <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
-                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Enroll</a>
+                                        <button type="button" class="view-archive btn btn-secondary btn-sm"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
+                                        <a href="faculty.php?action=add" id="add-btn" class="btn btn-success btn-sm" title='Enroll a student'><i class="bi bi-plus me-2"></i>Enroll</a>
                                         <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
                                     </div>
                                 </div>
@@ -43,13 +43,13 @@
                                 <div class="card w-100 h-auto bg-light">
                                     <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark'>
-                                        <div class="d-flex justify-content-between mb-3">
+                                        <div class="row justify-content-between mb-3">
                                             <!-- SEARCH BAR -->
                                             <span class="flex-grow-1 me-3">
                                                 <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                             </span>
                                             <div>
-                                                <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-danger btn-sm" title='Deactivate Faculty' value="Archive">
+                                                <button id = "subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
                                                 <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                                             </div>
                                         </div>
@@ -57,18 +57,19 @@
                                         <tr>
                                             <th data-checkbox="true"></th>
                                             <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
-                                            <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="false" data-field="LRN">LRN</th>
-                                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
+                                            <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="false" data-field="LRN">LRN</th>
+                                            <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
+                                            <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
+                                            <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
+                                            <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                                            <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
                                             <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                                         </tr>
                                         </thead>
                                     </table>
                                 </div>
                             </div>
+                            <!-- ENROLLMENT TABLE END-->
                         </div>
                     </div>
                 </div>
