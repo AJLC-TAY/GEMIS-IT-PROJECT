@@ -2087,12 +2087,12 @@ class Administration extends Dbconfig
         ];
         $address_types = "sssssii";
 
-        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE student_stud_id=?;";
+        $address_query = "UPDATE `address` SET home_no=?, street=?, barangay=?, mun_city=?,province=?,zip_code=? WHERE stud_id=?;";
         $this->prepared_query($address_query, $address_params, $address_types);
 
         foreach($parent as $parents){
              $parents_params= [
-                     $parents['fname'],$parents['mname'],$parents['lname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
+                     $parents['lname'],$parents['mname'],$parents['fname'],$parents['extname'],$parents['sex'],$parents['cp_no'],$parents['occupation'], $stud_id
                  ];
              $parents_types = "sssssssi";
               $parents_query = "CALL editStudentParent(?, ?, ?, ?, ?, ?, ?, ?);";
@@ -2100,16 +2100,13 @@ class Administration extends Dbconfig
          }
         
         $guardian_params= [
-                $g_lastname, $g_middlename, $g_firstname, $g_cp_no , $relationship, $stud_id
+                $g_firstname, $g_middlename, $g_lastname, $relationship, $g_cp_no, $stud_id
             ];
 
         $guardian_types = "sssssi";
         $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
-
-         header("Location: student.php?id=$stud_id");
+        header("Location: student.php?id=$stud_id");
     }
-
 }
-
-
+?>
