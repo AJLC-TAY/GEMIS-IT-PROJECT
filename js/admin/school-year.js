@@ -1,9 +1,5 @@
 preload('#curr-management', '#school-yr')
 
-let onPostBodyOfTable = () => {
-
-}
-
 const tableSetup = {
     url:                'getAction.php?data=school_year',
     method:             'GET',
@@ -17,7 +13,6 @@ const tableSetup = {
     pagination:         true,
     pageList:           "[10, 25, 50, All]",
     paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-    // onPostBody:         onPostBodyOfTable
 }
 
 var syTable = $("#table").bootstrapTable(tableSetup)
@@ -66,7 +61,7 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
 
 $(function() {
     $(document).on("click", ".edit-btn", function() {
-        showSpinner()
+        syTable.bootstrapTable("showLoading")
         let element, row, id
         element = $(this)
         id = element.attr("data-id")                        // store the id of the row
@@ -76,11 +71,11 @@ $(function() {
         $(".edit-btn").prop("disabled", true)               // disable other edit buttons
 
         setCurrentValuesToInput(id, row, "select")
-        hideSpinner()
+        syTable.bootstrapTable("hideLoading")
     })
 
     $(document).on("click", ".cancel-btn", function() {
-        showSpinner()
+        syTable.bootstrapTable("showLoading")
         let element, id, row, editOptions
         element = $(this)
         id = element.attr("data-id")
@@ -91,11 +86,11 @@ $(function() {
         editOptions = element.closest(".edit-options")      // hide the edit options
         editOptions.toggleClass("d-none")
         editOptions.prev(".edit-btn").toggleClass("d-none")
-        hideSpinner()
+        syTable.bootstrapTable("hideLoading")
     })
 
     $(document).on("click", ".save-btn", function() {
-        showSpinner()
+        syTable.bootstrapTable("showLoading")
         let element, id, record, selectInputs, formData
         element = $(this)
         id = element.attr("data-id")
@@ -137,12 +132,12 @@ $(function() {
         inputsToDisplay.eq(2).val(semester)
 
         $(".edit-btn").prop("disabled", false)          // enable all edit buttons
-        hideSpinner()
+        syTable.bootstrapTable("hideLoading")
         showToast('success', 'Successfully updated!')
     })
 
     $(document).on("click", "[name='enrollment']", function() {
-        showSpinner()
+        syTable.bootstrapTable("showLoading")
         let statusE = $(this).next(".status")
         let syID = $(this).attr("data-id")
         let formData = `sy_id=${syID}&action=editEnrollStatus`
@@ -156,10 +151,9 @@ $(function() {
         }
         console.log(formData)
         $.post("action.php", formData, function() {
-            // showToast("success", "Enrollment status changed")
+            syTable.bootstrapTable("refresh")
+            syTable.bootstrapTable("hideLoading")
         })
-
-        hideSpinner()
     })
 
     hideSpinner()
