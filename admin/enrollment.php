@@ -28,12 +28,13 @@
                                 }
 
                                 if ($_GET['page'] === 'setup') {
-                                    require("enrollment/enSetUp.php");
-                                    $js = "<script type='text/javascript' src='../js/admin/enrollmentFacultyPriv.js'></script>";
+                                    require("enrollment/enrollmentSetup.php");
+                                    $js = "<script type='text/javascript' src='../js/admin/enroll-faculty-priv.js'></script>";
                                 }
 
                                 if ($_GET['page'] === 'form') {
-                                    require("enrollment/stepForm.php");
+                                    require("enrollment/enrollmentForm.php");
+                                    $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
 
                                 if ($_GET['page'] === 'report') {
@@ -42,6 +43,7 @@
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
+                                $js = "<script src='../js/admin/enrollment.js'></script>";
                             }
                             ?>
                         </div>
@@ -65,6 +67,21 @@
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>
+    <!-- VALIDATION -->
+    <script>
+        var forms = document.querySelectorAll('.needs-validation');
+        var stepper = new Stepper($('#stepper')[0])
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    </script>
 </body>
 
 </html>
