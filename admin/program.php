@@ -70,13 +70,16 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                             </div>
                                         </div>
                                     </div><hr class='mt-2 mb-4'>
-                                    <form id='program-view-form' method="POST">
+                                    <form id='program-view-form' class="needs-validation" method="POST" novalidate>
                                         <input type="hidden" name="action" value="updateProgram">
                                         <div class="form-group row">
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
                                             <div class="col-xl-10 col-lg-9">
                                                 <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
-                                                <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required>"; ?>
+                                                <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required> 
+                                                <div class='invalid-feedback'>
+                                                    Please enter current code
+                                                </div>"; ?>
                                             </div>
                                             <label class="col-xl-2 col-lg-3 col-form-label text-start">Description</label>
                                             <div class='col-xl-10 col-lg-9'>
@@ -152,7 +155,21 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
 
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
 <script type="text/javascript">
     var code = <?php echo json_encode($prog_code); ?>;
 </script>

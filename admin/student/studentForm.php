@@ -75,7 +75,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
     <h3>Edit Student Information</h3>
 </header>
 <!-- CONTENT  -->
-<form id='student-form' method='POST' action='action.php' enctype='multipart/form-data'>
+<form id='student-form' class='needs-validation' method='POST' action='action.php' enctype='multipart/form-data' novalidate>
     <!-- Photo -->
     <div class="form-row row">
         <div class='form-group col-md-4 d-flex flex-column'>
@@ -294,14 +294,23 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                         <div class='form-group col-md-6'>
                             <label for='lastname'>Last Name</label>
                             <input type='text' class='form-control' name='g_lastname' value=<?php echo $guardian_last_name ?> placeholder='Last Name' required>
+                            <div class="invalid-feedcak">
+                                Please enter gruardian's last name
+                            </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='firstname'>First Name</label>
                             <input type='text' class='form-control' name='g_firstname' value=<?php echo $guardian_first_name ?> placeholder='First Name' required>
+                            <div class="invalid-feedback">
+                                Please enter guardian's firstname
+                            </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='middlename'>Middle Name</label>
                             <input type='text' class='form-control' name='g_middlename' value=<?php echo $guardian_middle_name ?> placeholder='Middle Name' required>
+                            <div class="invalid-feedback">
+                                Please enter guardian's middle name
+                            </div>
                         </div>
 
                     </div>
@@ -327,3 +336,18 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
         </div>
     </div>
 </form>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>

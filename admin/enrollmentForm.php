@@ -230,7 +230,7 @@ if (is_null($guardian)) {
                             </div>
                             <div class="tab-pane fade" id="step2">
                             <div class="card w-100 h-auto mt-4">
-                                <form action="action.php" method="POST">
+                                <form action="action.php" class="needs-validation" method="POST" novalidate>
                                     <h4 class="fw-bold"> PARENT/GUARDIAN'S INFORMATION</h4>
                                     <div class="form-group row">
                                         <h5>FATHER</h5>
@@ -238,14 +238,23 @@ if (is_null($guardian)) {
                                             <div class='form-group col-md-6'>
                                                 <label for='lastname'>Last Name</label>
                                                 <input type='text' class='form-control' id='lastname' name='lastname' value = <?php echo $father_last_name?> placeholder='Last Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter last name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='firstname'>First Name</label>
                                                 <input type='text' class='form-control' id='firstname' name='firstname' value = <?php echo $father_last_name?> placeholder='First Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter first name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='middlename'>Middle Name</label>
                                                 <input type='text' class='form-control' id='middlename' name='middlename' value = <?php echo $father_first_name?> placeholder='Middle Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter middle name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='extensionname'>Extension Name</label>
@@ -268,14 +277,23 @@ if (is_null($guardian)) {
                                             <div class='form-group col-md-6'>
                                                 <label for='lastname'>Last Name</label>
                                                 <input type='text' class='form-control' id='lastname' name='lastname' value = <?php echo $mother_last_name?> placeholder='Last Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter mother's last name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='firstname'>First Name</label>
                                                 <input type='text' class='form-control' id='firstname' name='firstname' value = <?php echo $mother_first_name?> placeholder='First Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter mother's first name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='middlename'>Middle Name</label>
                                                 <input type='text' class='form-control' id='middlename' name='middlename' value = <?php echo $mother_middle_name?> placeholder='Middle Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter mother's middle name
+                                                </div>
                                             </div>
                                         </div>
                                         <div class='form-row row'>
@@ -294,14 +312,23 @@ if (is_null($guardian)) {
                                             <div class='form-group col-md-6'>
                                                 <label for='lastname'>Last Name</label>
                                                 <input type='text' class='form-control' id='lastname' name='lastname' value = <?php echo $guardian_last_name?> placeholder='Last Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter guardian's last name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='firstname'>First Name</label>
                                                 <input type='text' class='form-control' id='firstname' name='firstname' value = <?php echo $guardian_first_name?> placeholder='First Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter guardian's first name
+                                                </div>
                                             </div>
                                             <div class='form-group col-md-6'>
                                                 <label for='middlename'>Middle Name</label>
                                                 <input type='text' class='form-control' id='middlename' name='middlename' value = <?php echo $guardian_middle_name?> placeholder='Middle Name' required>
+                                                <div class="invalid-feedback">
+                                                    Please enter guardian's middle name
+                                                </div>
                                             </div>
                                         
                                         </div>
@@ -349,7 +376,21 @@ if (is_null($guardian)) {
 </body>
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
 
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
 <script type="text/javascript" src="../js/admin/subject.js"></script>
 
 </html>
