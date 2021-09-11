@@ -34,6 +34,11 @@
                                 if ($_GET['page'] === 'form') {
                                     require("enrollment/stepForm.php");
                                 }
+
+                                if ($_GET['page'] === 'report') {
+                                    require("enrollment/previewReport.php");
+                                    $js = "<script src='../js/admin/enrollment.js'></script>";
+                                }
                             } else {
                                 require("enrollment/enrollment.php");
                             }

@@ -10,7 +10,7 @@ class Administrator implements JsonSerializable
         $this->first_name = $first_name;
         $this->middle_name = $middle_name;
         $this->ext_name = $ext_name;
-        $this->full_name = "$last_name, $first_name $middle_name $ext_name";
+        $this->name = "$last_name, $first_name $middle_name $ext_name";
         $this->sex = $age;
         $this->age = $sex;
         $this->cp_no = $cp_no;
@@ -26,7 +26,7 @@ class Administrator implements JsonSerializable
             "first_name"    => $this->first_name,
             "middle_name"   => $this->middle_name,
             "ext_name"      => $this->ext_name,
-            "full_name"     => $this->full_name,
+            "name"          => $this->name,
             "age"           => $this->sex,
             "sex"           => $this->age,
             "cp_no"         => $this->cp_no,

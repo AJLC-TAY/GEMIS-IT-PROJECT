@@ -2,6 +2,7 @@
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <body>
+
 <ul id="container"></ul>
 <template id="test">
     <li data-id='%code%' class='tile card shadow-sm p-0 position-relative'>
@@ -23,8 +24,26 @@
     </li>
 </template>
 
+<div class="">
+    <a href="enrollment/enrollmentReport.php" target="_blank" class="btn btn-sm btn-primary" id='export'>Export</a>
+</div>
 <?php
 include '../class/Administration.php';
+
+$admin = new Administration();
+$admin->getEnrollmentReportData(true);
+
+$tracks = [];
+$track_list = $_POST['tracks'];
+foreach($track_list as $track) {
+	$progs = $_POST["$track-programs"];
+	foreach($progs as $prog) {
+		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
+		$tracks[$track] = $prog;
+	}
+}
+
+
     /**
      * Trims each element of the array and make each null if empty.
      * Returns a new array.
@@ -63,6 +82,12 @@ include '../class/Administration.php';
         clone.replace("%desc%", e.desc)
   
         $("#container").append(clone)
+    })
+
+    $(function() {
+        // $(document).on("click", "#export", function() {
+        //     $.post("enrollment/enrollmentReport.php")
+        // })
     })
 </script>
 

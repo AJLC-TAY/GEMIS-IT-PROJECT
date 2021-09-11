@@ -112,7 +112,7 @@ class Administration extends Dbconfig
             $row['first_name'], $row['middle_name'],
             $row['ext_name'],   $row['age'],
             $row['sex'],        $row['cp_no'],
-            $row['email'],      $row['admin_user_no']
+            $row['email'],      $row['admin_user_no'],
         );
     }
 
@@ -995,7 +995,7 @@ class Administration extends Dbconfig
 
     public function getProfile($type)
     {
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? $_SESSION['id'];
 
         if ($type === 'AD') {
             return $this->getAdministrator($id ?? NULL);
@@ -1444,10 +1444,44 @@ class Administration extends Dbconfig
     }
 
 
-    public function getEnrollmentReportData()
+    private function in_multi_array($string, $array) {
+        $bool = false;
+        foreach($array as $id => $value) {
+            $bool = $string == $id;
+        }
+        return $bool;
+    }
+
+    public function getEnrollmentReportData($is_json = false)
     {
         $school_year = 5;
-        $result = $this->query("SELECT prog_code, valid_stud_data, COUNT(stud_id) AS 'Number of Students' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+        $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+        $data = [];
+
+        $track = "";
+        while($row = mysqli_fetch_assoc($result)) {
+            $track = $row['curr_code'];
+            $program = $row['prog_code'];
+            $count =  $row['count'];      
+            if (count($data) === 0) {
+                $program_array = [$count];
+                $data[$track] = [$program => $program_array];
+            } else {
+                if ($this->in_multi_array($track, $data)) {
+                    $data[$track][$program][] = $count;
+                } else {
+                    $program_array = [$count];
+                    $data[$track] = [$program => $program_array];
+                } 
+            }
+        }
+        
+        if ($is_json) {
+            echo json_encode($data);
+            return;
+        }
+        return $data;
+    
     }
     public function validateImage($file, $file_size)
     {

@@ -46,7 +46,7 @@ $admin_user = $admin->getProfile('AD');
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
                                             <ul class="ms-4 list-style">
                                                 <li>
-                                                    <h4><?php echo $admin_user['name']; ?></h4>
+                                                    <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
                                                 <li>School Year: 2023 - 2024 </li>
                                             </ul>
