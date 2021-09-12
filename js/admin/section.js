@@ -1,6 +1,7 @@
 preload('#enrollment', '#section')
 
-let tableSetup = {
+let tableSetup, url, id, table
+tableSetup = {
     method:             'GET',
     maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
     clickToSelect:      true,
@@ -10,32 +11,24 @@ let tableSetup = {
     paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
 }
 
-let studSetUp = {...tableSetup}
-studSetUp.url = "getAction.php?" + (isViewPage ? `data=student&section=${sectionCode}` : 'data=section')
-studSetUp.idField = 'lrn'
-studSetUp.uniqueId = 'lrn'
-studSetUp.height = 425
+url =  "getAction.php?"
+id = ''
 
-let studentTable = $("#table").bootstrapTable(studSetUp)
-let subjectTable
-
-let onPostBodyOfTable = () => {
-    // $('.profile-btn').click(function() {
-    //     let id = $(this).attr('data-id')
-    //     let state = $(this).attr('data-state')
-    //     let formData = new FormData()
-    //     formData.append('id', id)
-    //     formData.append('state', state)
-    //     $.post("profile.php", formData, function() {
-            
-    //     })
-
-
-    // })
+if (isViewPage) {
+    url += `data=student&section=${sectionCode}`
+    id = 'lrn'
 }
+else {
+    url += 'data=section'
+    id = 'seciton_code'
+}
+tableSetup.url = url
+tableSetup.idField = id
+tableSetup.uniqueId = id
+tableSetup.height = 425
+table = $("#table").bootstrapTable(tableSetup)
 
 let addAnother = false
-
 
 $(function() {
     $('#add-btn').click(function() {

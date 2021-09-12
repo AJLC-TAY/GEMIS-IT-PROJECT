@@ -3,6 +3,8 @@ require "../class/Administration.php";
 $admin = new Administration();
 $tracks = $admin->getEnrollmentReportData();
 
+print_r($tracks);
+
 $school_year = "2021-2022";
 $signatory = "Alvin John Cutay";
 $position = "Student";
@@ -42,7 +44,7 @@ $programs = [];
         </div>
     </div>
     <!-- MAIN REPORT INFO -->
-    <div class="container card p-4 bg-white  mb-3" style="width: 80% !important;">
+    <div class="container card p-4 bg-white w-75 mb-3" >
         <?php 
 
         $accepted_grand_total = [];
@@ -78,18 +80,13 @@ $programs = [];
 
             echo "<tr>";
             foreach($track_value as $tv_id => $tv_value) {
-                $is_last_element = $tv_id == array_key_last($track_value);
-                
-                echo "<td>$tv_id
-                   
-                </td>";
+                echo "<td>$tv_id</td>";
                 $rejected = $rejected_grand_total[] = $rejected_count_list[] = $tv_value[0];
                 $accepted = $accepted_grand_total[] = $accepted_count_list[] = $tv_value[1];
-                
                 echo "<td><input name='tracks[$track_id][$tv_id][1]' class='form-control mb-0 me-3' value ='$accepted' ></td>";
                 echo "<td><input name='tracks[$track_id][$tv_id][0]' class='form-control mb-0 me-3' value ='$rejected' ></td>";
                 // Accepted sub total column
-                if ($is_last_element) { 			// if the element is the last key, calculate total
+                if ($tv_id == array_key_last($track_value)) { 			// if the element is the last key, calculate total
                     echo "</tr>";
                     echo "<tr>"
                         ."<td>Sub total</td>"
@@ -99,7 +96,6 @@ $programs = [];
                 } else {
                     echo "</tr>";
                 }
-
             }
                 
                 echo "</tbody>";

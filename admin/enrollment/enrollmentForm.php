@@ -122,27 +122,27 @@ if (isset($_GET['action'])) {
         <h2>Enrollment Form</h2>
     </div>
 </header>
-<form id="enrollment-form" enctype="multipart/form-data" action="../action.php" method="POST">
+<form id="enrollment-form" enctype="multipart/form-data" action="action.php" method="POST">
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
             <div class="step mx-5" data-target="#test-l-1">
                 <button type="button" class="btn step-trigger">
+                    <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
-<!--                    <span class="bs-stepper-label">First step</span>-->
                 </button>
             </div>
             <div class="line"></div>
             <div class="step mx-5" data-target="#test-l-2">
                 <button type="button" class="btn step-trigger">
+                    <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
-<!--                    <span class="bs-stepper-label">Second step</span>-->
                 </button>
             </div>
             <div class="line"></div>
             <div class="step mx-5" data-target="#test-l-3">
                 <button type="button" class="btn step-trigger">
+                    <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
-<!--                    <span class="bs-stepper-label">Third step</span>-->
                 </button>
             </div>
         </div>
@@ -302,9 +302,8 @@ if (isset($_GET['action'])) {
                     </div>
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
-                            <a href="#main-header" class="btn btn-primary" onclick="stepper.next()">Next</a>
-
-                            <!-- <button class="btn btn-primary" onclick="stepper.next()">Next</button> -->
+                            <a href="#" class="btn btn-secondary" onclick="stepper.next()">Next</a>
+                            <!-- <button class="btn btn-secondary" onclick="stepper.next()">Next</button> -->
                         </div>
                     </div>
                 </div>
@@ -398,9 +397,9 @@ if (isset($_GET['action'])) {
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between flex-row-reverse mt-4">
-                        <a href="#main-header" class="btn btn-primary" onclick="stepper.next()">Next</a>
-                        <a href="#main-header" class="btn btn-primary" onclick="stepper.previous()">Back</a>
+                    <div class="d-flex flex-row-reverse mt-4">
+                        <a href="#" class="btn btn-secondary" onclick="stepper.next()">Next</a>
+                        <a href="#" class="btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
                     </div>
                 </div>
             </div>
@@ -411,24 +410,24 @@ if (isset($_GET['action'])) {
                     <label class="col-form-label me-4">Balik Aral Student? </label>
                     <div class="d-flex">
                         <?php
-                        echo "<div class='form-check me-4'>
-                                        <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
-                                        <label class='form-check-label' for='yes'> Yes </label>
-                                </div>
-                                <div class='form-check'>
-                                    <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
-                                        <label class='form-check-label' for='yes'> No </label>
-                                </div>";
+                        echo "<div class='form-check me-4'>"
+                                ."<input class='form-check-input' type='radio' name='balik' id='yes' value='Yes' " . (!is_null($indigenous_group) ? "checked" : "") . ">"
+                                ."<label class='form-check-label' for='yes'> Yes </label>"
+                            ."</div>"
+                            ."<div class='form-check'>"
+                                ."<input class='form-check-input' type='radio' name='balik' id='no' value='No' " . (is_null($indigenous_group) ? "checked" : "") . ">"
+                                ."<label class='form-check-label' for='no'> No </label>"
+                            ."</div>";
                         ?>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-4">
-                            <label for="last-gradelevel" class="col-form-label">Last Grade Level Completed</label>
-                            <input id="last-gradelevel" class="form-control" name="last-gradelevel" type="number"  value="">
+                            <label for="last-grade-level" class="col-form-label">Last Grade Level Completed</label>
+                            <input id="last-grade-level" class="form-control" name="last-grade-level" type="number"  value="">
                         </div>
                         <div class="col-md-4">
-                            <label for="last-schoolyear" class="col-form-label">Last School Year Completed</label>
-                            <input id="last-schoolyear" class="form-control" name="last-schoolyear" type="number"  value="">
+                            <label for="last-sy" class="col-form-label">Last School Year Completed</label>
+                            <input id="last-sy" class="form-control" name="last-sy" type="number"  value="">
                         </div>
                         <div class="col-md-4">
                             <label for="general-average" class="col-form-label">General Average</label>
@@ -441,8 +440,8 @@ if (isset($_GET['action'])) {
                             <input id="school-name" class="form-control" name="school-name" type="text"  value="">
                         </div>
                         <div class="col-md-3">
-                            <label for="id-number" class="col-form-label">School ID Number</label>
-                            <input id="id-number" class="form-control" name="id-number" type="number"  value="">
+                            <label for="school-id-no" class="col-form-label">School ID Number</label>
+                            <input id="school-id-no" class="form-control" name="school-id-no" type="number"  value="">
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -450,22 +449,23 @@ if (isset($_GET['action'])) {
                         <input id="school-address" class="form-control" name="school-address" type="text"  value="">
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column'>
-                        <label for='photo' class='form-label'>Student ID Photo</label>
-                        <input id='upload' class='form-control form-control-sm' id='photo' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <label for='image-studentid' class='form-label'>Student ID Photo</label>
+                        <input class='form-control form-control-sm' id='image-studentid' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column'>
-                        <label for='photo' class='form-label'>Student Form 137</label>
-                        <input id='upload' class='form-control form-control-sm' id='photo' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <label for='image-form' class='form-label'>Student Form 137</label>
+                        <input class='form-control form-control-sm' id='image-form' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column'>
-                        <label for='photo' class='form-label'>PSA Birth Certificate</label>
-                        <input id='upload' class='form-control form-control-sm' id='photo' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
+                        <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
-                            <label class="col-form-label">Semester</label>
-                            <input class="form-control" name="semester" type="text" value="" >
-                        </div>
+                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user-type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
+<!--                        <div class="col-md-2">-->
+<!--                            <label class="col-form-label">Semester</label>-->
+<!--                            <input class="form-control" name="semester" type="text" value="" >-->
+<!--                        </div>-->
 
                         <div class='col-md-4'>
                             <label class="col-form-label">Track</label>
@@ -505,10 +505,10 @@ if (isset($_GET['action'])) {
                         </div>
 
                     </div>
-                    <div class="d-flex justify-content-between flex-row-reverse mt-4">
+                    <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
-                        <a href="#main-header" class="btn btn-primary" onclick="stepper.previous()">Back</a>
+                        <a href="#" class="btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
                     </div>
                 </div>
             </div>

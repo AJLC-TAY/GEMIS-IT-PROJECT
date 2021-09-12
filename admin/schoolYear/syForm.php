@@ -41,7 +41,7 @@
 <div class="container mt-4">
     <div class="card h-auto bg-light mx-auto" style='width: 80%;'>
         <p><small class='text-secondary'>Please complete the following: </small></p>
-        <form id='school-year-form' action="action.php" method='POST'>
+        <form id='school-year-form' action="action.php" method='POST'><!--
             <!-- CURRICULUM CODE -->
             <div class="form-group row">
                 <label for="curr-code-input" class="col-lg-3 col-form-label">Curriculum code</label>
@@ -105,7 +105,7 @@
                 <div class="col-lg-9">
                     <div class="mt-1 my-auto">
                         <div class="form-check y-auto ms-2 me-3 d-flex align-items-center">
-                            <input id='enrollment-input' name='enrollment'  class="form-check-input my-auto me-3" type="checkbox" id="enrollment-btn" title='Start/End enrollment'>
+                            <input id='enrollment-input' name='enrollment' class="form-check-input my-auto me-3" type="checkbox" id="enrollment-btn" title='Start/End enrollment'>
                             <!-- <label id='enrollment-status' class="form-check-label" for="flexSwitchCheckDefault"><?php //echo $enroll_stat_msg; ?></label> -->
                             <label class="form-check-label" for="enrollment-input">Enable enrollment. Accept enrollees after submitting.</label>
                         </div>

@@ -136,6 +136,7 @@ $(function() {
         showToast('success', 'Successfully updated!')
     })
 
+    /** Changes the enrollment status of the school year */
     $(document).on("click", "[name='enrollment']", function() {
         syTable.bootstrapTable("showLoading")
         let statusE = $(this).next(".status")

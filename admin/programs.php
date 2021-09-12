@@ -16,7 +16,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">

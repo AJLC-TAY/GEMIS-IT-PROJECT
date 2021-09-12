@@ -10,7 +10,7 @@
     <div class="top-menu">
         <ul class="nav pull-right top-menu">
             <li>
-                <h8 class="topbar">Date</h8>
+                <h8 class="topbar">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
             <li><a class="topbar" href="">Login as Admin</a></li>
             <li><a class="logout" href="">Sign out</a></li>
@@ -67,7 +67,7 @@
                 </a>
                 <ul class="sub">
                     <li><a id="enrollment-sub" href="enrollment.php">Enrollment</a></li>
-                    <li><a id="set-up" href="">Set Up</a></li>
+                    <li><a id="set-up" href="enrollment.php?page=setup">Set Up</a></li>
                     <li><a id="section"href="section.php">Section</a></li>
                 </ul>
             </li>
