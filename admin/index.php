@@ -17,8 +17,8 @@ $admin_user = $admin->getProfile('AD');
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>

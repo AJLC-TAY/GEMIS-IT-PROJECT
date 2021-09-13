@@ -4,9 +4,9 @@
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>

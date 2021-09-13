@@ -2,13 +2,13 @@
       session_start();
 ?>
 <title>Student | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'></link>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -47,10 +47,11 @@
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+
+    <script src='../assets/js/bootstrap-table.min.js'></script>
+    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script type="module" src="<?php echo $jsFilePath; ?>"></script>
 </body>
 
-<script src='../assets/js/bootstrap-table.min.js'></script>
-<script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="<?php echo $jsFilePath; ?>"></script>
 </html>

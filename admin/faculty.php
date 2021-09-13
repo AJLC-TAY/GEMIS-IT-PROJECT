@@ -21,10 +21,10 @@ if (isset($_GET['action'])) {
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>x
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
@@ -77,9 +77,9 @@ if (isset($_GET['action'])) {
                                     Filter
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="sc-filter">
-                                    <li><a href="#" id="all-btn" class="dropdown-item">All</a></li>
-                                    <li><a href="#" id="available-btn" class="dropdown-item">Available</a></li>
-                                    <li><a href="#" id="unavailable-btn" class="dropdown-item">For switching</a></li>
+                                    <li><a data-value='*' id="all-btn" class="filter-item dropdown-item active">All</a></li>
+                                    <li><a data-value='available' id="available-btn" class="filter-item dropdown-item">Available</a></li>
+                                    <li><a data-value='taken' id="unavailable-btn" class="filter-item dropdown-item">For switching</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -115,13 +115,13 @@ if (isset($_GET['action'])) {
         </div>
     </div>
     <!--ADD SUBJECT CLASS MODAL END-->
+    <!--BOOTSTRAP TABLE JS-->
+    <script src='../assets/js/bootstrap-table.min.js'></script>
+    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
+
+    <!--CUSTOM JS-->
+    <script src="../js/common-custom.js"></script>
+    <script type="module" src="<?php echo $js_file_path; ?>"></script>
 </body>
 
-<!--BOOTSTRAP TABLE JS-->
-<script src='../assets/js/bootstrap-table.min.js'></script>
-<script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-
-<!--CUSTOM JS-->
-<script src="../js/common-custom.js"></script>
-<script type="module" src="<?php echo $js_file_path; ?>"></script>
 </html>

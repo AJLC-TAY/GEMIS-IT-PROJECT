@@ -8,8 +8,8 @@
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -50,4 +50,5 @@
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/school-year.js"></script>
 </body>
+
 </html>

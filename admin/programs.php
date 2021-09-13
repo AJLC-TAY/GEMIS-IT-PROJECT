@@ -9,8 +9,8 @@
     require_once('../class/Dataclasses.php');
     ?>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -42,13 +42,45 @@
                                 <!-- SEARCH BAR -->
                                 <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
                             </header>
-                            <!-- No result message -->
-                            <div class="msg w-100 d-flex justify-content-center d-none">
-                                <p class="m-auto">No results found</p>
+
+                            <div class="content">
+                                <!-- NO RESULTS MESSAGE -->
+                                <div class="w-100 d-flex justify-content-center" >
+                                    <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
+                                </div>
+                                <!-- SUB SPINNER -->
+                                <div id="program-spinner" class="sub-spinner" style="display: none; height: 60vh;">
+                                    <div class="spinner-con h-100 position-relative">
+                                        <div class="spinner-border position-absolute top-0 start-0 bottom-0 end-0 m-auto" style="margin: auto !important;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul data-page="program" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+                                    <!-- TEMPLATE -->
+                                    <template id="card-template">
+                                        <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 position-relative'>
+                                            <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
+                                            <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
+                                                <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                                                <ul class='dropdown-menu' style='z-index: 99;'>
+                                                    <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
+                                                    <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
+                                                    <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
+                                                </ul>
+                                            </div>
+                                            <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
+                                                <div class='tile-content'>
+                                                    <h4 class='card-title'>%PROGDESC%</h4>
+                                                    <p class='card-text'>%CURCODE% | %PROGCODE%</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                    <!-- TEMPLATE END -->
+                                </ul>
                             </div>
-                            <ul class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
-                                
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -64,7 +96,6 @@
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <!-- MODAL -->
     <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">

@@ -89,9 +89,8 @@ if ($action == 'add') {
                         foreach ($sexOpt as $id => $value) {
                             echo "<div class='form-check'>"
                                 ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                                ."<label class='form-check-label' for='$id'>$value"
-                                ."</label>"
-                                ."</div>";
+                                ."<label class='form-check-label' for='$id'>$value</label>"
+                            ."</div>";
                         }
                         ?>
                     </div>
