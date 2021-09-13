@@ -10,7 +10,7 @@
                 <input type="text" name="" class="form-control" placeholder="Enter ID">
                 <input type="password" name="" class="form-control" placeholder="Enter Password">
                 <input type="submit" name="" class="btn" value="Login">
-                <a href="#">Forgot Password?</a><br>
+                <a href="forgotPassword.php">Forgot Password?</a><br>
             </form>
         </div>
     </body>

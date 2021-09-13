@@ -24,37 +24,39 @@ $user = $admin->getAdministrator($user_id);
 <div class="container mt-1">
     <div class="row justify-content-between align-items-center mb-3">
         <div class="col-auto">
-            <h5>Information</h5>
+            <h5><b>INFORMATION</b></h5>
         </div>
         <div class="col-auto d-flex">
-            <button class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Delete Account</button>
-            <button class="btn link" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
-            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+            <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
+            <button class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#confirmation-modal"><i class="bi bi-trash me-2"></i>Delete Account</button>
         </div>
     </div>
     <div class="card w-100 h-auto bg-light">
         <div class="row">
-            <div class="col-md-7">
-                <h6>Personal</h6>
-                <p>ID: <?php echo $user->admin_id; ?></p>
-                <p>Name: <?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?></p>
-                <p>Age: <?php echo $user->age; ?></p>
-                <p>Sex: <?php echo $user->sex; ?></p>
+            <div class="col-md-6">
+                <h6><b>GENERAL INFORMATION</b></h6>
+                <ul class='list-group ms-3'>
+                    <li class='list-group-item'><b>ID:</b> <?php echo $user->admin_id; ?><br>
+                    <li class='list-group-item'><b>Name: </b> <?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
+                    <li class='list-group-item'><b>Age: </b> <?php echo $user->age; ?><br>
+                    <li class='list-group-item'><b>Sex: </b> <?php echo $user->sex; ?>
             </div>
-            <div class="col-md-5">
-                <h6>Contact</h6>
-                <p>Cellphone No.: <?php echo $user->cp_no; ?></p>
-                <p>Email: <?php echo $user->email; ?></p>
+            <div class="col-md-6">
+                <h6 class="fw-bold">CONTACT INFORMATION</h6>
+                <ul class='list-group ms-3'>
+                    <li class='list-group-item'><b>Cellphone No: </b><?php echo $user->cp_no; ?><br>
+                    <li class='list-group-item'><b>Email: </b><?php echo $user->email; ?>
             </div>
         </div>
     </div>
 </div>
  <!-- OTHER MEMBERS TABLE -->
- <div class="container mt-5">
+ <div class="container mt-4">
      <div class="d-flex justify-content-between align-items-center mb-3">
-         <h5>Other Members</h5>
+         <h5><b>OTHER ADMINS</b></h5>
          <span>
-            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'>Add admin</a>
+            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'><i class="bi bi-plus me-2"></i>Add admin</a>
          </span>
      </div>
      <div class="card w-100 h-auto bg-light">
@@ -126,6 +128,9 @@ $user = $admin->getAdministrator($user_id);
                             <!-- <label for="current-pass">Current password</label> -->
                             <input id="current-pass" type="password" name="current-pass" class='form-control' placeholder="Current password" required>
                         </div>
+                    </div>
+                    <p class="text-secondary"><small>Enter new password:</small></small></p>
+                    <div class="container">
                         <div class="form-group row mt-3">
                             <!-- <label for="new-pass">New password</label> -->
                             <input id="new-pass" type="password" name="new-pass" class='form-control' placeholder="New password" required>
