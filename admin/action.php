@@ -206,4 +206,8 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveStudent') {
     $admin->listArchStudentsJSON();
     // $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
+
+if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){
+    $admin->forgotPassword();
+}
 ?>
