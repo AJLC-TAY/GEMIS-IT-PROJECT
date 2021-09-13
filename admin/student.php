@@ -22,10 +22,13 @@
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
-                            if (isset($_GET['action'])) {
+                            if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
                                 $jsFilePath = "../js/admin/student.js";
-                            } else if (isset($_GET['id'])){
+                            } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
+                                include_once("student/studentTransfer.php"); 
+                                $jsFilePath = "../js/admin/transfer-student.js";
+                            }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
                                 $jsFilePath = "../js/admin/student.js";
                             } else {
