@@ -72,7 +72,7 @@ if (is_null($guardian)) {
 </div>
 <!-- SPINNER END -->
 <section id="container">
-    <?php include_once('../inc/admin/sidebar.html'); ?>
+    <?php include_once('../inc/admin/sidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
         <section class="wrapper">

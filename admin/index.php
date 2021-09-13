@@ -2,7 +2,11 @@
 include_once("../inc/head.html");
 session_start();
 $_SESSION['id'] = $user_id = 1;
-$_SESSION['sy'] = '2021-2022';
+$_SESSION['sy_id'] = 5;
+$_SESSION['sy_desc'] = '2021 - 2022';
+$_SESSION['enrollment'] = 0;
+$_SESSION['user-type'] = 'AD';
+
 require_once("../class/Administration.php");
 $admin = new Administration();
 $admin_user = $admin->getProfile('AD');
@@ -20,7 +24,7 @@ $admin_user = $admin->getProfile('AD');
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">

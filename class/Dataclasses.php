@@ -3,7 +3,7 @@
 
 class Administrator implements JsonSerializable
 {
-    public function __construct($admin_id, $last_name, $first_name, $middle_name, $ext_name, $sex, $age, $cp_no, $email, $admin_user_id = NULL)
+    public function __construct($admin_id, $last_name, $first_name, $middle_name, $ext_name, $age, $sex, $cp_no, $email, $admin_user_id = NULL)
     {
         $this->admin_id = $admin_id;
         $this->last_name = $last_name;
@@ -11,8 +11,8 @@ class Administrator implements JsonSerializable
         $this->middle_name = $middle_name;
         $this->ext_name = $ext_name;
         $this->name = "$last_name, $first_name $middle_name $ext_name";
-        $this->sex = $age;
-        $this->age = $sex;
+        $this->age = $age;
+        $this->sex = $sex;
         $this->cp_no = $cp_no;
         $this->email = $email;
         $this->admin_user_id = $admin_user_id;
@@ -27,8 +27,8 @@ class Administrator implements JsonSerializable
             "middle_name"   => $this->middle_name,
             "ext_name"      => $this->ext_name,
             "name"          => $this->name,
-            "age"           => $this->sex,
-            "sex"           => $this->age,
+            "age"           => $this->age,
+            "sex"           => $this->sex,
             "cp_no"         => $this->cp_no,
             "email"         => $this->email,
             "admin_user_id" => $this->admin_user_id
@@ -1675,8 +1675,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->teacher_id = $teacher_id;
             $this->action = 
                         "<div class='d-flex justify-content-center'>"
-                            ."<a href='section.php?sec_code=$code' class='btn btn-secondary btn-sm w-auto me-1' title='View Section'><i class='bi bi-eye'></i></a>"
-                            ."<a href='section.php?sec_code=$code&action=edit' class='btn btn-primary btn-sm w-auto' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                            ."<a href='section.php?sec_code=$code&action=edit' target='_blank' class='btn btn-secondary btn-sm w-auto me-1'' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                            ."<a href='section.php?sec_code=$code' target='_blank' class='btn btn-primary btn-sm w-auto' title='View Section'><i class='bi bi-eye'></i></a>"
                         ."</div>";
         }
 

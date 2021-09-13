@@ -15,7 +15,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper ps-4">
@@ -94,7 +94,10 @@
                         <p><small class='text-secondary'>Please complete the following: </small></p>
                         <div class="form-group">
                             <label for="curr-code">Code</label>
-                            <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required>
+                            <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required />
+                            <div>
+                                Please enter classcode
+                            </div>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
                             <label for="curr-name">Name</label>
                             <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
@@ -204,6 +207,21 @@
     <!-- TOAST END -->
 </body>
 <script type="text/javascript" src="../js/common-custom.js"></script>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
 <script type="text/javascript">
     let curricula = <?php $admin->listCurriculumJSON(); ?>;
 </script>

@@ -57,81 +57,79 @@
                 </div>
                 <div class="modal-body">
                     <p><small class='text-secondary'>Please complete the following: </small></p>
-                    <form id='section-form' method="POST">
-                        <div class="row">
-                            <div class="form-group col-sm-6">
-                                <div class="form-row row d-none">
-                                    <label for="sect-code" class="col-lg-5 col-form-label">Code</label>
-                                    <div class="col-lg-7">
-                                        <input value="" type="text" name="code" class="form-control" id="sect-code" placeholder="Enter unique code">
-                                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <div class="form-row row d-none">
+                                <label for="sect-code" class="col-lg-5 col-form-label">Code</label>
+                                <div class="col-lg-7">
+                                    <input value="" type="text" name="code" class="form-control" id="sect-code" placeholder="Enter unique code">
                                 </div>
-                                <div class="form-row row d-none">
-                                    <label for="program" class="col-lg-5 col-form-label">Program/Strand</label>
-                                    <div class="col-lg-7">
-                                        <select id="program" class='form-select' name='program'>
-                                            <option value="" selected>-- Select --</option>
-                                            <?php 
-                                                include_once("../class/Administration.php");
-                                                $admin = new Administration();
-                                                $program_list = $admin->listPrograms("program");
-                                                
-                                                foreach($program_list as $program) {
-                                                    $prog_code = $program->get_prog_code();
-                                                    $prog_name = $program->get_prog_desc();
-                                                    echo "<option value='$prog_code'>$prog_name</option>";
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row row">
-                                    <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
-                                    <div class="col-lg-8">
-                                        <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
-                                    </div>
-                                </div>
-                                <div class="form-row row">
-                                    <label for="grade-level" class="col-lg-4 col-form-label">Grade Level</label>
-                                    <div class="col-lg-8">
-                                        <select id="grade-level" class='form-select' name='grade-level'>
-                                            <?php 
-                                                $grade_level_list = ["11" => "11", "12" => "12"];
-                                                foreach($grade_level_list as $id => $value) {
-                                                    echo "<option value='$id'>$value</option>";
-                                                }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                
                             </div>
-                            <div class="form-group col-sm-6">
-                                <div class="form-row row">
-                                    <label for="max-no" class="col-lg-4 col-form-label">Max student no.</label>
-                                    <div class="col-lg-8">
-                                        <input value="50" type="text" name="max-no" class="form-control number" id="max-no" placeholder="Enter maximum student no.">
-                                    </div>
+                            <div class="form-row row d-none">
+                                <label for="program" class="col-lg-5 col-form-label">Program/Strand</label>
+                                <div class="col-lg-7">
+                                    <select id="program" class='form-select' name='program'>
+                                        <option value="" selected>-- Select --</option>
+                                        <?php
+                                            include_once("../class/Administration.php");
+                                            $admin = new Administration();
+                                            $program_list = $admin->listPrograms("program");
+
+                                            foreach($program_list as $program) {
+                                                $prog_code = $program->get_prog_code();
+                                                $prog_name = $program->get_prog_desc();
+                                                echo "<option value='$prog_code'>$prog_name</option>";
+                                            }
+                                        ?>
+                                    </select>
                                 </div>
-                                <div class="form-row row">
-                                    <label for="section-name" class="col-lg-4 col-form-label">Class Adviser (Optional)</label>
-                                    <div class="col-lg-8">
-                                        <input class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
-                                        <datalist id='adviser-list'>
-                                            <?php 
-                                                $faculty_list = $admin->listFaculty();
-                                                foreach($faculty_list as $faculty) {
-                                                    $teacher_id = $faculty->get_teacher_id();
-                                                    $teacher_name = $faculty->get_name();
-                                                    echo "<option value='$teacher_id'>$teacher_id - $teacher_name</option>";
-                                                }
-                                            ?>
-                                        </datalist>
-                                    </div>
+                            </div>
+                            <div class="form-row row">
+                                <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
+                                <div class="col-lg-8">
+                                    <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
+                                </div>
+                            </div>
+                            <div class="form-row row">
+                                <label for="grade-level" class="col-lg-4 col-form-label">Grade Level</label>
+                                <div class="col-lg-8">
+                                    <select id="grade-level" class='form-select' name='grade-level'>
+                                        <?php
+                                            $grade_level_list = ["11" => "11", "12" => "12"];
+                                            foreach($grade_level_list as $id => $value) {
+                                                echo "<option value='$id'>$value</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <div class="form-row row">
+                                <label for="max-no" class="col-lg-4 col-form-label">Max student no.</label>
+                                <div class="col-lg-8">
+                                    <input value="50" type="text" name="max-no" class="form-control number" id="max-no" placeholder="Enter maximum student no.">
+                                </div>
+                            </div>
+                            <div class="form-row row">
+                                <label for="section-name" class="col-lg-4 col-form-label">Class Adviser (Optional)</label>
+                                <div class="col-lg-8">
+                                    <input class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
+                                    <datalist id='adviser-list'>
+                                        <?php
+                                            $faculty_list = $admin->listFaculty();
+                                            foreach($faculty_list as $faculty) {
+                                                $teacher_id = $faculty->get_teacher_id();
+                                                $teacher_name = $faculty->get_name();
+                                                echo "<option value='$teacher_id'>$teacher_id - $teacher_name</option>";
+                                            }
+                                        ?>
+                                    </datalist>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="action" id="action" value="addSection" />

@@ -27,7 +27,8 @@ $user = $admin->getAdministrator($user_id);
             <h5>Information</h5>
         </div>
         <div class="col-auto d-flex">
-            <button class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="confirmation-modal">Delete Account</button>
+            <button class="btn btn-link text-danger" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Delete Account</button>
+            <button class="btn link" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
             <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
         </div>
     </div>
@@ -68,7 +69,7 @@ $user = $admin->getAdministrator($user_id);
                  <tr>
                      <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="100" data-align="left" data-field="admin_id">ID</th>
-                     <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="full_name">Name</th>
+                     <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="age">Age</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="sex">Sex</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="cp_no">Contact Number</th>
@@ -79,3 +80,67 @@ $user = $admin->getAdministrator($user_id);
          </table>
      </div>
  </div>
+<!-- ACCOUNT DELETION MODAL -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Confirmation</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="delete-account-form" method="POST" action="deleteAccount.php">
+                <div class="modal-body">
+                    <p class="text-secondary"><small>Enter your password to confirm account deletion</small></p>
+                    <div class="container">
+                        <div class="form-group row">
+                            <input id="password" type="password" name="code" class='form-control' placeholder="Password" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal fade" id="change-pass-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Change password</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="change-pass-form" method="POST" action="deleteAccount.php">
+                <div class="modal-body">
+                    <p class="text-secondary"><small>Please complete the following</small></small></p>
+                    <div class="container">
+                        <div class="form-group row">
+                            <!-- <label for="current-pass">Current password</label> -->
+                            <input id="current-pass" type="password" name="current-pass" class='form-control' placeholder="Current password" required>
+                        </div>
+                        <div class="form-group row mt-3">
+                            <!-- <label for="new-pass">New password</label> -->
+                            <input id="new-pass" type="password" name="new-pass" class='form-control' placeholder="New password" required>
+                        </div>
+                        <div class="form-group row">
+                            <!-- <label for="reenter-new-pass">Re-enter new password</label> -->
+                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control' placeholder="Re-enter new password" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary" value="Change">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

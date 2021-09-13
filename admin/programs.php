@@ -16,7 +16,7 @@
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -68,7 +68,7 @@
     <!-- MODAL -->
     <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog">
-            <form id="program-form" method="post">
+            <form id="program-form" class="needs-validation" method="post" novalidate>
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title">
@@ -81,9 +81,15 @@
                         <div class="form-group">
                             <label for="prog-code">Code</label>
                             <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
+                            <div class="invalid-feedback">
+                                Please enter program code
+                            </div>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
                             <label for="prog-desc">Description</label>
                             <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
+                            <div class="invalid-feedback">
+                                Pleae enter program name
+                            </div>
                             <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
                             <label for="curr-code">Curriculum</label>
                             <select id="curr-code" class="select form-select" name="curr-code">
@@ -197,6 +203,21 @@
 
 <!-- Scripts -->
 <script type="text/javascript" src="../js/common-custom.js"></script>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
 <script type="text/javascript">
     let programs = <?php $admin->listProgramsJSON(); ?>;
 </script>
