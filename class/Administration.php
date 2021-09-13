@@ -2158,5 +2158,53 @@ class Administration extends Dbconfig
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
         header("Location: student.php?id=$stud_id");
     }
+
+    public function listAvailableSection(){
+        $stud_id = '110001';
+        $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
+        if ($stud_data) {
+            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+        }
+
+        $res = $this->query("SELECT s.section_code, s.section_name, count(stud_id) as 'count' from enrollment as e right join section as s
+                                on s.section_code=e.section_code
+                                where s.stud_no <> s.stud_no_max AND e.section_code <> '{$data['section_code']}' AND enrolled_in='{$data['grdlvl']}' group by s.section_name;");
+
+        $available_sections =  array();
+        // while ($list = mysqli_fetch_row($this->prepared_select($retrieve_sec_query, [$data["section_code"], $data["grdlvl"]], "si"))){
+        //     $available_sections[$list[0]] = ["section_name" => $list[1], "slot" => 40 - $list[2]];
+        // }
+
+        while ($section = mysqli_fetch_assoc($res)) {
+            $available_sections[$section['section_code']] = ["code" => $section['section_code'],"name" => $section['section_name'], "slot" => 40 - $section['count']];
+        }
+
+        return $available_sections;
+    }
+
+    public function listFullSectionJSON()
+    {
+        $stud_id = '110001';
+        $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
+        if ($stud_data) {
+            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+        }
+
+        $res = $this->query("SELECT s.section_code, s.section_name, count(stud_id) as 'count' from enrollment as e right join section as s
+                                on s.section_code=e.section_code
+                                where s.stud_no = s.stud_no_max AND e.section_code <> '{$data['section_code']}' AND enrolled_in='{$data['grdlvl']}' group by s.section_name;");
+        
+        while ($row = mysqli_fetch_assoc($res)) {
+            $teacher_id = $row['teacher_id'];
+            $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
+            $sectionList[] = ["section_code" => $row['section_code'], 
+                              "section_name" => $row['section_name'],
+                              "section_grd"  => $row['grd_level'],
+                              "adviser_id"   => $teacher_id,
+                              "adviser_name" => $name
+                            ];
+        }
+        echo json_encode($sectionList);
+    }
 }
 ?>
