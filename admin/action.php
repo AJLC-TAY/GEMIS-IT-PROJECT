@@ -188,11 +188,24 @@ if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
 
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
-    echo('from action:transferStud');
-    // $admin->transferStudent();
+    $admin->transferStudent();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
-    // echo('from action:update');
-    $admin->editStudent();
+     $admin->editStudent();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'archiveStudent') {
+    $admin->moveSubject("", "archived_");
+    $admin->listArchStudentsJSON();
+    // $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'unarchiveStudent') {
+    $admin->moveSubject("archived_", "");
+    $admin->listArchStudentsJSON();
+    // $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){
+    $admin->forgotPassword();
 }
 ?>
