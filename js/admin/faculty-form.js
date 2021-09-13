@@ -1,6 +1,6 @@
 import {implementAssignSubjectMethods as asMethods, implementAssignSubjectClassMethods as scMethods} from "./utilities.js";
 
-preload('#faculty')
+
 
 let asTableSetup = {
     data:               subjects,
@@ -87,6 +87,7 @@ var subClassTable = $(SCID).bootstrapTable(scTableSetup)
 let subjectTable = $("#subject-table").bootstrapTable(asTableSetup)
 
 $(function () {
+    preload('#faculty')
     /** Handling image upload */
     const readURL = input => {
         if (input.files && input.files[0]) {

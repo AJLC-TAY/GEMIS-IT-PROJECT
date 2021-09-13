@@ -54,7 +54,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             <div class="btn-con my-a">
                 <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class='edit-opt <?php echo $display; ?>'>
-                    <a href='section.php?code=<?php echo $sect_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
+                    <a href='section.php?sec_code=<?php echo $sect_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
                     <input type="submit" form="section-edit-form" class="btn btn-success btn-sm" value="Save">
                 </div>
             </div>
