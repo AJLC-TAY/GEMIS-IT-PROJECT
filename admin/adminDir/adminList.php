@@ -69,7 +69,7 @@ $user = $admin->getAdministrator($user_id);
                  <tr>
                      <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="100" data-align="left" data-field="admin_id">ID</th>
-                     <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="full_name">Name</th>
+                     <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="age">Age</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="sex">Sex</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="cp_no">Contact Number</th>

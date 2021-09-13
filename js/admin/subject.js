@@ -7,6 +7,8 @@ const tableSetup = {
   uniqueId: 'sub_code',
   idField: 'sub_code',
   height: 425,
+  search: true,
+  searchSelector: '#search-input',
   maintainMetaDat: true, // set true to preserve the selected row even when the current table is empty
   clickToSelect:      true,
   pageSize: 10,
@@ -233,6 +235,7 @@ $(function () {
         let archivedSub = JSON.parse(data)
         $("ul.arch-list").html(prepareArchiveHTML(archivedSub))
         subjectTable.bootstrapTable('refresh')
+        subjectTable.bootstrapTable('resetSearch')
         showToast("success", "Subject successfully unarchived")
     })
   })

@@ -4,6 +4,7 @@ require('Dataclasses.php');
 
 class Administration extends Dbconfig
 {
+    const MAX_SECTION_COUNT = 50;
     protected $hostName;
     protected $userName;
     protected $password;
@@ -96,6 +97,7 @@ class Administration extends Dbconfig
                 $id
             ],
             "ssssisssi");
+
         header("Location: admin.php?id=$id");
     }
     public function getAdministrator($id = NULL)
@@ -165,7 +167,11 @@ class Administration extends Dbconfig
             for ($i = 0; $i < $program_count; $i++) {
                 $section_name =  "$grade-{$alphabet[$i]}-1-Class";
                 $section_code = rand(10, 1000000);
-                $this->query("INSERT INTO section (section_code, sy_id, section_name, grd_level, stud_no_max) VALUES ($section_code, $sy_id, '$section_name', $grade, 50 );");
+                $this->prepared_query(
+                    "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, sy_id) VALUES (?, ?, ?, ?, ?) ;",
+                    [$section_code, $section_name, $grade, 50, $sy_id],
+                    "ssiii"
+                );
             }
         }
 
@@ -246,12 +252,6 @@ class Administration extends Dbconfig
         echo json_encode($sy_list);
     }
 
-    public function editEnrollStatus()
-    {
-        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
-        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $_POST['sy_id']], "ii");
-        echo "test";
-    }
     public function get_sy()
     {
         $result = $this->prepared_select("SELECT * FROM schoolyear WHERE sy_id=?", [$_GET['sy_id']], "i");
@@ -279,7 +279,10 @@ class Administration extends Dbconfig
     /** Section Methods */
     public function listSection() 
     {
-        $query = "SELECT * FROM section;";
+        session_start();
+        $query = "SELECT * FROM section ". ((isset($_GET['current']) && $_GET['current'] === 'true')
+                ? "WHERE sy_id='{$_SESSION['sy_id']}'"
+                : "") .";";
         $result = mysqli_query($this->db, $query);
         $sectionList = array();
         while ($row = mysqli_fetch_assoc($result)) {
@@ -321,17 +324,20 @@ class Administration extends Dbconfig
 
     public function addSection() 
     {
-
+        session_start();
         $code = $_POST['code'];
-        $program = $_POST['program'];
+//        $program = $_POST['program'];
         $grade_level = $_POST['grade-level'];
-        $max_no = $_POST['max-no'];
+        $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
         $section_name = $_POST['section-name'];
         $adviser = $_POST['adviser'] ?: NULL;
+        $sy_id = $_SESSION['sy_id'];
 
-        $this->prepared_query("INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id) VALUES (?, ?, ?, ?, ?, ?); ",
-                             [$code, $section_name, $grade_level, $max_no, $adviser],
-                            "sssiii");
+        $this->prepared_query(
+            "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
+            [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
+            "ssiiii"
+        );
     }
 
     public function editSection() 
@@ -940,8 +946,8 @@ class Administration extends Dbconfig
             $teacher_id = $row['teacher_id'];
 
             $action = "<div>"
-                ."<button onClick='togglePrivilege(`{$teacher_id}`, `0`)' class='can-enroll-btn $can_enroll_display btn-sm btn btn-primary' title='Unallow teacher to enroll'>Yes</button>"
-                ."<button onClick='togglePrivilege(`{$teacher_id}`, `1`)' class='cant-enroll-btn $cant_enroll_disp btn-sm btn btn-secondary' title='Allow teacher to enroll'>No</a>"
+                ."<a href='javascript:;' onClick='togglePrivilege(`{$teacher_id}`, `0`)' class='can-enroll-btn $can_enroll_display btn-sm btn btn-primary' title='Unallow teacher to enroll'>Yes</a>"
+                ."<a href='javascript:;' onClick='togglePrivilege(`{$teacher_id}`, `1`)' class='cant-enroll-btn $cant_enroll_disp btn-sm btn btn-secondary' title='Allow teacher to enroll'>No</a>"
             ."</div>";
 
             $faculty_list[] = [
@@ -1387,6 +1393,7 @@ class Administration extends Dbconfig
 
     public function enroll()
     {
+        session_start();
         echo "Add student starting...<br>";
         $student_id = $this->addStudent();
         echo "Add student finished.<br>";
@@ -1394,20 +1401,45 @@ class Administration extends Dbconfig
         // School information
         echo "Add School info starting...<br>";
 
-        $school_info = [$_POST['semester'], $_POST['track'],  $_POST['program']];
-        [$semester, $track, $program] = $this->preprocessData($school_info);
+        $school_info = [$_POST['track'],  $_POST['program']];
+        [$track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
             "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code) "
                 ."VALUES (NOW(), 0, ?, ?, ?, ?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
-                12,  // should be replaced by the current school year
+                $_SESSION['sy_id'],  // should be replaced by the current school year
                 $track
             ],
             "iiss"
         );
         echo "Add School info ended...<br>";
+
+        echo 'Adding promotion record...<br>';
+        $this->prepared_query(
+            "INSERT INTO promotion (school_id, school_name, school_type, school_add, last_grd_lvl_comp, last_school_yr_comp, "
+            ."balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+//                $_POST['school-id'],
+                NULL, # school_id
+                $_POST['school-name'],
+                NULL, # school_type
+                $_POST['school-address'],
+                $_POST['last-grade-level'],
+
+                $_POST['last-sy'],
+                $_POST['balik'],
+                $_POST['grade-level'],
+                $_POST['general-average'],
+                $_POST['semester'] ?? 1, # default is 1
+
+                $student_id
+            ],
+            // 11 params
+            "isssi". "siiii" . "i"
+        );
+        echo 'Added promotion record...<br>';
     }
 
     public function getEnrollees()
@@ -1442,6 +1474,23 @@ class Administration extends Dbconfig
     public function listEnrolleesJSON()
     {
         echo json_encode($this->getEnrollees());
+    }
+
+    public function editEnrollStatus()
+    {
+        session_start();
+        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
+        if (isset($_POST['sy_id'])) {
+            echo 'here';
+            # enrollment status of other previous school year
+            $sy_id = $_POST['sy_id'];
+        } else {
+            echo 'applied';
+            # enrollment status of current school year; hence, update session value
+            $sy_id = $_SESSION['sy_id'];
+            $_SESSION['enrollment'] = $can_enroll;
+        }
+        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $sy_id], "ii");
     }
 
 
@@ -2108,6 +2157,54 @@ class Administration extends Dbconfig
         $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
         header("Location: student.php?id=$stud_id");
+    }
+
+    public function listAvailableSection(){
+        $stud_id = '110001';
+        $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
+        if ($stud_data) {
+            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+        }
+
+        $res = $this->query("SELECT s.section_code, s.section_name, count(stud_id) as 'count' from enrollment as e right join section as s
+                                on s.section_code=e.section_code
+                                where s.stud_no <> s.stud_no_max AND e.section_code <> '{$data['section_code']}' AND enrolled_in='{$data['grdlvl']}' group by s.section_name;");
+
+        $available_sections =  array();
+        // while ($list = mysqli_fetch_row($this->prepared_select($retrieve_sec_query, [$data["section_code"], $data["grdlvl"]], "si"))){
+        //     $available_sections[$list[0]] = ["section_name" => $list[1], "slot" => 40 - $list[2]];
+        // }
+
+        while ($section = mysqli_fetch_assoc($res)) {
+            $available_sections[$section['section_code']] = ["code" => $section['section_code'],"name" => $section['section_name'], "slot" => 40 - $section['count']];
+        }
+
+        return $available_sections;
+    }
+
+    public function listFullSectionJSON()
+    {
+        $stud_id = '110001';
+        $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
+        if ($stud_data) {
+            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+        }
+
+        $res = $this->query("SELECT s.section_code, s.section_name, count(stud_id) as 'count' from enrollment as e right join section as s
+                                on s.section_code=e.section_code
+                                where s.stud_no = s.stud_no_max AND e.section_code <> '{$data['section_code']}' AND enrolled_in='{$data['grdlvl']}' group by s.section_name;");
+        
+        while ($row = mysqli_fetch_assoc($res)) {
+            $teacher_id = $row['teacher_id'];
+            $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
+            $sectionList[] = ["section_code" => $row['section_code'], 
+                              "section_name" => $row['section_name'],
+                              "section_grd"  => $row['grd_level'],
+                              "adviser_id"   => $teacher_id,
+                              "adviser_name" => $name
+                            ];
+        }
+        echo json_encode($sectionList);
     }
 }
 ?>
