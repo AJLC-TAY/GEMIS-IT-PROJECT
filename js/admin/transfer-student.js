@@ -30,6 +30,7 @@ const tableSetup = {
 
 let programTable = $("#table").bootstrapTable(tableSetup)
 var section_id;
+var stud_id;
 $(function() {
     preload('#student')
     hideSpinner()
@@ -41,6 +42,7 @@ $(function() {
 
     $(document).on('click','.transfer', function(){
         section_id = $(this).attr('id');
+        stud_id = $(this).attr('data');
         $('#transferconfirmation').modal('toggle');
     })
 
@@ -53,7 +55,7 @@ $(function() {
         // $.post('action.php', {section_id, action:action} , function(data){
         //     $('#transfer-student-confirmation').modal('hide')	
         // })
-        $.post("action.php", {section_id, action:action}, function(data) {	
+        $.post("action.php", {section_id,stud_id, action:action}, function(data) {	
             $('#transfer-student-confirmation').modal('hide')
             console.log(data)
         })
