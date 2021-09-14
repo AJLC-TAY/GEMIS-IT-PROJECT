@@ -17,7 +17,7 @@ $admin = new Administration();
     </div>
 </header>
 
-<form id="enrollment-setup" enctype="multipart/form-data" action="action.php" method="POST">
+<form id="enrollment-setup" class="needs-validation "enctype="multipart/form-data" action="action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
             <div class="step mx-5" data-target="#test-l-1">
@@ -107,6 +107,9 @@ $admin = new Administration();
                                             <label for="section-name" class="col-lg-4 col-form-label">Name</label>
                                             <div class="col-lg-8">
                                                 <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name" required>
+                                                <div class="invalid-input">
+                                                    Please enter section name
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-row row">
