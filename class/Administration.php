@@ -1174,7 +1174,7 @@ class Administration extends Dbconfig
     /**
      * @param int|string $id
      */
-    private function updateAssignedSubClass(int|string $id): void
+    private function updateAssignedSubClass(string $id): void
     {
         if (isset($_POST['asgn-sub-class'])) {
             $asgn_sub_classes = $_POST['asgn-sub-class'];
