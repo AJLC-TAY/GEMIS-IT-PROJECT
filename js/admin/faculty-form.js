@@ -103,17 +103,6 @@ $(function () {
         readURL(this);
     })
 
-    // $('#faculty-form').submit(function(event) {
-    //     event.preventDefault()
-
-    //     console.log($(this).serializeArray())
-    //     $.post("action.php", $(this).serializeArray(), function(data) {
-    //         console.log(data)
-    //     }).fail(function(error) {
-    //         console.log(error.responseText)
-    //     }) 
-    // })
-
     /** Assign Subject to Faculty Methods */
     asMethods(assigned, subjectTable)
 
@@ -122,10 +111,8 @@ $(function () {
 
     $(document).on("submit", "#faculty-form", function (e) {
         e.preventDefault()
+        var action = $(this).attr('data-action')
         var formData = new FormData($(this)[0])
-        // let formData = $(this).serializeArray().filter(e => {  // remove unnecessary values in the formdata,
-        //     return !e.name.toLowerCase().includes("btselect")
-        // });
 
         $(ASSIGNEDSCID).bootstrapTable("getData")
                        .forEach(e => {
@@ -138,6 +125,7 @@ $(function () {
                            })
 
         formData.append("profile", "faculty")
+        formData.append("action", action)
 
         $.ajax({
             url: "action.php",

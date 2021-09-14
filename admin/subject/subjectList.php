@@ -36,7 +36,7 @@
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="180" data-align="center" data-field="sub_code">Code</th>
-                    <th scope='col' data-width="500" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                    <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Type</th>
                     <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
                 </tr>

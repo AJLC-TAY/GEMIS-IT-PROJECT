@@ -26,10 +26,8 @@ if ($action == 'add') {
     $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
-    $birthdate_input = "<input type='date' class='form-control' name='birthdate' required> 
-                        <div class='invalid-feedback'>
-                            Pleaes enter birthdate
-                        </div>";
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate' required>"
+                        ."<div class='invalid-feedback'>Please enter birthdate</div>";
     $department_option = "";
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
@@ -110,9 +108,9 @@ $camel_action = ucwords($action);
     <h6 class='text-secondary'>Please complete the following:</h6>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+<form id='faculty-form' data-action="<?php echo $action; ?>" class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+    <?php echo $teacher_id_input; ?>
     <div class='form-row row'>
-
         <!-- last name -->
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>
@@ -171,9 +169,8 @@ $camel_action = ucwords($action);
             foreach ($sexOpt as $id => $value) {
                 echo "<div class='form-check'>"
                     . "<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                    . "<label class='form-check-label' for='$id'>$value"
-                    . "</label>"
-                    . "</div>";
+                    . "<label class='form-check-label' for='$id'>$value</label>"
+                . "</div>";
             }
             ?>
         </div>
@@ -297,9 +294,7 @@ $camel_action = ucwords($action);
     </div>
     <!-- ASSIGN SUBJECTS END -->
 
-    <div class='back-btn d-flex justify-content-end'> <?php echo $teacher_id_input ?? ""; ?>
-        <input type='hidden' name='profile' value='faculty'>
-        <input type='hidden' value='<?php echo $action; ?>' name='action'>
+    <div class='back-btn d-flex justify-content-end'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
         <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn'>
     </div>

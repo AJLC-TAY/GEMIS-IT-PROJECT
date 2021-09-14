@@ -48,7 +48,7 @@ if (isset($_GET['action'])) {
     <!-- MAIN CONTENT END -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0; right: 0;">
-        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 9999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
     <!--ADD SUBJECT CLASS MODAL-->

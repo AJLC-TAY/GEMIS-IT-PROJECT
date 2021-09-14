@@ -88,9 +88,9 @@ class Program implements JsonSerializable
         $this->curr_code = $curr_code;
         $this->prog_desc = $prog_desc;
         $this->action = "<div class='d-flex justify-content-center'>"
-                      ."<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary btn-sm w-auto me-1' title='View Program'><i class='bi bi-eye'></i></a>" 
-                      ."<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary w-auto btn-sm' title='Edit Program'><i class='bi bi-pencil-square'></i></a>"
-                      . "</div>";
+                          ."<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary btn-sm w-auto me-1' title='View Program'><i class='bi bi-eye'></i></a>"
+                          ."<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary w-auto btn-sm' title='Edit Program'><i class='bi bi-pencil-square'></i></a>"
+                        ."</div>";
     }
 
     public function get_curr_code()

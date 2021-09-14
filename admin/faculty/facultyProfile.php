@@ -321,7 +321,7 @@ $display_style = STYLE_DISPLAY_NONE;
                     </div>
                     <!-- ADVISORY SECTION END -->
                     <!-- SUBJECT CLASS SECTION -->
-                    <div id="subject-class-section" class="mt-5 p-3 w-100 border">
+                    <div id="subject-class-section" data-page="profile" class="mt-5 p-3 w-100 border">
                         <!-- SUBJECT CLASS HEADER -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="my-auto ">

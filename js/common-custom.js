@@ -12,8 +12,9 @@ function preload(menuItem, subMenuItem= null) {
 }
 
 /** Shows the spinner */
-function showSpinner(selector = null) {
+function showSpinner(selector = null, bs = false) {
     if (selector != null) return $(selector).show()
+    if (bs) return $(selector).bootstrapTable('showLoading')
     spinner.show()
 }
 

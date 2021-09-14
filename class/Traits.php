@@ -170,24 +170,25 @@ trait Enrollment
         echo 'Added promotion record...<br>';
     }
 
-//    public function getEnrollees()
-//    {
-//        $result = $this->query(
-//            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-//            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
-//            ."JOIN student AS s USING (stud_id) "
-//            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
-//        );
-//        $enrollees = [];
-//        while ($row = mysqli_fetch_assoc($result)) {
-//            $enrollees[] = new Enrollee(
-//                $row['SY'], $row['LRN'], $row['name'],
-//                $row['date_of_enroll'], $row['enrolled_in'],
-//                $row['curr_code'], $row['status'], $row['stud_id']
-//            );
-//        }
-//        return $enrollees;
-//    }
+    public function getEnrollees()
+    {
+        $result = $this->query(
+            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+            ."JOIN student AS s USING (stud_id) "
+            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
+        );
+        $enrollees = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $enrollees[] = new Enrollee(
+                $row['SY'], $row['LRN'], $row['name'],
+                $row['date_of_enroll'], $row['enrolled_in'],
+                $row['curr_code'], $row['status'], $row['stud_id']
+            );
+
+        }
+        return $enrollees;
+    }
 
     public function editEnrollStatus()
     {

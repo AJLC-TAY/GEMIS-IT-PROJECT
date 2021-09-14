@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
 
