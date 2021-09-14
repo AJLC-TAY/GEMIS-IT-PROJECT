@@ -1817,5 +1817,24 @@ class Administration extends Dbconfig
         }
         echo json_encode($sectionList);
     }
+
+    public function forgotPassword(){
+        $email = $_POST['email'];
+        $user = mysqli_fetch_assoc($this->prepared_select("SELECT * from user WHERE email=?", [$email]));
+        $token = $user['token'];
+        sendPasswordResetLink($email, $token);
+
+        //modal message
+
+    }
+
+    $message = "";
+
+    public function sendPasswordResetLink($email, $token){
+        global $mailer;
+
+
+    }
+
 }
 ?>

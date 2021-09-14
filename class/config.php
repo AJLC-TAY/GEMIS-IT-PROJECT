@@ -10,7 +10,7 @@ class dbConfig {
         $this -> userName = 'root';
         $this -> password = 'root';
         $this -> dbName = 'gemis';
-        $this -> port = 8889;
+        $this -> port = 3306;
     }
 
     public function connect() {

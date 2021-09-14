@@ -9,8 +9,8 @@ include_once("inc/head.html");
     <body> 
         <div class="box">
             <h1>Forgot your password?</h1>
-            <form>
-                <input type="text" name="" class="form-control" placeholder="Enter Email">
+            <form action="forgotPassword.php" method="POST">
+                <input type="text" name="email" class="form-control" placeholder="Enter Email">
                 <input type="submit" name="forgotPassword" class="btn" value="Recover Password">
             </form>
         </div>
