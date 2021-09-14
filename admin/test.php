@@ -31,17 +31,22 @@
 include '../class/Administration.php';
 
 $admin = new Administration();
-$admin->getEnrollmentReportData(true);
 
-$tracks = [];
-$track_list = $_POST['tracks'];
-foreach($track_list as $track) {
-	$progs = $_POST["$track-programs"];
-	foreach($progs as $prog) {
-		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
-		$tracks[$track] = $prog;
-	}
-}
+echo "jtest";
+echo json_encode($admin->createUser('ST'));
+//$admin->getEnrollmentReportData(true);
+//
+//$tracks = [];
+//$track_list = $_POST['tracks'];
+//foreach($track_list as $track) {
+//	$progs = $_POST["$track-programs"];
+//	foreach($progs as $prog) {
+//		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
+//		$tracks[$track] = $prog;
+//	}
+//}
+
+
 
 
     /**

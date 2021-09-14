@@ -301,7 +301,7 @@ $camel_action = ucwords($action);
         <input type='hidden' name='profile' value='faculty'>
         <input type='hidden' value='<?php echo $action; ?>' name='action'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
-        <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn' name='submit'>
+        <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn'>
     </div>
 </form>
 <!-- VALIDATION -->

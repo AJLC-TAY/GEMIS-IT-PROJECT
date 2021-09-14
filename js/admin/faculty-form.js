@@ -138,7 +138,6 @@ $(function () {
                            })
 
         formData.append("profile", "faculty")
-        formData.append("action", "add")
 
         $.ajax({
             url: "action.php",
