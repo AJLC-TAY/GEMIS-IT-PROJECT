@@ -3,8 +3,8 @@ require "../class/Administration.php";
 $admin = new Administration();
 $tracks = $admin->getEnrollmentReportData();
 
-print_r($tracks);
 
+print_r($tracks);
 $school_year = "2021-2022";
 $signatory = "Alvin John Cutay";
 $position = "Student";

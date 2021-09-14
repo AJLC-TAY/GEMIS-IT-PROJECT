@@ -1649,6 +1649,39 @@ class StudentAward extends Award implements JsonSerializable
         ];}
 
     }
+    class Enrollee implements JsonSerializable {
+
+        public function __construct (
+            $SY, $LRN, $name, $date_of_enroll,
+            $enrolled_in, $curr_code, $status, $stud_id
+        ) {
+            $this->stud_id = $stud_id;
+            $this->SY = $SY;
+            $this->LRN = $LRN;
+            $this->name = $name;
+            $this->date_of_enroll = $date_of_enroll;
+            $this->enrolled_in = $enrolled_in;
+            $this->curr_code = $curr_code;
+            $this->status = $status;
+        }
+        public function jsonSerialize()
+        {
+            return [
+                "SY"          => $this->SY,
+                "LRN"         => $this->LRN,
+                "name"        => $this->name,
+                "enroll-date" => $this->date_of_enroll,
+                "grade-level" => $this->enrolled_in,
+                "curriculum"  => $this->curr_code,
+                "status"      => $this->status,
+                "action"      => "<div class='d-flex justify-content-center'>"
+                    ."<button class='btn btn-secondary w-auto me-1 btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
+                    ."<a href='enrollment.php?id={$this->stud_id}&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left'></i></a>"
+                    ."<a href='enrollment.php?id={$this->stud_id}' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
+                    ."</div>"
+            ];
+        }
+    }
     
     class Section implements JsonSerializable{
 

@@ -12,12 +12,12 @@ const tableSetup = {
     pagination:         true,
     pageList:           "[20, 40, 80, 100, All]",
     paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-    search:             true,
     searchSelector:     '#search-input'
 }
 
-let enrolleesTable = $('#table').bootstrapTable(tableSetup)
+
 
 $(function() {
+    let enrolleesTable = $('#table').bootstrapTable(tableSetup)
     hideSpinner()
 })
