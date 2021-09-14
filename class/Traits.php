@@ -1,5 +1,4 @@
 <?php
-require('Dataclasses.php');
 trait QueryMethods
 {
     public function prepared_query($query, $params, $types = "")
@@ -171,39 +170,24 @@ trait Enrollment
         echo 'Added promotion record...<br>';
     }
 
-    public function getEnrollees()
-    {
-        $result = $this->query(
-            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
-            ."JOIN student AS s USING (stud_id) "
-            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
-        );
-        $enrollees = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $user_id = $row['stud_id'];
-            $enrollees[] = [
-                "SY"          => $row['SY'],
-                "LRN"         => $row['LRN'],
-                "name"        => $row['name'],
-                "enroll-date" => $row['date_of_enroll'],
-                "grade-level" => $row['enrolled_in'],
-                "curriculum"  => $row['curr_code'],
-                "status"      => $row['status'],
-                "action"      => "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-secondary w-auto me-1 btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
-                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left'></i></a>"
-                    . "<a href='enrollment.php?id=$user_id' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
-                    . "</div>"
-            ];
-        }
-        return $enrollees;
-    }
-
-    public function listEnrolleesJSON()
-    {
-        echo json_encode($this->getEnrollees());
-    }
+//    public function getEnrollees()
+//    {
+//        $result = $this->query(
+//            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+//            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+//            ."JOIN student AS s USING (stud_id) "
+//            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
+//        );
+//        $enrollees = [];
+//        while ($row = mysqli_fetch_assoc($result)) {
+//            $enrollees[] = new Enrollee(
+//                $row['SY'], $row['LRN'], $row['name'],
+//                $row['date_of_enroll'], $row['enrolled_in'],
+//                $row['curr_code'], $row['status'], $row['stud_id']
+//            );
+//        }
+//        return $enrollees;
+//    }
 
     public function editEnrollStatus()
     {

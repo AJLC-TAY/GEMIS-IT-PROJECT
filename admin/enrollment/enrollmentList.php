@@ -4,7 +4,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item" aria-current="enrollment.php">Enrollment</li>
+            <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
             <li class="breadcrumb-item active" aria-current="page">Enrollees</li>
         </ol>
     </nav>
@@ -12,7 +12,7 @@
         <h3 class="fw-bold">Enrollees</h3>
         <div>
             <button type="button" class="view-archive btn btn-secondary btn-sm"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
-            <a href="faculty.php?action=add" id="add-btn" class="btn btn-success btn-sm" title='Enroll a student'><i class="bi bi-plus me-2"></i>Enroll</a>
+            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success btn-sm" title='Enroll a student' target="_blank"><i class="bi bi-plus me-2"></i>Enroll</a>
             <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
         </div>
     </div>

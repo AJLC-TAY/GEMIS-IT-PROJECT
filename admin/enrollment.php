@@ -22,6 +22,7 @@ include_once("../inc/head.html"); ?>
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <?php
+                            require('../class/Administration.php');
                             $js = '';
                             if (isset($_GET['page'])) {
                                 if ($_GET['page'] === 'enrollees') {
@@ -40,15 +41,16 @@ include_once("../inc/head.html"); ?>
                                 }
 
                                 if ($_GET['page'] === 'report') {
-                                    require("./enrollment/previewReport.php");
+                                    require("enrollment/previewReport.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                                 if ($_GET['page'] === 'credential') {
-                                    require("./enrollment/enrollmentCredentials.php");
+                                    require("enrollment/enrollmentCredentials.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
+                                echo "<a href='enrollment.php?page=enrollees'>Enrollment List</a>";
                                 $js = "<script src='../js/admin/enrollment.js'></script>";
                             }
                             ?>
