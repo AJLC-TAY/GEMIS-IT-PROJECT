@@ -2206,5 +2206,12 @@ class Administration extends Dbconfig
         }
         echo json_encode($sectionList);
     }
+    public function forgotPassword(){
+        $email = $_POST['email']; 
+        $userEmail = mysqli_fetch_row($this->prepared_select("SELECT * FROM user WHERE email=?", [$email],"s"));
+        $expDate = '';
+        $key= '';
+    
+    }
 }
 ?>

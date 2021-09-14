@@ -125,4 +125,5 @@ include_once("../inc/head.html");
     <script src="../js/admin/admin.js"></script>
 
 </body>
+
 </html>

@@ -6,9 +6,9 @@ include_once("../inc/head.html"); ?>
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -41,6 +41,10 @@ include_once("../inc/head.html"); ?>
 
                                 if ($_GET['page'] === 'report') {
                                     require("./enrollment/previewReport.php");
+                                    $js = "<script src='../js/admin/enrollment.js'></script>";
+                                }
+                                if ($_GET['page'] === 'credential') {
+                                    require("./enrollment/enrollmentCredentials.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                             } else {

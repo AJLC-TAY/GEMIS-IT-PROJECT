@@ -35,10 +35,7 @@ class Administrator implements JsonSerializable
         ];
     }
 }
-/**
- * Curriculum Class
- * @author Ben Carlo de los Santos
- */
+
 class Curriculum implements JsonSerializable
 {
     private $cur_code;
@@ -91,8 +88,8 @@ class Program implements JsonSerializable
         $this->curr_code = $curr_code;
         $this->prog_desc = $prog_desc;
         $this->action = "<div class='d-flex justify-content-center'>"
-                      . "<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary w-auto me-1 btn-sm' title='Edit Program'><i class='bi bi-pencil-square'></i></a>"
-                      . "<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary btn-sm w-auto' title='View Program'><i class='bi bi-eye'></i></a>"
+                      ."<a href='program.php?prog_code=".$prog_code."' class='btn btn-primary btn-sm w-auto me-1' title='View Program'><i class='bi bi-eye'></i></a>" 
+                      ."<a href='program.php?prog_code=".$prog_code."&state=edit' class='btn btn-secondary w-auto btn-sm' title='Edit Program'><i class='bi bi-pencil-square'></i></a>"
                       . "</div>";
     }
 
@@ -153,8 +150,8 @@ class Subject implements JsonSerializable
         $this->sub_semester = $sub_semester;
         $this->sub_type = $sub_type;
         $this->action = "<div class='d-flex justify-content-center'>"
-                    ."<a href='subject.php?sub_code=".$sub_code."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
                     ."<a href='subject.php?sub_code=".$sub_code."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                    ."<a href='subject.php?sub_code=".$sub_code."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
                     ."</div>";
     }
 
@@ -203,8 +200,8 @@ class Subject implements JsonSerializable
         $this->program = $program;
         $sub_code = $this->get_sub_code();
         $this->action = "<div class='d-flex justify-content-center'>"
-                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&action=edit' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
-                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."' class='btn btn-primary btn-sm w-auto' title='View Subject'><i class='bi bi-eye'></i></a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."' class='btn btn-primary btn-sm w-auto me-1' title='View Subject'><i class='bi bi-eye'></i></a>"
+                        ."<a href='subject.php?prog_code=". $program ."&sub_code=". $sub_code ."&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
                         ."</div>";
     }
 
@@ -329,8 +326,8 @@ class Faculty implements JsonSerializable
         $this->subjects = $subjects;
         $this->handled_sub_classes = [];
         $this->action = "<div class='d-flex justify-content-center'>"
-                      ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-primary btn-sm w-auto me-1' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
-                      ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Faculty'><i class='bi bi-eye'></i></a>"
+                      ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
+                      ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
                       ."</div>";
         $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
     }
@@ -1507,8 +1504,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->belong_to_ipcc = $belong_to_ipcc;
             $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
-                            ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-primary btn-sm w-auto me-1' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"
-                            . "<a href='student.php?id=$stud_id' role='button' class='btn btn-secondary btn-sm w-auto' title='View Student'><i class='bi bi-eye'></i></a>"
+                            ."<a href='student.php?id=$stud_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Student'><i class='bi bi-eye'></i></a>"
+                            ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"    
                             ."</div>";
             $this->section = $section;
             $this->parents = $parents;
@@ -1675,8 +1672,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->teacher_id = $teacher_id;
             $this->action = 
                         "<div class='d-flex justify-content-center'>"
-                            ."<a href='section.php?sec_code=$code&action=edit' target='_blank' class='btn btn-secondary btn-sm w-auto me-1'' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
-                            ."<a href='section.php?sec_code=$code' target='_blank' class='btn btn-primary btn-sm w-auto' title='View Section'><i class='bi bi-eye'></i></a>"
+                            ."<a href='section.php?sec_code=$code' target='_blank' class='btn btn-primary btn-sm w-auto me-1' title='View Section'><i class='bi bi-eye'></i></a>"
+                            ."<a href='section.php?sec_code=$code&action=edit' target='_blank' class='btn btn-secondary btn-sm w-auto' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
                         ."</div>";
         }
 

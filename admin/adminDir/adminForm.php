@@ -55,7 +55,7 @@ if ($action == 'add') {
         <?php echo $id_header; ?>
         <form id='admin-form' action="action.php" method='POST'>
             <!-- NAME -->
-            <h5>Personal Information</h5>
+            <h5 class="fw-bold">Personal Information</h5>
             <div class='form-row row mb-3'>
                 <div class='form-group col-md-4'>
                     <label for='lastname'>Last Name</label>
@@ -81,7 +81,7 @@ if ($action == 'add') {
                     <label for='age'>Age</label>
                     <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
                 </div>
-                <div class='form-group col-md-2'>
+                <div class='form-group col-md-3'>
                     <label for='sex'>Sex</label>
                     <div class="d-flex">
                         <?php
@@ -89,9 +89,8 @@ if ($action == 'add') {
                         foreach ($sexOpt as $id => $value) {
                             echo "<div class='form-check'>"
                                 ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                                ."<label class='form-check-label' for='$id'>$value"
-                                ."</label>"
-                                ."</div>";
+                                ."<label class='form-check-label me-2' for='$id'>$value</label>"
+                            ."</div>";
                         }
                         ?>
                     </div>
@@ -100,7 +99,7 @@ if ($action == 'add') {
             <!-- SEX INFO END -->
             <!-- CONTACT INFO -->
             <hr class="mt-0 mb-3">
-            <h5>Contact Information</h5>
+            <h5 class="fw-bold">Contact Information</h5>
             <div class="form-group row">
                 <div class='form-group col-md-4'>
                     <label for='cpnumber'>Cellphone No.</label>
@@ -116,7 +115,7 @@ if ($action == 'add') {
             <div class="form-group row mt-2">
                 <div class="d-flex justify-content-end">
                     <input type='hidden' name='action' value='<?php echo $action; ?>Administrator'>
-                    <a href='admin.php' class='btn btn-dark me-2'>Cancel</a>
+                    <a href='admin.php' class='btn btn-outline-danger me-2'>Cancel</a>
                     <input type='submit' form='admin-form' class='btn btn-success' value='<?php echo $button; ?>'>
                 </div>
             </div>

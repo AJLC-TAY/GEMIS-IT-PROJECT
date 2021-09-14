@@ -1,93 +1,19 @@
-// let selectedSubjects = []
-// const removeFromSelectedSubject = (subjectCode) => {
-//     const index = selectedSubjects.indexOf(subjectCode)
-//     if (index > -1) {
-//         selectedSubjects.splice(index, 1);
-//     }
-// }
-//
-// export let setSubjectSelected = list => {
-//     selectedSubjects = list
-// }
-//
-// export let getSubjectSelected = () => {return selectedSubjects};
-//
-// export function addSubjectFn (e) {
-//     e.preventDefault()
-//     let id, subject, code
-//     id = $('#search-input').val()
-//     subject = subjects.filter(function (element) {
-//         return element.sub_code == id
-//     })
-//
-//     if (subject.length == 1) {
-//         subject = subject[0]
-//         code = subject.sub_code
-//         if (selectedSubjects.includes(code)) return showToast('warning', 'Subject already added')
-//         selectedSubjects.push(code)
-//         $('#emptyMsg').addClass('d-none')
-//         $('table').find('tbody').append(`<tr class='text-center'>
-//             <td class='cb-con' scope='col'><input type='checkbox' value='${code}' /></td>
-//             <td scope='col'><input type='hidden' name='subjects[]' value='${code}'/>${code}</td>
-//             <td scope='col'>${subject.sub_name}</td>
-//             <td scope='col'>${subject.sub_type}</td>
-//             <td scope='col'>
-//                 <button data-value='${code}' class='remove-btn btn btn-sm btn-danger m-auto shadow-sm' title='Delete subject'><i class='bi bi-x-square'></i></button>
-//                 <a href='subject.php?sub_code=${code}&state=view' role='button' class='view-btn btn btn-sm btn-primary m-auto shadow-sm d-none' title='View subject'><i class='bi bi-eye'></i></a>
-//             </td>
-//         </tr>`)
-//     } else {
-//         showToast('warning', 'Code did not match')
-//     }
-// }
-//
-// export function removeAllBtnFn (e) {
-//     e.preventDefault()
-//     let selected = $("tbody input[type=checkbox]:checked")
-//     $("#selectAll").prop('checked', false)
-//     if (selected.length == 0) {
-//         showToast('warning', 'No subject is selected')
-//     } else {
-//         selected.each(function() {
-//             const element = $(this)
-//             const id = element.val()
-//             element.closest("tr").remove()
-//             removeFromSelectedSubject(id)
-//         })
-//         if (selectedSubjects.length == 0) $('#emptyMsg').removeClass('d-none')
-//     }
-// }
-//
-// export function removeSubjectBtnFn (e){
-//     e.preventDefault()
-//     let element = $(this)
-//     let id = element.attr('data-value')
-//     element.closest("tr").remove()
-//     removeFromSelectedSubject(id)
-//     if (selectedSubjects.length == 0) $('#emptyMsg').removeClass('d-none')
-// }
-//
-// export function selectAll () {
-//     $(this).prop('checked', this.checked)
-//     var table= this.closest('table')
-//     $('td input:checkbox', table).prop('checked', this.checked)
-// }
-
-
 /** Assign Subject to Faculty Methods */
 export const implementAssignSubjectMethods = (assignedSub, subTable) => {
-    let assigned = assignedSub
-    let subjectTable = subTable
+    let assigned = assignedSub      // list of assigned subjects
+    let subjectTable = subTable     // the table where the data of assigned subjects will be rendered
+
     $(document).on("click", ".edit-as-btn, #edit-as-btn", function() {
         // show
         console.log(assigned);
         // subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
     })
 
+    // uncheck all records if cancel button is clicked
     $(document).on("click", "#cancel-as-btn", () => {
         subjectTable.bootstrapTable("uncheckAll")
     })
-    // $("#save-as-btn").click(() => $("#as-form").submit())
+
     $(document).on("submit", "#as-form", function(e) {
         e.preventDefault()
         showSpinner()
@@ -143,12 +69,10 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
     })
 
     $("#add-sc-modal").on("show.bs.modal", function() {
-        // subClassTable.bootstrapTable('showLoading')
         showSpinner()
         $(SCID).bootstrapTable('uncheckAll')
         setTimeout( () => {
             $(SCID).bootstrapTable('resetView')
-            // subClassTable.bootstrapTable('hideLoading')
             hideSpinner()
         }, 1000);
     })
@@ -159,35 +83,32 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
     //     $('#sc-form').submit()
     // })
 
-    const toggleSCFilterActive = (element) => {
-        filterDropDownActiveEvent("ul[aria-labelledby='sc-filter']", element)
-    }
+    /** Filter button of the Subject Class table */
+    $(document).on('click', '.filter-item', function (e) {
+        e.preventDefault()
+        let subClassTable = $('#sc-table')
+        subClassTable.bootstrapTable('showLoading')
+        // Add active state to the button and remove active state from other options
+        $(this).addClass('active')
+        $(this).closest("ul").find("li a").not($(this)).removeClass('active')
 
-    $(document).on("click", "#all-btn", function() {
-        showSpinner()
-        toggleSCFilterActive(this)
-        $(SCID).bootstrapTable('filterBy', {})
-        hideSpinner()
+        // Get value of the button to know what to filter
+        let value = $(this).attr('data-value')
+        console.log(value)
+        let filterData = {}
+        if (value !== '*') filterData.status = [value]
+        else subClassTable.bootstrapTable('refresh')
+
+        subClassTable.bootstrapTable('filterBy', filterData)
+                     .bootstrapTable('hideLoading')
     })
+
+
 
     $(document).on("click", ".clear-table-btn", () => {
-        showSpinner()
-        $(SCID).bootstrapTable("resetSearch")
-        hideSpinner()
-    })
-
-    $(document).on("click", "#available-btn", function() {
-        showSpinner()
-        toggleSCFilterActive(this)
-        $(SCID).bootstrapTable('filterBy', {status: 'available'})
-        hideSpinner()
-    })
-
-    $(document).on("click", "#unavailable-btn", function() {
-        showSpinner()
-        toggleSCFilterActive(this)
-        $(SCID).bootstrapTable('filterBy', {status: 'taken'})
-        hideSpinner()
+        $(SCID).bootstrapTable("showLoading")
+               .bootstrapTable("resetSearch")
+               .bootstrapTable("hideLoading")
     })
 
     const moveData = (dataList, origin, destination) => {
@@ -295,16 +216,24 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
 /** Search List */
 export const searchKeyBindEvent = (searchInputSelector, listContainer) => {
     $(document).on("keyup", searchInputSelector, function() {
-        showSpinner()
-        var value = $(this).val().toLowerCase()
-        $(`${listContainer} li`).filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        })
-        hideSpinner()
-    })
-}
+        let noResultMsg = $(".no-result-msg")
+        // hide no result message and cards
+        noResultMsg.hide()
+        $(`${listContainer} li`).toggle(false)
+        let page = $(listContainer).attr('data-page')
+        // show loading status
+        showSpinner(`#${page}-spinner`)
+        setTimeout(() => {
+            var value = $(this).val().toLowerCase()
+            let match = []
+            $(`${listContainer} li`).filter(function() {
+                let thereIsMatch = $(this).text().toLowerCase().indexOf(value) > -1
+                match.push(thereIsMatch)
+                $(this).toggle(thereIsMatch)
+            })
 
-export const filterDropDownActiveEvent = (ulSelector, element) => {
-    $(`${ulSelector} li a`).not(element).removeClass('active')
-    $(element).addClass('active')
+            if (!match.includes(true)) noResultMsg.show()
+            hideSpinner(`#${page}-spinner`)
+        }, 1250)
+    })
 }

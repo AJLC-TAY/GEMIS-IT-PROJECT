@@ -37,5 +37,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
 // if (isset($_GET['data']) && $_GET['data'] == 'sectionOption') {
 //     $admin->listSectionOptionJSON($_GET['teacher_id']);
 // }
+
+if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
+    $admin->listFullSectionJSON();
+}
 ?>
 

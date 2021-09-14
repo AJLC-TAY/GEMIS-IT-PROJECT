@@ -27,17 +27,17 @@
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
+                        <button id="export-opt" type="submit" class="btn btn-primary btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                         <input id="reset-pass-opt" type="submit" class="btn btn-secondary btn-sm" title='Reset Password' value="Reset Password">
-                        <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                        <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-outline-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
                     </div>
                 </div>
 
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="teacher_id">UID</th>
-                    <th scope='col' data-width="400" data-align="left" data-sortable="true" data-field="name">Name</th>
-                    <th scope='col' data-width="300" data-align="left" data-sortable="true" data-field="department">Department</th>
+                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="teacher_id">UID</th>
+                    <th scope='col' data-width="450" data-align="left" data-sortable="true" data-field="name">Name</th>
+                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="department">Department</th>
                     <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>

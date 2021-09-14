@@ -69,7 +69,8 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
     <!-- BREADCRUMB -->
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
             <li class="breadcrumb-item active">Enrollment Credentials</li>
         </ol>
     </nav>
@@ -141,7 +142,6 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                             </div>
                             <hr>
                             <div class="row mt-3">
-                                
                                 <div class="col">
                                     <a href="#" id="pop">
                                         <img id="imageresource" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Alien_Case_File_for_Francesca_Rhee_-_NARA_-_6336263_%28page_29%29.jpg" style="width: 50%; height: auto;">

@@ -1,8 +1,8 @@
 let menuItem, subMenuItem, spinner
 
 /** Display active menu item */
-function preload(menuItem, subMenuItem=null) {
-    spinner = $('.spinner-con')
+function preload(menuItem, subMenuItem= null) {
+    spinner = $('#main-spinner-con')
     spinner.show()
     if (!subMenuItem) return $(menuItem).click()
     menuItem = $(`${menuItem} a:first`)
@@ -12,12 +12,14 @@ function preload(menuItem, subMenuItem=null) {
 }
 
 /** Shows the spinner */
-function showSpinner() {
+function showSpinner(selector = null) {
+    if (selector != null) return $(selector).show()
     spinner.show()
 }
 
 /** Fades out spinner */
-function hideSpinner() {
+function hideSpinner(selector = null) {
+    if (selector != null) return $(selector).hide()
     spinner.fadeOut(500)
 }
     
@@ -28,7 +30,7 @@ function hideSpinner() {
  *  @param {String} msg     Text to be showed.
  *  @param {Number} delay   Milliseconds to wait before fading out.
  */
-function showToast(type, msg, options=null) {
+function showToast(type, msg, options= null) {
     let toast = $(`<div class="toast bg-${type} text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">${msg}</div>
