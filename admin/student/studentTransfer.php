@@ -3,6 +3,7 @@ $admin = new Administration();
 $userProfile = $admin->getProfile("ST");
 $stud_name = $userProfile->get_name();
 $section = $userProfile->get_section();
+$stud_id = $userProfile->get_stud_id();
 ?>
 <header>
     <!-- BREADCRUMB -->
@@ -36,7 +37,7 @@ $section = $userProfile->get_section();
             $adviser = "Adviser: " . $subject['adviser'];
             $slot = "Available Slots: " . $subject['slot'];
             $code = $subject['code'];
-            echo "<button id='${code}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
+            echo "<button id='${code}' data = '${stud_id}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
             <div class='d-flex w-100 justify-content-between'>
                 <p class='mb-1'>$name</p>
                 <small>$slot</small>
