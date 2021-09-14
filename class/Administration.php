@@ -1800,23 +1800,55 @@ class Administration extends Dbconfig
     public function listFullSectionJSON()
     {
         $stud_id = $_GET['id'];
+
         $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
         if ($stud_data) {
-            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+            // $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+            $code = $stud_data[0];
+            $lvl = $stud_data[1];
         }
 
-        $sectionList = ["section_code" => 'waley', 
-                              "section_name" => 'section_name',
-                              "adviser_name" => 'adiver',
-                              "student" => 'idk',
-                              "action" => "<button id='asd' class='d-inline w-auto  btn btn-success btn-sm'>Transfer</button>"
-                            ]; 
 
+        $query = "SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code from section s left join faculty t ON s.teacher_id = t.teacher_id where stud_no <> stud_no_max AND section_code <> $code AND grd_level = $lvl";
+        
+        $result = mysqli_query($this->db, $query);
+        $sectionList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $teacher_id = $row['teacher_id'];
+            $name = $teacher_id ? "T. {$row['first_name']} {$row['middle_name']} {$row['last_name']}" : "";
+            $sectionList[] = ["section_code" => $row['section_code'], 
+                              "section_name" => $row['section_name'],
+                              "adviser_name" => $name,
+                              "student"   => 'idk',
+                              "action"   => 'wew'
+                            ];
+        }
 
+        // $res = $this->prepared_select("SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code 
+        // from section s left join faculty t ON s.teacher_id = t.teacher_id 
+        // where stud_no <> stud_no_max AND section_code <> ? AND grd_level = ?", ['ABM11', 11], "si");
+
+        // $sectionList =  array();
+        
+        // while ($section = mysqli_fetch_assoc($res)) {
+        //     $adviser = $section['first_name'] . " ". $section['middle_name'] . " " . $section['last_name'];
+        //     $sectionList[] = ["section_code" => $section['section_code'], 
+        //                       "section_name" => $section['section_name'],
+        //                       "adviser_name" => $adviser,
+        //                       "student" => 'idk',
+        //                       "action" => "asdf"
+        //                     ]; 
+        // }
+
+        // $sectionList[] = ["section_code" => 'sdfgdfg', 
+        //                       "section_name" =>'sdfgdf',
+        //                       "adviser_name" => 'sdfgdfg',
+        //                       "student" => 'idk',
+        //                       "action" => "asdf"
+        //                     ]; 
         echo json_encode($sectionList);
     }
 
-    
 
     public function transferStudent(){
         $stud_id = $_POST['stud_id'];
@@ -1825,7 +1857,7 @@ class Administration extends Dbconfig
         echo($stud_id);
         echo($section);
 
-        $query = "";
+        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");
     }
 
     public function forgotPassword(){
