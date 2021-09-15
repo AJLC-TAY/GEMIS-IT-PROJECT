@@ -62,6 +62,22 @@ $(function() {
 
     })
 
+    $(document).on('click', '.swapStudent', function() {
+        stud_id = $(this).attr('data');
+        section_id = $(this).attr('id');
+
+        console.log (section_id);
+        console.log (stud_id);
+        // var action = 'transferStudent'
+        // // $.post('action.php', {section_id, action:action} , function(data){
+        // //     $('#transfer-student-confirmation').modal('hide')	
+        // // })
+        // $.post("action.php", {section_id,stud_id, action:action}, function() {	
+        //     $('#transfer-student-confirmation').modal("hide")
+        // })
+
+    })
+
     
     $("#stud-save-btn").click(() =>$('#student-form').submit())
 

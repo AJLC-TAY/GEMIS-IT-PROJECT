@@ -1859,7 +1859,7 @@ class Administration extends Dbconfig
         $list = "<input list='students' name='studList' id='studList' placeholder ='--- Select student ----'>
         <datalist id='students'>";
 
-        $studList =  $this->prepared_select("SELECT stud_id, last_name, middle_name, first_name from student where stud_id in (select stud_id from enrollment where section_code = ?",['HUMSS11'],'s');
+        $studList =  $this->prepared_select("SELECT stud_id, last_name, middle_name, first_name from student where stud_id in (select stud_id from enrollment where section_code = ?)",['HUMSS11'],'s');
         while ($stud = mysqli_fetch_assoc($studList)) {
             $name = $stud['first_name'] . " ". $stud['middle_name'] . " " . $stud['last_name'];
             // $sectionList[] = ['name' => $name,
@@ -1867,7 +1867,7 @@ class Administration extends Dbconfig
 
             $list .= "<option value= '$name'>";
         }
-        $list.= "</datalist>";
+        $list .= "</datalist>";
 
         $res = $this->prepared_select("SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code 
         from section s left join faculty t ON s.teacher_id = t.teacher_id 
@@ -1880,8 +1880,8 @@ class Administration extends Dbconfig
             $sectionList[] = ["section_code" => $section['section_code'], 
                               "section_name" => $section['section_name'],
                               "adviser_name" => $adviser,
-                              "student" => $list,
-                              "action" => "<button id='asd' class='d-inline w-auto  btn btn-success btn-sm'>Transfer</button>"
+                              "student" => $list ,
+                              "action" => "<button id='' class='swapStudent d-inline w-auto  btn btn-success btn-sm'>Transfer</button>"
                             ]; 
         }
 
@@ -1894,10 +1894,15 @@ class Administration extends Dbconfig
         $stud_id = $_POST['stud_id'];
         $section = $_POST['section_id'];
 
-        echo($stud_id);
-        echo($section);
-
         $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");
+    }
+
+    public function transferStudentFull(){
+        $stud_id = $_POST['stud_id'];
+        $stud_to_swap = '';
+        $orig_section ='';
+        $sec_to_swap = '';
+
     }
 
     public function forgotPassword(){
