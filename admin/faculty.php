@@ -3,17 +3,16 @@ include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
-$js_file_path = "../js/admin/faculty-list.js";
+$js = "<script src='../js/admin/faculty-list.js'></script>";
 $action = "";
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $page_path = "faculty/facultyForm.php";
-    $js_file_path = "../js/admin/faculty-form.js";
+    $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
 } else if (isset($_GET['id'])) {
     $action = "profile";
     $page_path = "faculty/facultyProfile.php";
-    $js_file_path = "../js/admin/faculty.js";
-    // $jsFilePath = "../js/admin/faculty-temp.js";
+    $js = "<script type='module' src='../js/admin/faculty.js'></script>";
 }
 ?>
 <title>Faculty | GEMIS</title>
@@ -77,25 +76,25 @@ if (isset($_GET['action'])) {
                                     Filter
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="sc-filter">
-                                    <li><a data-value='*' id="all-btn" class="filter-item dropdown-item active">All</a></li>
-                                    <li><a data-value='available' id="available-btn" class="filter-item dropdown-item">Available</a></li>
-                                    <li><a data-value='taken' id="unavailable-btn" class="filter-item dropdown-item">For switching</a></li>
+                                    <li><a role="button" data-value='*' id="all-btn" class="filter-item dropdown-item active">All</a></li>
+                                    <li><a role="button" data-value='available' id="available-btn" class="filter-item dropdown-item">Available</a></li>
+                                    <li><a role="button" data-value='taken' id="unavailable-btn" class="filter-item dropdown-item">For switching</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <table id="sc-table" class="table-sm">
+                    <table id="sc-table" data-page="<?php echo $page; ?>" class="table-sm">
                         <thead class='thead-dark'>
                         <tr>
                             <th data-checkbox="true"></th>
+                            <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
+                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="teacher_id">Teacher</th>
                             <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
                             <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                             <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
                             <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="teacher_id">Teacher</th>
                             <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                            <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,7 +103,7 @@ if (isset($_GET['action'])) {
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <form id="sc-form" method="POST" action="action.php" data-form="<?php echo $action; ?>">
+                    <form id="sc-form" method="POST" action="action.php" data-page="<?php echo $action; ?>">
                         <input type="hidden" name="teacher_id" value="" />
                         <input type="hidden" name="action" value="assignSubClasses">
                         <button id='cancel-as-btn' class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
@@ -121,7 +120,7 @@ if (isset($_GET['action'])) {
 
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script type="module" src="<?php echo $js_file_path; ?>"></script>
+    <?php echo $js; ?>
 </body>
 
 </html>

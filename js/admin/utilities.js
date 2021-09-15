@@ -129,6 +129,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         form = $(this)
         selections = $(SCID).bootstrapTable('getSelections')
 
+        console.log(form.attr('data-page'));
         if (form.attr('data-page') === 'profile') { // allow database update on profile page only
             // form page
             formData = form.serializeArray()
