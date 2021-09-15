@@ -52,8 +52,7 @@ function showToast(type, msg, options= null) {
  */
 function isNumberKey(e){
 	var charCode = (e.which) ? e.which : e.keyCode
-	if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
-	return true;
+	return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
 $(document).on("keypress", ".number", isNumberKey)
