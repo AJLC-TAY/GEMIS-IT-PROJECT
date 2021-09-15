@@ -60,11 +60,13 @@ $stud_id = $userProfile->get_stud_id();
                     </span>
                 </div>
                 <tr>
+                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="current_code" data-class="hidden">Current Code</th>
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="section_code">Code</th>
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section</th>
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="adviser_name">Adviser</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="student">Student to swap</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="action">Action</th>
+                    
                 </tr>
             </thead>
 
