@@ -9,7 +9,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
     Administration::saveImage("2194014", 'image', "../student_assets", 'psa');
 }
 
-
 /******** ADMINISTRATOR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
     $admin->addAdministrator();
@@ -30,9 +29,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'editEnrollStatus') {
     $admin->editEnrollStatus();
 }
 
+/******** ENROLLMENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'enroll') {
     $admin->enroll();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
+    $admin->validateEnrollment();
+}
+
+
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {

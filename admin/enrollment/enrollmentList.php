@@ -21,9 +21,26 @@
 <!-- ENROLLEES TABLE -->
 <div class="container mt-1">
     <div class="card w-100 h-auto bg-light">
-        <table id="table" class="table-striped table-sm">
+        <table id="table"
+               data-search="true"
+               data-pagination="true"
+               data-auto-refresh="true"
+               data-show-auto-refresh="false"
+               data-auto-refresh-interval = "10"
+               data-search-selector="#search-input"
+               data-url="getAction.php?data=enrollees"
+               data-side-pagination="server"
+               data-unique-id="LRN"
+               data-id-field="LRN"
+               data-height="450"
+               data-maintain-meta-dat="true"
+               data-click-to-select="true"
+               data-page-size="25"
+               data-page-list="[25, 50, 100, All]"
+               data-pagination-parts="['pageInfoShort', 'pageSize', 'pageList']"
+               class="table-striped table-sm">
             <thead class='thead-dark'>
-            <div class="row justify-content-between mb-3">
+            <div class="d-flex justify-content-between mb-3">
                 <!-- SEARCH BAR -->
                 <span class="flex-grow-1 me-3">
                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
@@ -49,4 +66,5 @@
         </table>
     </div>
 </div>
+
 <!-- ENROLLMENT TABLE END-->
