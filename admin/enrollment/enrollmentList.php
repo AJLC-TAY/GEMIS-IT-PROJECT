@@ -23,7 +23,7 @@
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
-            <div class="row justify-content-between mb-3">
+            <div class="d-flex justify-content-between mb-3">
                 <!-- SEARCH BAR -->
                 <span class="flex-grow-1 me-3">
                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
