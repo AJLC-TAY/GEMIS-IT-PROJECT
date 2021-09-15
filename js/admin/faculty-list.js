@@ -1,18 +1,3 @@
-let onPostBodyOfTable = () => {
-    // $('.profile-btn').click(function() {
-    //     let id = $(this).attr('data-id')
-    //     let state = $(this).attr('data-state')
-    //     let formData = new FormData()
-    //     formData.append('id', id)
-    //     formData.append('state', state)
-    //     $.post("profile.php", formData, function() {
-            
-    //     })
-
-
-    // })
-}
-
 function buttons () {
     return {
         deactivateBtn: {
@@ -83,19 +68,32 @@ $(function() {
      *  otherwise, return true.
      */
     const countSelection = () => {
-        selection = facultyTable.getSelections()
+        selection = facultyTable.bootstrapTable('getSelections')
         let length = selection.length 
         if (length < 1) showToast("danger", "No faculty selected")
         return length
     }
 
-    $("#deactivate-opt").click(function() {
+    /** Event handler for clicking a table option [export, reset password, and deactivate] actions */
+    $(document).on("click", ".table-opt", function(e) {
+        e.preventDefault()
+        let btnValue = $(this).val()
         let length = countSelection()
         if (length) {
-            let modal = $("#deactivate-modal")         
-            let question = (length == 1) ? "this faculty?" : `${length} faculties?`
-            modal.find("#question").html(question)
-            modal.modal("show")
+            switch(btnValue) {
+                case 'Export':
+                    // export implementation
+                    break;
+                case 'Reset Password':
+                    // reset implementation
+                    break;
+                case 'Deactivate':
+                    let modal = $("#deactivate-modal")         
+                    let question = (length == 1) ? "this faculty?" : `${length} faculties?`
+                    modal.find("#question").html(question)
+                    modal.modal("show")
+                    break;
+            }
         }
     })
 
@@ -109,29 +107,6 @@ $(function() {
         $.post("action.php")
 
     })
-
-    $("#reset-pass-opt").click(function() {
-        if (countSelection()) {
-            
-        }
-    })
-
-    $("#export-opt").click(function() {
-        if (countSelection()) {
-
-        }
-    })
-
-
-    
-
-    // $('#save-btn').click(function() {
-    //     $(this).prop("disabled", true)
-    //     $("#edit-btn").prop("disabled", false)
-    //     $(this).closest('form').find('input').each(function() {
-    //         $(this).prop('disabled', true)
-    //     })
-    // })
 
     hideSpinner()
 })

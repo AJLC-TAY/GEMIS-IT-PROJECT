@@ -1180,9 +1180,23 @@ class Administration extends Dbconfig
     {
         if (isset($_POST['asgn-sub-class'])) {
             $asgn_sub_classes = $_POST['asgn-sub-class'];
-            foreach ($asgn_sub_classes as $asgn_sub_class) {
-                $this->query("UPDATE subjectclass SET teacher_id='$id' WHERE sub_class_code='$asgn_sub_class';");
+
+            $result = $this->query("SELECT sub_class_code FROM subjectclass WHERE teacher_id='$id';");
+            $current_asgn_sub_classes =[];
+            while ($row = mysqli_fetch_row($result)) {
+                $current_as_class = $current_asgn_sub_classes[] = $row[0];
+                print_r($current_as_class);
+                if (!in_array($current_as_class, $asgn_sub_classes)) {
+                    $this->query("UPDATE subjectclass SET teacher_id=NULL WHERE sub_class_code='$current_as_class';");
+                }
+                
             }
+
+            foreach (array_diff($asgn_sub_classes, $current_asgn_sub_classes) as $new_asgn_sub_class) {
+                $this->query("UPDATE subjectclass SET teacher_id='$id' WHERE sub_class_code='$new_asgn_sub_class';");
+            }
+        } else {
+            $this->query("UPDATE subjectclass SET teacher_id=NULL WHERE teacher_id = '$id';");
         }
     }
 

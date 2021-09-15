@@ -1,7 +1,5 @@
 import {implementAssignSubjectMethods as asMethods, implementAssignSubjectClassMethods as scMethods} from "./utilities.js";
 
-
-
 let asTableSetup = {
     data:               subjects,
     uniqueId:           "sub_code",
@@ -15,8 +13,6 @@ let asTableSetup = {
                                                                     {field: 'sub_code', values: assigned})
     }
 }
-
-console.log(assignedSubClasses)
 
 const detailFormatter = (index, row) => {
     // row details for reference
@@ -88,6 +84,7 @@ let subjectTable = $("#subject-table").bootstrapTable(asTableSetup)
 
 $(function () {
     preload('#faculty')
+
     /** Handling image upload */
     const readURL = input => {
         if (input.files && input.files[0]) {
