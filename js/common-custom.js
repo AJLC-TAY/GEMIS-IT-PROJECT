@@ -4,7 +4,10 @@ let menuItem, subMenuItem, spinner
 function preload(menuItem, subMenuItem= null) {
     spinner = $('#main-spinner-con')
     spinner.show()
-    if (!subMenuItem) return $(menuItem).click()
+    if (subMenuItem == null) {
+        console.log(menuItem);
+        return $(menuItem).click()
+    }
     menuItem = $(`${menuItem} a:first`)
     subMenuItem = $(`${subMenuItem}`)
     menuItem.addClass('active')

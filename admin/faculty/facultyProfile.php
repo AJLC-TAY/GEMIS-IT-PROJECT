@@ -240,19 +240,6 @@ $display_style = STYLE_DISPLAY_NONE;
                                 ?>
                             </div>
                         </div>
-<!--                        <div class="d-flex-column d-none">-->
-<!--                            <p>Sections:</p>-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-md-6">-->
-                                    <!-- <input id="no-advisers" type="radio" name="section" checked class="form-check-input" > -->
-<!--                                    <label for="no-advisers" class="form-check-label">With No Adviser</label>-->
-<!--                                </div>-->
-<!--                                <div class="col-md-6">-->
-<!--                                    <input id="with-advisers" type="radio" name="section" class="form-check-input">-->
-<!--                                    <label for="with-advisers" class="form-check-label">With Adviser</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
                         <!-- ADVISORY HEADER END -->
                         <!-- ADVISORY CONTENT -->
                         <div class="row p-0">
@@ -347,7 +334,7 @@ $display_style = STYLE_DISPLAY_NONE;
                                 </form>
                                 <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
                             </div>
-                            <table id='assigned-sc-table' class="table-striped table-sm">
+                            <table id='assigned-sc-table' data-page="profile" class="table-striped table-sm">
                                 <thead>
                                 <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
                                 <tr>

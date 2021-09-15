@@ -3,8 +3,6 @@ import {
     implementAssignSubjectMethods as implementASMethods
 } from "./utilities.js";
 
-preload('#faculty')
-
 const isViewPage = false
 const ASSIGNEDSCID = "#assigned-sc-table"
 const SCID = "#sc-table"
@@ -90,6 +88,7 @@ let assignedSubClassTable = $(ASSIGNEDSCID).bootstrapTable(assignedSCTableSetup)
 let subClassTable = $(SCID).bootstrapTable(scTableSetup)
 
 $(function() {
+    preload('#faculty')
 
     /** Tab pane initialization */
     var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))

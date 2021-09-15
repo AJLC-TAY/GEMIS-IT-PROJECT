@@ -15,7 +15,7 @@
 
 // let sectionTable = $("#table").bootstrapTable(tableSetup)
 const tableSetup = {
-    url:                `getAction.php?data=fullSection`,
+    url:                `getAction.php?data=fullSection&id=${id}`, 
     method:             'GET',
     uniqueId:           'code',
     idField:            'code',
@@ -25,7 +25,8 @@ const tableSetup = {
     pageSize:           10,
     pagination:         true,
     pageList:           "[10, 25, 50, All]",
-    paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    fixedColumns: true
 }
 
 let programTable = $("#table").bootstrapTable(tableSetup)
@@ -55,10 +56,25 @@ $(function() {
         // $.post('action.php', {section_id, action:action} , function(data){
         //     $('#transfer-student-confirmation').modal('hide')	
         // })
-        $.post("action.php", {section_id,stud_id, action:action}, function(data) {	
-            $('#transfer-student-confirmation').modal('hide')
-            console.log(data)
+        $.post("action.php", {section_id,stud_id, action:action}, function() {	
+            $('#transfer-student-confirmation').modal("hide")
         })
+
+    })
+
+    $(document).on('click', '.swapStudent', function() {
+        stud_id = $(this).attr('data');
+        section_id = $(this).attr('id');
+
+        console.log (section_id);
+        console.log (stud_id);
+        // var action = 'transferStudent'
+        // // $.post('action.php', {section_id, action:action} , function(data){
+        // //     $('#transfer-student-confirmation').modal('hide')	
+        // // })
+        // $.post("action.php", {section_id,stud_id, action:action}, function() {	
+        //     $('#transfer-student-confirmation').modal("hide")
+        // })
 
     })
 
