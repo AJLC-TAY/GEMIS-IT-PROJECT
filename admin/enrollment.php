@@ -72,11 +72,13 @@ include_once("../inc/head.html"); ?>
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <?php echo $js; ?>
+<!--    --><?php //echo $js; ?>
     <!-- VALIDATION -->
     <script>
+
         var forms = document.querySelectorAll('.needs-validation');
         try {
             var stepper = new Stepper($('#stepper')[0])
@@ -91,6 +93,11 @@ include_once("../inc/head.html"); ?>
                 form.classList.add('was-validated');
             }, false);
         });
+        $(function() {
+            preload("#faculty")
+            $("#table").bootstrapTable()
+            hideSpinner()
+        })
     </script>
 </body>
 

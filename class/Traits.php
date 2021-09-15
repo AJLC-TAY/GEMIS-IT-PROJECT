@@ -115,10 +115,10 @@ trait FacultySharedMethods
     }
 }
 
+
+/** Enrollment Methods */
 trait Enrollment
 {
-    /** Enrollment Methods */
-
     public function enroll()
     {
         session_start();
@@ -172,22 +172,107 @@ trait Enrollment
 
     public function getEnrollees()
     {
-        $result = $this->query(
-            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+
+
+        $limit = $_GET['limit'];
+        $offset = $_GET['offset'];
+        $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
             ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
-            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
-        );
-        $enrollees = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $enrollees[] = new Enrollee(
+            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
+        $result = $this->query($query);
+        $num_rows_not_filtered = $result->num_rows;
+
+        /**
+         * Returns the sort query string in line with the received
+         * sort value (column name in the database) and order value (ASC / DESC).
+         * @return string Sort Query
+         */
+        function get_sort_query() {
+            if(isset($_GET['sort'])) {
+                $sort = $_GET['sort'];
+                switch ($sort) {
+                    case 'grade-level':
+                        $sort = 'e.enrolled_in';
+                        break;
+                    case 'enroll-date':
+                        $sort = 'e.date_of_enroll';
+                        break;
+                    case 'curriculum':
+                        $sort = "e.curr_code";
+                        break;
+                }
+                if ($_GET['order'] === 'desc') return " ORDER BY $sort DESC";
+                return " ORDER BY $sort ASC";
+            }
+            return " ORDER BY name ASC";
+        }
+
+        if(strlen(trim($_GET['search'])) > 0) {
+            $text = $_GET['search'];
+//            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
+            $query .= " WHERE sy.start_year LIKE \"%$text%\"";
+            $query .= " OR sy.end_year LIKE \"%$text%\"";
+            $query .= " OR s.last_name LIKE \"%$text%\"";
+            $query .= " OR s.first_name LIKE \"%$text%\"";
+            $query .= " OR s.middle_name LIKE \"%$text%\"";
+            $query .= " OR s.ext_name LIKE \"%$text%\"";
+            $query .= " OR stud_id LIKE \"%$text%\"";
+            $query .= " OR LRN LIKE \"%$text%\"";
+            $query .= " OR e.date_of_enroll LIKE \"%$text%\"";
+            $query .= " OR e.enrolled_in LIKE \"%$text%\"";
+            $query .= " OR e.curr_code LIKE \"%$text%\"";
+            $query .= " OR e.valid_stud_data LIKE \"%$text%\"";
+            $query .= get_sort_query();
+            $query .= " LIMIT $limit";
+            $query .= " OFFSET $offset";
+
+            $result = $this->query($query);
+            $num_rows = $result->num_rows;
+        } else {
+            $query .= get_sort_query();
+            $query .= " LIMIT $limit";
+            $query .= " OFFSET $offset";
+
+            $result = $this->query($query);
+            $num_rows = $result->num_rows;
+        }
+
+        $records = array();
+        while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+            $records[] = new Enrollee(
                 $row['SY'], $row['LRN'], $row['name'],
                 $row['date_of_enroll'], $row['enrolled_in'],
                 $row['curr_code'], $row['status'], $row['stud_id']
             );
-
         }
-        return $enrollees;
+
+        $output = new stdClass();
+        $output->total = $num_rows_not_filtered;
+        $output->totalNotFiltered = $num_rows_not_filtered;
+        $output->rows = $records;
+        echo json_encode($output);
+
+
+        //        $result = $this->query(
+//            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+//            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+//            ."JOIN student AS s USING (stud_id) "
+//            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
+//        );
+//        echo json_encode($result);
+//        $enrollees = [];
+//        while ($row = mysqli_fetch_assoc($result)) {
+//            $enrollees[] = new Enrollee(
+//                $row['SY'], $row['LRN'], $row['name'],
+//                $row['date_of_enroll'], $row['enrolled_in'],
+//                $row['curr_code'], $row['status'], $row['stud_id']
+//            );
+//
+//        }
+//
+//
+//        return $enrollees;
     }
 
     public function editEnrollStatus()
@@ -247,6 +332,7 @@ trait Enrollment
         return $data;
 
     }
+
     public function validateImage($file, $file_size)
     {
         echo "<br>Start validating image ... <br>";
@@ -294,6 +380,12 @@ trait Enrollment
             $e = trim($e);
             return  $e ?? NULL;
         }, $params);
+    }
+
+    public function validateEnrollment()
+    {
+        $is_valid = isset($_POST['accept']) ? 1 : isset($_POST['reject']) ? 0 : 1;
+        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='{$_POST['stud_id']}';");
     }
 
     public function addStudent()
