@@ -58,9 +58,9 @@ $faculty = $admin->listFaculty();
                                     <tr>
                                         <th data-checkbox="true"></th>
                                         <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="sign_id">Sign ID</th>
-                                        <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="id">ID</th>
-                                        <th scope='col' data-width="750" data-align="center" data-sortable="true" data-field="name">Name</th>
-                                        <th scope='col' data-width="750"  data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
+                                        <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="true" data-field="id">ID</th>
+                                        <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="name">Name</th>
+                                        <th scope='col' data-width="300"  data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
                                         <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
                                     </tr>
                                     </thead>
@@ -84,7 +84,7 @@ $faculty = $admin->listFaculty();
     </div>
     <!-- TOAST END -->
     <!--MODAL-->
-    <div class="modal fade" id="modal-form" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+    <div class="modal fade" id="modal-form" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -94,7 +94,7 @@ $faculty = $admin->listFaculty();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="signatory-form" action="action.php" method="POST">
+                    <form id="signatory-form" method="POST">
                         <input type="hidden" name="action" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="form-group needs-validation" novalidate>
@@ -127,10 +127,43 @@ $faculty = $admin->listFaculty();
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" name="delete" form="signatory-form" class="btn btn-danger" value="Delete">
-                    <input type="submit" id="submit-again" class="btn btn-secondary" value="Submit & Add again">
-                    <input type="submit" name="submit" form="signatory-form" class="btn btn-primary" value="Add">
+                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" name="delete" form="signatory-form" class="btn btn-danger btn-sm" value="Delete">
+                    <button type="submit" id="submit-again" class="btn btn-secondary btn-sm">Submit and add again</button>
+                    <input type="submit" name="submit" form="signatory-form" class="btn btn-primary btn-sm" value="Add">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-view" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">View Signatory Details</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-column">
+                       <div class="container mb-3">
+                           <label for="id-no-view">ID No</label>
+                           <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
+                       </div>
+                        <div class="container mb-3">
+                            <label for="name-view">Name</label>
+                            <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
+                        </div>
+                        <div class="container mb-3">
+                            <label for="position-view">Role | Position</label>
+                            <input id="position-view" class="form-control form-control-sm mb-0" type="text" name="position">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
+                    <button data-bs-toggle="modal" data-bs-target="#modal-form" class="edit-btn btn btn-primary btn-sm">Edit</button>
                 </div>
             </div>
         </div>
@@ -144,24 +177,30 @@ $faculty = $admin->listFaculty();
     <script src="../js/common-custom.js"></script>
     <script>
         function renderData(data = null) {
-            showSpinner()
-            let modal = $("#modal-form")
+            showSpinner();
+            try {
+                $("#modal-view").modal("hide")
+            } catch (e) {}
+            let modal = $("#modal-form");
 
-            let action = "Add"
-            $("[name='delete']").addClass('d-none')
+            let action = "Add";
+            $("[name='delete']").addClass('d-none');
+            let displaySubmitAgainBtn = true;
             if (data !== null) {
-
-                let info = signatoryTable.bootstrapTable('getRowByUniqueId', data)
-                $("#id-no-select").select2('val', info.id)
-                $("#position").val(info.position)
-                $("[name='delete']").removeClass('d-none')
-                action = 'Save'
+                let info = signatoryTable.bootstrapTable('getRowByUniqueId', data);
+                $("#id-no-select").select2('val', info.id);
+                $("#position").val(info.position);
+                $("[name='delete']").removeClass('d-none');
+                displaySubmitAgainBtn = false;
+                action = 'Save';
             }
-            $("#signatory-form").find("input[name='action']").val(action.toLowerCase() + "Signatory")
-            modal.find(".modal-title h4").html(`${action} Signatory`)
-            modal.find(".modal-footer [name='submit']").val(action)
-            modal.modal('show')
-            hideSpinner()
+
+            $("#submit-again").toggle(displaySubmitAgainBtn);
+            $("#signatory-form").find("input[name='action']").val(action.toLowerCase() + "Signatory");
+            modal.find(".modal-title h4").html(`${action} Signatory`);
+            modal.find(".modal-footer [name='submit']").val(action);
+            modal.modal('show');
+            hideSpinner();
         }
 
         const tableSetup = {
@@ -169,6 +208,8 @@ $faculty = $admin->listFaculty();
             method:             'GET',
             uniqueId:           'id',
             idField:            'id',
+            search:             true,
+            searchSelector:     "#search-input",
             height:             425,
             maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
             clickToSelect:      true,
@@ -177,33 +218,54 @@ $faculty = $admin->listFaculty();
             buttonsToolbar:     ".buttons-toolbar",
             pageList:           "[10, 25, 50, All]",
             paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
-        }
-        let signatoryTable = $("#table").bootstrapTable(tableSetup)
-
+        };
+        let signatoryTable = $("#table").bootstrapTable(tableSetup);
+        let addAnother = false;
         $(function() {
-            preload("#signatory")
-            // $.fn.select2.defaults.set("theme", "bootstrap");
+            preload("#signatory");
+
             $("#id-no-select").select2({
                 theme: "bootstrap-5",
                 width: null,
                 dropdownParent: $('.modal')
-            })
+            });
 
-            // $(document).on("submit", "#signatory-form", function (e) {
-            //     e.preventDefault()
-            //     let formData = $(this).serializeArray()
-            //     formData.push({name: 'stud_id', value: ''})
-            // }).
+            $(document).on("click", "#submit-again", function () {
+                addAnother = true;
+                $("#signatory-form").submit();
+            });
 
+            $(document).on("submit", "#signatory-form", function (e) {
+                e.preventDefault();
+                let form = $(this);
+                $.post("action.php", form.serializeArray(), function () {
+                    form.trigger('reset');
+                    signatoryTable.bootstrapTable("refresh")
+                    if (!addAnother) {
+                        $("#modal-form").modal("hide");
+                        addAnother = false;
+                    }
+                    showToast("success", "Signatory successfully added");
+                });
+            });
             $(document).on("click", ".table-opt", function (e) {
-                let selections = signatoryTable.bootstrapTable('getSelections')
-                if (selections.length < 1) return showToast("danger", "Please select a signatory first")
-            })
-            $(document).on("click", "#submit-again", function (e) {
-                e.preventDefault()
+                let selections = signatoryTable.bootstrapTable('getSelections');
+                if (selections.length < 1) return showToast("danger", "Please select a signatory first");
+            });
+            $(document).on("click", ".view-btn", function () {
+                showSpinner();
+                let id = $(this).attr("data-id");
+                let data = signatoryTable.bootstrapTable("getRowByUniqueId", id)
 
-            })
-            hideSpinner()
+                let modal = $("#modal-view");
+
+                modal.find("#id-no-view").val(data.id);
+                modal.find("#name-view").val(data.name);
+                modal.find("#position-view").val(data.position);
+                modal.find(".modal-footer .edit-btn").attr("onclick", `renderData('${id}')`);
+                hideSpinner();
+            });
+            hideSpinner();
         })
     </script>
 

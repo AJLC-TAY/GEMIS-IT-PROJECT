@@ -539,8 +539,9 @@ class Signatory extends Faculty implements JsonSerializable
         $this->id = $id;
         $this->position = ucwords($position);
         $this->action = "<div class='d-flex'>"
+                ."<button data-bs-toggle='modal' data-bs-target='#modal-confirmation' class='btn btn-sm btn-danger me-1'>Delete</button>"
                 ."<button onclick='renderData(`{$id}`)' data-bs-toggle='modal' data-bs-target='#modal-form' class='btn btn-sm btn-secondary me-1'>Edit</button>"
-                ."<button data-bs-toggle='modal' data-bs-target='#modal-view'  class='btn btn-sm btn-primary'>View</button>"
+                ."<button data-id='$id' data-bs-toggle='modal' data-bs-target='#modal-view'  class='view-btn btn btn-sm btn-primary'>View</button>"
             ."</div>";
     }
 
