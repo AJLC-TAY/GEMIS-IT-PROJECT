@@ -7,52 +7,52 @@ if (isset($_GET['action'])) {
     if (!in_array($action, ['add', 'edit'])) {
         die ("<div class='container'><h5>Page not found</h5></div>");;
     }
-    if ($action === 'add') {
-        $stud_id = '';
-        $user_id_no = '';
-        $lrn = '';
-        $lname = '';
-        $fname = '';
-        $mname = '';
-        $extname = '';
-        $sex = '';
-        $age = '';
-        $birthdate = '';
-        $birth_place = '';
-        $indigenous_group = '';
-        $mother_tongue = '';
-        $religion = '';
 
-        $house_no = '';
-        $street = '';
-        $barangay = '';
-        $city = '';
-        $province = '';
-        $zip = '';
+    $stud_id = '';
+    $user_id_no = '';
+    $lrn = '';
+    $lname = '';
+    $fname = '';
+    $mname = '';
+    $extname = '';
+    $sex = '';
+    $age = '';
+    $birthdate = '';
+    $birth_place = '';
+    $indigenous_group = '';
+    $mother_tongue = '';
+    $religion = '';
 
-        $cp_no = '';
-        $psa_birth_cert = '';
-        $belong_to_ipcc = '';
-        $id_picture = '';
-        $section = '';
+    $house_no = '';
+    $street = '';
+    $barangay = '';
+    $city = '';
+    $province = '';
+    $zip = '';
 
-        $parents = ['mother', 'father'];
-        foreach ($parents as $par) {
-            ${$par . '_first_name'} = '';
-            ${$par . '_last_name'} = '';
-            ${$par . '_middle_name'} = '';
-            ${$par . '_ext_name'} = '';
-            ${$par . '_occupation'} = '';
-            ${$par . '_cp_no'} = '';
-        }
+    $cp_no = '';
+    $psa_birth_cert = '';
+    $belong_to_ipcc = '';
+    $id_picture = '';
+    $section = '';
 
-        $guardian_first_name = '';
-        $guardian_last_name = '';
-        $guardian_middle_name = '';
-        $guardian_cp_no = '';
-        $guardian_relationship = '';
+    $parents = ['mother', 'father'];
+    foreach ($parents as $par) {
+        ${$par . '_first_name'} = '';
+        ${$par . '_last_name'} = '';
+        ${$par . '_middle_name'} = '';
+        ${$par . '_ext_name'} = '';
+        ${$par . '_occupation'} = '';
+        ${$par . '_cp_no'} = '';
+    }
 
-    } else if ($action === 'edit') {
+    $guardian_first_name = '';
+    $guardian_last_name = '';
+    $guardian_middle_name = '';
+    $guardian_cp_no = '';
+    $guardian_relationship = '';
+
+    if ($action === 'edit') {
         $userProfile = $admin->getProfile("ST");
         $stud_id = $userProfile->get_stud_id();
         $user_id_no = $userProfile->get_id_no();

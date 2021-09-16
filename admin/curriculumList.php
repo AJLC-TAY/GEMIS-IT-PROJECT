@@ -45,8 +45,8 @@
                             </header>
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
-                                <div class="w-100 d-flex justify-content-center" >
-                                    <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
+                                <div class="no-result-msg-con w-100 d-flex justify-content-center">
+                                    <p class="no-result-msg" style="display: none; margin-top: 20vh;" >No results found</p>
                                 </div>
                                 <!-- SUB SPINNER -->
                                 <div id="curriculum-spinner" class="sub-spinner" style="display: none; height: 60vh;">

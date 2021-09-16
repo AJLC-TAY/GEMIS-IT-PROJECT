@@ -42,5 +42,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
 if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
     $admin->listFullSectionJSON();
 }
+
+if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
+   $test =  $admin->getEnrollFilters();
+}
 ?>
 

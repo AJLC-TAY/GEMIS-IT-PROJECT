@@ -183,6 +183,7 @@ trait Enrollment
         $result = $this->query($query);
         $num_rows_not_filtered = $result->num_rows;
 
+
         /**
          * Returns the sort query string in line with the received
          * sort value (column name in the database) and order value (ASC / DESC).
@@ -208,35 +209,56 @@ trait Enrollment
             return " ORDER BY name ASC";
         }
 
+        $search_query = "";
         if(strlen(trim($_GET['search'])) > 0) {
             $text = $_GET['search'];
 //            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
-            $query .= " WHERE sy.start_year LIKE \"%$text%\"";
-            $query .= " OR sy.end_year LIKE \"%$text%\"";
-            $query .= " OR s.last_name LIKE \"%$text%\"";
-            $query .= " OR s.first_name LIKE \"%$text%\"";
-            $query .= " OR s.middle_name LIKE \"%$text%\"";
-            $query .= " OR s.ext_name LIKE \"%$text%\"";
-            $query .= " OR stud_id LIKE \"%$text%\"";
-            $query .= " OR LRN LIKE \"%$text%\"";
-            $query .= " OR e.date_of_enroll LIKE \"%$text%\"";
-            $query .= " OR e.enrolled_in LIKE \"%$text%\"";
-            $query .= " OR e.curr_code LIKE \"%$text%\"";
-            $query .= " OR e.valid_stud_data LIKE \"%$text%\"";
-            $query .= get_sort_query();
-            $query .= " LIMIT $limit";
-            $query .= " OFFSET $offset";
-
-            $result = $this->query($query);
-            $num_rows = $result->num_rows;
-        } else {
-            $query .= get_sort_query();
-            $query .= " LIMIT $limit";
-            $query .= " OFFSET $offset";
-
-            $result = $this->query($query);
-            $num_rows = $result->num_rows;
+            $search_query .= " WHERE (sy.start_year LIKE \"%$text%\"";
+            $search_query .= " OR sy.end_year LIKE \"%$text%\"";
+            $search_query .= " OR s.last_name LIKE \"%$text%\"";
+            $search_query .= " OR s.first_name LIKE \"%$text%\"";
+            $search_query .= " OR s.middle_name LIKE \"%$text%\"";
+            $search_query .= " OR s.ext_name LIKE \"%$text%\"";
+            $search_query .= " OR stud_id LIKE \"%$text%\"";
+            $search_query .= " OR LRN LIKE \"%$text%\"";
+            $search_query .= " OR e.date_of_enroll LIKE \"%$text%\"";
+            $search_query .= " OR e.enrolled_in LIKE \"%$text%\"";
+            $search_query .= " OR e.curr_code LIKE \"%$text%\"";
+            $search_query .= " OR e.valid_stud_data LIKE \"%$text%\") ";
         }
+
+
+        $filter_query = [];
+
+        if ($_GET['sy'] !== '*') {
+            $filter_query[] = " sy.sy_id ='{$_GET['sy']}";
+        }
+        if ($_GET['track'] !== '*') {
+            $filter_query[] = " e.curr_code ='{$_GET['track']}'";
+        }
+//        if ($_GET['strand'] !== '*') {
+//            $query .= " sy.sy_id = \"%{$_GET['strand']}%\" AND";
+//        }
+        if ($_GET['yearLevel'] !== '*') {
+            $filter_query[] = " e.enrolled_in ='{$_GET['yearLevel']}'";
+        }
+        if ($_GET['status'] !== '*') {
+            $filter_query[] = " e.valid_stud_data ='{$_GET['status']}'";
+        }
+        $filter_qr = implode(" AND ", $filter_query);
+
+        $query .= strlen($search_query) > 0
+            ? " WHERE ".$search_query." AND (".$filter_qr.")"
+            : strlen($filter_qr) > 0
+                ? " WHERE ".$filter_qr : "";
+
+
+        $query .= get_sort_query();
+        $query .= " LIMIT $limit";
+        $query .= " OFFSET $offset";
+
+        $result = $this->query($query);
+        $num_rows = $result->num_rows;
 
         $records = array();
         while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
@@ -248,7 +270,7 @@ trait Enrollment
         }
 
         $output = new stdClass();
-        $output->total = $num_rows_not_filtered;
+        $output->total = $num_rows;
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);
@@ -273,6 +295,44 @@ trait Enrollment
 //
 //
 //        return $enrollees;
+    }
+
+    public function getEnrollFilters()
+    {
+        $filter = [];
+
+        # Get school year
+//        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear;");
+        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear GROUP BY sy;");
+        $school_years = [];
+        while($row = mysqli_fetch_row($result)) {
+            $school_years[$row["0"]] = $row["1"];
+        }
+        $filter['school_year'] = $school_years;
+
+
+        # Get tracks
+        $result = $this->query("SELECT curr_code, curr_name FROM curriculum;");
+        $programs = [];
+        while($row = mysqli_fetch_row($result)) {
+            $programs[$row["0"]] = $row["1"];
+        }
+        $filter['tracks'] = $programs;
+
+        # Get strands
+        $result = $this->query("SELECT prog_code, description FROM program;");
+        $programs = [];
+        while($row = mysqli_fetch_row($result)) {
+            $programs[$row["0"]] = $row["1"];
+        }
+        $filter['programs'] = $programs;
+
+        # Prepare year level
+        $filter['year_level'] = ['11', '12'];
+
+        $filter['status'] = ["0" => "Pending", "1" => "Enrolled", "2" => "Cancelled"];
+
+        return $filter;
     }
 
     public function editEnrollStatus()

@@ -218,21 +218,24 @@ export const searchKeyBindEvent = (searchInputSelector, listContainer) => {
         let noResultMsg = $(".no-result-msg")
         // hide no result message and cards
         noResultMsg.hide()
-        $(`${listContainer} li`).toggle(false)
+
         let page = $(listContainer).attr('data-page')
+        $(`${listContainer} .tile`).hide()
         // show loading status
         showSpinner(`#${page}-spinner`)
         setTimeout(() => {
             var value = $(this).val().toLowerCase()
             let match = []
-            $(`${listContainer} li`).filter(function() {
+            $(`${listContainer} .tile`).filter(function() {
                 let thereIsMatch = $(this).text().toLowerCase().indexOf(value) > -1
                 match.push(thereIsMatch)
                 $(this).toggle(thereIsMatch)
             })
 
-            if (!match.includes(true)) noResultMsg.show()
+            if (!match.includes(true)) {
+                noResultMsg.show()
+            }
             hideSpinner(`#${page}-spinner`)
-        }, 1250)
+        }, 500)
     })
 }
