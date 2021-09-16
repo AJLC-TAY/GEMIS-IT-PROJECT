@@ -45,7 +45,7 @@
 
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
-                                <div class="w-100 d-flex justify-content-center" >
+                                <div class="w-100 d-flex justify-content-center">
                                     <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
                                 </div>
                                 <!-- SUB SPINNER -->
@@ -56,30 +56,31 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <ul data-page="program" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
-                                    <!-- TEMPLATE -->
-                                    <template id="card-template">
-                                        <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 position-relative'>
-                                            <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
-                                            <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                                                <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
-                                                <ul class='dropdown-menu' style='z-index: 99;'>
-                                                    <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
-                                                    <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
-                                                    <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
-                                                </ul>
-                                            </div>
-                                            <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
-                                                <div class='tile-content'>
-                                                    <h4 class='card-title'>%PROGDESC%</h4>
-                                                    <p class='card-text'>%CURCODE% | %PROGCODE%</p>
+                                <div class="container ms-4 me-3">
+                                    <ul data-page="program" class="cards-con d-flex flex-wrap mt-2 h-auto" style="min-height: 60vh;">
+                                        <!-- TEMPLATE -->
+                                        <template id="card-template">
+                                            <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
+                                                <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
+                                                <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
+                                                    <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                                                    <ul class='dropdown-menu' style='z-index: 99;'>
+                                                        <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
+                                                        <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
+                                                        <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
+                                                    </ul>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    </template>
-                                    <!-- TEMPLATE END -->
-                                </ul>
+                                                <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
+                                                    <div class='tile-content'>
+                                                        <h4 class='card-title'>%PROGDESC%</h4>
+                                                        <p class='card-text'>%CURCODE% | %PROGCODE%</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </template>
+                                        <!-- TEMPLATE END -->
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,13 +93,13 @@
         </section>
     </section>
     <!-- TOAST -->
-     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
     <!-- MODAL -->
-    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <form id="program-form" class="needs-validation" method="post" novalidate>
                 <div class="modal-content">
                     <div class="modal-header">
@@ -126,11 +127,11 @@
                             <select id="curr-code" class="select form-select" name="curr-code">
                                 <option value="0" selected>-- Select curriculum --</option>
                                 <?php $currList = $admin->listCurriculum('curriculum');
-                                    foreach ($currList as  $cur) {
-                                        $curr_code = $cur->get_cur_code();
-                                        $curr_name = $cur->get_cur_name();
-                                        echo "<option value='$curr_code'> $curr_code | $curr_name </option>";
-                                    }
+                                foreach ($currList as  $cur) {
+                                    $curr_code = $cur->get_cur_code();
+                                    $curr_name = $cur->get_cur_name();
+                                    echo "<option value='$curr_code'> $curr_code | $curr_name </option>";
+                                }
                                 ?>
                             </select>
                         </div>
@@ -145,8 +146,8 @@
         </div>
     </div>
 
-    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -166,8 +167,8 @@
         </div>
     </div>
 
-    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -187,8 +188,8 @@
         </div>
     </div>
 
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
+        <div class="modal-dialo modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -210,8 +211,8 @@
         </div>
     </div>
 
-    <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

@@ -73,7 +73,7 @@ $stud_id = $userProfile->get_stud_id();
         </table>
     </div>
     <div class="modal fade" id="transferconfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

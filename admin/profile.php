@@ -284,8 +284,8 @@
         </section>
     </section>
     <!-- MODAL -->
-    <div class="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

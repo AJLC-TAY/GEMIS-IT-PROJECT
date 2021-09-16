@@ -1436,25 +1436,30 @@ class Administration extends Dbconfig
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
+        
+
         // Step 2
         $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
         $parent = array();
         while ($parentInfo = mysqli_fetch_assoc($result)) {
-            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " ". $personalInfo['ext_name']; 
+            $extname = is_null($parentInfo ['ext_name']) ? NULL : $parentInfo ['ext_name'];
+            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " " . is_null($extname) ? " " : $parentInfo ['ext_name']; 
             $parent[$parentInfo['sex']] = array(
                 'name' => $name,
                 'fname' => $parentInfo['first_name'],
                 'mname' => $parentInfo['middle_name'],
                 'lname' => $parentInfo['last_name'],
-                'extname' => $personalInfo['ext_name'],
+                'extname' => $extname,
                 'sex' => $parentInfo['sex'],
                 'cp_no' => $parentInfo['cp_no'],
                 'occupation' => is_null($parentInfo['occupation']) ? NULL : $parentInfo['occupation']
             );
         };
+       
         // Step 3
         $result = $this->prepared_select("SELECT * FROM guardian WHERE stud_id=?;", [$id], "i");
         $guardian = array();
+        
         while ($guardianInfo = mysqli_fetch_assoc($result)) {
             $name = $guardianInfo['guardian_last_name'] . ", " . $guardianInfo['guardian_first_name'] . " " . $guardianInfo['guardian_middle_name']; // to be added: $parentInfo['ext_name']
             $guardian = [
@@ -1475,36 +1480,45 @@ class Administration extends Dbconfig
              $section = $res[0];
         }
         
-        $complete_add = $personalInfo['home_no'] . " " . $personalInfo['street'] . ", " . $personalInfo['barangay'] . ", " . $personalInfo['mun_city'] . ", " . $personalInfo['zip_code'] . " " . $personalInfo['province'];
+        // echo(($personalInfo['home_no'] = ""));
+        $home_no = is_null($personalInfo['home_no']) ? "" : $personalInfo['home_no'];
+        $street = is_null($personalInfo['street']) ? "" : $personalInfo['street'];
+        $barangay = is_null($personalInfo['barangay']) ?"": $personalInfo['barangay'];
+        $mun_city = is_null($personalInfo['mun_city']) ? "": $personalInfo['mun_city'];
+        $province = is_null($personalInfo['mun_city']) ? "": $personalInfo['mun_city'];
+        $zipcode  = is_null($personalInfo['zip_code']) ? "": $personalInfo['zip_code'];
+
+        
+        $complete_add = "$home_no $street $barangay, $mun_city, $province $zipcode"; 
         $add = [
             'address' => $complete_add,
-            'home_no' => $personalInfo['home_no'],
-            'street' => $personalInfo['street'],
-            'barangay' => $personalInfo['barangay'],
-            'mun_city' => $personalInfo['mun_city'],
-            'province' => $personalInfo['mun_city'],
-            'zipcode' => $personalInfo['zip_code']
+            'home_no' => $home_no,
+            'street' => $street,
+            'barangay' => $barangay,
+            'mun_city' => $mun_city,
+            'province' => $province,
+            'zipcode' => $zipcode
         ];
         return new Student(
             $personalInfo['stud_id'],
             $personalInfo['id_no'],
             is_null($personalInfo['LRN']) ? NULL : $personalInfo['LRN'],
             $personalInfo['first_name'],
-            $personalInfo['middle_name'],
+            $personalInfo['middle_name'] ? NULL : $personalInfo['middle_name'],
             $personalInfo['last_name'],
-            $personalInfo['ext_name'],
+            $personalInfo['ext_name'] ? NULL : $personalInfo['ext_name'],
             $personalInfo['sex'],
             $personalInfo['age'],
             $personalInfo['birthdate'],
-            $personalInfo['birth_place'],
-            $personalInfo['indigenous_group'],
-            $personalInfo['mother_tongue'],
-            $personalInfo['religion'],
+            $personalInfo['birth_place'] ? NULL : $personalInfo['birth_place'],
+            $personalInfo['indigenous_group'] ? NULL : $personalInfo['indigenous_group'],
+            $personalInfo['mother_tongue'] ? NULL : $personalInfo['mother_tongue'],
+            $personalInfo['religion'] ? NULL : $personalInfo['religion'],
             $add,
-            $personalInfo['cp_no'],
-            $personalInfo['psa_birth_cert'],
-            $personalInfo['belong_to_IPCC'],
-            $personalInfo['id_picture'],
+            $personalInfo['cp_no'] ? NULL : $personalInfo['cp_no'],
+            $personalInfo['psa_birth_cert'] ? NULL :  $personalInfo['psa_birth_cert'],
+            $personalInfo['belong_to_IPCC'] ? NULL : $personalInfo['belong_to_IPCC'],
+            $personalInfo['id_picture'] ? NULL : $personalInfo['id_picture'],
             $section,
             $parent,
             $guardian
@@ -1861,11 +1875,12 @@ class Administration extends Dbconfig
 
         $studList =  $this->prepared_select("SELECT stud_id, last_name, middle_name, first_name from student where stud_id in (select stud_id from enrollment where section_code = ?)",['HUMSS11'],'s');
         while ($stud = mysqli_fetch_assoc($studList)) {
+            $code = $stud['stud_id'];
             $name = $stud['first_name'] . " ". $stud['middle_name'] . " " . $stud['last_name'];
             // $sectionList[] = ['name' => $name,
             //                  'code' => $stud['stud_id']]; 
 
-            $list .= "<option value= '$name'>";
+            $list .= "<option data-value='$code' value='$name'></option>";
         }
         $list .= "</datalist>";
 
@@ -1904,8 +1919,8 @@ class Administration extends Dbconfig
         $stud_to_swap = $_POST['stud_to_swap'];
         $curr_section =$_POST['current_code'];
         $section= $_POST['section'];
-        echo("sdfsdf");
 
+        echo($stud_id . ' '. $stud_to_swap . " " . $curr_section . " " . $section );
         $this->prepared_select("UPDATE enrollment SET section_code = (CASE WHEN stud_id = ? then ? WHEN stud_id = ? then ? END) WHERE stud_id in (?,?);", [$stud_id, $section, $stud_to_swap, $curr_section, $stud_id, $stud_to_swap], "isisii");
 
     }
