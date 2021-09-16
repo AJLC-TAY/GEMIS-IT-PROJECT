@@ -247,10 +247,10 @@ trait Enrollment
         }
         $filter_qr = implode(" AND ", $filter_query);
 
-        $query .= strlen($search_query) > 0
+        $query .= (strlen($search_query) > 0
             ? " WHERE ".$search_query." AND (".$filter_qr.")"
-            : strlen($filter_qr) > 0
-                ? " WHERE ".$filter_qr : "";
+            : (strlen($filter_qr) > 0
+                ? " WHERE ".$filter_qr : ""));
 
 
         $query .= get_sort_query();
@@ -270,7 +270,7 @@ trait Enrollment
         }
 
         $output = new stdClass();
-        $output->total = $num_rows;
+        $output->total = (strlen($search_query) > 0 && strlen($filter_qr)) ? $num_rows: $num_rows_not_filtered;
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);

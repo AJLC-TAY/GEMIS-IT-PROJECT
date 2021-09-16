@@ -64,109 +64,86 @@ $filters =  (new Administration())->getEnrollFilters();
 <!--                    </div>-->
                 </div>
             </div>
+
             <div class="row align-content-center">
-                <div class="col-auto">
-                    <button id="subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
-                    <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                </div>
+                <p class="text-secondary"><small>Other filter options: </small></p>
+                <ul id="" class="col d-inline-flex flex-wrap container">
+                    <!--TRACK FILTER-->
+                    <li class="col-auto mb-2 me-2">
+                        <div class="input-group input-group-sm">
+                            <label class="input-group-text " for="tracks">Track</label>
+                            <select class="form-select mb-0 filter-item " id="tracks">
+                                <option value="*" selected>All</option>
+                                <?php
+                                foreach($filters['tracks'] as $id => $value) {
+                                    echo "<option value='$id' >$value</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </li>
+                    <!--STRAND FILTER-->
+                    <li class="col-auto mb-2 me-2">
+                        <div class="input-group input-group-sm">
+                            <label class="input-group-text " for="strands">Strand</label>
+                            <select class="form-select mb-0 filter-item " id="strands">
+                                <option value="*" selected>All</option>
+                                <?php
+                                foreach($filters['programs'] as $id => $value) {
+                                    echo "<option value='$id' >$value</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </li>
+                    <!--YEAR LEVEL FILTER-->
+                    <li class="col-auto  mb-2 me-2">
+                        <div class="input-group input-group-sm ">
+                            <label class="input-group-text " for="year-level">Year Level</label>
+                            <select class="form-select mb-0 filter-item " id="year-level">
+                                <option value="*" selected>All</option>
+                                <?php
+                                foreach($filters['year_level'] as $value) {
+                                    echo "<option value='$value' >$value</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </li>
+                    <!--STATUS FILTER-->
+                    <li class="col-auto  mb-2 me-2">
+                        <div class="input-group input-group-sm ">
+                            <label class="input-group-text " for="status">Status</label>
+                            <select class="form-select mb-0 filter-item " id="status">
+                                <option value="*" selected>All</option>
+                                <?php
+                                foreach($filters['status'] as $id => $value) {
+                                    echo "<option value='$id' >$value</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </li>
 
-                    <div class="col d-inline-flex flex-wrap justify-content-end container">
-<!--                        <div class="">-->
-                            <!--TRACK FILTER-->
 
-                            <div class="col-auto me-0 mb-2">
-                                <div class="input-group input-group-sm">
-                                    <label class="input-group-text " for="tracks">Track</label>
-                                    <select class="form-select mb-0 filter-item " id="tracks">
-                                        <option value="*" selected>All</option>
-                                        <?php
-                                        foreach($filters['tracks'] as $id => $value) {
-                                            echo "<option value='$id' >$value</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--STRAND FILTER-->
+                    <!--AUTO REFRESH SWITCH-->
+                    <!--                            <div class="col-auto  mb-2 me-0 ms-3 ">-->
+                    <!--                                <div class="input-group input-group-sm ">-->
+                    <!--                                    <div class="form-check form-switch">-->
+                    <!--                                        <input class="form-check-input auto-refresh" name="auto-refresh" type="checkbox" id="auto-refresh-table" checked>-->
+                    <!--                                        <label class="form-check-label" for="auto-refresh-table">Auto Refresh Table</label>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
 
-                            <div class="col-auto  mb-2 me-0 ms-3">
-                                <div class="input-group input-group-sm">
-                                    <label class="input-group-text " for="strands">Strand</label>
-                                    <select class="form-select mb-0 filter-item " id="strands">
-                                        <option value="*" selected>All</option>
-                                        <?php
-                                        foreach($filters['programs'] as $id => $value) {
-                                            echo "<option value='$id' >$value</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!--YEAR LEVEL FILTER-->
-                            <div class="col-auto  mb-2 me-0 ms-3 ">
-                                <div class="input-group input-group-sm ">
-                                    <label class="input-group-text " for="year-level">Year Level</label>
-                                    <select class="form-select mb-0 filter-item " id="year-level">
-                                        <option value="*" selected>All</option>
-                                        <?php
-                                        foreach($filters['year_level'] as $value) {
-                                            echo "<option value='$value' >$value</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--STATUS FILTER-->
-                            <div class="col-auto  mb-2 me-0 ms-3 ">
-                                <div class="input-group input-group-sm ">
-                                    <label class="input-group-text " for="status">Status</label>
-                                    <select class="form-select mb-0 filter-item " id="status">
-                                        <option value="*" selected>All</option>
-                                        <?php
-                                        foreach($filters['status'] as $id => $value) {
-                                            echo "<option value='$id' >$value</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--AUTO REFRESH SWITCH-->
-<!--                            <div class="col-auto  mb-2 me-0 ms-3 ">-->
-<!--                                <div class="input-group input-group-sm ">-->
-<!--                                    <div class="form-check form-switch">-->
-<!--                                        <input class="form-check-input auto-refresh" name="auto-refresh" type="checkbox" id="auto-refresh-table" checked>-->
-<!--                                        <label class="form-check-label" for="auto-refresh-table">Auto Refresh Table</label>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-                    </div>
-
+                </ul><hr>
+            </div>
+            <div class="buttons-toolbar d-flex justify-content-between">
 
             </div>
         </div>
-
-        <table id="table"
-               data-search="true"
-               data-pagination="true"
-               data-auto-refresh="true"
-               data-show-auto-refresh="false"
-               data-auto-refresh-interval = "10"
-               data-search-selector="#search-input"
-               data-url="getAction.php?data=enrollees"
-               data-side-pagination="server"
-               data-unique-id="LRN"
-               data-id-field="LRN"
-               data-height="450"
-               data-maintain-meta-dat="true"
-               data-click-to-select="true"
-               data-query-params="queryParams"
-               data-page-size="25"
-               data-page-list="[25, 50, 100, All]"
-               data-toggle="#toolbar"
-               data-pagination-parts="['pageInfoShort', 'pageSize', 'pageList']"
-               class="table-striped table-sm">
+        <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
             <tr>
                 <th data-checkbox="true"></th>

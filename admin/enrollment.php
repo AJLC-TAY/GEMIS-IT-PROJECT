@@ -74,10 +74,9 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-<!--    --><?php //echo $js; ?>
+    <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>
-
         var forms = document.querySelectorAll('.needs-validation');
         try {
             var stepper = new Stepper($('#stepper')[0])
@@ -94,39 +93,8 @@ include_once("../inc/head.html"); ?>
         });
 
 
-        function queryParams(params) {
-            params.sy = $("#sy").val()
-            params.track = $("#tracks").val()
-            params.strand = $("#strands").val()
-            params.yearLevel = $("#year-level").val()
-            params.status = $("#status").val()
-            return params
-        }
-
-        function formatAutoRefresh() {
-            return "test"
-        }
-
         $(function() {
             preload("#faculty")
-            let enrolleeTable = $("#table").bootstrapTable()
-
-            $(document).on("change", ".filter-item", function() {
-                $("#table").bootstrapTable("refresh")
-            })
-
-
-            $(document).on("change", "#auto-refresh-table", function () {
-                enrolleeTable.toggleAutoRefresh()
-                // $("#table").attr("data-auto-refresh-silent", $(this).is(":checked"))
-                // $("#table").attr("data-auto-refresh-status", $(this).is(":checked"))
-                // $("#table").bootstrapTable("formatAutoRefresh", function() {
-                //     return {
-                //         autoRefresh: false,
-                //         autoRefreshStatus: false
-                //     }
-                // })
-            })
             hideSpinner()
         })
     </script>
