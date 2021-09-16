@@ -72,7 +72,7 @@
                 </ul>
             </li>
             <li class="sub-menu">
-                <a href="javascript:;">
+                <a id='signatory' href="javascript:;">
                     <i class="fa fa-pencil-square-o"></i>
                     <span>Signatory Management</span>
                 </a>

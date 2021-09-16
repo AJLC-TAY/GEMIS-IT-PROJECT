@@ -180,8 +180,7 @@ trait Enrollment
             ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
             ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
-        $result = $this->query($query);
-        $num_rows_not_filtered = $result->num_rows;
+
 
 
         /**
@@ -254,13 +253,16 @@ trait Enrollment
 
 
         $query .= get_sort_query();
+        $result = $this->query($query);
+        $num_rows_not_filtered = $result->num_rows;
+
+
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
 
         $result = $this->query($query);
-        $num_rows = $result->num_rows;
-
         $records = array();
+
         while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
             $records[] = new Enrollee(
                 $row['SY'], $row['LRN'], $row['name'],
@@ -269,8 +271,9 @@ trait Enrollment
             );
         }
 
+
         $output = new stdClass();
-        $output->total = (strlen($search_query) > 0 && strlen($filter_qr)) ? $num_rows: $num_rows_not_filtered;
+        $output->total = $num_rows_not_filtered;
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);

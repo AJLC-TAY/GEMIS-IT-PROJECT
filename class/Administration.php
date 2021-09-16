@@ -99,9 +99,9 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        session_start();
+//        session_start();
         $result = $this->query("SELECT admin_id, last_name, first_name, middle_name, ext_name, "
-            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
+            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $administrators[] = new Administrator(
@@ -1917,6 +1917,28 @@ class Administration extends Dbconfig
         $key= '';
     
     }
-    
+
+    /** SIGNATORY METHODS */
+    public function addSignatory()
+    {
+        $this->prepared_query(
+            "INSERT INTO signatory (teacher_id, position) VALUES (?, ?);",
+            [$_POST['signatory'], $_POST['position']],
+            "is"
+        );
+    }
+    public function listSignatory($is_JSON = false)
+    {
+        $result = $this->query("SELECT * FROM signatory;");
+        $signatory = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $signatory[] = new Signatory($row['sign_id'], $row['teacher_id'], $row['position']);
+        }
+        if (!$is_JSON) {
+            return $signatory;
+        }
+        echo json_encode($signatory);
+    }
+
 }
 ?>

@@ -533,20 +533,24 @@ class Signatory extends Faculty implements JsonSerializable
     private $sign_id;
     private $position;
 
-    public function __construct($sign_id, $teacher_id, $position)
+    public function __construct($sign_id, $id, $position)
     {
         $this->sign_id = $sign_id;
-        $this->teacher_id = $teacher_id;
-        $this->position = $position;
+        $this->id = $id;
+        $this->position = ucwords($position);
+        $this->action = "<div class='d-flex'>"
+                ."<button onclick='renderData(`{$id}`)' data-bs-toggle='modal' data-bs-target='#modal-form' class='btn btn-sm btn-secondary me-1'>Edit</button>"
+                ."<button data-bs-toggle='modal' data-bs-target='#modal-view'  class='btn btn-sm btn-primary'>View</button>"
+            ."</div>";
     }
 
     public function get_sign_id()
     {
         return $this->sign_id;
     }
-    public function get_teacher_id()
+    public function get_id()
     {
-        return $this->teacher_id;
+        return $this->id;
     }
     public function get_position()
     {
@@ -556,9 +560,10 @@ class Signatory extends Faculty implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'sign_id' => $this->sign_id,
-            'teacher_id' => $this->teacher_id,
-            'position' => $this->position
+            'sign_id' =>    $this->sign_id,
+            'id' =>         $this->id,
+            'position' =>   $this->position,
+            'action' =>     $this->action
         ];
     }
 }

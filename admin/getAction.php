@@ -46,5 +46,8 @@ if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
 if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
    $test =  $admin->getEnrollFilters();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'signatory') {
+   $test =  $admin->listSignatory(true);
+}
 ?>
 

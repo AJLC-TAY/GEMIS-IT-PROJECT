@@ -48,6 +48,14 @@ td .form-select {
     margin: 0;
 }
 
+/* SELECT2*/
+.select2-container {
+    padding: 0;
+}
+
+/*.select2-selection {*/
+/*    z-index: 9999 !important;*/
+/*}*/
 /* IMAGE PREVIEW */
 .image-preview-con {
     width: 250px; height: 250px;
