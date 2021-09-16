@@ -124,3 +124,8 @@ td .form-select {
 
 
 /* END SPINNER */
+
+.hidden{
+    display:none;
+    visibility:hidden;
+  }

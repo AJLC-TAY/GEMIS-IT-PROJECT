@@ -93,7 +93,7 @@ class Administration extends Dbconfig
             $row['first_name'], $row['middle_name'],
             $row['ext_name'],   $row['age'],
             $row['sex'],        $row['cp_no'],
-            $row['email'],      $row['admin_user_no'],
+            $row['email'],      $row['admin_user_no']
         );
     }
 
@@ -1877,10 +1877,12 @@ class Administration extends Dbconfig
         
         while ($section = mysqli_fetch_assoc($res)) {
             $adviser = $section['first_name'] . " ". $section['middle_name'] . " " . $section['last_name'];
-            $sectionList[] = ["section_code" => $section['section_code'], 
+            $sectionList[] = ["current_code" =>$stud_data[0],
+                              "section_code" => $section['section_code'], 
                               "section_name" => $section['section_name'],
                               "adviser_name" => $adviser,
                               "student" => $list ,
+                            //   "action" => "<input type='button' value='submit'  />"
                               "action" => "<button id='' class='swapStudent d-inline w-auto  btn btn-success btn-sm'>Transfer</button>"
                             ]; 
         }
@@ -1898,10 +1900,13 @@ class Administration extends Dbconfig
     }
 
     public function transferStudentFull(){
-        $stud_id = $_POST['stud_id'];
-        $stud_to_swap = '';
-        $orig_section ='';
-        $sec_to_swap = '';
+        $stud_id = $_POST['id'];
+        $stud_to_swap = $_POST['stud_to_swap'];
+        $curr_section =$_POST['current_code'];
+        $section= $_POST['section'];
+        echo("sdfsdf");
+
+        $this->prepared_select("UPDATE enrollment SET section_code = (CASE WHEN stud_id = ? then ? WHEN stud_id = ? then ? END) WHERE stud_id in (?,?);", [$stud_id, $section, $stud_to_swap, $curr_section, $stud_id, $stud_to_swap], "isisii");
 
     }
 
