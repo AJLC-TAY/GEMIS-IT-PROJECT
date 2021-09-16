@@ -247,10 +247,10 @@ trait Enrollment
         }
         $filter_qr = implode(" AND ", $filter_query);
 
-        $query .= (strlen($search_query) > 0
+        $query .= (strlen($search_query) > 0)
             ? " WHERE ".$search_query." AND (".$filter_qr.")"
-            : (strlen($filter_qr) > 0
-                ? " WHERE ".$filter_qr : ""));
+            : ((strlen($filter_qr) > 0)
+                ? " WHERE ".$filter_qr : "");
 
 
         $query .= get_sort_query();

@@ -26,12 +26,10 @@ function queryParams(params) {
     return params
 }
 
-function responseHandler(res) {
-    $.each(res.rows, function (i, row) {
-        // init your state value
-        row.state = $.inArray(row.id, selections) !== -1;
-    });
-    return res;
+function checkSelections() {
+    try {
+        $('#table').bootstrapTable("checkBy", {field: 'LRN', values: selections})
+    } catch (e) {}
 }
 
 const tableSetup = {
@@ -54,10 +52,17 @@ const tableSetup = {
     pageSize:           25,
     pagination:         true,
     pageList:           "[25, 50, 100, All]",
-    onPostBody:         responseHandler
+    onPostBody:         checkSelections
+    // responseHandler:         responseHandler
 }
 let enrolleesTable = $('#table').bootstrapTable(tableSetup)
-
+enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
+    // save your data, here just save the current page
+    selections = $.map(enrolleesTable.bootstrapTable('getSelections'), function (row) {
+        return row.LRN
+    })
+    // push or splice the selections if you want to save all data selections
+})
 
 $(function() {
 
@@ -100,15 +105,7 @@ $(function() {
     })
 
 
-    enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
-        // save your data, here just save the current page
-        selections = $.map(enrolleesTable.bootstrapTable('getSelections'), function (row) {
-            return row.LRN
-        });
 
-        console.log(selections)
-        // push or splice the selections if you want to save all data selections
-    });
 
 
     hideSpinner()
