@@ -70,8 +70,18 @@ $(function() {
         var currentTds = $(this).closest("tr").find("td"); // find all td of selected row
             current_code = $(currentTds).eq(0).text(); // eq= cell , text = inner text
             section = $(currentTds).eq(1).text();
-            stud_to_swap = document.getElementById("studList").value;
+           
+            var data = {};
+            $("#students option").each(function(i,el) {  
+                data[$(el).data("value")] = $(el).val();
+             });
+             console.log(data, $("#students option").val());
+             var value = $('#studList').val();
+            stud_to_swap = $('#students [value="' + value + '"]').data('value');
+           
 
+            
+            
 
            
 

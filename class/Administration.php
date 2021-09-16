@@ -1861,11 +1861,12 @@ class Administration extends Dbconfig
 
         $studList =  $this->prepared_select("SELECT stud_id, last_name, middle_name, first_name from student where stud_id in (select stud_id from enrollment where section_code = ?)",['HUMSS11'],'s');
         while ($stud = mysqli_fetch_assoc($studList)) {
+            $code = $stud['stud_id'];
             $name = $stud['first_name'] . " ". $stud['middle_name'] . " " . $stud['last_name'];
             // $sectionList[] = ['name' => $name,
             //                  'code' => $stud['stud_id']]; 
 
-            $list .= "<option value= '$name'>";
+            $list .= "<option data-value='$code' value='$name'></option>";
         }
         $list .= "</datalist>";
 
@@ -1904,8 +1905,8 @@ class Administration extends Dbconfig
         $stud_to_swap = $_POST['stud_to_swap'];
         $curr_section =$_POST['current_code'];
         $section= $_POST['section'];
-        echo("sdfsdf");
 
+        echo($stud_id . ' '. $stud_to_swap . " " . $curr_section . " " . $section );
         $this->prepared_select("UPDATE enrollment SET section_code = (CASE WHEN stud_id = ? then ? WHEN stud_id = ? then ? END) WHERE stud_id in (?,?);", [$stud_id, $section, $stud_to_swap, $curr_section, $stud_id, $stud_to_swap], "isisii");
 
     }
