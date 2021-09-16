@@ -40,8 +40,8 @@ include_once("../inc/head.html");
         </section>
     </section>
     <!-- VIEW MODAL -->
-    <div class="modal" id="view-modal" tabindex="-1" aria-labelledby="modal viewSchoolYear" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="view-modal" tabindex="-1" aria-labelledby="modal viewSchoolYear" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
