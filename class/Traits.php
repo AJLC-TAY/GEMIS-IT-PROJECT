@@ -444,7 +444,8 @@ trait Enrollment
 
     public function validateEnrollment()
     {
-        $is_valid = isset($_POST['accept']) ? 1 : isset($_POST['reject']) ? 0 : 1;
+        $is_valid = (isset($_POST['accept'])) ? 1
+            : (isset($_POST['reject']) ? 0 : 1);
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='{$_POST['stud_id']}';");
     }
 
