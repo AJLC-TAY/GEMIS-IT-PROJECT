@@ -131,8 +131,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </div>
         <!-- TOAST END -->
         <!-- Archive subject confirmation -->
-        <div class="modal" id="subject-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-                <div class="modal-dialog">
+        <div class="modal fade" id="subject-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="modal-title">

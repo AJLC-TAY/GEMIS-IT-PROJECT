@@ -100,8 +100,8 @@ $admin = new Administration();
 <!--TEMPLATE END-->
 <!-- MODAL -->
 <!-- ADD MODAL -->
-<div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <form id="curriculum-form" method="post">
             <div class="modal-content">
                 <div class="modal-header">
@@ -136,8 +136,8 @@ $admin = new Administration();
     </div>
 </div>
 <!-- ARCHIVE MODAL -->
-<div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -157,8 +157,8 @@ $admin = new Administration();
     </div>
 </div>
 <!-- DELETE MODAL -->
-<div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -178,8 +178,8 @@ $admin = new Administration();
     </div>
 </div>
 <!-- VIEW ARCHIVED MODAL -->
-<div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -200,8 +200,8 @@ $admin = new Administration();
     </div>
 </div>
 <!-- UNARCHIVE MODAL -->
-<div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">

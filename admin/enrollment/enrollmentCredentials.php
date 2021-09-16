@@ -117,7 +117,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
 
                                     <!-- Creates the bootstrap modal where the image will appear -->
                                     <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -149,7 +149,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
 
                                     <!-- Creates the bootstrap modal where the image will appear -->
                                     <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -174,8 +174,8 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                             </div>
                         </div>
                     </div>
-                    <div class="modal" id="select-section-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
-                        <div class="modal-dialog">
+                    <div class="modal fade" id="select-section-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <div class="modal-title">

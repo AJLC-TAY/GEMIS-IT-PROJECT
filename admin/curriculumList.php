@@ -57,10 +57,11 @@
                                     </div>
                                 </div>
                                 <!--CARDS-->
+                                <div class="ms-4 me-3">
                                 <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                                     <!-- TEMPLATE -->
                                     <template id="card-template">
-                                        <div data-id='%CODE%' class='tile card shadow-sm p-0 position-relative'>
+                                        <div data-id='%CODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
                                             <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='../admin/curriculum.php?code=%CODE%'></a>
                                             <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
                                                 <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
@@ -80,6 +81,7 @@
                                     </template>
                                     <!-- TEMPLATE END -->
                                 </ul>
+                                </div>
                             </div>
 
                         </div>
@@ -130,8 +132,8 @@
         </div>
     </div>
     <!-- ARCHIVE MODAL -->
-    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -151,8 +153,8 @@
         </div>
     </div>
     <!-- DELETE MODAL -->
-    <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -172,8 +174,8 @@
         </div>
     </div>
     <!-- VIEW ARCHIVED MODAL -->
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -194,8 +196,8 @@
         </div>
     </div>
     <!-- UNARCHIVE MODAL -->
-    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

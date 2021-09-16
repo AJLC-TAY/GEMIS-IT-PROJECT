@@ -48,8 +48,8 @@
 
 <!-- MAIN CONTENT END -->
 
-<div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -69,8 +69,8 @@
     </div>
 </div>
 
-<div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedSubjects" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedSubjects" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -92,8 +92,8 @@
     </div>
 </div>
 
-<div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
