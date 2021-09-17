@@ -8,7 +8,7 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 
 require_once './../../class/Administration.php';
 require_once './../../vendor/phpoffice/phpword/bootstrap.php';
-$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./../../templates/enroll_report_template.docx');
+$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('./../../templates/enroll_report_template2.docx');
 
 # ENROLLMENT DATA
 // $admin = new Administration();
@@ -47,6 +47,10 @@ $templateProcessor->setComplexValue("signatory", $signatory);
 $templateProcessor->setComplexValue("position", $position);
 $templateProcessor->setComplexValue("date", $date);
 $templateProcessor->setComplexValue('school_year', $sy);
+$templateProcessor->setImageValue('deped_logo', array('path' => '../../assets/deped_logo.png', 'width' => 115, 'height' => 115, 'ratio' => true));
+$templateProcessor->setImageValue('school_logo', array('path' => '../../assets/school_logo.jpg', 'width' => 115, 'height' => 115, 'ratio' => true));
+//$templateProcessor->setImageValue('deped_logo', array('path' => './deped_logo.png', 'width' => 115, 'height' => 115, 'ratio' => true));
+//$templateProcessor->setImageValue('school_logo', array('path' => './school_logo.jpg', 'width' => 115, 'height' => 115, 'ratio' => true));
 
 # CELL STYLES
 $cellRowSpan = array('vMerge' => 'restart', 'valign' => 'center');
@@ -155,50 +159,29 @@ header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessi
 // header("Content-Type: application/pdf");
 header("Content-Transfer-Encoding: binary");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-// header("Expires: 0");
-header('Refresh: 0; url=enrollment/enrollList.php');
+header("Expires: 0");
+header('Refresh: 0; url=enrollment.php?page=enrollees');
 
 $templateProcessor->saveAs("php://output");
 
 
 // $templateProcessor->saveAs($outFile);
-// $domPdfPath = realpath('./../../vendor/dompdf/dompdf');
-// Settings::setPdfRendererPath($domPdfPath);
-// Settings::setPdfRendererName('DomPDF');
+//
+////$renderer_name = Settings::PDF_RENDERER_TCPDF;
+////$renderer_library_path =  realpath('./../../test/TCPDF');
+//$renderer_name = Settings::PDF_RENDERER_DOMPDF;
+//$renderer_library_path =  realpath('./../../vendor/dompdf/dompdf');
+//Settings::setPdfRenderer($renderer_name, $renderer_library_path);
+////Settings::setPdfRendererPath();
+////Settings::setPdfRendererName('Dompdf');
+//
+//
+//$phpWord = IOFactory::load($outFile);
+//$xmlWriter = IOFactory::createWriter($phpWord,'PDF');
+//$xmlWriter->save($tmpFile);  // Save to PDF
 
-// //Load temp file
-// $phpWord = IOFactory::load($outFile); 
-// //Save it
-// $xmlWriter = IOFactory::createWriter($phpWord , 'PDF');
-// $xmlWriter->save('result.pdf');  
-// // $xmlWriter->save("php://output");
-// // unlink($outFile);
 
-
-// $url = 'https://api2.docconversionapi.com/jobs/create';
-// $fields = array(
-// 	'inputFile' => 'https://www.docconversionapi.com/samples/example.docx',
-// 	'conversionParameters' => '{}',
-// 	'outputFormat' => 'pdf',
-// 	'async' => 'false'
-// );
-// //url-ify the data for the POST
-// foreach ($fields as $key => $value) {
-// 	$fields_string .= $key . '=' . $value . '&';
-// }
-// $fields_string = rtrim($fields_string, '&');
-// //open connection
-// $ch = curl_init();
-// //set the url, number of POST vars, POST data
-// curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-// 	'X-ApplicationID: Get your key from https://app.docconversionapi.com/#/applications',
-// 	'X-SecretKey: Get your key from https://app.docconversionapi.com/#/applications'
-// ));
-// curl_setopt($ch, CURLOPT_URL, $url);
-// curl_setopt($ch, CURLOPT_POST, count($fields));
-// curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-// //execute post
-// $result = curl_exec($ch);
-// print $result;
+ // $xmlWriter->save("php://output");
+ // unlink($outFile);
 
 ?>
