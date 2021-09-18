@@ -74,7 +74,7 @@ $admin_user = $admin->getProfile('AD');
                                             <div class="icon">
                                                 <i class="fa fa-user-circle" aria-hidden="true"></i>
                                             </div>
-                                            <a href="admin.php?id=<?php echo $user_id;?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="admin.php?id=<?php echo $user_id; ?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
@@ -236,11 +236,11 @@ $admin_user = $admin->getProfile('AD');
                     </div>
                 </div>
             </section>
+            <!--footer start-->
+            <?php include_once("../inc/footer.html"); ?>
+            <!--footer end-->
         </section>
         <!--main content end-->
-        <!--footer start-->
-        <?php include_once("../inc/footer.html"); ?>
-        <!--footer end-->
     </section>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->

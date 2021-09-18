@@ -24,11 +24,6 @@ a:focus {
     color: #fff;
 }
 
-::-moz-selection {
-    background: #5dbb63;
-    color: #fff;
-}
-
 #container {
     width: 100%;
     height: 100%;
@@ -319,7 +314,6 @@ ul.sidebar-menu li ul.sub li a {
     line-height: 35px;
     height: 35px;
     -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
@@ -334,9 +328,6 @@ ul.sidebar-menu li ul.sub li a:hover {
 ul.sidebar-menu li ul.sub li.active a {
     color: #5dbb63;
     -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
     display: block;
 }
@@ -364,9 +355,6 @@ ul.sidebar-menu li a {
     font-size: 12px;
     outline: none;
     -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 
@@ -377,9 +365,6 @@ ul.sidebar-menu li a:focus {
     color: #fff;
     display: block;
     -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    -ms-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
 

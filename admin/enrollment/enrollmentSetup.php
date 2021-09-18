@@ -103,6 +103,9 @@ $admin = new Administration();
                                             <div class='form-group col-md-6'>
                                                 <label for="section-name" class="col-lg-4 col-form-label fw-bold">Name</label>
                                                 <input id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter section name
+                                                </div>
                                             </div>
                                             
                                         </div>

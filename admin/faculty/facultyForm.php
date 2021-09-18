@@ -118,9 +118,6 @@ $camel_action = ucwords($action);
             <div class="invalid-feedback">
                 Please enter last name
             </div>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
         </div>
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
