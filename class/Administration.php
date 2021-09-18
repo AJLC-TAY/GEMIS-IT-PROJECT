@@ -1759,7 +1759,6 @@ class Administration extends Dbconfig
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
                 http_response_code(400);
                 die(json_encode($statusMsg));
-                return;
             }
         }
 
@@ -1942,10 +1941,18 @@ class Administration extends Dbconfig
     }
     public function listSignatory($is_JSON = false)
     {
-        $result = $this->query("SELECT * FROM signatory;");
+//        $result = $this->query("SELECT * FROM signatory;");
+        $result = $this->query("SELECT  s.sign_id, s.teacher_id, CONCAT(f.last_name,', ', f.first_name,' ',f.middle_name,' ',COALESCE(f.ext_name, '')) AS name, s.position
+    FROM signatory AS s JOIN faculty AS f ON s.teacher_id = f.teacher_id;");
         $signatory = [];
         while($row = mysqli_fetch_assoc($result)) {
-            $signatory[] = new Signatory($row['sign_id'], $row['teacher_id'], $row['position']);
+            $signatory[] = [
+                "sign_id" => $row['sign_id'],
+                "name" => $row['name'],
+                "id" => $row['teacher_id'],
+                "position" => ucwords($row['position'])
+            ];
+//            $signatory[] = new Signatory($row['sign_id'], $row['teacher_id'], $row['position']);
         }
         if (!$is_JSON) {
             return $signatory;

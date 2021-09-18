@@ -84,7 +84,7 @@
                                         <div class="col-3 p-0">
                                             <img src="../assets/deped_logo.png" alt="">
                                         </div>
-                                        <div class="col-6 p-0" style="text-align: center;">
+                                        <div class="col-6 p-0 text-center">
                                             Republic of the Philippines<br>
                                             Department of Education<br>
                                             Cordillera Administrative Region<br>

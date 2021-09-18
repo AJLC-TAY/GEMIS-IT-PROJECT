@@ -136,7 +136,7 @@ $faculty = $admin->listFaculty();
         </div>
     </div>
 
-    <div class="modal fade" id="modal-view" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modal-view" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -227,7 +227,7 @@ $faculty = $admin->listFaculty();
             $("#id-no-select").select2({
                 theme: "bootstrap-5",
                 width: null,
-                dropdownParent: $('.modal')
+                dropdownParent: $('#modal-form')
             });
 
             $(document).on("click", "#submit-again", function () {
