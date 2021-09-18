@@ -27,7 +27,7 @@
                                 $jsFilePath = "../js/admin/student.js";
                             } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
                                 include_once("student/studentTransfer.php"); 
-                                $jsFilePath = "../js/admin/transfer-student.js";
+                                $jsFilePath = "<script type='text/javascript' src='../js/admin/transfer-student.js'></script>";
                             }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
                                 $jsFilePath = "../js/admin/student.js";
@@ -54,7 +54,7 @@
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script type="text/javascript" src="../js/common-custom.js"></script>
-    <script type="module" src="<?php echo $jsFilePath; ?>"></script>
+    <?php echo $jsFilePath; ?>
 </body>
 
 </html>

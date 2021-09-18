@@ -1842,18 +1842,19 @@ class Administration extends Dbconfig
     }
 
     public function getNames($section){
-        $list = "<input list='students' name='studList' id = $section class='studList' placeholder ='--- Select student ----'>
-        <datalist id='students'>";
+ 
+        $list = "<select name='studentNames' class='select2 px-0 form-select form-select-sm' required>
+        <option>Select student</option>";
 
         $studList =  $this->prepared_select("SELECT stud_id, last_name, middle_name, first_name from student where stud_id in (select stud_id from enrollment where section_code = ?)",[$section],'s');
         while ($stud = mysqli_fetch_assoc($studList)) {
             $code = $stud['stud_id'];
             $name = $stud['first_name'] . " ". $stud['middle_name'] . " " . $stud['last_name'];
 
-            $list .= "<option data-value='$code' value='$name'></option>";
+            $list .= "<option value='$code'>{$name}</option>";
         }
-        $list .= "</datalist>";
-        
+
+        $list .= "</select>";
         return $list;
     }
 
@@ -1869,19 +1870,18 @@ class Administration extends Dbconfig
 
         $res = $this->prepared_select("SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code 
         from section s left join faculty t ON s.teacher_id = t.teacher_id 
-        where stud_no <> stud_no_max AND section_code <> ?  AND section_code <> 'TVLB11' AND grd_level = ?", [$data['section_code'], $data['grdlvl']], "si");
+        where stud_no <> stud_no_max AND section_code <> ?  AND grd_level = ?", [$data['section_code'], $data['grdlvl']], "si");
 
         $sectionList =  array();
         
         while ($section = mysqli_fetch_assoc($res)) {
             $adviser = $section['first_name'] . " ". $section['middle_name'] . " " . $section['last_name'];
             $code = $section['section_code'];
-            $list = $this->getNames($code);
             $sectionList[] = ["current_code" =>$stud_data[0],
                               "section_code" => $code, 
                               "section_name" => $section['section_name'],
                               "adviser_name" => $adviser,
-                              "student" =>  $list,
+                              "student" =>  $this->getNames($code),
                               "action" => "<button id='' class='swapStudent d-inline w-auto  btn btn-success btn-sm'>Transfer</button>"
                             ]; 
 
@@ -1889,14 +1889,12 @@ class Administration extends Dbconfig
         echo json_encode($sectionList);
     }
 
-
-
-
     public function transferStudent(){
         $stud_id = $_POST['stud_id'];
         $section = $_POST['section_id'];
 
         $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");
+        
     }
 
     public function transferStudentFull(){
@@ -1907,7 +1905,7 @@ class Administration extends Dbconfig
 
         echo($stud_id . ' '. $stud_to_swap . " " . $curr_section . " " . $section );
         $this->prepared_select("UPDATE enrollment SET section_code = (CASE WHEN stud_id = ? then ? WHEN stud_id = ? then ? END) WHERE stud_id in (?,?);", [$stud_id, $section, $stud_to_swap, $curr_section, $stud_id, $stud_to_swap], "isisii");
-
+        header("Refresh:5");
     }
 
     public function forgotPassword(){

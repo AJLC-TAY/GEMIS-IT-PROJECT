@@ -72,7 +72,7 @@ $stud_id = $userProfile->get_stud_id();
 
         </table>
     </div>
-    <div class="modal fade" id="transferconfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal fade" id="transferConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,12 +82,33 @@ $stud_id = $userProfile->get_stud_id();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Do you want to transfer <?php echo $stud_name?> to <span id="modal-identifier"></span>?</h5>
+                    <h5>Are you sure you want to transfer <?php echo $stud_name?> to <span id="modal-identifier"></span>?</h5>
                     <p class="modal-msg"></p>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                     <button class="btn btn-primary close-btn transfer-btn">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="transferConfirmationFull" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to transfer <?php echo $stud_name?> to <span id="modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary close-btn transfer-btn-full">Transfer</button>
                 </div>
             </div>
         </div>
