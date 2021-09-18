@@ -51,15 +51,15 @@ $admin = new Administration();
                         <div class="dropdown">
                             <button class="btn btn-outline-success btn-sm" type="button" id="faculty-filter" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-filter me-2"></i>Filter</button>
                             <ul class="dropdown-menu" aria-labelledby="faculty-filter">
-                                <li><a data-value='*' class="filter-item dropdown-item active">All</a></li>
-                                <li><a data-value='1' class="filter-item dropdown-item">Can enroll</a></li>
-                                <li><a data-value='0' class="filter-item dropdown-item">Cannot enroll</a></li>
+                                <li><a role='button' data-value='*' class="filter-item dropdown-item active">All</a></li>
+                                <li><a role='button' data-value='1' class="filter-item dropdown-item">Can enroll</a></li>
+                                <li><a role='button' data-value='0' class="filter-item dropdown-item">Cannot enroll</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <span class="flex-grow-1 me-3">
-                            <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                            <input id="faculty-search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                         </span>
                         <div>
                             <input id="f-table-clear-btn" type="reset" class=" mb-0 me-1 btn btn-outline-dark btn-sm" value="Clear" />
@@ -103,6 +103,9 @@ $admin = new Administration();
                                             <div class='form-group col-md-6'>
                                                 <label for="section-name" class="col-lg-4 col-form-label fw-bold">Name</label>
                                                 <input id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter section name
+                                                </div>
                                             </div>
                                             
                                         </div>
@@ -123,8 +126,8 @@ $admin = new Administration();
                                                 </select>
                                             </div>
                                             <div class='form-group col-md-6'>
-                                                <label for="section-name" class="col-lg-4 col-form-label fw-bold">Adviser (Opt.)</label>
-                                                <input class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
+                                                <label for="adviser-input" class="col-lg-4 col-form-label fw-bold">Adviser (Opt.)</label>
+                                                <input id="adviser-input" class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
                                                 <datalist id='adviser-list'>
                                                     <?php
                                                     $faculty_list = $admin->listFaculty();

@@ -72,10 +72,10 @@ include_once("../inc/head.html");
                         <div class="col-sm-9">
                             <select name="grade-level" id="grade-level-input" class="grd-level form-select">
                                 <?php
-                                $grd_lvl_list = array('0' => '-- Select grade level --', '11' => '11', '12' => '12' );
+                                $grd_lvl_list = array('0' => '-- Select grade level --', '11' => '11', '12' => '12');
                                 $grd_opt = '';
-                                foreach($grd_lvl_list as $id => $value) {
-                                    $grd_opt .= "<option value='$id'". ($id == 0 ? "selected" : "") .">$value</option>";
+                                foreach ($grd_lvl_list as $id => $value) {
+                                    $grd_opt .= "<option value='$id'" . ($id == 0 ? "selected" : "") . ">$value</option>";
                                 }
                                 echo $grd_opt;
                                 ?>
@@ -84,11 +84,11 @@ include_once("../inc/head.html");
                     </div>
                     <!-- Grade level end -->
                     <!-- Current quarter -->
-                    <div class="form-group row <?php echo $display?>">
+                    <div class="form-group row <?php echo $display ?>">
                         <label for="grade-level-input" class="col-sm-3 col-form-label">Current Quarter</label>
                         <div class="col-sm-9">
                             <select name="quarter" id="grade-level-input" class="form-select" <?php echo $action; ?>>
-                                <?php echo $quarter_opt;?>
+                                <?php echo $quarter_opt; ?>
                             </select>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ include_once("../inc/head.html");
                         <div class="col-sm-9">
                             <div class="d-flex align-items-center">
                                 <div class="form-check form-switch  my-auto ms-2 me-3">
-                                    <input name='enrollment'  class="form-check-input" type="checkbox" id="enrollment-switch" title='Start/End enrollment'>
+                                    <input name='enrollment' class="form-check-input" type="checkbox" id="enrollment-switch" title='Start/End enrollment'>
                                     <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
                                 </div>
                                 <input value="" class='form-control m-0' id='enrollment-status' readonly>
@@ -123,6 +123,21 @@ include_once("../inc/head.html");
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script src="../js/admin/admin.js"></script>
+    <!-- VALIDATION -->
+    <script>
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    </script>
 
 </body>
 
