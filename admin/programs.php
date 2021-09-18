@@ -100,7 +100,6 @@
     <!-- MODAL -->
     <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form id="program-form" class="needs-validation" method="post" novalidate>
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title">
@@ -109,35 +108,37 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p><small class='text-secondary'>Please complete the following: </small></p>
-                        <div class="form-group">
-                            <label for="prog-code">Code</label>
-                            <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
-                            <div class="invalid-feedback">
-                                Please enter program code
+                        <form id="program-form" class="needs-validation" method="post" novalidate>
+                            <input type="hidden" name="action" id="action" value="addProgram" />
+                            <p><small class='text-secondary'>Please complete the following: </small></p>
+                            <div class="form-group">
+                                <label for="prog-code">Code</label>
+                                <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
+                                <div class="invalid-feedback">
+                                    Please enter program code
+                                </div>
+                                <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
+                                <label for="prog-desc">Description</label>
+                                <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
+                                <div class="invalid-feedback">
+                                    Pleae enter program name
+                                </div>
+                                <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
+                                <label for="curr-code">Curriculum</label>
+                                <select id="curr-code" class="select form-select" name="curr-code">
+                                    <option value="0" selected>-- Select curriculum --</option>
+                                    <?php $currList = $admin->listCurriculum('curriculum');
+                                    foreach ($currList as  $cur) {
+                                        $curr_code = $cur->get_cur_code();
+                                        $curr_name = $cur->get_cur_name();
+                                        echo "<option value='$curr_code'> $curr_code | $curr_name </option>";
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
-                            <label for="prog-desc">Description</label>
-                            <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
-                            <div class="invalid-feedback">
-                                Pleae enter program name
-                            </div>
-                            <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
-                            <label for="curr-code">Curriculum</label>
-                            <select id="curr-code" class="select form-select" name="curr-code">
-                                <option value="0" selected>-- Select curriculum --</option>
-                                <?php $currList = $admin->listCurriculum('curriculum');
-                                foreach ($currList as  $cur) {
-                                    $curr_code = $cur->get_cur_code();
-                                    $curr_name = $cur->get_cur_name();
-                                    echo "<option value='$curr_code'> $curr_code | $curr_name </option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="action" id="action" value="addProgram" />
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                         <input type="submit" form="program-form" class="submit btn btn-primary" value="Add" />
                     </div>

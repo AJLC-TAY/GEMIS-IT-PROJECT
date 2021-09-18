@@ -11,7 +11,7 @@ trait QueryMethods
         mysqli_stmt_bind_param($stmt, $types, ...$params);
         if (!mysqli_stmt_execute($stmt)) {
             die('stmt error: ' . mysqli_stmt_error($stmt));
-        };
+        }
 
         return $stmt;
     }
@@ -33,9 +33,9 @@ trait UserShareMethods
     /**
      * Creates a User record basing from the specified user type.
      * @param   String $type Can either be AD, FA, or ST, short for Admin, Faculty, and Student, respectively.
-     * @return  String User ID number.
+     * @return  int User ID number.
      */
-    public function createUser(String $type)
+    public function createUser(String $type): int
     {
         $qry = mysqli_query($this->db, "SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
         $PASSWORD = mysqli_fetch_row($qry)[0];
@@ -55,7 +55,7 @@ trait FacultySharedMethods
      *
      * @return Faculty Faculty object.
      */
-    public function getFaculty($id)
+    public function getFaculty($id): Faculty
     {
         // Step 1
         $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
@@ -66,7 +66,7 @@ trait FacultySharedMethods
         $subjects = array();
         while ($s_row = mysqli_fetch_assoc($result)) {
             $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']);
-        };
+        }
 
         // Step 3
         $teacher_id = $row['teacher_id'];
@@ -180,8 +180,7 @@ trait Enrollment
             ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
             ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
-        $result = $this->query($query);
-        $num_rows_not_filtered = $result->num_rows;
+
 
 
         /**
@@ -189,7 +188,8 @@ trait Enrollment
          * sort value (column name in the database) and order value (ASC / DESC).
          * @return string Sort Query
          */
-        function get_sort_query() {
+        function get_sort_query(): string
+        {
             if(isset($_GET['sort'])) {
                 $sort = $_GET['sort'];
                 switch ($sort) {
@@ -254,13 +254,16 @@ trait Enrollment
 
 
         $query .= get_sort_query();
+        $result = $this->query($query);
+        $num_rows_not_filtered = $result->num_rows;
+
+
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
 
         $result = $this->query($query);
-        $num_rows = $result->num_rows;
-
         $records = array();
+
         while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
             $records[] = new Enrollee(
                 $row['SY'], $row['LRN'], $row['name'],
@@ -269,8 +272,9 @@ trait Enrollment
             );
         }
 
+
         $output = new stdClass();
-        $output->total = (strlen($search_query) > 0 && strlen($filter_qr)) ? $num_rows: $num_rows_not_filtered;
+        $output->total = $num_rows_not_filtered;
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);
@@ -297,7 +301,7 @@ trait Enrollment
 //        return $enrollees;
     }
 
-    public function getEnrollFilters()
+    public function getEnrollFilters():array
     {
         $filter = [];
 
@@ -353,7 +357,8 @@ trait Enrollment
     }
 
 
-    private function in_multi_array($string, $array) {
+    private function in_multi_array(string $string, array $array): bool
+    {
         $bool = false;
         foreach($array as $id => $value) {
             $bool = $string == $id;
@@ -387,13 +392,13 @@ trait Enrollment
 
         if ($is_json) {
             echo json_encode($data);
-            return;
+            exit;
         }
         return $data;
 
     }
 
-    public function validateImage($file, $file_size)
+    public function validateImage($file, $file_size):array
     {
         echo "<br>Start validating image ... <br>";
         // default values
@@ -424,8 +429,8 @@ trait Enrollment
 
             $statusInfo['status'] = 'valid';
             $statusInfo['image'] = $profile_img;
-            return $statusInfo;
         }
+        return $statusInfo;
     }
 
     /**
@@ -434,7 +439,7 @@ trait Enrollment
      * @param   array   $params
      * @return  array
      */
-    public static function preprocessData($params)
+    public static function preprocessData(array $params): array
     {
         return array_map(function($e) {
             $e = trim($e);
@@ -464,19 +469,19 @@ trait Enrollment
             $_POST['city-muni'], $_POST['province'], $_POST['zip-code']
         ];
 
-        function prepareParentData ($type)
+        function prepareParentData ($type): array
         {
-            $parent =  [$_POST["{$type}-lastname"], $_POST["{$type}-firstname"], $_POST["{$type}-middlename"]];
+            $parent =  [$_POST["$type-lastname"], $_POST["$type-firstname"], $_POST["$type-middlename"]];
             if ($type === 'f') {
-                $parent[] = $_POST["{$type}-extensionname"];
+                $parent[] = $_POST["$type-extensionname"];
             }
-            $parent[] =  $_POST["{$type}-contactnumber"];
+            $parent[] =  $_POST["$type-contactnumber"];
 
             if ($type === 'g') { // if guardian, add relationship else occupation of parent
-                $parent[] = $_POST["{$type}-relationship"];
+                $parent[] = $_POST["$type-relationship"];
             } else {
                 $parent[] =  $type;
-                $parent[] =  $_POST["{$type}-occupation"];
+                $parent[] =  $_POST["$type-occupation"];
             }
 
             return Administration::preprocessData($parent);

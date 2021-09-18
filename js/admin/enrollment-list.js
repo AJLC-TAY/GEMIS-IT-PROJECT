@@ -95,7 +95,7 @@ $(function() {
         let status = autoRefreshEvents($(this))
         setTimeout(() => {
             enrolleesTable.bootstrapTable("hideLoading")
-            showToast('success', `Table auto refresh is turned ${status}`)
+            showToast('dark', `Table auto refresh is turned ${status}`)
         }, 300)
     })
 

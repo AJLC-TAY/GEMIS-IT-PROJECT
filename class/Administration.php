@@ -99,9 +99,9 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        session_start();
+//        session_start();
         $result = $this->query("SELECT admin_id, last_name, first_name, middle_name, ext_name, "
-            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
+            . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $administrators[] = new Administrator(
@@ -177,7 +177,7 @@ class Administration extends Dbconfig
             $grd_level = $row['grd_level'];
 
             // grade options
-            $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data_name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
+            $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
                         ."<select data-id='$sy_id' name='grade-level' class='form-select d-none'>";
             foreach($grd_list as $id => $value) {
                 // $grd_opt .= "<option value='$id' ". (($id == $grd_level) ? "selected" : "") .">$value</option>";
@@ -186,7 +186,7 @@ class Administration extends Dbconfig
             $grd_opt .= "</select>";
 
             // quarter options
-            $quarter_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data_name='quarter' type='text'  data-key='$quarter' value='{$quarter_list[$quarter]}' readonly><select data-id='$sy_id' name='quarter' class='form-select d-none'>";
+            $quarter_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='quarter' type='text'  data-key='$quarter' value='{$quarter_list[$quarter]}' readonly><select data-id='$sy_id' name='quarter' class='form-select d-none'>";
             foreach($quarter_list as $id => $value) {
                 // $quarter_opt .= "<option value='$id' ". (($id == $quarter) ? "selected" : "") .">$value</option>";
                 $quarter_opt .= "<option value='$id'>$value</option>";
@@ -194,7 +194,7 @@ class Administration extends Dbconfig
             $quarter_opt .= "</select>";
 
             // semester options
-            $sem_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data_name='semester' type='text' data-key='$semester' value='{$semester_list[$semester]}' readonly><select data-id='$sy_id' name='semester' class='form-select d-none'>";
+            $sem_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='semester' type='text' data-key='$semester' value='{$semester_list[$semester]}' readonly><select data-id='$sy_id' name='semester' class='form-select d-none'>";
             foreach($semester_list as $id => $value) {
                 // $sem_opt .= "<option value='$id' ". (($id == $semester) ? "selected" : "") .">$value</option>";
                 $sem_opt .= "<option value='$id'>$value</option>";
@@ -974,7 +974,7 @@ class Administration extends Dbconfig
     /** User Profile */
     /**
      * Returns the user Object of the specified user type.
-     * @param $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
+     * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
      * @return Faculty|Student|void
      */
 
@@ -1080,7 +1080,6 @@ class Administration extends Dbconfig
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
                 http_response_code(400);
                 die(json_encode($statusMsg));
-                return;
             }
         }
 
@@ -1742,7 +1741,6 @@ class Administration extends Dbconfig
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
                 http_response_code(400);
                 die(json_encode($statusMsg));
-                return;
             }
         }
 
@@ -1919,6 +1917,28 @@ class Administration extends Dbconfig
         $key= '';
     
     }
-    
+
+    /** SIGNATORY METHODS */
+    public function addSignatory()
+    {
+        $this->prepared_query(
+            "INSERT INTO signatory (teacher_id, position) VALUES (?, ?);",
+            [$_POST['signatory'], $_POST['position']],
+            "is"
+        );
+    }
+    public function listSignatory($is_JSON = false)
+    {
+        $result = $this->query("SELECT * FROM signatory;");
+        $signatory = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $signatory[] = new Signatory($row['sign_id'], $row['teacher_id'], $row['position']);
+        }
+        if (!$is_JSON) {
+            return $signatory;
+        }
+        echo json_encode($signatory);
+    }
+
 }
 ?>

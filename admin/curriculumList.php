@@ -98,15 +98,16 @@
     <!-- ADD MODAL -->
     <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form id="curriculum-form" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">S
-                            <h4 class="mb-0">Add Curriculum</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Curriculum</h4>
                     </div>
-                    <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="curriculum-form" method="post">
+                        <input type="hidden" name="action" id="action" value="addCurriculum" />
                         <p><small class='text-secondary'>Please complete the following: </small></p>
                         <div class="form-group">
                             <label for="curr-code">Code</label>
@@ -121,14 +122,13 @@
                             <label for="curr-desc">Short Description</label>
                             <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="action" id="action" value="addCurriculum" />
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
-                    </div>
+                    </form>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
+                </div>
+            </div>
         </div>
     </div>
     <!-- ARCHIVE MODAL -->
