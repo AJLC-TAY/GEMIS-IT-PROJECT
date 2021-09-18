@@ -254,22 +254,6 @@ $display_style = STYLE_DISPLAY_NONE;
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr> -->
                                             <tr>
                                                 <td>Test</td>
                                                 <td>wekrljwoeifjsdlk</td>
@@ -329,7 +313,7 @@ $display_style = STYLE_DISPLAY_NONE;
                                 <form>
                                     <div class="form-group d-flex flex-grow-1 me-3" >
                                         <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
-                                        <input type="reset" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
+                                        <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                                     </div>
                                 </form>
                                 <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
@@ -452,7 +436,7 @@ $display_style = STYLE_DISPLAY_NONE;
                             <form>
                                 <div class="d-flex flex-grow-1">
                                     <input id="search-sub-input" type="search" class="form-control form-control-sm mb-0 me-2" placeholder="Search subject here">
-                                    <input type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
+                                    <input type="reset" data-target-table='#subject-table' class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
                                 </div>
                             </form>
                         </div>

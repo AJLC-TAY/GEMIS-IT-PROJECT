@@ -232,7 +232,7 @@ $camel_action = ucwords($action);
                 <form>
                     <div class="form-group d-flex flex-grow-1 me-3">
                         <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
-                        <input type="reset" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
+                        <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                     </div>
                 </form>
                 <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
@@ -269,10 +269,12 @@ $camel_action = ucwords($action);
                 <thead class='thead-dark'>
                     <div class="d-flex justify-content-between mb-1">
                         <!-- SEARCH BAR - SUBJECTS -->
-                        <span class="flex-grow-1 me-3">
-                            <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
-                        </span>
-                        <span><button class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
+                        <form action="">
+                            <span class="flex-grow-1 me-3">
+                                <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
+                            </span>
+                            <span><input data-target-table="#subject-table" type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear"></span>
+                        </form>
                     </div>
                     <tr>
                         <th data-checkbox="true"></th>

@@ -1,3 +1,10 @@
+export const clearButtonTableEvent = () => {
+    // clear button for search subject input in the as-modal
+    $(document).on("click", ".clear-table-btn", function() {
+        $($(this).attr("data-target-table")).bootstrapTable("resetSearch");
+    });
+}
+
 /** Assign Subject to Faculty Methods */
 export const implementAssignSubjectMethods = (assignedSub, subTable) => {
     let assigned = assignedSub      // list of assigned subjects
@@ -27,7 +34,7 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
             assigned = newSubCodes
             let emptyMsg = $("#empty-as-msg")
             let emptySubjectCon = () => $(".assigned-sub-con a").remove()
-            if (assigned.length == 0) {
+            if (assigned.length === 0) {
                 emptyMsg.removeClass("d-none")
                 emptySubjectCon()
             }
@@ -49,13 +56,6 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
             hideSpinner()
             showToast('success', "Handled subjects successfully updated")
         })
-    })
-
-    // clear button for search subject input in the as-modal
-    $(document).on("click", ".clear-table-btn", () => {
-        showSpinner()
-        subjectTable.bootstrapTable("resetSearch")
-        hideSpinner()
     })
 }
 
@@ -97,18 +97,15 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
                      .bootstrapTable('hideLoading')
     })
 
-    $(document).on("click", ".clear-table-btn", () => {
-        $(SCID).bootstrapTable("showLoading")
-               .bootstrapTable("resetSearch")
-               .bootstrapTable("hideLoading")
-    })
-
+    /** Moves the list of selected data from the specified origin table to the table destination*/
     const moveData = (dataList, origin, destination) => {
         dataList.forEach(e => moveElement(e.sub_class_code, origin, destination))
     }
 
+    /** Moves the selected data from the specified origin table to the specified table
+     *  destination through the specified id */
     const moveElement = (uniqueID, origin, destination) => {
-        let color = (origin == ASSIGNEDSCID) ? 'success' : 'warning'
+        let color = (origin === ASSIGNEDSCID) ? 'success' : 'warning'
         // change value of selected row
         let selected = $(origin).bootstrapTable('getRowByUniqueId', uniqueID)
         selected.teacher_id = null

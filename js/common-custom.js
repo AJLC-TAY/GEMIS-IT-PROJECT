@@ -22,7 +22,8 @@ function showSpinner(selector = null, bs = false) {
 }
 
 /** Fades out spinner */
-function hideSpinner(selector = null) {
+function hideSpinner(selector = null, bs = false) {
+    if (selector != null && bs) return $(selector).bootstrapTable('hideLoading');
     if (selector != null) return $(selector).hide();
     spinner.fadeOut(500);
 }
@@ -44,6 +45,7 @@ function showToast(type, msg, options= null) {
     toast.prependTo('#toast-con');
     let newToast = new bootstrap.Toast(toast, options);
     toast.bind('hidden.bs.toast', function () {
+        // this removes the toast instance when hidden
         $(this).remove();
     })
     newToast.show();

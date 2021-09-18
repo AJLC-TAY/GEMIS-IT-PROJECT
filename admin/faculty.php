@@ -68,7 +68,7 @@ if (isset($_GET['action'])) {
                             <form>
                                 <div class="flex-grow-1 d-flex me-3">
                                     <input id="search-sc-input" type="search" class="form-control form-control-sm mb-0 me-2" placeholder="Search subject here">
-                                    <input type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
+                                    <input type="reset" data-target-table="#sc-table" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
                                 </div>
                             </form>
                             <div class="dropdown">
