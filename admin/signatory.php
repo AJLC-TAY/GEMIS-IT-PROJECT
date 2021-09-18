@@ -38,36 +38,39 @@ $faculty = $admin->listFaculty();
                                         <li class="breadcrumb-item">Signatory</li>
                                     </ol>
                                 </nav>
-                                <h3 class="fw-bold">Signatory List</h3>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h3 class="fw-bold">Signatory List</h3>
+                                    <div>
+                                        <button class="btn btn-success" onclick="renderData()" data-bs-toggle="modal" data-bs-target="#modal-form"><i class="bi bi-plus me-2"></i>Add Signatory</button>
+                                    </div>
+                                </div>
                             </header>
-                            <button class="btn btn-sm btn-success" onclick="renderData()" data-bs-toggle="modal" data-bs-target="#modal-form">Add Signatory</button>
                             <!-- HEADER END -->
-                            <div class="card w-100 h-auto bg-light">
-                                <div id="toolbar" class="d-flex justify-content-between mb-3">
-                                    <!-- SEARCH BAR -->
-                                    <span class="flex-grow-1 me-3">
-                                     <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                    </span>
+                            <div class="container mt-1">
+                                <div class="card w-100 h-auto bg-light">
+                                    <table id="table" class="table-striped table-sm">
+                                        <thead class='thead-dark'>
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <!-- SEARCH BAR -->
+                                                <span class="flex-grow-1 me-3">
+                                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                                </span>
+                                                <div>
+                                                    <button class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
+                                                </div>
+                                            </div>
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="sign_id">Sign ID</th>
+                                                <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="true" data-field="id">ID</th>
+                                                <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
-                                <div class="row">
-                                    <button class="btn btn-sm btn-danger table-opt">Delete</button>
-                                </div>
-
-                                <table id="table" class="table-striped">
-                                    <thead class='thead-dark'>
-                                    <tr>
-                                        <th data-checkbox="true"></th>
-                                        <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="sign_id">Sign ID</th>
-                                        <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="true" data-field="id">ID</th>
-                                        <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="name">Name</th>
-                                        <th scope='col' data-width="300"  data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
-                                    </tr>
-                                    </thead>
-                                </table>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -103,11 +106,11 @@ $faculty = $admin->listFaculty();
                                 <option>Search user</option>
                                 <optgroup value="administrator" label="Administrators" class="select2-result-selectable">
                                     <?php
-                                    foreach($administrators as $element) {
+                                    foreach ($administrators as $element) {
                                         echo "<option value='{$element->admin_id}'>{$element->name}</option>";
                                     }
                                     echo "<optgroup value='faculty' label='Faculty' class='select2-result-selectable'>";
-                                    foreach($faculty as $element) {
+                                    foreach ($faculty as $element) {
                                         echo "<option value='{$element->get_teacher_id()}'>{$element->get_name()}</option>";
                                     }
                                     ?>
@@ -147,10 +150,10 @@ $faculty = $admin->listFaculty();
                 </div>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
-                       <div class="container mb-3">
-                           <label for="id-no-view">ID No</label>
-                           <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
-                       </div>
+                        <div class="container mb-3">
+                            <label for="id-no-view">ID No</label>
+                            <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
+                        </div>
                         <div class="container mb-3">
                             <label for="name-view">Name</label>
                             <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
@@ -204,20 +207,20 @@ $faculty = $admin->listFaculty();
         }
 
         const tableSetup = {
-            url:                `getAction.php?data=signatory`,
-            method:             'GET',
-            uniqueId:           'id',
-            idField:            'id',
-            search:             true,
-            searchSelector:     "#search-input",
-            height:             425,
-            maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
-            clickToSelect:      true,
-            pageSize:           10,
-            pagination:         true,
-            buttonsToolbar:     ".buttons-toolbar",
-            pageList:           "[10, 25, 50, All]",
-            paginationParts:    ["pageInfoShort", "pageSize", "pageList"]
+            url: `getAction.php?data=signatory`,
+            method: 'GET',
+            uniqueId: 'id',
+            idField: 'id',
+            search: true,
+            searchSelector: "#search-input",
+            height: 425,
+            maintainMetaDat: true, // set true to preserve the selected row even when the current table is empty
+            clickToSelect: true,
+            pageSize: 10,
+            pagination: true,
+            buttonsToolbar: ".buttons-toolbar",
+            pageList: "[10, 25, 50, All]",
+            paginationParts: ["pageInfoShort", "pageSize", "pageList"]
         };
         let signatoryTable = $("#table").bootstrapTable(tableSetup);
         let addAnother = false;
@@ -230,15 +233,15 @@ $faculty = $admin->listFaculty();
                 dropdownParent: $('.modal')
             });
 
-            $(document).on("click", "#submit-again", function () {
+            $(document).on("click", "#submit-again", function() {
                 addAnother = true;
                 $("#signatory-form").submit();
             });
 
-            $(document).on("submit", "#signatory-form", function (e) {
+            $(document).on("submit", "#signatory-form", function(e) {
                 e.preventDefault();
                 let form = $(this);
-                $.post("action.php", form.serializeArray(), function () {
+                $.post("action.php", form.serializeArray(), function() {
                     form.trigger('reset');
                     signatoryTable.bootstrapTable("refresh")
                     if (!addAnother) {
@@ -248,11 +251,11 @@ $faculty = $admin->listFaculty();
                     showToast("success", "Signatory successfully added");
                 });
             });
-            $(document).on("click", ".table-opt", function (e) {
+            $(document).on("click", ".table-opt", function(e) {
                 let selections = signatoryTable.bootstrapTable('getSelections');
                 if (selections.length < 1) return showToast("danger", "Please select a signatory first");
             });
-            $(document).on("click", ".view-btn", function () {
+            $(document).on("click", ".view-btn", function() {
                 showSpinner();
                 let id = $(this).attr("data-id");
                 let data = signatoryTable.bootstrapTable("getRowByUniqueId", id)
