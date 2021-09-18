@@ -1,7 +1,5 @@
 import {implementAssignSubjectMethods as asMethods, implementAssignSubjectClassMethods as scMethods} from "./utilities.js";
 
-
-
 let asTableSetup = {
     data:               subjects,
     uniqueId:           "sub_code",
@@ -15,8 +13,6 @@ let asTableSetup = {
                                                                     {field: 'sub_code', values: assigned})
     }
 }
-
-console.log(assignedSubClasses)
 
 const detailFormatter = (index, row) => {
     // row details for reference
@@ -88,6 +84,7 @@ let subjectTable = $("#subject-table").bootstrapTable(asTableSetup)
 
 $(function () {
     preload('#faculty')
+
     /** Handling image upload */
     const readURL = input => {
         if (input.files && input.files[0]) {
@@ -103,17 +100,6 @@ $(function () {
         readURL(this);
     })
 
-    // $('#faculty-form').submit(function(event) {
-    //     event.preventDefault()
-
-    //     console.log($(this).serializeArray())
-    //     $.post("action.php", $(this).serializeArray(), function(data) {
-    //         console.log(data)
-    //     }).fail(function(error) {
-    //         console.log(error.responseText)
-    //     }) 
-    // })
-
     /** Assign Subject to Faculty Methods */
     asMethods(assigned, subjectTable)
 
@@ -122,10 +108,8 @@ $(function () {
 
     $(document).on("submit", "#faculty-form", function (e) {
         e.preventDefault()
+        var action = $(this).attr('data-action')
         var formData = new FormData($(this)[0])
-        // let formData = $(this).serializeArray().filter(e => {  // remove unnecessary values in the formdata,
-        //     return !e.name.toLowerCase().includes("btselect")
-        // });
 
         $(ASSIGNEDSCID).bootstrapTable("getData")
                        .forEach(e => {
@@ -138,6 +122,7 @@ $(function () {
                            })
 
         formData.append("profile", "faculty")
+        formData.append("action", action)
 
         $.ajax({
             url: "action.php",

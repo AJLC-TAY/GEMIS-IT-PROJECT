@@ -3,6 +3,7 @@ $admin = new Administration();
 $userProfile = $admin->getProfile("ST");
 $stud_name = $userProfile->get_name();
 $section = $userProfile->get_section();
+$stud_id = $userProfile->get_stud_id();
 ?>
 <header>
     <!-- BREADCRUMB -->
@@ -36,7 +37,7 @@ $section = $userProfile->get_section();
             $adviser = "Adviser: " . $subject['adviser'];
             $slot = "Available Slots: " . $subject['slot'];
             $code = $subject['code'];
-            echo "<button id='${code}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
+            echo "<button id='${code}' data = '${stud_id}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
             <div class='d-flex w-100 justify-content-between'>
                 <p class='mb-1'>$name</p>
                 <small>$slot</small>
@@ -59,17 +60,20 @@ $section = $userProfile->get_section();
                     </span>
                 </div>
                 <tr>
-                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="name">Section</th>
+                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="current_code" data-class="hidden">Current Code</th>
+                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="section_code">Code</th>
+                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section</th>
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="adviser_name">Adviser</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="student">Student to swap</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="action">Action</th>
+                    
                 </tr>
             </thead>
 
         </table>
     </div>
     <div class="modal fade" id="transferconfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -88,3 +92,7 @@ $section = $userProfile->get_section();
             </div>
         </div>
     </div>
+
+    <script>
+        var id = <?php echo $stud_id; ?>;
+    </script>

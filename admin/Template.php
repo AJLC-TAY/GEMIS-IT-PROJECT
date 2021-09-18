@@ -4,9 +4,9 @@
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
@@ -30,6 +30,11 @@
             <!-- FOOTER END -->
         </section>
     </section>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>

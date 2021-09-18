@@ -3,6 +3,7 @@ session_start();
 include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -40,15 +41,16 @@ include_once("../inc/head.html"); ?>
                                 }
 
                                 if ($_GET['page'] === 'report') {
-                                    require("./enrollment/previewReport.php");
+                                    require("enrollment/previewReport.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                                 if ($_GET['page'] === 'credential') {
-                                    require("./enrollment/enrollmentCredentials.php");
+                                    require("enrollment/enrollmentCredentials.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
+                                echo "<a href='enrollment.php?page=enrollees'>Enrollment List</a>";
                                 $js = "<script src='../js/admin/enrollment.js'></script>";
                             }
                             ?>
@@ -70,8 +72,10 @@ include_once("../inc/head.html"); ?>
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>
@@ -89,6 +93,12 @@ include_once("../inc/head.html"); ?>
                 form.classList.add('was-validated');
             }, false);
         });
+
+
+        $(function() {
+            preload("#faculty")
+            hideSpinner()
+        })
     </script>
 </body>
 

@@ -27,9 +27,9 @@
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <button id="export-opt" type="submit" class="btn btn-primary btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                        <input id="reset-pass-opt" type="submit" class="btn btn-secondary btn-sm" title='Reset Password' value="Reset Password">
-                        <input id="deactivate-opt" type="submit" form="deactivate-from" class="btn btn-outline-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
+                        <button id="export-opt" type="submit" class="table-opt btn btn-primary btn-sm" title='Export' value='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                        <input id="reset-pass-opt" type="submit" class="table-opt btn btn-secondary btn-sm" title='Reset Password' value="Reset Password">
+                        <input id="deactivate-opt" type="submit" form="deactivate-from" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
                     </div>
                 </div>
 

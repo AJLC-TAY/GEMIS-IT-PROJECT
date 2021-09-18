@@ -1,5 +1,4 @@
 <?php
-require('Dataclasses.php');
 trait QueryMethods
 {
     public function prepared_query($query, $params, $types = "")
@@ -12,7 +11,7 @@ trait QueryMethods
         mysqli_stmt_bind_param($stmt, $types, ...$params);
         if (!mysqli_stmt_execute($stmt)) {
             die('stmt error: ' . mysqli_stmt_error($stmt));
-        };
+        }
 
         return $stmt;
     }
@@ -34,9 +33,9 @@ trait UserShareMethods
     /**
      * Creates a User record basing from the specified user type.
      * @param   String $type Can either be AD, FA, or ST, short for Admin, Faculty, and Student, respectively.
-     * @return  String User ID number.
+     * @return  int User ID number.
      */
-    public function createUser(String $type)
+    public function createUser(String $type): int
     {
         $qry = mysqli_query($this->db, "SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
         $PASSWORD = mysqli_fetch_row($qry)[0];
@@ -56,7 +55,7 @@ trait FacultySharedMethods
      *
      * @return Faculty Faculty object.
      */
-    public function getFaculty($id)
+    public function getFaculty($id): Faculty
     {
         // Step 1
         $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
@@ -67,7 +66,7 @@ trait FacultySharedMethods
         $subjects = array();
         while ($s_row = mysqli_fetch_assoc($result)) {
             $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']);
-        };
+        }
 
         // Step 3
         $teacher_id = $row['teacher_id'];
@@ -116,10 +115,10 @@ trait FacultySharedMethods
     }
 }
 
+
+/** Enrollment Methods */
 trait Enrollment
 {
-    /** Enrollment Methods */
-
     public function enroll()
     {
         session_start();
@@ -173,36 +172,171 @@ trait Enrollment
 
     public function getEnrollees()
     {
-        $result = $this->query(
-            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+
+
+        $limit = $_GET['limit'];
+        $offset = $_GET['offset'];
+        $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
             ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
-            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
-        );
-        $enrollees = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $user_id = $row['stud_id'];
-            $enrollees[] = [
-                "SY"          => $row['SY'],
-                "LRN"         => $row['LRN'],
-                "name"        => $row['name'],
-                "enroll-date" => $row['date_of_enroll'],
-                "grade-level" => $row['enrolled_in'],
-                "curriculum"  => $row['curr_code'],
-                "status"      => $row['status'],
-                "action"      => "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-secondary w-auto me-1 btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
-                    . "<a href='enrollment.php?id=$user_id&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee'><i class='bi bi-box-arrow-up-left'></i></a>"
-                    . "<a href='enrollment.php?id=$user_id' class='btn btn-primary btn-sm w-auto' title='View Enrollee'><i class='bi bi-eye'></i></a>"
-                    . "</div>"
-            ];
+            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
+
+
+
+        /**
+         * Returns the sort query string in line with the received
+         * sort value (column name in the database) and order value (ASC / DESC).
+         * @return string Sort Query
+         */
+        function get_sort_query(): string
+        {
+            if(isset($_GET['sort'])) {
+                $sort = $_GET['sort'];
+                switch ($sort) {
+                    case 'grade-level':
+                        $sort = 'e.enrolled_in';
+                        break;
+                    case 'enroll-date':
+                        $sort = 'e.date_of_enroll';
+                        break;
+                    case 'curriculum':
+                        $sort = "e.curr_code";
+                        break;
+                }
+                if ($_GET['order'] === 'desc') return " ORDER BY $sort DESC";
+                return " ORDER BY $sort ASC";
+            }
+            return " ORDER BY name ASC";
         }
-        return $enrollees;
+
+        $search_query = "";
+        if(strlen(trim($_GET['search'])) > 0) {
+            $text = $_GET['search'];
+//            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
+            $search_query .= " WHERE (sy.start_year LIKE \"%$text%\"";
+            $search_query .= " OR sy.end_year LIKE \"%$text%\"";
+            $search_query .= " OR s.last_name LIKE \"%$text%\"";
+            $search_query .= " OR s.first_name LIKE \"%$text%\"";
+            $search_query .= " OR s.middle_name LIKE \"%$text%\"";
+            $search_query .= " OR s.ext_name LIKE \"%$text%\"";
+            $search_query .= " OR stud_id LIKE \"%$text%\"";
+            $search_query .= " OR LRN LIKE \"%$text%\"";
+            $search_query .= " OR e.date_of_enroll LIKE \"%$text%\"";
+            $search_query .= " OR e.enrolled_in LIKE \"%$text%\"";
+            $search_query .= " OR e.curr_code LIKE \"%$text%\"";
+            $search_query .= " OR e.valid_stud_data LIKE \"%$text%\") ";
+        }
+
+
+        $filter_query = [];
+
+        if ($_GET['sy'] !== '*') {
+            $filter_query[] = " sy.sy_id ='{$_GET['sy']}";
+        }
+        if ($_GET['track'] !== '*') {
+            $filter_query[] = " e.curr_code ='{$_GET['track']}'";
+        }
+//        if ($_GET['strand'] !== '*') {
+//            $query .= " sy.sy_id = \"%{$_GET['strand']}%\" AND";
+//        }
+        if ($_GET['yearLevel'] !== '*') {
+            $filter_query[] = " e.enrolled_in ='{$_GET['yearLevel']}'";
+        }
+        if ($_GET['status'] !== '*') {
+            $filter_query[] = " e.valid_stud_data ='{$_GET['status']}'";
+        }
+        $filter_qr = implode(" AND ", $filter_query);
+
+        $query .= (strlen($search_query) > 0)
+            ? " WHERE ".$search_query." AND (".$filter_qr.")"
+            : ((strlen($filter_qr) > 0)
+                ? " WHERE ".$filter_qr : "");
+
+
+        $query .= get_sort_query();
+        $result = $this->query($query);
+        $num_rows_not_filtered = $result->num_rows;
+
+
+        $query .= " LIMIT $limit";
+        $query .= " OFFSET $offset";
+
+        $result = $this->query($query);
+        $records = array();
+
+        while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+            $records[] = new Enrollee(
+                $row['SY'], $row['LRN'], $row['name'],
+                $row['date_of_enroll'], $row['enrolled_in'],
+                $row['curr_code'], $row['status'], $row['stud_id']
+            );
+        }
+
+
+        $output = new stdClass();
+        $output->total = $num_rows_not_filtered;
+        $output->totalNotFiltered = $num_rows_not_filtered;
+        $output->rows = $records;
+        echo json_encode($output);
+
+
+        //        $result = $this->query(
+//            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+//            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+//            ."JOIN student AS s USING (stud_id) "
+//            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
+//        );
+//        echo json_encode($result);
+//        $enrollees = [];
+//        while ($row = mysqli_fetch_assoc($result)) {
+//            $enrollees[] = new Enrollee(
+//                $row['SY'], $row['LRN'], $row['name'],
+//                $row['date_of_enroll'], $row['enrolled_in'],
+//                $row['curr_code'], $row['status'], $row['stud_id']
+//            );
+//
+//        }
+//
+//
+//        return $enrollees;
     }
 
-    public function listEnrolleesJSON()
+    public function getEnrollFilters():array
     {
-        echo json_encode($this->getEnrollees());
+        $filter = [];
+
+        # Get school year
+//        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear;");
+        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear GROUP BY sy;");
+        $school_years = [];
+        while($row = mysqli_fetch_row($result)) {
+            $school_years[$row["0"]] = $row["1"];
+        }
+        $filter['school_year'] = $school_years;
+
+
+        # Get tracks
+        $result = $this->query("SELECT curr_code, curr_name FROM curriculum;");
+        $programs = [];
+        while($row = mysqli_fetch_row($result)) {
+            $programs[$row["0"]] = $row["1"];
+        }
+        $filter['tracks'] = $programs;
+
+        # Get strands
+        $result = $this->query("SELECT prog_code, description FROM program;");
+        $programs = [];
+        while($row = mysqli_fetch_row($result)) {
+            $programs[$row["0"]] = $row["1"];
+        }
+        $filter['programs'] = $programs;
+
+        # Prepare year level
+        $filter['year_level'] = ['11', '12'];
+
+        $filter['status'] = ["0" => "Pending", "1" => "Enrolled", "2" => "Cancelled"];
+
+        return $filter;
     }
 
     public function editEnrollStatus()
@@ -223,7 +357,8 @@ trait Enrollment
     }
 
 
-    private function in_multi_array($string, $array) {
+    private function in_multi_array(string $string, array $array): bool
+    {
         $bool = false;
         foreach($array as $id => $value) {
             $bool = $string == $id;
@@ -257,12 +392,13 @@ trait Enrollment
 
         if ($is_json) {
             echo json_encode($data);
-            return;
+            exit;
         }
         return $data;
 
     }
-    public function validateImage($file, $file_size)
+
+    public function validateImage($file, $file_size):array
     {
         echo "<br>Start validating image ... <br>";
         // default values
@@ -293,8 +429,8 @@ trait Enrollment
 
             $statusInfo['status'] = 'valid';
             $statusInfo['image'] = $profile_img;
-            return $statusInfo;
         }
+        return $statusInfo;
     }
 
     /**
@@ -303,12 +439,19 @@ trait Enrollment
      * @param   array   $params
      * @return  array
      */
-    public static function preprocessData($params)
+    public static function preprocessData(array $params): array
     {
         return array_map(function($e) {
             $e = trim($e);
             return  $e ?? NULL;
         }, $params);
+    }
+
+    public function validateEnrollment()
+    {
+        $is_valid = (isset($_POST['accept'])) ? 1
+            : (isset($_POST['reject']) ? 0 : 1);
+        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='{$_POST['stud_id']}';");
     }
 
     public function addStudent()
@@ -326,19 +469,19 @@ trait Enrollment
             $_POST['city-muni'], $_POST['province'], $_POST['zip-code']
         ];
 
-        function prepareParentData ($type)
+        function prepareParentData ($type): array
         {
-            $parent =  [$_POST["{$type}-lastname"], $_POST["{$type}-firstname"], $_POST["{$type}-middlename"]];
+            $parent =  [$_POST["$type-lastname"], $_POST["$type-firstname"], $_POST["$type-middlename"]];
             if ($type === 'f') {
-                $parent[] = $_POST["{$type}-extensionname"];
+                $parent[] = $_POST["$type-extensionname"];
             }
-            $parent[] =  $_POST["{$type}-contactnumber"];
+            $parent[] =  $_POST["$type-contactnumber"];
 
             if ($type === 'g') { // if guardian, add relationship else occupation of parent
-                $parent[] = $_POST["{$type}-relationship"];
+                $parent[] = $_POST["$type-relationship"];
             } else {
                 $parent[] =  $type;
-                $parent[] =  $_POST["{$type}-occupation"];
+                $parent[] =  $_POST["$type-occupation"];
             }
 
             return Administration::preprocessData($parent);

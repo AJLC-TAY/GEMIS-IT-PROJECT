@@ -8,7 +8,7 @@ $(function() {
             showToast('dark', 'Redirecting to enrollment dashboard ...')
         }, 2000)
         setTimeout(() => {
-            window.location.replace("enrollIndex.php?page=enrollees");
+            window.location.replace("enrollment.php?page=enrollees");
         }, 4000)
     })
     hideSpinner()

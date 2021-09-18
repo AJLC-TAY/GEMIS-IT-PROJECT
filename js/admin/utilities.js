@@ -77,16 +77,10 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         }, 1000);
     })
 
-    // $(document).on('click', '#assigned-sc-btn', function (e) {
-    //     e.preventDefault()
-    //
-    //     $('#sc-form').submit()
-    // })
-
     /** Filter button of the Subject Class table */
     $(document).on('click', '.filter-item', function (e) {
         e.preventDefault()
-        let subClassTable = $('#sc-table')
+        let subClassTable = $(SCID)
         subClassTable.bootstrapTable('showLoading')
         // Add active state to the button and remove active state from other options
         $(this).addClass('active')
@@ -102,8 +96,6 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         subClassTable.bootstrapTable('filterBy', filterData)
                      .bootstrapTable('hideLoading')
     })
-
-
 
     $(document).on("click", ".clear-table-btn", () => {
         $(SCID).bootstrapTable("showLoading")
@@ -137,6 +129,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         form = $(this)
         selections = $(SCID).bootstrapTable('getSelections')
 
+        console.log(form.attr('data-page'));
         if (form.attr('data-page') === 'profile') { // allow database update on profile page only
             // form page
             formData = form.serializeArray()
@@ -154,7 +147,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         hideSpinner()
     })
 
-    let createUnassignForm = () => {
+    const createUnassignForm = () => {
         let formData = new FormData()
         formData.append("action", "unassignSubClasses")
         formData.append("teacher_id", teacherID)
@@ -163,32 +156,38 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
 
     $(document).on("click", ".unassign-btn", function (e) {
         e.preventDefault()
-        showSpinner()
-        let subCode = $(this).attr("data-sc-code")
-        let formData = createUnassignForm()
-        formData.append("sub_class_code[]", subCode)
+        let asSCTable = $(ASSIGNEDSCID);
+        asSCTable.bootstrapTable('showLoading')
 
-        $.ajax({
-            url: "action.php",
-            data: formData,
-            cache: false,
-            contentType: false,  // sending form data object will create error if content type and process data is not set to false
-            processData: false,
-            method: 'POST',
-            success: function (data) {
-                moveData(subCode, ASSIGNEDSCID, SCID)
-                // $(SCID).bootstrapTable()
-            }
-        })
-        hideSpinner()
+        let subCode = $(this).attr("data-sc-code")
+
+        if (asSCTable.attr('data-page') === 'profile') {
+            let formData = createUnassignForm()
+            formData.append("sub_class_code[]", subCode)
+
+            $.ajax({
+                url: "action.php",
+                data: formData,
+                cache: false,
+                contentType: false,  // sending form data object will create error if content type and process data is not set to false
+                processData: false,
+                method: 'POST'
+            })
+        }
+
+        moveElement(subCode, ASSIGNEDSCID, SCID)
+        setTimeout(() => asSCTable.bootstrapTable('hideLoading'), 300)
     })
 
     /** Unassign all */
     $(document).on('click', '.unassign-selected-btn', (e) => {
         e.preventDefault()
-        showSpinner()
+        showSpinner(ASSIGNEDSCID, true)
         let selection = $(ASSIGNEDSCID).bootstrapTable("getSelections")
-        if (selection.length == 0) return showToast("danger", "Please select a subject class first")
+        if (selection.length === 0) {
+            hideSpinner(ASSIGNEDSCID, true)
+            return showToast("danger", "Please select a subject class first")
+        }
         let formData = createUnassignForm()
         let scCodes = []
         selection.forEach(e => {
@@ -209,7 +208,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
                 // $(SCID).bootstrapTable()
             }
         })
-        hideSpinner()
+        hideSpinner(ASSIGNEDSCID, true)
     })
 }
 
@@ -219,21 +218,24 @@ export const searchKeyBindEvent = (searchInputSelector, listContainer) => {
         let noResultMsg = $(".no-result-msg")
         // hide no result message and cards
         noResultMsg.hide()
-        $(`${listContainer} li`).toggle(false)
+
         let page = $(listContainer).attr('data-page')
+        $(`${listContainer} .tile`).hide()
         // show loading status
         showSpinner(`#${page}-spinner`)
         setTimeout(() => {
             var value = $(this).val().toLowerCase()
             let match = []
-            $(`${listContainer} li`).filter(function() {
+            $(`${listContainer} .tile`).filter(function() {
                 let thereIsMatch = $(this).text().toLowerCase().indexOf(value) > -1
                 match.push(thereIsMatch)
                 $(this).toggle(thereIsMatch)
             })
 
-            if (!match.includes(true)) noResultMsg.show()
+            if (!match.includes(true)) {
+                noResultMsg.show()
+            }
             hideSpinner(`#${page}-spinner`)
-        }, 1250)
+        }, 500)
     })
 }

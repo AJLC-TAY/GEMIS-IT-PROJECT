@@ -2,6 +2,12 @@
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <body>
+<form action="action.php" method="post">
+
+    <input type="submit" name="validate" value="Submit">
+    <input type="submit" name="reject" value="Accept">
+
+</form>
 
 <ul id="container"></ul>
 <template id="test">

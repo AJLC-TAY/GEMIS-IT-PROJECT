@@ -45,8 +45,8 @@
                             </header>
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
-                                <div class="w-100 d-flex justify-content-center" >
-                                    <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
+                                <div class="no-result-msg-con w-100 d-flex justify-content-center">
+                                    <p class="no-result-msg" style="display: none; margin-top: 20vh;" >No results found</p>
                                 </div>
                                 <!-- SUB SPINNER -->
                                 <div id="curriculum-spinner" class="sub-spinner" style="display: none; height: 60vh;">
@@ -57,10 +57,11 @@
                                     </div>
                                 </div>
                                 <!--CARDS-->
+                                <div class="ms-4 me-3">
                                 <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
                                     <!-- TEMPLATE -->
                                     <template id="card-template">
-                                        <div data-id='%CODE%' class='tile card shadow-sm p-0 position-relative'>
+                                        <div data-id='%CODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
                                             <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='../admin/curriculum.php?code=%CODE%'></a>
                                             <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
                                                 <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
@@ -80,6 +81,7 @@
                                     </template>
                                     <!-- TEMPLATE END -->
                                 </ul>
+                                </div>
                             </div>
 
                         </div>
@@ -96,15 +98,16 @@
     <!-- ADD MODAL -->
     <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <form id="curriculum-form" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">S
-                            <h4 class="mb-0">Add Curriculum</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Curriculum</h4>
                     </div>
-                    <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="curriculum-form" method="post">
+                        <input type="hidden" name="action" id="action" value="addCurriculum" />
                         <p><small class='text-secondary'>Please complete the following: </small></p>
                         <div class="form-group">
                             <label for="curr-code">Code</label>
@@ -119,19 +122,18 @@
                             <label for="curr-desc">Short Description</label>
                             <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="action" id="action" value="addCurriculum" />
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
-                    </div>
+                    </form>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
+                </div>
+            </div>
         </div>
     </div>
     <!-- ARCHIVE MODAL -->
-    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -151,8 +153,8 @@
         </div>
     </div>
     <!-- DELETE MODAL -->
-    <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -172,8 +174,8 @@
         </div>
     </div>
     <!-- VIEW ARCHIVED MODAL -->
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -194,8 +196,8 @@
         </div>
     </div>
     <!-- UNARCHIVE MODAL -->
-    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

@@ -8,12 +8,12 @@
     <a href="index.php" class="logo"><b>PCNHS<span> GEMIS</span></b></a>
     <!-- LOGO END -->
     <div class="top-menu">
-        <ul class="nav pull-right top-menu">
+        <ul class="nav pull-right top-menu mt-3">
             <li>
-                <h8 class="topbar">Date | <?php echo date('F j, Y'); ?></h8>
+                <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
-            <li><a class="topbar" href="">Login as Admin</a></li>
-            <li><a class="logout" href="">Sign out</a></li>
+            <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
+            <li><a class="logout" href=""><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
 </header>
@@ -32,13 +32,13 @@
             </li>
             <li class="sub-menu">
                 <a id="student" href="student.php">
-                    <i class="fa fa-user"></i>
+                    <i class="fa fa-graduation-cap"></i>
                     <span>Student</span>
                 </a>
             </li>
             <li class="sub-menu">
                 <a id="faculty" href="faculty.php">
-                    <i class="fa fa-user"></i>
+                    <i class="fa fa-users"></i>
                     <span>Faculty</span>
                 </a>
             </li>
@@ -68,12 +68,12 @@
                 <ul class="sub">
                     <li><a id="enrollment-sub" href="enrollment.php">Enrollment</a></li>
                     <li><a id="set-up" href="enrollment.php?page=setup">Set Up</a></li>
-                    <li><a id="section"href="section.php">Section</a></li>
+                    <li><a id="section" href="section.php">Section</a></li>
                 </ul>
             </li>
             <li class="sub-menu">
-                <a href="javascript:;">
-                    <i class="fa fa-th"></i>
+                <a id='signatory' href="signatory.php">
+                    <i class="fa fa-pencil-square-o"></i>
                     <span>Signatory Management</span>
                 </a>
             </li>
