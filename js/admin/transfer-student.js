@@ -18,7 +18,9 @@ const tableSetup = {
             width: null,
         });
     },
-    fixedColumns: true
+    fixedColumns:       true,
+    searchSelector:     '#search-sub-input',
+    
 
 }
 
@@ -32,15 +34,13 @@ $(function() {
     preload('#student')
     hideSpinner()
 
-    // $('.transfer').click(function(event){
-    //     $('#transferconfirmation').modal('show');
-    //     stud_id = $(this).attr('id');
-    // });
 
     $(document).on('click','.transfer', function(){
         section_id = $(this).attr('id');
         stud_id = $(this).attr('data');
-        $('#transferConfirmation').modal('toggle');
+        let confirmationModal = $('#transferConfirmation');
+        confirmationModal.find('.modal-indentifier').html(section);
+        confirmationModal.modal('toggle');
     })
 
 
@@ -48,31 +48,32 @@ $(function() {
         var action = 'transferStudent'
         $.post("action.php", {section_id,stud_id, action:action}, function() {	
             $('#transferConfirmation').modal("hide");
+            showToast("success", "Student Successfully Transferred");
             location.reload();
         })
+        
+        
     })
 
     $(document).on('click', '.swapStudent', function() {
         var currentTds = $(this).closest("tr").find("td"); // find all td of selected row
         current_code = $(currentTds).eq(0).text(); // eq= cell , text = inner text
         section = $(currentTds).eq(1).text();
-
         stud_to_swap = $('.select2').val();
+        let fullConfirmationModal = $('#transferConfirmationFull');
         
-        $('#transferConfirmationFull').modal('toggle')
-        // var action = 'transferStudentFull'
-        // $.post('action.php', {current_code, section, stud_to_swap, id, action:action} , function(data){
-        //     console.log(data)
-        // })
+        fullConfirmationModal.find('.full-modal-indentifier').html(section);
+        fullConfirmationModal.modal('toggle');
 
     })
 
 
     $(document).on('click', '.transfer-btn-full', function() {
         var action = 'transferStudentFull'
-        $.post('action.php', {current_code, section, stud_to_swap, id, action:action} , function(){
+        $.post('action.php', {current_code, section, stud_to_swap, id, action:action} , () =>{
             $('#transferConfirmationFull').modal("hide")
             location.reload();
+            showToast("success", "Student Successfully Transferred");
         })
 
     })
@@ -83,7 +84,17 @@ $(function() {
         console.log("submit")
     })
 
-    $('.transfer-full').click(() => {
-        console.log("cliecked")
-      })
+    const listSearchEventBinder = (searchInputID, itemSelector) => {
+        $(document).on("keyup", searchInputID, function() {
+            var value = $(this).val().toLowerCase()
+            console.log(value)
+            $(itemSelector).filter(function() {
+                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
+                return $(this).addClass("d-none")
+            })
+        })
+    }
+    
+    listSearchEventBinder("#search-section", ".available-section button")
+
 })

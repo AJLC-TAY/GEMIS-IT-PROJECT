@@ -1442,7 +1442,7 @@ class Administration extends Dbconfig
         $parent = array();
         while ($parentInfo = mysqli_fetch_assoc($result)) {
             $extname = is_null($parentInfo ['ext_name']) ? NULL : $parentInfo ['ext_name'];
-            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " " . is_null($extname) ? " " : $parentInfo ['ext_name']; 
+            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " " . $extname; 
             $parent[$parentInfo['sex']] = array(
                 'name' => $name,
                 'fname' => $parentInfo['first_name'],
@@ -1503,21 +1503,21 @@ class Administration extends Dbconfig
             $personalInfo['id_no'],
             is_null($personalInfo['LRN']) ? NULL : $personalInfo['LRN'],
             $personalInfo['first_name'],
-            $personalInfo['middle_name'] ? NULL : $personalInfo['middle_name'],
+            is_null($personalInfo['middle_name']) ? NULL : $personalInfo['middle_name'],
             $personalInfo['last_name'],
-            $personalInfo['ext_name'] ? NULL : $personalInfo['ext_name'],
+            is_null($personalInfo['ext_name']) ? NULL : $personalInfo['ext_name'],
             $personalInfo['sex'],
             $personalInfo['age'],
             $personalInfo['birthdate'],
-            $personalInfo['birth_place'] ? NULL : $personalInfo['birth_place'],
-            $personalInfo['indigenous_group'] ? NULL : $personalInfo['indigenous_group'],
-            $personalInfo['mother_tongue'] ? NULL : $personalInfo['mother_tongue'],
-            $personalInfo['religion'] ? NULL : $personalInfo['religion'],
+            is_null($personalInfo['birth_place']) ? NULL : $personalInfo['birth_place'],
+            is_null($personalInfo['indigenous_group']) ? NULL : $personalInfo['indigenous_group'],
+            is_null($personalInfo['mother_tongue']) ? NULL : $personalInfo['mother_tongue'],
+            is_null($personalInfo['religion']) ? NULL : $personalInfo['religion'],
             $add,
-            $personalInfo['cp_no'] ? NULL : $personalInfo['cp_no'],
-            $personalInfo['psa_birth_cert'] ? NULL :  $personalInfo['psa_birth_cert'],
-            $personalInfo['belong_to_IPCC'] ? NULL : $personalInfo['belong_to_IPCC'],
-            $personalInfo['id_picture'] ? NULL : $personalInfo['id_picture'],
+            is_null($personalInfo['cp_no']) ? NULL : $personalInfo['cp_no'],
+            is_null($personalInfo['psa_birth_cert']) ? NULL :  $personalInfo['psa_birth_cert'],
+            is_null($personalInfo['belong_to_IPCC']) ? NULL : $personalInfo['belong_to_IPCC'],
+            is_null($personalInfo['id_picture']) ? NULL : $personalInfo['id_picture'],
             $section,
             $parent,
             $guardian
@@ -1870,7 +1870,7 @@ class Administration extends Dbconfig
 
         $res = $this->prepared_select("SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code 
         from section s left join faculty t ON s.teacher_id = t.teacher_id 
-        where stud_no <> stud_no_max AND section_code <> ?  AND grd_level = ?", [$data['section_code'], $data['grdlvl']], "si");
+        where stud_no = stud_no_max AND section_code <> ?  AND grd_level = ?", [$data['section_code'], $data['grdlvl']], "si");
 
         $sectionList =  array();
         
