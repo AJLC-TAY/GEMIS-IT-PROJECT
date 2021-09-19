@@ -216,6 +216,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveStudent') {
 
 if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){
     $admin->forgotPassword();
+    $admin->sendPasswordResetLink($email, $key);
 }
 
 /******** SIGNATORY ********/

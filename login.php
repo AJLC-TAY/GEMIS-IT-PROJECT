@@ -1,4 +1,6 @@
-<?php include_once("inc/head.html"); ?>
+<?php 
+require_once("../class/Administration.php"); 
+include_once("inc/head.html"); ?>
 <title>Login | GEMIS</title>
 <link rel="stylesheet" type= "text/css" href="css/loginstyle.css">
 </head>

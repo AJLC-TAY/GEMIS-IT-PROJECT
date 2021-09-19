@@ -10,7 +10,7 @@ $stud_id = $userProfile->get_stud_id();
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item">Student</a></li>
+            <li class="breadcrumb-item"> <a href="student.php">Student</a></li>
             <li class="breadcrumb-item active">Transfer Student</a></li>
 
         </ol>
@@ -26,10 +26,10 @@ $stud_id = $userProfile->get_stud_id();
     <h5>Student Name: <?php echo $stud_name; ?></h5>
     <h5>Section: <?php echo $section; ?></h5>
 </div>
-<!-- Section List: With slot -->
-<div id='subject-con' class=''>
-    <input id="search-subject" type="text" class="form-control form-control-sm" placeholder="Search section here ...">
-    <div class="assigned-sub-con list-group border">
+<!-- Section List: With slots -->
+<div id='subject' class=''>
+    <input id="search-section" type="text" class="form-control form-control-sm" placeholder="Search section here ...">
+    <div class="available-section list-group border">
         <?php
         $available_subjects = $admin->listAvailableSection();
         foreach ($available_subjects as $subject) {
@@ -48,7 +48,8 @@ $stud_id = $userProfile->get_stud_id();
         ?>
     </div>
     <div>
-        <a id="transfer-full" class="link btn w-auto mx-auto" data-bs-toggle='collapse' href='#section-table'><small>Transfer Student to Full Section</small></a>
+        <button id="transfer-full" class="link btn w-auto mx-auto" data-toggle="tooltip" data-placement="top" data-bs-toggle='collapse' href='#section-table' title ="Transfering a student to a full section will require
+        a swapping of students."><small>Transfer Student to Full Section</small></button>
     </div>
     <div id='section-table' class='collapse mt-3'>
         <table id="table" class="table-striped table-sm">
@@ -56,7 +57,7 @@ $stud_id = $userProfile->get_stud_id();
                 <div class="d-flex justify-content-between mb-1">
                     <!-- SEARCH BAR -->
                     <span class="flex-grow-1 me-3">
-                        <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
+                        <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search section here">
                     </span>
                 </div>
                 <tr>
@@ -72,7 +73,7 @@ $stud_id = $userProfile->get_stud_id();
 
         </table>
     </div>
-    <div class="modal fade" id="transferconfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal fade" id="transferConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,7 +83,7 @@ $stud_id = $userProfile->get_stud_id();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Do you want to transfer <?php echo $stud_name?> to <span id="modal-identifier"></span>?</h5>
+                    <h5>Are you sure you want to transfer <?php echo $stud_name?><span id="modal-identifier"></span>?</h5>
                     <p class="modal-msg"></p>
                 </div>
                 <div class="modal-footer">
@@ -92,6 +93,28 @@ $stud_id = $userProfile->get_stud_id();
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="transferConfirmationFull" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to transfer <?php echo $stud_name?><span id="full-modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary close-btn transfer-btn-full">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         var id = <?php echo $stud_id; ?>;

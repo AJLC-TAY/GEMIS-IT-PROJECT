@@ -53,8 +53,10 @@
 
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
+    <script src='../assets/js/bootstrap.bundle.min.js'></script>
     <script type="text/javascript" src="../js/common-custom.js"></script>
-    <script type="module" src="<?php echo $jsFilePath; ?>"></script>
+    <script type="text/javascript" src="<?php echo $jsFilePath; ?>"></script>
+    
 </body>
 
 </html>

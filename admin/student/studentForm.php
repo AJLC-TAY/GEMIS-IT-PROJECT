@@ -109,22 +109,22 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
 
                     <div class="col-6">
                         <label class="col-form-label">Learner's Reference Number</label>
-                        <input class="form-control" type="number" name="lrn" value=<?php echo $lrn ?> aria-label="default input example">
+                        <input class="form-control" type="number" name="lrn" value='<?php echo $lrn ?>' aria-label="default input example" placeholder="LRN">
                     </div>
 
                     <div class="col-6">
                         <label class="col-form-label">Last Name</label>
-                        <input class="form-control" type="text" name="last_name" value=<?php echo $lname ?> aria-label="default input example" placeholder="Last Name">
+                        <input class="form-control" type="text" name="last_name" value='<?php echo $lname ?>' aria-label="default input example" placeholder="Last Name">
                     </div>
 
                     <div class='col-6'>
                         <label class="col-form-label">First Name</label>
-                        <input class="form-control" type="text" name="first_name" value=<?php echo $fname ?> aria-label="default input example" placeholder="First Name">
+                        <input class="form-control" type="text" name="first_name" value='<?php echo $fname ?>' aria-label="default input example" placeholder="First Name">
                     </div>
 
                     <div class='col-6'>
                         <label class="col-form-label">Middle Name</label>
-                        <input class="form-control" type="text" name="middl_name" value=<?php echo $mname ?> aria-label="default input example" placeholder="Middle Name">
+                        <input class="form-control" type="text" name="middl_name" value='<?php echo $mname ?>' aria-label="default input example" placeholder="Middle Name">
                     </div>
 
                     <div class='col-4'>
@@ -140,12 +140,12 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     </div>
                     <div class='col-4'>
                         <label class="col-form-label">Birth Place</label>
-                        <input class="form-control" type="text" name='birthplace' value=<?php echo $birth_place ?> aria-label="default input example" placeholder="Birth Place">
+                        <input class="form-control" type="text" name='birthplace' value='<?php echo $birth_place ?>' aria-label="default input example" placeholder="Birth Place">
                     </div>
 
                     <div class='col-2'>
                         <label class="col-form-label">Age</label>
-                        <input class="form-control" type="number" name='age' value=<?php echo $age ?> aria-label="default input example" placeholder="Age">
+                        <input class="form-control" type="number" name='age' value='<?php echo $age ?>' aria-label="default input example" placeholder="Age">
                     </div>
                     <div class="col-3">
                         <label class="col-form-label">Sex</label>
@@ -162,7 +162,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
 
                     <div class='col-5'>
                         <label class="col-form-label">Contact Number</label>
-                        <input class="form-control" type="number" name='contact_no' value=<?php echo $cp_no ?> aria-label="default input example" placeholder="Contact number">
+                        <input class="form-control" type="number" name='contact_no' value='<?php echo $cp_no ?>' aria-label="default input example" placeholder="Contact number">
                     </div>
                     <div class="col-6">
                         <label class="col-form-label me-4">Belonging to any Indeginous Group? </label>
@@ -179,17 +179,17 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
 
                     <div class='col-5'>
                         <label class="col-form-label text-start">If yes, please specify</label>
-                        <input class="form-control" type="text" name='group' value=<?php echo $indigenous_group ?> placeholder="Indigenous Group">
+                        <input class="form-control" type="text" name='group' value='<?php echo $indigenous_group ?>' placeholder="Indigenous Group">
                     </div>
 
                     <div class="col-6">
                         <label class="col-form-label">Mother Tongue</label>
-                        <input class="form-control" type="text" name='mother_tongue' value=<?php echo $mother_tongue ?> aria-label="default input example" placeholder="Mother Tongue">
+                        <input class="form-control" type="text" name='mother_tongue' value='<?php echo $mother_tongue ?>' aria-label="default input example" placeholder="Mother Tongue">
                     </div>
 
                     <div class="col-6">
                         <label class="col-form-label">Religion</label>
-                        <input class="form-control" type="text" name='religion' value=<?php echo $religion ?> aria-label="default input example" placeholder="Religion">
+                        <input class="form-control" type="text" name='religion' value='<?php echo $religion ?>' aria-label="default input example" placeholder="Religion">
                     </div>
 
                 </div>
@@ -197,32 +197,32 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <h5>ADDRESS</h5>
                     <div class="col-2">
                         <label class="col-form-label">House No.</label>
-                        <input class="form-control" type="number" name='house_no' value=<?php echo $house_no ?> aria-label="default input example" placeholder="House No.">
+                        <input class="form-control" type="number" name='house_no' value='<?php echo $house_no ?>' aria-label="default input example" placeholder="House No.">
                     </div>
 
                     <div class="col-4">
                         <label class="col-form-label">Street</label>
-                        <input class="form-control" type="text" name='street' value=<?php echo $street ?> aria-label="default input example" placeholder="Street">
+                        <input class="form-control" type="text" name='street' value='<?php echo $street ?>' aria-label="default input example" placeholder="Street">
                     </div>
 
                     <div class="col-6">
                         <label class="col-form-label">Barangay</label>
-                        <input class="form-control" type="text" name='barangay' value=<?php echo $barangay ?> aria-label="default input example" placeholder="Barangay">
+                        <input class="form-control" type="text" name='barangay' value='<?php echo $barangay ?>' aria-label="default input example" placeholder="Barangay">
                     </div>
 
                     <div class="col-6">
                         <label class="col-form-label">City/Municipality</label>
-                        <input class="form-control" type="text" name='city' value=<?php echo $city ?> aria-label="default input example" placeholder="City/Municipality">
+                        <input class="form-control" type="text" name='city' value='<?php echo $city ?>' aria-label="default input example" placeholder="City/Municipality">
                     </div>
 
                     <div class="col-4">
                         <label class="col-form-label">Province</label>
-                        <input class="form-control" type="text" name='province' value=<?php echo $province ?> aria-label="default input example" placeholder="Province">
+                        <input class="form-control" type="text" name='province' value='<?php echo $province ?>' aria-label="default input example" placeholder="Province">
                     </div>
 
                     <div class="col-2">
                         <label class="col-form-label">Zip Code</label>
-                        <input class="form-control" type="number" name='zip' value=<?php echo $zip ?> aria-label="default input example" placeholder="Zip Code">
+                        <input class="form-control" type="number" name='zip' value='<?php echo $zip ?>' aria-label="default input example" placeholder="Zip Code">
                     </div>
                 </div>
             </div>
@@ -293,21 +293,21 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <div class='form-row row'>
                         <div class='form-group col-md-6'>
                             <label for='lastname'>Last Name</label>
-                            <input type='text' class='form-control' name='g_lastname' value=<?php echo $guardian_last_name ?> placeholder='Last Name' required>
+                            <input type='text' class='form-control' name='g_lastname' value='<?php echo $guardian_last_name ?>' placeholder='Last Name' required>
                             <div class="invalid-feedcak">
                                 Please enter gruardian's last name
                             </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='firstname'>First Name</label>
-                            <input type='text' class='form-control' name='g_firstname' value=<?php echo $guardian_first_name ?> placeholder='First Name' required>
+                            <input type='text' class='form-control' name='g_firstname' value='<?php echo $guardian_first_name ?>' placeholder='First Name' required>
                             <div class="invalid-feedback">
                                 Please enter guardian's firstname
                             </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='middlename'>Middle Name</label>
-                            <input type='text' class='form-control' name='g_middlename' value=<?php echo $guardian_middle_name ?> placeholder='Middle Name' required>
+                            <input type='text' class='form-control' name='g_middlename' value='<?php echo $guardian_middle_name ?>' placeholder='Middle Name' required>
                             <div class="invalid-feedback">
                                 Please enter guardian's middle name
                             </div>
@@ -317,11 +317,11 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <div class='form-row row'>
                         <div class='form-group col-md-6'>
                             <label for='middlename'>Contact Number</label>
-                            <input type='text' class='form-control' name='g_contactnumber' value=<?php echo $guardian_cp_no ?> placeholder='Contact Number'>
+                            <input type='text' class='form-control' name='g_contactnumber' value='<?php echo $guardian_cp_no ?>' placeholder='Contact Number'>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='extensionname'>Relationship</label>
-                            <input type='text' class='form-control' name='relationship' value=<?php echo $guardian_relationship ?> placeholder='Relationship'>
+                            <input type='text' class='form-control' name='relationship' value='<?php echo $guardian_relationship ?>' placeholder='Relationship'>
                         </div>
                     </div>
                 </div>
