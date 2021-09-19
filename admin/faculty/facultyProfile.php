@@ -10,9 +10,12 @@ $link = "faculty.php";
 $admin_user = $admin->getProfile("FA");
 $advisory_class = $admin->getAdvisoryClass();
 $advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
+$advisory_get_variable = $advisory_code == "" ? "" : "&currentAdvisory=$advisory_code";
 $current_teacher_id = $admin_user->get_teacher_id();
 $image = is_null($admin_user->get_id_photo()) ? "../assets/profile.png" : $admin_user->get_id_photo();
 $display_style = STYLE_DISPLAY_NONE;
+$section_list = $admin->listSectionOption($current_teacher_id);
+$no_match_display = count($section_list) == 0 ? "" : "d-none";
 ?>
 
 <!-- HEADER -->
@@ -38,15 +41,13 @@ $display_style = STYLE_DISPLAY_NONE;
 
 <div class='container my-3'>
     <div class="card p-3 text-center">
-        <div class="">
-            <nav id="myTab">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">General Information</button>
-                    <button class="nav-link" id="nav-classes-tab" data-bs-toggle="tab" data-bs-target="#classes" type="button" role="tab" aria-controls="classes" aria-selected="false">Classes</button>
-                    <button class="nav-link" id="nav-subject-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="false">Subjects</button>
-                </div>
-            </nav>
-        </div>
+        <nav id="myTab">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-link active" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">General Information</a>
+                <a class="nav-link" id="nav-classes-tab" data-bs-toggle="tab" data-bs-target="#classes" type="button" role="tab" aria-controls="classes" aria-selected="false">Classes</a>
+                <a class="nav-link" id="nav-subject-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="false">Subjects</a>
+            </div>
+        </nav>
         <div class="tab-content" id="myTabContent">
             <!-- GENERAL INFORMATION -->
             <div class="tab-pane fade bg-white p-4 show active" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
@@ -166,7 +167,7 @@ $display_style = STYLE_DISPLAY_NONE;
                                         renderRoleHTML($role);
                                     }
                                     $role_msg_display = (!$rSize) ? "" : "d-none";
-                                    echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles/access set</p>";
+                                    echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles or access set</p>";
                                     // echo "
                                     // <div id='role-add-btn' class='btn-group dropend d-none'>
                                     //     <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -243,51 +244,19 @@ $display_style = STYLE_DISPLAY_NONE;
                         <!-- ADVISORY HEADER END -->
                         <!-- ADVISORY CONTENT -->
                         <div class="row p-0">
-<!--                            <div class="col-md-7">-->
-                                <p class="">Previous Classes</p>
-                                <div class='overflow-auto' style="height: 250px;">
-                                    <table class='table table-striped table-sm border'>
-                                        <thead>
-                                            <tr>
-                                                <td>SY</td>
-                                                <td>Section Code</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Test</td>
-                                                <td>wekrljwoeifjsdlk</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-<!--                            </div>-->
-
-
+                            <!-- ADVISORY TABLE -->
+                                <p>Advisory Class History</p>
+                            <table id="advisory-class-table" data-url="getAction.php?data=advisoryClasses&id=<?php echo $current_teacher_id; ?><?php echo $advisory_get_variable; ?>" class="table-striped table-sm">
+                                <thead class='thead-dark track-table'>
+                                    <tr>
+                                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field='sy'>SY</th>
+                                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
+                                        <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
+                                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_grd">Grade Level</th>
+                                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="stud_no">No. of Students</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                     <!-- ADVISORY SECTION END -->
@@ -491,53 +460,62 @@ $display_style = STYLE_DISPLAY_NONE;
                                 <input id="search-section" type="text" class="form-control flex-grow-1 me-3" placeholder="Search section here ...">
                                 <input type="reset" class="form-control mb-0 me-1 btn-dark" value="Clear"/>
                             </form>
-
                             <div class="dropdown">
                                 <button class="btn shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">
                                     Filter
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="section-filter">
+                                <ul class="dropdown-menu d-none" aria-labelledby="section-filter">
                                     <li><a href="#" id="all-section-btn" class="dropdown-item">All</a></li>
                                     <li><a id="no-adv-btn" class="dropdown-item">No Adviser</a></li>
                                     <li><a id="with-adv-btn" class="dropdown-item">With Adviser</a></li>
                                 </ul>
                             </div>
                         </div>
+                        <div class="section-content position-relative">
+                            <!-- SUB SPINNER -->
+                            <div id="advisory-spinner" class="sub-spinner bg-white position-absolute start-0 end-0 bottom-0 top-0" style="z-index: 3;">
+                                <div class="spinner-border m-auto" style="position: absolute; top: 0; right: 0; bottom: 0; left:0;" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <!-- NO RESULTS MESSAGE -->
+                            <div class="d-flex justify-content-center <?php echo $no_match_display; ?>" style="position: absolute; top: 0; right: 0; bottom: 0; left:0; z-index: 2;">
+                                <p class="no-result-msg my-auto" >No results found</p>
+                            </div>
 
-                        <!-- <input id="selected-section" type="text" class="form-control m-0" aria-describedby="selected-section-label" readonly> -->
 
-                        <ul class="list-group overflow-auto" id="section-list" style="height: 250px;">
-                            <?php
-                            $section_list = $admin->listSectionOption($current_teacher_id);
-                            foreach ($section_list as $section) {
-                                $sect_code = $section["section_code"];
-                                $sect_name = $section["section_name"];
-                                $sect_grd = $section["section_grd"];
-                                $sect_adviser_id = $section["adviser_id"];
-                                $sect_adviser = $section["adviser_name"];
-                                $color_badge = "success";
-                                $availability = "available";
+                            <ul class="list-group top-0 bottom-0 right-0 left-0 overflow-auto" id="section-list" style="z-index: 1; height: 250px;">
+                                <?php
+                                foreach ($section_list as $section) {
+                                    $sect_code = $section["section_code"];
+                                    $sect_name = $section["section_name"];
+                                    $sect_grd = $section["section_grd"];
+                                    $sect_adviser_id = $section["adviser_id"];
+                                    $sect_adviser = $section["adviser_name"];
+                                    $color_badge = "success";
+                                    $availability = "available";
 
-                                if ($sect_adviser) {
-                                    $color_badge = "warning";
-                                    $availability = "unavailable";
+                                    if ($sect_adviser) {
+                                        $color_badge = "warning";
+                                        $availability = "unavailable";
+                                    }
+                                    echo "<li class='list-group-item'>
+                                                <div class='form-row row'>
+                                                    <span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>
+                                                    <div class='section-info d-flex justify-content-between col-sm-6'>
+                                                        <label for='$sect_code'>$sect_code - $sect_name </label>
+                                                        <span class='text-secondary'>G$sect_grd</span>
+                                                    </div>
+                                                    <div class='section-status d-flex justify-content-between col-sm-5'>
+                                                        <div class='teacher-con' title='Current class adviser'>$sect_adviser</div>
+                                                        <span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>
+                                                    </div>
+                                                </div>
+                                            </li>";
                                 }
-                                echo "<li class='list-group-item'>
-                                            <div class='form-row row'>
-                                                <span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>
-                                                <div class='section-info d-flex justify-content-between col-sm-6'>
-                                                    <label for='$sect_code'>$sect_code - $sect_name </label> 
-                                                    <span class='text-secondary'>G$sect_grd</span>
-                                                </div>
-                                                <div class='section-status d-flex justify-content-between col-sm-5'>
-                                                    <div class='teacher-con' title='Current class adviser'>$sect_adviser</div>
-                                                    <span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>
-                                                </div>
-                                            </div>
-                                        </li>";
-                            }
-                            ?>
-                        </ul>
+                                ?>
+                            </ul>
+                        </div>
                     </div>
                     <div class="form-group my-3">
                         <input id="unassign-cb" type="checkbox" <?php echo ($advisory_code ? "" : "disabled"); ?> name="unassign" class="form-check-input me-1 shadow-sm">

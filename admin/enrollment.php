@@ -31,7 +31,7 @@ include_once("../inc/head.html"); ?>
 
                                 if ($_GET['page'] === 'setup') {
                                     require("enrollment/enrollmentSetup.php");
-                                    $js = "<script type='text/javascript' src='../js/admin/enroll-setup.js'></script>";
+                                    $js = "<script type='module' src='../js/admin/enroll-setup.js'></script>";
                                 }
 
                                 if ($_GET['page'] === 'form') {

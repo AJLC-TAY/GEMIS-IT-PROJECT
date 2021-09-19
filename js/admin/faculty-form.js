@@ -1,7 +1,6 @@
 import {
     implementAssignSubjectMethods as asMethods,
-    implementAssignSubjectClassMethods as scMethods,
-    clearButtonTableEvent
+    implementAssignSubjectClassMethods as scMethods, commonTableSetup
 } from "./utilities.js";
 
 let asTableSetup = {
@@ -42,7 +41,7 @@ const detailFormatter = (index, row) => {
                 + `<p>Semester: ${row.sub_semester}</p>`
             + "</div>"
         + "</div>";
-}
+};
 
 
 let assignedSCTableSetup = {
@@ -51,15 +50,10 @@ let assignedSCTableSetup = {
     idField:            "sub_class_code",
     search:             true,
     searchSelector:     '#search-assigned-sc-input',
-    clickToSelect:      true,
     height:             "400",
-    maintainMetaDat:    true,      // set true to preserve the selected row even when the current table is empty
-    pageSize:           10,
-    pagination:         true,
-    pageList:           "[10, 25, 50, All]",
-    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
     detailView:         true,
-    detailFormatter:    detailFormatter
+    detailFormatter,
+    ...commonTableSetup
 };
 
 let scTableSetup = {
@@ -68,13 +62,8 @@ let scTableSetup = {
     idField:            "sub_class_code",
     search:             true,
     searchSelector:     '#search-sc-input',
-    clickToSelect:      true,
-    maintainMetaDat:    true,      // set true to preserve the selected row even when the current table is empty
     height:             380,
-    pageSize:           10,
-    pagination:         true,
-    pageList:           "[10, 25, 50, All]",
-    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
+    ...commonTableSetup
     // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
     // detailFormatter:    detailFormatter
 };
@@ -98,14 +87,12 @@ $(function () {
             }
             reader.readAsDataURL(input.files[0]);
         }
-    }
+    };
 
     $("#upload").change(function(){
         readURL(this);
-    })
+    });
 
-    /** Clear button of tables event */
-    clearButtonTableEvent();
     /** Assign Subject to Faculty Methods */
     asMethods(assigned, subjectTable);
     /** Add Subject Class Methods */
@@ -140,8 +127,7 @@ $(function () {
                 window.location.replace(`faculty.php?id=${response.teacher_id}`);
             }
         });
-
-    })
+    });
 
     $(".edit-text").click(()=> $("#upload").click());
     hideSpinner();

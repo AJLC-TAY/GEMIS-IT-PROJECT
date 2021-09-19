@@ -14,20 +14,16 @@
 // }
 
 // let sectionTable = $("#table").bootstrapTable(tableSetup)
+import {commonTableSetup} from "./utilities.js";
+
 const tableSetup = {
     url:                `getAction.php?data=fullSection&id=${id}`, 
     method:             'GET',
     uniqueId:           '0',
     idField:            'section_code',
     height:             300,
-    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
-    clickToSelect:      true,
-    pageSize:           10,
-    pagination:         true,
-    pageList:           "[10, 25, 50, All]",
-    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-    fixedColumns: true
-
+    fixedColumns:       true,
+    ...commonTableSetup
 }
 
 let programTable = $("#table").bootstrapTable(tableSetup)

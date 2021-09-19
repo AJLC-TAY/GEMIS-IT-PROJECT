@@ -60,4 +60,9 @@ function isNumberKey(e){
 	return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
+function loadingTemplate(message) {
+    return '<div class="spinner-border" role="status">'
+        + '<span class="visually-hidden">Loading...</span>'
+    +'</div>';
+}
 $(document).on("keypress", ".number", isNumberKey);

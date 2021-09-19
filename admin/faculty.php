@@ -3,7 +3,7 @@ include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
-$js = "<script src='../js/admin/faculty-list.js'></script>";
+$js = "<script type='module' src='../js/admin/faculty-list.js'></script>";
 $action = "";
 if (isset($_GET['action'])) {
     $action = $_GET['action'];

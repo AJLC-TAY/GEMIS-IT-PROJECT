@@ -122,7 +122,7 @@ include_once("../inc/head.html");
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script src="../js/admin/admin.js"></script>
+    <script type="module" src="../js/admin/admin.js"></script>
     <!-- VALIDATION -->
     <script>
         var forms = document.querySelectorAll('.needs-validation');

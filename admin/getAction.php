@@ -44,10 +44,13 @@ if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
-   $test =  $admin->getEnrollFilters();
+   $admin->getEnrollFilters();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'signatory') {
-   $test =  $admin->listSignatory(true);
+   $admin->listSignatory(true);
+}
+if (isset($_GET['data']) && $_GET['data'] == 'advisoryClasses') {
+   $admin->listAdvisoryClasses(true);
 }
 ?>
 

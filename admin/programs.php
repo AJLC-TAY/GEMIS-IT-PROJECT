@@ -46,7 +46,7 @@
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
                                 <div class="w-100 d-flex justify-content-center">
-                                    <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
+                                    <p class="no-result-msg" style="display: none; margin-top: 20vh;">No results found</p>
                                 </div>
                                 <!-- SUB SPINNER -->
                                 <div id="program-spinner" class="sub-spinner" style="display: none; height: 60vh;">
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <div class="container ms-4 me-3">
-                                    <ul data-page="program" class="cards-con d-flex flex-wrap mt-2 h-auto" style="min-height: 60vh;">
+                                    <ul data-page="program" class="cards-con d-flex flex-wrap mt-2 h-auto" style="min-height: 75vh;">
                                         <!-- TEMPLATE -->
                                         <template id="card-template">
                                             <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
