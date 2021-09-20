@@ -41,7 +41,7 @@ $faculty = $admin->listFaculty();
                                 <div class="d-flex justify-content-between mb-3">
                                     <h3 class="fw-bold">Signatory List</h3>
                                     <div>
-                                        <button class="btn btn-success" onclick="renderData()" data-bs-toggle="modal" data-bs-target="#modal-form"><i class="bi bi-plus me-2"></i>Add Signatory</button>
+                                        <button data-action="Add" class="btn btn-success show-modal" data-bs-toggle="modal" data-bs-target="#modal-form"><i class="bi bi-plus me-2"></i>Add Signatory</button>
                                     </div>
                                 </div>
                             </header>
@@ -61,10 +61,10 @@ $faculty = $admin->listFaculty();
                                             </div>
                                             <tr>
                                                 <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="sign_id">Sign ID</th>
-                                                <th scope='col' data-width="100" data-halign="center" data-align="left" data-sortable="true" data-field="id">ID</th>
-                                                <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="name">Name</th>
-                                                <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="sign_id">Sign ID</th>
+                                                <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="years">Years</th>
+                                                <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
                                             </tr>
                                         </thead>
@@ -100,37 +100,62 @@ $faculty = $admin->listFaculty();
                     <form id="signatory-form" method="POST">
                         <input type="hidden" name="action" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
-                        <div class="form-group needs-validation" novalidate>
-                            <label for="id-no">ID No</label>
-                            <select name="signatory" class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
-                                <option>Search user</option>
-                                <optgroup value="administrator" label="Administrators" class="select2-result-selectable">
-                                    <?php
-                                    foreach ($administrators as $element) {
-                                        echo "<option value='{$element->admin_id}'>{$element->name}</option>";
-                                    }
-                                    echo "<optgroup value='faculty' label='Faculty' class='select2-result-selectable'>";
-                                    foreach ($faculty as $element) {
-                                        echo "<option value='{$element->get_teacher_id()}'>{$element->get_name()}</option>";
-                                    }
-                                    ?>
-                            </select>
-                            <div class="invalid-input">
-                                Please enter a unique code
+                        <div class="container">
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="last-name">Last Name</label>
+                                <div class="col-8">
+                                    <input id="last-name" name="last-name" type="text" class="form-control-sm form-control" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="first-name">First Name</label>
+                                <div class="col-8">
+                                    <input id="first-name" name="first-name" type="text" class="form-control-sm form-control" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="middle-name">Middle Name</label>
+                                <div class="col-8">
+                                    <input id="middle-name" name="middle-name" type="text" class="form-control-sm form-control" placeholder="Middle Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="academic-degree">Academic degree</label>
+                                <div class="col-8">
+                                    <input id="academic-degree" name="academic-degree" type="text" class="form-control-sm form-control" placeholder="Academic Degree">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="position">Position</label>
+                                <div class="col-8">
+                                    <input id="position" class="form-control form-control-sm mb-0" type="text" name="position" placeholder="Position">
+                                    <div class="invalid-input">
+                                        Please provide position
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-4" for="years">Years (Start-End)</label>
+                                <div  id="years" class="col-8 row m-0">
+                                    <div class="col-5 p-0">
+                                        <input id="start-year" name="start-year" type="text" class="number form-control-sm form-control" placeholder="Start year">
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <p class="m-0"> - </p>
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        <input id="end-year" name="end-year" type="text" class="number form-control-sm form-control" placeholder="End year">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <br>
-                        <div class="form-group needs-validation" novalidate>
-                            <label for="position">Role | Position</label>
-                            <input id="position" class="form-control form-control-sm mb-0" type="text" name="position">
-                            <div class="invalid-input">
-                                Please provide position
-                            </div>
-                        </div>
+
+
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" name="delete" form="signatory-form" class="btn btn-danger btn-sm" value="Delete">
                     <button type="submit" id="submit-again" class="btn btn-secondary btn-sm">Submit and add again</button>
                     <input type="submit" name="submit" form="signatory-form" class="btn btn-primary btn-sm" value="Add">
@@ -150,23 +175,35 @@ $faculty = $admin->listFaculty();
                 </div>
                 <div class="modal-body">
                     <div class="d-flex flex-column">
-                        <div class="container mb-3">
-                            <label for="id-no-view">ID No</label>
-                            <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
+                        <div class="row mb-3">
+                            <label class='col-form-label col-4'for="id-no-view">ID No</label>
+                            <div class="col-8">
+                                <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
+                            </div>
                         </div>
-                        <div class="container mb-3">
-                            <label for="name-view">Name</label>
-                            <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
+                        <div class="row mb-3">
+                            <label class='col-form-label col-4'for="name-view">Name</label>
+                            <div class="col-8">
+                                <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
+                            </div>
                         </div>
-                        <div class="container mb-3">
-                            <label for="position-view">Role | Position</label>
-                            <input id="position-view" class="form-control form-control-sm mb-0" type="text" name="position">
+                        <div class="row mb-3">
+                            <label class='col-form-label col-4'for="position-view">Position</label>
+                            <div class="col-8">
+                                <input id="position-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class='col-form-label col-4'for="years-view">Years</label>
+                            <div class="col-8">
+                                <input id="years-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
-                    <button data-bs-toggle="modal" data-bs-target="#modal-form" class="edit-btn btn btn-primary btn-sm">Edit</button>
+                    <button data-action='Edit' data-bs-toggle="modal" data-bs-target="#modal-form" class="show-modal edit-btn btn btn-primary btn-sm">Edit</button>
                 </div>
             </div>
         </div>
@@ -178,101 +215,7 @@ $faculty = $admin->listFaculty();
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>
-        function renderData(data = null) {
-            showSpinner();
-            try {
-                $("#modal-view").modal("hide")
-            } catch (e) {}
-            let modal = $("#modal-form");
-
-            let action = "Add";
-            $("[name='delete']").addClass('d-none');
-            let displaySubmitAgainBtn = true;
-            if (data !== null) {
-                let info = signatoryTable.bootstrapTable('getRowByUniqueId', data);
-                $("#id-no-select").select2('val', info.id);
-                $("#position").val(info.position);
-                $("[name='delete']").removeClass('d-none');
-                displaySubmitAgainBtn = false;
-                action = 'Save';
-            }
-
-            $("#submit-again").toggle(displaySubmitAgainBtn);
-            $("#signatory-form").find("input[name='action']").val(action.toLowerCase() + "Signatory");
-            modal.find(".modal-title h4").html(`${action} Signatory`);
-            modal.find(".modal-footer [name='submit']").val(action);
-            modal.modal('show');
-            hideSpinner();
-        }
-
-        const tableSetup = {
-            url: `getAction.php?data=signatory`,
-            method: 'GET',
-            uniqueId: 'id',
-            idField: 'id',
-            search: true,
-            searchSelector: "#search-input",
-            height: 425,
-            maintainMetaDat: true, // set true to preserve the selected row even when the current table is empty
-            clickToSelect: true,
-            pageSize: 10,
-            pagination: true,
-            buttonsToolbar: ".buttons-toolbar",
-            pageList: "[10, 25, 50, All]",
-            paginationParts: ["pageInfoShort", "pageSize", "pageList"]
-        };
-        let signatoryTable = $("#table").bootstrapTable(tableSetup);
-        let addAnother = false;
-        $(function() {
-            preload("#signatory");
-
-            $("#id-no-select").select2({
-                theme: "bootstrap-5",
-                width: null,
-                dropdownParent: $('#modal-form')
-            });
-
-            $(document).on("click", "#submit-again", function() {
-                addAnother = true;
-                $("#signatory-form").submit();
-            });
-
-            $(document).on("submit", "#signatory-form", function(e) {
-                e.preventDefault();
-                let form = $(this);
-                $.post("action.php", form.serializeArray(), function() {
-                    form.trigger('reset');
-                    signatoryTable.bootstrapTable("refresh")
-                    if (!addAnother) {
-                        $("#modal-form").modal("hide");
-                        addAnother = false;
-                    }
-                    showToast("success", "Signatory successfully added");
-                });
-            });
-            $(document).on("click", ".table-opt", function(e) {
-                let selections = signatoryTable.bootstrapTable('getSelections');
-                if (selections.length < 1) return showToast("danger", "Please select a signatory first");
-            });
-            $(document).on("click", ".view-btn", function() {
-                showSpinner();
-                let id = $(this).attr("data-id");
-                let data = signatoryTable.bootstrapTable("getRowByUniqueId", id)
-
-                let modal = $("#modal-view");
-
-                modal.find("#id-no-view").val(data.id);
-                modal.find("#name-view").val(data.name);
-                modal.find("#position-view").val(data.position);
-                modal.find(".modal-footer .edit-btn").attr("onclick", `renderData('${id}')`);
-                hideSpinner();
-            });
-            hideSpinner();
-        })
-    </script>
-
-
+    <script type="module" src="../js/admin/signatory.js"></script>
 </body>
 
 </html>

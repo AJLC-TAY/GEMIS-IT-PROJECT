@@ -287,19 +287,19 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                 </form>
                                 <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
                             </div>
+                            <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
                             <table id='assigned-sc-table' data-page="profile" class="table-striped table-sm">
                                 <thead>
-                                <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
-                                <tr>
-                                    <th data-checkbox="true"></th>
-                                    <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
-                                    <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
-                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
-                                    <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                                    <!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
-                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                                    <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                </tr>
+                                    <tr>
+                                        <th data-checkbox="true"></th>
+                                        <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
+                                        <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
+                                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
+                                        <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                        <!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
+                                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                    </tr>
                                 </thead>
                             </table>
                         </div>
@@ -339,13 +339,13 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                             foreach ($assigned_sub as $subject) {
                                 $type = $subject->get_sub_type();
                                 $sub_code = $subject->get_sub_code();
-                                echo "<a target='_blank' href='subject.php?sub_code=$sub_code' class='list-group-item list-group-item-action' aria-current='true'>
-                                            <div class='d-flex w-100 justify-content-between'>
-                                                <p class='mb-1'>{$subject->get_sub_name()}</p>
-                                                <small>$type</small>
-                                            </div>
-                                            <small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>
-                                        </a>";
+                                echo "<a target='_blank' href='subject.php?sub_code=$sub_code' class='list-group-item list-group-item-action' aria-current='true'>"
+                                        ."<div class='d-flex w-100 justify-content-between'>"
+                                            ."<p class='mb-1'>{$subject->get_sub_name()}</p>"
+                                                ."<small>$type</small>"
+                                        ."</div>"
+                                        ."<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
+                                      ."</a>";
                             }
                             $assigned_sub = array_map(function ($e) {
                                 return $e->get_sub_code();
@@ -499,19 +499,19 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                         $color_badge = "warning";
                                         $availability = "unavailable";
                                     }
-                                    echo "<li class='list-group-item'>
-                                                <div class='form-row row'>
-                                                    <span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>
-                                                    <div class='section-info d-flex justify-content-between col-sm-6'>
-                                                        <label for='$sect_code'>$sect_code - $sect_name </label>
-                                                        <span class='text-secondary'>G$sect_grd</span>
-                                                    </div>
-                                                    <div class='section-status d-flex justify-content-between col-sm-5'>
-                                                        <div class='teacher-con' title='Current class adviser'>$sect_adviser</div>
-                                                        <span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>
-                                                    </div>
-                                                </div>
-                                            </li>";
+                                    echo "<li class='list-group-item'>"
+                                                ."<div class='form-row row'>"
+                                                    ."<span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>"
+                                                    ."<div class='section-info d-flex justify-content-between col-sm-6'>"
+                                                        ."<label for='$sect_code'>$sect_code - $sect_name </label>"
+                                                        ."<span class='text-secondary'>G$sect_grd</span>"
+                                                    ."</div>"
+                                                    ."<div class='section-status d-flex justify-content-between col-sm-5'>"
+                                                        ."<div class='teacher-con' title='Current class adviser'>$sect_adviser</div>"
+                                                        ."<span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>"
+                                                    ."</div>"
+                                                ."</div>"
+                                            ."</li>";
                                 }
                                 ?>
                             </ul>

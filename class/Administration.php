@@ -1946,25 +1946,22 @@ class Administration extends Dbconfig
     public function addSignatory()
     {
         $this->prepared_query(
-            "INSERT INTO signatory (teacher_id, position) VALUES (?, ?);",
-            [$_POST['signatory'], $_POST['position']],
-            "is"
+            "INSERT INTO signatory (first_name, middle_name, last_name, acad_degree, year_started, year_ended, position) VALUES (?, ?, ?, ?, ?, ?, ?);",
+            [$_POST['first-name'], $_POST['middle-name'], $_POST['last-name'], trim($_POST['academic-degree']) ?: NULL, $_POST['start-year'], $_POST['end-year'],$_POST['position']],
+            "ssssiis"
         );
     }
     public function listSignatory($is_JSON = false)
     {
 //        $result = $this->query("SELECT * FROM signatory;");
-        $result = $this->query("SELECT  s.sign_id, s.teacher_id, CONCAT(f.last_name,', ', f.first_name,' ',f.middle_name,' ',COALESCE(f.ext_name, '')) AS name, s.position
-    FROM signatory AS s JOIN faculty AS f ON s.teacher_id = f.teacher_id;");
+        $result = $this->query("SELECT  sign_id, first_name, middle_name, last_name, acad_degree, "
+            ."CONCAT(year_started, ' - ', year_ended) AS years, year_started, year_ended, position FROM signatory;");
         $signatory = [];
         while($row = mysqli_fetch_assoc($result)) {
-            $signatory[] = [
-                "sign_id" => $row['sign_id'],
-                "name" => $row['name'],
-                "id" => $row['teacher_id'],
-                "position" => ucwords($row['position'])
-            ];
-//            $signatory[] = new Signatory($row['sign_id'], $row['teacher_id'], $row['position']);
+            $signatory[] = new Signatory(
+                $row['sign_id'], $row['first_name'],  $row['middle_name'],  $row['last_name'],  $row['acad_degree'],  $row['years'],
+                $row['year_started'], $row['year_ended'], $row['position']
+            );
         }
         if (!$is_JSON) {
             return $signatory;
