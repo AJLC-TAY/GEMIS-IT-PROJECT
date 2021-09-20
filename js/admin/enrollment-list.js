@@ -104,9 +104,5 @@ $(function() {
         $("#table").bootstrapTable("refresh")
     })
 
-
-
-
-
     hideSpinner()
 })

@@ -14,6 +14,9 @@ const tableSetup = {
 };
 
 var syTable = $("#table").bootstrapTable(tableSetup);
+try {
+    var stepper = new Stepper($('#stepper')[0])
+} catch (e) {}
 
 /**
  * Displays the current values of the row to the given html tag
@@ -154,6 +157,39 @@ $(function() {
             syTable.bootstrapTable("hideLoading");
         });
     });
+
+    /** Checkbox all event */
+    $(document).on("click", ".checkbox-all", function() {
+        $($(this).attr("data-target-list")).find("input").prop("checked", $(this).is(":checked"));
+    });
+    
+
+    const toggleListElement = (selector, bool) => {
+        $(`[data-track-id='${selector}']`).prop("disabled", !bool );
+    }
+    $(document).on("click", "#track-checkbox-all", function() {
+        let isChecked = $(this).is(":checked");
+        let list = $(this).attr("data-target-list");
+        let tracks = $(list).find('label');
+        console.log("tracks", tracks);
+        tracks.each(function() {
+         
+            toggleListElement($(this).find('input').val(), isChecked)
+        })
+    });
+
+    $(document).on("submit", "#school-year-form", function(e) {
+        e.preventDefault();
+        console.log($(this).serializeArray());
+    });
+
+    $(document).on("change", ".track-checkbox", function() {
+        let selector = $(this).val();
+        // $(`[data-track-id='${selector}']`).closest('label').toggle($(this).is(":checked"));
+        let isChecked = $(this).is(":checked");
+        toggleListElement(selector, isChecked);
+    })
+
 
     hideSpinner();
 });
