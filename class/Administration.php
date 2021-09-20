@@ -1938,17 +1938,20 @@ class Administration extends Dbconfig
     }
 
     public function forgotPassword(){
-        $email = 'email';
+        echo("from administration: forgotpassowrd");
+        $email = $_POST['email'];
 
-        $userEmails = array($this->query("SELECT email FROM user"));
+        $res = $this->query("SELECT email FROM user");
+        while ($userEmails = mysqli_fetch_assoc($res)) {
+        var_dump ($userEmails);
         if (in_array($email, $userEmails)) {
-            require_once "PHPMailer/PHPMailer.php";
-            require_once "PHPMailer/SMTP.php";
-            require_once "PHPMailer/Exception.php";
+            require_once "../PHPMailer/PHPMailer.php";
+            require_once "../PHPMailer/SMTP.php";
+            require_once "../PHPMailer/Exception.php";
 
             $token = bin2hex(random_bytes(50)); //generate random token 
-            $query = "INSERT INTO resetpassword (email, token)"."VALUES (?, ?);";
-            $this->prepared_query($query, [$email, $token]); 
+            $query = "INSERT INTO resetpassword (email, token) VALUES (?, ?);";
+            $this->prepared_query($query, [$email, $token], "ss"); 
 
             $mail = new PHPMailer();    
             
@@ -1963,15 +1966,16 @@ class Administration extends Dbconfig
             $mail->Port       = 465;      
             
             //Recipient
-            $mail->setFrom('gemispcnhs@gmail.com', 'GEMIS PCNHS');
+            $mail->setFrom('gemispcnhs@gmail.com', 'GEMIS PCNHS - Incognito');
             $mail->addAddress($email);      //Add a recipient
 
             //Content
             $mail->isHTML(true);   
             $mail->Header = 'From: GEMIS PCNHS - Incognito Team';                              
             $mail->Subject = 'Reset Your Password';
-            $mail->Body    = wordwrap('Hello, please click on this <a href="newPassword.php?token=' . $token . '">link</a> to reset your password.');
-        
+            // $mail->Body    = 'Hello, please click on this <a href="newPassword.php?token=' . $token . '>link</a> to reset your password.';
+            $mail->Body    = "Hello, please click on this <a href='http://localhost:3000/passwordReset/newPassword.php?token=$token'>link</a> to reset your password.";
+
             if ($mail->send()){
                 $status = "success";
                 $response = "Email sent successfully.";
@@ -1979,9 +1983,39 @@ class Administration extends Dbconfig
                 $status = "failed";
                 $response = "Email not sent. Mailer Error: {$mail->ErrorInfo}";
             }
-            exit(json_encode(array("status" => $status, "response" => $response)));
-        }
+
+            header('location: ../passwordReset/forgotPassword.php');
     
+        } else {
+
+        }
+    }
+    
+    }
+
+    public function newPassword(){
+        $newPass = $_POST['newPass'];
+        $newPassConf = $_POST['newPassConf'];
+
+        //validation ng passwords kung nagmatch
+        // $token = $_SESSION['token'];
+        $token = $_POST['token'];
+
+        if ($newPass == $newPassConf){
+            echo ("tamasdfasd");
+            $email = mysqli_fetch_assoc($this->prepared_select("SELECT email FROM resetpassword WHERE token=?", [$token],"s"));
+            var_dump($email['email']);
+            echo("----------");
+            $mail = $email['email'];
+    
+            if ($email['email']){
+                $newPass = $newPass;
+                echo($newPass);
+                $this->prepared_query("UPDATE user SET password=? WHERE email=?;", [$newPass,$mail], "ss");
+                header('location: ../login.php');
+            }
+        }   
+             
     }
 
     /** SIGNATORY METHODS */
@@ -2013,6 +2047,16 @@ class Administration extends Dbconfig
         }
         echo json_encode($signatory);
     }
+
+    public function editSignatory() {
+
+    }
+
+    public function deleteSignatory() {
+
+    }
+
+
 
 }
 ?>

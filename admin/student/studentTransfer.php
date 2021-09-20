@@ -55,7 +55,7 @@ $stud_id = $userProfile->get_stud_id();
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
                 <div class="d-flex justify-content-between mb-1">
-                    <!-- SEARCH BAR -->
+                     <!-- SEARCH BAR  -->
                     <span class="flex-grow-1 me-3">
                         <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search section here">
                     </span>
@@ -71,7 +71,7 @@ $stud_id = $userProfile->get_stud_id();
                 </tr>
             </thead>
 
-        </table>
+        </table> 
     </div>
     <div class="modal fade" id="transferConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

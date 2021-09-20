@@ -217,6 +217,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveStudent') {
 if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){
     $admin->forgotPassword();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'newPassword'){
+    $admin->newPassword();
+}
 
 /******** SIGNATORY ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addSignatory'){
