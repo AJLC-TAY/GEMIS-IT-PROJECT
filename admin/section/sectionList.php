@@ -71,15 +71,15 @@
                                     <select id="program" class='form-select' name='program'>
                                         <option value="" selected>-- Select --</option>
                                         <?php
-                                            include_once("../class/Administration.php");
-                                            $admin = new Administration();
-                                            $program_list = $admin->listPrograms("program");
+                                        include_once("../class/Administration.php");
+                                        $admin = new Administration();
+                                        $program_list = $admin->listPrograms("program");
 
-                                            foreach($program_list as $program) {
-                                                $prog_code = $program->get_prog_code();
-                                                $prog_name = $program->get_prog_desc();
-                                                echo "<option value='$prog_code'>$prog_name</option>";
-                                            }
+                                        foreach($program_list as $program) {
+                                            $prog_code = $program->get_prog_code();
+                                            $prog_name = $program->get_prog_desc();
+                                            echo "<option value='$prog_code'>$prog_name</option>";
+                                        }
                                         ?>
                                     </select>
                                 </div>
@@ -113,19 +113,19 @@
                                 </div>
                             </div>
                             <div class="form-row row">
-                                <label for="section-name" class="col-lg-4 col-form-label">Class Adviser (Optional)</label>
+                                <label for="adviser" class="col-lg-4 col-form-label">Class Adviser (Optional)</label>
                                 <div class="col-lg-8">
-                                    <input class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
-                                    <datalist id='adviser-list'>
+                                    <select name="adviser" id="adviser" class="form-select">
+                                        <option>-- Select faculty --</option>
                                         <?php
                                             $faculty_list = $admin->listFaculty();
                                             foreach($faculty_list as $faculty) {
                                                 $teacher_id = $faculty->get_teacher_id();
                                                 $teacher_name = $faculty->get_name();
-                                                echo "<option value='$teacher_id'>$teacher_id - $teacher_name</option>";
+                                                echo "<option value='$teacher_id'>T. $teacher_name</option>";
                                             }
                                         ?>
-                                    </datalist>
+                                    </select>
                                 </div>
                             </div>
                         </div>

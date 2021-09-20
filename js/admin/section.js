@@ -1,4 +1,4 @@
-import {commonTableSetup} from "./utilities";
+import {commonTableSetup} from "./utilities.js";
 
 preload('#enrollment', '#section')
 
@@ -28,16 +28,21 @@ table = $("#table").bootstrapTable(tableSetup);
 let addAnother = false;
 
 $(function() {
-    $('#add-btn').click(function() {
+    $("#adviser").select2({
+        theme: "bootstrap-5",
+        width: null,
+        dropdownParent: $('#add-modal')
+    });
+    $(document).on("click", '#add-btn', function() {
         $("#add-modal").modal("show");
-    })
+    });
 
-    $(".submit-another").click(function(e) {
+    $(document).on("click", ".submit-another", function(e) {
         e.preventDefault();
         addAnother = true;
         $("#section-form").submit();
-    })
-    $('#section-form').submit(function(e) {
+    });
+    $(document).on("submit", '#section-form', function(e) {
         e.preventDefault();
         let form = $(this);
         $.post("action.php", form.serializeArray(), function(data) {
@@ -49,10 +54,10 @@ $(function() {
                 addAnother = false;
             }
             showToast("success", "Section successfully added");
-        })
-    })
+        });
+    });
 
-    $('#edit-btn').click(function(e) {
+    $(document).on("click", '#edit-btn', function(e) {
         e.preventDefault();
         $("#empty-msg").addClass("d-none");
         $(".edit-opt").removeClass("d-none");
@@ -63,10 +68,10 @@ $(function() {
             input.removeClass('d-none');
             input.prop("disabled", false);
             $("a.link").addClass("d-none");
-        })
-    })
+        });
+    });
 
-    $('#cancel-btn').click(function(e) {
+    $(document).on("click", '#cancel-btn', function(e) {
         e.preventDefault();
         $(".edit-opt").addClass("d-none");
         $('#edit-btn').toggleClass('d-none');
@@ -83,9 +88,9 @@ $(function() {
         // teacherInput.addClass("d-none")
         
         $("a.link").removeClass("d-none");
-    })
+    });
 
-    $("#section-edit-form").submit(function(e) {
+    $(document).on("submit", "#section-edit-form", function(e) {
         e.preventDefault();
         showSpinner();
         let form = $(this);
@@ -99,7 +104,7 @@ $(function() {
 
             teacherID = formData[1].value;
             teacherLink = $("a.link");
-            if (teacherID.trim().length == 0) {
+            if (teacherID.trim().length === 0) {
                 // $("#empty-msg").removeClass("d-none")
                 // teacherLink = $("a.link")
                 // teacherLink.attr("href", "")
@@ -125,21 +130,21 @@ $(function() {
             // tempData = []
             // hideSpinner()
             // showToast("success", "Successfully updated section")
-        })
-    })
+        });
+    });
 
     /** Clears the teacher input if clear button is clicked */
-    $("#adviser-clear-btn").click(function(e) {
+    $(document).on("click", "#adviser-clear-btn", function(e) {
         e.preventDefault();
         $("input[name='adviser']").val("");
-    })
+    });
 
-    $("#transfer-btn").click(function() {
+    $(document).on("click", "#transfer-btn", function() {
                 
-    })
+    });
 
     /** Specific subject */
-    $("#add-subject-btn").click(function() {
+    $(document).on("click", "#add-subject-btn", function() {
         let subSetUp = {...tableSetup};
         subSetUp.url = "getAction.php?data=subjects";
         subSetUp.idField = 'sub_code';
@@ -147,17 +152,16 @@ $(function() {
         subSetUp.height = 300;
         subSetUp.search = true;
         subSetUp.searchSelector = "#search-sub-input";
+        $("#subject-table").bootstrapTable(subSetUp);
 
-        subjectTable = $("#subject-table").bootstrapTable(subSetUp);
-
-    })
+    });
 
      // clear button for search subject input in the as-modal
      $(document).on("click", ".clear-table-btn", () => {
         showSpinner();
         $("#subject-table").bootstrapTable("resetSearch");
         hideSpinner();
-    })
+    });
 
 
     
