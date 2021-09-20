@@ -1,10 +1,10 @@
-<?php include_once("src/head.html"); ?>
+<?php include_once("inc/head.html"); ?>
 <title>Home | GEMIS</title>
 </head>
 
 <body>
     <main class="container">
-        <?php include("src/footer.html"); ?>
+        <?php include("inc/footer.html"); ?>
     </main>
 </body>
 

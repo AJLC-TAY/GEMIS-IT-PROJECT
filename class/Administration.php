@@ -3,6 +3,9 @@ require('config.php');
 require('Dataclasses.php');
 require('Traits.php');
 
+// sending email
+use PHPMailer\PHPMailer\PHPMailer;
+
 class Administration extends Dbconfig
 {
     const MAX_SECTION_COUNT = 50;
@@ -1935,10 +1938,49 @@ class Administration extends Dbconfig
     }
 
     public function forgotPassword(){
-        $email = $_POST['email']; 
-        $userEmail = mysqli_fetch_row($this->prepared_select("SELECT * FROM user WHERE email=?", [$email],"s"));
-        $expDate = '';
-        $key= '';
+        $email = 'email';
+
+        $userEmails = array($this->query("SELECT email FROM user"));
+        if (in_array($email, $userEmails)) {
+            require_once "PHPMailer/PHPMailer.php";
+            require_once "PHPMailer/SMTP.php";
+            require_once "PHPMailer/Exception.php";
+
+            $token = bin2hex(random_bytes(50)); //generate random token 
+            $query = "INSERT INTO resetpassword (email, token)"."VALUES (?, ?);";
+            $this->prepared_query($query, [$email, $token]); 
+
+            $mail = new PHPMailer();    
+            
+            //server settings
+            $mail->isSMTP();  
+            $mail->Mailer = 'smtp';                                    //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //gmail smtp
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = 'gemispcnhs@gmail.com';                     //SMTP username
+            $mail->Password   = 'GridleyCG21';                               //SMTP password
+            $mail->SMTPSecure = 'ssl';            
+            $mail->Port       = 465;      
+            
+            //Recipient
+            $mail->setFrom('gemispcnhs@gmail.com', 'GEMIS PCNHS');
+            $mail->addAddress($email);      //Add a recipient
+
+            //Content
+            $mail->isHTML(true);   
+            $mail->Header = 'From: GEMIS PCNHS - Incognito Team';                              
+            $mail->Subject = 'Reset Your Password';
+            $mail->Body    = wordwrap('Hello, please click on this <a href="newPassword.php?token=' . $token . '">link</a> to reset your password.');
+        
+            if ($mail->send()){
+                $status = "success";
+                $response = "Email sent successfully.";
+            } else {
+                $status = "failed";
+                $response = "Email not sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+            exit(json_encode(array("status" => $status, "response" => $response)));
+        }
     
     }
 

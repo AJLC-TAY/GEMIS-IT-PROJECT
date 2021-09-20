@@ -1,5 +1,6 @@
 <?php 
-//require_once("../class/Administration.php"); 
+require_once("class/Administration.php"); 
+$admin = new Administration();
 include_once("inc/head.html"); 
 
 ?>
@@ -14,6 +15,9 @@ include_once("inc/head.html");
                 <input type="submit" name="forgotPassword" class="btn" value="Recover Password">
             </form>
         </div>
+        <!--CUSTOM JS-->
+        <script src="../js/common-custom.js"></script>
+        <script type="module" src="../js/admin/admin.js"></script>
     </body>
     <?php include_once ("inc/footer.html"); ?>
 </html>
