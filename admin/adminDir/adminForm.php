@@ -53,21 +53,30 @@ if ($action == 'add') {
 <div class="container mt-4">
     <div class="card h-auto bg-light mx-auto" style='width: 80%;'>
         <?php echo $id_header; ?>
-        <form id='admin-form' action="action.php" method='POST'>
+        <form id='admin-form' class="needs-validation" action="action.php" method='POST' novalidate>
             <!-- NAME -->
-            <h5>Personal Information</h5>
+            <h5 class="fw-bold">Personal Information</h5>
             <div class='form-row row mb-3'>
                 <div class='form-group col-md-4'>
                     <label for='lastname'>Last Name</label>
                     <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
+                    <div class="invalid-feedback ">
+                        Please enter last name
+                    </div>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='firstname'>First Name</label>
                     <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
+                    <div class="invalid-feedback">
+                        Please enter first name
+                    </div>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='middlename'>Middle Name</label>
                     <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+                    <div class="invalid-feedback">
+                        Please enter middle name
+                    </div>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='extensionname'>Extension Name</label>
@@ -80,8 +89,11 @@ if ($action == 'add') {
                 <div class='form-group col-md-2'>
                     <label for='age'>Age</label>
                     <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
+                    <div class="invalid-feedback">
+                        Please enter age
+                    </div>
                 </div>
-                <div class='form-group col-md-2'>
+                <div class='form-group col-md-3'>
                     <label for='sex'>Sex</label>
                     <div class="d-flex">
                         <?php
@@ -89,9 +101,8 @@ if ($action == 'add') {
                         foreach ($sexOpt as $id => $value) {
                             echo "<div class='form-check'>"
                                 ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                                ."<label class='form-check-label' for='$id'>$value"
-                                ."</label>"
-                                ."</div>";
+                                ."<label class='form-check-label me-2' for='$id'>$value</label>"
+                            ."</div>";
                         }
                         ?>
                     </div>
@@ -100,7 +111,7 @@ if ($action == 'add') {
             <!-- SEX INFO END -->
             <!-- CONTACT INFO -->
             <hr class="mt-0 mb-3">
-            <h5>Contact Information</h5>
+            <h5 class="fw-bold">Contact Information</h5>
             <div class="form-group row">
                 <div class='form-group col-md-4'>
                     <label for='cpnumber'>Cellphone No.</label>
@@ -109,6 +120,9 @@ if ($action == 'add') {
                 <div class='form-group col-md-4'>
                     <label for='email'>Email</label>
                     <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' required>
+                    <div class="invalid-feedback">
+                        Please enter email
+                    </div>
                 </div>
             </div>
             <!-- CONTACT INFO END -->
@@ -116,7 +130,7 @@ if ($action == 'add') {
             <div class="form-group row mt-2">
                 <div class="d-flex justify-content-end">
                     <input type='hidden' name='action' value='<?php echo $action; ?>Administrator'>
-                    <a href='admin.php' class='btn btn-dark me-2'>Cancel</a>
+                    <a href='admin.php' class='btn btn-outline-danger me-2'>Cancel</a>
                     <input type='submit' form='admin-form' class='btn btn-success' value='<?php echo $button; ?>'>
                 </div>
             </div>

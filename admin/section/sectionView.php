@@ -52,9 +52,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <div class="d-flex justify-content-between">
             <h5>Information</h5>
             <div class="btn-con my-a">
-                <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                <button id='edit-btn' data-current-adviser='<?php echo $sect_adviser;?>' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class='edit-opt <?php echo $display; ?>'>
-                    <a href='section.php?code=<?php echo $sect_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
+                    <a href='section.php?sec_code=<?php echo $sect_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
                     <input type="submit" form="section-edit-form" class="btn btn-success btn-sm" value="Save">
                 </div>
             </div>
@@ -86,52 +86,49 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                         </div>
                     </div>
                     <div class="col-md-7">
-                        <div class="row">
-                            <label for="sect-max-no" class="col-sm-4 text-secondary fw-bold">Max Student No.</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" name="max-no" id="sect-max-no" value="<?php echo $sect_max_no; ?>" <?php echo $state; ?> />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="adviser" class="col-sm-4 text-secondary fw-bold">Class Adviser</label>
-                            <div class="col-sm-8">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <p id='adviser' class='m-0'>
-                                        <?php
-                                        $teacher_id = "";
-                                        $adviser_name = "";
-                                        $none_when_adv_exist = "";
-                                        if ($sect_adviser) {
-                                            $teacher_id = $sect_adviser['teacher_id'];
-                                            $adviser_name = "Teacher {$sect_adviser['name']}";
-                                            $none_when_adv_exist = $NONE;
-                                            // $none_when_edit = "d-none";
-                                        }
-                                        echo "<a class='link $none_when_edit' target='_blank' href='faculty.php?id=$teacher_id'>$adviser_name</a>";
-                                        echo "<p id='empty-msg' class='m-0 $none_when_edit $none_when_adv_exist'>No adviser set</p>";
-                                        ?>
-                                    </p>
-                                    <div class='d-flex-column w-100 mb-2 edit-opt <?php echo $display; ?>'>
-                                        <div class='d-flex'>
-                                            <div class='flex-grow-1'>
-                                                <input value="<?php echo $teacher_id; ?>" type="text" class='form-control m-0' name='adviser' list='adviser-list' placeholder='Type to search ...'>
-                                                <datalist id='adviser-list'>
-                                                    <?php
-                                                    $faculty_list = $admin->listFaculty();
-                                                    foreach ($faculty_list as $faculty) {
-                                                        $id = $faculty->get_teacher_id();
-                                                        $teacher_name = $faculty->get_name();
-                                                        echo "<option value='$id'>$id - $teacher_name</option>";
-                                                    }
-                                                    ?>
-                                                </datalist>
-                                            </div>
-                                            <span class='m-auto edit-opt <?php echo $display; ?>'><button id='adviser-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1'><i class='bi bi-x-square-fill'></i></button></span>
-                                        </div>
-                                        <small class='edit-opt ms-1 text-secondary <?php echo $display; ?>'>Clear field to unassign adviser</small>
-                                    </div>
-                                    <!-- <span class="badge"><button id="adviser-edit-btn" class="btn btn-sm link-green"><i class="bi bi-plus-square me-2"></i>Assign</button></span> -->
+                        <div class="container">
+                            <div class="row align-content-center">
+                                <label for="sect-max-no" class="col-form-label col-sm-4 text-secondary fw-bold">Max Student No.</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" name="max-no" id="sect-max-no" value="<?php echo $sect_max_no; ?>" <?php echo $state; ?> />
                                 </div>
+                            </div>
+                            <div class="row align-content-center">
+                                <label for="adviser" class="col-form-label col-sm-4 text-secondary fw-bold">Class Adviser</label>
+                                <div class="col-sm-8 py-2">
+                                    <?php
+                                    $teacher_id = "";
+                                    $adviser_name = "";
+                                    $none_when_adv_exist = "";
+                                    if ($sect_adviser) {
+                                        $teacher_id = $sect_adviser['teacher_id'];
+                                        $adviser_name = "Teacher {$sect_adviser['name']}";
+                                        $none_when_adv_exist = $NONE;
+                                    }
+                                    echo "<a class='link $none_when_edit ' target='_blank' href='faculty.php?id=$teacher_id'>$adviser_name</a>";
+                                    echo "<p id='empty-msg' class='m-0 $none_when_edit $none_when_adv_exist'>No adviser set</p>";
+                                    ?>
+                                    <div class="row edit-opt <?php echo $display; ?>">
+                                        <div class='w-100 mb-2 '>
+                                            <select name="adviser" id="adviser-section" class="form-select">
+                                                <option value="">-- Select faculty --</option>
+                                                <?php
+                                                $faculty_list = $admin->listNotAdvisers($teacher_id);
+                                                foreach($faculty_list as $e) {
+                                                    $faculty_id = $e['teacher_id'];
+                                                    $teacher_name = $e['name'];
+                                                    echo "<option ". ($teacher_id == $faculty_id ? "selected" : "") ." value='$faculty_id'>T. $teacher_name</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <button id='adviser-clear-btn' class='btn btn-danger edit-opt <?php echo $display; ?> btn-sm w-auto mt-1'><i class='bi bi-x-square'></i> Unassign</button>
+
+                                            <!--                                        <small class='editjjquery-opt ms-1 text-secondary --><?php //echo $display; ?><!--'>Clear field to unassign adviser</small>-->
+                                        </div>
+                                        <!-- <span class="badge"><button id="adviser-edit-btn" class="btn btn-sm link-green"><i class="bi bi-plus-square me-2"></i>Assign</button></span> -->
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

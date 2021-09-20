@@ -1,3 +1,8 @@
+html {
+    overflow: -moz-scrollbars-vertical;
+    overflow-y: scroll;
+}
+
 .tile {
     width: 275px;
     height: 250px;
@@ -48,6 +53,14 @@ td .form-select {
     margin: 0;
 }
 
+/* SELECT2*/
+.select2-container {
+    padding: 0;
+}
+
+/*.select2-selection {*/
+/*    z-index: 9999 !important;*/
+/*}*/
 /* IMAGE PREVIEW */
 .image-preview-con {
     width: 250px; height: 250px;
@@ -99,10 +112,10 @@ td .form-select {
 
 /* SPINNER */
 
-.spinner-border,
-.spinner-con {
+#main-spinner-border,
+#main-spinner-con {
     position: fixed;
-    overflow: show;
+    /*overflow: show;*/
     margin: auto;
     top: 0;
     left: 0;
@@ -110,11 +123,11 @@ td .form-select {
     bottom: 0;
 }
 
-.spinner-border {
+#main-spinner-border {
     z-index: 1070;
 }
 
-.spinner-con {
+#main-spinner-con {
     z-index: 1070;
     background: black;
     opacity: 0.40;
@@ -124,3 +137,8 @@ td .form-select {
 
 
 /* END SPINNER */
+
+.hidden{
+    display:none;
+    visibility:hidden;
+  }

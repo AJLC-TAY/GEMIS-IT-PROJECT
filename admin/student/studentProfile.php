@@ -68,7 +68,7 @@ if (is_null($guardian)) {
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
         <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
-        <a href="student.php?id=<?php echo $stud_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
     </div>
 </div>
 <!-- MAIN CONTENT -->
@@ -94,7 +94,8 @@ if (is_null($guardian)) {
                             echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
                             <br>
                             <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
-                            <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' id='${stud_id}'>TRANSFER STUDENT</button>
+                            <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id?>">TRANSFER STUDENT</button> -->
+                            <a href='student.php?action=transfer&id=<?php echo $stud_id?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
                             <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
                         <!-- PROFILE PICTURE END -->
@@ -150,47 +151,6 @@ if (is_null($guardian)) {
                             </div>
                         </div>
                     </div>
-                    <div class="modal" id="select-section-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <div class="modal-title">
-                                        <h4 class="mb-0">Select Section</h4>
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="overflow-auto" style="height: 50vh;">
-                                        <ul class="list-group sec-list">
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal" id="transfer-student-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <div class="modal-title">
-                                        <h4 class="mb-0">Confirmation</h4>
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5>Do you want to transfer the student to <span id="modal-identifier"></span>?</h5>
-                                    <p class="modal-msg"></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                                    <button class="btn btn-primary close-btn transfer-btn">Transfer</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

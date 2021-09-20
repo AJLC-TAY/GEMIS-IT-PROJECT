@@ -2,6 +2,12 @@
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <body>
+<form action="action.php" method="post">
+
+    <input type="submit" name="validate" value="Submit">
+    <input type="submit" name="reject" value="Accept">
+
+</form>
 
 <ul id="container"></ul>
 <template id="test">
@@ -31,17 +37,23 @@
 include '../class/Administration.php';
 
 $admin = new Administration();
-$admin->getEnrollmentReportData(true);
+print_r($admin->listNotAdvisers());
 
-$tracks = [];
-$track_list = $_POST['tracks'];
-foreach($track_list as $track) {
-	$progs = $_POST["$track-programs"];
-	foreach($progs as $prog) {
-		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
-		$tracks[$track] = $prog;
-	}
-}
+echo "jtest";
+echo json_encode($admin->createUser('ST'));
+//$admin->getEnrollmentReportData(true);
+//
+//$tracks = [];
+//$track_list = $_POST['tracks'];
+//foreach($track_list as $track) {
+//	$progs = $_POST["$track-programs"];
+//	foreach($progs as $prog) {
+//		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
+//		$tracks[$track] = $prog;
+//	}
+//}
+
+
 
 
     /**

@@ -25,14 +25,14 @@
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once("../inc/$userType/sidebar.html");?>
+        <?php include_once("../inc/$userType/sidebar.php");?>
         <!-- MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper"></section>
@@ -284,8 +284,8 @@
         </section>
     </section>
     <!-- MODAL -->
-    <div class="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">

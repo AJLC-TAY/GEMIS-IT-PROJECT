@@ -28,7 +28,8 @@ if (isset($_GET['data']) && $_GET['data'] == 'section') {
     $admin->listSectionJSON();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'enrollees') {
-    $admin->listEnrolleesJSON();
+//    $admin->listEnrolleesJSON();
+    $admin->getEnrollees();
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
@@ -37,5 +38,19 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
 // if (isset($_GET['data']) && $_GET['data'] == 'sectionOption') {
 //     $admin->listSectionOptionJSON($_GET['teacher_id']);
 // }
+
+if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
+    $admin->listFullSectionJSON();
+}
+
+if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
+   $admin->getEnrollFilters();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'signatory') {
+   $admin->listSignatory(true);
+}
+if (isset($_GET['data']) && $_GET['data'] == 'advisoryClasses') {
+   $admin->listAdvisoryClasses(true);
+}
 ?>
 

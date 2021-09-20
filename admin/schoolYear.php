@@ -8,14 +8,14 @@
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -50,4 +50,5 @@
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/school-year.js"></script>
 </body>
+
 </html>

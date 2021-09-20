@@ -2,7 +2,11 @@
 include_once("../inc/head.html");
 session_start();
 $_SESSION['id'] = $user_id = 1;
-$_SESSION['sy'] = '2021-2022';
+$_SESSION['sy_id'] = 5;
+$_SESSION['sy_desc'] = '2021 - 2022';
+$_SESSION['enrollment'] = 0;
+$_SESSION['user-type'] = 'AD';
+
 require_once("../class/Administration.php");
 $admin = new Administration();
 $admin_user = $admin->getProfile('AD');
@@ -13,14 +17,14 @@ $admin_user = $admin->getProfile('AD');
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
@@ -70,7 +74,7 @@ $admin_user = $admin->getProfile('AD');
                                             <div class="icon">
                                                 <i class="fa fa-user-circle" aria-hidden="true"></i>
                                             </div>
-                                            <a href="admin.php?id=<?php echo $user_id;?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                            <a href="admin.php?id=<?php echo $user_id; ?>" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
@@ -232,11 +236,11 @@ $admin_user = $admin->getProfile('AD');
                     </div>
                 </div>
             </section>
+            <!--footer start-->
+            <?php include_once("../inc/footer.html"); ?>
+            <!--footer end-->
         </section>
         <!--main content end-->
-        <!--footer start-->
-        <?php include_once("../inc/footer.html"); ?>
-        <!--footer end-->
     </section>
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->

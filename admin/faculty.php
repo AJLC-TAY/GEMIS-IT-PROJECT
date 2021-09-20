@@ -3,17 +3,16 @@ include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
-$js_file_path = "../js/admin/faculty-list.js";
+$js = "<script type='module' src='../js/admin/faculty-list.js'></script>";
 $action = "";
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     $page_path = "faculty/facultyForm.php";
-    $js_file_path = "../js/admin/faculty-form.js";
+    $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
 } else if (isset($_GET['id'])) {
     $action = "profile";
     $page_path = "faculty/facultyProfile.php";
-    $js_file_path = "../js/admin/faculty.js";
-    // $jsFilePath = "../js/admin/faculty-temp.js";
+    $js = "<script type='module' src='../js/admin/faculty.js'></script>";
 }
 ?>
 <title>Faculty | GEMIS</title>
@@ -21,20 +20,20 @@ if (isset($_GET['action'])) {
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>x
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php include($page_path); ?>
                         </div>
@@ -48,7 +47,7 @@ if (isset($_GET['action'])) {
     <!-- MAIN CONTENT END -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0; right: 0;">
-        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 9999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
     <!--ADD SUBJECT CLASS MODAL-->
@@ -69,7 +68,7 @@ if (isset($_GET['action'])) {
                             <form>
                                 <div class="flex-grow-1 d-flex me-3">
                                     <input id="search-sc-input" type="search" class="form-control form-control-sm mb-0 me-2" placeholder="Search subject here">
-                                    <input type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
+                                    <input type="reset" data-target-table="#sc-table" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
                                 </div>
                             </form>
                             <div class="dropdown">
@@ -77,25 +76,25 @@ if (isset($_GET['action'])) {
                                     Filter
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="sc-filter">
-                                    <li><a href="#" id="all-btn" class="dropdown-item">All</a></li>
-                                    <li><a href="#" id="available-btn" class="dropdown-item">Available</a></li>
-                                    <li><a href="#" id="unavailable-btn" class="dropdown-item">For switching</a></li>
+                                    <li><a role="button" data-value='*' id="all-btn" class="filter-item dropdown-item active">All</a></li>
+                                    <li><a role="button" data-value='available' id="available-btn" class="filter-item dropdown-item">Available</a></li>
+                                    <li><a role="button" data-value='taken' id="unavailable-btn" class="filter-item dropdown-item">For switching</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <table id="sc-table" class="table-sm">
+                    <table id="sc-table" data-page="<?php echo $page; ?>" class="table-sm">
                         <thead class='thead-dark'>
                         <tr>
                             <th data-checkbox="true"></th>
+                            <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
+                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="teacher_id">Teacher</th>
                             <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
                             <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                             <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
                             <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="teacher_id">Teacher</th>
                             <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                            <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,7 +103,7 @@ if (isset($_GET['action'])) {
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <form id="sc-form" method="POST" action="action.php" data-form="<?php echo $action; ?>">
+                    <form id="sc-form" method="POST" action="action.php" data-page="<?php echo $action; ?>">
                         <input type="hidden" name="teacher_id" value="" />
                         <input type="hidden" name="action" value="assignSubClasses">
                         <button id='cancel-as-btn' class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
@@ -115,13 +114,13 @@ if (isset($_GET['action'])) {
         </div>
     </div>
     <!--ADD SUBJECT CLASS MODAL END-->
+    <!--BOOTSTRAP TABLE JS-->
+    <script src='../assets/js/bootstrap-table.min.js'></script>
+    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
+
+    <!--CUSTOM JS-->
+    <script src="../js/common-custom.js"></script>
+    <?php echo $js; ?>
 </body>
 
-<!--BOOTSTRAP TABLE JS-->
-<script src='../assets/js/bootstrap-table.min.js'></script>
-<script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-
-<!--CUSTOM JS-->
-<script src="../js/common-custom.js"></script>
-<script type="module" src="<?php echo $js_file_path; ?>"></script>
 </html>

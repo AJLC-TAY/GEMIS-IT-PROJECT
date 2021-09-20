@@ -8,14 +8,14 @@
     $admin = new Administration();
     ?>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper ps-4">
@@ -39,15 +39,51 @@
                                     </span>
                                 </div>
                                 <!-- SEARCH BAR -->
-                                <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
+                                <form action="">
+                                    <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
+                                </form>
                             </header>
-                            <!-- No result message -->
-                            <div class="msg w-100 d-flex justify-content-center d-none">
-                                <p class="m-auto">No results found</p>
+                            <div class="content">
+                                <!-- NO RESULTS MESSAGE -->
+                                <div class="no-result-msg-con w-100 d-flex justify-content-center">
+                                    <p class="no-result-msg" style="display: none; margin-top: 20vh;" >No results found</p>
+                                </div>
+                                <!-- SUB SPINNER -->
+                                <div id="curriculum-spinner" class="sub-spinner" style="display: none; height: 60vh;">
+                                    <div class="spinner-con h-100 position-relative">
+                                        <div class="spinner-border position-absolute top-0 start-0 bottom-0 end-0 m-auto" style="margin: auto !important;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--CARDS-->
+                                <div class="ms-4 me-3">
+                                <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+                                    <!-- TEMPLATE -->
+                                    <template id="card-template">
+                                        <div data-id='%CODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
+                                            <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='../admin/curriculum.php?code=%CODE%'></a>
+                                            <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
+                                                <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                                                <ul class='dropdown-menu' style='z-index: 99;'>
+                                                    <li><a class='dropdown-item' href='../admin/curriculum.php?code=%CODE%&state=edit'>Edit</a></li>
+                                                    <li><button data-name='%NAME%' class='archive-option dropdown-item' id='%CODE%'>Archive</button></li>
+                                                    <li><button data-name='%NAME%' class='delete-option dropdown-item' id='%CODE%'>Delete</button></li>
+                                                </ul>
+                                            </div>
+                                            <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
+                                                <div class='tile-content'>
+                                                    <h4 class='card-title text-break'>%NAME%</h4>
+                                                    <p class='card-text text-break'>%DESC%</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <!-- TEMPLATE END -->
+                                </ul>
+                                </div>
                             </div>
-                            <ul class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
 
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -58,39 +94,20 @@
             </section>
         </section>
     </section>
-    <!-- TEMPLATE -->
-    <template id="card-template">
-        <li data-id='${code}' class='tile card shadow-sm p-0 position-relative'>
-            <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='curriculum.php?code=${code}'></a>
-            <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
-                <ul class='dropdown-menu' style='z-index: 99;'>
-                    <li><a class='dropdown-item' href='curriculum.php?code=${code}&state=edit'>Edit</a></li>
-                    <li><button data-name='${name}' class='archive-option dropdown-item' id='${code}'>Archive</button></li>
-                    <li><button data-name='${name}' class='delete-option dropdown-item' id='${code}'>Delete</button></li>
-                </ul>
-            </div>
-            <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
-                <div class='tile-content'>
-                    <h4 class='card-title text-break'>${name}</h4>
-                    <p class='card-text text-break'>${desc}</p>
-                </div>
-            </div>
-        </li>
-    </template>
     <!-- MODAL -->
     <!-- ADD MODAL -->
-    <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="curriculum-form" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h4 class="mb-0">Add Curriculum</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Curriculum</h4>
                     </div>
-                    <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="curriculum-form" method="post">
+                        <input type="hidden" name="action" id="action" value="addCurriculum" />
                         <p><small class='text-secondary'>Please complete the following: </small></p>
                         <div class="form-group">
                             <label for="curr-code">Code</label>
@@ -105,19 +122,18 @@
                             <label for="curr-desc">Short Description</label>
                             <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" name="action" id="action" value="addCurriculum" />
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                        <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
-                    </div>
+                    </form>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
+                </div>
+            </div>
         </div>
     </div>
     <!-- ARCHIVE MODAL -->
-    <div class="modal" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -137,8 +153,8 @@
         </div>
     </div>
     <!-- DELETE MODAL -->
-    <div class="modal" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -158,8 +174,8 @@
         </div>
     </div>
     <!-- VIEW ARCHIVED MODAL -->
-    <div class="modal" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -180,8 +196,8 @@
         </div>
     </div>
     <!-- UNARCHIVE MODAL -->
-    <div class="modal" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -205,25 +221,25 @@
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <!-- VALIDATION -->
+    <script>
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        let curricula = <?php $admin->listCurriculumJSON(); ?>;
+    </script>
+    <script type="module" src="../js/admin/curriculum-list.js"></script>
 </body>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<!-- VALIDATION -->
-<script>
-    var forms = document.querySelectorAll('.needs-validation');
 
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-    });
-</script>
-<script type="text/javascript">
-    let curricula = <?php $admin->listCurriculumJSON(); ?>;
-</script>
-<script type="module" src="../js/admin/curriculum-list.js"></script>
 </html>

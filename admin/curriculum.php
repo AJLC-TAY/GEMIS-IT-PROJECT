@@ -28,14 +28,14 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 
 <body>
     <!-- SPINNER -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper ps-4">
@@ -139,8 +139,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </section>
         <!-- MAIN CONTENT END-->
         <!-- ARCHIVE CONFIRMATION MODAL -->
-        <div class="modal" id="track-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="track-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title">
@@ -161,8 +161,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </div>
         <!-- ARCHIVE CONFIRMATION MODAL END -->
         <!-- ADD MODAL -->
-        <div class="modal" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title">

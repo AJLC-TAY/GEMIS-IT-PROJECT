@@ -1,18 +1,21 @@
-<?php include_once("../inc/head.html"); ?>
+<?php
+session_start();
+include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <!-- SPINNER START -->
-    <div class="spinner-con">
-        <div class="spinner-border" role="status">
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.html'); ?>
+        <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -28,20 +31,27 @@
                                 }
 
                                 if ($_GET['page'] === 'setup') {
-                                    require("enrollment/enSetUp.php");
-                                    $js = "<script type='text/javascript' src='../js/admin/enrollmentFacultyPriv.js'></script>";
+                                    require("enrollment/enrollmentSetup.php");
+                                    $js = "<script type='module' src='../js/admin/enroll-setup.js'></script>";
                                 }
 
                                 if ($_GET['page'] === 'form') {
-                                    require("enrollment/stepForm.php");
+                                    require("enrollment/enrollmentForm.php");
+                                    $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
 
                                 if ($_GET['page'] === 'report') {
                                     require("enrollment/previewReport.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
+                                if ($_GET['page'] === 'credential') {
+                                    require("enrollment/enrollmentCredentials.php");
+                                    $js = "<script src='../js/admin/enrollment.js'></script>";
+                                }
                             } else {
                                 require("enrollment/enDashBoard.php");
+                                echo "<a href='enrollment.php?page=enrollees'>Enrollment List</a>";
+                                $js = "<script src='../js/admin/enrollment.js'></script>";
                             }
                             ?>
                         </div>
@@ -62,9 +72,34 @@
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <?php echo $js; ?>
+    <!-- VALIDATION -->
+    <script>
+        var forms = document.querySelectorAll('.needs-validation');
+        try {
+            var stepper = new Stepper($('#stepper')[0])
+        } catch (e) {}
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+
+        $(function() {
+            preload("#faculty")
+            hideSpinner()
+        })
+    </script>
 </body>
 
 </html>
