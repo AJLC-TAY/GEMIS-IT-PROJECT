@@ -33,6 +33,12 @@ $(function() {
         width: null,
         dropdownParent: $('#add-modal')
     });
+
+    $("#adviser-section").select2({
+        theme: "bootstrap-5",
+        width: null
+    });
+
     $(document).on("click", '#add-btn', function() {
         $("#add-modal").modal("show");
     });
@@ -95,33 +101,34 @@ $(function() {
         showSpinner();
         let form = $(this);
         let formData= form.serializeArray();
+        console.log(formData);
         $.post("action.php", formData, function(data) {
             let teacherID, inputs, teacherInput, teacherLink;
             data = JSON.parse(data);
 
-            inputs = form.find("input");
-            inputs.eq(0).prop("disabled", true);
-
-            teacherID = formData[1].value;
-            teacherLink = $("a.link");
-            if (teacherID.trim().length === 0) {
-                // $("#empty-msg").removeClass("d-none")
-                // teacherLink = $("a.link")
-                // teacherLink.attr("href", "")
-                // teacherLink.html("")
-                // teacherLink.addClass("d-none")
-            } else {
-                teacherInput = inputs.eq(1);
-                teacherInput.val(teacherID);
-
-                teacherLink.attr("href", `faculty.php?id=${teacherID}`);
-                let name = $(`#adviser-list option[value*='${teacherID}']`).html();
-                name = "Teacher " + name.substring(name.indexOf("-") + 2);
-                teacherLink.html(name);
-                teacherLink.removeClass("d-none");
-
-            }
-            location.replace(`section.php?code=${data.section}`);
+            // inputs = form.find("input");
+            // inputs.eq(0).prop("disabled", true);
+            //
+            // teacherID = formData[1].value;
+            // teacherLink = $("a.link");
+            // if (teacherID.trim().length === 0) {
+            //     // $("#empty-msg").removeClass("d-none")
+            //     // teacherLink = $("a.link")
+            //     // teacherLink.attr("href", "")
+            //     // teacherLink.html("")
+            //     // teacherLink.addClass("d-none")
+            // } else {
+            //     teacherInput = inputs.eq(1);
+            //     teacherInput.val(teacherID);
+            //
+            //     teacherLink.attr("href", `faculty.php?id=${teacherID}`);
+            //     let name = $(`#adviser-list option[value*='${teacherID}']`).html();
+            //     name = "Teacher " + name.substring(name.indexOf("-") + 2);
+            //     teacherLink.html(name);
+            //     teacherLink.removeClass("d-none");
+            //
+            // }
+            location.replace(`section.php?sec_code=${data.section}`);
           
 
             // $("#edit-btn").toggleClass('d-none')
@@ -136,7 +143,8 @@ $(function() {
     /** Clears the teacher input if clear button is clicked */
     $(document).on("click", "#adviser-clear-btn", function(e) {
         e.preventDefault();
-        $("input[name='adviser']").val("");
+        $("#adviser-section").val("");
+        $("#adviser-section").trigger("change");
     });
 
     $(document).on("click", "#transfer-btn", function() {

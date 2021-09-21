@@ -37,6 +37,7 @@
 include '../class/Administration.php';
 
 $admin = new Administration();
+print_r($admin->listNotAdvisers());
 
 echo "jtest";
 echo json_encode($admin->createUser('ST'));

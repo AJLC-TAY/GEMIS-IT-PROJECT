@@ -118,11 +118,9 @@
                                     <select name="adviser" id="adviser" class="form-select">
                                         <option>-- Select faculty --</option>
                                         <?php
-                                            $faculty_list = $admin->listFaculty();
+                                            $faculty_list = $admin->listNotAdvisers();
                                             foreach($faculty_list as $faculty) {
-                                                $teacher_id = $faculty->get_teacher_id();
-                                                $teacher_name = $faculty->get_name();
-                                                echo "<option value='$teacher_id'>T. $teacher_name</option>";
+                                                echo "<option value='{$faculty['teacher_id']}'>T. {$faculty['name']}</option>";
                                             }
                                         ?>
                                     </select>

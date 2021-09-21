@@ -344,7 +344,7 @@ class Administration extends Dbconfig
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
-        return new Section($row['section_code'], $row['school_yr'], $row['section_name'], $row['grd_level'],
+        return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
                             $row['stud_no_max'], $row['stud_no'], $adviser);
     }
     public function listSectionStudentJSON() 
@@ -944,7 +944,7 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-        $query = 'SELECT * FROM faculty;';
+        $query = "SELECT * FROM faculty;";
         $result = mysqli_query($this->db, $query);
         $facultyList = array();
 
@@ -968,6 +968,20 @@ class Administration extends Dbconfig
             );
         }
         return $facultyList;
+    }
+
+    public function listNotAdvisers($teacher_id = NULL)
+    {
+        $result = $this->query ("SELECT CONCAT(last_name, ', ', first_name, ' ', middle_name ) as name, teacher_id FROM faculty WHERE teacher_id NOT IN (SELECT DISTINCT (teacher_id)
+                    FROM section WHERE teacher_id IS NOT NULL)". (!is_null($teacher_id) ? " OR teacher_id = '{$teacher_id}';" : ";"));
+        $not_advisers = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $not_advisers[] = [
+                "teacher_id" => $row["teacher_id"],
+                "name"       => $row["name"]
+            ];
+        }
+        return $not_advisers;
     }
 
     public function listFacultyJSON()
