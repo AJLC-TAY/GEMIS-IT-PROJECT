@@ -1497,7 +1497,7 @@ class StudentAward extends Award implements JsonSerializable
         private $guardians;
 
         
-            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section, $parents, $guardians)
+            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1523,6 +1523,7 @@ class StudentAward extends Award implements JsonSerializable
                             ."<a href='student.php?id=$stud_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"    
                             ."</div>";
+            $this->section_code = $section_code;
             $this->section = $section;
             $this->parents = $parents;
             $this->guardians = $guardians;
@@ -1623,6 +1624,10 @@ class StudentAward extends Award implements JsonSerializable
             return $this->id_picture;
         }
 
+        public function get_section_code()
+        {
+            return $this->section_code;
+        }
         public function get_section()
         {
             return $this->section;
@@ -1661,6 +1666,7 @@ class StudentAward extends Award implements JsonSerializable
             'psa_birth_cert' => $this->psa_birth_cert,
             'belong_to_ipcc'=> $this->belong_to_ipcc,
             'action' => $this->action,
+            'section_code' => $this->section_code,
             'section' => $this->section,
         ];}
 

@@ -123,6 +123,32 @@ class Administration extends Dbconfig
         echo json_encode($this->listAdministrators());
     }
     /*** School Year Methods */
+    public function getInitSYData() 
+    {
+        $result = $this->query("SELECT c.curr_code, c.curr_name, prog_code, description FROM curriculum as c JOIN program USING (curr_code);");
+        $track_program = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $track_code = $row['curr_code'];
+            if (!in_array($track_code, array_keys($track_program))) {
+                $track_program[$track_code] = [
+                    "track_name" => $row['curr_name'],
+                    "programs" => []
+                ];
+            } 
+            $track_program[$track_code]['programs'][$row['prog_code']] = $row['description'];
+        }
+
+        $subject_result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
+        $subjects = [];
+        while($sub_row = mysqli_fetch_assoc($subject_result)) {
+            $sub_type = $sub_row['sub_type'];
+            if (!in_array($sub_type, array_keys($subjects))) {
+                $subjects[$sub_type] = [$sub_row['sub_code'] => []];
+            }
+            $subjects[$sub_type][$sub_row['sub_code']] = $sub_row['sub_name'];
+        }
+        return ["track_program" => $track_program, "subjects" => $subjects];
+    }
 
     public function initializeSY()
     {
@@ -1450,6 +1476,7 @@ class Administration extends Dbconfig
                 $row['psa_birth_cert'],
                 $row['belong_to_IPCC'],
                 $row['id_picture'],
+                NULL,
                 $row['section_code'],
                 $parent,
                 $parent
@@ -1519,9 +1546,10 @@ class Administration extends Dbconfig
         sizeof($parent) != 0 ?: $parent = NULL;
         sizeof($guardian) != 0 ?: $guardian = NULL;
 
-        $result = $this->prepared_select("SELECT s.section_name FROM enrollment e JOIN section s ON s.section_code=e.section_code WHERE stud_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT s.section_name, e.section_code FROM enrollment e JOIN section s ON s.section_code=e.section_code WHERE stud_id=?;", [$id], "i");
         while ($res= mysqli_fetch_row($result)){
              $section = $res[0];
+             $section_code = $res[1];
         }
         
         // echo(($personalInfo['home_no'] = ""));
@@ -1563,6 +1591,7 @@ class Administration extends Dbconfig
             is_null($personalInfo['psa_birth_cert']) ? NULL :  $personalInfo['psa_birth_cert'],
             is_null($personalInfo['belong_to_IPCC']) ? NULL : $personalInfo['belong_to_IPCC'],
             is_null($personalInfo['id_picture']) ? NULL : $personalInfo['id_picture'],
+            $section_code,
             $section,
             $parent,
             $guardian
@@ -2073,7 +2102,8 @@ class Administration extends Dbconfig
     }
 
     public function deleteSignatory() {
-
+        $id = $_POST['id'];
+        $this->prepared_query("DELETE FROM signatory WHERE sign_id=?;", [$_POST['id']],"i");
     }
 
 

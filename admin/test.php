@@ -37,10 +37,12 @@
 include '../class/Administration.php';
 
 $admin = new Administration();
-print_r($admin->listNotAdvisers());
+echo json_encode($admin->getInitSYData());
+// print_r($admin->listNotAdvisers());
 
-echo "jtest";
-echo json_encode($admin->createUser('ST'));
+
+// echo "jtest";
+// echo json_encode($admin->createUser('ST'));
 //$admin->getEnrollmentReportData(true);
 //
 //$tracks = [];

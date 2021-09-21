@@ -32,12 +32,13 @@ $stud_id = $userProfile->get_stud_id();
     <div class="available-section list-group border">
         <?php
         $available_subjects = $admin->listAvailableSection();
+        $section_code = $userProfile->get_section_code();
         foreach ($available_subjects as $subject) {
             $name = $subject['name'];
             $adviser = "Adviser: " . $subject['adviser'];
             $slot = "Available Slots: " . $subject['slot'];
             $code = $subject['code'];
-            echo "<button id='${code}' data = '${stud_id}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
+            echo "<button id='${code}' data = '${stud_id}' data-current-section='{$section_code}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
             <div class='d-flex w-100 justify-content-between'>
                 <p class='mb-1'>$name</p>
                 <small>$slot</small>
