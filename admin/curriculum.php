@@ -31,7 +31,6 @@ include_once('../class/Administration.php');?>
                                 $jsFilePath = "../js/admin/curriculum-card.js";
                             }
                             ?>
-                            
                         </div>
                     </div>
                 </div>

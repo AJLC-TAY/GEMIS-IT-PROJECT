@@ -26,10 +26,12 @@ var stud_id;
 var current_code;
 var section;
 var stud_to_swap;
+var current_section;
 $(function() {
     preload('#student');
 
     $(document).on('click','.transfer', function(){
+        current_section = $(this).attr('data-current-section');
         section_id = $(this).attr('id');
         stud_id = $(this).attr('data');
         let confirmationModal = $('#transferConfirmation');
@@ -40,7 +42,7 @@ $(function() {
 
     $(document).on('click', '.transfer-btn', function() {
         var action = 'transferStudent'
-        $.post("action.php", {section_id,stud_id, action}, function() {	
+        $.post("action.php", {section_id, stud_id, action}, function() {	
             $('#transferConfirmation').modal("hide");
             showToast("success", "Student Successfully Transferred");
             // location.reload();

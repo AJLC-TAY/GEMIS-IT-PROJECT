@@ -14,7 +14,9 @@ const tableSetup = {
 };
 
 var syTable = $("#table").bootstrapTable(tableSetup);
-var stepper =  new Stepper($('#school-year-stepper')[0]);
+try {
+    var stepper =  new Stepper($('#school-year-stepper')[0]);
+} catch (e) {}
 
 /**
  * Displays the current values of the row to the given html tag
