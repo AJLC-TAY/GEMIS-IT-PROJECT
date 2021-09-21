@@ -19,7 +19,7 @@ let asTableSetup = {
 
 const detailFormatter = (index, row) => {
     // row details for reference
-    // corequisite: []
+    // corequisite: []Management
     // for_grd_level: "12"
     // prerequisite: []
     // school_yr: "0"

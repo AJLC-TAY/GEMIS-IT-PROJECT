@@ -58,7 +58,9 @@
                                 </div>
                                 <!--CARDS-->
                                 <div class="ms-4 me-3">
-                                <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+                                    <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+                                        
+                                    </ul>
                                     <!-- TEMPLATE -->
                                     <template id="card-template">
                                         <div data-id='%CODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
@@ -80,7 +82,6 @@
                                         </div>
                                     </template>
                                     <!-- TEMPLATE END -->
-                                </ul>
                                 </div>
                             </div>
 

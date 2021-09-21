@@ -58,28 +58,28 @@
                                 </div>
                                 <div class="container ms-4 me-3">
                                     <ul data-page="program" class="cards-con d-flex flex-wrap mt-2 h-auto" style="min-height: 75vh;">
-                                        <!-- TEMPLATE -->
-                                        <template id="card-template">
-                                            <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
-                                                <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
-                                                <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                                                    <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
-                                                    <ul class='dropdown-menu' style='z-index: 99;'>
-                                                        <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
-                                                        <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
-                                                        <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
-                                                    </ul>
-                                                </div>
-                                                <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
-                                                    <div class='tile-content'>
-                                                        <h4 class='card-title'>%PROGDESC%</h4>
-                                                        <p class='card-text'>%CURCODE% | %PROGCODE%</p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </template>
-                                        <!-- TEMPLATE END -->
                                     </ul>
+                                    <!-- TEMPLATE -->
+                                    <template id="card-template">
+                                        <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
+                                            <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
+                                            <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
+                                                <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                                                <ul class='dropdown-menu' style='z-index: 99;'>
+                                                    <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
+                                                    <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
+                                                    <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
+                                                </ul>
+                                            </div>
+                                            <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
+                                                <div class='tile-content'>
+                                                    <h4 class='card-title'>%PROGDESC%</h4>
+                                                    <p class='card-text'>%CURCODE% | %PROGCODE%</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                                    <!-- TEMPLATE END -->
                                 </div>
                             </div>
                         </div>
