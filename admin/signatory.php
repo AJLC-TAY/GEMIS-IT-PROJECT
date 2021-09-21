@@ -56,7 +56,7 @@ $faculty = $admin->listFaculty();
                                                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
+                                                    <button id="delete-signatory" class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
                                                 </div>
                                             </div>
                                             <tr>
@@ -101,7 +101,6 @@ $faculty = $admin->listFaculty();
                         <input type="hidden" name="action" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="container">
-                            <input id='sig-id' name='sig-id' type='hidden'>
                             <div class="row align-content-center needs-validation" novalidate>
                                 <label class="col-form-label col-4" for="last-name">Last Name</label>
                                 <div class="col-8">

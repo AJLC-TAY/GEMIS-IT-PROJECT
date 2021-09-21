@@ -2073,7 +2073,8 @@ class Administration extends Dbconfig
     }
 
     public function deleteSignatory() {
-
+        $id = $_POST['id'];
+        $this->prepared_query("DELETE FROM signatory WHERE sign_id=?;", [$_POST['id']],"i");
     }
 
 
