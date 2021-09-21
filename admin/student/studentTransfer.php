@@ -48,7 +48,7 @@ $stud_id = $userProfile->get_stud_id();
         ?>
     </div>
     <div>
-        <button data-bs-toggle='collapse' id="transfer-full" class="link btn w-auto mx-auto" href='#section-table'><small>Transfer Student to Full Section</small></button>
+        <button data-bs-toggle='collapse' id="transfer-full"  class="link btn w-auto mx-auto" href='#section-table' data-toggle="tooltip" title="Transferring to a full section will require switching of students."><small>Transfer Student to Full Section</small></button>
     </div>
     <div id='section-table' class='collapse mt-3'>
         <table id="table" class="table-striped table-sm">

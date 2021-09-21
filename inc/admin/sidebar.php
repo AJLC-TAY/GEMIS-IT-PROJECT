@@ -55,8 +55,8 @@
                 </a>
                 <ul class="sub">
                     <li><a id="school-yr" href="schoolYear.php">School Year</a></li>
-                    <li><a id="curriculum" href="curriculumList.php">Curriculum</a></li>
-                    <li><a id="program" href="programs.php">Program/Strand</a></li>
+                    <li><a id="curriculum" href="curriculum.php">Curriculum</a></li>
+                    <li><a id="program" href="program.php">Program/Strand</a></li>
                     <li><a id="subject" href="subject.php">Subject</a></li>
                 </ul>
             </li>
