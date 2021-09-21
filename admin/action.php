@@ -231,4 +231,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSignatory'){
     $admin->editSignatory();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'deleteSignatory'){ 
+    $admin->deleteSignatory();
+}
+
+
 ?>
