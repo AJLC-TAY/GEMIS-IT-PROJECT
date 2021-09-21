@@ -8,6 +8,7 @@ $quarter_opt = '';
 $enroll_stat_msg = "No enrollment";
 $display = 'd-none';
 
+
 if ($action == 'add') {
     $header = "Add";
     $last_name = '';
@@ -35,6 +36,8 @@ if ($action == 'add') {
     $sex = $admin_user->sex;
     $button = "Save";
 }
+
+
 ?>
 <!-- HEADER -->
 <header>
@@ -53,16 +56,14 @@ if ($action == 'add') {
 <div class="container mt-4">
     <div class="card h-auto bg-light mx-auto" style='width: 80%;'>
         <?php echo $id_header; ?>
-        <form id='admin-form' class="needs-validation" action="action.php" method='POST' novalidate>
+        <form method="POST" id='admin-form' class="needs-validation" action="action.php"  novalidate>
             <!-- NAME -->
             <h5 class="fw-bold">Personal Information</h5>
             <div class='form-row row mb-3'>
                 <div class='form-group col-md-4'>
                     <label for='lastname'>Last Name</label>
                     <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
-                    <div class="invalid-feedback ">
-                        Please enter last name
-                    </div>
+                    <br>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='firstname'>First Name</label>

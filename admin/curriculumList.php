@@ -6,6 +6,12 @@
     <?php
     include('../class/Administration.php');
     $admin = new Administration();
+    $curriculum_code_list = $admin->listCurriculum("curriculum");
+    $final_code_list = array_map(function($e) {
+        return $e->get_cur_code();
+    }, $curriculum_code_list);
+    echo "<script>let curriculumCodeList = ". json_encode($final_code_list). ";</script>";
+
     ?>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -113,7 +119,7 @@
                             <label for="curr-code">Code</label>
                             <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required />
                             <div>
-                                Please enter classcode
+                                Please enter curriculum code
                             </div>
                             <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
                             <label for="curr-name">Name</label>

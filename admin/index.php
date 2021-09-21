@@ -1,6 +1,6 @@
 <?php
 include_once("../inc/head.html");
-session_start();
+// session_start();
 $_SESSION['id'] = $user_id = 1;
 $_SESSION['sy_id'] = 5;
 $_SESSION['sy_desc'] = '2021 - 2022';

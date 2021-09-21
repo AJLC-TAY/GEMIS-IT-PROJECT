@@ -120,24 +120,13 @@ include_once("../inc/head.html");
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <!-- VALIDATION -->
+    <script src="validation/jquery.validate.min.js"></script>
+    <script src="validation/additional-methods.min.js"></script>
+    <script src="validation/validation.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/admin.js"></script>
-    <!-- VALIDATION -->
-    <script>
-        var forms = document.querySelectorAll('.needs-validation');
-
-        Array.prototype.slice.call(forms).forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation();
-                }
-
-                form.classList.add('was-validated');
-            }, false);
-        });
-    </script>
 
 </body>
 
