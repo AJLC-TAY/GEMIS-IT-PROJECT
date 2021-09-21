@@ -28,6 +28,7 @@ $(function() {
         let displaySubmitAgainBtn = true;
         if (action == 'Edit') {
             let info = signatoryTable.bootstrapTable('getRowByUniqueId', $(this).attr('data-id'));
+            $("#sig-id").val(info.sign_id);
             $("#last-name").val(info.last_name);
             $("#first-name").val(info.first_name);
             $("#middle-name").val(info.middle_name);
@@ -66,13 +67,14 @@ $(function() {
     $(document).on("submit", "#signatory-form", function(e) {
         e.preventDefault();
         let form = $(this);
+        console.log(form.serializeArray());
         $.post("action.php", form.serializeArray(), function() {
             form.trigger('reset');
             signatoryTable.bootstrapTable("refresh")
             if (!addAnother) {
                 $("#modal-form").modal("hide");
                 addAnother = false;
-            }
+            };
             showToast("success", "Signatory successfully added");
         });
     });
@@ -83,7 +85,7 @@ $(function() {
     $(document).on("click", ".view-btn", function() {
         showSpinner();
         let id = $(this).attr("data-id");
-        let data = signatoryTable.bootstrapTable("getRowByUniqueId", id)
+        let data = signatoryTable.bootstrapTable("getRowByUniqueId", id);
 
         let modal = $("#modal-view");
 
@@ -95,4 +97,4 @@ $(function() {
         hideSpinner();
     });
     hideSpinner();
-})
+});

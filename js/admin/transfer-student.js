@@ -18,18 +18,16 @@ const tableSetup = {
     fixedColumns:       true,
     searchSelector:     '#search-sub-input',
     ...commonTableSetup
-}
+};
 
-let programTable = $("#table").bootstrapTable(tableSetup)
+let sectionTable = $("#table").bootstrapTable(tableSetup)
 var section_id;
 var stud_id;
 var current_code;
 var section;
 var stud_to_swap;
 $(function() {
-    preload('#student')
-    hideSpinner()
-
+    preload('#student');
 
     $(document).on('click','.transfer', function(){
         section_id = $(this).attr('id');
@@ -37,19 +35,18 @@ $(function() {
         let confirmationModal = $('#transferConfirmation');
         confirmationModal.find('.modal-indentifier').html(section);
         confirmationModal.modal('toggle');
-    })
+    });
 
 
     $(document).on('click', '.transfer-btn', function() {
         var action = 'transferStudent'
-        $.post("action.php", {section_id,stud_id, action:action}, function() {	
+        $.post("action.php", {section_id,stud_id, action}, function() {	
             $('#transferConfirmation').modal("hide");
             showToast("success", "Student Successfully Transferred");
-            location.reload();
-        })
+            // location.reload();
+        });
 
-
-    })
+    });
 
     $(document).on('click', '.swapStudent', function() {
         var currentTds = $(this).closest("tr").find("td"); // find all td of selected row
@@ -61,36 +58,37 @@ $(function() {
         fullConfirmationModal.find('.full-modal-indentifier').html(section);
         fullConfirmationModal.modal('toggle');
 
-    })
+    });
 
 
     $(document).on('click', '.transfer-btn-full', function() {
         var action = 'transferStudentFull'
-        $.post('action.php', {current_code, section, stud_to_swap, id, action:action} , () =>{
-            $('#transferConfirmationFull').modal("hide")
+        $.post('action.php', {current_code, section, stud_to_swap, id, action} , () =>{
+            $('#transferConfirmationFull').modal("hide");
             location.reload();
             showToast("success", "Student Successfully Transferred");
-        })
+        });
 
-    })
+    });
 
-    $("#stud-save-btn").click(() =>$('#student-form').submit())
+    $("#stud-save-btn").click(() =>$('#student-form').submit());
 
     $('#student-form').submit(function(e){
-        console.log("submit")
-    })
+        console.log("submit");
+    });
 
     const listSearchEventBinder = (searchInputID, itemSelector) => {
         $(document).on("keyup", searchInputID, function() {
-            var value = $(this).val().toLowerCase()
-            console.log(value)
+            var value = $(this).val().toLowerCase();
+            console.log(value);
             $(itemSelector).filter(function() {
-                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
-                return $(this).addClass("d-none")
-            })
-        })
-    }
+                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none");
+                return $(this).addClass("d-none");
+            });
+        });
+    };
 
-    listSearchEventBinder("#search-section", ".available-section button")
+    listSearchEventBinder("#search-section", ".available-section button");
+    hideSpinner();
 
-})
+});

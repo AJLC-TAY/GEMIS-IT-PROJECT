@@ -137,6 +137,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
+    echo("from action: archivesubject");
     $admin->moveSubject("", "archived_");
     $admin->listArchSubjectsJSON();
     // $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
@@ -224,6 +225,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'newPassword'){
 /******** SIGNATORY ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addSignatory'){
     $admin->addSignatory();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'editSignatory'){
+    $admin->editSignatory();
 }
 
 ?>

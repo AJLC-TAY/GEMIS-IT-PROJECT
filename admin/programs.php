@@ -189,8 +189,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArchivedProgram" aria-hidden="true">
-        <div class="modal-dialo modal-dialog-centered">
+    <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -200,7 +200,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="overflow-auto" style="height: 50vh;">
-
                         <ul class="list-group arch-list">
                         </ul>
                     </div>

@@ -24,16 +24,16 @@
                         <?php 
                             if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
-                                $jsFilePath = "../js/admin/student.js";
+                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                             } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
                                 include_once("student/studentTransfer.php"); 
-                                $jsFilePath = "../js/admin/transfer-student.js";
+                                $jsFilePath = "<script type='module' src='../js/admin/transfer-student.js'></script>";
                             }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
-                                $jsFilePath = "../js/admin/student.js";
+                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                             } else {
                                 include_once("student/studentList.php"); 
-                                $jsFilePath = "../js/admin/student-list.js";
+                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student-list.js'></script>";
                             }
                         ?>
                         </div>
@@ -55,7 +55,7 @@
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>
     <script type="text/javascript" src="../js/common-custom.js"></script>
-    <script type="text/javascript" src="<?php echo $jsFilePath; ?>"></script>
+    <?php echo $jsFilePath; ?>;
     
 </body>
 

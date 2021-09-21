@@ -101,6 +101,7 @@ $faculty = $admin->listFaculty();
                         <input type="hidden" name="action" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="container">
+                            <input id='sig-id' name='sig-id' type='hidden'>
                             <div class="row align-content-center needs-validation" novalidate>
                                 <label class="col-form-label col-4" for="last-name">Last Name</label>
                                 <div class="col-8">

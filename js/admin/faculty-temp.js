@@ -7,11 +7,11 @@ preload('#faculty')
 // import {Table} from "./Class.js"
 
 // Deleted roles
-let rolesDel = []
-let rolesTmp = []
+let rolesDel = [];
+let rolesTmp = [];
 
 // Department
-let inputData
+let inputData;
 
 // Subjects Handled
 // setSubjectSelected(assigned.map(e => e.sub_code)) // we have to set the selected subject list towards the  utilities.js 
@@ -19,13 +19,13 @@ let inputData
 $(function () {
     /** Initialization */
     // Modal
-    let modalE = $('.modal')
+    let modalE = $('.modal');
     // Toast 
     let toastList = $('.toast').map(function (toastEl) {
         return new bootstrap.Toast(toastEl)
-    })
+    });
     // Popover for the instruction
-    let popover = new bootstrap.Popover($("#instruction"))
+    let popover = new bootstrap.Popover($("#instruction"));
 
     var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
         triggerTabList.forEach(function (triggerEl) {
@@ -34,8 +34,8 @@ $(function () {
         triggerEl.addEventListener('click', function (event) {
             event.preventDefault()
             tabTrigger.show()
-        })
-    })
+        });
+    });
 
     // let subTable = $("#subject-table").bootstrapTable({data : assigned})
     // console.log("test", assigned)
@@ -46,7 +46,7 @@ $(function () {
         let emptyMsg = $("#role-empty-msg")
         if (rolesTmp.length == 0) emptyMsg.removeClass('d-none')
         else emptyMsg.addClass('d-none')
-    }
+    };
 
     /** Role Methods */
     // Edit roles
@@ -62,7 +62,7 @@ $(function () {
         $("#role-section").addClass("border")
         $(".role-to-delete-btn button, #role-option-tag-con, #role-decide-con").removeClass('d-none')
         checkRolesTagForMsg()
-    })
+    });
 
     // Add role tag
     $("#role-option-tag-con button").click(function() {
@@ -77,7 +77,7 @@ $(function () {
         // console.log("*****Add clicked******")
         // console.log("Temp Roles:", rolesTmp)
         // console.log("Roles to Delete:", rolesDel)
-    })
+    });
 
     // delete role tag
     $(".role-to-delete-btn button").click(function () {
@@ -96,53 +96,53 @@ $(function () {
         // console.log("Temp Roles:", rolesTmp)
         // console.log("Roles to Delete:", rolesDel)
        
-    })
+    });
 
     // cancel role edit
     $("#role-cancel-btn").click(function(e) {
-        e.preventDefault()
+        e.preventDefault();
         // hide
-        $("#role-section").removeClass("border")
-        $("#role-option-tag-con, #role-decide-con").addClass('d-none')
+        $("#role-section").removeClass("border");
+        $("#role-option-tag-con, #role-decide-con").addClass('d-none');
 
         // show
-        $("#role-edit-btn").removeClass("d-none")
+        $("#role-edit-btn").removeClass("d-none");
         
         // for each element in the current roles, their corresponding 
         // tag will be shown but their delete icon is hidden
         roles.forEach(e => {
-            let eHTML = $(`.role-to-delete-btn[data-value=${e}]`)
-            eHTML.find("button").addClass('d-none')
-            eHTML.removeClass('d-none')
-        })
+            let eHTML = $(`.role-to-delete-btn[data-value=${e}]`);
+            eHTML.find("button").addClass('d-none');
+            eHTML.removeClass('d-none');
+        });
 
         // for each element in the roles to be delete, their add button tag are hidden
         rolesDel.forEach(e => {
-            let eHTML = $(`#role-option-tag-con [data-value=${e}]`)
-            eHTML.addClass('d-none')
-        })
+            let eHTML = $(`#role-option-tag-con [data-value=${e}]`);
+            eHTML.addClass('d-none');
+        });
 
         // temporary arrays are set to empty
-        rolesDel = []
-        rolesTmp = []
+        rolesDel = [];
+        rolesTmp = [];
 
         // console.log("*****Cancel clicked******")
         // console.log("Temp Roles:", roles)
         // console.log("Temp Roles:", rolesTmp)
         // console.log("Roles to Delete:", rolesDel)
-    })
+    });
 
-    $("#role-save-btn").click(() => $("#role-form").submit())
+    $("#role-save-btn").click(() => $("#role-form").submit());
 
     $("#role-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        var formData = $(this).serialize()
+        e.preventDefault();
+        showSpinner();
+        var formData = $(this).serialize();
 
         // add each element in the temporary roles to the formdata
         rolesTmp.forEach(role => {
             formData += encodeURI(`&access[]=${role}`)
-        })
+        });
 
         $.post('action.php', formData, function(){
             // hide
@@ -153,56 +153,56 @@ $(function () {
             rolesTmp.forEach(e=> {
                 let eHTML = $(`.role-to-delete-btn[data-value=${e}]`)
                 eHTML.find("button").addClass('d-none')
-            })
+            });
 
             // show
-            $("#role-edit-btn").removeClass('d-none')
-            checkRolesTagForMsg()
+            $("#role-edit-btn").removeClass('d-none');
+            checkRolesTagForMsg();
 
             // override roles by cloning the temprary roles
-            roles = [...rolesTmp]
-            hideSpinner()
-            showToast('success', "Roles successfully updated")
-        })
-    })
+            roles = [...rolesTmp];
+            hideSpinner();
+            showToast('success', "Roles successfully updated");
+        });
+    });
 
     /** Deparment Methods */
     $("#dept-edit-btn").click(function() {
-        let input = $("#dept-input")
+        let input = $("#dept-input");
         // Get input value and store it to the input data
-        inputData = input.val()
+        inputData = input.val();
         // empty input if no department is set
-        if (!deptExist) input.val("")
+        if (!deptExist) input.val("");
         
         // show
-        $("#dept-section").addClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none')
-        input.removeClass('d-none')
-        input.prop('readonly', false)
+        $("#dept-section").addClass("border");
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").removeClass('d-none');
+        input.removeClass('d-none');
+        input.prop('readonly', false);
         
         // hide
-        $(this, "#dept-empty-msg").addClass('d-none')
-    })
+        $(this, "#dept-empty-msg").addClass('d-none');
+    });
 
     $("#dept-clear-btn").click(function(e) {
-        e.preventDefault()
-        $("#dept-input").val('')
-    })
+        e.preventDefault();
+        $("#dept-input").val('');
+    });
 
     $("#dept-cancel-btn").click(function(e) {
-        e.preventDefault()
+        e.preventDefault();
         
-        let input = $("#dept-input")
-        input.attr('readonly', true)
-        input.val(inputData)
+        let input = $("#dept-input");
+        input.attr('readonly', true);
+        input.val(inputData);
 
         // hide
-        $("#dept-section").removeClass("border")
-        $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+        $("#dept-section").removeClass("border");
+        $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none');
         
         // show
-        $("#dept-edit-btn, #dept-empty-msg").fadeIn()
-    })
+        $("#dept-edit-btn, #dept-empty-msg").fadeIn();
+    });
 
 
     // $("#dept-save-btn").click(() => $("#dept-form").submit())
@@ -212,11 +212,11 @@ $(function () {
 
         $.post("action.php?", $(this).serialize(), function() {
             // hide
-            $("#dept-section").removeClass("border")
-            $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none')
+            $("#dept-section").removeClass("border");
+            $("#dept-decide-con, #dept-clear-btn, .dept-ins").toggleClass('d-none');
 
-            let input = $("#dept-input")
-            input.attr('readonly', true)
+            let input = $("#dept-input");
+            input.attr('readonly', true);
             // empty input if no department is set
             if (input.val().length == 0) {
                 input.val("No department set")
@@ -224,19 +224,19 @@ $(function () {
             } else deptExist = true
             
             // show
-            $("#dept-edit-btn, #dept-empty-msg").toggleClass('d-none')
+            $("#dept-edit-btn, #dept-empty-msg").toggleClass('d-none');
             
-            hideSpinner()
-            showToast('success', "Department successfully updated")
-        })
-    })
+            hideSpinner();
+            showToast('success', "Department successfully updated");
+        });
+    });
 
     /** Subject Methods */
-    asMethods()
+    asMethods();
 
     /** Advisory Methods */
 
-    $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"))
+    $("#advisory-change-btn").click(() => $("#advisory-modal").modal("show"));
 
     // $("input[type='radio'][name='section']").click(function() {
     //     let element = $(this)
@@ -265,17 +265,17 @@ $(function () {
                         </div>
                     </div>
                 </li>`
-        })
-        container.html(html)
-    }
+        });
+        container.html(html);
+    };
 
     $("#advisory-form").submit(function(e) {
-        e.preventDefault()
-        showSpinner()
-        let form = $(this)
-        let formData = form.serializeArray()
+        e.preventDefault();
+        showSpinner();
+        let form = $(this);
+        let formData = form.serializeArray();
 
-        let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser")
+        let currentAdviser = $("#advisory-form [type='radio']:checked").attr("data-current-adviser");
         if (currentAdviser) formData.push({name : "current-adviser", value : currentAdviser})
         $.post("action.php", formData, function(data) {
             let sectionData = JSON.parse(data)
@@ -300,9 +300,9 @@ $(function () {
             $("#advisory-modal").modal("hide")
             hideSpinner()
             showToast("success", "Successfully updated advisory class")
-        })
+        });
         // console.log($("input[type='radio']:checked"))
-    })
+    });
 
     // Disable all section input when unassign checkbox is checked
     $(document).on("click", "input[name='unassign']", function() {
@@ -312,7 +312,7 @@ $(function () {
             $("#section-opt-con [type='radio']").prop("checked", false)
         }
         $("#section-opt-con input, #section-filter").prop("disabled", bool)
-    })
+    });
 
     $(document).on("keyup", "#search-section", function() {
         var value = $(this).val().toLowerCase()
@@ -320,31 +320,31 @@ $(function () {
             if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none")
             return $(this).addClass("d-none")
             // $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        })
-    })
+        });
+    });
 
     $(document).on("click", "#all-section-btn", function() {
         $("#section-list li").removeClass("d-none")
-    })
+    });
 
     const filterSection = (parameter) => {
         $("#section-list li").filter(function() {
             if ($(this).find("span").hasClass(parameter)) return $(this).removeClass("d-none")
             return $(this).addClass("d-none")
-        })
-    }
+        });
+    };
 
     $("#no-adv-btn").click(function(e) {
         e.preventDefault()
         filterSection("available")
-    })
+    });
 
     $("#with-adv-btn").click(function(e) {
         e.preventDefault()
         filterSection("unavailable")
-    })
+    });
 
 
 
-    hideSpinner()
-})
+    hideSpinner();
+});

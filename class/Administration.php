@@ -541,14 +541,14 @@ class Administration extends Dbconfig
     {
         $subjectList = [];
 
-        $shared_sub = ($tbl == "archived_subject") ? "archived_sharedsubject" : "sharedsubject";
+        $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
         $queryOne = (!isset($_GET['prog_code']))
             ? "SELECT * FROM $tbl;"
             : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub 
+               IN (SELECT sub_code FROM $shared_sub
                WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $shared_sub WHERE sub_type='CORE';";
+               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
 
         $resultOne = mysqli_query($this->db, $queryOne);
 
@@ -899,15 +899,16 @@ class Administration extends Dbconfig
         $req_dest = "{$pref_dest}requisite";
         $req_origin = "{$pref_og}requisite";
 
+        $code = $_POST['code'];
         // $query = "";
-        foreach($_POST['code'] as $code) {
+        
             mysqli_query($this->db, "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "INSERT INTO $req_dest SELECT * FROM $req_origin where sub_code = '$code';");
             mysqli_query($this->db, "DELETE FROM $sub_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "DELETE FROM $req_origin WHERE sub_code = '$code';");
             // mysqli_query($this->db, "DELETE FROM $shared_origin WHERE sub_code = '$code';");
-        }
+        
         // mysqli_multi_query($this->db, $query);
     }
 
@@ -1922,8 +1923,7 @@ class Administration extends Dbconfig
         $stud_id = $_POST['stud_id'];
         $section = $_POST['section_id'];
 
-        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");
-        
+        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");  
     }
 
     public function transferStudentFull(){
@@ -2046,7 +2046,16 @@ class Administration extends Dbconfig
     }
 
     public function editSignatory() {
+        $firstname = $_POST['first-name'];
+        $middlename = $_POST['middle-name'];
+        $lastname = $_POST['last-name'];
+        $acaddegree = $_POST['academic-degree'];
+        $position = $_POST['position'];
+        $started = $_POST['start-year'];
+        $ended = $_POST['end-year'];
+        $id = $_POST['sig-id'];
 
+        $this->prepared_query("UPDATE signatory SET first_name=?, middle_name=?, last_name=?, acad_degree=?, year_started=?, year_ended=?,position=? WHERE sign_id=?;", [$firstname, $middlename, $lastname, $acaddegree, $started, $ended, $position, $id], "ssssiisi");
     }
 
     public function deleteSignatory() {

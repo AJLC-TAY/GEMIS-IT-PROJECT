@@ -1,7 +1,3 @@
-// import {Table} from "./Class.js"
-    
-// let tableId, url, method, id, search, searchSelector, height
-
 const tableSetup = {
     url:                `getAction.php?data=student`, 
     method:             'GET',
@@ -18,22 +14,12 @@ const tableSetup = {
     fixedColumns:       true,
     searchSelector:     '#search-input',
 
-}
+};
 
 
-// tableId = '#table'
-// url = 'getAction.php?data=student'
-// method = 'GET'
-// id = 'student_id'
-
-// searchSelector = '#search-input'
-// height = 425
-
-// let student_table = new Table(tableId, url, method, id, id, height, search, searchSelector)
-
-let studentTable = $("#table").bootstrapTable(tableSetup)
+let studentTable = $("#table").bootstrapTable(tableSetup);
 
 $(function() {
-    preload('#student')
-    hideSpinner()
-})
+    preload('#student');
+    hideSpinner();
+});
