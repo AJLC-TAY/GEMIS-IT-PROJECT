@@ -63,21 +63,14 @@ if ($action == 'add') {
                 <div class='form-group col-md-4'>
                     <label for='lastname'>Last Name</label>
                     <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
-                    <br>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='firstname'>First Name</label>
                     <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
-                    <div class="invalid-feedback">
-                        Please enter first name
-                    </div>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='middlename'>Middle Name</label>
                     <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
-                    <div class="invalid-feedback">
-                        Please enter middle name
-                    </div>
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='extensionname'>Extension Name</label>
@@ -90,9 +83,6 @@ if ($action == 'add') {
                 <div class='form-group col-md-2'>
                     <label for='age'>Age</label>
                     <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
-                    <div class="invalid-feedback">
-                        Please enter age
-                    </div>
                 </div>
                 <div class='form-group col-md-3'>
                     <label for='sex'>Sex</label>
@@ -121,9 +111,6 @@ if ($action == 'add') {
                 <div class='form-group col-md-4'>
                     <label for='email'>Email</label>
                     <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' required>
-                    <div class="invalid-feedback">
-                        Please enter email
-                    </div>
                 </div>
             </div>
             <!-- CONTACT INFO END -->
