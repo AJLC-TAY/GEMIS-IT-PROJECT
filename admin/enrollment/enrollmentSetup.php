@@ -80,7 +80,7 @@ $admin = new Administration();
                 </div>
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto">
-                        <a href="#" id='to-step-2' class="stepper-btn btn btn-success" onclick="stepper.next()">Next</a>
+                        <a id='to-step-2' class="stepper-btn btn btn-success next" >Next</a>
                     </div>
                 </div>
             </div>
@@ -185,8 +185,8 @@ $admin = new Administration();
                 </div>
                 <div class="d-flex flex-row-reverse mt-4">
                     <input type="hidden" name="action" value="enroll">
-                    <a href="#" id="to-step-3" class="stepper-btn btn btn-success" onclick="stepper.next()">Next</a>
-                    <a href="#" class="stepper-btn btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
+                    <a href="#" id="to-step-3" class="stepper-btn btn btn-success next">Next</a>
+                    <a href="#" class="stepper-btn btn btn-secondary me-1 previous">Back</a>
                 </div>
             </div>
         </div>
@@ -228,7 +228,7 @@ $admin = new Administration();
             </div>
             <div class="row justify-content-end mt-3">
                     <div class="col-auto">
-                        <a href="#" class="stepper-btn btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
+                        <a href="#" class="stepper-btn btn btn-secondary me-1 previous">Back</a>
                         <a href="enrollment.php" class="stepper-btn btn btn-success">Go to Enrollment Dashboard</a>
                     </div>
                 </div>

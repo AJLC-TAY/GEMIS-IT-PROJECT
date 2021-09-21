@@ -28,6 +28,15 @@ $(function() {
         $("input[name='position']").val(selected.attr("data-position"));
     });
 
+    /** Stepper */ 
+    $(document).on("click", ".next", () => {
+        stepper.next();
+    });
+    
+    $(document).on("click", ".previous", () => {
+        stepper.previous();
+    });
+
 
     hideSpinner();
 });

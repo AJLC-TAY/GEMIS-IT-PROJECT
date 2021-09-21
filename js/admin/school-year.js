@@ -14,9 +14,7 @@ const tableSetup = {
 };
 
 var syTable = $("#table").bootstrapTable(tableSetup);
-try {
-    var stepper = new Stepper($('#stepper')[0])
-} catch (e) {}
+var stepper =  new Stepper($('#school-year-stepper')[0]);
 
 /**
  * Displays the current values of the row to the given html tag
@@ -59,6 +57,7 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
     inputsToDisplay.eq(1).val(quarter);
     inputsToDisplay.eq(2).val(semester);
 };
+
 
 $(function() {
     $(document).on("click", ".edit-btn", function() {
@@ -190,6 +189,13 @@ $(function() {
         toggleListElement(selector, isChecked);
     })
 
+    /** Stepper */ 
+    $(document).on("click", ".next", () => {
+        stepper.next();
+    });
+    $(document).on("click", ".previous", () => {
+        stepper.previous();
+    });
 
     hideSpinner();
 });
