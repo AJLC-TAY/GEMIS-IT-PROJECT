@@ -103,42 +103,41 @@ $faculty = $admin->listFaculty();
                         <div class="container">
                             <input id='sig-id' name='sig-id' type='hidden'>
                             <div class="row align-content-center needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="last-name">Last Name</label>
-                                <div class="col-8">
+                                <label class="col-form-label col-5" for="last-name">Last Name</label>
+                                <div class="col-7">
                                     <input id="last-name" name="last-name" type="text" class="form-control-sm form-control" placeholder="Last Name">
                                 </div>
                             </div>
                             <div class="row align-content-center needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="first-name">First Name</label>
-                                <div class="col-8">
+                                <label class="col-form-label col-5" for="first-name">First Name</label>
+                                <div class="col-7">
                                     <input id="first-name" name="first-name" type="text" class="form-control-sm form-control" placeholder="First Name">
                                 </div>
                             </div>
                             <div class="row align-content-center needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="middle-name">Middle Name</label>
-                                <div class="col-8">
+                                <label class="col-form-label col-5" for="middle-name">Middle Name</label>
+                                <div class="col-7">
                                     <input id="middle-name" name="middle-name" type="text" class="form-control-sm form-control" placeholder="Middle Name">
                                 </div>
                             </div>
                             <div class="row align-content-center needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="academic-degree">Academic degree</label>
-                                <div class="col-8">
+                                <label class="col-form-label col-5" for="academic-degree">Academic degree</label>
+                                <div class="col-7">
                                     <input id="academic-degree" name="academic-degree" type="text" class="form-control-sm form-control" placeholder="Academic Degree">
                                 </div>
                             </div>
-                            <br>
-                            <div class="row needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="position">Position</label>
-                                <div class="col-8">
+                            <div class="row align-content-center needs-validation" novalidate>
+                                <label class="col-form-label col-5" for="position">Position</label>
+                                <div class="col-7">
                                     <input id="position" class="form-control form-control-sm mb-0" type="text" name="position" placeholder="Position">
                                     <div class="invalid-input">
-                                        Please provide position
+                                        <p class="text-secondary"><small>Please provide position</small></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="row align-content-center needs-validation" novalidate>
-                                <label class="col-form-label col-4" for="years">Years (Start-End)</label>
-                                <div  id="years" class="col-8 row m-0">
+                                <label class="col-form-label col-5" for="years">Years (Start-End)</label>
+                                <div  id="years" class="col-7 row m-0">
                                     <div class="col-5 p-0">
                                         <input id="start-year" name="start-year" type="text" class="number form-control-sm form-control" placeholder="Start year">
                                     </div>
@@ -157,9 +156,9 @@ $faculty = $admin->listFaculty();
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="delete" form="signatory-form" class="btn btn-danger btn-sm" value="Delete">
+                    <input type="submit" name="delete" form="signatory-form" class="btn btn-outline-dark btn-sm" value="Delete">
                     <button type="submit" id="submit-again" class="btn btn-secondary btn-sm">Submit and add again</button>
-                    <input type="submit" name="submit" form="signatory-form" class="btn btn-primary btn-sm" value="Add">
+                    <input type="submit" name="submit" form="signatory-form" class="btn btn-success btn-sm" value="Add">
                 </div>
             </div>
         </div>
@@ -203,7 +202,7 @@ $faculty = $admin->listFaculty();
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
                     <button data-action='Edit' data-bs-toggle="modal" data-bs-target="#modal-form" class="show-modal edit-btn btn btn-primary btn-sm">Edit</button>
                 </div>
             </div>
