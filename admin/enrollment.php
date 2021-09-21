@@ -3,7 +3,6 @@ session_start();
 include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>

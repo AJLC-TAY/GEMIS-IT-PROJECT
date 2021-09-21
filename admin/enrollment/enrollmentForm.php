@@ -301,8 +301,8 @@ if (isset($_GET['action'])) {
                     </div>
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
-                            <a href="#" class="btn btn-secondary" onclick="stepper.next()">Next</a>
-                            <!-- <button class="btn btn-secondary" onclick="stepper.next()">Next</button> -->
+                            <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
+                            <button class="btn btn-secondary next">Next</button>
                         </div>
                     </div>
                 </div>
@@ -424,8 +424,8 @@ if (isset($_GET['action'])) {
                     </div>
 
                     <div class="d-flex flex-row-reverse mt-4">
-                        <a href="#" class="btn btn-secondary" onclick="stepper.next()">Next</a>
-                        <a href="#" class="btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
+                        <a href="#" class="btn btn-secondary next">Next</a>
+                        <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
             </div>
@@ -534,7 +534,7 @@ if (isset($_GET['action'])) {
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
-                        <a href="#" class="btn btn-secondary me-1" onclick="stepper.previous()">Back</a>
+                        <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
             </div>

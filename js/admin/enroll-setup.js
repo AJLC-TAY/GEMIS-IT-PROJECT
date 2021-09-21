@@ -61,6 +61,7 @@ function togglePrivilege (teacherID, canEnroll) {
     return false;
 }
 
+var stepper = new Stepper($('#stepper')[0]);
 
 $(function () {
     /** Toggles enrollment privilege of selected on or multiple faculties */
@@ -180,6 +181,14 @@ $(function () {
             console.log(data);
             hideSpinner();
         });
+    });
+
+    /** Stepper */ 
+    $(document).on("click", ".next", () => {
+        stepper.next();
+    });
+    $(document).on("click", ".previous", () => {
+        stepper.previous();
     });
 
     /** Remove section from enrollment setup */
