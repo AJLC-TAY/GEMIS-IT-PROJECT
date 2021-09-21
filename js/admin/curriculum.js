@@ -53,7 +53,7 @@ $(function () {
     });
 
     $('.archive-btn').click(function(event){
-        var $table = $(tableId);
+        var $table = $("#table");
         var action = 'archiveProgram';
     
         let selected = $table.bootstrapTable('getSelections');

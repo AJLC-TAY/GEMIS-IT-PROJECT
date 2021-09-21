@@ -1,6 +1,6 @@
 <?php 
 require_once("../class/Administration.php"); 
-include_once("inc/head.html"); ?>
+include_once("../inc/head.html"); ?>
 <title>Login | GEMIS</title>
 <link rel="stylesheet" type= "text/css" href="css/loginstyle.css">
 </head>
@@ -12,9 +12,9 @@ include_once("inc/head.html"); ?>
                 <input type="text" name="" class="form-control" placeholder="Enter ID">
                 <input type="password" name="" class="form-control" placeholder="Enter Password">
                 <input type="submit" name="" class="btn" value="Login">
-                <a href="forgotPassword.php">Forgot Password?</a><br>
+                <a href="passwordReset/forgotPassword.php">Forgot Password?</a><br>
             </form>
         </div>
     </body>
-    <?php include_once ("inc/footer.html"); ?>
+    <?php include_once ("../inc/footer.html"); ?>
 </html>

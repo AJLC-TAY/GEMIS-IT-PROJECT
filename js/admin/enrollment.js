@@ -1,5 +1,9 @@
 preload("#enrollment", "#enrollment-sub");
 
+try {
+    var stepper = new Stepper($('#stepper')[0])
+} catch (e) {}
+
 $(function() {
     $("#id-no-select").select2({
         theme: "bootstrap-5",

@@ -192,7 +192,7 @@ $(function() {
         // console.log("Temp Roles:", roles)
         // console.log("Temp Roles:", rolesTmp)
         // console.log("Roles to Delete:", rolesDel)
-    })
+    });
 
     // $("#role-save-btn").click(() => $("#role-form").submit())
 
@@ -225,8 +225,8 @@ $(function() {
             roles = [...rolesTmp];
             hideSpinner();
             showToast('success', "Roles successfully updated");
-        })
-    })
+        });
+    });
 
     /** Department Methods */
     $("#dept-edit-btn").click(function() {
@@ -274,7 +274,7 @@ $(function() {
         hideSpinner();
 
         
-    })
+    });
 
     $("#dept-form").submit(function(e) {
         e.preventDefault();
@@ -339,7 +339,7 @@ $(function() {
                 </li>`;
         });
         container.html(html);
-    }
+    };
 
     $(document).on("shown.bs.modal", "#advisory-modal", function () {
         $("#advisory-spinner").fadeOut();

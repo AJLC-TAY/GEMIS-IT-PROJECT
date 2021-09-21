@@ -80,9 +80,6 @@ include_once("../inc/head.html"); ?>
     <!-- VALIDATION -->
     <script>
         var forms = document.querySelectorAll('.needs-validation');
-        try {
-            var stepper = new Stepper($('#stepper')[0])
-        } catch (e) {}
         Array.prototype.slice.call(forms).forEach(function(form) {
             form.addEventListener('submit', function(event) {
                 if (!form.checkValidity()) {
@@ -93,12 +90,6 @@ include_once("../inc/head.html"); ?>
                 form.classList.add('was-validated');
             }, false);
         });
-
-
-        $(function() {
-            preload("#faculty")
-            hideSpinner()
-        })
     </script>
 </body>
 

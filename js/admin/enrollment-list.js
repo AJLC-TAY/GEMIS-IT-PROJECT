@@ -15,7 +15,7 @@ preload("#enrollment", "#enrollment-sub")
 //     searchSelector:     '#search-input'
 // }
 
-let selections = []
+let selections = [];
 
 function queryParams(params) {
     params.sy = $("#sy").val()
@@ -24,13 +24,13 @@ function queryParams(params) {
     params.yearLevel = $("#year-level").val()
     params.status = $("#status").val()
     return params
-}
+};
 
 function checkSelections() {
     try {
         $('#table').bootstrapTable("checkBy", {field: 'LRN', values: selections})
     } catch (e) {}
-}
+};
 
 const tableSetup = {
     search:              true,
@@ -54,15 +54,15 @@ const tableSetup = {
     pageList:           "[25, 50, 100, All]",
     onPostBody:         checkSelections
     // responseHandler:         responseHandler
-}
-let enrolleesTable = $('#table').bootstrapTable(tableSetup)
+};
+let enrolleesTable = $('#table').bootstrapTable(tableSetup);
 enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
     // save your data, here just save the current page
     selections = $.map(enrolleesTable.bootstrapTable('getSelections'), function (row) {
         return row.LRN
-    })
+    });
     // push or splice the selections if you want to save all data selections
-})
+});
 
 $(function() {
 
@@ -88,7 +88,7 @@ $(function() {
         elem.addClass('btn-dark')
         elem.attr('title', 'Auto refresh on')
         return 'on'
-    }
+    };
 
     $(document).on("click", ".auto-refresh", function () {
         enrolleesTable.bootstrapTable("showLoading")
@@ -97,16 +97,12 @@ $(function() {
             enrolleesTable.bootstrapTable("hideLoading")
             showToast('dark', `Table auto refresh is turned ${status}`)
         }, 300)
-    })
+    });
 
 
     $(document).on("change", ".filter-item", function() {
         $("#table").bootstrapTable("refresh")
-    })
+    });
 
-
-
-
-
-    hideSpinner()
-})
+    hideSpinner();
+});

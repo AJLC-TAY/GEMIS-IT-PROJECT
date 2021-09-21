@@ -344,7 +344,7 @@ class Administration extends Dbconfig
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
-        return new Section($row['section_code'], $row['school_yr'], $row['section_name'], $row['grd_level'],
+        return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
                             $row['stud_no_max'], $row['stud_no'], $adviser);
     }
     public function listSectionStudentJSON() 
@@ -541,14 +541,14 @@ class Administration extends Dbconfig
     {
         $subjectList = [];
 
-        $shared_sub = ($tbl == "archived_subject") ? "archived_sharedsubject" : "sharedsubject";
+        $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
         $queryOne = (!isset($_GET['prog_code']))
             ? "SELECT * FROM $tbl;"
             : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub 
+               IN (SELECT sub_code FROM $shared_sub
                WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $shared_sub WHERE sub_type='CORE';";
+               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
 
         $resultOne = mysqli_query($this->db, $queryOne);
 
@@ -899,15 +899,16 @@ class Administration extends Dbconfig
         $req_dest = "{$pref_dest}requisite";
         $req_origin = "{$pref_og}requisite";
 
+        $code = $_POST['code'];
         // $query = "";
-        foreach($_POST['code'] as $code) {
+        
             mysqli_query($this->db, "INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "INSERT INTO $req_dest SELECT * FROM $req_origin where sub_code = '$code';");
             mysqli_query($this->db, "DELETE FROM $sub_origin WHERE sub_code = '$code';");
             mysqli_query($this->db, "DELETE FROM $req_origin WHERE sub_code = '$code';");
             // mysqli_query($this->db, "DELETE FROM $shared_origin WHERE sub_code = '$code';");
-        }
+        
         // mysqli_multi_query($this->db, $query);
     }
 
@@ -943,7 +944,7 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-        $query = 'SELECT * FROM faculty;';
+        $query = "SELECT * FROM faculty;";
         $result = mysqli_query($this->db, $query);
         $facultyList = array();
 
@@ -967,6 +968,20 @@ class Administration extends Dbconfig
             );
         }
         return $facultyList;
+    }
+
+    public function listNotAdvisers($teacher_id = NULL)
+    {
+        $result = $this->query ("SELECT CONCAT(last_name, ', ', first_name, ' ', middle_name ) as name, teacher_id FROM faculty WHERE teacher_id NOT IN (SELECT DISTINCT (teacher_id)
+                    FROM section WHERE teacher_id IS NOT NULL)". (!is_null($teacher_id) ? " OR teacher_id = '{$teacher_id}';" : ";"));
+        $not_advisers = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $not_advisers[] = [
+                "teacher_id" => $row["teacher_id"],
+                "name"       => $row["name"]
+            ];
+        }
+        return $not_advisers;
     }
 
     public function listFacultyJSON()
@@ -1922,8 +1937,7 @@ class Administration extends Dbconfig
         $stud_id = $_POST['stud_id'];
         $section = $_POST['section_id'];
 
-        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");
-        
+        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");  
     }
 
     public function transferStudentFull(){
@@ -1938,17 +1952,20 @@ class Administration extends Dbconfig
     }
 
     public function forgotPassword(){
-        $email = 'email';
+        echo("from administration: forgotpassowrd");
+        $email = $_POST['email'];
 
-        $userEmails = array($this->query("SELECT email FROM user"));
+        $res = $this->query("SELECT email FROM user");
+        while ($userEmails = mysqli_fetch_assoc($res)) {
+        var_dump ($userEmails);
         if (in_array($email, $userEmails)) {
-            require_once "PHPMailer/PHPMailer.php";
-            require_once "PHPMailer/SMTP.php";
-            require_once "PHPMailer/Exception.php";
+            require_once "../PHPMailer/PHPMailer.php";
+            require_once "../PHPMailer/SMTP.php";
+            require_once "../PHPMailer/Exception.php";
 
             $token = bin2hex(random_bytes(50)); //generate random token 
-            $query = "INSERT INTO resetpassword (email, token)"."VALUES (?, ?);";
-            $this->prepared_query($query, [$email, $token]); 
+            $query = "INSERT INTO resetpassword (email, token) VALUES (?, ?);";
+            $this->prepared_query($query, [$email, $token], "ss"); 
 
             $mail = new PHPMailer();    
             
@@ -1963,15 +1980,16 @@ class Administration extends Dbconfig
             $mail->Port       = 465;      
             
             //Recipient
-            $mail->setFrom('gemispcnhs@gmail.com', 'GEMIS PCNHS');
+            $mail->setFrom('gemispcnhs@gmail.com', 'GEMIS PCNHS - Incognito');
             $mail->addAddress($email);      //Add a recipient
 
             //Content
             $mail->isHTML(true);   
             $mail->Header = 'From: GEMIS PCNHS - Incognito Team';                              
             $mail->Subject = 'Reset Your Password';
-            $mail->Body    = wordwrap('Hello, please click on this <a href="newPassword.php?token=' . $token . '">link</a> to reset your password.');
-        
+            // $mail->Body    = 'Hello, please click on this <a href="newPassword.php?token=' . $token . '>link</a> to reset your password.';
+            $mail->Body    = "Hello, please click on this <a href='http://localhost:3000/passwordReset/newPassword.php?token=$token'>link</a> to reset your password.";
+
             if ($mail->send()){
                 $status = "success";
                 $response = "Email sent successfully.";
@@ -1979,9 +1997,39 @@ class Administration extends Dbconfig
                 $status = "failed";
                 $response = "Email not sent. Mailer Error: {$mail->ErrorInfo}";
             }
-            exit(json_encode(array("status" => $status, "response" => $response)));
-        }
+
+            header('location: ../passwordReset/forgotPassword.php');
     
+        } else {
+
+        }
+    }
+    
+    }
+
+    public function newPassword(){
+        $newPass = $_POST['newPass'];
+        $newPassConf = $_POST['newPassConf'];
+
+        //validation ng passwords kung nagmatch
+        // $token = $_SESSION['token'];
+        $token = $_POST['token'];
+
+        if ($newPass == $newPassConf){
+            echo ("tamasdfasd");
+            $email = mysqli_fetch_assoc($this->prepared_select("SELECT email FROM resetpassword WHERE token=?", [$token],"s"));
+            var_dump($email['email']);
+            echo("----------");
+            $mail = $email['email'];
+    
+            if ($email['email']){
+                $newPass = $newPass;
+                echo($newPass);
+                $this->prepared_query("UPDATE user SET password=? WHERE email=?;", [$newPass,$mail], "ss");
+                header('location: ../login.php');
+            }
+        }   
+             
     }
 
     /** SIGNATORY METHODS */
@@ -2010,6 +2058,25 @@ class Administration extends Dbconfig
         }
         echo json_encode($signatory);
     }
+
+    public function editSignatory() {
+        $firstname = $_POST['first-name'];
+        $middlename = $_POST['middle-name'];
+        $lastname = $_POST['last-name'];
+        $acaddegree = $_POST['academic-degree'];
+        $position = $_POST['position'];
+        $started = $_POST['start-year'];
+        $ended = $_POST['end-year'];
+        $id = $_POST['sig-id'];
+
+        $this->prepared_query("UPDATE signatory SET first_name=?, middle_name=?, last_name=?, acad_degree=?, year_started=?, year_ended=?,position=? WHERE sign_id=?;", [$firstname, $middlename, $lastname, $acaddegree, $started, $ended, $position, $id], "ssssiisi");
+    }
+
+    public function deleteSignatory() {
+
+    }
+
+
 
 }
 ?>

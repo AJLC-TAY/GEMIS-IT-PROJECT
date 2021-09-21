@@ -48,14 +48,13 @@ $stud_id = $userProfile->get_stud_id();
         ?>
     </div>
     <div>
-        <button id="transfer-full" class="link btn w-auto mx-auto" data-toggle="tooltip" data-placement="top" data-bs-toggle='collapse' href='#section-table' title ="Transfering a student to a full section will require
-        a swapping of students."><small>Transfer Student to Full Section</small></button>
+        <button data-bs-toggle='collapse' id="transfer-full"  class="link btn w-auto mx-auto" href='#section-table' data-toggle="tooltip" title="Transferring to a full section will require switching of students."><small>Transfer Student to Full Section</small></button>
     </div>
     <div id='section-table' class='collapse mt-3'>
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
                 <div class="d-flex justify-content-between mb-1">
-                    <!-- SEARCH BAR -->
+                     <!-- SEARCH BAR  -->
                     <span class="flex-grow-1 me-3">
                         <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search section here">
                     </span>
@@ -71,7 +70,7 @@ $stud_id = $userProfile->get_stud_id();
                 </tr>
             </thead>
 
-        </table>
+        </table> 
     </div>
     <div class="modal fade" id="transferConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

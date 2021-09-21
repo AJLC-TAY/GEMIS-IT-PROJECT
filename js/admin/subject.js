@@ -206,7 +206,7 @@ $(function () {
     archiveModal.find('#modal-identifier').html(header);
     archiveModal.find('.modal-msg').html(archiveMessage);
     archiveModal.modal('toggle');
-  })
+  });
 
   $('#view-arch-modal').on('shown.bs.modal', function () {
     $.post('action.php', { action: 'getArchiveSubjectJSON' }, data => {
@@ -227,7 +227,8 @@ $(function () {
     $('#view-arch-modal').modal('hide');
     var code = $(this).attr('id');
     var action = `unarchiveSubject`;
-    $.post('action.php', {"code[]": code, action}, function (data) {
+    
+    $.post('action.php', {"code": code, action}, function (data) {
         $('#unarchive-modal').modal('hide');
         let archivedSub = JSON.parse(data);
         $("ul.arch-list").html(prepareArchiveHTML(archivedSub));
