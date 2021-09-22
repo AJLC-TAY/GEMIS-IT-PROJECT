@@ -16,6 +16,10 @@ class Administration extends Dbconfig
 
     private $db = false;
     const ALLOWED_IMG_TYPES = array('jpg', 'png', 'jpeg');
+    const SEMESTERS = [1, 2];
+    const QUARTER = [1, 2, 3, 4];
+    const GRADE_LEVEL = [11, 12];
+    const SECTION_SIZE = 50;
     use QueryMethods, UserShareMethods, FacultySharedMethods, Enrollment;
 
     public function __construct()
@@ -150,44 +154,94 @@ class Administration extends Dbconfig
         return ["track_program" => $track_program, "subjects" => $subjects];
     }
 
+    /**
+     * Initializes school year.
+     * 1.   Create school year record.
+     * 2.   Initialize curriculum.
+     * 3.   Initialize sections
+     */
     public function initializeSY()
     {
-        $curr_code = $_POST['curr-code'];
         $start_yr= $_POST['start-year'];
         $end_yr = $_POST['end-year'];
-        $grd_level = $_POST['grade-level'];
-        $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
+        // $grd_level = $_POST['grade-level'];
+        $grd_level = NULL;
+        $enrollment = 0;
+        $current_quarter = 1;
+        $current_semester = 1;
+  
+        // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
+        # Step 1
         $query = "INSERT INTO schoolyear (start_year, end_year, grd_level, current_quarter, current_semester, can_enroll) "
                 ."VALUES (?, ?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $grd_level, 1, 1, $enrollment], "iiiiii");
+        $this->prepared_query($query, [$start_yr, $end_yr, $grd_level, $current_quarter, $current_semester, $enrollment], "iiiiii");
 
-        // create sections
         $sy_id = mysqli_insert_id($this->db);
-        $grade_level = [11, 12];
-        $alphabet = range('A', 'Z');
 
-        $result = mysqli_query($this->db, "SELECT COUNT(*) FROM program;");
-        $program_count = mysqli_fetch_row($result)[0];
+        // echo "Added school year. ID: ". $sy_id ."<br>";
 
-        foreach($grade_level as $grade) {
-            for ($i = 0; $i < $program_count; $i++) {
-                $section_name =  "$grade-{$alphabet[$i]}-1-Class";
-                $section_code = rand(10, 1000000);
-                $this->prepared_query(
-                    "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, sy_id) VALUES (?, ?, ?, ?, ?) ;",
-                    [$section_code, $section_name, $grade, 50, $sy_id],
-                    "ssiii"
-                );
+        # Step 2
+        $tracks = $_POST['track']['name'];
+        foreach ($tracks as $track) {
+            // insert record to sycurriculum table
+            $this->prepared_query("INSERT INTO sycurriculum (sy_id, curr_code) VALUES (?, ?);", [$sy_id, $track], 'is');
+            // echo "Added school year - curriculum: ". $sy_id ." - ". $track ."<br>";
+
+
+            // store syc_id
+            $school_year_curr_id = mysqli_insert_id($this->db);
+
+            // insert strands offered in the sycurrstrand 
+            $programs = array_keys($_POST['track'][$track]);
+            foreach($programs as $prog) {
+                $this->prepared_query("INSERT INTO sycurrstrand (syc_id, prog_code) VALUES (?, ?);", [$school_year_curr_id, $prog], 'is');
+                $new_sy_curr_strand_id = mysqli_insert_id($this->db);
+                // echo "Added school year - strand: ". $school_year_curr_id ." - ". $prog ."<br>";
+
+                # Prepare section
+                $alphabet = range('A', 'Z');
+                // $result = mysqli_query($this->db, "SELECT prog_code FROM sycurrstrand JOIN sycurriculum USING (syc_id) WHERE sy_id='$sy_id';");
+                // $programs = [];
+                // while ($row = mysqli_fetch_row($result)) {
+                //     $programs[] = $row[0];
+                // }
+        
+                foreach(Administration::GRADE_LEVEL as $grade) {
+                    $this->addSection($grade, $prog, 50, $alphabet[0], $sy_id, $new_sy_curr_strand_id);
+                    // $section_name =  "$grade-{$alphabet[0]}-{$prog}-Class";  // 11-A-ABM-Class
+                    // $section_code = rand(10, 10000000);
+                    // $this->prepared_query(
+                    //     "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, sy_id) VALUES (?, ?, ?, ?, ?);",
+                    //     [$section_code, $section_name, $grade, 50, $sy_id],
+                    //     "ssiii"
+                    // );
+                    // $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
+                    //     [$section_code, $new_sy_curr_strand_id],
+                    //     "si"
+                    // );
+    
+                }
             }
+            // echo "----------"."<br>";
         }
+        
+        // insert subjects offered in the sysub
+        $subjects = $_POST['subjects']['core'] + $_POST['subjects']['spap']; // spap (specialized + applied)
+        foreach($subjects as $sub_code) {
+            $this->prepared_query("INSERT INTO sysub (sycs_id, sub_code) VALUES (?, ?);", [0, $sub_code], 'is');
+            // echo "Added school year - strand: ". $sub_code ."<br>";
+        }
+
+    
 
         // create subject class
 
         
 
 
-        echo "School year successfully initialized.";
+        // echo "School year successfully initialized.";
+        echo json_encode($sy_id);
         // header("Location: schoolYear.php");
     }
 
@@ -329,23 +383,23 @@ class Administration extends Dbconfig
         echo json_encode($this->listSectionOption($teacher_id));
     }
 
-    public function addSection() 
-    {
-        session_start();
-        $code = $_POST['code'];
-//        $program = $_POST['program'];
-        $grade_level = $_POST['grade-level'];
-        $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
-        $section_name = $_POST['section-name'];
-        $adviser = $_POST['adviser'] ?: NULL;
-        $sy_id = $_SESSION['sy_id'];
+//     public function addSection() 
+//     {
+//         session_start();
+//         $code = $_POST['code'];
+// //        $program = $_POST['program'];
+//         $grade_level = $_POST['grade-level'];
+//         $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
+//         $section_name = $_POST['section-name'];
+//         $adviser = $_POST['adviser'] ?: NULL;
+//         $sy_id = $_SESSION['sy_id'];
 
-        $this->prepared_query(
-            "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
-            [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
-            "ssiiii"
-        );
-    }
+//         $this->prepared_query(
+//             "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
+//             [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
+//             "ssiiii"
+//         );
+//     }
 
     public function editSection() 
     {

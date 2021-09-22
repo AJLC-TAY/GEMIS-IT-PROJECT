@@ -142,8 +142,8 @@ $user = $admin->getAdministrator($user_id);
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary" value="Change">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>

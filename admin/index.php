@@ -27,9 +27,9 @@ $admin_user = $admin->getProfile('AD');
         <?php include_once('../inc/admin/sidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="pe-5">
+                    <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <?php
                             require_once("../class/Administration.php");

@@ -546,9 +546,8 @@ class Signatory extends Faculty implements JsonSerializable
         $this->acad_degree = $acad_degree;
         $this->position = ucwords($position);
         $this->action = "<div class='d-flex justify-content-center'>"
-                ."<button data-bs-toggle='modal' data-bs-target='#modal-confirmation' class='btn btn-sm btn-danger me-1'>Delete</button>"
-                ."<button data-id='{$sign_id}' data-action='Edit' data-bs-toggle='modal' data-bs-target='#modal-form' class='btn btn-sm btn-secondary me-1 show-modal'>Edit</button>"
-                ."<button data-id='{$sign_id}' data-bs-toggle='modal' data-bs-target='#modal-view'  class='view-btn btn btn-sm btn-primary'>View</button>"
+                ."<button data-id='{$sign_id}' data-bs-toggle='modal' data-bs-target='#modal-view'  class='view-btn btn btn-sm btn-primary'><i class='bi bi-eye'></i></button>"
+                ."<button data-id='{$sign_id}' data-action='Edit' data-bs-toggle='modal' data-bs-target='#modal-form' class='btn btn-sm btn-secondary me-1 show-modal ms-1'><i class='bi bi-pencil-square'></i></button>"
             ."</div>";
     }
 
@@ -1755,6 +1754,11 @@ class StudentAward extends Award implements JsonSerializable
         }
 
         public function get_stud_no(){
+            return $this->stud_no;
+        }
+
+        public function increase_stud_no($no) {
+            $this->stud_no = $this->stud_no + $no;
             return $this->stud_no;
         }
 
