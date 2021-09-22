@@ -1,4 +1,4 @@
-import {commonTableSetup} from "./utilities.js";
+import {commonTableSetup, listSearchEventBinder} from "./utilities.js";
 
 preload('#curr-management', '#school-yr');
 
@@ -223,5 +223,22 @@ $(function() {
         stepper.previous();
     });
 
+    /** Search Events */
+    listSearchEventBinder("#search-core-subjects", "#core-list label", "#core-spinner", "#core-empty-msg");
+    listSearchEventBinder("#search-spap-subjects", "#spap-list label", "#spap-spinner", "#spap-empty-msg");
+
+    /** Clear buttons */
+    $(document).on("click", ".clear-btn", function () {
+        let target = $(this).attr('data-target');
+        let spinnerSelector = `${target}-spinner`;
+        showSpinner(spinnerSelector);
+        // hide empty message
+        $(`${target}-empty-msg`).toggle(false);
+        setTimeout(() => {
+            // show label items
+            $(`${target}-list label`).toggle(true);
+            hideSpinner(spinnerSelector);
+        }, 300);
+    });
     hideSpinner();
 });

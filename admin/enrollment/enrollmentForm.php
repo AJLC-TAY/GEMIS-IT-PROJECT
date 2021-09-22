@@ -520,7 +520,6 @@ if (isset($_GET['action'])) {
                         </div>
                         <div class='col-md-2'>
                             <label for="grade-select" class="col-form-label">Grade Level</label>
-
                             <select class="form-select" name="grade-level" id="grade-select">
                                 <?php
                                 $grade_level = ["11" => 11, "12" => 12];

@@ -1,5 +1,6 @@
 import {
     commonTableSetup,
+    listSearchEventBinder,
     implementAssignSubjectClassMethods as scMethods,
     implementAssignSubjectMethods as implementASMethods
 } from "./utilities.js";
@@ -391,21 +392,7 @@ $(function() {
           $("#section-opt-con input, #section-filter").prop("disabled", bool);
       });
   
-    /***
-     *  Adds search feature to the specified input inorder to filter 
-     *  the list of elements referred by the given selector. 
-     * @param {String} searchInputID    Search input selector
-     * @param {String} itemSelector     Item selector of the list 
-     * */
-    const listSearchEventBinder = (searchInputID, itemSelector) => {
-        $(document).on("keyup", searchInputID, function() {
-            var value = $(this).val().toLowerCase();
-            $(itemSelector).filter(function() {
-                if ($(this).text().toLowerCase().indexOf(value) > -1) return $(this).removeClass("d-none");
-                return $(this).addClass("d-none");
-            });
-        });
-    };
+
 
     listSearchEventBinder("#search-section", "#section-list li");
     listSearchEventBinder("#search-subject", ".assigned-sub-con a");

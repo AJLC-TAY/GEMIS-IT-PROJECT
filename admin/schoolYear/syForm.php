@@ -141,19 +141,28 @@ $subjects = $init_data['subjects'];
                                 <div class="row">
                                     <form>
                                         <div class="d-flex px-0">
-                                            <input id="search-section" type="text" class="form-control form-control-sm flex-grow-1 mb-0 me-3" placeholder="Search subject here ...">
-                                            <input type="reset" class="form-control mb-0 me-1 w-auto btn-dark form-control-sm" value="Clear"/>
+                                            <input id="search-core-subjects" type="text" class="form-control form-control-sm flex-grow-1 mb-0 me-3" placeholder="Search subject here ...">
+                                            <input type="reset" data-target="#core" class="clear-btn form-control mb-0 me-1 w-auto btn-dark form-control-sm" value="Clear"/>
                                         </div>
                                     </form>
                                 </div>
-                                <div class="row border mt-3 overflow-auto" style="height: 350px;">
+                                <div class="row border position-relative mt-3 overflow-auto" style="height: 350px;">
+                                    <!-- SUB SPINNER -->
+                                    <div id="core-spinner" class="sub-spinner bg-white position-absolute start-0 end-0 bottom-0 top-0" style="z-index: 3; display: none; ">
+                                        <div class="spinner-border m-auto" style="position: absolute; top: 0; right: 0; bottom: 0; left:0;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <!-- NO RESULTS MESSAGE -->
+                                    <div class="d-flex justify-content-center" style="position: absolute; top: 0; right: 0; bottom: 0; left:0; z-index: 2;">
+                                        <p id="core-empty-msg" class="no-result-msg my-auto" style="display: none;">No results found</p>
+                                    </div>
                                     <ul id="core-list" class="list-group p-0">
                                         <?php 
                                         foreach($subjects['core'] as $id => $value) {
                                             echo "<label class='list-group-item'><input name='subjects[core][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
                                         }
                                         ?>
-        
                                     </ul>
                                 </div>
                                 <div class="row mt-3 justify-content-between">
@@ -172,15 +181,25 @@ $subjects = $init_data['subjects'];
                                     <label class="col-form-label col-auto fw-bold px-0">Specialized | Applied Subject</label>
                                 </div>
                                 <form>
-                                <div class="row">
+                                    <div class="row">
                                         <div class="d-flex px-0">
-                                            <input id="search-section" type="text" class="form-control form-control-sm flex-grow-1 mb-0 me-3" placeholder="Search subject here ...">
-                                            <input type="reset" class="form-control mb-0 me-1 w-auto btn-dark form-control-sm" value="Clear"/>
+                                            <input id="search-spap-subjects" type="text" class="form-control form-control-sm flex-grow-1 mb-0 me-3" placeholder="Search subject here ...">
+                                            <input type="reset" data-target="#spap" class="clear-btn form-control mb-0 me-1 w-auto btn-dark form-control-sm" value="Clear"/>
                                         </div>
                                     </div>
                                 </form>
             
-                                <div class="row border mt-3 overflow-auto" style="height: 350px;">
+                                <div class="row border position-relative mt-3 overflow-auto" style="height: 350px;">
+                                    <!-- SUB SPINNER -->
+                                    <div id="spap-spinner" class="sub-spinner bg-white position-absolute start-0 end-0 bottom-0 top-0" style="z-index: 3; display: none; ">
+                                        <div class="spinner-border m-auto" style="position: absolute; top: 0; right: 0; bottom: 0; left:0;" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <!-- NO RESULTS MESSAGE -->
+                                    <div class="d-flex justify-content-center" style="position: absolute; top: 0; right: 0; bottom: 0; left:0; z-index: 2;">
+                                        <p id="spap-empty-msg" class="no-result-msg my-auto" style="display: none;">No results found</p>
+                                    </div>
                                     <ul id="spap-list" class="list-group p-0">
                                         <?php 
                                         foreach($subjects['specialized'] as $id => $value) {

@@ -74,7 +74,7 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>

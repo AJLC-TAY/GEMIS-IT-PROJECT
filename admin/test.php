@@ -38,7 +38,7 @@ include '../class/Administration.php';
 
 $admin = new Administration();
 // $admin->addSection(11, 'ABM', 1, 'C', 29, 54 );
-$admin->validateEnrollment(110001, 29, 1);
+$admin->validateEnrollment(110001, 29, 1);  // 0 = pending 1 = accepted/ enrolled 2 cancelled
 // echo json_encode($admin->getInitSYData());
 // print_r($admin->listNotAdvisers());
 

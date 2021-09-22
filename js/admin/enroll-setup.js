@@ -69,7 +69,7 @@ $(function () {
         e.preventDefault();
         let selections = facultyTable.bootstrapTable('getSelections');
         // Notify user if there is no selection
-        if (selections === 0) return showToast("danger", "Please select a faculty first");
+        if (selections.length === 0) return showToast("danger", "Please select a faculty first");
 
         facultyTable.bootstrapTable("showLoading");
         let id, value, formData, msg;
@@ -92,10 +92,10 @@ $(function () {
             processData: false,
             contentType: false,
             success:     () => {
+                            facultyTable.bootstrapTable('refresh')
                             setTimeout(function () {
-                                facultyTable.bootstrapTable('refresh')
                                 facultyTable.bootstrapTable("hideLoading")
-                            }, 500)
+                            }, 700)
                             showToast("success", msg)
                          }
         });

@@ -245,3 +245,31 @@ export const searchKeyBindEvent = (searchInputSelector, listContainer) => {
         }, 500);
     });
 };
+
+/***
+ *  Adds search feature to the specified input inorder to filter 
+ *  the list of elements referred by the given selector. 
+ * @param {String} searchInputID    Search input selector
+ * @param {String} itemSelector     Item selector of the list 
+ * */
+export const listSearchEventBinder = (searchInputID, itemSelector, spinnerSelector = null, emptyMsgSelector = null) => {
+    $(document).on("keyup", searchInputID, function() {
+        let noResultMsg = $(emptyMsgSelector);
+        // hide no result message and cards
+        noResultMsg.hide();
+        showSpinner(spinnerSelector);
+        setTimeout(() => {
+            var value = $(this).val().toLowerCase();
+            var match = [];
+            $(itemSelector).filter(function() {
+                let thereIsMatch = $(this).text().toLowerCase().indexOf(value) > -1;
+                match.push(thereIsMatch);
+                $(this).toggle(thereIsMatch);
+            });
+            hideSpinner(spinnerSelector);
+            if (!match.includes(true)) {
+                noResultMsg.show();
+            } 
+        }, 400);
+    });
+};

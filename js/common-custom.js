@@ -35,7 +35,7 @@ function hideSpinner(selector = null, bs = false) {
  *  @param {String} msg     Text to be showed.
  *  @param {Object} options  Options
  */
-function showToast(type, msg, options= null) {
+function showToast(type, msg, options = null) {
     let toast = $(`<div class="toast bg-${type} text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">${msg}</div>
@@ -47,7 +47,7 @@ function showToast(type, msg, options= null) {
     toast.bind('hidden.bs.toast', function () {
         // this removes the toast instance when hidden
         $(this).remove();
-    })
+    });
     newToast.show();
 }
 
