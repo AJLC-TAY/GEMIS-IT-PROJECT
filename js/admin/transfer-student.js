@@ -42,7 +42,7 @@ $(function() {
 
     $(document).on('click', '.transfer-btn', function() {
         var action = 'transferStudent'
-        $.post("action.php", {section_id, stud_id, action}, function() {	
+        $.post("action.php", {section_id, stud_id, current_section, action}, function() {	
             $('#transferConfirmation').modal("hide");
             showToast("success", "Student Successfully Transferred");
             // location.reload();
