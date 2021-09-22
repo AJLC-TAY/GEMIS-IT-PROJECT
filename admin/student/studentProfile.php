@@ -68,7 +68,7 @@ if (is_null($guardian)) {
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
         <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
-        <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn btn-secondary link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
     </div>
 </div>
 <!-- MAIN CONTENT -->
@@ -78,6 +78,7 @@ if (is_null($guardian)) {
             <nav id="myTab">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-link active" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">General Information</a>
+                    <a class="nav-link" id="nav-docu-tab" data-bs-toggle="tab" data-bs-target="#docu" type="button" role="tab" aria-controls="docu" aria-selected="false">Documents</a>
                 </div>
             </nav>
         </div>
@@ -94,8 +95,8 @@ if (is_null($guardian)) {
                             echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
                             <br>
                             <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
-                            <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id?>">TRANSFER STUDENT</button> -->
-                            <a href='student.php?action=transfer&id=<?php echo $stud_id?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
+                            <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
+                            <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
                             <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
                         <!-- PROFILE PICTURE END -->
@@ -151,6 +152,25 @@ if (is_null($guardian)) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- DOCUMENTS TAB -->
+        <div class="tab-pane fade bg-white p-4" id="docu" role="tabpanel" aria-labelledby="docu-tab">
+            <div class="row w-100 h-auto text-start mx-auto">
+                <div class="row p-0">
+                    <div class="row">
+                        <div class="col-md-4 card">
+                            <div class="thumbnail">
+                                <div class="caption">
+                                    <p class="fw-bold text-center">PSA DOCUMENT</p>
+                                </div>
+                                <!-- KES DITO MO PO ILAGAY HAHAH -->
+                                <a href="../assets/psa_preview.jpg"> 
+                                    <img src="../assets/psa_preview.jpg" class="img-responsive" alt="PSA document" style="width:100%">
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
