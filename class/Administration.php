@@ -1965,8 +1965,11 @@ class Administration extends Dbconfig
     public function transferStudent(){
         $stud_id = $_POST['stud_id'];
         $section = $_POST['section_id'];
-
-        $this->prepared_select("UPDATE enrollment SET section_code = ? WHERE stud_id = ?;", [$section, $stud_id], "si");  
+        $oldSection = $_POST['current_section'];
+        
+        mysqli_query($this->db, "UPDATE enrollment SET section_code = '{$section}' WHERE stud_id = {$stud_id};");
+        mysqli_query($this->db, "UPDATE section SET stud_no = stud_no - 1 WHERE section_code = '{$oldSection}';");
+        mysqli_query($this->db, "UPDATE section SET stud_no = stud_no + 1 WHERE section_code = '{$section}';");
     }
 
     public function transferStudentFull(){
@@ -2090,9 +2093,9 @@ class Administration extends Dbconfig
 
     public function editSignatory() {
         $firstname = $_POST['first-name'];
-        $middlename = $_POST['middle-name'];
+        $middlename = $_POST['middle-name'] ?: NULL;
         $lastname = $_POST['last-name'];
-        $acaddegree = $_POST['academic-degree'];
+        $acaddegree = $_POST['academic-degree'] ?: NULL;
         $position = $_POST['position'];
         $started = $_POST['start-year'];
         $ended = $_POST['end-year'];
