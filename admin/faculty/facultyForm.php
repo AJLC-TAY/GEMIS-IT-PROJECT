@@ -27,7 +27,7 @@ if ($action == 'add') {
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
     $birthdate_input = "<input type='date' class='form-control' name='birthdate' required>"
-                        ."<div class='invalid-feedback'>Please enter birthdate</div>";
+        . "<div class='invalid-feedback'>Please enter birthdate</div>";
     $department_option = "";
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
@@ -161,15 +161,17 @@ $camel_action = ucwords($action);
         </div>
         <div class='form-group col-md-2'>
             <label for='sex'>Sex</label>
-            <?php
-            $sexOpt = ["m" => "Male", "f" => "Female"];
-            foreach ($sexOpt as $id => $value) {
-                echo "<div class='form-check'>"
-                    . "<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                    . "<label class='form-check-label' for='$id'>$value</label>"
-                . "</div>";
-            }
-            ?>
+            <div class="d-flex">
+                <?php
+                $sexOpt = ["m" => "Male", "f" => "Female"];
+                foreach ($sexOpt as $id => $value) {
+                    echo "<div class='form-check'>"
+                        . "<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
+                        . "<label class='form-check-label' for='$id'>$value</label>"
+                        . "</div>";
+                }
+                ?>
+            </div>
         </div>
         <div class='form-group col-md-4'>
             <label for='birthdate'>Birthdate</label>
@@ -197,7 +199,7 @@ $camel_action = ucwords($action);
         <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
     </div>
     <div class='form-group col-md-4'>
-        <label for='facultyAccess'>Faculty Access</label>
+        <label for='facultyAccess' class="mb-2">Faculty Access</label>
         <div class='form-check'>
             <input class='form-check-input' name='access[]' type='checkbox' value='editGrades' <?php echo $edit_grades_checked; ?>>
             <label class='form-check-label'>

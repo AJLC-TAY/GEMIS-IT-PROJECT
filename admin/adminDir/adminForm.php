@@ -1,9 +1,11 @@
-<?php 
+<?php
 include_once("../class/Administration.php");
 $admin = new Administration();
 $action = $_GET['action'];
-$quarter_list = array('0' => '-- Select quarter --', '1' => 'First quarter',
-                      '2' => 'Second quarter', '3' => 'Third quarter', '4' => 'Fourth quarter');
+$quarter_list = array(
+    '0' => '-- Select quarter --', '1' => 'First quarter',
+    '2' => 'Second quarter', '3' => 'Third quarter', '4' => 'Fourth quarter'
+);
 $quarter_opt = '';
 $enroll_stat_msg = "No enrollment";
 $display = 'd-none';
@@ -56,8 +58,8 @@ if ($action == 'add') {
 <div class="container mt-4">
     <div class="card h-auto bg-light mx-auto" style='width: 80%;'>
         <?php echo $id_header; ?>
-        <form method="POST" id='admin-form' class="needs-validation" action="action.php"  novalidate>
-            <!-- NAME -->
+        <form method="POST" id='admin-form' class="needs-validation" action="action.php" novalidate>
+            <!-- GENERAL INFO -->
             <h5 class="fw-bold">Personal Information</h5>
             <div class='form-row row mb-3'>
                 <div class='form-group col-md-4'>
@@ -72,34 +74,34 @@ if ($action == 'add') {
                     <label for='middlename'>Middle Name</label>
                     <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
                 </div>
-                <div class='form-group col-md-4'>
-                    <label for='extensionname'>Extension Name</label>
-                    <input type='text' value='<?php echo $ext_name; ?>' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
-                </div>
-            </div>
-            <!-- NAME END -->
-            <!-- SEX INFO -->
-            <div class="form-row row mb-3">
-                <div class='form-group col-md-2'>
-                    <label for='age'>Age</label>
-                    <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
-                </div>
-                <div class='form-group col-md-3'>
-                    <label for='sex'>Sex</label>
-                    <div class="d-flex">
-                        <?php
-                        $sexOpt = ["m" => "Male", "f" => "Female"];
-                        foreach ($sexOpt as $id => $value) {
-                            echo "<div class='form-check'>"
-                                ."<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
-                                ."<label class='form-check-label me-2' for='$id'>$value</label>"
-                            ."</div>";
-                        }
-                        ?>
+                <div class="form-row row">
+                    <div class='form-group col-md-4'>
+                        <label for='extensionname'>Extension Name</label>
+                        <input type='text' value='<?php echo $ext_name; ?>' class='form-control' id='extensionname' name='extensionname' placeholder='Extension Name'>
+                    </div>
+                    <div class='form-group col-md-2'>
+                        <label for='age'>Age</label>
+                        <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
+                    </div>
+                    <div class='form-group col-md-3'>
+                        <label for='sex'>Sex</label>
+                        <div class="d-flex">
+                            <?php
+                            $sexOpt = ["m" => "Male", "f" => "Female"];
+                            foreach ($sexOpt as $id => $value) {
+                                echo "<div class='form-check'>"
+                                    . "<input class='form-check-input' type='radio' name='sex' id='$id' value='$id' " . (($sex == $value) ? "checked" : "") . ">"
+                                    . "<label class='form-check-label me-2' for='$id'>$value</label>"
+                                    . "</div>";
+                            }
+                            ?>
+                        </div>
                     </div>
                 </div>
+
             </div>
-            <!-- SEX INFO END -->
+            <!-- GENERAL INFO END -->
+
             <!-- CONTACT INFO -->
             <hr class="mt-0 mb-3">
             <h5 class="fw-bold">Contact Information</h5>
@@ -108,7 +110,7 @@ if ($action == 'add') {
                     <label for='cpnumber'>Cellphone No.</label>
                     <input type='text' value='<?php echo $cp_no; ?>' class='number form-control' id='cpnumber' name='cpnumber' placeholder='Cellphone No.'>
                 </div>
-                <div class='form-group col-md-4'>
+                <div class='form-group col-md-5'>
                     <label for='email'>Email</label>
                     <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' required>
                 </div>
