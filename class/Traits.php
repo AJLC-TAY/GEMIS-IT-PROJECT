@@ -132,15 +132,16 @@ trait Enrollment
         $school_info = [$_POST['track'],  $_POST['program']];
         [$track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
-            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code) "
+            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code) "
             ."VALUES (NOW(), 0, ?, ?, ?, ?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
                 $_SESSION['sy_id'],  // should be replaced by the current school year
-                $track
+                $track, 
+                $_POST['program']
             ],
-            "iiss"
+            "iisss"
         );
         echo "Add School info ended...<br>";
 
@@ -447,11 +448,102 @@ trait Enrollment
         }, $params);
     }
 
-    public function validateEnrollment()
+    public function addSection($grade_level, $prog_code, $stud_no, $letter, $sy, $sycs) {
+        echo "$grade_level, $prog_code, $stud_no, $letter, $sy, $sycs";
+        $section_name =  "$grade_level-{$letter}-{$prog_code}-Class";  // 11-A-ABM-Class
+        $section_code = rand(10, 10000000);
+        echo "Added section: ".$section_name."<br>";
+        echo "Section code: ". $section_code;
+        $this->prepared_query(
+            "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, sy_id) VALUES (?, ?, ?, ?, ?, ?);",
+            [$section_code, $section_name, $grade_level, 50, $stud_no, $sy],
+            "ssiiii"
+        );
+        echo "test";
+        $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
+            [$section_code, $sycs],
+            "si"
+        );
+     
+ 
+        return $section_code;
+    }
+
+    /**
+     *  Officially accept or reject enrollment request. 
+     *  1.  If not valid, return.
+     *      If valid, 
+     *          1.1 Update enrollment attribute.
+     *          1.2 Add student to a section and initialize subject classes.     
+     */
+    public function validateEnrollment($stud_id, $current_sy, $is_valid)
     {
-        $is_valid = (isset($_POST['accept'])) ? 1
-            : (isset($_POST['reject']) ? 0 : 1);
-        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='{$_POST['stud_id']}';");
+        // session_start();
+        // $stud_id = $_POST['stud_id'];
+        // $is_valid = (isset($_POST['accept'])) ? 1
+        //     : (isset($_POST['reject']) ? 2 : 0);
+
+        # Step 2
+        if (!$is_valid) {
+            $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';");
+            return;
+        }
+
+        # query to join all school year table : SELECT sy.sy_id, syc_id, syc.curr_code, sycs_id, sycs.prog_code FROM schoolyear AS sy JOIN sycurriculum AS syc USING(sy_id) JOIN sycurrstrand AS sycs USING (syc_id);
+
+        // $current_sy = 29;
+        // $current_sy = $_SESSION['sy_id'];
+        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT  sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$current_sy';"));
+        $grade_level = $enroll_detail['grade_level'];
+        $prog_code = $enroll_detail['prog_code'];
+
+
+        # get school_year_curr_strand_id
+        $sycs = mysqli_fetch_row($this->query("SELECT sycs_id FROM schoolyear 
+                                               JOIN sycurriculum USING(sy_id) 
+                                               JOIN sycurrstrand USING (syc_id) 
+                                               WHERE prog_code='$prog_code' AND sy_id='$current_sy';"))[0];
+        $section_result = $this->query("SELECT * FROM section JOIN sectionprog USING (section_code) 
+                                        WHERE sycs_id = '$sycs' AND grd_level = '$grade_level' 
+                                        ORDER BY stud_no DESC;");
+        $sections = [];
+        $avail_section = [];
+        while($row = mysqli_fetch_array($section_result)) {
+            $stud_no = $row['stud_no'];
+            $stud_max_no = $row['stud_no_max'];
+            $section = new Section (
+                $row['section_code'],
+                $row['sy_id'],
+                $row['section_name'],
+                $row['grd_level'],
+                $stud_max_no,
+                $stud_no,
+                $row['teacher_id']
+            );
+            $sections[] = $section;
+            if ($stud_no < $stud_max_no) {
+                $avail_section[] = $section;
+            }
+        }    
+
+        $selected_section_code = 0;
+        # if no available section, create new section
+        if (count($avail_section) === 0) {
+            echo "Adding new section ... <br>";
+            $alphabet = range('A', 'Z');
+            $letter = $alphabet[count($sections)];
+            // echo "$letter <br>";
+            echo "$grade_level, $prog_code, $stud_no, $letter, $current_sy, $sycs <br>";
+            $selected_section_code = $this->addSection($grade_level, $prog_code, 1, $letter, $current_sy, $sycs);
+        } else {
+            # select the very first available section
+            $selected_section = $avail_section[0];
+            $selected_section_code = $selected_section->get_code();
+            # update section student no.
+            $new_stud_no = $selected_section->increase_stud_no(1);
+            $this->query("UPDATE section SET stud_no = '$new_stud_no' WHERE section_code = '$selected_section_code';");
+        }
+        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid', section_code='$selected_section_code' WHERE stud_id='$stud_id';");
     }
 
     public function addStudent()

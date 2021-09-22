@@ -6,7 +6,7 @@ $admin = new Administration();
 if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
     echo "image";
 //    print_r($admin->validateImage('image', 5000000));
-    Administration::saveImage("2194014", 'image', "../student_assets", 'psa');
+    // Administration::saveImage("2194014", 'image', "../student_assets", 'psa');
 }
 
 /******** ADMINISTRATOR ********/

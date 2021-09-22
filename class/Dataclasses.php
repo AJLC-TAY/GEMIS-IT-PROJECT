@@ -1758,6 +1758,11 @@ class StudentAward extends Award implements JsonSerializable
             return $this->stud_no;
         }
 
+        public function increase_stud_no($no) {
+            $this->stud_no = $this->stud_no + $no;
+            return $this->stud_no;
+        }
+
         public function get_teacher_id(){
             return $this->teacher_id;
         }

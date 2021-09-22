@@ -24,7 +24,7 @@ $subjects = $init_data['subjects'];
         <h2>Initialize School Year</h2>
     </div>
 </header>
-<form id="school-year-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
+<form id="school-year-form" class="needs-validation" action="action.php" method="POST" novalidate>
     <div id="school-year-stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-50 mx-auto">
             <div class="step mx-5" data-target="#step-1">
@@ -75,7 +75,7 @@ $subjects = $init_data['subjects'];
                                         <?php 
                                         foreach($track_program as $id => $value) {
                                             $track_name = $value['track_name'];
-                                            echo "<label class='list-group-item'><input name='track[]' class='form-check-input me-2 track-checkbox' type='checkbox' value='$id' checked>$track_name Track</label>";
+                                            echo "<label class='list-group-item'><input name='track[name][]' class='form-check-input me-2 track-checkbox' type='checkbox' value='$id' checked>$track_name Track</label>";
                                         }
                                         ?>
                                 

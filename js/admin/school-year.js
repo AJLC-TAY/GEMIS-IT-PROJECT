@@ -14,6 +14,7 @@ const tableSetup = {
 };
 
 var syTable = $("#table").bootstrapTable(tableSetup);
+var enrollAfter = false;
 try {
     var stepper =  new Stepper($('#school-year-stepper')[0]);
 } catch (e) {}
@@ -179,9 +180,31 @@ $(function() {
         })
     });
 
+    $(document).on('click',  "input[name='initAndEnroll']", function(e) {
+        e.preventDefault();
+        enrollAfter = true;
+        $("#school-year-form").submit();
+    });
+
     $(document).on("submit", "#school-year-form", function(e) {
         e.preventDefault();
-        console.log($(this).serializeArray());
+        showSpinner();
+        let formData = $(this).serializeArray();
+        formData.push({name: 'action', value: 'initializeSY'});
+
+        showToast('dark', 'Initializing school year ...');
+        // console.log(formData);
+        $.post("action.php", formData, function(data) {
+            let sy_code = JSON.parse(data);
+            let message = 'Redirecting to the initialized school year';
+            let url = `schoolYear.php?id=${sy_code}`;
+            if (enrollAfter) {
+                message = 'Redirecting to the enrollment setup page';
+                url = 'enrollment.php?page=setup';
+            }
+            showToast('dark', message, {delay: 3000});
+            location.replace(url);
+        });
     });
 
     $(document).on("change", ".track-checkbox", function() {
@@ -195,6 +218,7 @@ $(function() {
     $(document).on("click", ".next", () => {
         stepper.next();
     });
+
     $(document).on("click", ".previous", () => {
         stepper.previous();
     });

@@ -33,7 +33,7 @@ function hideSpinner(selector = null, bs = false) {
  * 
  *  @param {String} type    Toast type.
  *  @param {String} msg     Text to be showed.
- *  @param {Number} delay   Milliseconds to wait before fading out.
+ *  @param {Object} options  Options
  */
 function showToast(type, msg, options= null) {
     let toast = $(`<div class="toast bg-${type} text-white" data-animation="true" role="alert" aria-live="assertive" aria-atomic="true">
