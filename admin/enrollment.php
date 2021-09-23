@@ -39,10 +39,16 @@ include_once("../inc/head.html"); ?>
                                     $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
 
-                                if ($_GET['page'] === 'report') {
+                                if ($_GET['page'] === 'report' && $_GET['type']  === 'pdf') {
+                                    require("enrollment/enrollmentReportHTML.php");            
+                                    $js = "<script src='../js/admin/enrollment.js'></script>";
+                                }
+                                
+                                if ($_GET['page'] === 'generateReport') {
                                     require("enrollment/previewReport.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
+
                                 if ($_GET['page'] === 'credential') {
                                     require("enrollment/enrollmentCredentials.php");
                                     $js = "<script src='../js/admin/enrollment.js'></script>";

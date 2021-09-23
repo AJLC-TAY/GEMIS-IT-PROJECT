@@ -1,14 +1,32 @@
-preload("#enrollment", "#enrollment-sub");
 
 try {
     var stepper = new Stepper($('#stepper')[0])
 } catch (e) {}
 
+function generatePDF() {
+    const template = document.querySelector(".template");
+    var opt = {
+        margin: 0.5,
+        filename: 'myfile.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 4, dpi: 300 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().from(template).set(opt).save();
+}
+window.generatePDF = generatePDF;
+
 $(function() {
-    $("#id-no-select").select2({
-        theme: "bootstrap-5",
-        width: null
-    });
+    preload("#enrollment", "#enrollment-sub");
+
+    try {
+        $("#id-no-select").select2({
+            theme: "bootstrap-5",
+            width: null
+        });
+    } catch (e) {}
+
+    
     $(document).on('submit', '#enroll-report-form', function() {
         // showSpinner();
         console.log($(this).serializeArray());

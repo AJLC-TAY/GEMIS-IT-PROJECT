@@ -528,10 +528,10 @@ class SubjectClass extends Subject implements JsonSerializable
     }
 }
 
-class Signatory extends Faculty implements JsonSerializable
+class Signatory implements JsonSerializable
 {
-    private $sign_id;
-    private $position;
+    // private $sign_id;
+    // private $position;
 
     public function __construct($sign_id, $first_name, $middle_name, $last_name, $acad_degree, $years, $start_year, $end_year, $position)
     {
