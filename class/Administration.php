@@ -1516,7 +1516,7 @@ class Administration extends Dbconfig
 
         $query = "SELECT * from student AS s "
                 ."JOIN enrollment AS e ON e.stud_id = s.stud_id "
-                . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : ";");
+                . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : "AND s.id_no IN (SELECT id_no FROM user WHERE is_active=1);");
         $result = mysqli_query($this->db, $query);
         $studentList = array();
 
@@ -2176,7 +2176,10 @@ class Administration extends Dbconfig
         $this->prepared_query("DELETE FROM signatory WHERE sign_id=?;", [$_POST['id']],"i");
     }
 
-
+    public function deactivate() {
+        $id = $_POST['user_id'];
+        $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
+    }
 
 }
 ?>

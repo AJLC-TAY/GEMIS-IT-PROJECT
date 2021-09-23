@@ -44,5 +44,23 @@ $(function() {
     });
 
     $(".psa-photo").click(()=> $("#psaUpload").click());
+
+    $(document).on('click','.deactivate', function(){
+        user_id = $(this).attr('data-user-id');
+        let confirmationModal = $('#deactivateConfirmation');
+        confirmationModal.find('.modal-indentifier').html(section);
+        confirmationModal.modal('toggle');
+    });
+
+    $(document).on('click', '.deact-btn', function() {
+        var action = 'deactivate'
+        $.post("action.php", {user_id, action}, function() {	
+            $('#deactivateConfirmation').modal("hide");
+            showToast("success", "Student Deactivated.");
+            // location.reload();
+        });
+
+    });
+
     hideSpinner();
 });
