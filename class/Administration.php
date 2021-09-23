@@ -154,11 +154,39 @@ class Administration extends Dbconfig
         return ["track_program" => $track_program, "subjects" => $subjects];
     }
 
+    function addSubjectClass($sy_id, $sub_code, $sub_type) {
+        $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
+        $sub_sy_id = mysqli_insert_id($this->db); // 1
+        // echo "Added school year - strand: ". $sub_code ."<br>";
+
+
+        $query_core = "SELECT sub_sy_id, section_code FROM sysub JOIN section USING (sy_id) 
+                        JOIN subject USING (sub_code) 
+                        WHERE sub_sy_id='$sub_sy_id' AND for_grd_level = grd_level;";
+        $query_spap = "SELECT sysub.sub_sy_id, temp.section_code FROM subject sub
+                        JOIN sysub USING (sub_code) 	
+                        JOIN sharedsubject sh USING (sub_code)     
+                        JOIN sycurriculum syc USING (sy_id)    
+                        JOIN sycurrstrand sycs USING (syc_id)    
+                        JOIN sectionprog sp USING (sycs_id)    
+                        JOIN (SELECT * FROM section WHERE sy_id = '$sy_id') AS temp ON sp.section_code = temp.section_code
+                        WHERE syc.sy_id = '$sy_id' AND sysub.sub_sy_id = '$sub_sy_id' 
+                        AND sub.for_grd_level = temp.grd_level GROUP BY temp.section_code;";
+        # Step 4 - Create subject class
+        $result = $this->query($sub_type == "core" ? $query_core : $query_spap);
+        
+        while ($row = mysqli_fetch_row($result)) {
+            // insert query sa subjectclass // sub_sy_id [0], section [1]
+            $this->query("INSERT INTO subjectclass (sub_sy_id, section_code) VALUES ('$row[0]', '$row[1]');");
+        }
+    }    
+
     /**
      * Initializes school year.
      * 1.   Create school year record.
      * 2.   Initialize curriculum.
-     * 3.   Initialize sections
+     * 3.   Initialize sections.
+     * 4.   Initialize subject class.
      */
     public function initializeSY()
     {
@@ -201,44 +229,29 @@ class Administration extends Dbconfig
 
                 # Prepare section
                 $alphabet = range('A', 'Z');
-                // $result = mysqli_query($this->db, "SELECT prog_code FROM sycurrstrand JOIN sycurriculum USING (syc_id) WHERE sy_id='$sy_id';");
-                // $programs = [];
-                // while ($row = mysqli_fetch_row($result)) {
-                //     $programs[] = $row[0];
-                // }
-        
+
+                # Step 3
                 foreach(Administration::GRADE_LEVEL as $grade) {
-                    $this->addSection($grade, $prog, 50, $alphabet[0], $sy_id, $new_sy_curr_strand_id);
-                    // $section_name =  "$grade-{$alphabet[0]}-{$prog}-Class";  // 11-A-ABM-Class
-                    // $section_code = rand(10, 10000000);
-                    // $this->prepared_query(
-                    //     "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, sy_id) VALUES (?, ?, ?, ?, ?);",
-                    //     [$section_code, $section_name, $grade, 50, $sy_id],
-                    //     "ssiii"
-                    // );
-                    // $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
-                    //     [$section_code, $new_sy_curr_strand_id],
-                    //     "si"
-                    // );
-    
+                    $section_code = $this->addSection($grade, $prog, 50, $alphabet[0], $sy_id, $new_sy_curr_strand_id);
                 }
             }
             // echo "----------"."<br>";
         }
+
+         
         
         // insert subjects offered in the sysub
-        $subjects = $_POST['subjects']['core'] + $_POST['subjects']['spap']; // spap (specialized + applied)
+        # Core subjects
+        $subjects = $_POST['subjects']['core'];
         foreach($subjects as $sub_code) {
-            $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
-            // echo "Added school year - strand: ". $sub_code ."<br>";
+            $this->addSubjectClass($sy_id, $sub_code, 'core');
         }
 
-    
-
-        // create subject class
-
-        
-
+        # Specialized and Applied subjects
+        $subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
+        foreach($subjects as $sub_code) {
+            $this->addSubjectClass($sy_id, $sub_code, 'applied');
+        }
 
         // echo "School year successfully initialized.";
         echo json_encode($sy_id);
