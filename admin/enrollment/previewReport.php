@@ -1,8 +1,8 @@
-<?php 
+<?php
 require "../class/Administration.php";
 $admin = new Administration();
 $tracks = $admin->getEnrollmentReportData();
-$school_year = "2021-2022";
+$school_year = "2021 - 2022";
 $signatory = "Alvin John Cutay";
 $position = "Student";
 $date = strftime('%Y-%m-%d', strtotime(date("F j, Y")));
@@ -11,6 +11,7 @@ $signatory_list = $admin->listSignatory();
 $track_names = [];
 $programs = [];
 ?>
+
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -21,12 +22,12 @@ $programs = [];
             <li class="breadcrumb-item active" aria-current="page">Report</li>
         </ol>
     </nav>
-    <h3 class="fw-bold">Enrollment Report Preview</h3>
+    <h3 class="fw-bold">Generate Enrollment Report</h3>
 </header>
 <!-- HEADER END -->
 <!-- <form id='enroll-report-form' method='POST' action='test.php'> -->
 <div class="container mt-4">
-    <form id='enroll-report-form' method='POST' action='./enrollment/enrollmentReport.php'>
+    <form id='enroll-report-form' method='POST' action='enrollment.php?page=report&type=pdf'>
         <!-- GENERAL REPORT INFO  -->
         <div class="card p-4 bg-white mb-3 w-75">
             <h5>Report Information</h5>
@@ -52,14 +53,8 @@ $programs = [];
 
             foreach($tracks as $track_id => $track_value) {
                 $track_names[] = $track_id;
-                // echo "<div class='row'><h6>Track ID: $track_id</h6></div>";
-                // echo "<div class='row align-items-center text-center'>"
-                //     ."<div class='col-md-2'>Strand</div>"
-                //     ."<div class='col-md-5'>Accepted</div>"
-                //     ."<div class='col-md-5'>Rejected</div>"
-                // ."</div>";
 
-                echo "<table class='table table-striped table-sm mx-auto' style='width: 90%;'>";
+                echo "<table class='table  table-sm mx-auto' style='width: 90%;'>";
                 echo "<thead class='t>
                     <tr>
                         <th colspan='5'>
@@ -81,17 +76,17 @@ $programs = [];
                 echo "<tr>";
                 foreach($track_value as $tv_id => $tv_value) {
                     echo "<td>$tv_id</td>";
-                    $rejected = $rejected_grand_total[] = $rejected_count_list[] = $tv_value[0];
-                    $accepted = $accepted_grand_total[] = $accepted_count_list[] = $tv_value[1];
-                    echo "<td><input name='tracks[$track_id][$tv_id][1]' class='form-control mb-0 me-3' value ='$accepted' ></td>";
-                    echo "<td><input name='tracks[$track_id][$tv_id][0]' class='form-control mb-0 me-3' value ='$rejected' ></td>";
+                    $rejected = $rejected_grand_total[] = $rejected_count_list[] = $tv_value[0] ?: 0;
+                    $accepted = $accepted_grand_total[] = $accepted_count_list[] = $tv_value[1] ?: 0;
+                    echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][1]' class='form-control form-control-sm mb-0 me-3' value ='$accepted' ></td>";
+                    echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][0]' class='form-control form-control-sm mb-0 me-3' value ='$rejected' ></td>";
                     // Accepted sub total column
                     if ($tv_id == array_key_last($track_value)) { 			// if the element is the last key, calculate total
                         echo "</tr>";
                         echo "<tr>"
                             ."<td>Sub total</td>"
-                            ."<td><input class='form-control mb-0' value ='".array_sum($accepted_count_list)."' ></td>"
-                            ."<td><input class='form-control mb-0' value ='".array_sum($rejected_count_list)."' ></td>"
+                            ."<td class='py-2'><input class='form-control form-control-sm mb-0' value ='".array_sum($accepted_count_list)."' ></td>"
+                            ."<td class='py-2'><input class='form-control form-control-sm mb-0' value ='".array_sum($rejected_count_list)."' ></td>"
                         ."</tr>";
                     } else {
                         echo "</tr>";
@@ -110,10 +105,10 @@ $programs = [];
                         Total
                     </div>
                     <div class="col-5">
-                        <input value="<?php echo array_sum($accepted_grand_total); ?>" type="text" class="form-control mb-0">
+                        <input value="<?php echo array_sum($accepted_grand_total); ?>" type="text" class="form-control form-control-sm mb-0">
                     </div>
                     <div class="col-5">
-                        <input value="<?php echo array_sum($rejected_grand_total); ?>" type="text" class="form-control mb-0">
+                        <input value="<?php echo array_sum($rejected_grand_total); ?>" type="text" class="form-control form-control-sm mb-0">
                     </div>
 
                 </div>
@@ -123,26 +118,20 @@ $programs = [];
 
         <div class=" card p-4 bg-white w-75">
             <h5>Signatory</h5>
+        
             <div class="d-flex flex-column">
-
-<!--                <div class="row justify-content-end">-->
-                    <div class="d-flex flex-column">
-                        <input type="hidden" name="signatory">
-                        <input type="hidden" name="position">
-<!--                        <label>Name</label>-->
-                        <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
-                            <option>Search user</option>
-                            <?php
-                            foreach($signatory_list as $element) {
-                                echo "<option ". ($element['id'] == $_SESSION['id'] ? "selected" : "") ." class='signatory' data-name='{$element['name']}' data-position='{$element['position']}' value='{$element['id']}'>{$element['name']} - {$element['position']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-<!--                    <div class="col-md-6 d-flex flex-column"><label>Position</label><input typt='text' class='form-control' name='position' value='--><?php //echo $position; ?><!--'></div>-->
-<!--                </div>-->
+                <input type="hidden" name="signatory" value='<?php echo $signatory; ?>'>
+                <input type="hidden" name="position" value='<?php echo $position; ?>'>
+                <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
+                    <option>Search user</option>
+                    <?php
+                    foreach($signatory_list as $element) {
+                        // echo "<option ". ($element['id'] == $_SESSION['id'] ? "selected" : "") ." class='signatory' data-name='{$element['name']}' data-position='{$element['position']}' value='{$element['id']}'>{$element['name']} - {$element['position']}</option>";
+                        echo "<option ". ($element->sign_id == 1 ? "selected" : "") ." class='signatory' data-name='{$element->name}' data-position='{$element->position}' value='{$element->sign_id}'>{$element->name} - {$element->position}</option>";
+                    }
+                    ?>
+                </select>
             </div>
-
         </div>
 
         <div class="d-inline-flex justify-content-end w-75 mt-4 p-0">

@@ -369,7 +369,7 @@ trait Enrollment
 
     public function getEnrollmentReportData($is_json = false)
     {
-        $school_year = 5;
+        $school_year = 29;
         $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
         $data = [];
 

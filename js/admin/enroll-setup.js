@@ -61,6 +61,7 @@ function togglePrivilege (teacherID, canEnroll) {
     return false;
 }
 
+window.togglePrivilege = togglePrivilege;
 var stepper = new Stepper($('#stepper')[0]);
 
 $(function () {
@@ -178,7 +179,6 @@ $(function () {
             statusE.html("Ended");
         }
         $.post("action.php", formData, function(data) {
-            console.log(data);
             hideSpinner();
         });
     });
