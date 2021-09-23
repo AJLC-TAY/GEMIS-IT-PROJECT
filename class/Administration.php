@@ -229,7 +229,7 @@ class Administration extends Dbconfig
         // insert subjects offered in the sysub
         $subjects = $_POST['subjects']['core'] + $_POST['subjects']['spap']; // spap (specialized + applied)
         foreach($subjects as $sub_code) {
-            $this->prepared_query("INSERT INTO sysub (sycs_id, sub_code) VALUES (?, ?);", [0, $sub_code], 'is');
+            $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
             // echo "Added school year - strand: ". $sub_code ."<br>";
         }
 
