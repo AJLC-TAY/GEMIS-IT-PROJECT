@@ -41,7 +41,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {
-    // $admin->deactivate();
+    $admin->deactivate();
 }
 
 /******** CURRICULUM ********/
