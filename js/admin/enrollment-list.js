@@ -24,13 +24,13 @@ function queryParams(params) {
     params.yearLevel = $("#year-level").val()
     params.status = $("#status").val()
     return params
-};
+}
 
 function checkSelections() {
     try {
         $('#table').bootstrapTable("checkBy", {field: 'LRN', values: selections})
     } catch (e) {}
-};
+}
 
 const tableSetup = {
     search:              true,
@@ -52,7 +52,7 @@ const tableSetup = {
     pageSize:           25,
     pagination:         true,
     pageList:           "[25, 50, 100, All]",
-    onPostBody:         checkSelections
+    onPostBody:         checkSelections,
     // responseHandler:         responseHandler
 };
 let enrolleesTable = $('#table').bootstrapTable(tableSetup);
@@ -64,19 +64,12 @@ enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-al
     // push or splice the selections if you want to save all data selections
 });
 
+
+
 $(function() {
+    $(".buttons-toolbar").hide();
 
-    /** Set default values of table buttons */
-    // Add other table buttons in the buttons toolbar
-    $(".buttons-toolbar").prepend(`<div class="col-auto d-inline-flex"><button id="subject-archive-btn" class="btn btn-secondary btn-sm me-1"><i class="bi bi-archive me-2"></i>Archive</button>
-            <button id="export-opt" type="submit" class="btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button></div>`);
-
-    // Add icons and labels in the buttons
-    $("[name='refresh']").addClass('btn-sm').html("<i class='bi bi-arrow-repeat me-2'></i>Refresh")
-    $(".auto-refresh").addClass('btn-sm btn-dark').html("<i class='bi bi-alarm me-2'></i> Auto Refresh")
-    $(".auto-refresh").attr("title", "Turn off auto refresh")
-    $(".auto-refresh").attr("data-status", "on")
-
+    /** Updates the button title of the switch */
     function autoRefreshEvents(elem) {
         if (elem.attr("data-status") === "on") {
             elem.attr("data-status", "off")
@@ -86,22 +79,40 @@ $(function() {
         }
         elem.attr("data-status", "on")
         elem.addClass('btn-dark')
-        elem.attr('title', 'Auto refresh on')
+        elem.attr('title', 'Turn off auto refresh')
         return 'on'
     };
 
-    $(document).on("click", ".auto-refresh", function () {
+    /** Refreshes the table when the button with refresh class is clicked */
+    $(document).on("click", ".refresh", function () {
         enrolleesTable.bootstrapTable("showLoading")
-        let status = autoRefreshEvents($(this))
+        enrolleesTable.bootstrapTable("refresh");
         setTimeout(() => {
             enrolleesTable.bootstrapTable("hideLoading")
+        }, 500);
+    });
+    
+    /** Clicks the hidden auto refresh button and shows then hides the loading status of the table  */
+    $(document).on("click", ".auto-refresh-switch", function () {
+        $(".auto-refresh").click();
+        let status = autoRefreshEvents($(this))
+        enrolleesTable.bootstrapTable("showLoading")
+        setTimeout(() => {
+            enrolleesTable.bootstrapTable({autoRefreshStatus: false});
+            enrolleesTable.bootstrapTable("hideLoading")
             showToast('dark', `Table auto refresh is turned ${status}`)
-        }, 300)
+        }, 300);
     });
 
-
+    /** Refreshes the table when a filter item is changed */
     $(document).on("change", ".filter-item", function() {
         $("#table").bootstrapTable("refresh")
+    });
+
+    /** Sets all select filter into All with value of '*' and refreshes the table */
+    $(document).on("click", ".reset-filter-btn", function() {
+        $(this).closest(".collapse").find("select").val("*");
+        enrolleesTable.bootstrapTable("refresh");
     });
 
     hideSpinner();

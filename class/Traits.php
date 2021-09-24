@@ -452,14 +452,13 @@ trait Enrollment
         echo "$grade_level, $prog_code, $stud_no, $letter, $sy, $sycs";
         $section_name =  "$grade_level-{$letter}-{$prog_code}-Class";  // 11-A-ABM-Class
         $section_code = rand(10, 10000000);
-        echo "Added section: ".$section_name."<br>";
-        echo "Section code: ". $section_code;
+        // echo "Added section: ".$section_name."<br>";
+        // echo "Section code: ". $section_code;
         $this->prepared_query(
             "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, sy_id) VALUES (?, ?, ?, ?, ?, ?);",
             [$section_code, $section_name, $grade_level, 50, $stud_no, $sy],
             "ssiiii"
         );
-        echo "test";
         $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
             [$section_code, $sycs],
             "si"
