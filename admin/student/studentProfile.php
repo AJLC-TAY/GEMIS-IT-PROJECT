@@ -67,8 +67,28 @@ if (is_null($guardian)) {
 <div class="d-flex justify-content-between align-items-center">
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
-        <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
+        <button id="deactivate-btn" data-user-id=<?php echo $user_id_no; ?> class="deactivate btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
         <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn btn-secondary link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+    </div>
+    <div class="modal fade" id="deactivateConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Are you sure you want to deactivate <?php echo $name ?><span id="full-modal-identifier"></span>?</h5>
+                    <p class="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-danger me-3 close-btn deact-btn">Deactivate</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- MAIN CONTENT -->
@@ -99,6 +119,7 @@ if (is_null($guardian)) {
                             <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
                             <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
+
                         <!-- PROFILE PICTURE END -->
                         <!-- INFORMATION DETAILS -->
                         <div class="col-xl-7 ms-5">
@@ -166,7 +187,7 @@ if (is_null($guardian)) {
                                     <p class="fw-bold text-center">PSA DOCUMENT</p>
                                 </div>
                                 <!-- KES DITO MO PO ILAGAY HAHAH -->
-                                <a href="../assets/psa_preview.jpg"> 
+                                <a href="../assets/psa_preview.jpg">
                                     <img src="../assets/psa_preview.jpg" class="img-responsive" alt="PSA document" style="width:100%">
                                 </a>
                             </div>

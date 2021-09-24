@@ -463,7 +463,7 @@ trait Enrollment
             [$section_code, $sycs],
             "si"
         );
-     
+    
  
         return $section_code;
     }
