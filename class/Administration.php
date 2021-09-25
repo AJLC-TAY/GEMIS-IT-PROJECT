@@ -44,8 +44,8 @@ class Administration extends Dbconfig
     {
         $user_id = $this->createUser("AD");
         $this->prepared_query(
-            "INSERT INTO administrator (last_name, first_name, middle_name, ext_name, cp_no, sex, email, admin_user_no) "
-            ."VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+            "INSERT INTO administrator (last_name, first_name, middle_name, ext_name, cp_no, sex, age, email, admin_user_no) "
+            ."VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
             , [
                 $_POST['lastname'],
                 $_POST['firstname'],
@@ -53,10 +53,11 @@ class Administration extends Dbconfig
                 $_POST['extensionname'],
                 $_POST['cpnumber'],
                 $_POST['sex'],
+                $_POST['age'],
                 $_POST['email'],
                 $user_id
             ],
-            "sssssssi");
+            "ssssssisi");
         $id = mysqli_insert_id($this->db);
         header("Location: admin.php?id=$id");
     }
