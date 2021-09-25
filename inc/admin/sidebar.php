@@ -1,3 +1,7 @@
+<?php 
+// session handling
+$school_year = "2021 - 2022";
+?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
 <header class="header black-bg">
@@ -23,7 +27,7 @@
     <div id="sidebar" class="nav-collapse ">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="centered">SY 2021-2022</h5>
+            <h5 class="centered">SY <?php echo $school_year ?></h5>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>

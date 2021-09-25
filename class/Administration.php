@@ -20,7 +20,7 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
-    use QueryMethods, UserShareMethods, FacultySharedMethods, Enrollment;
+    use QueryMethods, UserShareMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
     {
