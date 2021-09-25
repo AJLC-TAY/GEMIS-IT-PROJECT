@@ -258,6 +258,94 @@ class Administration extends Dbconfig
         // header("Location: schoolYear.php");
     }
 
+        //INITIALIZATION
+    // 1. select churva classes mapped to the student's section.
+    // 2. For each subjectclass, create a classgrade with that class' sub_class_code.
+    // 3.  
+    //tables to be initialized: 
+    // [/] gradereport, *changes sa db - null lahat except report_id and stud_id;
+    // [/] classgrade, INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (141, 110001, 9101);
+    // [/] observevalues
+            
+            
+    public function initializeGrades()
+    {
+        $stud_id = $_POST['stud_id'];// with the assumption na may stud id kong san man to matatawag HAHAHAH
+
+        // 1. initialize gradereport
+        $this->prepared_query("INSERT INTO gradereport (stud_id) VALUES (?);", [$stud_id], 'i');
+
+        //2. Retrieve report_id of student
+        $report_id = mysqli_fetch_row(mysqli_query($this->db,  "SELECT report_id FROM gradereport WHERE stud_id=$stud_id;"));
+
+        //3. Initialize classgrade
+        //3.a. retrieve student class
+        $result = $this->query("SELECT sub_class_code FROM subjectclass WHERE section_code IN (SELECT section_code FROM student WHERE stud_id=$stud_id)"); 
+        
+        //3.b for each class, create classgrade
+        while($row = mysqli_fetch_assoc($result)) {
+            $this->prepared_query("INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (?, ?, ?);", [$report_id, $stud_id, $row['sub_class_code']], 'iii'); 
+            
+        }
+
+        //4. Initialize array of default observed value ids
+        $values = $this->query("SELECT `value_id` FROM `values`"); 
+
+        //4.a For each value_id, 
+                    //for each quarter, create an observedvalue.                     
+                    while($row = mysqli_fetch_assoc($values)) {
+                        foreach(Administration::QUARTER as $quarter) {
+                            $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii'); 
+                        }
+
+                    }
+        
+                    
+    }
+    // RETRIEVAL of grades sigi wait prinoprocess ko HAHAHHA
+    // assuming na meron na tayong stud_id,
+    // retrieve the current quarter para malaman kong anong grade ung ilalabas SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id'
+    // 1. retrieve class with the grade // asa classgrade na table 
+    // a. if currentgrading = 1, 
+    //2. for each class imap mo sa category: core, specialize, applied 
+    
+    // RETRIEVAL of values
+    // assuming na meron na tayong stud_id, 
+    // retrieve the current quarter para malaman kong anong grade ung ilalabas
+    // 1. retrieve values of student
+    
+    // RETRIEVAL of attendance
+    
+    public function listGradesJSON() 
+    {
+
+        $grades = [];
+        echo json_encode($grades);// [core] => class => grade
+                                //           => class2 => grade] 
+                                      //[specioalized] => class
+    }
+
+    public function listValuesJSON() 
+    {
+        $values = [];
+        echo json_encode($values);// corevaluename => class => grade
+                                //           => class2 => grade] 
+                                      //[specioalized] => class
+    }
+
+    public function listAttendanceJSON(){
+        $attendance = []; 
+        echo json_encode($attendance);// [jan] => category => days
+                                //           => category2 => grade] 
+                                      //[feb] => no_of_absent => 18
+    }
+
+    
+
+    
+
+    // UPDATE 
+
     public function listSYJSON()
     {
         $result = mysqli_query($this->db, "SELECT * FROM schoolyear ORDER BY end_year DESC;");
