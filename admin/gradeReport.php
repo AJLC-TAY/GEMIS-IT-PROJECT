@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); ?>
-    <title>Section | GEMIS</title>
+    <title>Grade Report | GEMIS</title>
     <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
     <script src="../assets/js/html2pdf.bundle.min.js"></script>
     <style>
@@ -70,12 +70,13 @@
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active">Faculty</li>
+                                        <li class="breadcrumb-item"><a href="index.php">Student</a></li>
+                                        <li class="breadcrumb-item active">Grade Report</li>
                                     </ol>
                                 </nav>
                                 <div class="d-flex flex-column mb-3">
-                                    <h3 class="fw-bold">Grade Report</h3>
-                                    <h6>Student Name</h6>
+                                    <h6 class="fw-bold">Grade Report</h6>
+                                    <h3>Student Name</h3>
                                     <hr class='m-1'>
                                     <p class='text-secondary'>School Year</p>
                                 </div>

@@ -7,26 +7,24 @@ $title_desc = $_POST['report-title'];
 $signatory_desc = $_POST['signatory'];
 $position_desc = $_POST['position'];
 $date_desc = date('F j, Y', strtotime($_POST['date']));
+$file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
 
 ?>
     <script src="../assets/js/html2pdf.bundle.min.js"></script>
     <style>
         .doc {
             width: 8.5in !important;
-            height: 11in !important;
-            border: 1px solid black;
-            padding: 0.4in; /** Margin */
+            height: auto;
         }
         .template {
-            /*width: 7.3in !important;*/
-            /*height: 10in !important;*/
-            width: 7.45in !important; /** 8.5-1 = 7.5  */
-            height: 9.5in !important;
+            width: 7.5in !important; 
             font-family: Arial !important;
             font-size: 13px !important;
         }
         .template li {
             width: 100%;
+            height: 9.98in !important;
+            margin: 0.5in !important;
         }
 
         /*Header*/
@@ -45,6 +43,9 @@ $date_desc = date('F j, Y', strtotime($_POST['date']));
         img {
             height: 100px;
             width: 100px;
+        }
+        td {
+            border: 0.5px solid #C5C5C5;
         }
 
         /*Footer*/
@@ -70,12 +71,12 @@ $date_desc = date('F j, Y', strtotime($_POST['date']));
     <hr class="my-2">
     <div class="row mb-4">
         <div class="col-auto">
-            <button class="btn btn-sm btn-primary" onclick="generatePDF()" id="export">Export PDF</button>
+            <button class="btn btn-sm btn-primary" onclick="generatePDF(`<?php echo $file_name; ?>`)" id="export">Download</button>
         </div>
     </div>
 </header>
 <!-- HEADER END -->
-<div class="doc bg-white ms-2">
+<div class="doc bg-white ms-2 p-0 shadow">
     <ul class="template p-0">
         <li class="p-0 mb-0 mx-auto">
             <!-- DOCUMENT HEADER -->
@@ -105,7 +106,7 @@ $date_desc = date('F j, Y', strtotime($_POST['date']));
             <div class="content mb-5">
                 <h6>Statistics</h6>
                 <div class="table-con">
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                         <tr class="table-dark text-center">
                             <td>Track</td>
