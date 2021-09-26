@@ -371,7 +371,7 @@ trait Enrollment
 
     public function getEnrollmentReportData($is_json = false)
     {
-        $school_year = 15;
+        $school_year = 9;
         $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
         $data = [];
 
@@ -380,8 +380,9 @@ trait Enrollment
             $track = $row['curr_code'];
             $program = $row['prog_code'];
             $count =  $row['count'];
+            $index = $row['valid_stud_data'] == 1 ? 1 : 0;
             if (count($data) === 0) {
-                $program_array = [$count];
+                $program_array[$index] = $count;
                 $data[$track] = [$program => $program_array];
             } else {
                 if ($this->in_multi_array($track, $data)) {
