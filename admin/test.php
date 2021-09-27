@@ -37,9 +37,9 @@
 include '../class/Administration.php';
 
 $admin = new Administration();
-print_r($admin->listSignatory());
+// print_r($admin->listSignatory());
 // $admin->addSection(11, 'ABM', 1, 'C', 29, 54 );
-//$admin->validateEnrollment(110001, 29, 1);  // 0 = pending 1 = accepted/ enrolled 2 cancelled
+$admin->validateEnrollment(120089, 15, 1);  // 0 = pending 1 = accepted/ enrolled 2 cancelled
 // echo json_encode($admin->getInitSYData());
 // print_r($admin->listNotAdvisers());
 

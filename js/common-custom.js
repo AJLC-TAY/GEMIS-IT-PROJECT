@@ -66,3 +66,15 @@ function loadingTemplate(message) {
     +'</div>';
 }
 $(document).on("keypress", ".number", isNumberKey);
+
+function generatePDF(filename) {
+    const template = document.querySelector(".template");
+    var opt = {
+        margin: 0,
+        filename: filename + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 4, dpi: 300 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().from(template).set(opt).save();
+}
