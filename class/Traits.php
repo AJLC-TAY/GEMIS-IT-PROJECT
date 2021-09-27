@@ -28,7 +28,7 @@ trait QueryMethods
 
 }
 
-trait UserShareMethods
+trait UserSharedMethods
 {
     /**
      * Creates a User record basing from the specified user type.
@@ -546,6 +546,8 @@ trait Enrollment
             $this->query("UPDATE section SET stud_no = '$new_stud_no' WHERE section_code = '$selected_section_code';");
         }
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid', section_code='$selected_section_code' WHERE stud_id='$stud_id';");
+
+        //call initializeGrades
     }
 
     public function addStudent()
@@ -641,6 +643,39 @@ trait Enrollment
         echo "$student_id <br>";
 
         return $student_id;
+    }
+
+    public function initializeGrades()
+    {
+        $stud_id = $_POST['stud_id'];// with the assumption na may stud id kong san man to matatawag HAHAHAH
+
+        // 1. initialize gradereport
+        $this->prepared_query("INSERT INTO gradereport (stud_id) VALUES (?);", [$stud_id], 'i');
+
+        //2. Retrieve report_id of student
+        $report_id = mysqli_fetch_row(mysqli_query($this->db,  "SELECT report_id FROM gradereport WHERE stud_id=$stud_id;"));
+
+        //3. Initialize classgrade
+        //3.a. retrieve student class
+        $result = $this->query("SELECT sub_class_code FROM subjectclass WHERE section_code IN (SELECT section_code FROM student WHERE stud_id=$stud_id)"); 
+        
+        //3.b for each class, create classgrade
+        while($row = mysqli_fetch_assoc($result)) {
+            $this->prepared_query("INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (?, ?, ?);", [$report_id, $stud_id, $row['sub_class_code']], 'iii'); 
+            
+        }
+
+        //4. Initialize array of default observed value ids
+        $values = $this->query("SELECT `value_id` FROM `values`"); 
+
+        //4.a For each value_id, 
+                    //for each quarter, create an observedvalue.                     
+                    while($row = mysqli_fetch_assoc($values)) {
+                        foreach(Administration::QUARTER as $quarter) {
+                            $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii'); 
+                        }
+
+                    }             
     }
 
 }

@@ -20,7 +20,7 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
-    use QueryMethods, UserShareMethods, FacultySharedMethods, Enrollment, Grade;
+    use QueryMethods, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
     {
@@ -268,84 +268,188 @@ class Administration extends Dbconfig
     // [/] classgrade, INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (141, 110001, 9101);
     // [/] observevalues
             
-            
-    public function initializeGrades()
-    {
-        $stud_id = $_POST['stud_id'];// with the assumption na may stud id kong san man to matatawag HAHAHAH
+     //!!!initializeGrades has been moved to Enroll Trait!!!
+    
+    // ---------------------------------------------
 
-        // 1. initialize gradereport
-        $this->prepared_query("INSERT INTO gradereport (stud_id) VALUES (?);", [$stud_id], 'i');
-
-        //2. Retrieve report_id of student
-        $report_id = mysqli_fetch_row(mysqli_query($this->db,  "SELECT report_id FROM gradereport WHERE stud_id=$stud_id;"));
-
-        //3. Initialize classgrade
-        //3.a. retrieve student class
-        $result = $this->query("SELECT sub_class_code FROM subjectclass WHERE section_code IN (SELECT section_code FROM student WHERE stud_id=$stud_id)"); 
-        
-        //3.b for each class, create classgrade
-        while($row = mysqli_fetch_assoc($result)) {
-            $this->prepared_query("INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (?, ?, ?);", [$report_id, $stud_id, $row['sub_class_code']], 'iii'); 
-            
-        }
-
-        //4. Initialize array of default observed value ids
-        $values = $this->query("SELECT `value_id` FROM `values`"); 
-
-        //4.a For each value_id, 
-                    //for each quarter, create an observedvalue.                     
-                    while($row = mysqli_fetch_assoc($values)) {
-                        foreach(Administration::QUARTER as $quarter) {
-                            $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii'); 
-                        }
-
-                    }
-        
-                    
-    }
     // RETRIEVAL of grades sigi wait prinoprocess ko HAHAHHA
     // assuming na meron na tayong stud_id,
     // retrieve the current quarter para malaman kong anong grade ung ilalabas SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id'
-    // 1. retrieve class with the grade // asa classgrade na table 
-    // a. if currentgrading = 1, 
-    //2. for each class imap mo sa category: core, specialize, applied 
+    // 1. retrieve class with the grade // asa classgrade na table SELECT * FROM `classgrade` WHERE stud_id = 110001
+    //2. for each class imap mo sa category: core, specialize, applied SELECT stud_id, sub_class_code, sub_code, sub_name, sub_type, first_grading, second_grading, final_grade FROM `classgrade` JOIN `subjectclass` USING(sub_class_code) JOIN `sysub` USING(sub_sy_id) JOIN `subject` USING(sub_code) WHERE classgrade.stud_id = 110001 ORDER BY sub_type
     
-    // RETRIEVAL of values
-    // assuming na meron na tayong stud_id, 
-    // retrieve the current quarter para malaman kong anong grade ung ilalabas
-    // 1. retrieve values of student
+    // per faculty or subject teacher, so kukunin lahat ng students at grade by subject
+    // 1.  retrieve for adviser muna para maintegrate natin si report
+    // so ung data na need is ung current quarter? para kong 1 lang si grade_1 lang malalagyan HHAH or ewan ko kong mapped sa db ung quarter baka oks lang na kunin buo baka oks lang basta 0 .. visualization, kunyari current quarter is 1, ang kukunin lang na grading is 1, pag 2, 1 at 2, pag 3, 1 2 at 3, pag 4, 1 2 3 4 ganun? oo parang ganon HAHAH pero dik sure depende sa meron sa db :v hakdog HAHAHAHAHHAHAH
+    // 1. SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id' ... allison is nabubuang??? pacheck na lang if tama my ginagawa HAHAHHAA
+    // 2. if current quarter 1 = 
+      //STRUCTURES 
     
-    // RETRIEVAL of attendance
     
-    public function listGradesJSON() 
+    //   $grades = [
+    //     'core' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '100',
+    //          'grade_f'   => ''],
+    //         
+    //     ],
+    //     'applied' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''],
+    //         
+    //     ],
+    //     'specialized' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''],
+    //         
+    //     ]
+    // ];
+
+    
+    public function listGrade() 
     {
 
-        $grades = [];
-        echo json_encode($grades);// [core] => class => grade
-                                //           => class2 => grade] 
-                                      //[specioalized] => class
+        $grades = array();
+
+        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = ?"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
+        $subject_type = $this->query("SELECT sub_type FROM subject GROUP BY sub_type ?");//insert ung query nung pagretrieve ng subtypes  // subtypes lang ba etey?
+        $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
+                                    FROM classgrade JOIN subjectclass USING(sub_class_code) 
+                                    JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
+                                    WHERE stud_id = ?");//insert ung query nung pagretrieve ng grades per quarter 
+        
+        while($row = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
+            while($sub_type = mysqli_fetch_assoc($subject_type)) { 
+                while($stud_grd = mysqli_fetch_assoc($stud_grade)) { 
+                    $grades[$row['sub_semester']] = [
+                        $grades[$sub_type['sub_type']] = [
+                            'subname' => $row['sub_name'],
+                            'grade_1' => $row['first_grading'],
+                            'grade_2' => $row['second_grading'],
+                            'grade_f' => $row['final_grade']
+                        ]
+                    ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+                }
+            }
+        }
+        // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
+        return $grades;        
     }
 
-    public function listValuesJSON() 
+   
+    public function listValuesReport() 
     {
         $values = [];
-        echo json_encode($values);// corevaluename => class => grade
-                                //           => class2 => grade] 
-                                      //[specioalized] => class
+        $result = $this->query("SELECT value_name, bhvr_statement FROM `observedvalues` JOIN `values` USING (value_id) GROUP BY bhvr_statement"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
+        $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110001 AND quarter = $qtr");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
+        $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = ?"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
+        while($qtrs = mysqli_fetch_assoc($qtr)) { 
+            while($marks = mysqli_fetch_assoc($markings)) { 
+                $values [$marks['quarter']] = [
+                        'subname' => $marks['sub_name'],
+                        'grade_1' => $marks['first_grading'],
+                        'grade_2' => $marks['second_grading'],
+                        'grade_f' => $marks['final_grade']
+
+                ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+            }
+        }
+        return $values;
+        // "1" => [
+        //     'Makadiyos'     => ['AO', 'SO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        //     'Makakalikasan' => ['NO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        // ],
+        // "2" => [
+        //     'Makadiyos'     => ['AO', 'SO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        //     'Makakalikasan' => ['NO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        // ],
+        // "3" => [
+        //     'Makadiyos'     => ['AO', 'SO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        //     'Makakalikasan' => ['NO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        // ],
+        // "4" => [
+        //     'Makadiyos'     => ['AO', 'SO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        //     'Makakalikasan' => ['NO'],
+        //     'Makatao'       => ['NO', 'RO'],
+        // ]
     }
 
-    public function listAttendanceJSON(){
+    public function listAttendanceReport(){
         $attendance = []; 
-        echo json_encode($attendance);// [jan] => category => days
+        return $attendance;// "jan" [=> category => days
                                 //           => category2 => grade] 
-                                      //[feb] => no_of_absent => 18
+                                      //feb [=> no_of_absent => 18
     }
 
-    
+    //RETRIEVAL FOR SUBJECT TEACHER AND STUDENT --->pacheck haha 
+    public function listStudentGrades() {
+        $stud_id = $_POST['stud_id'];
+        $sy_id = $_POST['sy_id'];
+        $this->query($this->db,  "SELECT sub_code, sub_name, first_grading, second_grading, final_grade 
+        FROM classgrade 
+        JOIN subjectclass USING (sub_class_code) 
+        JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) 
+        WHERE report_id IN (SELECT report_id FROM gradereport WHERE stud_id=$stud_id) 
+        AND sy_id=$sy_id;");
+ 
+            
+        //
+    }
 
-    
+    // UPDATE ---> pacheeeeck - ben
+    public function editGrades() {
+         $stud_id = $_POST['stud_id'];
+         $first_grading = $_POST['first_grading '];
+         $second_grading = $_POST['second_grading'];
+         $final_grade = $_POST['final_grade'];
+         $grade_id = $_POST['grade_id'];
+         $report_id = $_POST['report_id'];
+         $sub_class_code= $_POST['sub_class_code'];
 
-    // UPDATE 
+         //first grading //ganito muna di ko sure coniditional kung first,second,final ineedit ng user       
+         $this->prepared_query("UPDATE `classgrade` SET `first_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+                              [$first_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
+                             "iiii");  
+        //second grading
+        $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+                              [ $second_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
+                             "iiii");  
+
+                              
+        //final grade
+        $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+                              [ $final_grade, $grade_id, $stud_id, $report_id, $sub_class_code],
+                             "iiii"); 
+    }
+    
+    //pacheeeeck - ben
+    public function editValues() {
+        $marking = $_POST['marking'];
+        $stud_id = $_POST['stud_id'];
+        $value_id = $_POST['value_id'];
+        $quarter = $_POST['quarter'];
+        $report_id= $_POST['report_id'];
+       
+        $this->prepared_query("UPDATE `observedvalues` SET `marking`=? WHERE `stud_id`=? AND `value_id`=? AND `quarter`=? AND `report_id`=?;",
+                            [$marking, $stud_id, $value_id, $quarter, $report_id],
+                            "iiii");  
+    }
+    
+    public function editAttendance() {
+        // to resolve: months
+    }
 
     public function listSYJSON()
     {
