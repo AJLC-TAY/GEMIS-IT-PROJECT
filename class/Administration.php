@@ -316,14 +316,55 @@ class Administration extends Dbconfig
     // 1. retrieve values of student
     
     // RETRIEVAL of attendance
+
+      //STRUCTURES 
+    
     
     public function listGradesJSON() 
     {
 
         $grades = [];
-        echo json_encode($grades);// [core] => class => grade
-                                //           => class2 => grade] 
-                                      //[specioalized] => class
+        echo json_encode($grades);
+        // $grades = [
+    //     'core' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '100',
+    //          'grade_f'   => ''],
+    //         ['sub_name'  => "Test 02",
+    //          'grade_1'   => '99',
+    //          'grade_2'   => '89',
+    //          'grade_f'   => ''
+    //         ],
+    //         ['sub_name'  => "Math",
+    //          'grade_1'   => '99',
+    //          'grade_2'   => '89',
+    //          'grade_f'   => '100'
+    //         ]
+    //     ],
+    //     'applied' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''],
+    //         ['sub_name'  => "Test 02",
+    //          'grade_1'   => '99',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''
+    //         ]
+    //     ],
+    //     'specialized' => [
+    //         ['sub_name'  => "Test 01",
+    //          'grade_1'   => '98',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''],
+    //         ['sub_name'  => "Test 02",
+    //          'grade_1'   => '99',
+    //          'grade_2'   => '',
+    //          'grade_f'   => ''
+    //         ]
+    //     ]
+    // ];
     }
 
     public function listValuesJSON() 
@@ -343,7 +384,7 @@ class Administration extends Dbconfig
 
     
 
-    
+//SELECT sub_code, sub_name, first_grading, second_grading, final_grade FROM classgrade JOIN subjectclass USING (sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE report_id IN (SELECT report_id FROM gradereport WHERE stud_id=110001) AND sy_id=9
 
     // UPDATE 
 
