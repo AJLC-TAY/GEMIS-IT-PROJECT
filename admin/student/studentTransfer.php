@@ -20,7 +20,6 @@ $stud_id = $userProfile->get_stud_id();
         <h3 class="fw-bold">Transfer Student</h3>
     </div>
 </header>
-<hr>
 
 <div class='d-flex w-100 justify-content-between'>
     <h5>Student Name: <?php echo $stud_name; ?></h5>
@@ -28,7 +27,7 @@ $stud_id = $userProfile->get_stud_id();
 </div>
 <!-- Section List: With slots -->
 <div id='subject' class=''>
-    <input id="search-section" type="text" class="form-control form-control-sm" placeholder="Search section here ...">
+    <input id="search-section" type="text" class="form-control form-control" placeholder="Search section here ...">
     <div class="available-section list-group border">
         <?php
         $available_subjects = $admin->listAvailableSection();
@@ -38,7 +37,7 @@ $stud_id = $userProfile->get_stud_id();
             $adviser = "Adviser: " . $subject['adviser'];
             $slot = "Available Slots: " . $subject['slot'];
             $code = $subject['code'];
-            echo "<button id='${code}' data = '${stud_id}' data-current-section='{$section_code}' class='transfer btn btn-link list-group-item list-group-item-action' aria-current='true' type='button'>
+            echo "<button id='${code}' data = '${stud_id}' data-current-section='{$section_code}' class='transfer btn btn-link list-group-item list-group-item-action mb-2' aria-current='true' type='button'>
             <div class='d-flex w-100 justify-content-between'>
                 <p class='mb-1'>$name</p>
                 <small>$slot</small>
@@ -49,7 +48,7 @@ $stud_id = $userProfile->get_stud_id();
         ?>
     </div>
     <div>
-        <button data-bs-toggle='collapse' id="transfer-full"  class="link btn w-auto mx-auto" href='#section-table' data-toggle="tooltip" title="Transferring to a full section will require switching of students."><small>Transfer Student to Full Section</small></button>
+        <button data-bs-toggle='collapse' id="transfer-full"  class=" btn w-auto mx-auto btn-outline-primary" href='#section-table' data-toggle="tooltip" title="Transferring to a full section will require switching of students."><small>Transfer Student to Full Section</small></button>
     </div>
     <div id='section-table' class='collapse mt-3'>
         <table id="table" class="table-striped table-sm">

@@ -138,7 +138,8 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                             <span class="badge"><button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
                                         </h6>
                                     </div>
-                                    <div id="role-decide-con" class='my-auto d-none'<?php // echo $display_style; ?>>
+                                    <div id="role-decide-con" class='my-auto d-none' <?php // echo $display_style; 
+                                                                                        ?>>
                                         <button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
                                         <input type="submit" form="role-form" id='role-save-btn' class='btn btn-sm btn-success' value="Save">
                                     </div>
@@ -245,7 +246,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                         <!-- ADVISORY CONTENT -->
                         <div class="row p-0">
                             <!-- ADVISORY TABLE -->
-                                <p>Advisory Class History</p>
+                            <p>Advisory Class History</p>
                             <table id="advisory-class-table" data-url="getAction.php?data=advisoryClasses&id=<?php echo $current_teacher_id; ?><?php echo $advisory_get_variable; ?>" class="table-striped table-sm">
                                 <thead class='thead-dark track-table'>
                                     <tr>
@@ -277,17 +278,16 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                         <!-- SUBJECT CLASS HEADER END -->
                         <!-- SUBJECT CLASS CONTENT -->
                         <div id='sc-class-con' class='mt-3'>
-                            <div class="d-flex justify-content-between mb-3">
-                                <!-- SEARCH BAR - SUBJECT CLASS -->
-                                <form>
-                                    <div class="form-group d-flex flex-grow-1 me-3" >
-                                        <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
-                                        <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
-                                    </div>
-                                </form>
-                                <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
+                            <div class="d-flex justify-content-between mb-2">
+                                <!-- SEARCH BAR -->
+                                <span class="flex-grow-1 me-3">
+                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                </span>
+                                <div>
+                                    <button id='add-sc-option' class='btn btn-sm btn-success'><i class="bi bi-plus me-2"></i>Add subject class</button>
+                                    <button class="unassign-selected-btn btn btn-sm btn-outline-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
+                                </div>
                             </div>
-                            <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
                             <table id='assigned-sc-table' data-page="profile" class="table-striped table-sm">
                                 <thead>
                                     <tr>
@@ -295,7 +295,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                         <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
                                         <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
-                                        <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                        <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                                         <!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
                                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
                                         <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
@@ -340,12 +340,12 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                 $type = $subject->get_sub_type();
                                 $sub_code = $subject->get_sub_code();
                                 echo "<a target='_blank' href='subject.php?sub_code=$sub_code' class='list-group-item list-group-item-action' aria-current='true'>"
-                                        ."<div class='d-flex w-100 justify-content-between'>"
-                                            ."<p class='mb-1'>{$subject->get_sub_name()}</p>"
-                                                ."<small>$type</small>"
-                                        ."</div>"
-                                        ."<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
-                                      ."</a>";
+                                    . "<div class='d-flex w-100 justify-content-between'>"
+                                    . "<p class='mb-1'>{$subject->get_sub_name()}</p>"
+                                    . "<small>$type</small>"
+                                    . "</div>"
+                                    . "<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
+                                    . "</a>";
                             }
                             $assigned_sub = array_map(function ($e) {
                                 return $e->get_sub_code();
@@ -400,14 +400,11 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                 <p class='text-secondary'><small>Check subjects to be assigned to the faculty. Uncheck to unassign.</small></p>
                 <table id="subject-table" class="table-sm">
                     <thead class='thead-dark'>
-                        <div class="d-flex justify-content-between mb-1">
+                    <div class="d-flex justify-content-between mb-2">
                             <!-- SEARCH BAR -->
-                            <form>
-                                <div class="d-flex flex-grow-1">
-                                    <input id="search-sub-input" type="search" class="form-control form-control-sm mb-0 me-2" placeholder="Search subject here">
-                                    <input type="reset" data-target-table='#subject-table' class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
-                                </div>
-                            </form>
+                            <span class="flex-grow-1 me-3">
+                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                            </span>
                         </div>
                         <tr>
                             <th data-checkbox="true"></th>
@@ -427,7 +424,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                 <form id="as-form" method="POST" action="action.php">
                     <input type="hidden" name="teacher_id" value="<?php echo $current_teacher_id; ?>" />
                     <input type="hidden" name="action" value="editSubject">
-                    <button id='cancel-as-btn' class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button id='cancel-as-btn' class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" form="as-form" id='save-as-btn' class="submit btn btn-success" value="Save">
                 </form>
             </div>
@@ -455,16 +452,15 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                     <input type="hidden" name="action" value="advisoryChange" />
                     <div id="section-opt-con" class="border p-3">
                         <p class="text-secondary"><small>Select one section to be assigned or switched</small></p>
-                        <div class="search-con d-flex">
-                            <form>
-                                <input id="search-section" type="text" class="form-control flex-grow-1 me-3" placeholder="Search section here ...">
-                                <input type="reset" class="form-control mb-0 me-1 btn-dark" value="Clear"/>
-                            </form>
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <!-- SEARCH BAR -->
+                            <span class="flex-grow-1 me-3">
+                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                            </span>
                             <div class="dropdown">
-                                <button class="btn shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Filter
-                                </button>
-                                <ul class="dropdown-menu d-none" aria-labelledby="section-filter">
+                                <button class="btn btn-primary btn-sm" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-filter me-2"></i>Filter</button>
+                                <ul class="dropdown-menu" aria-labelledby="section-filter">
                                     <li><a href="#" id="all-section-btn" class="dropdown-item">All</a></li>
                                     <li><a id="no-adv-btn" class="dropdown-item">No Adviser</a></li>
                                     <li><a id="with-adv-btn" class="dropdown-item">With Adviser</a></li>
@@ -480,7 +476,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                             </div>
                             <!-- NO RESULTS MESSAGE -->
                             <div class="d-flex justify-content-center <?php echo $no_match_display; ?>" style="position: absolute; top: 0; right: 0; bottom: 0; left:0; z-index: 2;">
-                                <p class="no-result-msg my-auto" >No results found</p>
+                                <p class="no-result-msg my-auto">No results found</p>
                             </div>
 
 
@@ -500,18 +496,18 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                         $availability = "unavailable";
                                     }
                                     echo "<li class='list-group-item'>"
-                                                ."<div class='form-row row'>"
-                                                    ."<span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>"
-                                                    ."<div class='section-info d-flex justify-content-between col-sm-6'>"
-                                                        ."<label for='$sect_code'>$sect_code - $sect_name </label>"
-                                                        ."<span class='text-secondary'>G$sect_grd</span>"
-                                                    ."</div>"
-                                                    ."<div class='section-status d-flex justify-content-between col-sm-5'>"
-                                                        ."<div class='teacher-con' title='Current class adviser'>$sect_adviser</div>"
-                                                        ."<span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>"
-                                                    ."</div>"
-                                                ."</div>"
-                                            ."</li>";
+                                        . "<div class='form-row row'>"
+                                        . "<span class='col-1'><input id='$sect_code' class='form-check-input me-1' data-current-adviser='$sect_adviser_id' name='section' type='radio' value='$sect_code'></span>"
+                                        . "<div class='section-info d-flex justify-content-between col-sm-6'>"
+                                        . "<label for='$sect_code'>$sect_code - $sect_name </label>"
+                                        . "<span class='text-secondary'>G$sect_grd</span>"
+                                        . "</div>"
+                                        . "<div class='section-status d-flex justify-content-between col-sm-5'>"
+                                        . "<div class='teacher-con' title='Current class adviser'>$sect_adviser</div>"
+                                        . "<span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span>"
+                                        . "</div>"
+                                        . "</div>"
+                                        . "</li>";
                                 }
                                 ?>
                             </ul>
@@ -524,7 +520,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-outline-dark close-btn" data-bs-dismiss="modal">Cancel</button>
                 <input type="submit" form="advisory-form" class="submit btn btn-success" value="Save">
             </div>
         </div>
