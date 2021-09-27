@@ -56,7 +56,7 @@
         </div>
     </div>
     <!-- SPINNER END -->
-    <section id="container">
+    <section id="container"></section>
         <?php include_once('../inc/admin/sidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
@@ -84,9 +84,11 @@
                             <?php 
                                 include "../class/Administration.php";
                                 $admin = new Administration();
+                                $stud_id = '1111';  // test
+                                $filename = $stud_id.'_grade_report'; // 1111_grade_report
                                 // $grades = $admin->getGrade();
 
-                                function echoGradeRecords($grade_list) {
+                                function prepareGradeRecordsHTML($grade_list) {
                                     $row = '';
                                     foreach($grade_list as $grade) {
                                         $row .= "<tr>
@@ -123,15 +125,15 @@
                                                 <tr class='bg-light'>
                                                     <td colspan='4'>Core Subjects</td>
                                                 </tr>".
-                                                    echoGradeRecords($grades['core'])
+                                                    prepareGradeRecordsHTML($grades['core'])
                                                 ."<tr class='bg-light'>
                                                     <td colspan='4'>Applied Subjects</td>
                                                 </tr>".
-                                                    echoGradeRecords($grades['applied'])
+                                                    prepareGradeRecordsHTML($grades['applied'])
                                                 ."<tr class='bg-light'>
                                                     <td colspan='4'>Specialized Subjects</td>
                                                 </tr>".
-                                                    echoGradeRecords($grades['specialized'])
+                                                    prepareGradeRecordsHTML($grades['specialized'])
                                                 ."<tr class='bg-light fw-bold'>
                                                     <td colspan='3'>General Average for the Semester:</td>
                                                     <td class='bg-white'></td>
@@ -141,64 +143,147 @@
 
                                 }
                                 $grades = [
-                                    'core' => [
-                                        ['sub_name'  => "Test 01",
-                                         'grade_1'   => '98',
-                                         'grade_2'   => '100',
-                                         'grade_f'   => ''],
-                                        ['sub_name'  => "Test 02",
-                                         'grade_1'   => '99',
-                                         'grade_2'   => '89',
-                                         'grade_f'   => ''
-                                        ]
+                                    'First' => [ 
+                                        'core' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ],
+                                        'applied' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ],
+                                        'specialized' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ] 
                                     ],
-                                    'applied' => [
-                                        ['sub_name'  => "Test 01",
-                                         'grade_1'   => '98',
-                                         'grade_2'   => '',
-                                         'grade_f'   => ''],
-                                        ['sub_name'  => "Test 02",
-                                         'grade_1'   => '99',
-                                         'grade_2'   => '',
-                                         'grade_f'   => ''
-                                        ]
+                                    'Second' => [ 
+                                        'core' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ],
+                                        'applied' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ],
+                                        'specialized' => [
+                                            ['sub_name'  => "Test 01",
+                                            'grade_1'   => '98',
+                                            'grade_2'   => '100',
+                                            'grade_f'   => ''],
+                                            ['sub_name'  => "Test 02",
+                                            'grade_1'   => '99',
+                                            'grade_2'   => '89',
+                                            'grade_f'   => ''
+                                            ]
+                                        ] 
+                                    ]
+                                ];
+
+                                $observed_values_desc = [
+                                    "Makadiyos" => [
+                                        "Expresses one’s spiritual beliefs while respecting the spirtiual beliefs of others.",
+                                        "Shows  adherence to ethical principles by uphoalding truth in all undertakings." 
                                     ],
-                                    'specialized' => [
-                                        ['sub_name'  => "Test 01",
-                                         'grade_1'   => '98',
-                                         'grade_2'   => '',
-                                         'grade_f'   => ''],
-                                        ['sub_name'  => "Test 02",
-                                         'grade_1'   => '99',
-                                         'grade_2'   => '',
-                                         'grade_f'   => ''
-                                        ]
+                                    "Makatao"  =>  [
+                                        "In sensitive to individual, social, and cultural differences." ,
+                                        "Demonstrates contributions towards solidarity"
+                                    ],
+                                    "Makakalikasan" => [
+                                        "Cares for environment and utilizes resources wisely, judiciously and economically." ,
+                                    ],
+                                    "Makabansa"  => [
+                                        "Demonstrates pride in being a Filipino; exercises the rights and responsibilities of a Filipino citizen.",
+                                        "Demonstrate appropriate behavior in carrying out activities in school, community and country." 
                                     ]
                                 ];
 
                                 $observed_values = [
-                                    "Makadiyos" => [
-                                        "Expresses one’s spiritual beliefs while respecting the spirtiual beliefs of others." => ['AO', 'SO', 'RO', 'NO'],
-                                        "Shows  adherence to ethical principles by uphoalding truth in all undertakings." => ['AO', 'SO', 'RO', 'NO']
+                                    "1" => [
+                                        'Makadiyos'     => ['AO', 'SO'],
+                                        'Makatao'       => ['NO', 'RO'],
+                                        'Makakalikasan' => ['NO'],
+                                        'Makatao'       => ['NO', 'RO'],
                                     ],
-                                    "Makatao"  =>  [
-                                        "In sensitive to individual, social, and cultural differences." => ['AO', 'SO', 'RO', 'NO'],
-                                        "Demonstrates contributions towards solidarity" => ['AO', 'SO', 'RO', 'NO']
+                                    "2" => [
+                                        'Makadiyos'     => ['AO', 'SO'],
+                                        'Makatao'       => ['NO', 'RO'],
+                                        'Makakalikasan' => ['NO'],
+                                        'Makatao'       => ['NO', 'RO'],
                                     ],
-                                    "Makakalikasan" => [
-                                        "Cares for environment and utilizes resources wisely, judiciously and economically." => ['AO', 'SO', 'RO', 'NO'],
+                                    "3" => [
+                                        'Makadiyos'     => ['AO', 'SO'],
+                                        'Makatao'       => ['NO', 'RO'],
+                                        'Makakalikasan' => ['NO'],
+                                        'Makatao'       => ['NO', 'RO'],
                                     ],
-                                    "Makabansa"  => [
-                                        "Demonstrates pride in being a Filipino; exercises the rights and responsibilities of a Filipino citizen." => ['AO', 'SO', 'RO', 'NO'],
-                                        "Demonstrate appropriate behavior in carrying out activities in school, community and country." => ['AO', 'SO', 'RO', 'NO']
+                                    "4" => [
+                                        'Makadiyos'     => ['AO', 'SO'],
+                                        'Makatao'       => ['NO', 'RO'],
+                                        'Makakalikasan' => ['NO'],
+                                        'Makatao'       => ['NO', 'RO'],
                                     ]
                                 ];
-                                
                             ?>
 
 
                             <div class="d-flex-inline">
-                                <button onclick='generatePDF()' class="btn btn-sm btn-primary">Download</button>
+                                <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
                             </div>
                             <div class="doc bg-white ms-2 mt-3 p-0 shadow">
                                 <ul class="template p-0 w-100">
@@ -223,11 +308,10 @@
                                         </div> -->
                                         <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                         <?php 
-                                            renderSemesterGradeTable('1st Semester', $grades);
-                                            renderSemesterGradeTable('2nd Semester', $grades);
+                                            renderSemesterGradeTable('1st Semester', $grades['First']);
+                                            renderSemesterGradeTable('2nd Semester', $grades['Second']);
                                         ?>
                                         <br>
-                            
                                     </li>
                                     <hr class='m-0'>
                                     <!-- <div class="html2pdf__page-break"><hr class='m-0'></div> -->
@@ -303,16 +387,13 @@
                                                     <b>Remarks</b>
                                                     <p>Passed<br>Passed<br>Passed<br>Passed<br>Failed</p>
                                                 </div>
-                                              
                                             </div>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
 
-                            
-
-                          
+                                              
                         </div>
                     </div>
                 </div>
@@ -336,17 +417,20 @@
     <script src="../js/common-custom.js"></script>
     <script >
 
-        function generatePDF() {
+        function generatePDF(filename) {
+            // hide horizontal line 
+            // $(".doc hr").addClass('d-none');
             const template = document.querySelector(".template");
             var opt = {
                 // margin: 0.5,
                 margin: 0,
-                filename: 'grade.pdf',
+                filename: filename + '.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 4, dpi: 300 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
             html2pdf().from(template).set(opt).save();
+            // $(".doc hr").removeClass('d-none');
         }
         // window.generatePDF = generatePDF;
         $(function () {
