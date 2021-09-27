@@ -11,7 +11,17 @@
 <div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
 
 </div>
-
+<!-- QUICK ACTIONS -->
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">                       
+                <div class="row mt ps-3">     
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
 <!-- MODAL -->
 <div id="deactivate-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
