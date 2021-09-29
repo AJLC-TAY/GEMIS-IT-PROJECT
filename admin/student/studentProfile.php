@@ -46,7 +46,6 @@ if (is_null($guardian)) {
     $guardian_cp_no = $guardian['cp_no'];
     $guardian_relationship = $guardian['relationship'];
 }
-
 ?>
 
 <title>Student Information | GEMIS</title>
@@ -119,6 +118,7 @@ if (is_null($guardian)) {
                             <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
                             <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
+                       <?php $admin->listValuesReport()?> 
 
                         <!-- PROFILE PICTURE END -->
                         <!-- INFORMATION DETAILS -->
