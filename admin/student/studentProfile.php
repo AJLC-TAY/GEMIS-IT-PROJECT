@@ -67,8 +67,8 @@ if (is_null($guardian)) {
 <div class="d-flex justify-content-between align-items-center">
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
-        <button id="deactivate-btn" data-user-id=<?php echo $user_id_no; ?> class="deactivate btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
-        <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn btn-secondary link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+    <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn btn-secondary link my-auto me-3"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        <button id="deactivate-btn" data-user-id=<?php echo $user_id_no; ?> class="deactivate btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
     </div>
     <div class="modal fade" id="deactivateConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -80,11 +80,11 @@ if (is_null($guardian)) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Are you sure you want to deactivate <?php echo $name ?><span id="full-modal-identifier"></span>?</h5>
+                    <h6>Are you sure you want to deactivate <?php echo $name ?><span id="full-modal-identifier"></span>?</h6>
                     <p class="modal-msg"></p>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                     <button class="btn btn-danger me-3 close-btn deact-btn">Deactivate</button>
                 </div>
             </div>
