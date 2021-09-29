@@ -86,7 +86,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <p role='button' class="edit-text profile-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='upload' class='form-control form-control-sm mt-2 w-75' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
 
         <div class='form-group col-md-4 d-flex flex-column'>
@@ -97,7 +97,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='psaUpload' class='form-control form-control-sm' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='psaUpload' class='form-control form-control-sm mt-2 w-75' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
     </div>
     

@@ -47,7 +47,6 @@ $programs = [];
         <!-- MAIN REPORT INFO -->
         <div class="card p-4 bg-white mb-3 w-75" >
             <?php
-
             $accepted_grand_total = [];
             $rejected_grand_total = [];
 

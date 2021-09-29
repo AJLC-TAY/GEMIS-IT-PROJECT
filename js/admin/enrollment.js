@@ -3,19 +3,6 @@ try {
     var stepper = new Stepper($('#stepper')[0])
 } catch (e) {}
 
-function generatePDF() {
-    const template = document.querySelector(".template");
-    var opt = {
-        margin: 0.5,
-        filename: 'myfile.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 4, dpi: 300 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    html2pdf().from(template).set(opt).save();
-}
-window.generatePDF = generatePDF;
-
 $(function() {
     preload("#enrollment", "#enrollment-sub");
 
