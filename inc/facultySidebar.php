@@ -1,6 +1,28 @@
 <?php
 // session handling
-$school_year = "2021 - 2022";
+session_start();
+$school_year = $_SESSION['sy_desc'];
+$roles = $_SESSION['roles'];
+
+$enrollment_item = '';
+if (in_array('can_enroll', $roles)) {
+    $enrollment_item = " <li class='sub-menu'>"
+                ."<a id='enrollment' href='enrollment.php'>"
+                    ."<i class='fa fa-users'></i>"
+                    ."<span>Enrollment</span>"
+                ."</a>"
+            ."</li>";
+}
+
+$award_coor_item = '';
+if (in_array('award_coor', $roles)) {
+    $award_coor_item = " <li class='sub-menu'>"
+                ."<a id='awards' href='awards.php'>"
+                    ."<i class='fa fa-users'></i>"
+                    ."<span>Enrollment</span>"
+                ."</a>"
+            ."</li>";
+}
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
@@ -34,19 +56,13 @@ $school_year = "2021 - 2022";
                     <span>Home</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="enrollment" href="enrollment.php">
-                    <i class="fa fa-users"></i>
-                    <span>Enrollment</span>
-                </a>
-            </li>
+            <?php echo $enrollment_item; ?>
             <li class="sub-menu">
                 <a id="students" href="students.php">
                     <i class="fa fa-graduation-cap"></i>
                     <span>Students</span>
                 </a>
             </li>
-
             <li class="sub-menu">
                 <a id="grade" href="grade.php">
                     <i class="fa fa-user"></i>
@@ -60,17 +76,12 @@ $school_year = "2021 - 2022";
                 </a>
             </li>
             <li class="sub-menu">
-                <a id='awards' href="awards.php">
-                    <i class="fa fa-pencil-square-o"></i>
-                    <span>Awards</span>
-                </a>
-            </li>
-            <li class="sub-menu">
                 <a id='archived' href="archived.php">
                     <i class="fa fa-pencil-square-o"></i>
                     <span>Archived Classes</span>
                 </a>
             </li>
+            <?php echo $award_coor_item; ?>
             <li class="sub-menu">
                 <a id='faculty' href="profile.php">
                     <i class="fa fa-pencil-square-o"></i>

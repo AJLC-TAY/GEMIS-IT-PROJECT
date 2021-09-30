@@ -5,7 +5,7 @@ $_SESSION['id'] = 1;
 $_SESSION['sy_id'] = 15;
 $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
-
+$_SESSION['roles'] = ['can_enroll', 'award_coor'];
 include_once("../inc/head.html");
 $action = "profile";
 $page_path = "../admin/faculty/facultyProfile.php";
