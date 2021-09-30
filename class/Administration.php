@@ -281,7 +281,7 @@ class Administration extends Dbconfig
     // per faculty or subject teacher, so kukunin lahat ng students at grade by subject
     // 1.  retrieve for adviser muna para maintegrate natin si report
     // so ung data na need is ung current quarter? para kong 1 lang si grade_1 lang malalagyan HHAH or ewan ko kong mapped sa db ung quarter baka oks lang na kunin buo baka oks lang basta 0 .. visualization, kunyari current quarter is 1, ang kukunin lang na grading is 1, pag 2, 1 at 2, pag 3, 1 2 at 3, pag 4, 1 2 3 4 ganun? oo parang ganon HAHAH pero dik sure depende sa meron sa db :v hakdog HAHAHAHAHHAHAH
-    // 1. SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id' ... allison is nabubuang??? pacheck na lang if tama my ginagawa HAHAHHAA
+    // 1. SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id' ... 
     // 2. if current quarter 1 = 
       //STRUCTURES 
     
@@ -316,50 +316,93 @@ class Administration extends Dbconfig
 
         $grades = array();
 
-        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = ?"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
-        $subject_type = $this->query("SELECT sub_type FROM subject GROUP BY sub_type ?");//insert ung query nung pagretrieve ng subtypes  // subtypes lang ba etey?
-        $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
-                                    FROM classgrade JOIN subjectclass USING(sub_class_code) 
-                                    JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
-                                    WHERE stud_id = ?");//insert ung query nung pagretrieve ng grades per quarter 
-        
-        while($row = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
-            while($sub_type = mysqli_fetch_assoc($subject_type)) { 
-                while($stud_grd = mysqli_fetch_assoc($stud_grade)) { 
-                    $grades[$row['sub_semester']] = [
-                        $grades[$sub_type['sub_type']] = [
-                            'subname' => $row['sub_name'],
-                            'grade_1' => $row['first_grading'],
-                            'grade_2' => $row['second_grading'],
-                            'grade_f' => $row['final_grade']
-                        ]
-                    ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+        $result = ['1'];//$this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
+        $subject_type = ['core','specialized']; //$this->query("SELECT sub_type FROM subject GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes  // subtypes lang ba etey?
+        $stud_grade = ['subname' => 'test',
+        'first_grading' => '98',
+        'second_grading' => '80',
+        'final_grade' => '89'];//$this->query("SELECT sub_name, first_grading, second_grading, final_grade 
+                                    // FROM classgrade JOIN subjectclass USING(sub_class_code) 
+                                    // JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
+                                    // WHERE stud_id = 110001");//insert ung query nung pagretrieve ng grades per quarter 
+                                    
+        foreach($result as $res){
+            foreach($subject_type as $type){
+                foreach($stud_grade as $row){
+                    $grades[$res] = [
+                                        $grades[$type] = [
+                                            'subname' => $row['sub_name'],
+                                            'grade_1' => $row['first_grading'],
+                                            'grade_2' => $row['second_grading'],
+                                            'grade_f' => $row['final_grade']
+                                        ]
+                                    ];
                 }
             }
         }
+        // while($row = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
+        //     while($sub_type = mysqli_fetch_assoc($subject_type)) { 
+        //         while($row = mysqli_fetch_assoc($stud_grade)) { 
+        //             $grades[$row['sub_semester']] = [
+        //                 $grades[$sub_type['sub_type']] = [
+        //                     'subname' => $row['sub_name'],
+        //                     'grade_1' => $row['first_grading'],
+        //                     'grade_2' => $row['second_grading'],
+        //                     'grade_f' => $row['final_grade']
+        //                 ]
+        //             ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+        //         }
+        //     }
+        // }
         // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
-        return $grades;        
+        echo json_encode ($grades);        
     }
 
    
     public function listValuesReport() 
     {
         $values = [];
-        $result = $this->query("SELECT value_name, bhvr_statement FROM `observedvalues` JOIN `values` USING (value_id) GROUP BY bhvr_statement"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
-        $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110001 AND quarter = $qtr");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
+        $values_desc = [];
+        
+        $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
+        while($desc = mysqli_fetch_assoc($result)) { 
+            $bhv_statement[] = $desc['bhvr_statement'];
+            $values_desc[$desc['value_name']] = [$bhv_statement];
+        } 
+
+        $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110003 AND quarter = 1");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
         $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = ?"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
-        while($qtrs = mysqli_fetch_assoc($qtr)) { 
+        while($qtrs = mysqli_fetch_assoc($qtr)) {  
             while($marks = mysqli_fetch_assoc($markings)) { 
-                $values [$marks['quarter']] = [
+                $values [$qtrs['current_quarter']] = [
                         'subname' => $marks['sub_name'],
                         'grade_1' => $marks['first_grading'],
                         'grade_2' => $marks['second_grading'],
                         'grade_f' => $marks['final_grade']
 
-                ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+                ];// not tried and tested HAAHHAHHHAHA 
             }
-        }
-        return $values;
+        } //add for empty data
+        echo json_encode($values);
+
+        // $observed_values_desc = [
+        //     "Makadiyos" => [
+        //         "Expresses one’s spiritual beliefs while respecting the spirtiual beliefs of others.",
+        //         "Shows  adherence to ethical principles by uphoalding truth in all undertakings." 
+        //     ],
+        //     "Makatao"  =>  [
+        //         "In sensitive to individual, social, and cultural differences." ,
+        //         "Demonstrates contributions towards solidarity"
+        //     ],
+        //     "Makakalikasan" => [
+        //         "Cares for environment and utilizes resources wisely, judiciously and economically." ,
+        //     ],
+        //     "Makabansa"  => [
+        //         "Demonstrates pride in being a Filipino; exercises the rights and responsibilities of a Filipino citizen.",
+        //         "Demonstrate appropriate behavior in carrying out activities in school, community and country." 
+        //     ]
+        // ];
+
         // "1" => [
         //     'Makadiyos'     => ['AO', 'SO'],
         //     'Makatao'       => ['NO', 'RO'],
@@ -448,7 +491,7 @@ class Administration extends Dbconfig
     }
     
     public function editAttendance() {
-        // to resolve: months
+       //UPDATE `attendance` SET `no_of_present` = '29', `no_of_absent` = '1', `no_of_tardy` = '0', `no_of_days` = '30' WHERE `attendance`.`attendance_id` = 1
     }
 
     public function listSYJSON()
