@@ -495,6 +495,11 @@ class SubjectClass extends Subject implements JsonSerializable
     {
         return $this->sub_class_code;
     }
+
+    public function get_section_name()
+    {
+        return $this->section_name;
+    }
     public function get_section_code()
     {
         return $this->section_code;

@@ -20,7 +20,7 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
-    use QueryMethods, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
+    use QueryMethods, School, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
     {
@@ -558,35 +558,10 @@ class Administration extends Dbconfig
         return $sectionList;
     }
 
-    public function listSectionOption($teacher_id)
-    {
-        $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
-                ."LEFT JOIN faculty AS f USING (teacher_id) "
-                ."WHERE teacher_id != '$teacher_id' "
-                ."OR teacher_id IS NULL ORDER BY teacher_id;";
-        $result = mysqli_query($this->db, $query);
-        $sectionList = array();
-        while ($row = mysqli_fetch_assoc($result)) {
-            $teacher_id = $row['teacher_id'];
-            $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
-            $sectionList[] = ["section_code" => $row['section_code'], 
-                              "section_name" => $row['section_name'],
-                              "section_grd"  => $row['grd_level'],
-                              "adviser_id"   => $teacher_id,
-                              "adviser_name" => $name
-                            ];
-        }
-        return $sectionList;
-    }
 
     public function listSectionJSON()
     {
         echo json_encode($this->listSection());
-    }
-
-    public function listSectionOptionJSON($teacher_id)
-    {
-        echo json_encode($this->listSectionOption($teacher_id));
     }
 
 //     public function addSection() 
@@ -823,42 +798,6 @@ class Administration extends Dbconfig
 
 
     /*** Subject Methods */
-    public function listSubjects($tbl)
-    {
-        $subjectList = [];
-
-        $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
-
-        $queryOne = (!isset($_GET['prog_code']))
-            ? "SELECT * FROM $tbl;"
-            : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub
-               WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
-
-        $resultOne = mysqli_query($this->db, $queryOne);
-
-        while ($row = mysqli_fetch_assoc($resultOne)) {
-            $code = $row['sub_code'];
-            $sub_type = $row['sub_type'];
-            $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
-            
-            if ($sub_type == 'specialized') {
-                $resultTwo = mysqli_query($this->db,  "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
-                $rowTwo = mysqli_fetch_row($resultTwo);
-                $subject->set_program($rowTwo[0] ?? "");
-            }
-            $subjectList[] = $subject;
-        }
-
-        return $subjectList;
-    }
-
-    public function listSubjectsJSON()
-    {
-        echo json_encode($this->listSubjects('subject'));
-    }
-
     public function listAllSub($tbl)
     {
         $query = "SELECT * FROM {$tbl}";
@@ -1277,29 +1216,6 @@ class Administration extends Dbconfig
 
     /** User Profile */
     /**
-     * Returns the user Object of the specified user type.
-     * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
-     * @return Faculty|Student|void
-     */
-
-    public function getProfile($type)
-    {
-        $id = $_GET['id'] ?? $_SESSION['id'];
-
-        if ($type === 'AD') {
-            return $this->getAdministrator($id ?? NULL);
-        }
-
-        if ($type === 'FA') {
-            return $this->getFaculty($id);
-        }
-
-        if ($type === 'ST') {
-            return $this->getStudent($id);
-        }
-    }
-
-    /**
      * Returns the count of current administrators, faculty, and students.
      * @return array
      */
@@ -1391,7 +1307,7 @@ class Administration extends Dbconfig
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep,
             $canEnroll, $editGrades, $department, $cp_no, $imgContent
         ];
-        $types = "sssssdssiiisss"; // datatypes of the current parameters
+        $types = "sssssdssiiisss"; // data types of the current parameters
 
         if ($action == 'add') {
             $statusMsg = $this->addFaculty($params, $types);
@@ -1605,13 +1521,14 @@ class Administration extends Dbconfig
         );
     }
 
-    public function listAdvisoryClasses($is_json = FALSE)
+    public function listAdvisoryClasses($is_JSON = FALSE)
     {
-        session_start();
+        // session_start();
         $id = $_GET['id'];
+        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
         $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
             ."CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
-            ."FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} AND section_code!={$_GET['currentAdvisory']};");
+            ."FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} $advisorCondition;");
         $advisory_classes = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $advisory_classes[] = [
@@ -1621,11 +1538,11 @@ class Administration extends Dbconfig
                 "section_code" => $row['section_code'],
                 "section_name" => $row['section_name'],
                 "section_grd"  => $row['grd_level'],
-                "stud_no"  => $row['stud_no']
+                "stud_no"      => $row['stud_no']
             ];
         }
 
-        if ($is_json) {
+        if ($is_JSON) {
             echo json_encode($advisory_classes);
             return;
         }
@@ -1858,17 +1775,6 @@ class Administration extends Dbconfig
         );
     }
 
-    public function listDepartments()
-    {
-        $result = mysqli_query($this->db, "SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
-        $departments = [];
-        while ($row = mysqli_fetch_row($result)) {
-            $departments[] = $row[0];
-        }
-
-        return $departments;
-    }
-
     /** Enroll Methods */
 
     public function listEnrolleesJSON()
@@ -1888,31 +1794,6 @@ class Administration extends Dbconfig
     }
 
     /** Section Methods */
-    public function listSubjectClasses($teacher_id = "")
-    {
-        $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
-        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
-                  FROM subjectclass AS sc JOIN subject AS s USING (sub_code) 
-                  JOIN section AS se USING (section_code) $condition ORDER BY sc.teacher_id ";
-        $result = $this->query($query);
-        $sub_classes = array();
-
-        while ($sc_row = mysqli_fetch_assoc($result)) {
-            $sub_classes[] = new SubjectClass(
-                $sc_row['sub_code'],
-                $sc_row['sub_name'],
-                $sc_row['grd_level'],
-                $sc_row['sub_semester'],
-                $sc_row['sub_type'],
-                $sc_row['sub_class_code'],
-                $sc_row['section_code'],
-                $sc_row['section_name'],
-                $sc_row['sy_id'],
-                $sc_row['teacher_id']
-            );
-        }
-        return $sub_classes;
-    }
     private function getSectionName($section_id) {
         $result = mysqli_query($this->db, "SELECT section_name FROM section WHERE section_code='$section_id'");
         return mysqli_fetch_row($result)[0];
@@ -1971,14 +1852,6 @@ class Administration extends Dbconfig
         mysqli_query($this->db, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
         mysqli_query($this->db, "UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
         $this->prepareSectionResult($section_dest, $teacher_id);
-    }
-
-    public function getAdvisoryClass() {
-        $data = mysqli_fetch_row($this->prepared_select("SELECT section_code, section_name FROM section WHERE teacher_id=?", [$_GET['id']], "i"));
-        if ($data) {
-            return ["section_code" => $data[0], "section_name" => $data[1]];
-        }
-        return NULL;
     }
 
     public function assignSubClasses($teacher_id) {
