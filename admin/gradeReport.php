@@ -86,18 +86,18 @@
                                 $admin = new Administration();
                                 $stud_id = '1111';  // test
                                 $filename = $stud_id.'_grade_report'; // 1111_grade_report
-                                // $grades = $admin->listGrade();
+                                $grades = $admin->listGrade();
+                                // echo json_encode($grades);
 
-                                function prepareGradeRecordsHTML($grade_list) {
+                                function prepareGradeRecordsHTML($grade) {
                                     $row = '';
-                                    foreach($grade_list as $grade) {
+                                    // echo json_encode($grade);
                                         $row .= "<tr>
-                                        <td>{$grade['sub_name']}</td>
-                                        <td align='center'>{$grade['grade_1']}</td>
-                                        <td align='center'>{$grade['grade_2']}</td>
-                                        <td align='center'>{$grade['grade_f']}</td>
+                                        <td>{$grade[0]['sub_name']}</td>
+                                        <td align='center'>{$grade[0]['grade_1']}</td>
+                                        <td align='center'>{$grade[0]['grade_2']}</td>
+                                        <td align='center'>{$grade[0]['grade_f']}</td>
                                         </tr>";
-                                    }
                                     return $row;
                                 }
 
@@ -142,98 +142,7 @@
                                         </table>";
 
                                 }
-                                $grades = [
-                                    'First' => [ 
-                                        'core' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'applied' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'specialized' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ] 
-                                    ],
-                                    'Second' => [ 
-                                        'core' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'applied' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'specialized' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ] 
-                                    ]
-                                ];
+                                
 
                                 $observed_values_desc = [
                                     "Makadiyos" => [
@@ -309,8 +218,9 @@
                                         </div> -->
                                         <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                         <?php 
-                                            renderSemesterGradeTable('1st Semester', $grades['First']);
-                                            renderSemesterGradeTable('2nd Semester', $grades['Second']);
+                                        
+                                            renderSemesterGradeTable('1st Semester', $grades['1']);
+                                            renderSemesterGradeTable('2nd Semester', $grades['2']);
                                         ?>
                                         <br>
                                     </li>

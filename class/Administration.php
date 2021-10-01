@@ -286,8 +286,8 @@ class Administration extends Dbconfig
       //STRUCTURES 
     
     
-    //   $grades = [
-    //     'core' => [
+    //   $grades = [1 = [
+      //  'core' => [
     //         ['sub_name'  => "Test 01",
     //          'grade_1'   => '98',
     //          'grade_2'   => '100',
@@ -308,56 +308,71 @@ class Administration extends Dbconfig
     //          'grade_f'   => ''],
     //         
     //     ]
+    //]
+    //     
     // ];
 
     
     public function listGrade() 
     {
 
-        $grades = array();
+        $grades = [];
+        $stud_id = 110001;
+        $grado = [];
+        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
+        $sy_id = 9;//$this->query("SELECT * FROM schoolyear WHERE status = 'current'"); '
+        $subject_type = $this->query("SELECT sub_type FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = $stud_id GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
+        while($sem = mysqli_fetch_assoc($result)) { 
+            while($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
+                for($x = 1; $x <= $sem['current_semester']; $x++ ){ 
+                    $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = $x"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    
+                    // foreach($sub_type as $type){
+                        while($grd = mysqli_fetch_assoc($stud_grade)) { 
+                            // echo json_encode($sub_type['sub_type']);
+                            // echo ("-------------");
+                            if($sub_type['sub_type'] == $grd['sub_type']){
+                                
+                                // echo ($grd['sub_type']);
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => $grd['first_grading'],
+                                    'grade_2'   => $grd['second_grading'],
+                                    'grade_f'   => $grd['final_grade'] 
+                                ];
+                            }
+                        }
 
-         $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 4"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
-        // $subject_type = $this->query("SELECT sub_type FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = ? GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
-        // $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
-        //                          FROM classgrade JOIN subjectclass USING(sub_class_code) 
-        //                              JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
-        //                              WHERE stud_id = 110001");//insert ung query nung pagretrieve ng grades per quarter sigi
-        //                              // 1. pwede bang mag if here HAHAHA if $result = 1, SELECT sub_name, first_grading FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = 110001 HAHAHAHHAHAHAHHA
-        //                              // 2. tapos if $result = 2, SELECT sub_name, first_grading, second_grading HAHAHAHHAHAHA KAJDBLADHLAKDHALKDNAL 
-                                        // chinange ko na jay subject type HAHAHHAAH
-                                        // HAHHA go kesleeeeey
-                                        
-    
-        while($qtr = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
-            for($x = 0; $x <= $qtr['current_sem']; $x++ ){ 
-                // HAAHAHAAAHA hindi, schoolyear table, so kapag kunyare sem = 1, ang kailangan ket 1st at 2nd
-                // yung 1st at 2nd grading pala garud sa classgrade is 1st at 2nd sem? 
-                // may 2 sems
-                // 1 sem = 2 grading/quarter
-                // 2 , 1 at 2 , 1 sem , map what sem
-                // 
-                $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
-                                  FROM classgrade JOIN subjectclass USING(sub_class_code) 
-                                  JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
-                                  WHERE stud_id = 110001"); //sub_name | first_grading | seconf_grading | final_grading sa particular na sem
-            } 
-        //     while($sub_type = mysqli_fetch_assoc($subject_type)) { 
-        //         $types[] = [
-        //             $sub_type['sub_type']
-        //         ];
-        //         // while($row = mysqli_fetch_assoc($stud_grade)) { 
-        //         //     // foreach($)
-        //         //     $grades[$sem['current_semester']] = [
-        //         //         // $grades[$sub_type['sub_type']] = [
-        //         //         //     'subname' => 'test',//$row['sub_name'],
-        //         //         //     'grade_1' => 44,//$row['first_grading'],
-        //         //         //     'grade_2' => 56,//$row['second_grading'],
-        //         //         //     'grade_f' => 43,//$row['final_grade']
-        //         //         // ]
                         
-        //         //     ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
-        //         // } 
-        //     }
+                    // }
+                    $grades[$x][$sub_type['sub_type']] = $grado;
+                    $grado=[];
+                } 
+               
+                //ung kukunin lang is ung sub_name and sub_type ni stud
+                if(sizeof($grades) != 2){
+                    
+                    $stud_grd = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    
+                    // foreach($sub_type as $type){
+                        while($grds = mysqli_fetch_assoc($stud_grd)) { 
+                            
+                                $grades['2'][$grds['sub_type']][] = [
+                                    'sub_name'  => $grds['sub_name'],
+                                    'grade_1'   => '',
+                                    'grade_2'   => '',
+                                    'grade_f'   => '' 
+                                ];
+                                
+                        }
+                    
+                } 
+                
+           
+        }
+                                        
+        
+        
         }
         // // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
         return ($grades);       
@@ -399,8 +414,6 @@ class Administration extends Dbconfig
             }
             
         } 
-
-
         return $values; 
     }
 
