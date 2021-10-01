@@ -360,8 +360,7 @@ class Administration extends Dbconfig
         //     }
         }
         // // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
-        echo json_encode ($grades);       
-        // echo("test"); 
+        return ($grades);       
     }
 
    
@@ -369,69 +368,40 @@ class Administration extends Dbconfig
     {
         $values = [];
         $values_desc = [];
-        
+        $marking = [];
+        $stud_id = 110003;
+        $sy_id = 4;
         $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
-        while($desc = mysqli_fetch_assoc($result)) { 
-            $bhv_statement[] = $desc['bhvr_statement'];
-            $values_desc[$desc['value_name']] = [$bhv_statement];
-        } 
-        // schoolyear current_semerster = 1, reportid001, 1st 2nd grading
-        // schoolyear current_semester = 2, reportid001, 1st 2nd grading
-        // 
-        $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110003 AND quarter = 1");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
-        $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = '9'"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
-        while($qtrs = mysqli_fetch_assoc($qtr)) {
-            for($x = 0; $x <= $qtrs['current_sem']; $x++ ){ 
-                while($marks = mysqli_fetch_assoc($markings)) { 
-                    $values[$x] = [];
-                }
-            }   
+        
+
+        while($val = mysqli_fetch_assoc($result)) { 
             
-        } //add for empty data
-        echo json_encode($values_desc);
 
-        // $observed_values_desc = [
-        //     "Makadiyos" => [
-        //         "Expresses one’s spiritual beliefs while respecting the spirtiual beliefs of others.",
-        //         "Shows  adherence to ethical principles by uphoalding truth in all undertakings." 
-        //     ],
-        //     "Makatao"  =>  [
-        //         "In sensitive to individual, social, and cultural differences." ,
-        //         "Demonstrates contributions towards solidarity"
-        //     ],
-        //     "Makakalikasan" => [
-        //         "Cares for environment and utilizes resources wisely, judiciously and economically." ,
-        //     ],
-        //     "Makabansa"  => [
-        //         "Demonstrates pride in being a Filipino; exercises the rights and responsibilities of a Filipino citizen.",
-        //         "Demonstrate appropriate behavior in carrying out activities in school, community and country." 
-        //     ]
-        // ];
+            $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = $sy_id");
+            while($qtrs = mysqli_fetch_assoc($qtr)) {
+                for($x = 1; $x <= $qtrs['current_quarter']; $x++ ){
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    while($marks = mysqli_fetch_assoc($markings)) { 
+                        if($marks['bhvr_statement'] == $val['bhvr_statement'] AND $marks['value_name'] == $val['value_name'] ){
+                        $marking[$val['bhvr_statement']][] =  $marks['marking'];
+                        }
+                    }
+                }
+                
+                if(sizeof($marking) != 4){
+                    for($x=1; $x <= 3; $x++){
+                        $marking[$val['bhvr_statement']][] =  '';
+                    }
+                } 
 
-        // "1" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "2" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "3" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "4" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ]
+                $values[$val['value_name']][]=$marking;
+                    $marking = []; 
+            }
+            
+        } 
+
+
+        return $values; 
     }
 
     public function listAttendanceReport(){
