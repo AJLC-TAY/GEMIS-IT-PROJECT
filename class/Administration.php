@@ -316,46 +316,52 @@ class Administration extends Dbconfig
 
         $grades = array();
 
-        $result = ['1'];//$this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
-        $subject_type = ['core','specialized']; //$this->query("SELECT sub_type FROM subject GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes  // subtypes lang ba etey?
-        $stud_grade = ['subname' => 'test',
-        'first_grading' => '98',
-        'second_grading' => '80',
-        'final_grade' => '89'];//$this->query("SELECT sub_name, first_grading, second_grading, final_grade 
-                                    // FROM classgrade JOIN subjectclass USING(sub_class_code) 
-                                    // JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
-                                    // WHERE stud_id = 110001");//insert ung query nung pagretrieve ng grades per quarter 
-                                    
-        foreach($result as $res){
-            foreach($subject_type as $type){
-                foreach($stud_grade as $row){
-                    $grades[$res] = [
-                                        $grades[$type] = [
-                                            'subname' => $row['sub_name'],
-                                            'grade_1' => $row['first_grading'],
-                                            'grade_2' => $row['second_grading'],
-                                            'grade_f' => $row['final_grade']
-                                        ]
-                                    ];
-                }
-            }
-        }
-        // while($row = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
+         $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 4"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
+        // $subject_type = $this->query("SELECT sub_type FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = ? GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
+        // $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
+        //                          FROM classgrade JOIN subjectclass USING(sub_class_code) 
+        //                              JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
+        //                              WHERE stud_id = 110001");//insert ung query nung pagretrieve ng grades per quarter sigi
+        //                              // 1. pwede bang mag if here HAHAHA if $result = 1, SELECT sub_name, first_grading FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = 110001 HAHAHAHHAHAHAHHA
+        //                              // 2. tapos if $result = 2, SELECT sub_name, first_grading, second_grading HAHAHAHHAHAHA KAJDBLADHLAKDHALKDNAL 
+                                        // chinange ko na jay subject type HAHAHHAAH
+                                        // HAHHA go kesleeeeey
+                                        
+    
+        while($qtr = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
+            for($x = 0; $x <= $qtr['current_sem']; $x++ ){ 
+                // HAAHAHAAAHA hindi, schoolyear table, so kapag kunyare sem = 1, ang kailangan ket 1st at 2nd
+                // yung 1st at 2nd grading pala garud sa classgrade is 1st at 2nd sem? 
+                // may 2 sems
+                // 1 sem = 2 grading/quarter
+                // 2 , 1 at 2 , 1 sem , map what sem
+                // 
+                $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
+                                  FROM classgrade JOIN subjectclass USING(sub_class_code) 
+                                  JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
+                                  WHERE stud_id = 110001"); //sub_name | first_grading | seconf_grading | final_grading sa particular na sem
+            } 
         //     while($sub_type = mysqli_fetch_assoc($subject_type)) { 
-        //         while($row = mysqli_fetch_assoc($stud_grade)) { 
-        //             $grades[$row['sub_semester']] = [
-        //                 $grades[$sub_type['sub_type']] = [
-        //                     'subname' => $row['sub_name'],
-        //                     'grade_1' => $row['first_grading'],
-        //                     'grade_2' => $row['second_grading'],
-        //                     'grade_f' => $row['final_grade']
-        //                 ]
-        //             ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
-        //         }
+        //         $types[] = [
+        //             $sub_type['sub_type']
+        //         ];
+        //         // while($row = mysqli_fetch_assoc($stud_grade)) { 
+        //         //     // foreach($)
+        //         //     $grades[$sem['current_semester']] = [
+        //         //         // $grades[$sub_type['sub_type']] = [
+        //         //         //     'subname' => 'test',//$row['sub_name'],
+        //         //         //     'grade_1' => 44,//$row['first_grading'],
+        //         //         //     'grade_2' => 56,//$row['second_grading'],
+        //         //         //     'grade_f' => 43,//$row['final_grade']
+        //         //         // ]
+                        
+        //         //     ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+        //         // } 
         //     }
-        // }
-        // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
-        echo json_encode ($grades);        
+        }
+        // // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
+        echo json_encode ($grades);       
+        // echo("test"); 
     }
 
    
@@ -369,21 +375,20 @@ class Administration extends Dbconfig
             $bhv_statement[] = $desc['bhvr_statement'];
             $values_desc[$desc['value_name']] = [$bhv_statement];
         } 
-
+        // schoolyear current_semerster = 1, reportid001, 1st 2nd grading
+        // schoolyear current_semester = 2, reportid001, 1st 2nd grading
+        // 
         $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110003 AND quarter = 1");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
-        $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = ?"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
-        while($qtrs = mysqli_fetch_assoc($qtr)) {  
-            while($marks = mysqli_fetch_assoc($markings)) { 
-                $values [$qtrs['current_quarter']] = [
-                        'subname' => $marks['sub_name'],
-                        'grade_1' => $marks['first_grading'],
-                        'grade_2' => $marks['second_grading'],
-                        'grade_f' => $marks['final_grade']
-
-                ];// not tried and tested HAAHHAHHHAHA 
-            }
+        $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = '9'"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
+        while($qtrs = mysqli_fetch_assoc($qtr)) {
+            for($x = 0; $x <= $qtrs['current_sem']; $x++ ){ 
+                while($marks = mysqli_fetch_assoc($markings)) { 
+                    $values[$x] = [];
+                }
+            }   
+            
         } //add for empty data
-        echo json_encode($values);
+        echo json_encode($values_desc);
 
         // $observed_values_desc = [
         //     "Makadiyos" => [
@@ -460,11 +465,14 @@ class Administration extends Dbconfig
          $grade_id = $_POST['grade_id'];
          $report_id = $_POST['report_id'];
          $sub_class_code= $_POST['sub_class_code'];
+         //$grade=;
 
+         //1 => first_grading
+         //2 => seon
          //first grading //ganito muna di ko sure coniditional kung first,second,final ineedit ng user       
-         $this->prepared_query("UPDATE `classgrade` SET `first_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
-                              [$first_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
-                             "iiii");  
+        // $this->prepared_query("UPDATE `classgrade` SET `$grade` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+        //                      [$grade, $grade_id, $stud_id, $report_id, $sub_class_code],
+        //                     "iiii");  
         //second grading
         $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
                               [ $second_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
