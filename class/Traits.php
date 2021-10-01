@@ -127,6 +127,126 @@ trait UserSharedMethods
 trait FacultySharedMethods
 {
     /**
+     * Implementation of adding new, or editing existing faculty record.
+     */
+    public function processFaculty()
+    {
+        session_start();
+        $user_type = $_SESSION['user_type'];
+        $statusMsg = array();
+        $action = $_POST['action'];                 // value = "add" or "edit"
+        $allowTypes = array('jpg', 'png', 'jpeg');  // allowed image extensions
+
+
+        // General information
+        $lastname = trim($_POST['lastname']);
+        $firstname = trim($_POST['firstname']);
+        $middlename = trim($_POST['middlename']);
+        $extname = trim($_POST['extensionname']) ?: NULL; // return null if first value is '', otherwise return first value
+        $lastname = trim($_POST['lastname']);
+        $age = trim($_POST['age']);
+        $birthdate = trim($_POST['birthdate']);
+        $sex = $_POST['sex'];
+
+        // Contact information
+        $cp_no = trim($_POST['cpnumber']) ?: NULL;
+        $email = trim($_POST['email']);
+
+
+        // School information
+        $department = trim($_POST['department']) ?: NULL;
+
+        $params = [
+            $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
+        ];
+        $types = "sssssdss";
+        // Profile image
+        $imgContent = NULL;
+        $fileSize = $_FILES['image']['size'];
+        if ($fileSize > 0) {
+            if ($fileSize > 5242880) { //  file is greater than 5MB
+                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 5 MB";
+            }
+            $filename = basename($_FILES['image']['name']);
+            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+            if (in_array($fileType, $allowTypes)) {
+//                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
+                # Upload image
+                $imgContent = $_FILES['image']['tmp_name'];
+                $filename = $_SESSION['sy_id']."_". time() ."_".uniqid("", true).".$fileType";  // ex. upload/student/234236513_12323.png
+                $fileDestination = "../upload/student/$filename";
+                move_uploaded_file($imgContent, $fileDestination);
+            } else {
+                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
+                http_response_code(400);
+                die(json_encode($statusMsg));
+            }
+        }
+
+        switch($user_type) {
+            case "AD":
+                [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
+//                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
+                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $filename];
+//                $types .= "iiisss"; // data types of the current parameters
+                $types .= "iiisss"; // data types of the current parameters
+                break;
+            case "FA":
+//                $params = [...$params, $cp_no, $imgContent];
+                $params = [...$params, $cp_no, $filename];
+//                $types .= "ss";
+                $types .= "ss";
+                break;
+        }
+
+        if ($action == 'add' AND $user_type === 'AD') {
+            $statusMsg = $this->addFaculty($params, $types);
+        }
+        if ($action == 'edit') {
+            $statusMsg = $this->editFaculty($params, $types, $img, $user_type);
+        }
+
+        echo $statusMsg;
+    }
+    /**
+     * Implementation of updating Faculty
+     * 1.   Remove image content from parameters and types if null
+     * 2.   Add teacher id to the parameter and types before executing the query.
+     *      End if user is faculty.
+     * 3.   Update every subject handled if exist
+     * 4.   Update every subject classes handled
+     *  */
+    private function editFaculty(array $params, String $types, array $img, String $user_type)
+    {
+        // Step 1
+        $imgContent = end($params);                             // Image content is the last element of the parameter array
+        $imgQuery = ", id_picture=?";
+        if (is_null($imgContent)) {                                    // If image content is null
+            $imgQuery = "";
+            array_pop($params);                                 // remove image in params
+            $types = substr_replace($types, "", -1);      // remove last type
+        }
+        // Step 2
+        $params[] = $id = $_POST['teacher_id'];
+        $types .= "i";
+
+        $query = "UPDATE faculty SET last_name=?, first_name=?, middle_name=?, ext_name=?, birthdate=?, age=?, sex=?, email=?,";
+        if ($user_type === 'FA') {
+            $query .= " cp_no=?$imgQuery WHERE teacher_id=?;";
+            $this->prepared_query($query, $params, $types);
+        } else if ($user_type === 'AD') {
+            $query .= " award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=?$imgQuery WHERE teacher_id=?;";
+            $this->prepared_query($query, $params, $types);
+            // Step 3
+            $this->updateFacultySubjects($id);
+
+            // Step 4
+            $this->updateAssignedSubClass($id);
+        }
+
+        echo json_encode(["teacher_id" => $id]);
+    }
+    /**
      * Returns faculty with the specified teacher ID.
      * 1.   Get faculty record
      * 2.   Get records of handled subjects

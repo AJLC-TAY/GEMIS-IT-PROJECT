@@ -329,7 +329,8 @@ class Faculty implements JsonSerializable
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
                       ."</div>";
-        $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
+        $this->id_photo = $id_photo;
+//        $this->id_photo = is_null($id_photo) ? NULL : ("data:image/png;charset=utf8;base64,". base64_encode($id_photo));
     }
 
     public function get_teacher_id()

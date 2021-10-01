@@ -83,7 +83,7 @@ if (in_array('award_coor', $roles)) {
             </li>
             <?php echo $award_coor_item; ?>
             <li class="sub-menu">
-                <a id='faculty' href="profile.php">
+                <a id='faculty' href="faculty.php">
                     <i class="fa fa-pencil-square-o"></i>
                     <span>Profile</span>
                 </a>

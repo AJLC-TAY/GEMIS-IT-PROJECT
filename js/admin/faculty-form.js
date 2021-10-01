@@ -93,28 +93,32 @@ $(function () {
         readURL(this);
     });
 
-    /** Assign Subject to Faculty Methods */
-    asMethods(assigned, subjectTable);
-    /** Add Subject Class Methods */
-    scMethods(ASSIGNEDSCID, SCID);
+    try {
+        /** Assign Subject to Faculty Methods */
+        asMethods(assigned, subjectTable);
+        /** Add Subject Class Methods */
+        scMethods(ASSIGNEDSCID, SCID);
+    } catch (e) {}
 
     $(document).on("submit", "#faculty-form", function (e) {
         e.preventDefault();
-        var action = $(this).attr('data-action');
+        // var action = $(this).attr('data-action');
         var formData = new FormData($(this)[0]);
 
-        $(ASSIGNEDSCID).bootstrapTable("getData")
-                       .forEach(e => {
-                           formData.append("asgn-sub-class[]",  e.sub_class_code);
-                       });
-
-        subjectTable.bootstrapTable("getSelections")
+        try {
+            $(ASSIGNEDSCID).bootstrapTable("getData")
                            .forEach(e => {
-                               formData.append("subjects[]", e.sub_code);
+                               formData.append("asgn-sub-class[]",  e.sub_class_code);
                            });
 
-        formData.append("profile", "faculty");
-        formData.append("action", action);
+            subjectTable.bootstrapTable("getSelections")
+                               .forEach(e => {
+                                   formData.append("subjects[]", e.sub_code);
+                               });
+        } catch (e) {}
+
+        // formData.append("profile", "faculty");
+        // formData.append("action", action);
 
         $.ajax({
             url: "action.php",

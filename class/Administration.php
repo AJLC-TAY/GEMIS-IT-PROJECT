@@ -1278,86 +1278,28 @@ class Administration extends Dbconfig
 
     /** Faculty Methods */
     /**
-     * Implementation of adding new, or editing existing faculty record.
-     */
-    public function processFaculty()
-    {
-        $statusMsg = array();
-        $action = $_POST['action'];                 // value = "add" or "edit"
-        $allowTypes = array('jpg', 'png', 'jpeg');  // allowed image extensions
-
-
-        // General information
-        $lastname = trim($_POST['lastname']);
-        $firstname = trim($_POST['firstname']);
-        $middlename = trim($_POST['middlename']);
-        $extname = trim($_POST['extensionname']) ?: NULL; // return null if first value is '', otherwise return first value
-        $lastname = trim($_POST['lastname']);
-        $age = trim($_POST['age']);
-        $birthdate = trim($_POST['birthdate']);
-        $sex = $_POST['sex'];
-
-        // Contact information
-        $cp_no = trim($_POST['cpnumber']) ?: NULL;
-        $email = trim($_POST['email']);
-
-
-        // School information
-        $department = trim($_POST['department']) ?: NULL;
-        [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-
-        // Profile image
-        $imgContent = NULL;
-        $fileSize = $_FILES['image']['size'];
-        if ($fileSize > 0) {
-            if ($fileSize > 5242880) { //  file is greater than 5MB
-                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
-            }
-            $filename = basename($_FILES['image']['name']);
-            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
-            if (in_array($fileType, $allowTypes)) {
-                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
-            } else {
-                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
-                http_response_code(400);
-                die(json_encode($statusMsg));
-            }
-        }
-
-        $params = [
-            $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep,
-            $canEnroll, $editGrades, $department, $cp_no, $imgContent
-        ];
-        $types = "sssssdssiiisss"; // data types of the current parameters
-
-        if ($action == 'add') {
-            $statusMsg = $this->addFaculty($params, $types);
-        }
-        if ($action == 'edit') {
-            $statusMsg = $this->editFaculty($params, $types);
-        }
-
-        echo $statusMsg;
-    }
-
-    /**
      * Implementation of inserting Faculty
      * 1.   Create user default password by concatenating the prefix and the next 
      *      auto increment value (that is maximum of column id_no + 1). ex. FA1234567890
+     *      1.1 Move image to directory
      * 2.   Create faculty record
      * 3.   Insert every subject handled if exist
      * 4.   Insert every subject class handled
      *  */
     private function addFaculty($params, $types)
     {
+
         // Step 1
         $user_id = $this->createUser("FA");
         $params[] = $user_id;
         $types .= "i";
 
         // Step 2
+//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
         $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
                 ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+
         $this->prepared_query($query, $params, $types);
         $id = mysqli_insert_id($this->db);  // store the last inserted primary key (that is the teacher_id)
 
@@ -1378,39 +1320,6 @@ class Administration extends Dbconfig
         } else {
             return "Faculty unsuccessfully added.";
         }
-    }
-
-    /**
-     * Implementation of updating Faculty
-     * 1.   Remove image content from parameters and types if null
-     * 2.   Add teacher id to the parameter and types before executing the query
-     * 3.   Update every subject handled if exist
-     * 4.   Update every subject classes handled
-     *  */
-    private function editFaculty(array $params, String $types)
-    {
-        // Step 1
-        $imgContent = end($params);                             // Image content is the last element of the parameter array
-        $imgQuery = ", id_picture=?";
-        if (is_null($imgContent)) {                                    // If image content is null
-            $imgQuery = "";
-            array_pop($params);                                 // remove image in params
-            $types = substr_replace($types, "", -1);      // remove last type
-        } 
-        // Step 2
-        $params[] = $id = $_POST['teacher_id'];
-        $types .= "i";
-        $query = "UPDATE faculty SET last_name=?, first_name=?, middle_name=?, ext_name=?, birthdate=?, age=?, sex=?, "
-            . "email=?, award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=?$imgQuery WHERE teacher_id=?;";
-        $this->prepared_query($query, $params, $types);
-
-        // Step 3
-        $this->updateFacultySubjects($id);
-
-        // Step 4
-        $this->updateAssignedSubClass($id);
-
-        echo json_encode(["teacher_id" => $id]);
     }
 
     /**

@@ -7,9 +7,17 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 $_SESSION['roles'] = ['can_enroll', 'award_coor'];
 include_once("../inc/head.html");
-$action = "profile";
-$page_path = "../admin/faculty/facultyProfile.php";
-$js = "<script type='module' src='../js/admin/faculty.js'></script>";
+
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'edit') {
+        $page_path = "../admin/faculty/facultyForm.php";
+        $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    }
+} else {
+    $action = "profile";
+    $page_path = "../admin/faculty/facultyProfile.php";
+    $js = "<script type='module' src='../js/admin/faculty.js'></script>";
+}
 ?>
 
 <title>Profile | GEMIS</title>
@@ -54,8 +62,7 @@ $js = "<script type='module' src='../js/admin/faculty.js'></script>";
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-<!--    --><?php //echo $js; ?>
-    <script type='module' src='../js/admin/faculty.js'></script>
+    <?php echo $js; ?>
 </body>
 
 </html>
