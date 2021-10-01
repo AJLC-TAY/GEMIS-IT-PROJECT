@@ -1,8 +1,8 @@
 <?php
 # session handling here
-session_start();
+// session_start();
 const STYLE_DISPLAY_NONE = "style='display: none'";
-
+$_SESSION['user_type'] = 'FA';
 # Determine what class to import basing on the user type
 
 $user_type = $_SESSION['user_type'];
