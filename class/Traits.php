@@ -387,7 +387,7 @@ trait FacultySharedMethods
      * @param mixed $teacher_id
      * @return array
      */
-    public function getHandled_sub_classes(mixed $teacher_id): array
+    public function getHandled_sub_classes($teacher_id): array
     {
         $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
@@ -1005,3 +1005,4 @@ trait Grade
         return $grades;
     }
 }
+

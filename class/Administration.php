@@ -259,58 +259,7 @@ class Administration extends Dbconfig
         // header("Location: schoolYear.php");
     }
 
-        //INITIALIZATION
-    // 1. select churva classes mapped to the student's section.
-    // 2. For each subjectclass, create a classgrade with that class' sub_class_code.
-    // 3.  
-    //tables to be initialized: 
-    // [/] gradereport, *changes sa db - null lahat except report_id and stud_id;
-    // [/] classgrade, INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (141, 110001, 9101);
-    // [/] observevalues
-            
-     //!!!initializeGrades has been moved to Enroll Trait!!!
-    
-    // ---------------------------------------------
-
-    // RETRIEVAL of grades sigi wait prinoprocess ko HAHAHHA
-    // assuming na meron na tayong stud_id,
-    // retrieve the current quarter para malaman kong anong grade ung ilalabas SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id'
-    // 1. retrieve class with the grade // asa classgrade na table SELECT * FROM `classgrade` WHERE stud_id = 110001
-    //2. for each class imap mo sa category: core, specialize, applied SELECT stud_id, sub_class_code, sub_code, sub_name, sub_type, first_grading, second_grading, final_grade FROM `classgrade` JOIN `subjectclass` USING(sub_class_code) JOIN `sysub` USING(sub_sy_id) JOIN `subject` USING(sub_code) WHERE classgrade.stud_id = 110001 ORDER BY sub_type
-    
-    // per faculty or subject teacher, so kukunin lahat ng students at grade by subject
-    // 1.  retrieve for adviser muna para maintegrate natin si report
-    // so ung data na need is ung current quarter? para kong 1 lang si grade_1 lang malalagyan HHAH or ewan ko kong mapped sa db ung quarter baka oks lang na kunin buo baka oks lang basta 0 .. visualization, kunyari current quarter is 1, ang kukunin lang na grading is 1, pag 2, 1 at 2, pag 3, 1 2 at 3, pag 4, 1 2 3 4 ganun? oo parang ganon HAHAH pero dik sure depende sa meron sa db :v hakdog HAHAHAHAHHAHAH
-    // 1. SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id' ... 
-    // 2. if current quarter 1 = 
-      //STRUCTURES 
-    
-    
-    //   $grades = [1 = [
-      //  'core' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '100',
-    //          'grade_f'   => ''],
-    //         
-    //     ],
-    //     'applied' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '',
-    //          'grade_f'   => ''],
-    //         
-    //     ],
-    //     'specialized' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '',
-    //          'grade_f'   => ''],
-    //         
-    //     ]
-    //]
-    //     
-    // ];
+       
 
     
     public function listGrade() 
@@ -424,7 +373,7 @@ class Administration extends Dbconfig
                                       //feb [=> no_of_absent => 18
     }
 
-    //RETRIEVAL FOR SUBJECT TEACHER AND STUDENT --->pacheck haha 
+    //RETRIEVAL FOR ADVISER AND STUDENT --->pacheck haha 
     public function listStudentGrades() {
         $stud_id = $_POST['stud_id'];
         $sy_id = $_POST['sy_id'];
@@ -434,10 +383,14 @@ class Administration extends Dbconfig
         JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) 
         WHERE report_id IN (SELECT report_id FROM gradereport WHERE stud_id=$stud_id) 
         AND sy_id=$sy_id;");
+
+        
  
             
         //
     }
+
+    
 
     // UPDATE ---> pacheeeeck - ben
     public function editGrades() {

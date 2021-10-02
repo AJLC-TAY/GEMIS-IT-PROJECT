@@ -49,11 +49,11 @@ if (count($sub_classes) != 0) {
 
 <body>
     <!-- SPINNER -->
-    <div id="main-spinner-con" class="spinner-con">
+    <!-- <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
+    </div> -->
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
@@ -112,7 +112,7 @@ if (count($sub_classes) != 0) {
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="150" data-align="center" data-field="id"></th>
+                                                <th scope='col' data-width="150" data-align="center" data-field="lrn"></th>
                                                 <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
                                                 <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
                                                 <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
@@ -121,44 +121,6 @@ if (count($sub_classes) != 0) {
                                             </tr>
                                         </thead>
                                     </table>
-<!--                                    <table id="sub-table" class="table-striped table-sm --><?php //echo $sub_table_display; ?><!--">-->
-<!--                                        <thead class='thead-dark'>-->
-<!--                                        <tr>-->
-<!--                                            <th data-checkbox="true"></th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-field="id">ID</th>-->
-<!--                                            <th scope='col' data-width="450" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sex">Sex</th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>-->
-<!--                                        </tr>-->
-<!--                                        </thead>-->
-<!--                                    </table>-->
-                                </div>
-                            </div>
-                            <!-- MODAL -->
-                            <div id="deactivate-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <div class="modal-title">
-                                                <h4 class="mb-0">Confirmation</h4>
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Deactivate <span id="question"></span><br>
-                                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </small>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form id="deactivate-form" action="action.php">
-                                                <input type="hidden" name="action" value="deactivate"/>
-                                                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                                                <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- MODAL END -->
 
                         </div>
                     </div>
@@ -182,7 +144,7 @@ if (count($sub_classes) != 0) {
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
 <!--    --><?php //echo $js; ?>
-    <script type='module' src='../js/faculty/students.js'></script>
+    <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>
 
 </html>

@@ -106,4 +106,29 @@ class FacultyModule extends Dbconfig
             $this->listSubjectClass(true);
         }
     }
+
+    //RETRIEVAL FOR STUDENT GRADE PER CLASS studentname | First_grading | second_grading | Final
+    //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
+    //Tapos JSON ung return niya 
+    public function getClassGrades(){
+        $class_code = 9101;//$_POST[''];
+        $teacher_id = 26;//$_POST[''];
+        $sy_id = 9;//$_POST['']; 
+        $res = $this->query($this->db,  "SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
+        first_grading, second_grading, final_grade FROM student 
+        JOIN classgrade USING(stud_id) 
+        JOIN subjectclass USING(sub_class_code) 
+        JOIN sysub USING (sub_sy_id) 
+        JOIN subject USING (sub_code) 
+        WHERE teacher_id=26 
+        AND sub_class_code = 9101 
+        AND sy_id=9");
+        
+        $class_grades = [];
+        while($grd = mysqli_fetch_assoc($res)) {
+            $class_grades[] = new ClassGrade($grd['lrn'],$grd['stud_name'], $grd['first_grading'], $grd['second_grading'], $grd['final_grade']);
+        }
+
+        echo json_encode($class_grades);
+    }
 }

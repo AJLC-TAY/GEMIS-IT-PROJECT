@@ -1,4 +1,4 @@
-<?php
+;<?php
 session_start();
 $_SESSION['user_type'] = 'FA';
 $_SESSION['id'] = 1;
