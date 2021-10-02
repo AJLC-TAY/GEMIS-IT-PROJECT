@@ -185,12 +185,26 @@ if (isset($_POST['action']) && $_POST['action'] === 'addSection') {
 if (isset($_POST['action']) && $_POST['action'] === 'editSection') {
     $admin->editSection();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'assignSubClasses' &&
+    $_POST['target'] === 'SCFaculty'
+) {
+    $admin->assignSubClasses($_POST['teacher_id'], TRUE);
+    return;
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses' &&
+    $_POST['target'] === 'SCFaculty'
+) {
+    $admin->unassignSubClasses(TRUE);
+    return;
+}
 if (isset($_POST['action']) && $_POST['action'] === 'assignSubClasses') {
     $admin->assignSubClasses($_POST['teacher_id']);
 }
 if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
     $admin->unassignSubClasses();
 }
+
 
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
