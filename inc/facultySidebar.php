@@ -8,7 +8,7 @@ $enrollment_item = '';
 if (in_array('can_enroll', $roles)) {
     $enrollment_item = " <li class='sub-menu'>"
                 ."<a id='enrollment' href='enrollment.php'>"
-                    ."<i class='fa fa-users'></i>"
+                    ."<i class='fa fa-tasks'></i>"
                     ."<span>Enrollment</span>"
                 ."</a>"
             ."</li>";
@@ -56,6 +56,12 @@ if (in_array('award_coor', $roles)) {
                     <span>Home</span>
                 </a>
             </li>
+            <li class="sub-menu">
+                <a id='faculty' href="faculty.php">
+                    <i class="fa fa-pencil-square-o"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
             <?php echo $enrollment_item; ?>
             <li class="sub-menu">
                 <a id="students" href="students.php">
@@ -65,27 +71,21 @@ if (in_array('award_coor', $roles)) {
             </li>
             <li class="sub-menu">
                 <a id="grade" href="grade.php">
-                    <i class="fa fa-user"></i>
+                    <i class="bi bi-card-list"></i>
                     <span>Grade</span>
                 </a>
             </li>
             <li class="sub-menu">
                 <a id="attendance" href="attendance.php">
-                    <i class="fa fa-user"></i>
+                    <i class="bi bi-clipboard-check"></i>
                     <span>Attendance</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id='archived' href="archived.php">
-                    <i class="fa fa-pencil-square-o"></i>
-                    <span>Archived Classes</span>
-                </a>
-            </li>
             <?php echo $award_coor_item; ?>
-            <li class="sub-menu">
-                <a id='faculty' href="faculty.php">
-                    <i class="fa fa-pencil-square-o"></i>
-                    <span>Profile</span>
+            <li class="sub-menu mt-5">
+                <a id='archived' href="archived.php">
+                    <i class="fa fa-archive"></i>
+                    <span>Archived Classes</span>
                 </a>
             </li>
         </ul>
