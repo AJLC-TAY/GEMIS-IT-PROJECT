@@ -1307,9 +1307,11 @@ class Administration extends Dbconfig
         $params[] = $user_id;
         $types .= "i";
 
+        print_r($params);
+
         // Step 2
-//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
         $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
+//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
                 ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
@@ -1490,6 +1492,23 @@ class Administration extends Dbconfig
             return;
         }
         return $advisory_classes;
+    }
+
+    public function listSubClassFacultyOptions() {
+        if (isset($_POST['exclude'])) {
+            $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
+        }
+        $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
+                                    middle_name, ' ',COALESCE(ext_name, '')) AS name
+                                    FROM faculty ". $condition ?? '' .";");
+        $faculty_list = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $faculty_list[] = [
+                'teacher_id' => $row['teacher_id'],
+                'name'       => $row['name'],
+            ];
+        }
+        return $faculty_list;
     }
 
     /** Faculty End */
@@ -1737,6 +1756,47 @@ class Administration extends Dbconfig
     }
 
     /** Section Methods */
+    public function listAllSubjectClasses($is_JSON = FALSE)
+    {
+        session_start();
+//        $_SESSION['sy_id'] = 9;
+        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', middle_name, ' ',COALESCE(ext_name, ''))
+                                        AS name, grd_level FROM subjectclass sc
+                                        JOIN sysub s ON sc.sub_sy_id = s.sub_sy_id
+                                        JOIN subject su ON s.sub_code = su.sub_code
+                                        JOIN section USING (section_code)
+                                        LEFT JOIN faculty f ON sc.teacher_id = f.teacher_id
+                                        WHERE s.sy_id ='{$_SESSION['sy_id']}';");
+
+        $sub_classes = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $teacher_id = $row['teacher_id'];
+            $sub_class_code = $row['sub_class_code'];
+            $name = $row['name'];
+            $action = is_null($teacher_id) ? "<div class='d-flex justify-content-center'><button data-type='assign' data-sub-class-code='$sub_class_code' class='btn btn-sm btn-primary action m-auto'>Assign</button></div>"
+                                         : "<div class='d-flex justify-content-center'>"
+                                            ."<button class='btn-danger btn btn-sm me-1 action' data-type='unassign'  data-sub-class-code='$sub_class_code'>Unassign</button>"
+                                            ."<button class='btn-dark btn btn-sm action' data-type='change' data-current-id='$teacher_id' data-current='$name' data-sub-class-code='$sub_class_code'>Change</button>"
+                                            ."</p></div>";
+            $sub_classes[] = [
+                'sub_class_code' => $sub_class_code,
+                'section_code'   => $row['section_code'],
+                'section_name'   => $row['section_name'],
+                'sub_name'       => $row['sub_name'],
+                'teacher_id'     => $teacher_id,
+                'name'           => $name,
+                'grd_level'      => $row['grd_level'],
+                'action'         => $action
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($sub_classes);
+            return;
+        }
+        return $sub_classes;
+    }
+
     private function getSectionName($section_id) {
         $result = mysqli_query($this->db, "SELECT section_name FROM section WHERE section_code='$section_id'");
         return mysqli_fetch_row($result)[0];
@@ -1797,16 +1857,22 @@ class Administration extends Dbconfig
         $this->prepareSectionResult($section_dest, $teacher_id);
     }
 
-    public function assignSubClasses($teacher_id) {
+    public function assignSubClasses($teacher_id, $return_all = FALSE) {
         $sub_class_code_list = $_POST['sub_class_code'];
         foreach($sub_class_code_list as $sub_class_code) {
             $this->prepared_query( "UPDATE subjectclass SET teacher_id=? WHERE sub_class_code=?;", [$teacher_id, $sub_class_code], "ii");
         }
-        echo json_encode($this->listSubjectClasses($teacher_id));
+
+        if ($return_all) {
+            $this->listAllSubjectClasses(TRUE);
+        } else {
+            echo json_encode($this->listSubjectClasses($teacher_id));
+        }
+
     }
 
-    public function unassignSubClasses() {
-        $this->assignSubClasses(NULL);
+    public function unassignSubClasses($return_all = FALSE) {
+        $this->assignSubClasses(NULL, TRUE);
     }
 
     public function editStudent()

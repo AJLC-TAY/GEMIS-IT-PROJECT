@@ -47,10 +47,13 @@ if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
    $admin->getEnrollFilters();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'signatory') {
-   $admin->listSignatory(true);
+   $admin->listSignatory(TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'advisoryClasses') {
-   $admin->listAdvisoryClasses(true);
+   $admin->listAdvisoryClasses(TRUE);
+}
+if (isset($_GET['data']) && $_GET['data'] == 'all-sub-classes') {
+   $admin->listAllSubjectClasses(TRUE);
 }
 ?>
 

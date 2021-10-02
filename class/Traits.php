@@ -170,12 +170,12 @@ trait FacultySharedMethods
             $filename = basename($_FILES['image']['name']);
             $fileType = pathinfo($filename, PATHINFO_EXTENSION);
             if (in_array($fileType, $allowTypes)) {
-//                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
+                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
                 # Upload image
-                $imgContent = $_FILES['image']['tmp_name'];
-                $filename = $_SESSION['sy_id']."_". time() ."_".uniqid("", true).".$fileType";  // ex. upload/student/234236513_12323.png
-                $fileDestination = "../upload/student/$filename";
-                move_uploaded_file($imgContent, $fileDestination);
+//                $imgContent = $_FILES['image']['tmp_name'];
+//                $filename = $_SESSION['sy_id']."_". time() ."_".uniqid("", true).".$fileType";  // ex. upload/student/234236513_12323.png
+//                $fileDestination = "../upload/student/$filename";
+//                move_uploaded_file($imgContent, $fileDestination);
             } else {
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
                 http_response_code(400);
@@ -186,16 +186,16 @@ trait FacultySharedMethods
         switch($user_type) {
             case "AD":
                 [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-//                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
-                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $filename];
-//                $types .= "iiisss"; // data types of the current parameters
+                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
+//                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $filename];
                 $types .= "iiisss"; // data types of the current parameters
+//                $types .= "iiisss"; // data types of the current parameters
                 break;
             case "FA":
-//                $params = [...$params, $cp_no, $imgContent];
-                $params = [...$params, $cp_no, $filename];
+                $params = [...$params, $cp_no, $imgContent];
+//                $params = [...$params, $cp_no, $filename];
+                $types .= "sb";
 //                $types .= "ss";
-                $types .= "ss";
                 break;
         }
 
@@ -203,7 +203,7 @@ trait FacultySharedMethods
             $statusMsg = $this->addFaculty($params, $types);
         }
         if ($action == 'edit') {
-            $statusMsg = $this->editFaculty($params, $types, $img, $user_type);
+            $statusMsg = $this->editFaculty($params, $types, $user_type);
         }
 
         echo $statusMsg;
