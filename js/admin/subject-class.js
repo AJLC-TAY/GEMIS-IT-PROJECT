@@ -1,8 +1,6 @@
 import {commonTableSetup} from "./utilities.js";
 
-preload('#enrollment', '#sub-classes')
-
-let tableSetup, url, id, table;
+let tableSetup, table, assignMultiple, selections;
 tableSetup = {
     ...commonTableSetup,
     pageSize:           "25",
@@ -17,9 +15,14 @@ tableSetup = {
 };
 
 table = $("#table").bootstrapTable(tableSetup);
-let assignMultiple = false;
-let selections = [];
+assignMultiple = false;
+selections = [];
 
+/**
+ * Dynamically renders the faculty option DOM elements.
+ * If current ID is provided, exclude it from the selection.
+ * @param {String} currentID Faculty ID of the current subject teacher.
+ */
 function reloadOptions (currentID = null) {
     let options;
     if (currentID != null) {
@@ -33,17 +36,17 @@ function reloadOptions (currentID = null) {
     }
     options =  "<option value='*'>-- Select faculty here --</option>" + options.join('');
 
-    $("#faculty-select").html(
-        options
-    ).select2({
+    $("#faculty-select").html(options).select2({
         theme: "bootstrap-5",
         width: null,
         dropdownParent: $('#assign-modal')
     });
 }
+
 $(function() {
     reloadOptions();
 
+    /** Event listener when multiple assign button is clicked */
     $(document).on("click", '#multiple-assign-opt', function() {
         selections = table.bootstrapTable('getSelections');
         if (selections.length === 0) {
@@ -58,32 +61,23 @@ $(function() {
         modal.modal("show");
     });
 
-    $(document).on("click", ".action[data-type='assign']", function() {
-        assignMultiple = false;
-        let modal = $("#assign-modal");
-        let sub_class_code = $(this).attr("data-sub-class-code");
-        // change action of modal to assign
-        selections.push(sub_class_code);
-        $("#instruction").html(`Assign subject class code, ${sub_class_code} to: `);
-        modal.modal("show");
-    });
-
+    /** Event listener when action buttons are clicked */
     $(document).on("click", ".action", function() {
         showSpinner();
+        let modal, sub_class_code, ins;
+
         assignMultiple = false;
-        let modal = $("#assign-modal");
-        let sub_class_code = $(this).attr("data-sub-class-code");
+        modal = $("#assign-modal");
+        sub_class_code = $(this).attr("data-sub-class-code");
         selections.push(sub_class_code);
-        let ins;
+
         switch ($(this).attr("data-type")) {
             case 'assign':
-                // change action of modal to assign
                 ins = `Assign subject class code, ${sub_class_code} to: `;
                 break;
             case 'change':
                 ins = `<small>Current subject teacher: ${$(this).attr("data-current")}</small>
-                    <br><span class = 'text-dark'>Re-assign subject class code, ${sub_class_code} to:
-                    </span>`;
+                    <br><span class = 'text-dark'>Re-assign subject class code, ${sub_class_code} to:</span>`;
                 let currentID = $(this).attr("data-current-id");
                 reloadOptions(currentID);
                 break;
@@ -91,7 +85,7 @@ $(function() {
                 let formData = new FormData();
                 formData.append("sub_class_code[]", sub_class_code);
                 formData.append("target", "SCFaculty");
-                formData.append("action", "unassignSubClasses")
+                formData.append("action", "unassignSubClasses");
                 $.ajax({
                     url: "action.php",
                     method: "POST",
@@ -105,7 +99,6 @@ $(function() {
                     }
                 });
                 return;
-
         }
         $("#instruction").html(ins);
         modal.modal('show');
@@ -119,12 +112,12 @@ $(function() {
         reloadOptions();
     });
 
+    /** Event listener when form is submitted */
     $(document).on("submit", '#sub-class-multi-form', function(e) {
         e.preventDefault();
         showSpinner();
         let formData = new FormData($(this)[0]);
         formData.append("target", 'SCFaculty');
-
 
         if (assignMultiple) {
             selections.forEach(e => {
@@ -133,8 +126,6 @@ $(function() {
         } else {
             formData.append("sub_class_code[]", selections[0]);
         }
-
-
 
         $.ajax({
             url: "action.php",
@@ -153,6 +144,5 @@ $(function() {
         });
     });
 
-
     hideSpinner();
-})
+});

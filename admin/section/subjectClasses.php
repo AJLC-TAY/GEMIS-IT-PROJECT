@@ -67,12 +67,6 @@ $faculty_options = $admin->listSubClassFacultyOptions();
                     <input type="hidden" name="action" value="assignSubClasses"/>
                     <p id="instruction" class="text-secondary"></p>
                     <select name="teacher_id" id="faculty-select">
-                        <option value="*">-- Select faculty here --</option>
-<!--                        --><?php
-//                            foreach($faculty_options as $fao) {
-//                                echo "<option value='{$fao['teacher_id']}'>{$fao['name']}</option>";
-//                            }
-//                        ?>
                     </select>
                 </form>
             </div>
