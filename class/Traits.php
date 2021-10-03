@@ -186,13 +186,13 @@ trait FacultySharedMethods
         switch($user_type) {
             case "AD":
                 [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
+                $params = $params + [$awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
 //                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $filename];
                 $types .= "iiisss"; // data types of the current parameters
 //                $types .= "iiisss"; // data types of the current parameters
                 break;
             case "FA":
-                $params = [...$params, $cp_no, $imgContent];
+                $params = $params + [$cp_no, $imgContent];
 //                $params = [...$params, $cp_no, $filename];
                 $types .= "sb";
 //                $types .= "ss";
@@ -411,6 +411,49 @@ trait FacultySharedMethods
             );
         }
         return $handled_sub_classes;
+    }
+
+    public function listAttendance($is_JSON = FALSE)
+    {
+        $attendance = [];
+        $result = $this->query("SELECT stud_id, report_id, CONCAT(last_name,', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) 
+                    AS name, no_of_present, no_of_days AS present, no_of_absent AS absent, no_of_tardy AS tardy FROM student s 
+                    JOIN enrollment e USING (stud_id)
+                    JOIN attendance a USING (stud_id) WHERE section_code = '{$_GET['class']}'
+                    AND month = '{$_GET['month']}'");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $report_id = $row['report_id'];
+            $attendance[] = [
+                'stud_id' => $row['stud_id'],
+                'name'    => $row['name'],
+                'present_e' => "<input name='data[{$report_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['present']}'>",
+                'absent_e'  => "<input name='data[{$report_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
+                'tardy_e'   => "<input name='data[{$report_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
+                'action'    => "<div class='d-flex justify-content-center'>
+                                   <button class='btn btn-sm btn-secondary action' data-type='edit'>Edit</button>
+                                   <div class='edit-spec-options' style='display: none;'>
+                                       <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
+                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
+                                    </div>
+                                </div>"
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($attendance);
+            return;
+        }
+        return $attendance;
+    }
+
+    public function changeAttendance() {
+        foreach($_POST['data'] as $id => $value) { // $id = report_id
+            $this->prepared_query(
+                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE report_id = ? AND month=?;",
+                [$value['present'], $value['absent'], $value['tardy'], $id, $_POST['month']],
+                "iiiis"
+            );
+        }
     }
 }
 

@@ -9,4 +9,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'student') {
 if (isset($_GET['data']) && $_GET['data'] == 'classGrades') {
     $faculty->getClassGrades();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
+    $faculty->listAttendance(TRUE);
+}
 ?>

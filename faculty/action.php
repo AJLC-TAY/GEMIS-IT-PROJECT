@@ -6,3 +6,6 @@ if ((isset($_POST['profile']) && $_POST['profile'] == 'faculty')
     && $_POST['action'] === 'edit') {
     $faculty->processFaculty();
 }
+if ((isset($_POST['action']) && $_POST['action'] == 'changeAttendance')) {
+    $faculty->changeAttendance();
+}

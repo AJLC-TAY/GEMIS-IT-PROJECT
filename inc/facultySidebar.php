@@ -1,6 +1,11 @@
 <?php
 // session handling
 session_start();
+$_SESSION['sy_id'] = 9;
+$_SESSION['sy_desc'] = "2021 - 2022";
+$_SESSION['user_type'] = "FA";
+$_SESSION['user_id'] = 1;
+$_SESSION['roles'] = ['can_enroll', 'award_coor'];
 $school_year = $_SESSION['sy_desc'];
 $roles = $_SESSION['roles'];
 

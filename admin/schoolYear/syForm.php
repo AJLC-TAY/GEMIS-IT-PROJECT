@@ -24,6 +24,7 @@ $subjects = $init_data['subjects'];
         <h2>Initialize School Year</h2>
     </div>
 </header>
+<!-- HEADER END -->
 <form id="school-year-form" class="needs-validation" action="action.php" method="POST" novalidate>
     <div id="school-year-stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-50 mx-auto">

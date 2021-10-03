@@ -99,6 +99,7 @@ if (count($sub_classes) != 0) {
                                     </div>
                                 </div>
                             </header>
+                            <!-- HEADER END -->
                             <!-- STUDENTS TABLE -->
                             <div class="container mt-1 w-75 ms-0">
                                 <div class="card w-100 h-auto bg-light" style="min-height: 70vh !important;">
