@@ -184,3 +184,8 @@ $admin = new Administration();
     let curricula = <?php $admin->listCurriculumJSON(); ?>;
 </script>
 <script type="module" src="../js/admin/curriculum-card.js"></script>
+
+<!-- VALIDATION -->
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>

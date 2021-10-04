@@ -78,7 +78,7 @@ $(function () {
         remote: $.validator.format("<p class='text-danger user-select-none'>{0} is already associated with an account!</p>")
       }
     }
-  });
+  })
   $("#curriculum-form").validate({
     rules: {
       code: {
@@ -117,7 +117,7 @@ $(function () {
         remote: $.validator.format("{0} is already associated with an account.")
       }
     }
-  });
+  })
 
   $("#enrollment-form").validate({
     rules: {
@@ -209,7 +209,7 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter program code!</p>'
       }
     }
-  });
+  })
   // for questions
   $("#enroll-report-form").validate({
     rules: {
@@ -223,7 +223,7 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter program code!</p>'
       }
     }
-  });
+  })
 
   $("#program-form").validate({
     rules: {
@@ -276,7 +276,7 @@ $(function () {
         max: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
       }
     }
-  });
+  })
   $("#enroll-report-form").validate({
     rules: {
       code: {
@@ -295,7 +295,8 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter program name!</p>'
       }
     }
-  });
+  })
+  //program view form for improvement
   $("#program-view-form").validate({
     rules: {
       code: {
@@ -308,7 +309,29 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter current code!</p>'
       }
     }
-  });
+  })
+  $("#faculty-form").validate({
+    rules:{
+      lastname:{
+        required: true,
+        lettersonly: true
+      },
+      age: {
+        required: ture,
+        maximum: 2
+      },
+    },
+    messages:{
+      lastname: {
+        required:'<p class="text-danger user-select-none">Please enter last name!</p>',
+        lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      age:{
+        required: '<p class="text-danger user-select-none">Please enter age!</p>',
+        maximum: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
+      }
+    }
+  })
   $("#student-form").validate({
     rules: {
       'g_lastname': {
@@ -338,7 +361,8 @@ $(function () {
         lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
       },
     }
-  });
+  })
+  //program view form for improvement
   $("#program-view-form").validate({
     rules: {
       code: {

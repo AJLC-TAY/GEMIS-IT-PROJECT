@@ -149,9 +149,6 @@ switch ($user_type) {
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>
             <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
-            <div class="invalid-feedback">
-                Please enter last name
-            </div>
         </div>
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
@@ -189,9 +186,6 @@ switch ($user_type) {
         <div class='form-group col-md-2'>
             <label for='age'>Age</label>
             <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
-            <div class="invalid-feedback">
-                Please enter age
-            </div>
         </div>
         <div class='form-group col-md-2'>
             <label for='sex'>Sex</label>
@@ -307,7 +301,7 @@ switch ($user_type) {
     </div>
 </form>
 <!-- VALIDATION -->
-<script>
+<!-- <script>
     var forms = document.querySelectorAll('.needs-validation');
 
     Array.prototype.slice.call(forms).forEach(function(form) {
@@ -320,10 +314,12 @@ switch ($user_type) {
             form.classList.add('was-validated');
         }, false);
     });
-</script>
-<script>
+</script> -->
 
-</script>
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
+
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;
