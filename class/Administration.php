@@ -20,6 +20,10 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
+    const MONTHS = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July ', 'August','September','October', 'November', 'December'
+    ];
     use QueryMethods, School, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
@@ -188,6 +192,7 @@ class Administration extends Dbconfig
      * 2.   Initialize curriculum.
      * 3.   Initialize sections.
      * 4.   Initialize subject class.
+     * 5.   Initialize academic monthly days.
      */
     public function initializeSY()
     {
@@ -240,19 +245,24 @@ class Administration extends Dbconfig
         }
 
          
-        
+        # Step 4
         // insert subjects offered in the sysub
-        # Core subjects
+        ## Core subjects
         $subjects = $_POST['subjects']['core'];
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'core');
         }
 
-        # Specialized and Applied subjects
+        ## Specialized and Applied subjects
         $subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'applied');
         }
+
+        # Step 5
+//        foreach(Administration::MONTHS as $month) {
+//            $this->query("INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);");
+//        }
 
         // echo "School year successfully initialized.";
         echo json_encode($sy_id);
@@ -359,7 +369,7 @@ class Administration extends Dbconfig
                 } 
 
                 $values[$val['value_name']][]=$marking;
-                    $marking = []; 
+                    $marking = [];
             }
             
         } 
@@ -485,19 +495,32 @@ class Administration extends Dbconfig
                             ."<span class='status'>$enroll_opt</span>"
                         ."</div>";
              
-            $sy_list[] = [  'id' => $sy_id, 
-                            's_year' => $row['start_year'], 
-                            'e_year' => $row['end_year'], 
-                            'sy_year' => $row['start_year']." - ".$row['end_year'], 
+            $sy_list[] = [  'id'              => $sy_id,
+                            's_year'          => $row['start_year'],
+                            'e_year'          => $row['end_year'],
+                            'sy_year'         => $row['start_year']." - ".$row['end_year'],
                             'current_grd_val' => $grd_level, 
-                            'grd_level' => $grd_opt, 
+                            'grd_level'       => $grd_opt,
                             'current_qtr_val' => $quarter, 
-                            'current_qtr' => $quarter_opt, 
-                            'current_sem_val' =>  $semester,
-                            'current_sem' => $sem_opt,
-                            'enrollment_val' => $enrollment, 
-                            'enrollment' => $enroll_opt, 
-                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm'>Edit</button>"
+                            'current_qtr'     => $quarter_opt,
+                            'current_sem_val' => $semester,
+                            'current_sem'     => $sem_opt,
+                            'enrollment_val'  => $enrollment,
+                            'enrollment'      => $enroll_opt,
+                            'jan'   => '20',
+                            'feb'   => '20',
+                            'mar'   => '20',
+                            'apr'   => '20',
+                            'may'   => '20',
+                            'jun'   => '20',
+                            'jul'   => '20',
+                            'aug'   => '20',
+                            'sep'   => '20',
+                            'oct'   => '20',
+                            'nov'   => '20',
+                            'dec'   => '20',
+                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm me-1'>Edit</button>"
+                                        ."<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
                                         ."<div class='edit-options d-none'>"
                                             ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm me-1'>Cancel</button>"
                                             ."<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
@@ -530,6 +553,15 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
     }
 
+    public function editAcademicDays()
+    {
+        $sy_id = $_POST['sy-id'];
+        foreach($_POST['month'] as $m => $days) {
+            $this->prepared_query("UPDATE tablename SET days=? WHERE sy_id = ? AND month = ?;", [$days, $sy_id, $m], "iis");
+        }
+
+        $this->listSYJSON();
+    }
     /** Section Methods */
     public function listSection() 
     {

@@ -240,5 +240,26 @@ $(function() {
             hideSpinner(spinnerSelector);
         }, 300);
     });
+
+    /** Month */
+    $(document).on("click", ".edit-month-btn", function () {
+        let idRow = $(this).attr("data-id");
+        let monthsOfSY = syTable.bootstrapTable('getRowByUniqueId', idRow);
+        let modal = $("#month-modal");
+        modal.find("input[type='number']").each(function (i, e) {
+            let inputID = e.getAttribute("id");
+            e.value = monthsOfSY[inputID];
+        });
+        modal.find("[name='sy-id']").val(idRow);
+        modal.modal("show");
+
+    });
+
+    $(document).on("submit", "#month-form", function (e) {
+        e.preventDefault();
+        $.post("action.php", $(this).serializeArray(), function () {
+            showToast("success", "Successfully updated");
+        });
+    });
     hideSpinner();
 });
