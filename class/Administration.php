@@ -2241,5 +2241,98 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
     }
 
+    public function exportSubjectGradesToCSV () {
+        // Fetch records from database 
+        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
+
+        if($query->num_rows > 0){ 
+            $delimiter = ","; 
+            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
+     
+            // Create a file pointer 
+            $f = fopen('php://memory', 'w'); 
+     
+            // Set column headers 
+            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
+            fputcsv($f, $fields, $delimiter); 
+     
+            // Output each row of the data, format line as csv and write to file pointer 
+            while($row = $query->fetch_assoc()){ 
+                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
+                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
+                fputcsv($f, $lineData, $delimiter); 
+            } 
+     
+            // Move back to beginning of file 
+            fseek($f, 0); 
+     
+            // Set headers to download file rather than displayed 
+            header('Content-Type: text/csv'); 
+            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+     
+            //output all remaining data on a file pointer 
+            fpassthru($f); 
+        } 
+        exit; 
+
+    }
+    
+    public function importSubjectGradesToCSV () {
+        // // Load the database configuration file
+        // //if(isset($_POST['importSubmit'])){
+            
+        //     // Allowed mime types
+        //     $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+            
+        //     // Validate whether selected file is a CSV file
+        //     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
+                
+        //         // If the file is uploaded
+        //         if(is_uploaded_file($_FILES['file']['tmp_name'])){
+                    
+        //             // Open uploaded CSV file with read-only mode
+        //             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+                    
+        //             // Skip the first line
+        //             fgetcsv($csvFile);
+                    
+        //             // Parse data from CSV file line by line
+        //             while(($line = fgetcsv($csvFile)) !== FALSE){
+        //                 // Get row data
+        //                 $LRN  = $line[0];
+        //                 $stud_name = $line[1]; 
+        //                 $first_grading  = $line[2];
+        //                 $second_grading = $line[3];
+        //                 $final_grading = $line[3];
+                        
+        //                 // Check whether member already exists in the database with the same email
+        //                 $prevQuery = "SELECT id FROM members WHERE email = '".$line[1]."'";
+        //                 $prevResult = $this->query($prevQuery);
+                        
+        //                 if($prevResult->num_rows > 0){
+        //                     // Update member data in the database
+        //                     $this->query("UPDATE members SET name = '".$name."', phone = '".$phone."', status = '".$status."', modified = NOW() WHERE email = '".$email."'");
+        //                 }else{
+        //                     // Insert member data in the database
+        //                     $this->query("INSERT INTO members (name, email, phone, created, modified, status) VALUES ('".$name."', '".$email."', '".$phone."', NOW(), NOW(), '".$status."')");
+        //                 }
+        //             }
+                    
+        //             // Close opened CSV file
+        //             fclose($csvFile);
+                    
+        //             $qstring = '?status=succ';
+        //         }else{
+        //             $qstring = '?status=err';
+        //         }
+        //     }else{
+        //         $qstring = '?status=invalid_file';
+        //     }
+        }
+        
+        // Redirect to the listing page
+        // header("Location: index.php".$qstring);
 }
+
+
 ?>

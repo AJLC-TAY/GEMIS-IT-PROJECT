@@ -1,5 +1,5 @@
 $(function () {
-  
+
   $.validator.setDefaults({
     errorClass: 'help-block',
     highlight: function (element) {
@@ -336,7 +336,7 @@ $(function () {
     rules: {
       'g_lastname': {
         required: true,
-        lettersonly: ture
+        lettersonly: true
       },
       'g_firstname': {
         required: true,
