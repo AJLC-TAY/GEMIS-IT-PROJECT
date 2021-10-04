@@ -2300,7 +2300,27 @@ class Administration extends Dbconfig
         
         // Redirect to the listing page
         // header("Location: index.php".$qstring);
+
+    public function getStudentAttendance()
+    {
+        $report_id = 1;
+        $status = ['no_of_days', 'no_of_present', 'no_of_absent', 'no_of_tardy'];
+        foreach ($status as $stat) {
+            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month from attendance where report_id=$report_id;");
+            while ($row = mysqli_fetch_assoc($result)) {
+                $attendance[$stat][] = [
+                    $row['month'] => $row[$stat]
+                ];
+            }
+        }
+
+        return $attendance;
+    }
+
+    public function getTrackStrand()
+    {
+        $stud_id = 110001;
+        $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,' ', e.prog_code) FROM enrollment e JOIN curriculum c USING(curr_code) where stud_id=?;", [$stud_id], "i"));
+        return $trackStrand;
+    }
 }
-
-
-?>
