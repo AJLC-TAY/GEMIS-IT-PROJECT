@@ -34,15 +34,15 @@ $(function () {
         required: true,
         lettersonly: true
       },
-      firstname:{
+      firstname: {
         required: true,
         lettersonly: true
       },
-      middlename:{
+      middlename: {
         required: true,
         lettersonly: true
       },
-      age:{
+      age: {
         required: true,
         numbersonly: true,
         max: 2
@@ -56,20 +56,20 @@ $(function () {
     messages: {
       lastname: {
         required: '<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly:'<p class="text-danger user-select-none">Last name is letters only!</p>',
+        lettersonly: '<p class="text-danger user-select-none">Last name is letters only!</p>',
         minimum: '<p class="text-danger user-select-none">Please enter more than 2 characters!</p>'
       },
-      firstname:{
-        required:'<p class="text-danger user-select-none">Please enter first name!</p>',
-        lettersonly:'<p class="text-danger user-select-none">First name is letters only!</p>'
+      firstname: {
+        required: '<p class="text-danger user-select-none">Please enter first name!</p>',
+        lettersonly: '<p class="text-danger user-select-none">First name is letters only!</p>'
       },
-      middlename:{
-        required:'<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly:'<p class="text-danger user-select-none">Middle name is letters only!</p>'
+      middlename: {
+        required: '<p class="text-danger user-select-none">Please enter last name!</p>',
+        lettersonly: '<p class="text-danger user-select-none">Middle name is letters only!</p>'
       },
-      age:{
+      age: {
         required: '<p class="text-danger user-select-none">Please enter age!</p>',
-        numbersonly:'<p class="text-danger user-select-none">Please  enter numbers only!</p>',
+        numbersonly: '<p class="text-danger user-select-none">Please  enter numbers only!</p>',
         max: '<p class="text-danger user-select-none">Age is too high!</p>'
       },
       email: {
@@ -81,84 +81,275 @@ $(function () {
   });
   $("#curriculum-form").validate({
     rules: {
-      // code: {
-          
-      // },
-      name:{
-        required: true
-      }
-    },
-    messages:{
-      name:{
-        required:'<p class="text-danger user-select-none">Please enter curriculum name!</p>'
-      }
-    }
-  })
- 
-  $("#test-form").validate({
-    rules: {
-      lastname: {
+      code: {
         required: true
       },
-      email: {
-        required: true,
-        email: true,
-        remote: "http://localhost:3000/inputValidator"
-      },
-      password: {
-        required: true,
-        strongPassword: true
-      },
-      password2: {
-        required: true,
-        equalTo: '#password'
-      },
-      firstName: {
-        required: true,
-        nowhitespace: true,
-        lettersonly: true
-      },
-      secondName: {
-        required: true,
-        nowhitespace: true,
-        lettersonly: true
-      },
-      businessName: {
-        required: true
-      },
-      phone: {
-        required: true,
-        digits: true,
-        phonesUK: true
-      },
-      address: {
-        required: true,
-        minimum: 10,
-      },
-      town: {
-        required: true,
-        lettersonly: true
-      },
-      postcode: {
-        required: true,
-        postcodeUK: true
-      },
-      terms: {
+      name: {
         required: true
       }
     },
     messages: {
-      lastname: {
-        required: 'Please enter last name'
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>'
       },
-      email: {
-        required: '<br>Please enter an email address.',
-        email: '<br>Please enter a <em>valid</em> email address.',
+      name: {
+        required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
+      }
+    }
+  })
+
+  $("#prog-form").validate({
+    rules: {
+      code: {
+        required: true,
+        // similar validation
+      },
+      desc: {
+        required: true
+      }
+    },
+    messages: {
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+      },
+      desc: {
+        required: '<p class="text-danger user-select-none">Please enter program name!</p>',
         remote: $.validator.format("{0} is already associated with an account.")
-      },
-      address: {
-        required: "Please enter address"
       }
     }
   });
-});
+
+  $("#enrollment-form").validate({
+    rules: {
+      'f-lastname': {
+        required: true,
+        lettersonly: true
+      },
+      'f-firstname': {
+        required: true,
+        lettersonly: true
+      },
+      'f-middlename': {
+        required: true,
+        lettersonly: true
+      },
+      'm-lastname': {
+        required: true,
+        lettersonly: true
+      },
+      'm-firstname': {
+        required: true,
+        lettersonly: true
+      },
+      'm-middlename': {
+        required: true,
+        lettersonly: true
+      },
+      'g-lastname': {
+        required: true,
+        lettersonly: true
+      },
+      'g-firstname': {
+        required: true,
+        lettersonly: true
+      },
+      'g-middlename': {
+        required: true,
+        lettersonly: true
+      }
+    },
+    messages: {
+      'f-lastname': {
+        required: "<p class='text-danger user-select-none'>Please enter father's last name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'f-firstname': {
+        required: "<p class='text-danger user-select-none'>Please enter father's first name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'f-middlename': {
+        required: "<p class='text-danger user-select-none'>Please enter father's middle name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'm-lastname': {
+        required: "<p class='text-danger user-select-none'>Please enter mother's last name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'm-firstname': {
+        required: "<p class='text-danger user-select-none'>Please enter mother's first name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'm-middlename': {
+        required: "<p class='text-danger user-select-none'>Please enter mother's middle name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'g-lastname': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'g-firstname': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      },
+      'g-middlename': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
+        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+      }
+    }
+  })
+  $("#section-form").validate({
+    rules: {
+      'section-name': {
+        required: true,
+        // similar validation
+      }
+    },
+    messages: {
+      'section-name': {
+        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+      }
+    }
+  });
+  // for questions
+  $("#enroll-report-form").validate({
+    rules: {
+      'section-name': {
+        required: true,
+        // similar validation
+      }
+    },
+    messages: {
+      'section-name': {
+        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+      }
+    }
+  });
+
+  $("#program-form").validate({
+    rules: {
+      birthdate: {
+        required: true,
+      },
+      lastname:{
+        required: true,
+        lettersonly: true
+      },
+      firstname:{
+        required: true,
+        lettersonly: true
+      },
+      middlename:{
+        required: true,
+        lettersonly: true
+      },
+      email:{
+        required: true,
+        email: true
+      },
+      age:{
+        required: true,
+        max: 2
+      }
+    },
+    messages: {
+      birthdate: {
+        required: '<p class="text-danger user-select-none">Please select birthdate!</p>'
+      },
+      lastname:{
+        required:'<p class="text-danger user-select-none">Please enter last name!</p>',
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      firstname:{
+        required:'<p class="text-danger user-select-none">Please enter first name!</p>',
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      middlename:{
+        required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      email:{
+        required:'<p class="text-danger user-select-none">Please enter email!</p>',
+        email: '<p class="text-danger user-select-none">Please enter valid email!</p>'
+      },
+      age:{
+        required:'<p class="text-danger user-select-none">Please enter age!</p>',
+        max: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
+      }
+    }
+  });
+  $("#enroll-report-form").validate({
+    rules: {
+      code: {
+        required: true,
+        // similar validation
+      },
+      desc: {
+        required: true
+      }
+    },
+    messages: {
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+      },
+      desc: {
+        required: '<p class="text-danger user-select-none">Please enter program name!</p>'
+      }
+    }
+  });
+  $("#program-view-form").validate({
+    rules: {
+      code: {
+        required: true,
+        // similar validation
+      }
+    },
+    messages: {
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter current code!</p>'
+      }
+    }
+  });
+  $("#student-form").validate({
+    rules: {
+      'g_lastname': {
+        required: true,
+        lettersonly: ture
+      },
+      'g_firstname': {
+        required: true,
+        lettersonly: ture
+      },
+      'g_middlename': {
+        required: true,
+        lettersonly: ture
+      },
+    },
+    messages: {
+      'g_lastname': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
+      },
+      'g_firstname': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
+      },
+      'g_middlename': {
+        required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
+        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
+      },
+    }
+  });
+  $("#program-view-form").validate({
+    rules: {
+      code: {
+        required: true,
+        // similar validation
+      }
+    },
+    messages: {
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter current code!</p>'
+      }
+    }
+  });
+})
