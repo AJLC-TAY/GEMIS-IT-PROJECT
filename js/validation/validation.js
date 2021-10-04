@@ -336,7 +336,7 @@ $(function () {
     rules: {
       'g_lastname': {
         required: true,
-        lettersonly: teue
+        lettersonly: true
       },
       'g_firstname': {
         required: true,
