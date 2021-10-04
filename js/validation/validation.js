@@ -1,5 +1,5 @@
 $(function () {
-
+  
   $.validator.setDefaults({
     errorClass: 'help-block',
     highlight: function (element) {
@@ -317,7 +317,7 @@ $(function () {
         lettersonly: true
       },
       age: {
-        required: ture,
+        required: true,
         maximum: 2
       },
     },
@@ -340,11 +340,11 @@ $(function () {
       },
       'g_firstname': {
         required: true,
-        lettersonly: ture
+        lettersonly: true
       },
       'g_middlename': {
         required: true,
-        lettersonly: ture
+        lettersonly: true
       },
     },
     messages: {
