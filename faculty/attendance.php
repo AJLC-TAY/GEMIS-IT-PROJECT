@@ -96,10 +96,7 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                                     <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present_e">Present</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent_e">Absent</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy_e">Tardiness</th>
-    <!--                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present">Present</th>-->
-    <!--                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent">Absent</th>-->
-    <!--                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy">Tardiness</th>-->
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy_e">Tardy</th>
                                                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                                                 </tr>
                                             </thead>
