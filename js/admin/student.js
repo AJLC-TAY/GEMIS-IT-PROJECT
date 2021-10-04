@@ -62,5 +62,18 @@ $(function() {
 
     });
 
+    $("#psa").click(function(){
+        console.log(this.src)
+        let preview = $('#imgPreview');
+        preview.modal('toggle');
+    });
+
+    // $(document).on('click','.img', function(){
+    //     let confirmationModal = $('#myModal');
+    //     // confirmationModal.find('.modal-indentifier').html(section);
+    //     confirmationModal.modal('toggle');
+    //     console.log("cjklasdjf");
+    // });
+
     hideSpinner();
 });

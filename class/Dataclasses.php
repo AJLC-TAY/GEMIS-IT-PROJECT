@@ -329,7 +329,8 @@ class Faculty implements JsonSerializable
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
                       ."</div>";
-        $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
+        $this->id_photo = $id_photo;
+//        $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
     }
 
     public function get_teacher_id()
@@ -494,6 +495,11 @@ class SubjectClass extends Subject implements JsonSerializable
     public function get_sub_class_code()
     {
         return $this->sub_class_code;
+    }
+
+    public function get_section_name()
+    {
+        return $this->section_name;
     }
     public function get_section_code()
     {
@@ -1777,6 +1783,121 @@ class StudentAward extends Award implements JsonSerializable
                 'teacher_id'=> $this->teacher_id,
                 'action' => $this->action
             ];}
+    }
+
+    class ClassGrade implements JsonSerializable {
+        private $lrn;
+        private $stud_name;
+        private $first_grading;
+        private $second_grading;
+        private $final_grade;
+
+        public function __construct($lrn, $stud_name, $first_grading, $second_grading, $final_grade)
+        {
+            $this->lrn = $lrn;
+            $this->stud_name = $stud_name;
+            $this->first_grading = $first_grading;
+            $this->second_grading = $second_grading;
+            $this->final_grade = $final_grade;
+        }
+
+
+        public function jsonSerialize(){
+            return [
+                'stud_name' => $this->stud_name,
+                'first_grading' => $this->first_grading,
+                'second_grading' => $this->second_grading,
+                'final_grade' => $this->final_grade
+            ];
+        }
+
+        /**
+         * Get the value of stud_name
+         */ 
+        public function getlrn()
+        {
+                return $this->lrn;
+        }
+
+        /**
+         * Get the value of stud_name
+         */ 
+        public function getStud_name()
+        {
+                return $this->stud_name;
+        }
+
+        /**
+         * Set the value of stud_name
+         *
+         * @return  self
+         */ 
+        public function setStud_name($stud_name)
+        {
+                $this->stud_name = $stud_name;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of first_grading
+         */ 
+        public function getFirst_grading()
+        {
+                return $this->first_grading;
+        }
+
+        /**
+         * Set the value of first_grading
+         *
+         * @return  self
+         */ 
+        public function setFirst_grading($first_grading)
+        {
+                $this->first_grading = $first_grading;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of second_grading
+         */ 
+        public function getSecond_grading()
+        {
+                return $this->second_grading;
+        }
+
+        /**
+         * Set the value of second_grading
+         *
+         * @return  self
+         */ 
+        public function setSecond_grading($second_grading)
+        {
+                $this->second_grading = $second_grading;
+
+                return $this;
+        }
+
+        /**
+         * Get the value of final_grade
+         */ 
+        public function getFinal_grade()
+        {
+                return $this->final_grade;
+        }
+
+        /**
+         * Set the value of final_grade
+         *
+         * @return  self
+         */ 
+        public function setFinal_grade($final_grade)
+        {
+                $this->final_grade = $final_grade;
+
+                return $this;
+        }
     }
 
     

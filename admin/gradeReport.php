@@ -86,18 +86,18 @@
                                 $admin = new Administration();
                                 $stud_id = '1111';  // test
                                 $filename = $stud_id.'_grade_report'; // 1111_grade_report
-                                // $grades = $admin->getGrade();
+                                $grades = $admin->listGrade();
+                                // echo json_encode($grades);
 
-                                function prepareGradeRecordsHTML($grade_list) {
+                                function prepareGradeRecordsHTML($grade) {
                                     $row = '';
-                                    foreach($grade_list as $grade) {
+                                    // echo json_encode($grade);
                                         $row .= "<tr>
-                                        <td>{$grade['sub_name']}</td>
-                                        <td align='center'>{$grade['grade_1']}</td>
-                                        <td align='center'>{$grade['grade_2']}</td>
-                                        <td align='center'>{$grade['grade_f']}</td>
+                                        <td>{$grade[0]['sub_name']}</td>
+                                        <td align='center'>{$grade[0]['grade_1']}</td>
+                                        <td align='center'>{$grade[0]['grade_2']}</td>
+                                        <td align='center'>{$grade[0]['grade_f']}</td>
                                         </tr>";
-                                    }
                                     return $row;
                                 }
 
@@ -142,98 +142,7 @@
                                         </table>";
 
                                 }
-                                $grades = [
-                                    'First' => [ 
-                                        'core' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'applied' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'specialized' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ] 
-                                    ],
-                                    'Second' => [ 
-                                        'core' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'applied' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ],
-                                        'specialized' => [
-                                            ['sub_name'  => "Test 01",
-                                            'grade_1'   => '98',
-                                            'grade_2'   => '100',
-                                            'grade_f'   => ''],
-                                            ['sub_name'  => "Test 02",
-                                            'grade_1'   => '99',
-                                            'grade_2'   => '89',
-                                            'grade_f'   => ''
-                                            ]
-                                        ] 
-                                    ]
-                                ];
+                                
 
                                 $observed_values_desc = [
                                     "Makadiyos" => [
@@ -252,33 +161,34 @@
                                         "Demonstrate appropriate behavior in carrying out activities in school, community and country." 
                                     ]
                                 ];
-
-                                $observed_values = [
-                                    "1" => [
-                                        'Makadiyos'     => ['AO', 'SO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                        'Makakalikasan' => ['NO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                    ],
-                                    "2" => [
-                                        'Makadiyos'     => ['AO', 'SO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                        'Makakalikasan' => ['NO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                    ],
-                                    "3" => [
-                                        'Makadiyos'     => ['AO', 'SO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                        'Makakalikasan' => ['NO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                    ],
-                                    "4" => [
-                                        'Makadiyos'     => ['AO', 'SO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                        'Makakalikasan' => ['NO'],
-                                        'Makatao'       => ['NO', 'RO'],
-                                    ]
-                                ];
+                                
+                                $observed_values = $admin ->listValuesReport();
+                                // $observed_values = [
+                                //     "1" => [
+                                //         'Makadiyos'     => ['AO', 'SO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //         'Makakalikasan' => ['NO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //     ],
+                                //     "2" => [
+                                //         'Makadiyos'     => ['AO', 'SO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //         'Makakalikasan' => ['NO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //     ],
+                                //     "3" => [
+                                //         'Makadiyos'     => ['AO', 'SO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //         'Makakalikasan' => ['NO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //     ],
+                                //     "4" => [
+                                //         'Makadiyos'     => ['AO', 'SO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //         'Makakalikasan' => ['NO'],
+                                //         'Makatao'       => ['NO', 'RO'],
+                                //     ]
+                                // ];
                             ?>
 
 
@@ -308,8 +218,9 @@
                                         </div> -->
                                         <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                         <?php 
-                                            renderSemesterGradeTable('1st Semester', $grades['First']);
-                                            renderSemesterGradeTable('2nd Semester', $grades['Second']);
+                                        
+                                            renderSemesterGradeTable('1st Semester', $grades['1']);
+                                            renderSemesterGradeTable('2nd Semester', $grades['2']);
                                         ?>
                                         <br>
                                     </li>
@@ -346,19 +257,28 @@
                                             </thead>
                                             <tbody>
                                                 <?php 
-                                                    foreach($observed_values as $id => $values) {
-                                                        echo "<tr>";
+                                                    // echo json_encode($observed_values);
+                                                    // echo "<tr>";
+                                                     foreach($observed_values as $id => $values) {//id = MakaDiyos , values = [ 'sfdsdfsdfdsf => 1 => 'AO',2 => 'AO,],
                                                         echo "<td rowspan='". count($values) ."'><b>$id</b></td>";
-                                                        foreach($values as $bh_stmt_id => $bh_values) {
-                                                            echo "<td>$bh_stmt_id</td>";
-                                                            foreach($bh_values as $index => $bh_value) {
-                                                                echo "<td>$bh_value</td>";
-                                                                if ($index == array_key_last($bh_values)) {
-                                                                    echo "</tr>";
+                                                        foreach($values as $bh_staments => $bh_qtr){ // $bh_staments = sfdsdfsdfdsf
+                                                            foreach($bh_qtr as $bh_staments => $marking){
+                                                                echo "<td>$bh_staments</td>";
+                                                                
+                                                                    $first = $marking[0];
+                                                                    $second = $marking[1];
+                                                                    $third = $marking[2];
+                                                                    $fourth = $marking[3];
+                                                                    echo "<td>$first</td>";
+                                                                    echo "<td>$second</td>";
+                                                                    echo "<td>$third</td>";
+                                                                    echo "<td>$fourth</td>";
+                                                                    echo "</tr>";                                                           
                                                                 }
+                                                                
                                                             }
-                                                        }
-                                                        echo "</tr>";
+                                                       
+                                                       echo "</tr>";
                                                     }
                                                 ?>
                                             </tbody>

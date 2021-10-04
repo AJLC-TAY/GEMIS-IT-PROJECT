@@ -20,7 +20,7 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
-    use QueryMethods, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
+    use QueryMethods, School, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
     {
@@ -259,131 +259,111 @@ class Administration extends Dbconfig
         // header("Location: schoolYear.php");
     }
 
-        //INITIALIZATION
-    // 1. select churva classes mapped to the student's section.
-    // 2. For each subjectclass, create a classgrade with that class' sub_class_code.
-    // 3.  
-    //tables to be initialized: 
-    // [/] gradereport, *changes sa db - null lahat except report_id and stud_id;
-    // [/] classgrade, INSERT INTO classgrade (report_id, stud_id, sub_class_code) VALUES (141, 110001, 9101);
-    // [/] observevalues
-            
-     //!!!initializeGrades has been moved to Enroll Trait!!!
-    
-    // ---------------------------------------------
-
-    // RETRIEVAL of grades sigi wait prinoprocess ko HAHAHHA
-    // assuming na meron na tayong stud_id,
-    // retrieve the current quarter para malaman kong anong grade ung ilalabas SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id'
-    // 1. retrieve class with the grade // asa classgrade na table SELECT * FROM `classgrade` WHERE stud_id = 110001
-    //2. for each class imap mo sa category: core, specialize, applied SELECT stud_id, sub_class_code, sub_code, sub_name, sub_type, first_grading, second_grading, final_grade FROM `classgrade` JOIN `subjectclass` USING(sub_class_code) JOIN `sysub` USING(sub_sy_id) JOIN `subject` USING(sub_code) WHERE classgrade.stud_id = 110001 ORDER BY sub_type
-    
-    // per faculty or subject teacher, so kukunin lahat ng students at grade by subject
-    // 1.  retrieve for adviser muna para maintegrate natin si report
-    // so ung data na need is ung current quarter? para kong 1 lang si grade_1 lang malalagyan HHAH or ewan ko kong mapped sa db ung quarter baka oks lang na kunin buo baka oks lang basta 0 .. visualization, kunyari current quarter is 1, ang kukunin lang na grading is 1, pag 2, 1 at 2, pag 3, 1 2 at 3, pag 4, 1 2 3 4 ganun? oo parang ganon HAHAH pero dik sure depende sa meron sa db :v hakdog HAHAHAHAHHAHAH
-    // 1. SELECT current_quarter FROM `schoolyear` WHERE sy_id = 'sy_id' ... allison is nabubuang??? pacheck na lang if tama my ginagawa HAHAHHAA
-    // 2. if current quarter 1 = 
-      //STRUCTURES 
-    
-    
-    //   $grades = [
-    //     'core' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '100',
-    //          'grade_f'   => ''],
-    //         
-    //     ],
-    //     'applied' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '',
-    //          'grade_f'   => ''],
-    //         
-    //     ],
-    //     'specialized' => [
-    //         ['sub_name'  => "Test 01",
-    //          'grade_1'   => '98',
-    //          'grade_2'   => '',
-    //          'grade_f'   => ''],
-    //         
-    //     ]
-    // ];
+       
 
     
     public function listGrade() 
     {
 
-        $grades = array();
+        $grades = [];
+        $stud_id = 110001;
+        $grado = [];
+        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
+        $sy_id = 9;//$this->query("SELECT * FROM schoolyear WHERE status = 'current'"); '
+        $subject_type = $this->query("SELECT sub_type FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = $stud_id GROUP BY sub_type");//insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
+        while($sem = mysqli_fetch_assoc($result)) { 
+            while($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
+                for($x = 1; $x <= $sem['current_semester']; $x++ ){ 
+                    $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = $x"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    
+                    // foreach($sub_type as $type){
+                        while($grd = mysqli_fetch_assoc($stud_grade)) { 
+                            // echo json_encode($sub_type['sub_type']);
+                            // echo ("-------------");
+                            if($sub_type['sub_type'] == $grd['sub_type']){
+                                
+                                // echo ($grd['sub_type']);
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => $grd['first_grading'],
+                                    'grade_2'   => $grd['second_grading'],
+                                    'grade_f'   => $grd['final_grade'] 
+                                ];
+                            }
+                        }
 
-        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = ?"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
-        $subject_type = $this->query("SELECT sub_type FROM subject GROUP BY sub_type ?");//insert ung query nung pagretrieve ng subtypes  // subtypes lang ba etey?
-        $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade 
-                                    FROM classgrade JOIN subjectclass USING(sub_class_code) 
-                                    JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) 
-                                    WHERE stud_id = ?");//insert ung query nung pagretrieve ng grades per quarter 
-        
-        while($row = mysqli_fetch_assoc($result)) { // e.g. $row = sem 
-            while($sub_type = mysqli_fetch_assoc($subject_type)) { 
-                while($stud_grd = mysqli_fetch_assoc($stud_grade)) { 
-                    $grades[$row['sub_semester']] = [
-                        $grades[$sub_type['sub_type']] = [
-                            'subname' => $row['sub_name'],
-                            'grade_1' => $row['first_grading'],
-                            'grade_2' => $row['second_grading'],
-                            'grade_f' => $row['final_grade']
-                        ]
-                    ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
-                }
-            }
+                        
+                    // }
+                    $grades[$x][$sub_type['sub_type']] = $grado;
+                    $grado=[];
+                } 
+               
+                //ung kukunin lang is ung sub_name and sub_type ni stud
+                if(sizeof($grades) != 2){
+                    
+                    $stud_grd = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    
+                    // foreach($sub_type as $type){
+                        while($grds = mysqli_fetch_assoc($stud_grd)) { 
+                            
+                                $grades['2'][$grds['sub_type']][] = [
+                                    'sub_name'  => $grds['sub_name'],
+                                    'grade_1'   => '',
+                                    'grade_2'   => '',
+                                    'grade_f'   => '' 
+                                ];
+                                
+                        }
+                    
+                } 
+                
+           
         }
-        // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
-        return $grades;        
+                                        
+        
+        
+        }
+        // // add for empty data kunmabaga kapag first quarter lang meron padin ung 2nd, 3rd, 4th quarter sa array pero no values
+        return ($grades);       
     }
 
    
     public function listValuesReport() 
     {
         $values = [];
-        $result = $this->query("SELECT value_name, bhvr_statement FROM `observedvalues` JOIN `values` USING (value_id) GROUP BY bhvr_statement"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
-        $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = 110001 AND quarter = $qtr");//insert ung query nung pagretrieve ng valuesgrade columns: value_name | bhrv_statement | marking  by student? yis 
-        $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = ?"); //  kajdbcalkndslqkefba HAHAHAHHAHAHA
-        while($qtrs = mysqli_fetch_assoc($qtr)) { 
-            while($marks = mysqli_fetch_assoc($markings)) { 
-                $values [$marks['quarter']] = [
-                        'subname' => $marks['sub_name'],
-                        'grade_1' => $marks['first_grading'],
-                        'grade_2' => $marks['second_grading'],
-                        'grade_f' => $marks['final_grade']
+        $values_desc = [];
+        $marking = [];
+        $stud_id = 110003;
+        $sy_id = 4;
+        $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
+        
 
-                ];// not tried and tested HAAHHAHHHAHA para may disclaimer HAHAH ohh okiokii awann HAHAHHA dumagdag lang jay comment HAHAHAHA
+        while($val = mysqli_fetch_assoc($result)) { 
+            
+
+            $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = $sy_id");
+            while($qtrs = mysqli_fetch_assoc($qtr)) {
+                for($x = 1; $x <= $qtrs['current_quarter']; $x++ ){
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    while($marks = mysqli_fetch_assoc($markings)) { 
+                        if($marks['bhvr_statement'] == $val['bhvr_statement'] AND $marks['value_name'] == $val['value_name'] ){
+                        $marking[$val['bhvr_statement']][] =  $marks['marking'];
+                        }
+                    }
+                }
+                
+                if(sizeof($marking) != 4){
+                    for($x=1; $x <= 3; $x++){
+                        $marking[$val['bhvr_statement']][] =  '';
+                    }
+                } 
+
+                $values[$val['value_name']][]=$marking;
+                    $marking = []; 
             }
-        }
-        return $values;
-        // "1" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "2" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "3" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ],
-        // "4" => [
-        //     'Makadiyos'     => ['AO', 'SO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        //     'Makakalikasan' => ['NO'],
-        //     'Makatao'       => ['NO', 'RO'],
-        // ]
+            
+        } 
+        return $values; 
     }
 
     public function listAttendanceReport(){
@@ -393,7 +373,7 @@ class Administration extends Dbconfig
                                       //feb [=> no_of_absent => 18
     }
 
-    //RETRIEVAL FOR SUBJECT TEACHER AND STUDENT --->pacheck haha 
+    //RETRIEVAL FOR ADVISER AND STUDENT --->pacheck haha 
     public function listStudentGrades() {
         $stud_id = $_POST['stud_id'];
         $sy_id = $_POST['sy_id'];
@@ -403,10 +383,14 @@ class Administration extends Dbconfig
         JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) 
         WHERE report_id IN (SELECT report_id FROM gradereport WHERE stud_id=$stud_id) 
         AND sy_id=$sy_id;");
+
+        
  
             
         //
     }
+
+    
 
     // UPDATE ---> pacheeeeck - ben
     public function editGrades() {
@@ -417,11 +401,14 @@ class Administration extends Dbconfig
          $grade_id = $_POST['grade_id'];
          $report_id = $_POST['report_id'];
          $sub_class_code= $_POST['sub_class_code'];
+         //$grade=;
 
+         //1 => first_grading
+         //2 => seon
          //first grading //ganito muna di ko sure coniditional kung first,second,final ineedit ng user       
-         $this->prepared_query("UPDATE `classgrade` SET `first_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
-                              [$first_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
-                             "iiii");  
+        // $this->prepared_query("UPDATE `classgrade` SET `$grade` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+        //                      [$grade, $grade_id, $stud_id, $report_id, $sub_class_code],
+        //                     "iiii");  
         //second grading
         $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
                               [ $second_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
@@ -448,7 +435,7 @@ class Administration extends Dbconfig
     }
     
     public function editAttendance() {
-        // to resolve: months
+       //UPDATE `attendance` SET `no_of_present` = '29', `no_of_absent` = '1', `no_of_tardy` = '0', `no_of_days` = '30' WHERE `attendance`.`attendance_id` = 1
     }
 
     public function listSYJSON()
@@ -558,35 +545,10 @@ class Administration extends Dbconfig
         return $sectionList;
     }
 
-    public function listSectionOption($teacher_id)
-    {
-        $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
-                ."LEFT JOIN faculty AS f USING (teacher_id) "
-                ."WHERE teacher_id != '$teacher_id' "
-                ."OR teacher_id IS NULL ORDER BY teacher_id;";
-        $result = mysqli_query($this->db, $query);
-        $sectionList = array();
-        while ($row = mysqli_fetch_assoc($result)) {
-            $teacher_id = $row['teacher_id'];
-            $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
-            $sectionList[] = ["section_code" => $row['section_code'], 
-                              "section_name" => $row['section_name'],
-                              "section_grd"  => $row['grd_level'],
-                              "adviser_id"   => $teacher_id,
-                              "adviser_name" => $name
-                            ];
-        }
-        return $sectionList;
-    }
 
     public function listSectionJSON()
     {
         echo json_encode($this->listSection());
-    }
-
-    public function listSectionOptionJSON($teacher_id)
-    {
-        echo json_encode($this->listSectionOption($teacher_id));
     }
 
 //     public function addSection() 
@@ -823,42 +785,6 @@ class Administration extends Dbconfig
 
 
     /*** Subject Methods */
-    public function listSubjects($tbl)
-    {
-        $subjectList = [];
-
-        $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
-
-        $queryOne = (!isset($_GET['prog_code']))
-            ? "SELECT * FROM $tbl;"
-            : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub
-               WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
-
-        $resultOne = mysqli_query($this->db, $queryOne);
-
-        while ($row = mysqli_fetch_assoc($resultOne)) {
-            $code = $row['sub_code'];
-            $sub_type = $row['sub_type'];
-            $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
-            
-            if ($sub_type == 'specialized') {
-                $resultTwo = mysqli_query($this->db,  "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
-                $rowTwo = mysqli_fetch_row($resultTwo);
-                $subject->set_program($rowTwo[0] ?? "");
-            }
-            $subjectList[] = $subject;
-        }
-
-        return $subjectList;
-    }
-
-    public function listSubjectsJSON()
-    {
-        echo json_encode($this->listSubjects('subject'));
-    }
-
     public function listAllSub($tbl)
     {
         $query = "SELECT * FROM {$tbl}";
@@ -1277,29 +1203,6 @@ class Administration extends Dbconfig
 
     /** User Profile */
     /**
-     * Returns the user Object of the specified user type.
-     * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
-     * @return Faculty|Student|void
-     */
-
-    public function getProfile($type)
-    {
-        $id = $_GET['id'] ?? $_SESSION['id'];
-
-        if ($type === 'AD') {
-            return $this->getAdministrator($id ?? NULL);
-        }
-
-        if ($type === 'FA') {
-            return $this->getFaculty($id);
-        }
-
-        if ($type === 'ST') {
-            return $this->getStudent($id);
-        }
-    }
-
-    /**
      * Returns the count of current administrators, faculty, and students.
      * @return array
      */
@@ -1341,86 +1244,30 @@ class Administration extends Dbconfig
 
     /** Faculty Methods */
     /**
-     * Implementation of adding new, or editing existing faculty record.
-     */
-    public function processFaculty()
-    {
-        $statusMsg = array();
-        $action = $_POST['action'];                 // value = "add" or "edit"
-        $allowTypes = array('jpg', 'png', 'jpeg');  // allowed image extensions
-
-
-        // General information
-        $lastname = trim($_POST['lastname']);
-        $firstname = trim($_POST['firstname']);
-        $middlename = trim($_POST['middlename']);
-        $extname = trim($_POST['extensionname']) ?: NULL; // return null if first value is '', otherwise return first value
-        $lastname = trim($_POST['lastname']);
-        $age = trim($_POST['age']);
-        $birthdate = trim($_POST['birthdate']);
-        $sex = $_POST['sex'];
-
-        // Contact information
-        $cp_no = trim($_POST['cpnumber']) ?: NULL;
-        $email = trim($_POST['email']);
-
-
-        // School information
-        $department = trim($_POST['department']) ?: NULL;
-        [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-
-        // Profile image
-        $imgContent = NULL;
-        $fileSize = $_FILES['image']['size'];
-        if ($fileSize > 0) {
-            if ($fileSize > 5242880) { //  file is greater than 5MB
-                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
-            }
-            $filename = basename($_FILES['image']['name']);
-            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
-            if (in_array($fileType, $allowTypes)) {
-                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
-            } else {
-                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload."; 
-                http_response_code(400);
-                die(json_encode($statusMsg));
-            }
-        }
-
-        $params = [
-            $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email, $awardRep,
-            $canEnroll, $editGrades, $department, $cp_no, $imgContent
-        ];
-        $types = "sssssdssiiisss"; // datatypes of the current parameters
-
-        if ($action == 'add') {
-            $statusMsg = $this->addFaculty($params, $types);
-        }
-        if ($action == 'edit') {
-            $statusMsg = $this->editFaculty($params, $types);
-        }
-
-        echo $statusMsg;
-    }
-
-    /**
      * Implementation of inserting Faculty
      * 1.   Create user default password by concatenating the prefix and the next 
      *      auto increment value (that is maximum of column id_no + 1). ex. FA1234567890
+     *      1.1 Move image to directory
      * 2.   Create faculty record
      * 3.   Insert every subject handled if exist
      * 4.   Insert every subject class handled
      *  */
     private function addFaculty($params, $types)
     {
+
         // Step 1
         $user_id = $this->createUser("FA");
         $params[] = $user_id;
         $types .= "i";
 
+        print_r($params);
+
         // Step 2
         $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
+//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
                 ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+
         $this->prepared_query($query, $params, $types);
         $id = mysqli_insert_id($this->db);  // store the last inserted primary key (that is the teacher_id)
 
@@ -1441,39 +1288,6 @@ class Administration extends Dbconfig
         } else {
             return "Faculty unsuccessfully added.";
         }
-    }
-
-    /**
-     * Implementation of updating Faculty
-     * 1.   Remove image content from parameters and types if null
-     * 2.   Add teacher id to the parameter and types before executing the query
-     * 3.   Update every subject handled if exist
-     * 4.   Update every subject classes handled
-     *  */
-    private function editFaculty(array $params, String $types)
-    {
-        // Step 1
-        $imgContent = end($params);                             // Image content is the last element of the parameter array
-        $imgQuery = ", id_picture=?";
-        if (is_null($imgContent)) {                                    // If image content is null
-            $imgQuery = "";
-            array_pop($params);                                 // remove image in params
-            $types = substr_replace($types, "", -1);      // remove last type
-        } 
-        // Step 2
-        $params[] = $id = $_POST['teacher_id'];
-        $types .= "i";
-        $query = "UPDATE faculty SET last_name=?, first_name=?, middle_name=?, ext_name=?, birthdate=?, age=?, sex=?, "
-            . "email=?, award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=?$imgQuery WHERE teacher_id=?;";
-        $this->prepared_query($query, $params, $types);
-
-        // Step 3
-        $this->updateFacultySubjects($id);
-
-        // Step 4
-        $this->updateAssignedSubClass($id);
-
-        echo json_encode(["teacher_id" => $id]);
     }
 
     /**
@@ -1605,13 +1419,14 @@ class Administration extends Dbconfig
         );
     }
 
-    public function listAdvisoryClasses($is_json = FALSE)
+    public function listAdvisoryClasses($is_JSON = FALSE)
     {
-        session_start();
+        // session_start();
         $id = $_GET['id'];
+        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
         $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
             ."CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
-            ."FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} AND section_code!={$_GET['currentAdvisory']};");
+            ."FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} $advisorCondition;");
         $advisory_classes = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $advisory_classes[] = [
@@ -1621,15 +1436,32 @@ class Administration extends Dbconfig
                 "section_code" => $row['section_code'],
                 "section_name" => $row['section_name'],
                 "section_grd"  => $row['grd_level'],
-                "stud_no"  => $row['stud_no']
+                "stud_no"      => $row['stud_no']
             ];
         }
 
-        if ($is_json) {
+        if ($is_JSON) {
             echo json_encode($advisory_classes);
             return;
         }
         return $advisory_classes;
+    }
+
+    public function listSubClassFacultyOptions() {
+        if (isset($_POST['exclude'])) {
+            $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
+        }
+        $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
+                                    middle_name, ' ',COALESCE(ext_name, '')) AS name
+                                    FROM faculty ". $condition ?? '' .";");
+        $faculty_list = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $faculty_list[] = [
+                'teacher_id' => $row['teacher_id'],
+                'name'       => $row['name'],
+            ];
+        }
+        return $faculty_list;
     }
 
     /** Faculty End */
@@ -1858,17 +1690,6 @@ class Administration extends Dbconfig
         );
     }
 
-    public function listDepartments()
-    {
-        $result = mysqli_query($this->db, "SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
-        $departments = [];
-        while ($row = mysqli_fetch_row($result)) {
-            $departments[] = $row[0];
-        }
-
-        return $departments;
-    }
-
     /** Enroll Methods */
 
     public function listEnrolleesJSON()
@@ -1888,31 +1709,47 @@ class Administration extends Dbconfig
     }
 
     /** Section Methods */
-    public function listSubjectClasses($teacher_id = "")
+    public function listAllSubjectClasses($is_JSON = FALSE)
     {
-        $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
-        $query = "SELECT sc.sub_class_code, sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
-                  FROM subjectclass AS sc JOIN subject AS s USING (sub_code) 
-                  JOIN section AS se USING (section_code) $condition ORDER BY sc.teacher_id ";
-        $result = $this->query($query);
-        $sub_classes = array();
+        session_start();
+//        $_SESSION['sy_id'] = 9;
+        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', middle_name, ' ',COALESCE(ext_name, ''))
+                                        AS name, grd_level FROM subjectclass sc
+                                        JOIN sysub s ON sc.sub_sy_id = s.sub_sy_id
+                                        JOIN subject su ON s.sub_code = su.sub_code
+                                        JOIN section USING (section_code)
+                                        LEFT JOIN faculty f ON sc.teacher_id = f.teacher_id
+                                        WHERE s.sy_id ='{$_SESSION['sy_id']}';");
 
-        while ($sc_row = mysqli_fetch_assoc($result)) {
-            $sub_classes[] = new SubjectClass(
-                $sc_row['sub_code'],
-                $sc_row['sub_name'],
-                $sc_row['grd_level'],
-                $sc_row['sub_semester'],
-                $sc_row['sub_type'],
-                $sc_row['sub_class_code'],
-                $sc_row['section_code'],
-                $sc_row['section_name'],
-                $sc_row['sy_id'],
-                $sc_row['teacher_id']
-            );
+        $sub_classes = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $teacher_id = $row['teacher_id'];
+            $sub_class_code = $row['sub_class_code'];
+            $name = $row['name'];
+            $action = is_null($teacher_id) ? "<div class='d-flex justify-content-center'><button data-type='assign' data-sub-class-code='$sub_class_code' class='btn btn-sm btn-primary action m-auto'>Assign</button></div>"
+                                         : "<div class='d-flex justify-content-center'>"
+                                            ."<button class='btn-danger btn btn-sm me-1 action' data-type='unassign'  data-sub-class-code='$sub_class_code'>Unassign</button>"
+                                            ."<button class='btn-dark btn btn-sm action' data-type='change' data-current-id='$teacher_id' data-current='$name' data-sub-class-code='$sub_class_code'>Change</button>"
+                                            ."</p></div>";
+            $sub_classes[] = [
+                'sub_class_code' => $sub_class_code,
+                'section_code'   => $row['section_code'],
+                'section_name'   => $row['section_name'],
+                'sub_name'       => $row['sub_name'],
+                'teacher_id'     => $teacher_id,
+                'name'           => $name,
+                'grd_level'      => $row['grd_level'],
+                'action'         => $action
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($sub_classes);
+            return;
         }
         return $sub_classes;
     }
+
     private function getSectionName($section_id) {
         $result = mysqli_query($this->db, "SELECT section_name FROM section WHERE section_code='$section_id'");
         return mysqli_fetch_row($result)[0];
@@ -1973,24 +1810,22 @@ class Administration extends Dbconfig
         $this->prepareSectionResult($section_dest, $teacher_id);
     }
 
-    public function getAdvisoryClass() {
-        $data = mysqli_fetch_row($this->prepared_select("SELECT section_code, section_name FROM section WHERE teacher_id=?", [$_GET['id']], "i"));
-        if ($data) {
-            return ["section_code" => $data[0], "section_name" => $data[1]];
-        }
-        return NULL;
-    }
-
-    public function assignSubClasses($teacher_id) {
+    public function assignSubClasses($teacher_id, $return_all = FALSE) {
         $sub_class_code_list = $_POST['sub_class_code'];
         foreach($sub_class_code_list as $sub_class_code) {
             $this->prepared_query( "UPDATE subjectclass SET teacher_id=? WHERE sub_class_code=?;", [$teacher_id, $sub_class_code], "ii");
         }
-        echo json_encode($this->listSubjectClasses($teacher_id));
+
+        if ($return_all) {
+            $this->listAllSubjectClasses(TRUE);
+        } else {
+            echo json_encode($this->listSubjectClasses($teacher_id));
+        }
+
     }
 
-    public function unassignSubClasses() {
-        $this->assignSubClasses(NULL);
+    public function unassignSubClasses($return_all = FALSE) {
+        $this->assignSubClasses(NULL, TRUE);
     }
 
     public function editStudent()

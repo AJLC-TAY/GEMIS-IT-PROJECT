@@ -1,17 +1,17 @@
-let menuItem, subMenuItem, spinner;
+let mainMenuItem, mainSubMenuItem, spinner;
 
 /** Display active menu item */
 function preload(menuItem, subMenuItem= null) {
     spinner = $('#main-spinner-con');
     spinner.show();
     if (subMenuItem == null) {
-        console.log(menuItem);
+        // console.log(menuItem);
         return $(menuItem).click();
     }
-    menuItem = $(`${menuItem} a:first`);
-    subMenuItem = $(`${subMenuItem}`);
-    menuItem.addClass('active');
-    subMenuItem.addClass('active-sub');
+    mainMenuItem = $(`${menuItem} a:first`);
+    mainSubMenuItem = $(`${subMenuItem}`);
+    mainMenuItem.addClass('active');
+    mainSubMenuItem.addClass('active-sub');
 }
 
 /** Shows the spinner */

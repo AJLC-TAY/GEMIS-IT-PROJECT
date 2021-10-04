@@ -5,7 +5,7 @@ $admin = new Administration();
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     if (!in_array($action, ['add', 'edit'])) {
-        die ("<div class='container'><h5>Page not found</h5></div>");;
+        die ("<div class='container'><h5>Page not found</h5></div>");
     }
 
     $stud_id = '';

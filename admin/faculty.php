@@ -1,5 +1,5 @@
 <?php 
-include_once("../inc/head.html"); 
+include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";

@@ -21,8 +21,12 @@
                         <div class="row mt ps-3">
                             <?php 
                                 $isViewPage = TRUE;
+                                $js = "<script type='module' src='../js/admin/section.js'></script>";
                                 if (isset($_GET["sec_code"])) {
                                     include_once("section/sectionView.php");
+                                } else if (isset($_GET['page']) && $_GET['page'] == 'sub_classes') {
+                                    include_once("section/subjectClasses.php");
+                                    $js = "<script type='module' src='../js/admin/subject-class.js'></script>";
                                 } else {
                                     $isViewPage = FALSE;
                                     include_once("section/sectionList.php");
@@ -50,6 +54,6 @@
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="../js/admin/section.js"></script>
+<?php echo $js; ?>
 
 </html>
