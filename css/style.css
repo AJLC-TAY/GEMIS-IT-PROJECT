@@ -552,6 +552,10 @@ input::-webkit-inner-spin-button {
 }
 
 
+.badge {
+    float: right;
+}
+
 
 
 /*footer*/

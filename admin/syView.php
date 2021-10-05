@@ -32,74 +32,155 @@ session_start();
                                 <h4 class="fw-bold">School Year 2021 - 2022</h4>
                                 <hr>
                             </header>
-                            <div class='row justify-content-around'>
-                                <div class='col-xl-3 shadow-sm p-3 bg-light border rounded-3 text-start mb-4'>
-                                    <h5 class='text-start p-0 fw-bold'>TRACKS</h5>
-                                    <hr class='mt-1'>
-                                    <div class='row'>
-                                        <h6>K to 12 - Academic Track</h6>
-                                        <h6>K to 12 - TVL Track</h6>
-                                    </div>
-                                </div>
-                                <div class='col-xl-6 shadow-sm p-3 bg-light border rounded-3 text-start mb-4'>
-                                    <h5 class='text-start p-0 fw-bold'>STRAND</h5>
-                                    <hr class='mt-1'>
-                                    <div class='row p-0'>
-                                        <div class='row'>
-                                            <div class='fw-bold'>K to 12 - Academic Track</div>
-                                            <ul class="ms-3">
-                                                <li>Accountancy, Business, and Management</li>
-                                                <li>Humanities and Social Sciences</li>
-                                            </ul>
+                            <div class="container">
+                                <section class="row">
+                                    <section class="col-sm-6">
+                                        <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 me-3'>
+                                            <h5 class='text-start p-0 fw-bold'>TRACKS</h5>
+                                            <hr class='mt-1'>
+                                            <div class='row p-2 ms-2'>
+                                                <h6>K to 12 - Academic Track</h6>
+                                                <h6>K to 12 - TVL Track</h6>
+                                            </div>
                                         </div>
-                                        <div class='row'>
-                                            <div class='fw-bold'>K to 12 - TVL Track</div>
-                                            <ul class="ms-3">
-                                                <li>Bread and Pastry</li>
-                                                <li>Electronics</li>
-                                            </ul>
+                                        <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4'>
+                                            <h5 class='text-start p-0 fw-bold'>STRAND</h5>
+                                            <hr class='mt-1'>
+                                            <div class='row'>
+                                                <div class='fw-bold ms-3'>K to 12 - Academic Track</div>
+                                                <ul class="ms-4">
+                                                    <li>Accountancy, Business, and Management</li>
+                                                    <li>Humanities and Social Sciences</li>
+                                                </ul>
+                                                <div class='fw-bold ms-3'>K to 12 - TVL</div>
+                                                <ul class="ms-4 mb-1">
+                                                    <li>Bread and Pastry</li>
+                                                    <li>Electronics</li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <h5 class="fw-bold">Subject Checklist</h5>
-                                <div class="row justify-content-around mt-2">
-                                    <div class="col-md-6 shadow-sm p-4 bg-light border rounded-3 text-start mb-4 me-1">
-                                        <div class="row">
-                                            <h6><b>CORE SUBJECTS</b></h6>
-                                            <hr>
+                                    </section>
+                                    <section class="col-md-6">
+                                        <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 me-3'>
+                                            <div class="d-flex justify-content-between">
+                                                <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
+                                                <div>
+                                                    <button type="button" class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                                </div>
+                                            </div>
+                                            <hr class='mt-2'>
+                                            <div class='row d-flex justify-content-center'>
+                                                <h5 class='fw-bold d-flex justify-content-center'>2021</h5>
+                                                <div class="inner row justify-content-center">
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">August</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">September</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">October</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">November</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">December</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                </div>
+                                                <h5 class='fw-bold d-flex justify-content-center'>2022</h5>
+                                                <div class="inner row justify-content-center">
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">January</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">February</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">March</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">April</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                    <div class="ms-4 col-sm-8">
+                                                        <h7 class="fw-bold mt-1">May</h7>
+                                                    </div>
+                                                    <div class="mt-1 col-sm-3">
+                                                        <h7>20</h7>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </div>
+
+                            <h5 class="fw-bold mb-3">SUBJECT CHECKLIST</h5>
+                            <div class="container">
+                                <section class="row">
+                                    <section class="col-sm-6">
+                                        <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4 ">
+                                            <h5 class='text-start p-0 fw-bold'>CORE SUBJECTS</h5>
+                                            <hr class='mt-1'>
+
                                             <ul class='ms-2 list-group'>
                                                 <li class='list-group-item'>Contemporary Philippine Arts from the Regions<br>
                                                 <li class='list-group-item'>Earth and Life Science<br>
                                                 <li class='list-group-item'>General Mathematics<br>
                                             </ul>
                                         </div>
-                                    </div>
-                                    <div class="col-md-5 shadow-sm p-4 bg-light border rounded-3 text-start mb-4">
-                                        <div class="row">
-                                            <h6><b>SPECIALIZED | APPLIED SUBJECTS</b></h6>
-                                            <hr>
+                                    </section>
+                                    <section class="col-sm-6">
+                                        <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4">
+                                            <h5 class='text-start p-0 fw-bold'>SPECIALIZED | APPLIED SUBJECTS </h5>
+                                            <hr class='mt-1'>
                                             <ul class='ms-2 list-group'>
-                                                <li class='list-group-item'>Applied Economics<br>
-                                                <li class='list-group-item'>Business Enterprise Stimulation<br>
-                                                <li class='list-group-item'>Business Ethics and Social Responsibility<br>
+                                                <li class='list-group-item'>Applied Economics<span class="badge bg-primary badge-pill">ABM </span><br>
+                                                <li class='list-group-item'>Bread and Pastry Production<span class="badge bg-warning badge-pill">B&P </span><br>
+                                                <li class='list-group-item'>Electronic Products Assembly and Servicing<span class="badge bg-info badge-pill">ELEC </span><br>
+                                                <li class='list-group-item'>Philippine Politics and Governance<span class="badge bg-success badge-pill">HUMMS</span><br>
                                             </ul>
                                         </div>
-                                    </div>
-
-                                    <!--MAIN CONTENT END-->
-                                    <!--FOOTER START-->
-                                    <?php include_once("../inc/footer.html"); ?>
-                                    <!--FOOTER END-->
-                                </div>
+                                    </section>
+                                </section>
                             </div>
+                            <!--MAIN CONTENT END-->
+                            <!--FOOTER START-->
+                            <?php include_once("../inc/footer.html"); ?>
+                            <!--FOOTER END-->
+                        </div>
+                    </div>
+                </div>
             </section>
         </section>
     </section>
-    <!-- TOAST -->
-    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
-        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
-    </div>
-    <!-- TOAST END -->
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

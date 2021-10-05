@@ -246,8 +246,6 @@ $subjects = $init_data['subjects'];
               
                 </div>
             </div> -->
-
-            <input type="submit" form="school-year-form" value="Submit">
         </div>
     </div>
     <!-- STEPPER END -->
