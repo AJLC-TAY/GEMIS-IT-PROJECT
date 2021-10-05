@@ -152,7 +152,6 @@ trait FacultySharedMethods
         $cp_no = trim($_POST['cpnumber']) ?: NULL;
         $email = trim($_POST['email']);
 
-
         // School information
         $department = trim($_POST['department']) ?: NULL;
 
@@ -161,7 +160,7 @@ trait FacultySharedMethods
         ];
         $types = "sssssdss";
         // Profile image
-        $imgContent = NULL;
+        $fileDestination = NULL;
         $fileSize = $_FILES['image']['size'];
         if ($fileSize > 0) {
             if ($fileSize > 5242880) { //  file is greater than 5MB
@@ -170,12 +169,18 @@ trait FacultySharedMethods
             $filename = basename($_FILES['image']['name']);
             $fileType = pathinfo($filename, PATHINFO_EXTENSION);
             if (in_array($fileType, $allowTypes)) {
-                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
+//                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
                 # Upload image
-//                $imgContent = $_FILES['image']['tmp_name'];
-//                $filename = $_SESSION['sy_id']."_". time() ."_".uniqid("", true).".$fileType";  // ex. upload/student/234236513_12323.png
-//                $fileDestination = "../upload/student/$filename";
-//                move_uploaded_file($imgContent, $fileDestination);
+                $imgContent = $_FILES['image']['tmp_name'];
+                $filename = time() ."_".uniqid("", true).".$fileType";  // 234236513_12323.png
+                $fileDestination = "uploads/faculty/$filename"; // ex. uploads/faculty/234236513_12323.png
+                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+                    $current_img_path = $_POST["current_image_path"];
+                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+                        unlink("../".$current_img_path);                                 // delete current image
+                    }
+                }
+                move_uploaded_file($imgContent, "../".$fileDestination);
             } else {
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
                 http_response_code(400);
@@ -186,16 +191,12 @@ trait FacultySharedMethods
         switch($user_type) {
             case "AD":
                 [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-                $params = $params + [$awardRep, $canEnroll, $editGrades, $department, $cp_no, $imgContent];
-//                $params = [ ...$params, $awardRep, $canEnroll, $editGrades, $department, $cp_no, $filename];
+                $params = array_merge($params, [$awardRep, $canEnroll, $editGrades, $department, $cp_no, $fileDestination]);
                 $types .= "iiisss"; // data types of the current parameters
-//                $types .= "iiisss"; // data types of the current parameters
                 break;
             case "FA":
-                $params = $params + [$cp_no, $imgContent];
-//                $params = [...$params, $cp_no, $filename];
-                $types .= "sb";
-//                $types .= "ss";
+                $params = array_merge($params + [$cp_no, $fileDestination]);
+                $types .= "ss";
                 break;
         }
 
@@ -216,7 +217,7 @@ trait FacultySharedMethods
      * 3.   Update every subject handled if exist
      * 4.   Update every subject classes handled
      *  */
-    private function editFaculty(array $params, String $types, array $img, String $user_type)
+    private function editFaculty(array $params, String $types, String $user_type)
     {
         // Step 1
         $imgContent = end($params);                             // Image content is the last element of the parameter array
@@ -762,17 +763,17 @@ trait Enrollment
             }
 
             $filename = basename($file['name']);
-            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
+            $file_type = pathinfo($filename, PATHINFO_EXTENSION);
 
-            if (in_array($fileType, Administration::ALLOWED_IMG_TYPES)) {
+            if (in_array($file_type, Administration::ALLOWED_IMG_TYPES)) {
                 echo "<br>Image is valid ... <br>";
-                $profile_img = file_get_contents($file['tmp_name']);
+                $profile_img = time() ."_".uniqid("", true).".$file_type";
+//                $profile_img = file_get_contents($file['tmp_name']);
             } else {
                 $statusInfo['status'] = $status;
                 $statusInfo["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
                 return $statusInfo;
             }
-
             $statusInfo['status'] = 'valid';
             $statusInfo['image'] = $profile_img;
         }
@@ -939,7 +940,17 @@ trait Enrollment
         foreach([$psa_img, $form_img, $profile_img] as $image) {
             // add image to the parameters if valid
             if ($image['status'] == 'valid') {
-                $params[] = $image['image'];
+                # Upload image
+                $imgContent = $image['image'];
+                $fileDestination = "uploads/student/{$_SESSION['sy_id']}/$imgContent";
+                // for editing
+//                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+//                    $current_img_path = $_POST["current_image_path"];
+//                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+//                        unlink("../".$current_img_path);                                 // delete current image
+//                    }
+//                }
+                $params[] = $fileDestination;
             }
         }
 

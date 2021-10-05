@@ -64,7 +64,8 @@ if ($action == 'add') {
     $edit_grades_checked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
     $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
     $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
-    $image = is_null($faculty->get_id_photo()) ? $PROFILE_PATH : "../upload/student/".$faculty->get_id_photo();
+    $id_photo = $faculty->get_id_photo();
+    $image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : $PROFILE_PATH) : $PROFILE_PATH;
     $handled_subjects_list = $faculty->get_subjects();
     $handled_subjects = '';
     foreach ($handled_subjects_list as $sub) {
@@ -108,12 +109,12 @@ switch ($user_type) {
                 ."<label class='form-check-label'>Edit Grades</label>"
             ."</div>"
             ."<div class='form-check'>"
-                ."<input class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollment_checked>"
-                ."<label class='form-check-label'>Enrollment</label>"
+                ."<input id='enrollment-in' class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollment_checked>"
+                ."<label for='enrollment-in' class='form-check-label'>Enrollment</label>"
             ."</div>"
             ."<div class='form-check'>"
-                ."<input class='form-check-input' name='access[]' type='checkbox' value='awardReport' $award_report_checked>"
-                ."<label class='form-check-label'>Award Report</label>"
+                ."<input id='award-role-in' class='form-check-input' name='access[]' type='checkbox' value='awardReport' $award_report_checked>"
+                ."<label for='award-role-in' class='form-check-label'>Award Report</label>"
             ."</div>"
         ."</div>";
         $user_desc = "Faculty";
@@ -211,6 +212,7 @@ switch ($user_type) {
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>Faculty ID Photo</label>
             <div class="image-preview-con">
+                <input type="hidden" name="current_image_path" value="<?php echo $image; ?>">
                 <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100 shadow border'' />
                 <div class=' edit-img-con text-center'>
                 <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>

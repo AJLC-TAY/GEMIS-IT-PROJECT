@@ -193,6 +193,7 @@ class Administration extends Dbconfig
      * 3.   Initialize sections.
      * 4.   Initialize subject class.
      * 5.   Initialize academic monthly days.
+     * 6.   Create directory for images file system.
      */
     public function initializeSY()
     {
@@ -263,6 +264,17 @@ class Administration extends Dbconfig
 //        foreach(Administration::MONTHS as $month) {
 //            $this->query("INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);");
 //        }
+
+        # Step 6
+        $dir_path = "../uploads/student/$sy_id";
+        $cred_dir_path = "../uploads/credential/$sy_id";
+        if (!file_exists($dir_path)) {
+            mkdir($dir_path);
+        }
+        if (!file_exists($cred_dir_path)) {
+            mkdir($cred_dir_path);
+        }
+
 
         // echo "School year successfully initialized.";
         echo json_encode($sy_id);
@@ -1292,11 +1304,8 @@ class Administration extends Dbconfig
         $params[] = $user_id;
         $types .= "i";
 
-        print_r($params);
-
         // Step 2
         $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
-//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
                 ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
@@ -1316,7 +1325,7 @@ class Administration extends Dbconfig
 
         if ($id) {
             echo json_encode(["teacher_id" => $id]);
-//            header("Location: faculty.php?id=$id");
+            # header("Location: faculty.php?id=$id");
         } else {
             return "Faculty unsuccessfully added.";
         }
@@ -1334,7 +1343,6 @@ class Administration extends Dbconfig
             $current_asgn_sub_classes =[];
             while ($row = mysqli_fetch_row($result)) {
                 $current_as_class = $current_asgn_sub_classes[] = $row[0];
-                print_r($current_as_class);
                 if (!in_array($current_as_class, $asgn_sub_classes)) {
                     $this->query("UPDATE subjectclass SET teacher_id=NULL WHERE sub_class_code='$current_as_class';");
                 }
