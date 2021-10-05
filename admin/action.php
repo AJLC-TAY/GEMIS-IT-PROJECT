@@ -28,6 +28,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSY') {
 if (isset($_POST['action']) && $_POST['action'] === 'editEnrollStatus') {
     $admin->editEnrollStatus();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'editAcademicDays') {
+    $admin->editAcademicDays();
+}
 
 /******** ENROLLMENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'enroll') {

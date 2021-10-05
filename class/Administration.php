@@ -20,6 +20,10 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
+    const MONTHS = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July ', 'August','September','October', 'November', 'December'
+    ];
     use QueryMethods, School, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
@@ -188,6 +192,7 @@ class Administration extends Dbconfig
      * 2.   Initialize curriculum.
      * 3.   Initialize sections.
      * 4.   Initialize subject class.
+     * 5.   Initialize academic monthly days.
      */
     public function initializeSY()
     {
@@ -240,19 +245,24 @@ class Administration extends Dbconfig
         }
 
          
-        
+        # Step 4
         // insert subjects offered in the sysub
-        # Core subjects
+        ## Core subjects
         $subjects = $_POST['subjects']['core'];
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'core');
         }
 
-        # Specialized and Applied subjects
+        ## Specialized and Applied subjects
         $subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'applied');
         }
+
+        # Step 5
+//        foreach(Administration::MONTHS as $month) {
+//            $this->query("INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);");
+//        }
 
         // echo "School year successfully initialized.";
         echo json_encode($sy_id);
@@ -359,7 +369,7 @@ class Administration extends Dbconfig
                 } 
 
                 $values[$val['value_name']][]=$marking;
-                    $marking = []; 
+                    $marking = [];
             }
             
         } 
@@ -485,19 +495,32 @@ class Administration extends Dbconfig
                             ."<span class='status'>$enroll_opt</span>"
                         ."</div>";
              
-            $sy_list[] = [  'id' => $sy_id, 
-                            's_year' => $row['start_year'], 
-                            'e_year' => $row['end_year'], 
-                            'sy_year' => $row['start_year']." - ".$row['end_year'], 
+            $sy_list[] = [  'id'              => $sy_id,
+                            's_year'          => $row['start_year'],
+                            'e_year'          => $row['end_year'],
+                            'sy_year'         => $row['start_year']." - ".$row['end_year'],
                             'current_grd_val' => $grd_level, 
-                            'grd_level' => $grd_opt, 
+                            'grd_level'       => $grd_opt,
                             'current_qtr_val' => $quarter, 
-                            'current_qtr' => $quarter_opt, 
-                            'current_sem_val' =>  $semester,
-                            'current_sem' => $sem_opt,
-                            'enrollment_val' => $enrollment, 
-                            'enrollment' => $enroll_opt, 
-                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm'>Edit</button>"
+                            'current_qtr'     => $quarter_opt,
+                            'current_sem_val' => $semester,
+                            'current_sem'     => $sem_opt,
+                            'enrollment_val'  => $enrollment,
+                            'enrollment'      => $enroll_opt,
+                            'jan'   => '20',
+                            'feb'   => '20',
+                            'mar'   => '20',
+                            'apr'   => '20',
+                            'may'   => '20',
+                            'jun'   => '20',
+                            'jul'   => '20',
+                            'aug'   => '20',
+                            'sep'   => '20',
+                            'oct'   => '20',
+                            'nov'   => '20',
+                            'dec'   => '20',
+                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm me-1'>Edit</button>"
+                                        ."<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
                                         ."<div class='edit-options d-none'>"
                                             ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm me-1'>Cancel</button>"
                                             ."<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
@@ -530,6 +553,15 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
     }
 
+    public function editAcademicDays()
+    {
+        $sy_id = $_POST['sy-id'];
+        foreach($_POST['month'] as $m => $days) {
+            $this->prepared_query("UPDATE tablename SET days=? WHERE sy_id = ? AND month = ?;", [$days, $sy_id, $m], "iis");
+        }
+
+        $this->listSYJSON();
+    }
     /** Section Methods */
     public function listSection() 
     {
@@ -2209,5 +2241,118 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
     }
 
+    public function exportSubjectGradesToCSV () {
+        // Fetch records from database 
+        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
+
+        if($query->num_rows > 0){ 
+            $delimiter = ","; 
+            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
+     
+            // Create a file pointer 
+            $f = fopen('php://memory', 'w'); 
+     
+            // Set column headers 
+            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
+            fputcsv($f, $fields, $delimiter); 
+     
+            // Output each row of the data, format line as csv and write to file pointer 
+            while($row = $query->fetch_assoc()){ 
+                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
+                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
+                fputcsv($f, $lineData, $delimiter); 
+            } 
+     
+            // Move back to beginning of file 
+            fseek($f, 0); 
+     
+            // Set headers to download file rather than displayed 
+            header('Content-Type: text/csv'); 
+            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+     
+            //output all remaining data on a file pointer 
+            fpassthru($f); 
+        } 
+        exit; 
+
+    }
+    
+    public function importSubjectGradesToCSV () {
+        // // Load the database configuration file
+        // //if(isset($_POST['importSubmit'])){
+            
+        //     // Allowed mime types
+        //     $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+            
+        //     // Validate whether selected file is a CSV file
+        //     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
+                
+        //         // If the file is uploaded
+        //         if(is_uploaded_file($_FILES['file']['tmp_name'])){
+                    
+        //             // Open uploaded CSV file with read-only mode
+        //             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+                    
+        //             // Skip the first line
+        //             fgetcsv($csvFile);
+                    
+        //             // Parse data from CSV file line by line
+        //             while(($line = fgetcsv($csvFile)) !== FALSE){
+        //                 // Get row data
+        //                 $LRN  = $line[0];
+        //                 $stud_name = $line[1]; 
+        //                 $first_grading  = $line[2];
+        //                 $second_grading = $line[3];
+        //                 $final_grading = $line[3];
+                        
+        //                 // Check whether member already exists in the database with the same email
+        //                 $prevQuery = "SELECT id FROM members WHERE email = '".$line[1]."'";
+        //                 $prevResult = $this->query($prevQuery);
+                        
+        //                 if($prevResult->num_rows > 0){
+        //                     // Update member data in the database
+        //                     $this->query("UPDATE members SET name = '".$name."', phone = '".$phone."', status = '".$status."', modified = NOW() WHERE email = '".$email."'");
+        //                 }else{
+        //                     // Insert member data in the database
+        //                     $this->query("INSERT INTO members (name, email, phone, created, modified, status) VALUES ('".$name."', '".$email."', '".$phone."', NOW(), NOW(), '".$status."')");
+        //                 }
+        //             }
+                    
+        //             // Close opened CSV file
+        //             fclose($csvFile);
+                    
+        //             $qstring = '?status=succ';
+        //         }else{
+        //             $qstring = '?status=err';
+        //         }
+        //     }else{
+        //         $qstring = '?status=invalid_file';
+        //     }
+        }
+        
+        // Redirect to the listing page
+        // header("Location: index.php".$qstring);
+
+    public function getStudentAttendance()
+    {
+        $report_id = 1;
+        $status = ['no_of_days', 'no_of_present', 'no_of_absent', 'no_of_tardy'];
+        foreach ($status as $stat) {
+            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month from attendance where report_id=$report_id;");
+            while ($row = mysqli_fetch_assoc($result)) {
+                $attendance[$stat][] = [
+                    $row['month'] => $row[$stat]
+                ];
+            }
+        }
+
+        return $attendance;
+    }
+
+    public function getTrackStrand()
+    {
+        $stud_id = 110001;
+        $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,' ', e.prog_code) FROM enrollment e JOIN curriculum c USING(curr_code) where stud_id=?;", [$stud_id], "i"));
+        return $trackStrand;
+    }
 }
-?>
