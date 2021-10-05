@@ -65,7 +65,10 @@ $advisory_class = $school->getAdvisoryClass();
 $advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
 $advisory_get_variable = $advisory_code == "" ? "" : "&currentAdvisory=$advisory_code";
 $current_teacher_id = $school_user->get_teacher_id();
-$image = $school_user->get_id_photo() ?? "../assets/profile.png";
+const PROFILE_PATH = "../assets/profile.png";
+
+$id_photo = $school_user->get_id_photo();
+$image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : PROFILE_PATH) : PROFILE_PATH;
 $display_style = STYLE_DISPLAY_NONE;
 $section_list = $school->listSectionOption($current_teacher_id);
 $no_match_display = count($section_list) == 0 ? "" : "d-none";
@@ -119,7 +122,7 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-5">
-                            <img src="<?php echo $image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
+                            <img src="<?php echo "../".$image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
                             <p>Faculty ID: <?php echo $current_teacher_id; ?></p>
                         </div>
                         <!-- PROFILE PICTURE END -->
