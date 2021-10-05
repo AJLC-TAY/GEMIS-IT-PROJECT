@@ -574,6 +574,46 @@ class Administration extends Dbconfig
 
         $this->listSYJSON();
     }
+
+    public function get_sy_info(int $sy_id)
+    {
+//        session_start();
+        $sy_info = ["curriculum" => [], "program" => [], "month" => [], "subject" => [
+            'core' => [],
+            'spap' => []
+        ]];
+        # curriculum
+//        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT syc_id, curr_code, curr_name FROM schoolyear sy 
+                                        JOIN sycurriculum syc USING (sy_id)
+                                        JOIN curriculum USING (curr_code)
+                                        WHERE sy_id = '$sy_id';");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $curr_code = $row['curr_code'];
+            $syc_id = $row['syc_id'];
+            $sy_info["curriculum"][$curr_code] = $row['curr_name'];
+
+            # program
+            $prog_res = $this->query("SELECT prog_code, description FROM program JOIN sycurrstrand 
+                                            USING (prog_code) WHERE curr_code='$curr_code'
+                                                            AND syc_id = '$syc_id';");
+            while ($prog_row = mysqli_fetch_assoc($prog_res)) {
+                $sy_info["program"][$prog_row['prog_code'] ] =  $prog_row['description'];
+            }
+        }
+        # subject
+        $sub_res = $this->query("SELECT sub_code, sub_name, sub_type FROM subject JOIN sysub USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;");
+        while ($sub_row = mysqli_fetch_assoc($sub_res)){
+            $sub_type = $sub_row['sub_type'];
+            $key = ($sub_type === "core") ? $sub_type : 'spap';
+            $sy_info['subject'][$key][$sub_row['sub_code']] = $sub_row['sub_name'];
+        }
+//        echo json_encode($sy_info);
+
+        # month
+        return $sy_info;
+    }
+    /** School Year Methods End */
     /** Section Methods */
     public function listSection() 
     {
@@ -1252,6 +1292,7 @@ class Administration extends Dbconfig
      */
     public function getUserCounts() 
     {
+        session_start();
         $query = "SELECT (
             SELECT COUNT(admin_id) FROM administrator
         ) AS administrators, 
@@ -1259,7 +1300,7 @@ class Administration extends Dbconfig
             SELECT COUNT(teacher_id) FROM faculty
         ) as teachers,
         (
-            SELECT COUNT(stud_id) FROM student
+            SELECT COUNT(stud_id) FROM student JOIN enrollment USING (stud_id) WHERE sy_id = {$_SESSION['sy_id']}
         ) as students";
         $result = mysqli_query($this->db, $query);
         $row = mysqli_fetch_row($result);

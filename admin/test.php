@@ -44,12 +44,13 @@
 //    mkdir($cred_dir_path);
 //}
 
-unlink("../uploads/faculty/1633440070_615c5146b02472.52287926.jpg");
+//unlink("../uploads/faculty/1633440070_615c5146b02472.52287926.jpg");
 
 
-//include '../class/Administration.php';
+include '../class/Administration.php';
 //
-//$admin = new Administration();
+$admin = new Administration();
+$admin->get_sy_info(9);
 //session_start();
 //$_SESSION['sy_id'] = 9;
 //print_r($admin->listAllSubjectClasses());
