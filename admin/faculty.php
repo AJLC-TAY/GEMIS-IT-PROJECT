@@ -1,5 +1,5 @@
 <?php 
-include_once("../inc/head.html"); 
+include_once("../inc/head.html");
 session_start();
 
 $page_path = "faculty/facultyList.php";
@@ -118,6 +118,10 @@ if (isset($_GET['action'])) {
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
 
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>

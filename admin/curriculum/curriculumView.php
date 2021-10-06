@@ -60,17 +60,11 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                         <div class="col-sm-9">
                             <input type="hidden" name="action" value="updateCurriculum">
                             <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                            <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>
-                                                                    <div class='invalid-input'>
-                                                                        Please enter curriculum code
-                                                                    </div>"; ?>
+                            <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>"; ?>
                         </div>
                         <label class="col-sm-3">Name</label>
                         <div class="col-sm-9">
-                            <?php echo "<input class='form-input form-control ' type='text' name='name' value='$curr_name' $edit required>
-                                                                    <div class='invalid-input'>
-                                                                        Please entercurriculum name
-                                                                    </div>"; ?>
+                            <?php echo "<input class='form-input form-control ' type='text' name='name' value='$curr_name' $edit required>"; ?>
                         </div>
                         <label class="col-sm-3">Description</label>
                         <div class="col-sm-9">
@@ -150,16 +144,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                     <div class="form-group needs-validation" novalidate>
                         <label for="prog-code">Strand Code</label>
                         <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                        <div class="invalid-input">
-                            Please enter a unique code
-                        </div>
                         <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
                         <label for="prog-name">Strand Name</label>
                         <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
-                        <div class="invalid-input">
-                            Please enter description
-                        </div>
-                        <p class="name-error-msg text-danger m-0 invisible"><small>Please provide the program name</small></p>
                         <label for="prog-curr">Curriculum</label>
                         <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
                     </div>

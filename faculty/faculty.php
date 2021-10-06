@@ -1,14 +1,30 @@
-<?php
-include_once("../inc/head.html"); 
-$page_path = "../admin/faculty/facultyProfile.php";
-$js = "<script type='module' src='../js/admin/faculty.js'></script>";
+;<?php
+session_start();
+$_SESSION['user_type'] = 'FA';
+$_SESSION['id'] = 1;
+$_SESSION['sy_id'] = 15;
+$_SESSION['sy_desc'] = '2021 - 2022';
+$_SESSION['enrollment'] = 0;
+$_SESSION['roles'] = ['can_enroll', 'award_coor'];
+include_once("../inc/head.html");
+
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'edit') {
+        $page_path = "../admin/faculty/facultyForm.php";
+        $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    }
+} else {
+    $action = "profile";
+    $page_path = "../admin/faculty/facultyProfile.php";
+    $js = "<script type='module' src='../js/admin/faculty.js'></script>";
+}
 ?>
 
-<title>Faculty | GEMIS</title>
+<title>Profile | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
-<body></body>
+<body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
@@ -31,6 +47,7 @@ $js = "<script type='module' src='../js/admin/faculty.js'></script>";
                 <!-- FOOTER START -->
                 <?php include_once("../inc/footer.html"); ?>
                 <!-- FOOTER END -->
+            </section>
         </section>
     </section>
     <!-- MAIN CONTENT END -->
@@ -43,7 +60,6 @@ $js = "<script type='module' src='../js/admin/faculty.js'></script>";
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>

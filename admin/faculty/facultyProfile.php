@@ -1,21 +1,86 @@
 <?php
+# session handling here
+// session_start();
 const STYLE_DISPLAY_NONE = "style='display: none'";
-require_once("../class/Administration.php");
-$admin = new Administration();
-$_SESSION['userType'] = 'admin';
-$_SESSION['userID'] = 'alvin';
+//$_SESSION['user_type'] = 'FA';
+# Determine what class to import basing on the user type
 
-//$userType = ucwords($_SESSION['userType']);
-$link = "faculty.php";
-$admin_user = $admin->getProfile("FA");
-$advisory_class = $admin->getAdvisoryClass();
+$user_type = $_SESSION['user_type'];
+switch ($user_type) {
+    case 'AD':
+        require_once("../class/Administration.php");
+        $school = new Administration();
+
+        $display_for_admin = '';
+
+        $breadcrumb = "<li class='breadcrumb-item'><a href='faculty.php' target='_self'>Faculty</a></li>";
+
+        $edit_link = "";
+
+        # department
+        $dept_edit_btn = "<span class='badge'><button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>";
+        $dept_options = "";
+
+        # role
+        $role_edit_btn = "<span class='badge'><button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>";
+        $role_options = "<div id='role-decide-con' class='my-auto d-none'>"
+                            ."<button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>"
+                            ."<input type='submit' form='role-form' id='role-save-btn' class='btn btn-sm btn-success' value='Save'>"
+                       ."</div>";
+
+        # classes
+        ## subject class
+        $sub_class_options = "<div>"
+                ."<button id='add-sc-option' class='btn btn-sm btn-success'><i class='bi bi-plus me-2'></i>Add subject class</button>"
+                ."<button class='unassign-selected-btn btn btn-sm btn-outline-danger'><i class='bi bi-dash-circle me-2'></i>Unassign Selected</button>"
+            ."</div>";
+        $action_column = "<th scope='col' data-width='100' data-align='center' data-field='action'>Actions</th>";
+        break;
+    case 'FA':
+        require_once("../class/Faculty.php");
+        $display_for_admin = 'd-none';
+        $school = new FacultyModule();
+
+        $display_for_admin = 'd-none';
+
+        $breadcrumb = '';
+
+        $edit_link = "";
+
+        # department
+        $dept_edit_btn  = '';
+        $dept_edit_options = '';
+        # role
+        $role_edit_btn = '';
+        $role_options = '';
+        # classes
+        ## subject class
+        $sub_class_options = '';
+        $action_column = '';
+        break;
+}
+
+$school_user = $school->getProfile("FA");
+$advisory_class = $school->getAdvisoryClass();
 $advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
 $advisory_get_variable = $advisory_code == "" ? "" : "&currentAdvisory=$advisory_code";
-$current_teacher_id = $admin_user->get_teacher_id();
-$image = is_null($admin_user->get_id_photo()) ? "../assets/profile.png" : $admin_user->get_id_photo();
+$current_teacher_id = $school_user->get_teacher_id();
+const PROFILE_PATH = "../assets/profile.png";
+
+$id_photo = $school_user->get_id_photo();
+$image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : PROFILE_PATH) : PROFILE_PATH;
 $display_style = STYLE_DISPLAY_NONE;
-$section_list = $admin->listSectionOption($current_teacher_id);
+$section_list = $school->listSectionOption($current_teacher_id);
 $no_match_display = count($section_list) == 0 ? "" : "d-none";
+$chg_adv_btn = $user_type == 'AD'
+    ? "<span><button data-bs-toggle='modal' data-bs-target='#advisory-modal' "
+    ."class='ms-5 form-control btn btn-sm btn-dark shadow w-auto my-auto'>Change</button></span>"
+    : '';
+$advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_code=$advisory_code' id='current-advisory' class='text-secondary'> {$advisory_code} "
+    . $advisory_class['section_name']. "</a>$chg_adv_btn</div>"
+    : "No advisory class set";
+
+
 ?>
 
 <!-- HEADER -->
@@ -24,20 +89,20 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><?php echo "<a href='$link' target='_self'>Faculty</a>"; ?></li>
+            <?php echo $breadcrumb; ?>
             <li class="breadcrumb-item active" aria-current="page">Profile</li>
         </ol>
     </nav>
     <!-- BREADCRUMB END -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="my-auto">Profile</h4>
+        <div class="d-flex justify-content-center">
+            <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
+            <a href="faculty.php?id=<?php echo $current_teacher_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        </div>
+    </div>
 </header>
 <!-- HEADER END -->
-<div class="d-flex justify-content-between align-items-center">
-    <h4 class="my-auto">Profile</h4>
-    <div class="d-flex justify-content-center">
-        <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
-        <a href="faculty.php?id=<?php echo $current_teacher_id; ?>&action=edit" role="button" class="btn link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
-    </div>
-</div>
 
 <div class='container my-3'>
     <div class="card p-3 text-center">
@@ -57,7 +122,7 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-5">
-                            <img src="<?php echo $image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
+                            <img src="<?php echo "../".$image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
                             <p>Faculty ID: <?php echo $current_teacher_id; ?></p>
                         </div>
                         <!-- PROFILE PICTURE END -->
@@ -65,26 +130,26 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                         <div class="col-xl-7">
                             <div class="row">
                                 <?php
-                                $birthdate = $admin_user->get_birthdate();
+                                $birthdate = $school_user->get_birthdate();
                                 $birthdate = date("F j, Y", strtotime($birthdate));
-                                $name = $admin_user->get_name();
-                                echo "<p>Name: $name<br>
-                                            Gender: {$admin_user->get_sex()}<br>
-                                            Age: {$admin_user->get_age()}<br>
-                                            Birthdate: {$birthdate}</p>";
+                                $name = $school_user->get_name();
+                                echo "<p>Name: $name<br>"
+                                    ."Gender: {$school_user->get_sex()}<br>"
+                                    ."Age: {$school_user->get_age()}<br>"
+                                    ."Birthdate: {$birthdate}</p>";
                                 ?>
                             </div>
                             <div class="row">
                                 <h6><b>Contact Information</b></h6>
-                                <?php echo "<p>Cellphone No.: {$admin_user->get_cp_no()}<br>
-                                            Email: {$admin_user->get_email()}</p>"; ?>
+                                <?php echo "<p>Cellphone No.: {$school_user->get_cp_no()}<br>"
+                                          ."Email: {$school_user->get_email()}</p>"; ?>
                             </div>
                             <!-- DEPARTMENT SECTION -->
                             <div id="dept-section" class="row pt-2 mb-2">
                                 <div class="d-flex justify-content-between mb-2">
                                     <div class="my-auto">
                                         <h6 class='m-0 fw-bold'>Department
-                                            <span class="badge"><button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
+                                            <?php echo $dept_edit_btn; ?>
                                         </h6>
                                     </div>
                                     <div id="dept-decide-con" class='my-auto' <?php echo $display_style; ?>>
@@ -94,15 +159,15 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                 </div>
                                 <div class="dept-con">
                                     <?php
-                                    $depOpt = $admin->listDepartments();
+                                    $depOpt = $school->listDepartments();
                                     $departmentOption = "";
                                     foreach ($depOpt as $dep) {
                                         $departmentOption .= "<option value='$dep'>";
                                     }
-                                    $department = $admin_user->get_department();
-                                    $deptExist = TRUE;
+                                    $department = $school_user->get_department();
+                                    $dept_exist = TRUE;
                                     if ($department == '') {
-                                        $deptExist = FALSE;
+                                        $dept_exist = FALSE;
                                         $department = 'No department set';
                                     }
                                     ?>
@@ -135,70 +200,43 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                 <div class="d-flex justify-content-between">
                                     <div class="my-auto">
                                         <h6 class='m-0 fw-bold'>Roles
-                                            <span class="badge"><button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>
+                                            <?php echo $role_edit_btn; ?>
                                         </h6>
                                     </div>
-                                    <div id="role-decide-con" class='my-auto d-none' <?php // echo $display_style; 
-                                                                                        ?>>
-                                        <button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
-                                        <input type="submit" form="role-form" id='role-save-btn' class='btn btn-sm btn-success' value="Save">
-                                    </div>
+                                    <?php echo $role_options; ?>
                                 </div>
                                 <!-- ROLE HEADER END -->
                                 <!-- ROLE CONTENT -->
                                 <div id="role-tag-con">
                                     <?php
-                                    function renderRoleHTML($role)
-                                    {
-                                        $icon_display = 'd-none';
-                                        echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>
-                                                        <span class='ms-3 me-2'>{$role['desc']}</span>
-                                                        <button class='btn btn-link text-danger btn-sm p-0 me-2 $icon_display'>
-                                                            <i class='bi bi-x-square-fill '></i>
-                                                        </button>
-                                                    </div>";
-                                    }
-
-
-                                    $data = $admin_user->get_access_data();
+                                    $data = $school_user->get_access_data();
                                     $roles = $data['roles'];
                                     $rData = $data['data'];
                                     $rSize = $data['size'];
+
+                                    $icon_display = 'd-none';
                                     foreach ($rData as $role) {
-                                        renderRoleHTML($role);
+                                        echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>"
+                                            ."<span class='ms-3 me-2'>{$role['desc']}</span>"
+                                            ."<button class='btn btn-link text-danger btn-sm p-0 me-2 $icon_display'>"
+                                                ."<i class='bi bi-x-square-fill '></i>"
+                                            ."</button>"
+                                        ."</div>";
                                     }
+
                                     $role_msg_display = (!$rSize) ? "" : "d-none";
                                     echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles or access set</p>";
-                                    // echo "
-                                    // <div id='role-add-btn' class='btn-group dropend d-none'>
-                                    //     <button type='button' class='btn btn-outline-success rounded-circle px-2 py-1' data-bs-toggle='dropdown' aria-expanded='false'>
-                                    //         <i class='bi bi-plus'></i>
-                                    //     </button>
-                                    //     <ul id='role-dropdown' class='dropdown-menu'>
-                                    //         <li><button class='dropdown-item' data-value='editGrades'>Edit Grade</button></li>
-                                    //         <li><button class='dropdown-item' data-value='canEnroll'>Can Enroll</button></li>
-                                    //         <li><button class='dropdown-item' data-value='awardReport'>Award Coordinator</button></li>
-                                    //     </ul>
-                                    // </div>";
                                     ?>
                                 </div>
                                 <div id='role-option-tag-con' class='d-none'>
                                     <hr class='m-2 '>
                                     <div class="my-auto d-inline-block mx-2"><small>Options:</small></div>
                                     <?php
-                                    function renderRoleOptHTML($role)
-                                    {
-                                        echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>
-                                                        <i class='bi bi-plus-square me-2'></i>{$role['desc']}
-                                                    </button>";
-                                    }
                                     foreach ($rData as $role) {
-                                        if ($role['disp'] == "") {
-                                            $role['disp'] = "d-none";
-                                        } else {
-                                            $role['disp'] = "";
-                                        }
-                                        renderRoleOptHTML($role);
+                                        $role['disp'] = $role['disp'] == '' ? 'd-none' : '';
+                                        echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>"
+                                                ."<i class='bi bi-plus-square me-2'></i>{$role['desc']}"
+                                            ."</button>";
                                     }
                                     ?>
                                 </div>
@@ -224,21 +262,14 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                         <!-- ADVISORY HEADER -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="my-auto ">
-                                <h5 class='m-0 fw-bold'>ADVISORY CLASS
-                                    <!-- <span class="badge"><button id='adviser-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span> -->
-                                </h5>
-                            </div>
-                            <div id="adviser-decide-con" class='d-none my-auto'>
-                                <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
-                                <button id='adviser-save-btn' class='btn btn-sm btn-success'>Save</button>
+                                <h5 class='m-0 fw-bold'>ADVISORY CLASS</h5>
                             </div>
                         </div>
                         <div class="my-auto w-100">
                             <div class="form-group d-flex flex-column justify-content-between mb-3">
                                 <label for="current-advisory" class="col-form-label">Current</label>
                                 <?php
-                                $advisory = ($advisory_class) ? "($advisory_code) {$advisory_class['section_name']}" : "No advisory class set";
-                                echo "<span><a href='section.php?sec_code=$advisory_code' id='current-advisory' class='text-secondary'>$advisory</a><button data-bs-toggle='modal' data-bs-target='#advisory-modal' class='ms-5 form-control btn btn-sm btn-dark shadow w-auto my-auto'>Change</button></span>";
+                                echo $advisory;
                                 ?>
                             </div>
                         </div>
@@ -283,22 +314,19 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                                 <span class="flex-grow-1 me-3">
                                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                 </span>
-                                <div>
-                                    <button id='add-sc-option' class='btn btn-sm btn-success'><i class="bi bi-plus me-2"></i>Add subject class</button>
-                                    <button class="unassign-selected-btn btn btn-sm btn-outline-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
-                                </div>
+                                <?php echo $sub_class_options; ?>
                             </div>
                             <table id='assigned-sc-table' data-page="profile" class="table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th data-checkbox="true"></th>
+                                        <th class='<?php echo $display_for_admin; ?>' data-checkbox="true"></th>
                                         <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
                                         <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
                                         <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                                         <!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
                                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                        <?php echo $action_column; ?>
                                     </tr>
                                 </thead>
                             </table>
@@ -325,27 +353,27 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
                         <input id="search-subject" type="text" class="form-control mb-4" placeholder="Search subject here ...">
                         <div class="assigned-sub-con list-group border">
                             <?php
-                            $subjects = $admin->listSubjects('subject');
-                            $assigned_sub = $admin_user->get_subjects();
-                            echo "<div id='empty-as-msg' class='list-group-item " . (count($assigned_sub) > 0 ? "d-none" : "") . "' aria-current='true'>
-                                    <div class='d-flex w-100'>
-                                        <div class='mx-auto p-3 d-flex flex-column justify-content-center'>
-                                            <h6>No assigned subject</h6>
-                                            <button class='edit-as-btn btn btn-success btn-sm w-auto' data-action='Assign subject' data-bs-toggle='modal' data-bs-target='#as-modal'>Assign</button>
-                                        </div>
-                                    </div>
-                                </div>";
+                            $subjects = $school->listSubjects('subject');
+                            $assigned_sub = $school_user->get_subjects();
+                            echo "<div id='empty-as-msg' class='list-group-item " . (count($assigned_sub) > 0 ? "d-none" : "") . "' aria-current='true'>"
+                                    ."<div class='d-flex w-100'>"
+                                        ."<div class='mx-auto p-3 d-flex flex-column justify-content-center'>"
+                                            ."<h6>No assigned subject</h6>"
+                                            ."<button class='edit-as-btn btn btn-success btn-sm w-auto' data-action='Assign subject' data-bs-toggle='modal' data-bs-target='#as-modal'>Assign</button>"
+                                        ."</div>"
+                                    ."</div>"
+                                ."</div>";
 
                             foreach ($assigned_sub as $subject) {
                                 $type = $subject->get_sub_type();
                                 $sub_code = $subject->get_sub_code();
                                 echo "<a target='_blank' href='subject.php?sub_code=$sub_code' class='list-group-item list-group-item-action' aria-current='true'>"
                                     . "<div class='d-flex w-100 justify-content-between'>"
-                                    . "<p class='mb-1'>{$subject->get_sub_name()}</p>"
-                                    . "<small>$type</small>"
+                                        . "<p class='mb-1'>{$subject->get_sub_name()}</p>"
+                                        . "<small>$type</small>"
                                     . "</div>"
                                     . "<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
-                                    . "</a>";
+                                . "</a>";
                             }
                             $assigned_sub = array_map(function ($e) {
                                 return $e->get_sub_code();
@@ -535,13 +563,13 @@ $no_match_display = count($section_list) == 0 ? "" : "d-none";
 <!-- TOAST END -->
 
 <?php
-$sub_classes = $admin->listSubjectClasses($current_teacher_id);
-$assigned_sub_classes = $admin_user->get_handled_sub_classes();
+$sub_classes = $school->listSubjectClasses($current_teacher_id);
+$assigned_sub_classes = $school_user->get_handled_sub_classes();
 ?>
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;
     let roles = <?php echo json_encode($roles); ?>;
-    let deptExist = <?php echo json_encode($deptExist); ?>;
+    let deptExist = <?php echo json_encode($dept_exist); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;
     let assigned = <?php echo json_encode($assigned_sub); ?>;
     let subjectClasses = <?php echo json_encode($sub_classes); ?>;

@@ -46,7 +46,6 @@ if (is_null($guardian)) {
     $guardian_cp_no = $guardian['cp_no'];
     $guardian_relationship = $guardian['relationship'];
 }
-
 ?>
 
 <title>Student Information | GEMIS</title>
@@ -119,6 +118,7 @@ if (is_null($guardian)) {
                             <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
                             <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
+                       <?php $admin->listValuesReport()?> 
 
                         <!-- PROFILE PICTURE END -->
                         <!-- INFORMATION DETAILS -->
@@ -187,9 +187,28 @@ if (is_null($guardian)) {
                                     <p class="fw-bold text-center">PSA DOCUMENT</p>
                                 </div>
                                 <!-- KES DITO MO PO ILAGAY HAHAH -->
-                                <a href="../assets/psa_preview.jpg">
-                                    <img src="../assets/psa_preview.jpg" class="img-responsive" alt="PSA document" style="width:100%">
-                                </a>
+                                <!-- <a href="../assets/psa_preview.jpg"> -->
+                                    <img id = "psa" src="../assets/psa_preview.jpg" class="img-responsive" alt="PSA document" style="width:100%">
+                                <!-- </a> -->
+                                <div class="modal fade" id="imgPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="modal-title">
+                                                    <h4 class="mb-0">Confirmation</h4>
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id ="img01">
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                                <span id="caption"></span>
+                                                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

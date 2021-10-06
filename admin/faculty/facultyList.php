@@ -56,7 +56,6 @@
             </div>
             <div class="modal-body">
                 Deactivate <span id="question"></span><br>
-                <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </small>
             </div>
             <div class="modal-footer">
                 <form id="deactivate-form" action="action.php">

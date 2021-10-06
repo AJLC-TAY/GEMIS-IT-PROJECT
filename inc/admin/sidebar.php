@@ -73,6 +73,7 @@ $school_year = "2021 - 2022";
                     <li><a id="enrollment-sub" href="enrollment.php">Enrollment</a></li>
                     <li><a id="set-up" href="enrollment.php?page=setup">Set Up</a></li>
                     <li><a id="section" href="section.php">Section</a></li>
+                    <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
                 </ul>
             </li>
             <li class="sub-menu">

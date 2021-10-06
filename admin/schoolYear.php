@@ -25,6 +25,8 @@
                             <?php
                                 if (isset($_GET['action'])) {
                                     include_once("schoolYear/syForm.php");
+                                } else if (isset($_GET['id'])) {
+                                    include_once("schoolYear/syView.php");
                                 } else {
                                     include_once("schoolYear/syList.php");
                                 }

@@ -646,6 +646,10 @@ input:checked+.slider:before {
     background-color: #05386B;
 }
 
+.badge {
+    float: right;
+}
+
 
 /*footer*/
 

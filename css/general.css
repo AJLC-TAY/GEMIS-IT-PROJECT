@@ -84,6 +84,10 @@ td .form-select {
     opacity: 1;
 }
 
+.image-preview-con:hover #psaResult {
+    opacity: 0.5;
+}
+
 .edit-text {
     transition: .5s ease;
     opacity: 0;
@@ -142,3 +146,5 @@ td .form-select {
     display:none;
     visibility:hidden;
   }
+
+/* SELECT 2 */

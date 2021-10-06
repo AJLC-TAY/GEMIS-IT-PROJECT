@@ -154,8 +154,8 @@ $faculty = $admin->listFaculty();
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="delete" form="signatory-form" class="btn btn-outline-dark btn-sm" value="Delete">
+                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" name="delete" form="signatory-form" class="btn btn-danger btn-sm" value="Delete">
                     <button type="submit" id="submit-again" class="btn btn-secondary btn-sm">Submit and add again</button>
                     <input type="submit" name="submit" form="signatory-form" class="btn btn-success btn-sm" value="Add">
                 </div>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
 $subjects = $admin->listSubjects("subject");
@@ -52,9 +53,6 @@ if ($action == 'add') {
     $age = $faculty->get_age();
     $sex = $faculty->get_sex();
     $department = $faculty->get_department();
-    // $genderOption = "<option value='NULL'>-- Select gender --</option>"
-    //                ."<option value='f' ". (($gender == 'Female') ? "selected" : ""). ">Female</option>"
-    //                ."<option value='m' ". (($gender == 'Male') ? "selected" : "") .">Male</option>";
     $date = strftime('%Y-%m-%d', strtotime($faculty->get_birthdate()));
 
     // prepare html elements and attributes
@@ -66,7 +64,8 @@ if ($action == 'add') {
     $edit_grades_checked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
     $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
     $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
-    $image = is_null($faculty->get_id_photo()) ? $PROFILE_PATH : $faculty->get_id_photo();
+    $id_photo = $faculty->get_id_photo();
+    $image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : $PROFILE_PATH) : $PROFILE_PATH;
     $handled_subjects_list = $faculty->get_subjects();
     $handled_subjects = '';
     foreach ($handled_subjects_list as $sub) {
@@ -92,6 +91,41 @@ if ($action == 'add') {
 }
 
 $camel_action = ucwords($action);
+
+
+$user_type = $_SESSION['user_type'];
+switch ($user_type) {
+    case 'AD':
+        $breadcrumb = "";
+        $dept_input = "<div class='form-group col-md-4'>"
+            ."<label for='department'>Department</label>"
+            ."<input class='form-control' value='$department' name='department' list='departmentListOptions' placeholder='Type to search or add...'>"
+            ."<datalist id='departmentListOptions'>$department_option</datalist>"
+        ."</div>";
+        $access_options = " <div class='form-group col-md-4'>"
+            ."<label for='facultyAccess' class='mb-2'>Faculty Access</label>"
+            ."<div class='form-check'>"
+                ."<input class='form-check-input' name='access[]' type='checkbox' value='editGrades' $edit_grades_checked>"
+                ."<label class='form-check-label'>Edit Grades</label>"
+            ."</div>"
+            ."<div class='form-check'>"
+                ."<input id='enrollment-in' class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollment_checked>"
+                ."<label for='enrollment-in' class='form-check-label'>Enrollment</label>"
+            ."</div>"
+            ."<div class='form-check'>"
+                ."<input id='award-role-in' class='form-check-input' name='access[]' type='checkbox' value='awardReport' $award_report_checked>"
+                ."<label for='award-role-in' class='form-check-label'>Award Report</label>"
+            ."</div>"
+        ."</div>";
+        $user_desc = "Faculty";
+        break;
+    case 'FA':
+        $breadcrumb = '';
+        $dept_input = '';
+        $access_options = '';
+        $user_desc = "Profile";
+        break;
+}
 ?>
 
 <!-- HEADER -->
@@ -100,24 +134,22 @@ $camel_action = ucwords($action);
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
             <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
-            <li class='breadcrumb-item'><a href='faculty.php'>Faculty</a></li>
-            <li class='breadcrumb-item active'><?php echo $camel_action; ?> Faculty</li>
+            <li class='breadcrumb-item'><a href='faculty.php' target='_self'><?php echo $user_desc; ?></a></li>
+            <li class='breadcrumb-item active'><?php echo $camel_action ?></li>
         </ol>
     </nav>
-    <h3><?php echo $camel_action; ?> Faculty</h3>
+    <h3><?php echo $camel_action." ".$user_desc; ?></h3>
     <h6 class='text-secondary'>Please complete the following:</h6>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' data-action="<?php echo $action; ?>" class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+<form id='faculty-form' data-action="" class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
     <?php echo $teacher_id_input; ?>
+    <input type='hidden' name='action' value='<?php echo $action; ?>'><input type='hidden' name='profile' value='faculty'>
     <div class='form-row row'>
         <!-- last name -->
         <div class='form-group col-md-4'>
             <label for='lastname'>Last Name</label>
             <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
-            <div class="invalid-feedback">
-                Please enter last name
-            </div>
         </div>
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
@@ -155,13 +187,10 @@ $camel_action = ucwords($action);
         <div class='form-group col-md-2'>
             <label for='age'>Age</label>
             <input value='<?php echo $age; ?>' class='number form-control' id='age' name='age' placeholder='Age' required>
-            <div class="invalid-feedback">
-                Please enter age
-            </div>
         </div>
         <div class='form-group col-md-2'>
             <label for='sex'>Sex</label>
-            <div class="d-flex">
+            <div class="d-flex flex-column">
                 <?php
                 $sexOpt = ["m" => "Male", "f" => "Female"];
                 foreach ($sexOpt as $id => $value) {
@@ -177,20 +206,13 @@ $camel_action = ucwords($action);
             <label for='birthdate'>Birthdate</label>
             <?php echo $birthdate_input; ?>
         </div>
-        <div class='form-group col-md-4'>
-            <label for='department'>Department</label>
-            <!-- <select id='department' name='department' class='form-select form-select'> -->
-            <input class='form-control' value='<?php echo $department; ?>' name='department' list='departmentListOptions' placeholder='Type to search or add...'>
-            <datalist id='departmentListOptions'>
-                <?php echo $department_option; ?>
-            </datalist>
-            <!-- </select> -->
-        </div>
+        <?php echo $dept_input; ?>
     </div>
     <div class='form-row row'>
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>Faculty ID Photo</label>
             <div class="image-preview-con">
+                <input type="hidden" name="current_image_path" value="<?php echo $image; ?>">
                 <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100 shadow border'' />
                 <div class=' edit-img-con text-center'>
                 <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
@@ -198,30 +220,10 @@ $camel_action = ucwords($action);
         </div>
         <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
     </div>
-    <div class='form-group col-md-4'>
-        <label for='facultyAccess' class="mb-2">Faculty Access</label>
-        <div class='form-check'>
-            <input class='form-check-input' name='access[]' type='checkbox' value='editGrades' <?php echo $edit_grades_checked; ?>>
-            <label class='form-check-label'>
-                Edit Grades
-            </label>
-        </div>
-        <div class='form-check'>
-            <input class='form-check-input' name='access[]' type='checkbox' value='canEnroll' <?php echo $enrollment_checked; ?>>
-            <label class='form-check-label'>
-                Enrollment
-            </label>
-        </div>
-        <div class='form-check'>
-            <input class='form-check-input' name='access[]' type='checkbox' value='awardReport' <?php echo $award_report_checked; ?>>
-            <label class='form-check-label'>
-                Award Report
-            </label>
-        </div>
-    </div>
-    </div>
+    <?php echo $access_options; ?>
     <br>
     <!-- SUBJECT CLASS -->
+    <?php if ($user_type == 'AD') { ?>
     <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3'>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>SUBJECT CLASS</h5>
@@ -248,7 +250,6 @@ $camel_action = ucwords($action);
                         <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
                         <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                        <!--                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Type</th>-->
                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
                         <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                     </tr>
@@ -294,6 +295,7 @@ $camel_action = ucwords($action);
         </div>
     </div>
     <!-- ASSIGN SUBJECTS END -->
+    <?php } ?>
 
     <div class='back-btn d-flex justify-content-end'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
@@ -301,7 +303,7 @@ $camel_action = ucwords($action);
     </div>
 </form>
 <!-- VALIDATION -->
-<script>
+<!-- <script>
     var forms = document.querySelectorAll('.needs-validation');
 
     Array.prototype.slice.call(forms).forEach(function(form) {
@@ -314,10 +316,12 @@ $camel_action = ucwords($action);
             form.classList.add('was-validated');
         }, false);
     });
-</script>
-<script>
+</script> -->
 
-</script>
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
+
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;
