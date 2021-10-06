@@ -55,7 +55,6 @@ include_once("../inc/head.html"); ?>
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
-                                echo "<a href='enrollment.php?page=enrollees'>Enrollment List</a>";
                                 $js = "<script src='../js/admin/enrollment.js'></script>";
                             }
                             ?>
