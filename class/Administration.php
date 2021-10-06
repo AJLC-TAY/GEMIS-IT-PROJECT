@@ -578,10 +578,13 @@ class Administration extends Dbconfig
     public function get_sy_info(int $sy_id)
     {
 //        session_start();
-        $sy_info = ["curriculum" => [], "program" => [], "month" => [], "subject" => [
-            'core' => [],
-            'spap' => []
-        ]];
+        $sy_info = [
+            "curriculum" => [], "month" => [],
+            "subject" => [
+                'core' => [],
+                'spap' => []
+            ]
+        ];
         # curriculum
 //        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT syc_id, curr_code, curr_name FROM schoolyear sy 
@@ -591,14 +594,14 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $curr_code = $row['curr_code'];
             $syc_id = $row['syc_id'];
-            $sy_info["curriculum"][$curr_code] = $row['curr_name'];
+            $sy_info["curriculum"][$curr_code]['desc'] = $row['curr_name'];
 
             # program
             $prog_res = $this->query("SELECT prog_code, description FROM program JOIN sycurrstrand 
                                             USING (prog_code) WHERE curr_code='$curr_code'
                                                             AND syc_id = '$syc_id';");
             while ($prog_row = mysqli_fetch_assoc($prog_res)) {
-                $sy_info["program"][$prog_row['prog_code'] ] =  $prog_row['description'];
+                $sy_info["curriculum"][$curr_code]["program"][$prog_row['prog_code']] =  $prog_row['description'];
             }
         }
         # subject
@@ -606,10 +609,15 @@ class Administration extends Dbconfig
         while ($sub_row = mysqli_fetch_assoc($sub_res)){
             $sub_type = $sub_row['sub_type'];
             $key = ($sub_type === "core") ? $sub_type : 'spap';
-            $sy_info['subject'][$key][$sub_row['sub_code']] = $sub_row['sub_name'];
+            $sub_code = $sub_row['sub_code'];
+            $sy_info['subject'][$key][$sub_code]['name'] = $sub_row['sub_name'];
+            if ($key == 'spap') {
+                $sub_prog = $this->query("SELECT prog_code FROM sharedsubject WHERE sub_code='$sub_code';");
+                while ($row_sub_prog = mysqli_fetch_row($sub_prog)) {
+                    $sy_info['subject'][$key][$sub_code]['prog'][] = $row_sub_prog[0];
+                }
+            }
         }
-//        echo json_encode($sy_info);
-
         # month
         return $sy_info;
     }
