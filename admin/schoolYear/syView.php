@@ -23,7 +23,7 @@ $sy_info = $admin->get_sy_info($_GET["id"]);
                 <div class='row p-2 ms-2'>
                     <?php
                     foreach ($sy_info["curriculum"] as $curr => $curriculum) {
-                        echo "<h6><a href='curriculum.php?code=$curr' class='link btn p-0' target='_blank'>$curriculum</a>";
+                        echo "<h6><a href='curriculum.php?code=$curr' class='link btn p-0' target='_blank'>{$curriculum['desc']}</a>";
                     }
                     ?>
                 </div>
@@ -32,17 +32,16 @@ $sy_info = $admin->get_sy_info($_GET["id"]);
                 <h5 class='text-start p-0 fw-bold'>STRAND</h5>
                 <hr class='mt-1'>
                 <div class='row'>
-                    <div class='fw-bold ms-3'>K to 12 - Academic Track</div>
-                    <ul class="ms-4">
-                        <li>Accountancy, Business, and Management</li>
-                        <li>Humanities and Social Sciences</li>
-                    </ul>
-                    <div class='fw-bold ms-3'>K to 12 - TVL</div>
-                    <ul class="ms-4 mb-1">
-                        <li>Bread and Pastry</li>
-                        <li>Electronics</li>
-                    </ul>
-                </div>
+                    <?php
+                        foreach($sy_info['curriculum'] as $curr => $curriculum ) {
+                            echo "<div class='fw-bold ms-3'>{$curriculum['desc']}</div>";
+                            echo "<ul class='ms-4'>";
+                                foreach($curriculum['program'] AS $curr_prog_id => $curr_prog_desc) {
+                                    echo "<li><a href='program.php?prog_code=$curr_prog_id' target='_blank' class='btn link'>$curr_prog_desc</a></li>";
+                                }
+                            echo "</ul>";
+                        }
+                    ?>
             </div>
         </section>
         <section class="col-md-6">
@@ -133,11 +132,10 @@ $sy_info = $admin->get_sy_info($_GET["id"]);
             <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4 ">
                 <h5 class='text-start p-0 fw-bold'>CORE SUBJECTS</h5>
                 <hr class='mt-1'>
-
                 <ul class='ms-2 list-group'>
                     <?php
                         foreach($sy_info['subject']['core'] as $core_id => $core) {
-                            echo "<li class='list-group-item'><a href='subject.php?sub_code=$core_id' class='link btn text-start p-0' target='_blank'>$core</a></li>";
+                            echo "<a href='subject.php?sub_code=$core_id' class='link text-start list-group-item list-group-item-action' target='_blank'>{$core['name']}</a>";
                         }
                     ?>
                 </ul>
@@ -148,10 +146,16 @@ $sy_info = $admin->get_sy_info($_GET["id"]);
                 <h5 class='text-start p-0 fw-bold'>SPECIALIZED | APPLIED SUBJECTS </h5>
                 <hr class='mt-1'>
                 <ul class='ms-2 list-group'>
-                    <li class='list-group-item'>Applied Economics<span class="badge bg-primary badge-pill">ABM </span><br>
-                    <li class='list-group-item'>Bread and Pastry Production<span class="badge bg-warning badge-pill">B&P </span><br>
-                    <li class='list-group-item'>Electronic Products Assembly and Servicing<span class="badge bg-info badge-pill">ELEC </span><br>
-                    <li class='list-group-item'>Philippine Politics and Governance<span class="badge bg-success badge-pill">HUMMS</span><br>
+                    <?php
+                    foreach($sy_info['subject']['spap'] as $spap_id => $spap) {
+                        echo "<li class='list-group-item'>"
+                            ."<a href='subject.php?sub_code=$spap_id' class='link text-start btn' target='_blank'>{$spap['name']}</a>";
+                            foreach($spap['prog'] as $prog_badge) {
+                                echo "<span class='badge bg-primary badge-pill ms-1'><a href='program.php?prog_code=$prog_badge' class='text-white' target='_blank'>$prog_badge</a></span>";
+                            }
+                        echo "</li>";
+                    }
+                    ?>
                 </ul>
             </div>
         </section>

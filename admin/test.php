@@ -50,7 +50,7 @@
 include '../class/Administration.php';
 //
 $admin = new Administration();
-$admin->get_sy_info(9);
+print_r($admin->get_sy_info(9));
 //session_start();
 //$_SESSION['sy_id'] = 9;
 //print_r($admin->listAllSubjectClasses());
