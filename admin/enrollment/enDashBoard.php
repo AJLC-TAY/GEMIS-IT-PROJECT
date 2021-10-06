@@ -22,9 +22,7 @@
                 <h4>Pending: </h4>
                 <!-- <h2> <?php echo $pending; ?> </h2> -->
             </div>
-            <div class="icon">
-                <i class="fas fa-user-clock" aria-hidden="true"></i>
-            </div>
+            
         </div>
     </div>
     <div class="col-lg-4">
@@ -33,9 +31,7 @@
                 <h4>Enrolled: </h4>
                 <!-- <h2> <?php echo $enrolled; ?> </h2> -->
             </div>
-            <div class="icon">
-                <i class="fas fa-user-check" aria-hidden="true"></i>
-            </div>
+            
         </div>
     </div>
     <div class="col-lg-4">
@@ -43,9 +39,6 @@
             <div class="inner">
                 <h4>Rejected: </h4>
                 <!-- <h2> <?php echo $rejected; ?> </h2> -->
-            </div>
-            <div class="icon">
-                <i class="fas fa-user-times" aria-hidden="true"></i>
             </div>
         </div>
     </div>
