@@ -111,22 +111,30 @@ class FacultyModule extends Dbconfig
     //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
     //Tapos JSON ung return niya 
     public function getClassGrades(){
-        $class_code = 9101;//$_POST[''];
-        $teacher_id = 26;//$_POST[''];
-        $sy_id = 9;//$_POST['']; 
-        $res = $this->query($this->db,  "SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
+        $class_code = $_GET['sub_code'];
+        $teacher_id = $_GET['id'];
+        $sy_id = $_GET['sy_id']; 
+
+        $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
         first_grading, second_grading, final_grade FROM student 
         JOIN classgrade USING(stud_id) 
         JOIN subjectclass USING(sub_class_code) 
         JOIN sysub USING (sub_sy_id) 
         JOIN subject USING (sub_code) 
-        WHERE teacher_id=26 
-        AND sub_class_code = 9101 
-        AND sy_id=9");
+        WHERE teacher_id=$teacher_id
+        AND sub_class_code =$class_code
+        AND sy_id=$sy_id");
         
         $class_grades = [];
         while($grd = mysqli_fetch_assoc($res)) {
-            $class_grades[] = new ClassGrade($grd['lrn'],$grd['stud_name'], $grd['first_grading'], $grd['second_grading'], $grd['final_grade']);
+            $class_grades[] = [
+                'lrn' => $grd['LRN'],
+                'name' => $grd['stud_name'],
+                'grd_1' => $grd['first_grading'],
+                'grd_2' => $grd['second_grading'],
+                'grd_f' => $grd['final_grade']
+            ];
+            
         }
 
         echo json_encode($class_grades);
