@@ -9,13 +9,13 @@ session_start();
        }
        else
        {
-            $query = "select idno from gemis where idno='".$_POST['UName']."' and password='".$_POST['Password']."'";
+            $query = "select id_no from user where id_no='".$_POST['UName']."' and password='".$_POST['Password']."'";
             $result=mysqli_query($con,$query);
     
             if ($row = mysqli_fetch_assoc($result))
             {
                 $_SESSION['User'] = $row['UName'];
-                header("location:index.php");
+                header("location:destination.php");
             }
             else
             {

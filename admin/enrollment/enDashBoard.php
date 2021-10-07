@@ -7,11 +7,55 @@
             <li class="breadcrumb-item active">Enrollment</li>
         </ol>
     </nav>
+    <h3 class="fw-bold">Enrollment</h3>
 </header>
-<div class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
-
+<div class="toggle d-flex flex-row-reverse">
+    <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+    </label>
 </div>
-
+<section class="row">
+    <div class="col-lg-4">
+        <div class="card-box bg-warning">
+            <div class="inner">
+                <h4>Pending: </h4>
+                <!-- <h2> <?php echo $pending; ?> </h2> -->
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-box bg-default">
+            <div class="inner">
+                <h4>Enrolled: </h4>
+                <!-- <h2> <?php echo $enrolled; ?> </h2> -->
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-box bg-danger">
+            <div class="inner">
+                <h4>Rejected: </h4>
+                <!-- <h2> <?php echo $rejected; ?> </h2> -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- QUICK ACTIONS -->
+<div class="card h-auto">
+    <h4>QUICK ACTIONS</h4>
+    <div class="col-lg-12">                       
+        <div class="row mt ps-3">
+            
+            <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-5x"></i><br>View Enrollment List</a>
+            <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
+            <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a>
+            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-5x"><br></i>Enrollment Form</a>      
+        </div>
+    </div>
+</div>
 <!-- MODAL -->
 <div id="deactivate-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

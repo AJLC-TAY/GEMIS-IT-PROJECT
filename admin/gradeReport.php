@@ -203,16 +203,16 @@
                                                 <tr class='bg-light'>
                                                     <td colspan='4'>Core Subjects</td>
                                                 </tr>" .
-                                prepareGradeRecordsHTML($grades['core'])
-                                . "<tr class='bg-light'>
+                                                prepareGradeRecordsHTML($grades['core'])
+                                                . "<tr class='bg-light'>
                                                     <td colspan='4'>Applied Subjects</td>
                                                 </tr>" .
-                                prepareGradeRecordsHTML($grades['applied'])
-                                . "<tr class='bg-light'>
+                                                prepareGradeRecordsHTML($grades['applied'])
+                                                . "<tr class='bg-light'>
                                                     <td colspan='4'>Specialized Subjects</td>
                                                 </tr>" .
-                                prepareGradeRecordsHTML($grades['specialized'])
-                                . "<tr class='bg-light fw-bold'>
+                                                prepareGradeRecordsHTML($grades['specialized'])
+                                                . "<tr class='bg-light fw-bold'>
                                                     <td colspan='3'>General Average for the Semester:</td>
                                                     <td class='bg-white'></td>
                                                 </tr>
