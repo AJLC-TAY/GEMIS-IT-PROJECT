@@ -75,8 +75,8 @@ $(function() {
     if (firstClass != null) {
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         let classType = firstClass.attr("data-class-type");
-        studentTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
-        toggleGradesColumn(classType);
+        // studentTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
+        // toggleGradesColumn(classType);
         // initializeTable(classType, firstClass.attr("data-url"));
         changeName(classTmp);
     }
@@ -94,5 +94,16 @@ $(function() {
         changeName(sectionName);
         setTableData(classType, url);
     })
+
+    $('#export').click(function(e){
+        console.log("clicked");
+        var action = 'export';
+        $.post("action.php", {action}, function(data) {	
+        });
+
+    })
+
+
+
     hideSpinner();
 });
