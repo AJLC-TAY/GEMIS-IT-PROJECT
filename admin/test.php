@@ -50,7 +50,24 @@
 include '../class/Administration.php';
 //
 $admin = new Administration();
-print_r($admin->get_sy_info(9));
+$start_month = 9;
+$end_month = 6;
+$months_records = [];
+foreach(Administration::MONTHS as $ind => $month) { // January - December
+    if ($ind >= $start_month ) {
+        $months_records[] = $month;
+    }
+}
+
+foreach(Administration::MONTHS as $ind => $month) { // January - December
+    if ($ind <= $end_month ) {
+        $months_records[] = $month;
+    }
+}
+
+
+print_r($months_records);
+// print_r($admin->get_sy_info(9));
 //session_start();
 //$_SESSION['sy_id'] = 9;
 //print_r($admin->listAllSubjectClasses());

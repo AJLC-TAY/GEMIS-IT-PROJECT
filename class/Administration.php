@@ -208,9 +208,9 @@ class Administration extends Dbconfig
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, grd_level, current_quarter, current_semester, can_enroll) "
-                ."VALUES (?, ?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $grd_level, $current_quarter, $current_semester, $enrollment], "iiiiii");
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
+                ."VALUES (?, ?, ?, ?, ?);";
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -261,9 +261,24 @@ class Administration extends Dbconfig
         }
 
         # Step 5
-//        foreach(Administration::MONTHS as $month) {
-//            $this->query("INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);");
-//        }
+        $start_month = $_POST['start-month']; // 9
+        $end_month = $_POST['end-month'];
+        $months_records = [];
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind >= $start_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind <= $end_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach($months_records as $mr) {
+            $this->query("INSERT academicdays (month, no_of_days, sy_id) VALUES ('$mr', 20, '$sy_id');");
+        }
 
         # Step 6
         $dir_path = "../uploads/student/$sy_id";
@@ -2391,16 +2406,14 @@ class Administration extends Dbconfig
         // Redirect to the listing page
         // header("Location: index.php".$qstring);
 
-    public function getStudentAttendance()
+    public function getStudentAttendance($report_id)
     {
-        $report_id = 1;
         $status = ['no_of_days', 'no_of_present', 'no_of_absent', 'no_of_tardy'];
         foreach ($status as $stat) {
-            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month from attendance where report_id=$report_id;");
+            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month FROM attendance 
+                                    JOIN academicdays USING (acad_days_id) WHERE report_id='$report_id';");
             while ($row = mysqli_fetch_assoc($result)) {
-                $attendance[$stat][] = [
-                    $row['month'] => $row[$stat]
-                ];
+                $attendance[$stat][$row['month']] = $row[$stat];
             }
         }
 

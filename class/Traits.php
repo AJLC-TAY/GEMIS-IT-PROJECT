@@ -310,7 +310,6 @@ trait FacultySharedMethods
             $query .= " AND sy_id=?; ";
             $params = [$id, $sy];
             $types = "ii";
-
         }
         $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
         if ($data) {

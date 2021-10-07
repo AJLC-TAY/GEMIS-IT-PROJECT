@@ -3,14 +3,17 @@
 session_start();
 $_SESSION['user_type'] = 'FA';
 $_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
+$_SESSION['sy_id'] = 9;
 $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
+$_SESSION['name'] = "Penaflor, Mariel";
 
-require_once ("../class/Faculty.php");
+require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
 //$sub_classes = [];
+// $advisory = $faculty->getAdvisoryClass(9);
+// $sub_classes = $faculty->getHandled_sub_classes(1);
 $advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
 $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 $adv_opn = '';
@@ -27,10 +30,10 @@ if ($adv_count_is_empty) {
     $section_name = $advisory['section_name'];
 
     $adv_opn = "<optgroup label='Advisory Class'>"
-        ."<option value='$section_code' title='$section_code'  data-class-type='advisory' "
-        ."data-url='getAction.php?data=student&section={$section_code}' "
-        ."data-name='$section_name'>$section_name</option>"
-        ."</optgroup>";
+        . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
+        . "data-url='getAction.php?data=student&section={$section_code}' "
+        . "data-name='$section_name'>$section_name</option>"
+        . "</optgroup>";
 }
 
 
@@ -126,17 +129,19 @@ if (count($sub_classes) != 0) {
                                             </tr>
                                         </thead>
                                     </table>
-<!--                                    <table id="sub-table" class="table-striped table-sm --><?php //echo $sub_table_display; ?><!--">-->
-<!--                                        <thead class='thead-dark'>-->
-<!--                                        <tr>-->
-<!--                                            <th data-checkbox="true"></th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-field="id">ID</th>-->
-<!--                                            <th scope='col' data-width="450" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sex">Sex</th>-->
-<!--                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>-->
-<!--                                        </tr>-->
-<!--                                        </thead>-->
-<!--                                    </table>-->
+                                    <!--                                    <table id="sub-table" class="table-striped table-sm --><?php //echo $sub_table_display; 
+                                                                                                                                    ?>
+                                    <!--">-->
+                                    <!--                                        <thead class='thead-dark'>-->
+                                    <!--                                        <tr>-->
+                                    <!--                                            <th data-checkbox="true"></th>-->
+                                    <!--                                            <th scope='col' data-width="200" data-align="center" data-field="id">ID</th>-->
+                                    <!--                                            <th scope='col' data-width="450" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>-->
+                                    <!--                                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sex">Sex</th>-->
+                                    <!--                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>-->
+                                    <!--                                        </tr>-->
+                                    <!--                                        </thead>-->
+                                    <!--                                    </table>-->
                                 </div>
                             </div>
                             <!-- MODAL -->
@@ -155,7 +160,7 @@ if (count($sub_classes) != 0) {
                                         </div>
                                         <div class="modal-footer">
                                             <form id="deactivate-form" action="action.php">
-                                                <input type="hidden" name="action" value="deactivate"/>
+                                                <input type="hidden" name="action" value="deactivate" />
                                                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                                                 <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
                                             </form>
@@ -180,13 +185,45 @@ if (count($sub_classes) != 0) {
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 9999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- CONFIRM SIGNATORY MODAL -->
+    <div class="modal fade" id="confirm-sig-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirm signatory</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="confirm-sig-form" action="" method="POST">
+                        <div class="form-group needs-validation" novalidate>
+                            <label for="teacher-name">Teacher Name</label>
+                            <input id="teacher-name" type="text" name="teacher_name" class='form-control' placeholder="Enter teacher name" value="<?php echo $_SESSION['name']; ?>" required>
+                            
+                            <label for="signatory-name">Signatory Name</label>
+                            <input id="signatory-name" type="text" name="signatory_name" class='form-control' placeholder="Enter name" required>
+                            <label for="position">Position</label>
+                            <input id="position" type="text" name="position" class='form-control' placeholder="Enter position" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-dark btn close-btn" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" name="proceed" form="confirm-sig-form" class="submit btn btn-sm btn-primary">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CONFIRM SIGNATORY MODAL END -->
 
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-<!--    --><?php //echo $js; ?>
+    <!--    --><?php //echo $js; 
+                ?>
     <script type='module' src='../js/faculty/students.js'></script>
 </body>
 

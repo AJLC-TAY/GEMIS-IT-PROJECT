@@ -44,18 +44,25 @@ class FacultyModule extends Dbconfig
     }
 
     public function listAdvisoryStudents($is_JSON = false) {
+        session_start();
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT id_no, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
+        $result = $this->query("SELECT stud_id, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
         while($row = mysqli_fetch_assoc($result)) {
+            $stud_id = $row['stud_id'];
+            # get report id
+            $row_temp = $this->query("SELECT report_id FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
+            $report_id = mysqli_fetch_row($row_temp)[0];
             $students [] = [
-                'id'     =>  $row['id_no'],
+                'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'action' =>  "<div class='d-flex justify-content-center'>"
                         ."<button class='btn btn-sm btn-secondary me-1'>View</button>"
-                        ."<button class='btn btn-sm btn-primary'>View Grades</button>"
+                        ."<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
+                        ."<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
                     ."</div>"
             ];
         }
