@@ -1723,13 +1723,14 @@ class StudentAward extends Award implements JsonSerializable
         private $sy;
         private $action;
 
-        public function __construct($code, $sy, $name, $grd_level, $max_stud, $stud_no, $teacher_id){
+        public function __construct($code, $sy, $name, $grd_level, $max_stud, $stud_no, $teacher_id, $school_year = NULL){
             $this->code = $code;
             $this->sy = $sy;
             $this->name = $name;
             $this->grd_level = $grd_level;
             $this->max_stud = $max_stud;
             $this->stud_no = $stud_no;
+            $this->sy_desc = $school_year;
             $this->teacher_id = $teacher_id;
             $this->action = 
                         "<div class='d-flex justify-content-center'>"
@@ -1745,6 +1746,10 @@ class StudentAward extends Award implements JsonSerializable
         public function get_sy()
         {
             return $this->sy;
+        }
+        public function get_sy_desc()
+        {
+            return $this->sy_desc;
         }
 
         public function get_name(){
@@ -1780,9 +1785,11 @@ class StudentAward extends Award implements JsonSerializable
                 'grd_level'=> $this->grd_level,
                 'max_stud'=> $this->max_stud,
                 'stud_no'=> $this->stud_no,
+                'sy_desc' => $this->sy_desc,
                 'teacher_id'=> $this->teacher_id,
                 'action' => $this->action
-            ];}
+            ];
+        }
     }
 
     class ClassGrade implements JsonSerializable {

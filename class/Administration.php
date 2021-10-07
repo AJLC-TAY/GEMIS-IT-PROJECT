@@ -626,7 +626,7 @@ class Administration extends Dbconfig
     public function listSection() 
     {
         session_start();
-        $query = "SELECT * FROM section ". ((isset($_GET['current']) && $_GET['current'] === 'true')
+        $query = "SELECT * FROM section". ((isset($_GET['current']) && $_GET['current'] === 'true')
                 ? "WHERE sy_id='{$_SESSION['sy_id']}'"
                 : "") .";";
         $result = mysqli_query($this->db, $query);
@@ -675,17 +675,18 @@ class Administration extends Dbconfig
 
     public function getSection() 
     {
-        $result = $this->prepared_select("SELECT * FROM section WHERE section_code=?", [$_GET["sec_code"]], "s");
+        $result = $this->prepared_select("SELECT * FROM section JOIN schoolyear USING(sy_id) WHERE section_code=?", [$_GET["sec_code"]], "s");
         $row = mysqli_fetch_assoc($result);
         $adv_result = mysqli_query($this->db, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
         $adviser = mysqli_fetch_assoc($adv_result);
+        $school_year = $row['start_year']." - ".$row['end_year'];
         if ($adviser) {
             $name = "{$adviser['last_name']}, {$adviser['first_name']} {$adviser['middle_name']} {$adviser['ext_name']}";
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
         return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
-                            $row['stud_no_max'], $row['stud_no'], $adviser);
+                            $row['stud_no_max'], $row['stud_no'], $adviser, $school_year);
     }
     public function listSectionStudentJSON() 
     {
