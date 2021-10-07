@@ -107,7 +107,7 @@ class FacultyModule extends Dbconfig
         }
     }
 
-    public function exportSubjectGradesToCSV () {
+    public function exportSubjectGradesToCSV () { 
 
         // Fetch records from database 
         $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
@@ -118,31 +118,117 @@ class FacultyModule extends Dbconfig
      
             // Create a file pointer 
             $f = fopen('php://memory', 'w'); 
-     
+            
             // Set column headers 
             $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
             fputcsv($f, $fields, $delimiter); 
      
             // Output each row of the data, format line as csv and write to file pointer 
-            while($row = $query->fetch_assoc()){ 
+            while($row = mysqli_fetch_assoc($query)){ 
                 //$status = ($row['status'] == 1)?'Active':'Inactive'; 
-                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
+                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); 
                 fputcsv($f, $lineData, $delimiter); 
             } 
-     
+           
+            
             // Move back to beginning of file 
             fseek($f, 0); 
      
-            // Set headers to download file rather than displayed 
-            header('Content-Type: text/csv'); 
-            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+ 
      
             //output all remaining data on a file pointer 
             fpassthru($f); 
         } 
+        fclose($f);
         exit; 
+        
 
     }
+    public function importSubjectGradesToCSV () {
+        // Load the database configuration file
+        //if(isset($_POST['importSubmit'])){
+            
+            // Allowed mime types
+            $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+            
+            // Validate whether selected file is a CSV file
+            if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
+                
+                // If the file is uploaded
+                if(is_uploaded_file($_FILES['file']['tmp_name'])){
+                    
+                    // Open uploaded CSV file with read-only mode
+                    $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+                    
+                    // Skip the first line
+                    fgetcsv($csvFile);
+                    
+                    // Parse data from CSV file line by line
+                    while(($line = fgetcsv($csvFile)) !== FALSE){
+                        // Get row data
+                        $LRN  = $line[0];
+                        $stud_name = $line[1]; 
+                        $first_grading  = $line[2];
+                        $second_grading = $line[3];
+                        $final_grading = $line[4];
+                        
+                        // Check whether member already exists in the database with the same email
+                        $prevQuery = "SELECT stud_id FROM student WHERE LRN = '".$line[0]."'";
+                        $prevResult = $this->query($prevQuery);
+                        
+                        if($prevResult->num_rows > 0){
+                            // Update member data in the database
+                            $this->query("UPDATE `classgrade` SET `first_grading` = '".$first_grading."', `second_grading` = '".$second_grading."', `final_grade` = '".$final_grading."' WHERE stud_id IN (SELECT stud_id FROM student WHERE LRN='".$LRN."';"); //madami siyang pinalitan na rowsss need din ata ng subclasscode
+                        }
+                    }
+                    
+                    // Close opened CSV file
+                    fclose($csvFile);
+                    
+                    $qstring = '?status=succ';
+                }else{
+                    $qstring = '?status=err';
+                }
+            }else{
+                $qstring = '?status=invalid_file';
+            }
+        }
+        
+        // Redirect to the listing page
+        // header("Location: index.php".$qstring);
+
+    
+
+    // function array_to_csv_download($filename = "export.csv", $delimiter=";") {
+    //     $array = Array
+    //     (
+            
+    //             (
+    //                 ['fs_id'] => '4c524d8abfc6ef3b201f489c',
+    //                 ['name'] => 'restaurant',
+    //                 ['lat'] => 40.702692,
+    //                 ['lng'] => -74.012869,
+    //                 ['address'] => 'new york',
+    //                 ['postalCode'] => 'sadsada'
+    //             )
+        
+    //             );
+    //     // open raw memory as file so no temp files needed, you might run out of memory though
+    //     $f = fopen('php://memory', 'w'); 
+    //     // loop over the input array
+    //     foreach ($array as $line) { 
+    //         // generate csv lines from the inner arrays
+    //         fputcsv($f, $line, $delimiter); 
+    //     }
+    //     // reset the file pointer to the start of the file
+    //     fseek($f, 0);
+    //     // tell the browser it's going to be a csv file
+    //     header('Content-Type: text/csv');
+    //     // tell the browser we want to save it instead of displaying it
+    //     header('Content-Disposition: attachment; filename="'.$filename.'";');
+    //     // make php send the generated csv lines to the browser
+    //     fpassthru($f);
+    // }
 
     //RETRIEVAL FOR STUDENT GRADE PER CLASS studentname | First_grading | second_grading | Final
     //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
