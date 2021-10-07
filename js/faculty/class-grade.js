@@ -96,5 +96,16 @@ $(function() {
         changeName(sectionName);
         setTableData(classType, url);
     })
+
+    $('#export').click(function(e){
+        console.log("clicked");
+        var action = 'export';
+        $.post("action.php", {action}, function(data) {	
+        });
+
+    })
+
+
+
     hideSpinner();
 });

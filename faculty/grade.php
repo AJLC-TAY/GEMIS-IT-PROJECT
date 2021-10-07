@@ -2,8 +2,8 @@
 
 // session_start();
 $_SESSION['user_type'] = 'FA';
-$teacher_id = $_SESSION['id'] = 26;
-$sy_id =  $_SESSION['sys_id'] =  9;
+$_SESSION['id'] = 26;
+$_SESSION['sy_id'] = 15;
 $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 
@@ -91,7 +91,6 @@ if (count($sub_classes) != 0) {
                                         <div class="col-auto" style="min-width: 250px !important;">
                                             <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
                                                 <?php
-                                                echo $adv_opn;
                                                 echo $sub_class_opn;
                                                 ?>
                                             </select>
@@ -101,8 +100,8 @@ if (count($sub_classes) != 0) {
 
                                     <div class>
                                         <button type="button" class="btn btn-secondary">Template</button>
-                                        <button type="button" class="btn btn-secondary">Import</button>
-                                        <button type="button" class="btn btn-secondary">Export</button>
+                                        <button type="button"  class="btn btn-secondary">Import</button>
+                                        <button type="button" id = 'export' class="btn btn-secondary">Export</button>
                                         <button type="button" class="btn btn-success">SAVE</button>
 
                                     </div>
