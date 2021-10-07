@@ -107,26 +107,71 @@ class FacultyModule extends Dbconfig
         }
     }
 
+    public function exportSubjectGradesToCSV () {
+
+        // Fetch records from database 
+        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
+
+        if($query->num_rows > 0){ 
+            $delimiter = ","; 
+            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
+     
+            // Create a file pointer 
+            $f = fopen('php://memory', 'w'); 
+     
+            // Set column headers 
+            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
+            fputcsv($f, $fields, $delimiter); 
+     
+            // Output each row of the data, format line as csv and write to file pointer 
+            while($row = $query->fetch_assoc()){ 
+                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
+                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
+                fputcsv($f, $lineData, $delimiter); 
+            } 
+     
+            // Move back to beginning of file 
+            fseek($f, 0); 
+     
+            // Set headers to download file rather than displayed 
+            header('Content-Type: text/csv'); 
+            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+     
+            //output all remaining data on a file pointer 
+            fpassthru($f); 
+        } 
+        exit; 
+
+    }
+
     //RETRIEVAL FOR STUDENT GRADE PER CLASS studentname | First_grading | second_grading | Final
     //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
     //Tapos JSON ung return niya 
     public function getClassGrades(){
-        $class_code = 9101;//$_POST[''];
-        $teacher_id = 26;//$_POST[''];
-        $sy_id = 9;//$_POST['']; 
-        $res = $this->query($this->db,  "SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
+        $class_code = $_GET['sub_code'];
+        $teacher_id = $_GET['id'];
+        $sy_id = $_GET['sy_id']; 
+
+        $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
         first_grading, second_grading, final_grade FROM student 
         JOIN classgrade USING(stud_id) 
         JOIN subjectclass USING(sub_class_code) 
         JOIN sysub USING (sub_sy_id) 
         JOIN subject USING (sub_code) 
-        WHERE teacher_id=26 
-        AND sub_class_code = 9101 
-        AND sy_id=9");
+        WHERE teacher_id=$teacher_id
+        AND sub_class_code =$class_code
+        AND sy_id=$sy_id");
         
         $class_grades = [];
         while($grd = mysqli_fetch_assoc($res)) {
-            $class_grades[] = new ClassGrade($grd['lrn'],$grd['stud_name'], $grd['first_grading'], $grd['second_grading'], $grd['final_grade']);
+            $class_grades[] = [
+                'lrn' => $grd['LRN'],
+                'name' => $grd['stud_name'],
+                'grd_1' => $grd['first_grading'],
+                'grd_2' => $grd['second_grading'],
+                'grd_f' => $grd['final_grade']
+            ];
+            
         }
 
         echo json_encode($class_grades);

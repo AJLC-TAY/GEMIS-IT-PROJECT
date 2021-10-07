@@ -41,7 +41,7 @@ function initializeTable (classType, url) {
  * @returns {*}
  */
 function setTableData (classType, url) {
-    studentTable.bootstrapTable("refresh", {url});
+    classGradeTable.bootstrapTable("refresh", {url});
     // if (classType === 'advisory') {
     //     try {
     //         advisoryTable.bootstrapTable('refresh', {url});
@@ -73,10 +73,11 @@ $(function() {
     // Display current/selected section name
     let firstClass = $("#classes option:selected");
     if (firstClass != null) {
+        console.log(firstClass);
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         let classType = firstClass.attr("data-class-type");
-        studentTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
-        toggleGradesColumn(classType);
+        classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
+        // toggleGradesColumn(classType);
         // initializeTable(classType, firstClass.attr("data-url"));
         changeName(classTmp);
     }
@@ -84,15 +85,27 @@ $(function() {
     $(document).on("change", "#classes", function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
-        url = selected.attr("data-url");
-        sectionName = selected.attr("data-name");
+        url = selected.attr("data-url") + selected.attr("data-code");
+        console.log(url);
+        sectionName = selected.attr("data-code");
         classType = selected.attr("data-class-type");
 
-        toggleGradesColumn(classType);
+        // toggleGradesColumn(classType);
         console.log(classType);
         $("#classes").select2("close");
         changeName(sectionName);
         setTableData(classType, url);
     })
+
+    $('#export').click(function(e){
+        console.log("clicked");
+        var action = 'export';
+        $.post("action.php", {action}, function(data) {	
+        });
+
+    })
+
+
+
     hideSpinner();
 });

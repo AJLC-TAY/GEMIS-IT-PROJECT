@@ -578,10 +578,13 @@ class Administration extends Dbconfig
     public function get_sy_info(int $sy_id)
     {
 //        session_start();
-        $sy_info = ["curriculum" => [], "program" => [], "month" => [], "subject" => [
-            'core' => [],
-            'spap' => []
-        ]];
+        $sy_info = [
+            "curriculum" => [], "month" => [],
+            "subject" => [
+                'core' => [],
+                'spap' => []
+            ]
+        ];
         # curriculum
 //        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT syc_id, curr_code, curr_name FROM schoolyear sy 
@@ -591,14 +594,14 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $curr_code = $row['curr_code'];
             $syc_id = $row['syc_id'];
-            $sy_info["curriculum"][$curr_code] = $row['curr_name'];
+            $sy_info["curriculum"][$curr_code]['desc'] = $row['curr_name'];
 
             # program
             $prog_res = $this->query("SELECT prog_code, description FROM program JOIN sycurrstrand 
                                             USING (prog_code) WHERE curr_code='$curr_code'
                                                             AND syc_id = '$syc_id';");
             while ($prog_row = mysqli_fetch_assoc($prog_res)) {
-                $sy_info["program"][$prog_row['prog_code'] ] =  $prog_row['description'];
+                $sy_info["curriculum"][$curr_code]["program"][$prog_row['prog_code']] =  $prog_row['description'];
             }
         }
         # subject
@@ -606,10 +609,15 @@ class Administration extends Dbconfig
         while ($sub_row = mysqli_fetch_assoc($sub_res)){
             $sub_type = $sub_row['sub_type'];
             $key = ($sub_type === "core") ? $sub_type : 'spap';
-            $sy_info['subject'][$key][$sub_row['sub_code']] = $sub_row['sub_name'];
+            $sub_code = $sub_row['sub_code'];
+            $sy_info['subject'][$key][$sub_code]['name'] = $sub_row['sub_name'];
+            if ($key == 'spap') {
+                $sub_prog = $this->query("SELECT prog_code FROM sharedsubject WHERE sub_code='$sub_code';");
+                while ($row_sub_prog = mysqli_fetch_row($sub_prog)) {
+                    $sy_info['subject'][$key][$sub_code]['prog'][] = $row_sub_prog[0];
+                }
+            }
         }
-//        echo json_encode($sy_info);
-
         # month
         return $sy_info;
     }
@@ -618,7 +626,7 @@ class Administration extends Dbconfig
     public function listSection() 
     {
         session_start();
-        $query = "SELECT * FROM section ". ((isset($_GET['current']) && $_GET['current'] === 'true')
+        $query = "SELECT * FROM section". ((isset($_GET['current']) && $_GET['current'] === 'true')
                 ? "WHERE sy_id='{$_SESSION['sy_id']}'"
                 : "") .";";
         $result = mysqli_query($this->db, $query);
@@ -667,17 +675,18 @@ class Administration extends Dbconfig
 
     public function getSection() 
     {
-        $result = $this->prepared_select("SELECT * FROM section WHERE section_code=?", [$_GET["sec_code"]], "s");
+        $result = $this->prepared_select("SELECT * FROM section JOIN schoolyear USING(sy_id) WHERE section_code=?", [$_GET["sec_code"]], "s");
         $row = mysqli_fetch_assoc($result);
         $adv_result = mysqli_query($this->db, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
         $adviser = mysqli_fetch_assoc($adv_result);
+        $school_year = $row['start_year']." - ".$row['end_year'];
         if ($adviser) {
             $name = "{$adviser['last_name']}, {$adviser['first_name']} {$adviser['middle_name']} {$adviser['ext_name']}";
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
         return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
-                            $row['stud_no_max'], $row['stud_no'], $adviser);
+                            $row['stud_no_max'], $row['stud_no'], $adviser, $school_year);
     }
     public function listSectionStudentJSON() 
     {
@@ -2290,41 +2299,7 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
     }
 
-    public function exportSubjectGradesToCSV () {
-        // Fetch records from database 
-        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
-
-        if($query->num_rows > 0){ 
-            $delimiter = ","; 
-            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
-     
-            // Create a file pointer 
-            $f = fopen('php://memory', 'w'); 
-     
-            // Set column headers 
-            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
-            fputcsv($f, $fields, $delimiter); 
-     
-            // Output each row of the data, format line as csv and write to file pointer 
-            while($row = $query->fetch_assoc()){ 
-                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
-                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
-                fputcsv($f, $lineData, $delimiter); 
-            } 
-     
-            // Move back to beginning of file 
-            fseek($f, 0); 
-     
-            // Set headers to download file rather than displayed 
-            header('Content-Type: text/csv'); 
-            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
-     
-            //output all remaining data on a file pointer 
-            fpassthru($f); 
-        } 
-        exit; 
-
-    }
+    
     
     public function importSubjectGradesToCSV () {
         // // Load the database configuration file
@@ -2404,4 +2379,10 @@ class Administration extends Dbconfig
         $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,' ', e.prog_code) FROM enrollment e JOIN curriculum c USING(curr_code) where stud_id=?;", [$stud_id], "i"));
         return $trackStrand;
     }
+
+    // public function addMonth{
+    //     $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
+    //     $sub_sy_id = mysqli_insert_id($this->db);
+    //     INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);
+    // }
 }

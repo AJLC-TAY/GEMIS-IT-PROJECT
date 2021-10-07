@@ -2,7 +2,7 @@
 
 // session_start();
 $_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 2;
+$_SESSION['id'] = 26;
 $_SESSION['sy_id'] = 15;
 $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
@@ -12,7 +12,7 @@ require_once ("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
 //$sub_classes = [];
-$sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
+$sub_classes = $faculty->getHandled_sub_classes($teacher_id );
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -30,8 +30,8 @@ if (count($sub_classes) != 0) {
         $sub_code = $sub_class->get_sub_code();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=student&sub_class_code={$section_code}' "
-            . "data-name='$section_name'>$section_name [$sub_code]</option>";
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_code=9101' "
+            . "data-code='$section_code'>$section_name</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {
@@ -91,7 +91,6 @@ if (count($sub_classes) != 0) {
                                         <div class="col-auto" style="min-width: 250px !important;">
                                             <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
                                                 <?php
-                                                echo $adv_opn;
                                                 echo $sub_class_opn;
                                                 ?>
                                             </select>
@@ -101,14 +100,14 @@ if (count($sub_classes) != 0) {
 
                                     <div class>
                                         <button type="button" class="btn btn-secondary">Template</button>
-                                        <button type="button" class="btn btn-secondary">Import</button>
-                                        <button type="button" class="btn btn-secondary">Export</button>
+                                        <button type="button"  class="btn btn-secondary">Import</button>
+                                        <button type="button" id = 'export' class="btn btn-secondary">Export</button>
                                         <button type="button" class="btn btn-success">SAVE</button>
 
                                     </div>
                                     
                                     
-                                    <table id="table" class="table-striped table-sm ">
+                                    <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th data-checkbox="true"></th>
@@ -143,7 +142,6 @@ if (count($sub_classes) != 0) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-<!--    --><?php //echo $js; ?>
     <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>
 
