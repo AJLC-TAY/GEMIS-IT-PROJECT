@@ -487,7 +487,6 @@ class Administration extends Dbconfig
             $quarter = $row['current_quarter'];
             $semester = $row['current_semester'];
             $enrollment = $row['can_enroll'];
-            $grd_level = $row['grd_level'];
 
             // grade options
             $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
@@ -521,7 +520,14 @@ class Administration extends Dbconfig
                             ."<input ". ($enrollment ? "checked" : "") ." name='enrollment' data-id='$sy_id' class='form-check-input' type='checkbox' title='Turn ". ($enrollment ? "off" : "on")." enrollment'>"
                             ."<span class='status'>$enroll_opt</span>"
                         ."</div>";
-             
+
+            # get academic days
+            $acad_months_res = $this->query("SELECT * FROM academicdays WHERE sy_id='$sy_id' ORDER BY acad_days_id; ");
+            $acad_months = [];
+            while ($acad_month = mysqli_fetch_assoc($acad_months_res)) {
+                $acad_months[$acad_month['acad_days_id']] = ['month' => $acad_month['month'], 'days' => $acad_month['no_of_days']];
+            }
+        
             $sy_list[] = [  'id'              => $sy_id,
                             's_year'          => $row['start_year'],
                             'e_year'          => $row['end_year'],
@@ -534,24 +540,15 @@ class Administration extends Dbconfig
                             'current_sem'     => $sem_opt,
                             'enrollment_val'  => $enrollment,
                             'enrollment'      => $enroll_opt,
-                            'jan'   => '20',
-                            'feb'   => '20',
-                            'mar'   => '20',
-                            'apr'   => '20',
-                            'may'   => '20',
-                            'jun'   => '20',
-                            'jul'   => '20',
-                            'aug'   => '20',
-                            'sep'   => '20',
-                            'oct'   => '20',
-                            'nov'   => '20',
-                            'dec'   => '20',
-                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm me-1'>Edit</button>"
-                                        ."<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
-                                        ."<div class='edit-options d-none'>"
-                                            ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm me-1'>Cancel</button>"
+                            'acad_months'     => $acad_months,
+                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                                        ."<div class='edit-options' style='display: none;'>"
+                                            ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
                                             ."<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                                        ."</div>"];
+                                        ."</div>"
+                                        ."<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
+                                        ."<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
+                        ];
         }
         echo json_encode($sy_list);
     }
@@ -564,7 +561,7 @@ class Administration extends Dbconfig
             'id' => $row['sy_id'],
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
-            'grd_level' => $row['grd_level'],
+            // 'grd_level' => $row['grd_level'],
             'current_qtr' => $row['current_quarter'],
             'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
@@ -574,25 +571,62 @@ class Administration extends Dbconfig
     public function editSY()
     {
         $sy_id = $_POST['sy_id'];
-        $grd_level = $_POST['grade-level'];
+        // $grd_level = $_POST['grade-level'];
         $quarter = $_POST['quarter'];
         $semester = $_POST['semester'];
-        $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
+        // $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
+        $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $semester, $sy_id], "iii");
     }
 
     public function editAcademicDays()
     {
         $sy_id = $_POST['sy-id'];
-        foreach($_POST['month'] as $m => $days) {
-            $this->prepared_query("UPDATE tablename SET days=? WHERE sy_id = ? AND month = ?;", [$days, $sy_id, $m], "iis");
+        $new_month_values = $_POST['month'];
+        # delete current months if new months value array is zero
+        if (count($new_month_values) === 0) {
+            echo ("Delete all");
+            // $this->prepared_query("DELETE FROM academicdays WHERE sy_id = '$sy_id';");
+        } else {
+            # store current academic days
+            $cur_acad = [];
+            $cur_acad_res = $this->query("SELECT acad_days_id FROM academicdays WHERE sy_id = '$sy_id';");
+            while ($cur_row = mysqli_fetch_row($cur_acad_res)) {
+                $cur_acad[] = $cur_row[0];
+            }
+            echo ("Current months <br>");
+            print_r($cur_acad);
+        
+            # store new set of academic key ids
+            $new_months_keys = array_keys($new_month_values);
+            echo ("<br>To delete <br>");
+            print_r($new_months_keys);
+            
+            
+            # academic months to delete
+            $acad_months_to_delete = array_diff($cur_acad, $new_months_keys);
+            echo ("<br>To delete <br>");
+            print_r($acad_months_to_delete);
+            foreach ($acad_months_to_delete as $e) {
+                $this->query("DELETE FROM academicdays WHERE acad_days_id='$e';");
+            }
+
+            foreach($new_month_values as $m => $days) {
+                $this->prepared_query("UPDATE academicdays SET no_of_days=? WHERE sy_id = ? AND month = ?;", [$days, $sy_id, $m], "iis");
+            }
+        } 
+    
+        if (isset($_POST['newmonth'])) {
+            foreach($_POST['newmonth'] as $month => $days) {
+                $this->prepared_query("INSERT INTO academicdays (month, sy_id, no_of_days) VALUES (?, ?, ?);", [$month, $sy_id, $days], "sii");
+            }
         }
 
-        $this->listSYJSON();
+        // $this->listSYJSON();
     }
 
-    public function get_sy_info(int $sy_id)
+    public function get_sy_info()
     {
-//        session_start();
+        $sy_id = $_GET['id'];
         $sy_info = [
             "curriculum" => [], "month" => [],
             "subject" => [
@@ -600,8 +634,11 @@ class Administration extends Dbconfig
                 'spap' => []
             ]
         ];
+        # school year description
+        $sy_res = $this->query("SELECT CONCAT(start_year,' - ', end_year) AS sy_desc FROM schoolyear WHERE sy_id='$sy_id';");
+        $sy_info["desc"] = mysqli_fetch_row($sy_res)[0];
+
         # curriculum
-//        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT syc_id, curr_code, curr_name FROM schoolyear sy 
                                         JOIN sycurriculum syc USING (sy_id)
                                         JOIN curriculum USING (curr_code)
