@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
 ?>
 <title>Admin | GEMIS</title>

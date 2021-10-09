@@ -1,11 +1,6 @@
 <?php
+require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
-session_start();
-$_SESSION['id'] = $user_id = 1;
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['user_type'] = 'AD';
 
 require_once("../class/Administration.php");
 $admin = new Administration();

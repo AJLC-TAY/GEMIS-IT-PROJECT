@@ -121,7 +121,7 @@ class FacultyModule extends Dbconfig
 
         if($query->num_rows > 0){ 
             $delimiter = ","; 
-            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
+            $filename = "test.csv";//"student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
      
             // Create a file pointer 
             $f = fopen('php://memory', 'w'); 
@@ -148,9 +148,23 @@ class FacultyModule extends Dbconfig
         } 
         fclose($f);
         exit; 
-        
-
     }
+
+    public function tryExport(){
+        $filename = "student-grades" . date('Y-m-d') . ".csv";
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        $output = fopen('php://output', 'w');
+        $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
+        fputcsv($output, $fields);
+        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;");
+        while($row = mysqli_fetch_assoc($query)){
+            $data = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); 
+            fputcsv($output, $data);
+        }
+        fclose($output);
+    }
+
     public function importSubjectGradesToCSV () {
         // Load the database configuration file
         //if(isset($_POST['importSubmit'])){
