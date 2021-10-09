@@ -9,7 +9,7 @@ $_SESSION['roles'] = ['can_enroll', 'award_coor'];
 include_once("../inc/head.html");
 ?>
 
-<title>Student Profile | GEMIS</title>
+<title>Enrollment List | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
@@ -18,7 +18,7 @@ include_once("../inc/head.html");
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Enrollment</a></li>
+            <li class="breadcrumb-item active">Enrollment List</a></li>
         </ol>
     </nav>
 </header>
