@@ -143,7 +143,10 @@ include_once("../inc/head.html"); ?>
                         <?php
                         include "../class/Administration.php";
                         $admin = new Administration();
+                        // $report_id = 1;
+                        $report_id = $_GET['report_id'];
                         $stud_id = '1111';  // test
+                        // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
                         $grades = $admin->listGrade();
                         $userProfile = $admin->getProfile("ST");
@@ -156,15 +159,19 @@ include_once("../inc/head.html"); ?>
                         $age = $userProfile->get_age();
                         $section = $userProfile->get_section();
                         // $school_year = ;
-                        $teacherName = 'Kesley Bautista Trinidad';
+                        $teacherName = $_POST['teacher_name'];
+                        // $teacherName = 'Kesley Bautista Trinidad';
                         $grade = 12;
-                        $signatoryName = 'Whitney Houston';
-                        $position = 'Secondary School Principal III';
+                        $grade = 12;
+                        $signatoryName = $_POST['signatory_name'];
+                        // $signatoryName = 'Whitney Houston';
+                        // $position = 'Secondary School Principal III';
+                        $position = $_POST['position'];
                         $admittedIn = 'None';
                         $eligible = '12';
                         $date = 'October 5, 2021';
                         $trackStrand = $admin->getTrackStrand();
-                        $attendance = $admin->getStudentAttendance();
+                        $attendance = $admin->getStudentAttendance(1);
                         // echo json_encode($grades);
 
                         function prepareGradeRecordsHTML($grade)
@@ -183,54 +190,51 @@ include_once("../inc/head.html"); ?>
                         function renderSemesterGradeTable($semester_desc, $grades)
                         {
                             echo "
-                                        <h6><b>$semester_desc</b></h6>
-                                        <table class='table w-100 table-sm'>
-                                            <col style='width: 65%;'>
-                                            <col style='width: 10%;'>
-                                            <col style='width: 10%;'>
-                                            <col style='width: 15%;'>
-                                            
-                                            <thead class='text-center fw-bold'>
-                                                <tr>
-                                                    <td rowspan='2' valign='middle' align='center'>Subjects</td>
-                                                    <td colspan='2' align='center'>Quarter</td>
-                                                    <td rowspan='2' valign='middle' align='center'>Semester Final Grade</td>
-                                                </tr>
-                                                <tr>
-                                                    <td align='center'>1</td>
-                                                    <td align='center'>2</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class='bg-light'>
-                                                    <td colspan='4'>Core Subjects</td>
-                                                </tr>" .
-                                prepareGradeRecordsHTML($grades['core'])
-                                . "<tr class='bg-light'>
-                                                    <td colspan='4'>Applied Subjects</td>
-                                                </tr>" .
-                                prepareGradeRecordsHTML($grades['applied'])
-                                . "<tr class='bg-light'>
-                                                    <td colspan='4'>Specialized Subjects</td>
-                                                </tr>" .
-                                prepareGradeRecordsHTML($grades['specialized'])
-                                . "<tr class='bg-light fw-bold'>
-                                                    <td colspan='3'>General Average for the Semester:</td>
-                                                    <td class='bg-white'></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>";
+                                    <h6><b>$semester_desc</b></h6>
+                                    <table class='table w-100 table-sm'>
+                                        <col style='width: 65%;'>
+                                        <col style='width: 10%;'>
+                                        <col style='width: 10%;'>
+                                        <col style='width: 15%;'>
+                                        
+                                        <thead class='text-center fw-bold'>
+                                            <tr>
+                                                <td rowspan='2' valign='middle' align='center'>Subjects</td>
+                                                <td colspan='2' align='center'>Quarter</td>
+                                                <td rowspan='2' valign='middle' align='center'>Semester Final Grade</td>
+                                            </tr>
+                                            <tr>
+                                                <td align='center'>1</td>
+                                                <td align='center'>2</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class='bg-light'>
+                                                <td colspan='4'>Core Subjects</td>
+                                            </tr>" .
+                                            prepareGradeRecordsHTML($grades['core'])
+                                            . "<tr class='bg-light'>
+                                                <td colspan='4'>Applied Subjects</td>
+                                            </tr>" .
+                                            prepareGradeRecordsHTML($grades['applied'])
+                                            . "<tr class='bg-light'>
+                                                <td colspan='4'>Specialized Subjects</td>
+                                            </tr>" .
+                                            prepareGradeRecordsHTML($grades['specialized'])
+                                            . "<tr class='bg-light fw-bold'>
+                                                <td colspan='3'>General Average for the Semester:</td>
+                                                <td class='bg-white'></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>";
                         }
 
                         function prepareStudentAttendanceHTML($label, $att)
                         {
-                            $months = ['October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'];
-                            $ctr = 0;
                             $total = 0;
-                            foreach ($months as $month) {
-                                $total += $att[$label][$ctr][$month];
-                                echo "<td align='center'>{$att[$label][$ctr][$month]}</td>";
-                                $ctr++;
+                            foreach ($att[$label] as $month => $days) { 
+                                $total += $days;
+                                echo "<td align='center'>$days</td>";
                             }
                             echo "<td align='center'>$total</td>";
                         }
@@ -255,6 +259,7 @@ include_once("../inc/head.html"); ?>
                         ];
 
                         $observed_values = $admin->listValuesReport();
+                        // print_r($attendance);
                         ?>
 
 
@@ -267,7 +272,7 @@ include_once("../inc/head.html"); ?>
                                     <p>School Form 9 - SHS</p>
                                     <div class="row p-0 mx-1">
                                         <div class="col-3 p-0">
-                                            <img src="../assets/deped_logo.png" alt="">
+                                            <img src="../assets/deped_logo.png" alt="DEPED Logo" title="DEPED Logo">
                                         </div>
                                         <div class="col-6 p-0 text-center">
                                             <p>
@@ -281,13 +286,14 @@ include_once("../inc/head.html"); ?>
                                             </p>
                                         </div>
                                         <div class="col-3 p-0" style="text-align: right;">
-                                            <img src="../assets/school_logo.jpg" alt="">
+                                            <img src="../assets/school_logo.jpg" alt="PCNSH Logo" title="PCNSH Logo">
                                         </div>
                                     </div>
                                     <h5 class="text-center"><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
                                     <br><br><br>
                                     <div class="parentLine fsize">
                                         <div class="subLine2">Name: </div><br>
+                                        <?php // echo "$lastName, $firstName $midName"; ?>
                                         <div class="subLine2 ind"><?php echo $lastName; ?></div><br>
                                         <div class="subLine2 ind"><?php echo $firstName; ?></div><br>
                                         <div class="subLine2 ind"><?php echo $midName; ?></div><br>
@@ -311,8 +317,7 @@ include_once("../inc/head.html"); ?>
                                         <div class="subLine">Section: </div>
                                         <div class="subLine"><?php echo $section; ?></div>
                                     </div>
-                                    <div class="perLine text-center fsize">LRN: 457789876514</div> 
-                                    <!-- <?php echo $lrn; ?> -->
+                                    <div class="perLine text-center fsize">LRN: <?php echo $lrn; ?></div> 
                                     <div class="parentLine fsize">
                                         <div class="subLine">School Year: </div>
                                         <div class="subLine"><?php echo $school_year; ?></div>
@@ -333,13 +338,13 @@ include_once("../inc/head.html"); ?>
                                     </div>
                                     <br><br><br>
                                     <div class="fsize right">
-                                        <div> <?php echo $teacherName ?></div>
+                                        <div> <?php echo $teacherName; ?></div>
                                         <div> Class Adviser </div>
                                     </div>
                                     <br><br><br>
                                     <div class="fsize left">
-                                        <div><?php echo $signatoryName ?></div>
-                                        <div> Secondary School Principal III </div>
+                                        <div><?php echo $signatoryName; ?></div>
+                                        <div> <?php echo $position; ?> </div>
                                     </div>
                                 </li>
                                 <hr class='m-0'>
@@ -363,17 +368,11 @@ include_once("../inc/head.html"); ?>
                                         <thead class='text-center fw-bold'>
                                             <tr>
                                                 <td></td>
-                                                <td>Oct</td>
-                                                <td>Nov</td>
-                                                <td>Dec</td>
-                                                <td>Jan</td>
-                                                <td>Feb</td>
-                                                <td>Mar</td>
-                                                <td>Apr</td>
-                                                <td>May</td>
-                                                <td>Jun</td>
-                                                <td>Jul</td>
-                                                <td>Aug</td>
+                                                <?php 
+                                                    foreach(array_keys($attendance['no_of_days']) as $month_key) { 
+                                                        echo "<td>". ucwords(substr($month_key, 0, 3)) ."</td>"; 
+                                                    }
+                                                ?>
                                                 <td>Total</td>
                                             </tr>
                                         </thead>

@@ -8,6 +8,7 @@ $sect_grd_level = $section->get_grd_level();
 $sect_max_no = $section->get_max_stud();
 $sect_stud_no = $section->get_stud_no();
 $sect_adviser = $section->get_teacher_id();
+$school_year = $section->get_sy_desc();
 
 $program_list = $admin->listPrograms("program");
 
@@ -81,6 +82,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                             <div class="col-sm-8">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <p id="no-of-stud" class="m-0"><?php echo $sect_stud_no; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="sy" class="col-sm-4 text-secondary fw-bold">School Year</label>
+                            <div class="col-sm-8">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <p id="sy" class="m-0"><?php echo $school_year; ?></p>
                                 </div>
                             </div>
                         </div>

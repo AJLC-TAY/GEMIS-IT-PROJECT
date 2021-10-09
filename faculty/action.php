@@ -8,4 +8,7 @@ if ((isset($_POST['profile']) && $_POST['profile'] == 'faculty')
 }
 if ((isset($_POST['action']) && $_POST['action'] == 'changeAttendance')) {
     $faculty->changeAttendance();
+}if ((isset($_POST['action']) && $_POST['action'] == 'export')) {
+    $faculty->exportSubjectGradesToCSV();
+    // $faculty->tryExport();
 }

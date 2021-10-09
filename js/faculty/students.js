@@ -105,6 +105,14 @@ $(function() {
         $("#classes").select2("close");
         changeName(sectionName);
         setTableData(classType, url);
-    })
+    });
+
+    $(document).on("click", ".export-grade", function() {
+        let reportID = $(this).attr("data-report-id");
+        let studID = $(this).attr("data-stud-id");
+        let form = $("#confirm-sig-form");
+        form.attr("action", `../admin/gradeReport.php?id=${studID}&report_id=${reportID}`);
+        $("#confirm-sig-modal").modal("show");
+    });
     hideSpinner();
 });

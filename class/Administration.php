@@ -208,9 +208,9 @@ class Administration extends Dbconfig
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, grd_level, current_quarter, current_semester, can_enroll) "
-                ."VALUES (?, ?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $grd_level, $current_quarter, $current_semester, $enrollment], "iiiiii");
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
+                ."VALUES (?, ?, ?, ?, ?);";
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -261,9 +261,24 @@ class Administration extends Dbconfig
         }
 
         # Step 5
-//        foreach(Administration::MONTHS as $month) {
-//            $this->query("INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);");
-//        }
+        $start_month = $_POST['start-month']; // 9
+        $end_month = $_POST['end-month'];
+        $months_records = [];
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind >= $start_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind <= $end_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach($months_records as $mr) {
+            $this->query("INSERT academicdays (month, no_of_days, sy_id) VALUES ('$mr', 20, '$sy_id');");
+        }
 
         # Step 6
         $dir_path = "../uploads/student/$sy_id";
@@ -626,7 +641,7 @@ class Administration extends Dbconfig
     public function listSection() 
     {
         session_start();
-        $query = "SELECT * FROM section ". ((isset($_GET['current']) && $_GET['current'] === 'true')
+        $query = "SELECT * FROM section". ((isset($_GET['current']) && $_GET['current'] === 'true')
                 ? "WHERE sy_id='{$_SESSION['sy_id']}'"
                 : "") .";";
         $result = mysqli_query($this->db, $query);
@@ -675,17 +690,18 @@ class Administration extends Dbconfig
 
     public function getSection() 
     {
-        $result = $this->prepared_select("SELECT * FROM section WHERE section_code=?", [$_GET["sec_code"]], "s");
+        $result = $this->prepared_select("SELECT * FROM section JOIN schoolyear USING(sy_id) WHERE section_code=?", [$_GET["sec_code"]], "s");
         $row = mysqli_fetch_assoc($result);
         $adv_result = mysqli_query($this->db, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
         $adviser = mysqli_fetch_assoc($adv_result);
+        $school_year = $row['start_year']." - ".$row['end_year'];
         if ($adviser) {
             $name = "{$adviser['last_name']}, {$adviser['first_name']} {$adviser['middle_name']} {$adviser['ext_name']}";
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
         return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
-                            $row['stud_no_max'], $row['stud_no'], $adviser);
+                            $row['stud_no_max'], $row['stud_no'], $adviser, $school_year);
     }
     public function listSectionStudentJSON() 
     {
@@ -2297,41 +2313,7 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
     }
 
-    public function exportSubjectGradesToCSV () {
-        // Fetch records from database 
-        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
-
-        if($query->num_rows > 0){ 
-            $delimiter = ","; 
-            $filename = "student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
-     
-            // Create a file pointer 
-            $f = fopen('php://memory', 'w'); 
-     
-            // Set column headers 
-            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
-            fputcsv($f, $fields, $delimiter); 
-     
-            // Output each row of the data, format line as csv and write to file pointer 
-            while($row = $query->fetch_assoc()){ 
-                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
-                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); //yung status need ba yun?
-                fputcsv($f, $lineData, $delimiter); 
-            } 
-     
-            // Move back to beginning of file 
-            fseek($f, 0); 
-     
-            // Set headers to download file rather than displayed 
-            header('Content-Type: text/csv'); 
-            header('Content-Disposition: attachment; filename="' . $filename . '";'); 
-     
-            //output all remaining data on a file pointer 
-            fpassthru($f); 
-        } 
-        exit; 
-
-    }
+    
     
     public function importSubjectGradesToCSV () {
         // // Load the database configuration file
@@ -2389,16 +2371,14 @@ class Administration extends Dbconfig
         // Redirect to the listing page
         // header("Location: index.php".$qstring);
 
-    public function getStudentAttendance()
+    public function getStudentAttendance($report_id)
     {
-        $report_id = 1;
         $status = ['no_of_days', 'no_of_present', 'no_of_absent', 'no_of_tardy'];
         foreach ($status as $stat) {
-            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month from attendance where report_id=$report_id;");
+            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month FROM attendance 
+                                    JOIN academicdays USING (acad_days_id) WHERE report_id='$report_id';");
             while ($row = mysqli_fetch_assoc($result)) {
-                $attendance[$stat][] = [
-                    $row['month'] => $row[$stat]
-                ];
+                $attendance[$stat][$row['month']] = $row[$stat];
             }
         }
 
@@ -2411,4 +2391,10 @@ class Administration extends Dbconfig
         $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,' ', e.prog_code) FROM enrollment e JOIN curriculum c USING(curr_code) where stud_id=?;", [$stud_id], "i"));
         return $trackStrand;
     }
+
+    // public function addMonth{
+    //     $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
+    //     $sub_sy_id = mysqli_insert_id($this->db);
+    //     INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);
+    // }
 }
