@@ -1300,7 +1300,6 @@ class Administration extends Dbconfig
      */
     public function getUserCounts() 
     {
-        session_start();
         $query = "SELECT (
             SELECT COUNT(admin_id) FROM administrator
         ) AS administrators, 

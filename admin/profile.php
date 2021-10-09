@@ -1,4 +1,6 @@
-<?php include_once("../inc/head.html"); 
+<?php 
+require_once("../inc/sessionHandling.php");
+include_once("../inc/head.html"); 
     require_once("../class/Administration.php");
     $admin = new Administration();
     session_start();

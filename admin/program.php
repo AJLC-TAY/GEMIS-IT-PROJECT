@@ -1,4 +1,6 @@
-<?php include_once("../inc/head.html");
+<?php 
+require_once("../inc/sessionHandling.php");
+include_once("../inc/head.html");
 include('../class/Administration.php'); ?>
 <title>Program | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>

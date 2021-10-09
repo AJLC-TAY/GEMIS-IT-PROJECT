@@ -1,5 +1,5 @@
 <?php include_once("../inc/head.html"); 
-    session_start();
+    require_once("../inc/sessionHandling.php");
 ?>
 <title>School Year | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>

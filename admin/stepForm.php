@@ -1,4 +1,5 @@
 <?php
+require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
 session_start();
 require_once("../class/Administration.php");
