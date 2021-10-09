@@ -97,11 +97,12 @@ if (count($sub_classes) != 0) {
                                         </div>
                                     
                                     </div>
-
+                                    
                                     <div class>
                                         <button type="button" class="btn btn-secondary">Template</button>
                                         <button type="button"  class="btn btn-secondary">Import</button>
-                                        <button type="button" id = 'export' class="btn btn-secondary">Export</button>
+                                        <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form>
+                                        <!-- <button type="button" id = 'export' class="btn btn-secondary">Export</button> -->
                                         <button type="button" class="btn btn-success">SAVE</button>
 
                                     </div>
