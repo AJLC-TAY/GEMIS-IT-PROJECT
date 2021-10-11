@@ -19,8 +19,8 @@
     <div class="col-lg-4">
         <div class="card-box bg-warning">
             <div class="inner">
-                <h4>Pending: </h4>
-                <!-- <h2> <?php echo $pending; ?> </h2> -->
+                <h4>Pending</h4>
+                 <h2 id="pending"></h2>
             </div>
             
         </div>
@@ -28,8 +28,8 @@
     <div class="col-lg-4">
         <div class="card-box bg-default">
             <div class="inner">
-                <h4>Enrolled: </h4>
-                <!-- <h2> <?php echo $enrolled; ?> </h2> -->
+                <h4>Enrolled</h4>
+                 <h2 id='enrolled'></h2>
             </div>
             
         </div>
@@ -37,8 +37,8 @@
     <div class="col-lg-4">
         <div class="card-box bg-danger">
             <div class="inner">
-                <h4>Rejected: </h4>
-                <!-- <h2> <?php echo $rejected; ?> </h2> -->
+                <h4>Rejected</h4>
+                <h2 id="rejected"></h2>
             </div>
         </div>
     </div>
@@ -48,7 +48,6 @@
     <h4>QUICK ACTIONS</h4>
     <div class="col-lg-12">                       
         <div class="row mt ps-3">
-            
             <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-5x"></i><br>View Enrollment List</a>
             <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
             <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a>

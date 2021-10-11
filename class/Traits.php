@@ -76,12 +76,18 @@ trait School
         echo json_encode($this->listSubjects('subject'));
     }
 
-    public function listClass() {
+    public function listClass()
+    {
         if ($_GET['class'] === 'advisory') {
 
         } else {
 
         }
+    }
+
+    public function listEnrollmentData()
+    {
+
     }
 }
 trait UserSharedMethods

@@ -55,7 +55,7 @@ include_once("../inc/head.html"); ?>
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
-                                $js = "<script src='../js/admin/enrollment.js'></script>";
+//                                $js = "<script src='../js/admin/enrollment-dash.js'></script>";
                             }
                             ?>
                         </div>

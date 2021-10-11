@@ -53,7 +53,6 @@ $con = $dbConfig->connect();
                     $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
                     $_SESSION['current_semester'] = $sy_row['current_semester']; ;
                     $_SESSION['current_quarter'] = $sy_row['can_enroll'];
-                   
                     header("location: $destination");
                 }
             }
