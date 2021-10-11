@@ -48,11 +48,11 @@ $con = $dbConfig->connect();
                     
                     $sy_res = mysqli_query($con, $qry_sy);
                     $sy_row = mysqli_fetch_assoc($sy_res);
-                    $_SESSION['school_year'] = $sy['sy'];
-                    $_SESSION['sy_id'] = $sy['sy_id']; 
-                    $_SESSION['enroll_status'] = $sy['can_enroll']; ;
-                    $_SESSION['current_semester'] = $sy['current_semester']; ;
-                    $_SESSION['current_quarter'] = $sy['can_enroll']; 
+                    $_SESSION['school_year'] = $sy_row['sy'];
+                    $_SESSION['sy_id'] = $sy_row['sy_id'];
+                    $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
+                    $_SESSION['current_semester'] = $sy_row['current_semester']; ;
+                    $_SESSION['current_quarter'] = $sy_row['can_enroll'];
                    
                     header("location: $destination");
                 }

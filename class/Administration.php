@@ -624,7 +624,7 @@ class Administration extends Dbconfig
         // $this->listSYJSON();
     }
 
-    public function get_sy_info()
+    public function getSYInfo()
     {
         $sy_id = $_GET['id'];
         $sy_info = [
@@ -671,6 +671,12 @@ class Administration extends Dbconfig
             }
         }
         # month
+        $mon_res = $this->query("SELECT * FROM academicdays WHERE sy_id='$sy_id';");
+        $days = [];
+        while ($mon_row = mysqli_fetch_assoc($mon_res)) {
+            $sy_info['month'][$mon_row['month']] = $days[] = $mon_row['no_of_days'];
+        }
+        $sy_info['total_days'] = array_sum($days);
         return $sy_info;
     }
     /** School Year Methods End */

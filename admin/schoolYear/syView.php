@@ -1,7 +1,8 @@
-<?php include_once("../inc/head.html");
+<?php
+//include_once("../inc/head.html");
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$sy_info = $admin->get_sy_info();
+$sy_info = $admin->getSYInfo();
 ?>
 <header>
     <!-- BREADCRUMB -->
@@ -17,8 +18,43 @@ $sy_info = $admin->get_sy_info();
 </header>
 <div class="container">
     <section class="row">
-        <section class="col-sm-6">
-            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 me-3'>
+        <section class="col-md-4">
+            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4'>
+                <div class="d-flex justify-content-between">
+                    <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                    </div>
+                </div>
+                <hr class='mt-2'>
+                <div class='row d-flex justify-content-center'>
+                    <div class="inner container">
+                        <?php
+                        foreach($sy_info['month'] as $month => $days) {
+                            echo "<div class='row ps-4'>"
+                                ."<div class='col-sm-8'>"
+                                    ."<h7 class='fw-bold mt-1'>$month</h7>"
+                                ."</div>"
+                                ."<div class='col-sm-3 text-end'>"
+                                    ."<h7>$days</h7>"
+                                ."</div>"
+                            ."</div>";
+                        }
+                        ?>
+                        <div class="row ps-4">
+                            <div class='col-sm-8 border-top'>
+                                <h6 class='fw-bold mt-2'>Total</h6>
+                            </div>
+                            <div class='col-sm-3 text-end border-top'>
+                                <h6 class="mt-2 fw-bold"><?php echo $sy_info['total_days']; ?></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="col-sm-8">
+            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 '>
                 <h5 class='text-start p-0 fw-bold'>TRACKS</h5>
                 <hr class='mt-1'>
                 <div class='row p-2 ms-2'>
@@ -43,85 +79,6 @@ $sy_info = $admin->get_sy_info();
                             echo "</ul>";
                         }
                     ?>
-            </div>
-        </section>
-        <section class="col-md-6">
-            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 me-3'>
-                <div class="d-flex justify-content-between">
-                    <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
-                    <div>
-                        <button type="button" class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square me-2"></i>Edit</button>
-                    </div>
-                </div>
-                <hr class='mt-2'>
-                <div class='row d-flex justify-content-center'>
-                    <h5 class='fw-bold d-flex justify-content-center'>2021</h5>
-                    <div class="inner row justify-content-center">
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">August</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">September</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">October</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">November</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">December</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                    </div>
-                    <h5 class='fw-bold d-flex justify-content-center'>2022</h5>
-                    <div class="inner row justify-content-center">
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">January</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">February</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">March</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">April</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                        <div class="ms-4 col-sm-8">
-                            <h7 class="fw-bold mt-1">May</h7>
-                        </div>
-                        <div class="mt-1 col-sm-3">
-                            <h7>20</h7>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     </section>
