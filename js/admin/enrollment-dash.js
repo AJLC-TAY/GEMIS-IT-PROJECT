@@ -24,11 +24,10 @@ function toggleRefresh() {
 
 $(function () {
     preload("#enrollment", "#enrollment-sub");
-    refresh();
     hideSpinner();
-    // setInterval(reload(), interval);
+    refresh();
+    // setInterval(refresh(), interval);
     while(reload) {
-        setTimeout(refresh(), interval);
+        setTimeout( () => refresh(), interval);
     }
-
 });

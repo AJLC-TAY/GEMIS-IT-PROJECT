@@ -56,7 +56,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'all-sub-classes') {
    $admin->listAllSubjectClasses(TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
-    $admin->listEnrollmenData();
+    $admin->listEnrollmentData(TRUE);
 }
 ?>
 

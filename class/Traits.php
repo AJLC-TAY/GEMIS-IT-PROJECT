@@ -85,9 +85,32 @@ trait School
         }
     }
 
-    public function listEnrollmentData()
+    public function listEnrollmentData($is_JSON = false)
     {
-
+        session_start();
+        $en_data = ['pending' => 0, 'enrolled' => 0, 'rejected' => 0];
+        $sy_id = 9;
+//        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT valid_stud_data AS status, COUNT(*) AS count FROM enrollment WHERE sy_id = '$sy_id' GROUP BY valid_stud_data;");
+        while($row = mysqli_fetch_assoc($result)) {
+            switch($row['status']) {
+                case 0:
+                    $status = 'pending';
+                    break;
+                case 1:
+                    $status = 'enrolled';
+                    break;
+                case 2:
+                    $status = 'rejected';
+                    break;
+            }
+            $en_data[$status] = $row['count'];
+        }
+        if ($is_JSON) {
+            echo json_encode($en_data);
+            return;
+        }
+        return $en_data;
     }
 }
 trait UserSharedMethods
