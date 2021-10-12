@@ -189,7 +189,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-tasks me-3" aria-hidden="true"></i>ENROLLMENT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="enrollment.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -201,7 +201,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="enrollment.php?page=setup" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>

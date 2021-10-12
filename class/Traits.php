@@ -714,23 +714,6 @@ trait Enrollment
         return $filter;
     }
 
-    public function editEnrollStatus()
-    {
-        session_start();
-        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
-        if (isset($_POST['sy_id'])) {
-            echo 'here';
-            # enrollment status of other previous school year
-            $sy_id = $_POST['sy_id'];
-        } else {
-            echo 'applied';
-            # enrollment status of current school year; hence, update session value
-            $sy_id = $_SESSION['sy_id'];
-            $_SESSION['enrollment'] = $can_enroll;
-        }
-        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $sy_id], "ii");
-    }
-
 
     private function in_multi_array(string $string, array $array): bool
     {

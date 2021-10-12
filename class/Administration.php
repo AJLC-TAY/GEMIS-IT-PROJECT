@@ -749,6 +749,28 @@ class Administration extends Dbconfig
     public function listSectionStudentJSON() 
     {
     }
+
+    /** Enrollment Methods */
+
+    public function editEnrollStatus()
+    {
+        session_start();
+        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
+        if (isset($_POST['sy_id'])) {
+            echo 'here';
+            # enrollment status of other previous school year
+            $sy_id = $_POST['sy_id'];
+        } else {
+            echo 'applied';
+            # enrollment status of current school year; hence, update session value
+            $sy_id = $_SESSION['sy_id'];
+            // unset($_SESSION['enroll_status']);
+            $_SESSION['enroll_status'] = $can_enroll;
+            echo $can_enroll;
+        }
+        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $sy_id], "ii");
+        // header("Location: enrollment.php");
+    }
     /*** Curriculum Methods */
 
     /** Returns the list of curriculum. */
