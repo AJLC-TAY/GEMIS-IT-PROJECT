@@ -18,6 +18,7 @@ include_once("../inc/head.html"); ?>
 
     .template li {
         width: 100%;
+        min-height: 9.98in;
         height: auto;
         /* height: 9.98in !important; */
         margin: 0.5in !important;
@@ -126,9 +127,17 @@ include_once("../inc/head.html"); ?>
                     <div class="row mt ps-3">
                         <?php 
                         if (isset($_GET['type'])) {
-                            if ($_GET['type'] === 'ae') {
-                                require_once("award/academicExcellence.php");
+                            switch ($_GET['type']) {
+                                case 'ae': # ae for academic excellence
+                                    require_once("award/academicExcellence.php");
+                                    break;
+                                case 'sp': # sp for specific
+                                    require_once("award/awardGeneric.php");
+                                    break;
                             }
+                        } else {
+                            require_once("award/awardCards.php");
+
                         }
                         ?>
                     </div>

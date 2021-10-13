@@ -1,29 +1,7 @@
 <?php
 include "../class/Administration.php";
-$is_graduating = false;
-if (isset($_GET['graduating']) && in_array(strtolower($_GET['graduating']), array('true', 'false'))) {
-    $is_graduating = $_GET['graduating'];
-}
-$grd = ($is_graduating === 'true' ? "12" : "11");
 $admin = new Administration();
-$query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
-        ."curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
-        ."WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
-        ."THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
-        ."AND enrolled_in = '$grd' AND e.sy_id = '9' "
-        ."ORDER BY program DESC, general_average DESC;";
-$result = $admin->query($query);
-$excellence = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'].' Honors')];
-}
-
-foreach($excellence as $curr => $prog_rec) {
-    $total_count = [];
-    foreach($prog_rec as $prog => $prog_list) {
-        $excellence[$curr][$prog]['size'] = $total_count[] = count($prog_list['students']);
-    }
-}
+$excellence = $admin->getAwardExcellenceData();
 $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
 $date_desc = date("F j, Y");
@@ -76,7 +54,7 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
             </div>
 
             <h6 class="text-center m-0"><b>Academic Excellence Award</b></h6>
-            <h6 class="text-center"><b>Senior High School Graduates</b></h6>
+            <h6 class="text-center"><b><?php (isset($_GET['graduating']) && strtolower($_GET['graduating']) == 'true') ? "Senior High School Graduates" : "<br>"; ?></b></h6>
             <!-- 
                 <div class="d-flex justify-content-between">
                     <p><b>AO</b> - Always Observed</p>
@@ -85,7 +63,7 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                     <p><b>NO</b> - Not Observed</p>
                 </div> -->
 
-            <table class="table-bordered table w-100 table-sm text-center">
+            <table class="table-bordered table w-100 table-sm text-center mt-3">
                 <thead class="text-center">
                     <tr>
                         <th>SH School</th>
@@ -139,5 +117,4 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
             </div>
         </li>
     </ul>
-   
 </div>
