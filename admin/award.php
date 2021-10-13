@@ -112,6 +112,7 @@ while($row = mysqli_fetch_assoc($result)) {
                                 </div>
 
                             </div>
+                            SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, prog_code, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) THEN 'highest' END AS remark FROM `gradereport` JOIN student USING (stud_id) JOIN enrollment USING (stud_id) WHERE general_average >= 90;
 
                         </div>
                         <?php

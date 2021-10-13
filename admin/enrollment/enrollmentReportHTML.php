@@ -76,7 +76,7 @@ $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
     </div>
 </header>
 <!-- HEADER END -->
-<div class="doc bg-white ms-2 p-0 shadow">
+<div class="doc bg-white ms-2 p-0 shadow overflow-auto">
     <ul class="template p-0">
         <li class="p-0 mb-0 mx-auto">
             <!-- DOCUMENT HEADER -->
