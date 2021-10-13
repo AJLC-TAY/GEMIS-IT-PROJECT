@@ -255,9 +255,11 @@ class FacultyModule extends Dbconfig
     //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
     //Tapos JSON ung return niya 
     public function getClassGrades(){
-        $class_code = $_GET['sub_code'];
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
+        $class_code = $_GET['class_code'];
+
+
 
         $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
         first_grading, second_grading, final_grade FROM student 

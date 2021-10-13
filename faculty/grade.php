@@ -2,8 +2,8 @@
 
 // session_start();
 $_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 26;
-$_SESSION['sy_id'] = 15;
+$teacher_id = $_SESSION['id'] = 26;
+$sy_id = $_SESSION['sy_id'] = 9;
 $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 
@@ -30,8 +30,8 @@ if (count($sub_classes) != 0) {
         $sub_code = $sub_class->get_sub_code();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_code=9101' "
-            . "data-code='$section_code'>$section_name</option>";
+             . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
+            . "data-name='$section_name'>$section_name</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {
@@ -83,6 +83,7 @@ if (count($sub_classes) != 0) {
                             <!-- STUDENTS TABLE -->
                             <div class="container mt-1 w-75 ms-0">
                                 <div class="card w-100 h-auto bg-light" style="min-height: 70vh !important;">
+                                <form>
                                     <div class="d-flex justify-content-between mb-3">
                                         <!-- SEARCH BAR -->
                                         <div class="flex-grow-1 me-3">
@@ -107,20 +108,23 @@ if (count($sub_classes) != 0) {
 
                                     </div>
                                     
-                                    
-                                    <table id="table" class="table-striped table-sm">
+                                    <table id="table" class="table-striped table-sm" >
                                         <thead class='thead-dark'>
                                             <tr>
                                                 <th data-checkbox="true"></th>
                                                 <th scope='col' data-width="150" data-align="center" data-field="lrn"></th>
                                                 <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true"  contenteditable="true" data-field="grd_1">1st Grade</th>
                                                 <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
                                                 <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                                                <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
+                                                <th scope='col' data-width="150" data-align="center" data-field="action" data-editable = "true">Actions</th>
                                             </tr>
                                         </thead>
+                                       
                                     </table>
+                                    </form>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -143,6 +147,7 @@ if (count($sub_classes) != 0) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+   
     <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>
 
