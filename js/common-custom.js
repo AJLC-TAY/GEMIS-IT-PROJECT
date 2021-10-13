@@ -25,7 +25,10 @@ function showSpinner(selector = null, bs = false) {
 function hideSpinner(selector = null, bs = false) {
     if (selector != null && bs) return $(selector).bootstrapTable('hideLoading');
     if (selector != null) return $(selector).hide();
-    spinner.fadeOut(500);
+    // spinner.fadeOut(500);
+    setTimeout(() => {
+        spinner.hide();
+    }, 300);
 }
     
 /** 

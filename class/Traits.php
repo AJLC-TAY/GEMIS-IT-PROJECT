@@ -85,9 +85,32 @@ trait School
         }
     }
 
-    public function listEnrollmentData()
+    public function listEnrollmentData($is_JSON = false)
     {
-
+        session_start();
+        $en_data = ['pending' => 0, 'enrolled' => 0, 'rejected' => 0];
+        $sy_id = 9;
+//        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT valid_stud_data AS status, COUNT(*) AS count FROM enrollment WHERE sy_id = '$sy_id' GROUP BY valid_stud_data;");
+        while($row = mysqli_fetch_assoc($result)) {
+            switch($row['status']) {
+                case 0:
+                    $status = 'pending';
+                    break;
+                case 1:
+                    $status = 'enrolled';
+                    break;
+                case 2:
+                    $status = 'rejected';
+                    break;
+            }
+            $en_data[$status] = $row['count'];
+        }
+        if ($is_JSON) {
+            echo json_encode($en_data);
+            return;
+        }
+        return $en_data;
     }
 }
 trait UserSharedMethods
@@ -691,23 +714,6 @@ trait Enrollment
         return $filter;
     }
 
-    public function editEnrollStatus()
-    {
-        session_start();
-        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
-        if (isset($_POST['sy_id'])) {
-            echo 'here';
-            # enrollment status of other previous school year
-            $sy_id = $_POST['sy_id'];
-        } else {
-            echo 'applied';
-            # enrollment status of current school year; hence, update session value
-            $sy_id = $_SESSION['sy_id'];
-            $_SESSION['enrollment'] = $can_enroll;
-        }
-        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $sy_id], "ii");
-    }
-
 
     private function in_multi_array(string $string, array $array): bool
     {
@@ -1064,5 +1070,64 @@ trait Grade
 
         return $grades;
     }
+
+    public function getAwardExcellenceData() 
+    {
+        $is_graduating = false;
+        if (isset($_GET['graduating']) && in_array(strtolower($_GET['graduating']), array('true', 'false'))) {
+            $is_graduating = $_GET['graduating'];
+        }
+        $grd = ($is_graduating === 'true' ? "12" : "11");
+        $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
+                ."curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
+                ."WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
+                ."THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
+                ."AND enrolled_in = '$grd' AND e.sy_id = '9' "
+                ."ORDER BY program DESC, general_average DESC;";
+        $result = $this->query($query);
+        $excellence = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'].' Honors')];
+        }
+
+        foreach($excellence as $curr => $prog_rec) {
+            foreach($prog_rec as $prog => $prog_list) {
+                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
+            }
+        }    
+
+        return $excellence;
+    }
+
+    public function getAwardDataFromSubject()
+    {
+        $grd_param = 90;
+        $sub_code = 'OCC1';
+        $sy_id = 9;
+        $data = [];
+        $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, sub_code, enrolled_in AS grd
+                    FROM gradereport gr JOIN student s ON gr.stud_id = s.stud_id 
+                    LEFT JOIN enrollment e ON  e.stud_id = s.stud_id 
+                    JOIN classgrade cg ON cg.report_id = gr.report_id 
+                    JOIN subjectclass sc ON sc.sub_class_code = cg.sub_class_code 
+                    JOIN sysub sys ON sys.sub_sy_id = sc.sub_sy_id
+                    WHERE final_grade >= '$grd_param'  AND sys.sub_code = '$sub_code' AND e.sy_id = '$sy_id' 
+                    ORDER BY program DESC, final_grade DESC;";
+        $result = $this->query($query);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'fg' => $row['final_grade'], 'sex' => ucwords($row['sex'])];
+        }
+
+        // foreach($data as $grd_level => $prog_rec) {
+        //     foreach($prog_rec as $prog => $prog_list) {
+        //         $data[$grd_level][$prog]['size'] = count($prog_list['students']);
+        //     }
+        // }    
+        return $data;
+    }
 }
+
+
+
+    
 

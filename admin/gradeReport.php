@@ -266,7 +266,7 @@ include_once("../inc/head.html"); ?>
                         <div class="d-flex-inline">
                             <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
                         </div>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow">
+                        <div class="doc bg-white ms-2 mt-3 p-0 shadow  overflow-auto">
                             <ul class="template p-0 w-100">
                             <li class="p-0 mb-0 mx-auto">
                                     <p>School Form 9 - SHS</p>

@@ -1,10 +1,11 @@
-let reload = true;
-let interval = 5000;
+import {toggleEnrollment} from "./utilities.js";
+
+const SECONDS = 3000;
 
 function refresh() {
     $.ajax({
-        url: 'getAction.php?data=enroll-data',
-        method: "GET",
+        url:    'getAction.php?data=enroll-data',
+        method: 'GET',
         success: (data) => {
             let enData = JSON.parse(data);
             $("#enrolled").html(enData.enrolled);
@@ -14,21 +15,32 @@ function refresh() {
     });
 }
 
-function setInterval(sec) {
-    interval = sec;
+function startAutoRefresh () {
+    return setInterval(refresh, SECONDS);
 }
 
-function toggleRefresh() {
-    reload = !reload;
-}
+window.refresh = refresh;
 
-$(function () {
+var interval = startAutoRefresh();
+
+$(function() {
     preload("#enrollment", "#enrollment-sub");
     refresh();
     hideSpinner();
-    // setInterval(reload(), interval);
-    while(reload) {
-        setTimeout(refresh(), interval);
-    }
 
+    $(document).on("click", ".refresh-switch", function () {
+        refresh();
+        if ($(this).is(":checked")) {
+            interval = startAutoRefresh();
+        } else {
+            clearInterval(interval);
+        }
+    });
+
+    toggleEnrollment();
+
+    $(document).on("change", "[name='enrollment']", function() {
+        $("#auto-refresh").prop("checked", $(this).is(":checked"));
+    });
 });
+

@@ -23,6 +23,9 @@ include_once("../inc/head.html"); ?>
                         <div class="row mt ps-3">
                             <?php
                             $js = '';
+                            $bootstrapJS = '<script src="../assets/js/bootstrap-table.min.js"></script>'
+                                          .'<script src="../assets/js/bootstrap-table-en-US.min.js"></script>'
+                                          .'<script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>';
                             if (isset($_GET['page'])) {
                                 if ($_GET['page'] === 'enrollees') {
                                     require("enrollment/enrollmentList.php");
@@ -36,26 +39,30 @@ include_once("../inc/head.html"); ?>
 
                                 if ($_GET['page'] === 'form') {
                                     require("enrollment/enrollmentForm.php");
+                                    $bootstrapJS = '';
                                     $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
 
                                 if ($_GET['page'] === 'report' && $_GET['type']  === 'pdf') {
                                     require("enrollment/enrollmentReportHTML.php");            
+                                    $bootstrapJS = '';
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                                 
                                 if ($_GET['page'] === 'generateReport') {
                                     require("enrollment/previewReport.php");
+                                    $bootstrapJS = '';
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
 
                                 if ($_GET['page'] === 'credential') {
                                     require("enrollment/enrollmentCredentials.php");
+                                    $bootstrapJS = '';
                                     $js = "<script src='../js/admin/enrollment.js'></script>";
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
-//                                $js = "<script src='../js/admin/enrollment-dash.js'></script>";
+                                $js = "<script type='module' src='../js/admin/enrollment-dash.js'></script>";
                             }
                             ?>
                         </div>
@@ -73,28 +80,27 @@ include_once("../inc/head.html"); ?>
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+
     <!-- BOOTSTRAP TABLE JS -->
-    <script src="../assets/js/bootstrap-table.min.js"></script>
-    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-    <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
+    <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
-    <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>
-        var forms = document.querySelectorAll('.needs-validation');
-        Array.prototype.slice.call(forms).forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation();
-                }
+        /** MOVED TO enrollment.js */
+        // var forms = document.querySelectorAll('.needs-validation');
+        // Array.prototype.slice.call(forms).forEach(function(form) {
+        //     form.addEventListener('submit', function(event) {
+        //         if (!form.checkValidity()) {
+        //             event.preventDefault()
+        //             event.stopPropagation();
+        //         }
 
-                form.classList.add('was-validated');
-            }, false);
-        });
+        //         form.classList.add('was-validated');
+        //     }, false);
+        // });
     </script>
+    <?php echo $js; ?>
 </body>
 
 </html>
