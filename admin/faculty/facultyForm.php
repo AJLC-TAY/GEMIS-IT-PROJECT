@@ -153,16 +153,10 @@ switch ($user_type) {
         <div class='form-group col-md-4'>
             <label for='firstname'>First Name</label>
             <input type='text' value='<?php echo $first_name; ?>' class='form-control' id='firstname' name='firstname' placeholder='First Name' required>
-            <div class="invalid-feedback">
-                Please enter first name
-            </div>
         </div>
         <div class='form-group col-md-4'>
             <label for='middlename'>Middle Name</label>
             <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
-            <div class="invalid-feedback">
-                Please enter middle name
-            </div>
         </div>
     </div>
     <div class='form-row row'>
@@ -177,9 +171,6 @@ switch ($user_type) {
         <div class='form-group col-md-4'>
             <label for='email'>Email</label>
             <input type='email' value='<?php echo $email; ?>' class='form-control' id='email' name='email' placeholder='Email' required>
-            <div class="invalid-feedback">
-                Please enter valid email
-            </div>
         </div>
     </div>
     <div class='form-row row'>
@@ -301,7 +292,7 @@ switch ($user_type) {
     </div>
 </form>
 <!-- VALIDATION -->
-<!-- <script>
+<script>
     var forms = document.querySelectorAll('.needs-validation');
 
     Array.prototype.slice.call(forms).forEach(function(form) {
@@ -314,7 +305,7 @@ switch ($user_type) {
             form.classList.add('was-validated');
         }, false);
     });
-</script> -->
+</script>
 
     <script src="../js/validation/jquery.validate.min.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>

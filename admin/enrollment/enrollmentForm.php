@@ -319,23 +319,14 @@ if (isset($_GET['action'])) {
                         <div class='form-group col-md-3'>
                             <label for='f-lastname'>Last Name</label>
                             <input type='text' class='form-control' id='f-lastname' name='f-lastname' value = "<?php echo $father_last_name; ?>" placeholder='Last Name' required>
-                            <div class="invalid-feedback">
-                                Please enter father's first name
-                            </div>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='f-firstname'>First Name</label>
                             <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name' required>
-                            <div class="invalid-feedback">
-                                Please enter father's first normalizer_is_normalized
-                            </div>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='f-middlename'>Middle Name</label>
                             <input type='text' class='form-control' id='f-middlename' name='f-middlename' value = "<?php echo $father_first_name; ?>" placeholder='Middle Name' required>
-                            <div class="invalid-feedback">
-                                Please enter father's middle name
-                            </div>
                         </div>
                         <div class='form-group col-md-2'>
                             <label for='f-extensionname'>Extension Name</label>
@@ -358,23 +349,14 @@ if (isset($_GET['action'])) {
                         <div class='form-group col-md-3'>
                             <label for='m-lastname'>Maiden Last Name</label>
                             <input type='text' class='form-control' id='m-lastname' name='m-lastname' value = "<?php echo $mother_last_name; ?>" placeholder='Last Name' required>
-                            <div class="invalid-feedback">
-                                Please enter mother's maiden last name
-                            </div>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='m-firstname'>First Name</label>
                             <input type='text' class='form-control' id='m-firstname' name='m-firstname' value = "<?php echo $mother_first_name; ?>" placeholder='First Name' required>
-                            <div class="invalid-feedback">
-                                Please enter mother's first name
-                            </div>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='m-middlename'>Middle Name</label>
                             <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name' required>
-                            <div class="invalid-feedback">
-                                Please enter mother's middle name
-                            </div>
                         </div>
                     </div>
                     <div class='form-row row'>
@@ -393,23 +375,14 @@ if (isset($_GET['action'])) {
                         <div class='form-group col-md-3'>
                             <label for='g-lastname'>Last Name</label>
                             <input type='text' class='form-control' id='g-lastname' name='g-lastname' value = "<?php echo $guardian_last_name; ?>" placeholder='Last Name' required>
-                            <div class="invalid-feedback">
-                                Please enter guardian's last name
-                            </div>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='g-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='g-firstname' name='g-firstname' value = "<?php echo $guardian_first_name; ?>" placeholder='First Name' required>
-                            <div class="invalid-feedback">
-                                Please enter guardian's first name
-                            </div>
+                            <input type='text' class='form-control' id='g-firstname' name='g-firstname' value = "<?php echo $guardian_first_name; ?>" placeholder='First Name' required> 
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='g-middlename'>Middle Name</label>
                             <input type='text' class='form-control' id='g-middlename' name='g-middlename' value = "<?php echo $guardian_middle_name; ?>" placeholder='Middle Name' required>
-                            <div class="invalid-feedback">
-                                Please eter gurardian's middle name
-                            </div>
                         </div>
                     </div>
                     <div class='form-row row'>

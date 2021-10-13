@@ -1,6 +1,6 @@
 <?php
 include_once("../inc/head.html");
-include_once('../class/Administration.php');?>
+include_once('../class/Administration.php'); ?>
 
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -23,11 +23,11 @@ include_once('../class/Administration.php');?>
                     <div class="col-lg-12">
                         <div class="row ps-3">
                             <?php
-                            if (isset($_GET['code'])){
-                                include_once("curriculum/curriculumView.php"); 
+                            if (isset($_GET['code'])) {
+                                include_once("curriculum/curriculumView.php");
                                 $jsFilePath = "../js/admin/program.js";
                             } else {
-                                include_once("curriculum/curriculumCards.php"); 
+                                include_once("curriculum/curriculumCards.php");
                                 $jsFilePath = "../js/admin/curriculum-card.js";
                             }
                             ?>
@@ -47,20 +47,9 @@ include_once('../class/Administration.php');?>
     <!-- TOAST END -->
 </body>
 <!-- VALIDATION -->
-<script>
-    var forms = document.querySelectorAll('.needs-validation');
-
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-    });
-</script>
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>

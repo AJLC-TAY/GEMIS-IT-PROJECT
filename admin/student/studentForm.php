@@ -294,23 +294,14 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                         <div class='form-group col-md-6'>
                             <label for='lastname'>Last Name</label>
                             <input type='text' class='form-control' name='g_lastname' value='<?php echo $guardian_last_name ?>' placeholder='Last Name' required>
-                            <div class="invalid-feedcak">
-                                Please enter gruardian's last name
-                            </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='firstname'>First Name</label>
                             <input type='text' class='form-control' name='g_firstname' value='<?php echo $guardian_first_name ?>' placeholder='First Name' required>
-                            <div class="invalid-feedback">
-                                Please enter guardian's firstname
-                            </div>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='middlename'>Middle Name</label>
                             <input type='text' class='form-control' name='g_middlename' value='<?php echo $guardian_middle_name ?>' placeholder='Middle Name' required>
-                            <div class="invalid-feedback">
-                                Please enter guardian's middle name
-                            </div>
                         </div>
 
                     </div>

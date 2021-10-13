@@ -83,6 +83,9 @@ include_once("../inc/head.html"); ?>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <?php echo $js; ?>
     <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <script>
         var forms = document.querySelectorAll('.needs-validation');
         Array.prototype.slice.call(forms).forEach(function(form) {

@@ -27,8 +27,11 @@ $(function () {
       && /\d/.test(value)
       && /[a-z]/i.test(value);
   }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
-
-  $("#admin-form").validate({
+//implementing validation
+  // done final, done implementation final
+  $("#admin-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       lastname: {
         required: true,
@@ -44,13 +47,11 @@ $(function () {
       },
       age: {
         required: true,
-        numbersonly: true,
-        max: 2
+        max: 99
       },
       email: {
         required: true,
         email: true,
-        remote: "http://localhost:3000/inputValidator"
       },
     },
     messages: {
@@ -69,20 +70,26 @@ $(function () {
       },
       age: {
         required: '<p class="text-danger user-select-none">Please enter age!</p>',
-        numbersonly: '<p class="text-danger user-select-none">Please  enter numbers only!</p>',
         max: '<p class="text-danger user-select-none">Age is too high!</p>'
       },
       email: {
         required: '<p class="text-danger user-select-none">Please enter an email address!</p>',
-        email: '<p class="text-danger user-select-none">Please enter a <em>valid</em> email address!</p>',
-        remote: $.validator.format("<p class='text-danger user-select-none'>{0} is already associated with an account!</p>")
+        email: '<p class="text-danger user-select-none">Please enter a <em>valid</em> email address!</p>'
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  $("#curriculum-form").validate({
+  //submit done, unique rule left, for implementation
+  $("#curriculum-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       code: {
-        required: true
+        required: true,
+        //unique
       },
       name: {
         required: true
@@ -94,15 +101,21 @@ $(function () {
       },
       name: {
         required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
+      },
+      submitHandler: function(form) { 
+        form.submit();
+        return false;  //This doesn't prevent the form from submitting.
       }
     }
   })
-
-  $("#prog-form").validate({
+  //unique rule, submit done, for implementation 
+  $("#prog-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       code: {
         required: true,
-        // similar validation
+        // unique
       },
       desc: {
         required: true
@@ -116,10 +129,16 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter program name!</p>',
         remote: $.validator.format("{0} is already associated with an account.")
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-
-  $("#enrollment-form").validate({
+  //submit done, for implementation
+  $("#enrollment-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       'f-lastname': {
         required: true,
@@ -195,37 +214,36 @@ $(function () {
         required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
         lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  $("#section-form").validate({
+  //unique rule, submit done, for implementation and testing
+  $("#section-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       'section-name': {
         required: true,
-        // similar validation
+        // unique
       }
     },
     messages: {
       'section-name': {
         required: '<p class="text-danger user-select-none">Please enter program code!</p>'
       }
-    }
-  })
-  // for questions
-  $("#enroll-report-form").validate({
-    rules: {
-      'section-name': {
-        required: true,
-        // similar validation
-      }
     },
-    messages: {
-      'section-name': {
-        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
-      }
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-
-  $("#program-form").validate({
+  //submit done, for implementation
+  $("#program-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       birthdate: {
         required: true,
@@ -248,7 +266,7 @@ $(function () {
       },
       age:{
         required: true,
-        max: 2
+        max: 99
       }
     },
     messages: {
@@ -275,16 +293,27 @@ $(function () {
         required:'<p class="text-danger user-select-none">Please enter age!</p>',
         max: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  $("#enroll-report-form").validate({
+  // unique rule, submit done, for implementation
+  $("#enroll-report-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       code: {
         required: true,
-        // similar validation
+        // unique
       },
       desc: {
         required: true
+      },
+      'section-name': {
+        required: true,
+        // unique
       }
     },
     messages: {
@@ -293,32 +322,60 @@ $(function () {
       },
       desc: {
         required: '<p class="text-danger user-select-none">Please enter program name!</p>'
+      },
+      'section-name': {
+        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  //program view form for improvement
-  $("#program-view-form").validate({
+  //unique rule, submit done, for implementation
+  $("#program-view-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
       code: {
         required: true,
-        // similar validation
+        // unique
       }
     },
     messages: {
       code: {
         required: '<p class="text-danger user-select-none">Please enter current code!</p>'
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  $("#faculty-form").validate({
+  //submit done, for implementation
+  $("#faculty-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules:{
       lastname:{
         required: true,
         lettersonly: true
       },
+      firstname:{
+        required: true,
+        lettersonly: true
+      },
+      middlename:{
+        required: true,
+        lettersonly: true
+      },
+      email: {
+        required: true,
+        email: true
+      },
       age: {
         required: true,
-        maximum: 2
+        maximum: 99
       },
     },
     messages:{
@@ -326,15 +383,34 @@ $(function () {
         required:'<p class="text-danger user-select-none">Please enter last name!</p>',
         lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
       },
+      firstname:{
+        required:'<p class="text-danger user-select-none">Please enter first name!</p>',
+        lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      middlename:{
+        required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
+        lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
+      },
+      email:{
+        required:'<p class="text-danger user-select-none">Please enter email!</p>',
+        email:'<p class="text-danger user-select-none">Please enter a valid email!</p>'
+      },
       age:{
         required: '<p class="text-danger user-select-none">Please enter age!</p>',
         maximum: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
       }
+    },
+    submitHandler: function(form) { 
+      form.submit();
+      return false;  //This doesn't prevent the form from submitting.
     }
   })
-  $("#student-form").validate({
+  //submit done, for implementation
+  $("#student-form").submit(function(event){
+    event.preventDefault();
+  }).validate({
     rules: {
-      'g_lastname': {
+      "g_lastname": {
         required: true,
         lettersonly: true
       },
@@ -348,8 +424,8 @@ $(function () {
       },
     },
     messages: {
-      'g_lastname': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
+      "g_lastname": {
+        required: '<p class="text-danger user-select-none">Please enter guardians last name!</p>',
         lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
       },
       'g_firstname': {
@@ -360,20 +436,25 @@ $(function () {
         required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
         lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
       },
+      submitHandler: function(form) { 
+        form.submit();
+        return false;  //This doesn't prevent the form from submitting.
+      }
     }
   })
+  //for questioning
   //program view form for improvement
-  $("#program-view-form").validate({
-    rules: {
-      code: {
-        required: true,
-        // similar validation
-      }
-    },
-    messages: {
-      code: {
-        required: '<p class="text-danger user-select-none">Please enter current code!</p>'
-      }
-    }
-  });
+  // $("#school-year-form").validate({
+  //   rules: {
+  //     code: {
+  //       required: true,
+  //       // similar validation
+  //     }
+  //   },
+  //   messages: {
+  //     code: {
+  //       required: '<p class="text-danger user-select-none">Please enter current code!</p>'
+  //     }
+  //   }
+  // });
 })

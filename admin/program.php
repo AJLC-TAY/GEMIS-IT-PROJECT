@@ -49,6 +49,9 @@ include('../class/Administration.php'); ?>
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <!-- VALIDATION -->
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 <script>
     var forms = document.querySelectorAll('.needs-validation');
 
