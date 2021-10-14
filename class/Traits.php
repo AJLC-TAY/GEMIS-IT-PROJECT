@@ -833,23 +833,21 @@ trait Enrollment
      *          1.1 Add student to a section and initialize subject classes.     
      *          1.2 Update enrollment attribute.
      */
-    public function validateEnrollment($stud_id, $current_sy, $is_valid)
+    public function validateEnrollment ()
     {
-        // session_start();
-        // $stud_id = $_POST['stud_id'];
-        // $is_valid = (isset($_POST['accept'])) ? 1
-        //     : (isset($_POST['reject']) ? 2 : 0);
+        // $stud_id, $current_sy, $is_valid
+        $stud_id = $_POST['stud_id'];
+        $current_sy = $_SESSION['sy_id'] = 9;
+        $is_valid = (isset($_POST['accept'])) ? 1
+            : (isset($_POST['reject']) ? 2 : 0);
 
         # Step 1
         if (!$is_valid) {
-            $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';"); // 110001
+            $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id' WHERE sy_id='$current_sy';"); // 110001
             return;
         }
 
         # query to join all school year table : SELECT sy.sy_id, syc_id, syc.curr_code, sycs_id, sycs.prog_code FROM schoolyear AS sy JOIN sycurriculum AS syc USING(sy_id) JOIN sycurrstrand AS sycs USING (syc_id);
-
-        // $current_sy = 29;
-        // $current_sy = $_SESSION['sy_id'];
         $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$current_sy';"));
         $grade_level = $enroll_detail['grade_level'];
         $prog_code = $enroll_detail['prog_code'];
@@ -1134,7 +1132,7 @@ trait Grade
     public function getAwardDataFromSubject()
     {
         $grd_param = 90;
-        $sub_code = 'WI1';
+        $sub_code = 'OCC1';
         $sy_id = 9;
         $data = [];
         $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, sub_code, enrolled_in AS grd
