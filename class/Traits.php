@@ -1102,7 +1102,7 @@ trait Grade
     public function getAwardDataFromSubject()
     {
         $grd_param = 90;
-        $sub_code = 'OCC1';
+        $sub_code = 'WI1';
         $sy_id = 9;
         $data = [];
         $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, sub_code, enrolled_in AS grd
@@ -1123,6 +1123,25 @@ trait Grade
         //         $data[$grd_level][$prog]['size'] = count($prog_list['students']);
         //     }
         // }    
+        return $data;
+    }
+
+    public function getPerfectAttendance() 
+    {
+        // $sy_id = $_GET['sy_id'] ?? $_SESSION['sy_id'];
+        $sy_id = 9;
+        $data = [];
+        $query = "SELECT stud_id, LRN, name, sex, program, grd FROM (SELECT s.stud_id, LRN, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''), COALESCE(ext_name,'')) AS name, 
+                    sex, SUM(no_of_present) AS total_attend, SUM(no_of_days) AS total_days, prog_code AS program, enrolled_in AS grd
+                    FROM attendance JOIN gradereport gr USING (report_id)
+                    JOIN student s ON s.stud_id = gr.stud_id
+                    JOIN enrollment e ON e.stud_id = s.stud_id
+                    JOIN academicdays USING (acad_days_id)
+                    WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS attend WHERE attend.total_attend = attend.total_days;";
+        $result = $this->query($query);
+        while($row = mysqli_fetch_assoc($result)) {
+            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
+        }
         return $data;
     }
 }
