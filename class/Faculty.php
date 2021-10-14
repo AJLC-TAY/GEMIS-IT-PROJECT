@@ -114,60 +114,10 @@ class FacultyModule extends Dbconfig
         }
     }
 
-    public function exportSubjectGradesToCSV () { 
-
-        // Fetch records from database 
-        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;"); 
-
-        if($query->num_rows > 0){ 
-            $delimiter = ","; 
-            $filename = "test.csv";//"student-grades" . date('Y-m-d') . ".csv"; // + code ng subject class
-     
-            // Create a file pointer 
-            $f = fopen('php://memory', 'w'); 
-            
-            // Set column headers 
-            $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
-            fputcsv($f, $fields, $delimiter); 
-     
-            // Output each row of the data, format line as csv and write to file pointer 
-            while($row = mysqli_fetch_assoc($query)){ 
-                //$status = ($row['status'] == 1)?'Active':'Inactive'; 
-                $lineData = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); 
-                fputcsv($f, $lineData, $delimiter); 
-            } 
-           
-            
-            // Move back to beginning of file 
-            fseek($f, 0); 
-     
- 
-     
-            //output all remaining data on a file pointer 
-            fpassthru($f); 
-        } 
-        fclose($f);
-        exit; 
-    }
-
-    public function tryExport(){
-        $filename = "student-grades" . date('Y-m-d') . ".csv";
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        $output = fopen('php://output', 'w');
-        $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
-        fputcsv($output, $fields);
-        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = 9101 AND sy_id=9;");
-        while($row = mysqli_fetch_assoc($query)){
-            $data = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); 
-            fputcsv($output, $data);
-        }
-        fclose($output);
-    }
+    
 
     public function importSubjectGradesToCSV () {
-        // Load the database configuration file
-        //if(isset($_POST['importSubmit'])){
+       
             
             // Allowed mime types
             $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
@@ -214,6 +164,8 @@ class FacultyModule extends Dbconfig
                 $qstring = '?status=invalid_file';
             }
         }
+    
+        
         
         // Redirect to the listing page
         // header("Location: index.php".$qstring);
@@ -251,38 +203,36 @@ class FacultyModule extends Dbconfig
     //     fpassthru($f);
     // }
 
-    //RETRIEVAL FOR STUDENT GRADE PER CLASS studentname | First_grading | second_grading | Final
-    //Store siya sa dataClass kaya dapat may class sa dataclass - classgrade
-    //Tapos JSON ung return niya 
-    public function getClassGrades(){
-        $teacher_id = $_GET['id'];
-        $sy_id = $_GET['sy_id']; 
-        $class_code = $_GET['class_code'];
-
-
-
-        $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
-        first_grading, second_grading, final_grade FROM student 
-        JOIN classgrade USING(stud_id) 
-        JOIN subjectclass USING(sub_class_code) 
-        JOIN sysub USING (sub_sy_id) 
-        JOIN subject USING (sub_code) 
-        WHERE teacher_id=$teacher_id
-        AND sub_class_code =$class_code
-        AND sy_id=$sy_id");
+    function getSchoolYearInfo($sy_id){
+        //implement session for sy_id then remove param
+        $row_temp = $this->query("SELECT current_quarter AS qtr, current_semester AS sem FROM schoolyear WHERE sy_id='$sy_id';");
+        $sy = mysqli_fetch_row($row_temp);
         
-        $class_grades = [];
-        while($grd = mysqli_fetch_assoc($res)) {
-            $class_grades[] = [
-                'lrn' => $grd['LRN'],
-                'name' => $grd['stud_name'],
-                'grd_1' => $grd['first_grading'],
-                'grd_2' => $grd['second_grading'],
-                'grd_f' => $grd['final_grade']
-            ];
-            
-        }
-
-        echo json_encode($class_grades);
+        return ['grading' => $sy[0],
+                'sem' => $sy[1]];
     }
+
+    public function editGrades() {
+        $stud_id = $_POST['studGrades'];
+        echo json_encode( $stud_id);
+        //$grade=;
+
+        //1 => first_grading
+        //2 => seon
+        //first grading //ganito muna di ko sure coniditional kung first,second,final ineedit ng user       
+       // $this->prepared_query("UPDATE `classgrade` SET `$grade` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+       //                      [$grade, $grade_id, $stud_id, $report_id, $sub_class_code],
+       //                     "iiii");  
+       //second grading
+    //    $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+    //                          [ $second_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
+    //                         "iiii");  
+
+                             
+    //    //final grade
+    //    $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
+    //                          [ $final_grade, $grade_id, $stud_id, $report_id, $sub_class_code],
+    //                         "iiii"); 
+   }
+    
 }

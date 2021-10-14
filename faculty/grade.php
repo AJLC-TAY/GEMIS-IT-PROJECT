@@ -8,11 +8,11 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 
 
-require_once ("../class/Faculty.php");
+require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
 //$sub_classes = [];
-$sub_classes = $faculty->getHandled_sub_classes($teacher_id );
+$sub_classes = $faculty->getHandled_sub_classes($teacher_id);
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -20,7 +20,9 @@ $adv_table_display = 'd-none';
 $sub_table_display = '';
 
 
-
+$schoolYearInfo = $faculty->getSchoolYearInfo($sy_id); //to be removed pag maayos ung sa session
+$sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
+$grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
@@ -30,7 +32,7 @@ if (count($sub_classes) != 0) {
         $sub_code = $sub_class->get_sub_code();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-             . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
             . "data-name='$section_name'>$section_name</option>";
     }
     $sub_class_opn .= "</optgroup>";
@@ -48,12 +50,13 @@ if (count($sub_classes) != 0) {
 </head>
 
 <body>
+    
     <!-- SPINNER -->
-    <!-- <div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
@@ -74,16 +77,16 @@ if (count($sub_classes) != 0) {
                                 </nav>
                                 <div class="row align-content-center">
                                     <div class="col-auto">
-                                        <h3 class="fw-bold" id ='class'></h3>
-                                        <span>Semester & Grading</span>
+                                        <h3 class="fw-bold" id='class'></h3>
+                                        <h4><?php echo $sem ?> Semester & <?php echo $grading ?> Quarter</h4>
                                     </div>
-                                    
+
                                 </div>
                             </header>
                             <!-- STUDENTS TABLE -->
                             <div class="container mt-1 w-75 ms-0">
                                 <div class="card w-100 h-auto bg-light" style="min-height: 70vh !important;">
-                                <form>
+
                                     <div class="d-flex justify-content-between mb-3">
                                         <!-- SEARCH BAR -->
                                         <div class="flex-grow-1 me-3">
@@ -96,45 +99,67 @@ if (count($sub_classes) != 0) {
                                                 ?>
                                             </select>
                                         </div>
-                                    
-                                    </div>
-                                    
-                                    <div class>
-                                        <button type="button" class="btn btn-secondary">Template</button>
-                                        <button type="button"  class="btn btn-secondary">Import</button>
-                                        <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form>
-                                        <!-- <button type="button" id = 'export' class="btn btn-secondary">Export</button> -->
-                                        <button type="button" class="btn btn-success">SAVE</button>
 
                                     </div>
-                                    
-                                    <table id="table" class="table-striped table-sm" >
-                                        <thead class='thead-dark'>
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th scope='col' data-width="150" data-align="center" data-field="lrn"></th>
-                                                <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true"  contenteditable="true" data-field="grd_1">1st Grade</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                                                <th scope='col' data-width="150" data-align="center" data-field="action" data-editable = "true">Actions</th>
-                                            </tr>
-                                        </thead>
-                                       
-                                    </table>
+
+                                    <div class>
+                                        <button type="button" class="btn btn-secondary">Template</button>
+                                        <button type="button" class="btn btn-secondary">Import</button>
+                                        <!-- <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form> -->
+                                        <button type="button" id='export' class="btn btn-secondary">Export</button>
+                                        <button type="button" class="btn btn-secondary" id="grade">Grade</button>
+                                        <button type="button" class="btn btn-success confirm" >SUBMIT</button>
+
+
+                                    </div>
+                                    <form id= 'grades'>
+                                        <table id="table" class="table-striped table-sm">
+                                            <thead class='thead-dark'>
+                                                <tr>
+                                                    <th scope='col' data-width="150" data-align="center" data-field="lrn"></th>
+                                                    <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1">1st Quarter</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Quarter</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
+                                                </tr>
+                                            </thead>
+
+                                        </table>
                                     </form>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
+    
+                
                 <!-- FOOTER START -->
                 <?php include_once("../inc/footer.html"); ?>
                 <!-- FOOTER END -->
             </section>
         </section>
     </section>
+    <div class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Are you sure you want to submit?</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <p class="modal-msg">Submitted grades are final and cannot be edited.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn close-btn btn-success submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
     <!-- MAIN CONTENT END -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0; right: 0;">
@@ -147,7 +172,9 @@ if (count($sub_classes) != 0) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-   
+    <script>
+        var currentGrading = '<?php echo $grading; ?>';
+    </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>
 

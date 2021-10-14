@@ -1071,6 +1071,38 @@ trait Grade
         return $grades;
     }
 
+    public function getClassGrades(){
+        $teacher_id = $_GET['id'];
+        $sy_id = $_GET['sy_id']; 
+        $class_code = $_GET['class_code'];
+
+
+
+        $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
+        first_grading, second_grading, final_grade FROM student 
+        JOIN classgrade USING(stud_id) 
+        JOIN subjectclass USING(sub_class_code) 
+        JOIN sysub USING (sub_sy_id) 
+        JOIN subject USING (sub_code) 
+        WHERE teacher_id=$teacher_id
+        AND sub_class_code =$class_code
+        AND sy_id=$sy_id");
+        
+        $class_grades = [];
+        while($grd = mysqli_fetch_assoc($res)) {
+            $class_grades[] = [
+                'lrn' => $grd['LRN'],
+                'name' => $grd['stud_name'],
+                'grd_1' => "<input name='data[{$grd['LRN']}][grd_1'] class='form-control form-control-sm text-center mb-0 First number' readonly value='{$grd['first_grading']}'>",
+                'grd_2' => "<input name='data[{$grd['LRN']}][grd_2'] class='form-control form-control-sm text-center mb-0 Second' readonly value='{$grd['second_grading']}'>",
+                'grd_f' => "<input name='data[{$grd['LRN']}][grd_f'] class='form-control form-control-sm text-center mb-0 Number' readonly value='{$grd['final_grade']}'>"
+            ];
+            
+        }
+
+        echo json_encode($class_grades);
+    }
+
     public function getAwardExcellenceData() 
     {
         $is_graduating = false;

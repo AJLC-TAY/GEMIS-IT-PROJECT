@@ -32,16 +32,30 @@ function setTableData (classType, url) {
 
 
 $(function() {
-    preload('#grades');
+    
+    // $("."+currentGrading).removeAttr("readonly");
+    
+    preload('#grade');
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
     });
 
+    // $("#grade").click();
+    // $(document).on("click", "#grade", function(e) {
+    //     console.log("clicked");
+    //     $("."+currentGrading).removeAttr("readonly");
+    // });
+
+    // document.getElementById("grade").addEventListener("click", grading());
+    function grading(){
+        console.log("clicked grade");
+        $("."+currentGrading).removeAttr("readonly");
+    }
+
     // Display current/selected section name
     let firstClass = $("#classes option:selected");
     if (firstClass != null) {
-        console.log(firstClass);
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
@@ -54,7 +68,6 @@ $(function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
         url = selected.attr("data-url");
-        console.log(url);
         sectionName = selected.attr("data-name");
         classType = selected.attr("data-class-type");
 
@@ -65,15 +78,27 @@ $(function() {
         setTableData(classType, url);
     })
 
-    $('#export').click(function(e){
-        console.log("clicked");
-        var action = 'export';
-        $.post("action.php", {action}, function(data) {	
+    $(document).on("click", "#grade", () => {
+        $("."+currentGrading).removeAttr("readonly");
+    });
+
+    $(document).on("click", ".confirm", () => {
+        $(".grading-confirmation").modal("toggle");
+    });
+
+    $(document).on("click", ".submit", function(e)  {
+        // let studGrades = new FormData();
+        var studGrades = $("#grades").serializeArray();
+        var action = 'gradeClass';        
+        console.log(studGrades);
+        $.post("action.php", {studGrades, action}, function(data) {	
+            console.log(data);
         });
 
-    })
+        $('.grading-confirmation').modal().hide();
+        
 
-
+    });
 
     hideSpinner();
 });
