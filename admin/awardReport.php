@@ -134,6 +134,9 @@ include_once("../inc/head.html"); ?>
                                 case 'sp': # sp for specific
                                     require_once("award/awardGeneric.php");
                                     break;
+                                case 'pa': # pa for perfect attendance
+                                    require_once("award/perfectAttendance.php");
+                                    break;
                             }
                         } else {
                             require_once("award/awardCards.php");

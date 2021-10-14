@@ -49,9 +49,9 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                 </nav>
                                 <div class="d-flex">
                                     <div class="col-auto">
-                                        <p class="text-secondary m-0"><small>First Semester</small></p>
-                                        <h3 class="m-0">12 ABM A</h3>
-                                        <h6 class="m-0">Attendance</h6>
+                                        <p class="text-secondary m-0"><medium>First Semester</medium></p>
+                                        <h3 class="m-0 fw-bold">12 ABM A</h3>
+                                        <h5 class="m-0">Attendance</h5>
                                     </div>
                                 </div>
                                 <hr class="mt-3 mb-4">
@@ -62,29 +62,28 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                 <div class="card w-100 h-auto bg-light">
                                     <form id="attendance-form" action="action.php" method="POST">
                                         <input type="hidden" name="action" value="changeAttendance">
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex justify-content-between mb-3">
                                             <!-- SEARCH BAR -->
-                                            <div class="col-8 d-inline-flex align-content-center">
-                                                <div class="col-6 me-2">
-                                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                                                </div>
-                                                <div class="col-4 me-2">
-                                                    <select name="month" class="form-select form-select-sm">
-                                                        <?php
-                                                        foreach($months as $month) {
-                                                            echo "<option value='$month' ". ($month == $current_month ? "selected" : "") .">$month</option>";
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="text" name="academicDays" class="form-control form-control-sm number" placeholder="Days" title="Academic Days">
-                                                </div>
+                                            <span class="flex-grow-1 me-3">
+                                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                            </span>
+                                            <div class="col-2 me-2">
+                                                <select name="month" class="form-select form-select-sm">
+                                                    <?php
+                                                    foreach ($months as $month) {
+                                                        echo "<option value='$month' " . ($month == $current_month ? "selected" : "") . ">$month</option>";
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
+                                            <div class="col-1">
+                                                <input type="text" name="academicDays" class="form-control form-control-sm number" placeholder="Days" title="Academic Days">
+                                            </div>
+
                                             <div class="col-auto">
-                                                <button class="link btn btn-sm edit-btn">Edit</button>
+                                                <button class="link btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                                 <div class="edit-options" style="display: none;">
-                                                    <a href="attendance.php" role="button" class="btn btn-sm btn-dark me-1">Cancel</a>
+                                                    <a href="attendance.php" role="button" class="btn btn-sm btn-outline-dark me-1 ms-2">Cancel</a>
                                                     <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">
                                                 </div>
                                             </div>
@@ -101,7 +100,7 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                                 </tr>
                                             </thead>
                                         </table>
-                                    </div>
+                                </div>
                                 </form>
                             </div>
                         </div>
@@ -125,7 +124,9 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>let currentClass = <?php echo json_encode($class); ?>; </script>
+    <script>
+        let currentClass = <?php echo json_encode($class); ?>;
+    </script>
     <script type="module" src="../js/faculty/attendance.js"></script>
 
 </body>

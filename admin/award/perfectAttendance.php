@@ -1,9 +1,9 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-$data = $admin->getAwardDataFromSubject();
+$data = $admin->getPerfectAttendance();
 $school_year = $_SESSION['school_year'];
-$filename = "Academic_Excellence_$school_year";
+$filename = "Perfect_Attendance_$school_year";
 $date_desc = date("F j, Y");
 $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
 $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");
@@ -16,12 +16,12 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
             <li class="breadcrumb-item"><a href="awardReport.php">Awards</a></li>
-            <li class="breadcrumb-item active">Award for Research</li>
+            <li class="breadcrumb-item active">Perfect Attendance Award</li>
         </ol>
     </nav>
     <div class="d-flex flex-column mb-3">
         <h6 class="fw-bold">Preview</h6>
-        <h3>Award for Research</h3>
+        <h3>Perfect Attendance</h3>
         <hr class='m-1'>
         <p class='text-secondary'><?php echo $school_year; ?></p>
     </div>
@@ -53,10 +53,12 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                 </div>
             </div>
 
-            <h6 class="text-center m-0"><b>AWARD FOR RESEARCH</b></h6>
+            <h6 class="text-center m-0"><b>Perfect Attendance</b></h6>
             <h6 class="text-center m-0"><small>SY <?php echo $school_year; ?></small></h6>
-
             <?php 
+            if (empty($data)) {
+                echo "<h4 class='my-5 text-center'>No students have perfect attendance</h4>";
+            }
             foreach($data as $grd_level => $val) {
                 foreach($val as $prog_code => $prog_data) {
                     echo "<table class='table-bordered table w-100 table-sm text-center my-3'>"
@@ -65,17 +67,17 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                                 <th colspan='3'>$prog_code $grd_level</th>
                             </tr>
                             <tr>
+                                <th>LRN</th>
                                 <th>Student Name</th>
                                 <th>Sex</th>
-                                <th>Grade</th>
                             </tr>
                         </thead>";
                     echo "<tbody>";
                     foreach ($prog_data['students'] as $record) {
                         echo "<tr>
+                            <td>{$record['lrn']}</td>
                             <td class='text-start ps-3'>{$record['name']}</td>
                             <td>{$record['sex']}</td>
-                            <td class='fw-bold'>{$record['fg']}</td>
                         </tr>";
                     }
                     echo "</tbody></table>";
