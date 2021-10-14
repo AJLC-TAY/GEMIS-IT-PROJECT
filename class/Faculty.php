@@ -213,26 +213,18 @@ class FacultyModule extends Dbconfig
     }
 
     public function editGrades() {
-        $stud_id = $_POST['studGrades'];
-        echo json_encode( $stud_id);
-        //$grade=;
+        $stud_id = $_POST['id'];
+        $grading = $_POST['grading'];
+        $grade = $_POST['grade'];
+        $code = $_POST['code'];
 
-        //1 => first_grading
-        //2 => seon
-        //first grading //ganito muna di ko sure coniditional kung first,second,final ineedit ng user       
-       // $this->prepared_query("UPDATE `classgrade` SET `$grade` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
-       //                      [$grade, $grade_id, $stud_id, $report_id, $sub_class_code],
-       //                     "iiii");  
-       //second grading
-    //    $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
-    //                          [ $second_grading, $grade_id, $stud_id, $report_id, $sub_class_code],
-    //                         "iiii");  
-
-                             
-    //    //final grade
-    //    $this->prepared_query("UPDATE `classgrade` SET `second_grading` =? WHERE `classgrade`.`grade_id` =? AND `classgrade`.`stud_id` = ? AND `classgrade`.`report_id` = ? AND `classgrade`.`sub_class_code` = ?;",
-    //                          [ $final_grade, $grade_id, $stud_id, $report_id, $sub_class_code],
-    //                         "iiii"); 
+        echo($stud_id);
+        echo($grading);
+        echo($grade);
+        echo($code);
+     
+       $this->prepared_query("UPDATE `classgrade` SET `$grading` =? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
+                            [$grade, $stud_id, $code],"iii");  
    }
     
 }

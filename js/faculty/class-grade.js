@@ -29,7 +29,7 @@ function setTableData (classType, url) {
     classGradeTable.bootstrapTable("refresh", {url});
 }
 
-
+var code = '';
 
 $(function() {
     
@@ -41,11 +41,6 @@ $(function() {
         width: "100%"
     });
 
-    // $("#grade").click();
-    // $(document).on("click", "#grade", function(e) {
-    //     console.log("clicked");
-    //     $("."+currentGrading).removeAttr("readonly");
-    // });
 
     // document.getElementById("grade").addEventListener("click", grading());
     function grading(){
@@ -57,17 +52,17 @@ $(function() {
     let firstClass = $("#classes option:selected");
     if (firstClass != null) {
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
+        code = firstClass.val();
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
-        // toggleGradesColumn(classType);
-        // initializeTable(classType, firstClass.attr("data-url"));
-        changeName(classTmp);
+        changeName(classTmp) ;
     }
 
     $(document).on("change", "#classes", function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
         url = selected.attr("data-url");
+        code = selected.val();
         sectionName = selected.attr("data-name");
         classType = selected.attr("data-class-type");
 
@@ -78,7 +73,7 @@ $(function() {
         setTableData(classType, url);
     })
 
-    $(document).on("click", "#grade", () => {
+    $(document).on("click", ".grade", () => {
         $("."+currentGrading).removeAttr("readonly");
     });
 
@@ -88,16 +83,25 @@ $(function() {
 
     $(document).on("click", ".submit", function(e)  {
         // let studGrades = new FormData();
-        var studGrades = $("#grades").serializeArray();
-        var action = 'gradeClass';        
-        console.log(studGrades);
-        $.post("action.php", {studGrades, action}, function(data) {	
-            console.log(data);
-        });
+        var studGrades = $("#grades").serializeArray();        
+        studGrades.forEach(element => {
+            
+            var recordInfo = element['name'].split("/")
+            
+            var grades  = {'id' : recordInfo[0],
+                            'grading' : recordInfo[1],
+                            'grade': element['value'],
+                            'code' : code,
+                            'action' : 'gradeClass'};
 
-        $('.grading-confirmation').modal().hide();
-        
+            $.post("action.php", grades, function(data) {	
+            });
 
+        });        
+        $('.grading-confirmation').modal('hide');
+
+        $(".number").attr('readOnly',true);
+        // $(".grade").addClass('hidden');
     });
 
     hideSpinner();

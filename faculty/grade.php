@@ -107,7 +107,7 @@ if (count($sub_classes) != 0) {
                                         <button type="button" class="btn btn-secondary">Import</button>
                                         <!-- <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form> -->
                                         <button type="button" id='export' class="btn btn-secondary">Export</button>
-                                        <button type="button" class="btn btn-secondary" id="grade">Grade</button>
+                                        <button type="button" class="btn btn-secondary grade">Grade</button>
                                         <button type="button" class="btn btn-success confirm" >SUBMIT</button>
 
 
@@ -116,7 +116,7 @@ if (count($sub_classes) != 0) {
                                         <table id="table" class="table-striped table-sm">
                                             <thead class='thead-dark'>
                                                 <tr>
-                                                    <th scope='col' data-width="150" data-align="center" data-field="lrn"></th>
+                                                    <th scope='col' data-width="150" data-align="center" data-field="stud_id"></th>
                                                     <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1">1st Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Quarter</th>
@@ -174,6 +174,7 @@ if (count($sub_classes) != 0) {
     <script src="../js/common-custom.js"></script>
     <script>
         var currentGrading = '<?php echo $grading; ?>';
+        var code = '<?php echo $section_code; ?>';
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>

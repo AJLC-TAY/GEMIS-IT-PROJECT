@@ -1078,7 +1078,7 @@ trait Grade
 
 
 
-        $res = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
+        $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
         first_grading, second_grading, final_grade FROM student 
         JOIN classgrade USING(stud_id) 
         JOIN subjectclass USING(sub_class_code) 
@@ -1091,11 +1091,11 @@ trait Grade
         $class_grades = [];
         while($grd = mysqli_fetch_assoc($res)) {
             $class_grades[] = [
-                'lrn' => $grd['LRN'],
+                'stud_id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
-                'grd_1' => "<input name='data[{$grd['LRN']}][grd_1'] class='form-control form-control-sm text-center mb-0 First number' readonly value='{$grd['first_grading']}'>",
-                'grd_2' => "<input name='data[{$grd['LRN']}][grd_2'] class='form-control form-control-sm text-center mb-0 Second' readonly value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='data[{$grd['LRN']}][grd_f'] class='form-control form-control-sm text-center mb-0 Number' readonly value='{$grd['final_grade']}'>"
+                'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' readonly value='{$grd['first_grading']}'>",
+                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' readonly value='{$grd['second_grading']}'>",
+                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' readonly value='{$grd['final_grade']}'>"
             ];
             
         }
