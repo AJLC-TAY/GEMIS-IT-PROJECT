@@ -87,7 +87,7 @@ if (in_array('award_coor', $roles)) {
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="attendance" href="attendance.php">
+                <a id="attendance" href="awards.php">
                     <i class="bi bi-award-fill"></i>
                     <span>Awards</span>
                 </a>
