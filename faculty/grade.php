@@ -8,6 +8,7 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 
 
+
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
@@ -107,7 +108,6 @@ if (count($sub_classes) != 0) {
                                         <button type="button" class="btn btn-secondary">Import</button>
                                         <!-- <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form> -->
                                         <button type="button" id='export' class="btn btn-secondary">Export</button>
-                                        <button type="button" class="btn btn-secondary grade">Grade</button>
                                         <button type="button" class="btn btn-success confirm" >SUBMIT</button>
 
 

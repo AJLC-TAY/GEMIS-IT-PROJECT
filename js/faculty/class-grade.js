@@ -33,20 +33,12 @@ var code = '';
 
 $(function() {
     
-    // $("."+currentGrading).removeAttr("readonly");
     
     preload('#grade');
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
     });
-
-
-    // document.getElementById("grade").addEventListener("click", grading());
-    function grading(){
-        console.log("clicked grade");
-        $("."+currentGrading).removeAttr("readonly");
-    }
 
     // Display current/selected section name
     let firstClass = $("#classes option:selected");
@@ -73,10 +65,6 @@ $(function() {
         setTableData(classType, url);
     })
 
-    $(document).on("click", ".grade", () => {
-        $("."+currentGrading).removeAttr("readonly");
-    });
-
     $(document).on("click", ".confirm", () => {
         $(".grading-confirmation").modal("toggle");
     });
@@ -95,12 +83,14 @@ $(function() {
                             'action' : 'gradeClass'};
 
             $.post("action.php", grades, function(data) {	
+                classGradeTable.bootstrapTable("refresh")
+                
             });
 
         });        
         $('.grading-confirmation').modal('hide');
-
         $(".number").attr('readOnly',true);
+        
         // $(".grade").addClass('hidden');
     });
 
