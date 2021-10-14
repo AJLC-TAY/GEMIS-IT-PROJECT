@@ -1,5 +1,6 @@
-$(function () {
 
+
+$(function () {
   $.validator.setDefaults({
     errorClass: 'help-block',
     highlight: function (element) {
@@ -20,7 +21,18 @@ $(function () {
       }
     }
   });
-
+  var codes = '<?php echo json_encode($currarray); ?>';
+  $.mockjax({
+    url: "unique.action",
+    response: function(settings) {
+      var code = settings.data.code,
+        this.responseText = "true";
+      if ($.inArray(code, codes) !== -1) {
+        this.responseText = "false";
+      }
+    },
+    responseTime: 500
+  });
   $.validator.addMethod('strongPassword', function (value, element) {
     return this.optional(element)
       || value.length >= 6
@@ -29,7 +41,7 @@ $(function () {
   }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
 //implementing validation
   // done final, done implementation final
-  $("#admin-form").submit(function(event){
+  $("#admin-form").on("submit", function(event){
     event.preventDefault();
   }).validate({
     rules: {
@@ -57,8 +69,7 @@ $(function () {
     messages: {
       lastname: {
         required: '<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Last name is letters only!</p>',
-        minimum: '<p class="text-danger user-select-none">Please enter more than 2 characters!</p>'
+        lettersonly: '<p class="text-danger user-select-none">Last name is letters only!</p>'
       },
       firstname: {
         required: '<p class="text-danger user-select-none">Please enter first name!</p>',
@@ -82,34 +93,9 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   })
-  //submit done, unique rule left, for implementation
-  $("#curriculum-form").submit(function(event){
-    event.preventDefault();
-  }).validate({
-    rules: {
-      code: {
-        required: true,
-        //unique
-      },
-      name: {
-        required: true
-      }
-    },
-    messages: {
-      code: {
-        required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>'
-      },
-      name: {
-        required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
-      },
-      submitHandler: function(form) { 
-        form.submit();
-        return false;  //This doesn't prevent the form from submitting.
-      }
-    }
-  })
+
   //unique rule, submit done, for implementation 
-  $("#prog-form").submit(function(event){
+  $("#prog-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -136,7 +122,7 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#enrollment-form").submit(function(event){
+  $("#enrollment-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -221,7 +207,7 @@ $(function () {
     }
   })
   //unique rule, submit done, for implementation and testing
-  $("#section-form").submit(function(event){
+  $("#section-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -241,7 +227,7 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#program-form").submit(function(event){
+  $("#program-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -300,7 +286,7 @@ $(function () {
     }
   })
   // unique rule, submit done, for implementation
-  $("#enroll-report-form").submit(function(event){
+  $("#enroll-report-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -333,7 +319,7 @@ $(function () {
     }
   })
   //unique rule, submit done, for implementation
-  $("#program-view-form").submit(function(event){
+  $("#program-view-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -353,7 +339,7 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#faculty-form").submit(function(event){
+  $("#faculty-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules:{
@@ -375,7 +361,6 @@ $(function () {
       },
       age: {
         required: true,
-        maximum: 99
       },
     },
     messages:{
@@ -396,8 +381,7 @@ $(function () {
         email:'<p class="text-danger user-select-none">Please enter a valid email!</p>'
       },
       age:{
-        required: '<p class="text-danger user-select-none">Please enter age!</p>',
-        maximum: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
+        required: '<p class="text-danger user-select-none">Please enter age!</p>'
       }
     },
     submitHandler: function(form) { 
@@ -406,7 +390,7 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#student-form").submit(function(event){
+  $("#student-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -458,3 +442,35 @@ $(function () {
   //   }
   // });
 })
+$('#add-modal').on('shown.bs.modal', function () {
+  $('#myInput').validate({
+
+  })
+})
+  //submit done, unique rule left, for implementation
+  $("#curriculum-form").on("submit", function(event) {
+    event.preventDefault();
+  }).validate({
+    rules: {
+      code: {
+        required: true,
+        remote: "unique.action"
+      },
+      name: {
+        required: true
+      }
+    },
+    messages: {
+      code: {
+        required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>',
+        remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
+      },
+      name: {
+        required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
+      },
+      submitHandler: function(form) { 
+        form.submit();
+        return false;  //This doesn't prevent the form from submitting.
+      }
+    }
+  })

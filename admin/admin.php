@@ -122,6 +122,7 @@ include_once("../inc/head.html");
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!-- VALIDATION -->
     <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/jquery.mockjax.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
     <script src="../js/validation/validation.js"></script>
     <!--CUSTOM JS-->
