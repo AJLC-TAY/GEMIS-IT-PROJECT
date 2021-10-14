@@ -1174,6 +1174,29 @@ trait Grade
         }
         return $data;
     }
+
+    public function getConductAward()
+    {
+        $data = [];
+        $sy_id = 9;
+        $min = 3;
+        $query = "SELECT * FROM (SELECT s.stud_id, LRN, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''), COALESCE(ext_name,'')) AS name, 
+                        sex, prog_code AS program, enrolled_in AS grd, COUNT(CASE WHEN marking = 'SO' THEN 1 ELSE NULL END) AS counts, section_code, section_name
+                        FROM gradereport gr
+                        JOIN student s ON s.stud_id = gr.stud_id
+                        JOIN enrollment e ON e.stud_id = s.stud_id
+                        JOIN observedvalues o ON o.report_id = gr.report_id
+                        JOIN section USING (section_code)
+                        WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS conduct WHERE conduct.counts >= '$min';";
+        $result = $this->query($query);
+        while($row = mysqli_fetch_assoc($result)) {
+            $section_code = $row['section_code'];
+            $grd = $row['grd'];
+            $data[$grd][$section_code]['section_name'] = $row['section_name'];
+            $data[$grd][$section_code]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
+        }
+        return $data;   
+    }
 }
 
 
