@@ -12,27 +12,12 @@ let tableSetup = {
 
 
 let classGradeTable = $("#table").bootstrapTable(tableSetup);
-
 /** Changes the name of class in the card */
+
 function changeName(name) {
     $("#class").html(name);
 }
 
-/**
- * Initializes the table given the class type and data url
- * @param {String} classType Values can either be 'advisory' or 'sub-class'.
- * @param {String} url       The url from which the data will be retrieved.
- * @returns {jQuery|*}       Bootstrap-table object.
- */
-function initializeTable (classType, url) {
-    tableSetup.url = url;
-    // if (classType === 'advisory') {
-    //     return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
-    // }
-    // if (classType === 'sub-class') {
-    //     return subClassTable = $("#sub-table").bootstrapTable(tableSetup);
-    // }
-}
 
 /**
  *
@@ -42,52 +27,43 @@ function initializeTable (classType, url) {
  */
 function setTableData (classType, url) {
     classGradeTable.bootstrapTable("refresh", {url});
-    // if (classType === 'advisory') {
-    //     try {
-    //         advisoryTable.bootstrapTable('refresh', {url});
-    //     } catch (e) {
-    //         return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
-    //     }
-    //     return;
-    // }
-    // if (classType === 'sub-class') {
-    //     try {
-    //         subClassTable.bootstrapTable('refresh', {url});
-    //     } catch (e) {
-    //         tableSetup.url = url;
-    //         return subClassTable = $("#sub-table").bootstrapTable(tableSetup);
-    //     }
-    // }
 }
 
-
+var code = '';
 
 $(function() {
-    preload('#grades');
-
+    
+    // $("."+currentGrading).removeAttr("readonly");
+    
+    preload('#grade');
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
     });
 
+
+    // document.getElementById("grade").addEventListener("click", grading());
+    function grading(){
+        console.log("clicked grade");
+        $("."+currentGrading).removeAttr("readonly");
+    }
+
     // Display current/selected section name
     let firstClass = $("#classes option:selected");
     if (firstClass != null) {
-        console.log(firstClass);
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
+        code = firstClass.val();
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
-        // toggleGradesColumn(classType);
-        // initializeTable(classType, firstClass.attr("data-url"));
-        changeName(classTmp);
+        changeName(classTmp) ;
     }
 
     $(document).on("change", "#classes", function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
-        url = selected.attr("data-url") + selected.attr("data-code");
-        console.log(url);
-        sectionName = selected.attr("data-code");
+        url = selected.attr("data-url");
+        code = selected.val();
+        sectionName = selected.attr("data-name");
         classType = selected.attr("data-class-type");
 
         // toggleGradesColumn(classType);
@@ -97,15 +73,36 @@ $(function() {
         setTableData(classType, url);
     })
 
-    $('#export').click(function(e){
-        console.log("clicked");
-        var action = 'export';
-        $.post("action.php", {action}, function(data) {	
-        });
+    $(document).on("click", ".grade", () => {
+        $("."+currentGrading).removeAttr("readonly");
+    });
 
-    })
+    $(document).on("click", ".confirm", () => {
+        $(".grading-confirmation").modal("toggle");
+    });
 
+    $(document).on("click", ".submit", function(e)  {
+        // let studGrades = new FormData();
+        var studGrades = $("#grades").serializeArray();        
+        studGrades.forEach(element => {
+            
+            var recordInfo = element['name'].split("/")
+            
+            var grades  = {'id' : recordInfo[0],
+                            'grading' : recordInfo[1],
+                            'grade': element['value'],
+                            'code' : code,
+                            'action' : 'gradeClass'};
 
+            $.post("action.php", grades, function(data) {	
+            });
+
+        });        
+        $('.grading-confirmation').modal('hide');
+
+        $(".number").attr('readOnly',true);
+        // $(".grade").addClass('hidden');
+    });
 
     hideSpinner();
 });
