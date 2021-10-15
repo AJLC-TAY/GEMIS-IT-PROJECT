@@ -1,4 +1,7 @@
 <?php
+require_once("../inc/sessionHandling.php");
+include_once("../inc/head.html");
+
 session_start();
 $_SESSION['user_type'] = 'FA';
 $_SESSION['id'] = 1;
@@ -7,81 +10,173 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 $_SESSION['roles'] = ['can_enroll', 'award_coor'];
 include_once("../inc/head.html");
+
+
+include("../class/Administration.php");
+$admin = new Administration();
+$result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest' 
+                        WHEN award_code = 'ae1_highHonors' THEN 'High'
+                        WHEN award_code = 'ae1_withHonors' THEN 'With' END AS info, 
+                        min_gwa AS min, max_gwa AS max
+                        FROM academicexcellence;");
+$param = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
+}
 ?>
-
-<title>Award Parameters | GEMIS</title>
-<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
+<title>Award | GEMIS</title>
+<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
-<header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Award Parameters</a></li>
-        </ol>
-    </nav>
-</header>
 
 <body>
     <!-- SPINNER -->
-    <!--<div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/facultySidebar.php'); ?>
-        <!-- MAIN CONTENT START -->
+        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <!--MAIN CONTENT -->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row mt ps-3">
+                    <div class="row ps-3">
+                        <header>
+                            <!-- BREADCRUMB -->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                    <li class="breadcrumb-item active">Award</a></li>
+                                </ol>
+                            </nav>
                             <div class="d-flex justify-content-between mb-3">
                                 <h3 class="fw-bold">Award Parameters</h3>
-
                             </div>
+                        </header>
+                        <div class="container w-75">
+                            <div class="card row mb-4">
+                                <h4>Academic Excellence</h4>
+                                <hr>
+                                <form id="acad-parameter-form" action="action.php" method="post">
+                                    <input type="hidden" name="editAcadParameters">
+                                    <div class="container">
+                                        <div class="form-row row align-content-center mb-3 text-center fw-bold">
+                                            <label class="col-form-label col-4">Description</label>
+                                            <div class="col-8 pt-2">Range (Min - Max)</div>
+                                        </div>
+                                        <?php
+                                        foreach ($param as $info => $range) {
+                                            echo "<div class='form-row row align-content-center'>
+                                                    <label class='col-form-label col-md-4'>$info Honor</label>";
+                                            foreach ($range as $val) {
+                                                echo "<div class='col-4'>
+                                                                <input value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                                            </div>";
+                                            }
+                                            echo "</div>";
+                                        }
+                                        ?>
+                                    </div>
+                                    <!-- <input type="submit" form="acad-parameter-form" class="form-control form-control-sm btn-success" value="Save"> -->
+                                </form>
+                            </div>
+                            <div class="card row mb-4">
+                                <h4>Conduct Award</h4>
+                                <hr>
+                                <div class="container">
+                                    <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
 
-                            <div class='container'>
-                                <div class="card w-100 h-auto bg-light">
-                                    <table id="table" class="table-striped">
-                                        <thead class='thead-dark'>
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <!-- SEARCH BAR -->
-                                                <span class="flex-grow-1 me-3">
-                                                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                                                </span>
-                                            </div>
-
-                                            <tr>
-                                                <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Description</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="enroll-date">Award Type</th>
-                                                <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
                                 </div>
+
                             </div>
+                            <div class="card row mb-4">
+                                <h4>Other Awards </h4>
+                                <hr>
+                                <div class="container">
+                                    <div class='form-row row align-content-center justify-content-end text-center mt-1'>
+                                        <div class="col-6">
+                                            <b>Awards for</b>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class='fw-bold'>Minimum Grade</p>
+                                        </div>
+                                    </div>
+                                    <div class='form-row row align-content-center'>
+                                        <label class='col-form-label col-md-6'>Research</label>
+                                        <div class="col-md-6">
+                                            <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                        </div>
+                                    </div>
+                                    <div class='form-row row align-content-center'>
+                                        <label class='col-form-label col-md-6'>Outstanding Performance in Specific Disciplines</label>
+                                        <div class="col-md-6">
+                                            <input value='90' name='outstanding' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                        </div>
+                                    </div>
+                                    <div class='form-row row align-content-center'>
+                                        <label class='col-form-label col-md-6'>Work Immersion Senior High</label>
+                                        <div class="col-md-6">
+                                            <input value='90' name='immersion' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, prog_code, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' WHEN (general_average>= 95 AND general_average <= 97) THEN 'high' WHEN (general_average>= 98 AND general_average <=100) THEN 'highest' END AS remark FROM `gradereport` JOIN student USING (stud_id) JOIN enrollment USING (stud_id) WHERE general_average>= 90;
+
                         </div>
-                        <!-- FOOTER START -->
-                        <?php include_once("../inc/footer.html"); ?>
-                        <!-- FOOTER END -->
+                        <?php
+                        // if (isset($_GET['award_code'])){
+                        //     include_once("award/awardView.php");
+                        //     $jsFilePath = "../js/admin/award.js";
+                        // } else {
+                        //     include_once("award/awardCards.php");
+                        //     $jsFilePath = "../js/admin/award.js";
+                        // }
+                        ?>
                     </div>
                 </div>
             </section>
+            <!-- FOOTER -->
+            <?php include_once("../inc/footer.html"); ?>
+            <!-- FOOTER END -->
         </section>
     </section>
-    <!-- MAIN CONTENT END -->
-
-
-    <!--BOOTSTRAP TABLE JS-->
-    <script src='../assets/js/bootstrap-table.min.js'></script>
-    <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-    <!--CUSTOM JS-->
-    <script src="../js/common-custom.js"></script>
-    <script type='module' src='../js/admin/faculty.js'></script>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 </body>
+<!-- VALIDATION -->
+<script>
+    var forms = document.querySelectorAll('.needs-validation');
+
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation();
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    });
+</script>
+
+<!-- JQUERY FOR BOOTSTRAP TABLE -->
+<script src="../assets/js/bootstrap-table.min.js"></script>
+<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+<script type="text/javascript" src="../js/common-custom.js"></script>
+<!-- <script type="module" src="<?php // echo $jsFilePath; 
+                                ?>"></script> -->
+<script>
+    $(function() {
+        preload("#curriculum");
+        hideSpinner();
+    });
+</script>
 
 </html>

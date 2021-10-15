@@ -77,6 +77,12 @@ $school_year = $_SESSION['school_year'];
                 </ul>
             </li>
             <li class="sub-menu">
+                <a id="awards" href="award.php">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Awards</span>
+                </a>
+            </li>
+            <li class="sub-menu">
                 <a id='signatory' href="signatory.php">
                     <i class="fa fa-pencil-square-o"></i>
                     <span>Signatory Management</span>
