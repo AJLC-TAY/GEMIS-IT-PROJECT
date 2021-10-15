@@ -418,7 +418,6 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        echo($teacher_id);
         $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
                   JOIN subject AS s USING (sub_code) 
@@ -833,23 +832,21 @@ trait Enrollment
      *          1.1 Add student to a section and initialize subject classes.     
      *          1.2 Update enrollment attribute.
      */
-    public function validateEnrollment($stud_id, $current_sy, $is_valid)
+    public function validateEnrollment ()
     {
-        // session_start();
-        // $stud_id = $_POST['stud_id'];
-        // $is_valid = (isset($_POST['accept'])) ? 1
-        //     : (isset($_POST['reject']) ? 2 : 0);
+        // $stud_id, $current_sy, $is_valid
+        $stud_id = $_POST['stud_id'];
+        $current_sy = $_SESSION['sy_id'] = 9;
+        $is_valid = (isset($_POST['accept'])) ? 1
+            : (isset($_POST['reject']) ? 2 : 0);
 
         # Step 1
         if (!$is_valid) {
-            $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';"); // 110001
+            $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id' WHERE sy_id='$current_sy';"); // 110001
             return;
         }
 
         # query to join all school year table : SELECT sy.sy_id, syc_id, syc.curr_code, sycs_id, sycs.prog_code FROM schoolyear AS sy JOIN sycurriculum AS syc USING(sy_id) JOIN sycurrstrand AS sycs USING (syc_id);
-
-        // $current_sy = 29;
-        // $current_sy = $_SESSION['sy_id'];
         $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$current_sy';"));
         $grade_level = $enroll_detail['grade_level'];
         $prog_code = $enroll_detail['prog_code'];
@@ -1075,7 +1072,8 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $class_code = $_GET['class_code'];
-
+        $qtr = '2';//to be changed to $_SESSION
+        
 
 
         $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
@@ -1089,13 +1087,17 @@ trait Grade
         AND sy_id=$sy_id");
         
         $class_grades = [];
+        
         while($grd = mysqli_fetch_assoc($res)) {
+            $first = $qtr == '1' ? '': 'readonly';
+            $second = $qtr == '2' ? '': 'readonly';
+            $final = $qtr == '2' ? '': 'readonly';
             $class_grades[] = [
                 'stud_id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
-                'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' readonly value='{$grd['first_grading']}'>",
-                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' readonly value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' readonly value='{$grd['final_grade']}'>"
+                'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
+                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second value='{$grd['second_grading']}'>",
+                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $final value='{$grd['final_grade']}'>"
             ];
             
         }
@@ -1134,7 +1136,7 @@ trait Grade
     public function getAwardDataFromSubject()
     {
         $grd_param = 90;
-        $sub_code = 'WI1';
+        $sub_code = 'OCC1';
         $sy_id = 9;
         $data = [];
         $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, sub_code, enrolled_in AS grd
@@ -1175,6 +1177,29 @@ trait Grade
             $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
         }
         return $data;
+    }
+
+    public function getConductAward()
+    {
+        $data = [];
+        $sy_id = 9;
+        $min = 3;
+        $query = "SELECT * FROM (SELECT s.stud_id, LRN, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''), COALESCE(ext_name,'')) AS name, 
+                        sex, prog_code AS program, enrolled_in AS grd, COUNT(CASE WHEN marking = 'SO' THEN 1 ELSE NULL END) AS counts, section_code, section_name
+                        FROM gradereport gr
+                        JOIN student s ON s.stud_id = gr.stud_id
+                        JOIN enrollment e ON e.stud_id = s.stud_id
+                        JOIN observedvalues o ON o.report_id = gr.report_id
+                        JOIN section USING (section_code)
+                        WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS conduct WHERE conduct.counts >= '$min';";
+        $result = $this->query($query);
+        while($row = mysqli_fetch_assoc($result)) {
+            $section_code = $row['section_code'];
+            $grd = $row['grd'];
+            $data[$grd][$section_code]['section_name'] = $row['section_name'];
+            $data[$grd][$section_code]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
+        }
+        return $data;   
     }
 }
 

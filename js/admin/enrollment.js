@@ -58,6 +58,38 @@ $(function() {
         stepper.previous();
     });
 
+    /** Validate Form */
+    $(document).on("click", "#validate-form [type='submit']", function (e) {
+        e.preventDefault();
+        let status = $(this).attr("name");
+        let formData = $("#validate-form").serialize() + `&${status}=true`;
+        console.log(formData);
+        $.post("action.php", formData, function() {
+            $(".edit-opt").hide();
+            $("#valid-change-btn").closest(".badge").show();
+            $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
+        });
+    });
+
+    $(document).on("click", ".action", function () {
+        $(this).hide();
+        switch($(this).attr("data-type")) {
+            case "change":
+                $(".edit-opt").show();
+                break;
+            case "cancel":
+                $(".edit-opt").hide();
+                $("#valid-change-btn").show();
+                break;
+        }
+    });
+
+    /** Credential Page */
+    $(document).on("click", "#pop",  function() {
+        $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
+        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    });
+
 
     hideSpinner();
 });

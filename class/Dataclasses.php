@@ -1509,9 +1509,9 @@ class StudentAward extends Award implements JsonSerializable
             $this->id_no = $id_no;
             $this->lrn = $lrn;
             $this->first_name = $first_name;
-            $this->middle_name = $middle_name;
+            $this->middle_name = $middle_name ?? '';
             $this->last_name = $last_name;
-            $this->ext_name = $ext_name;
+            $this->ext_name = $ext_name ?? '';
             $this->name = "$last_name, $first_name $middle_name $ext_name";
             $this->sex = ($sex == 'm') ? "Male" : "Female";
             $this->age = $age;
@@ -1522,9 +1522,11 @@ class StudentAward extends Award implements JsonSerializable
             $this->religion = $religion;
             $this->address = $address;
             $this->cp_no = $cp_no;
-            $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
+            $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : "../".$psa_birth_cert;
+            // $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
             $this->belong_to_ipcc = $belong_to_ipcc;
-            $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
+            $this->id_picture = is_null($id_picture) ? NULL : "../".$id_picture;
+            // $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
                             ."<a href='student.php?id=$stud_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"    

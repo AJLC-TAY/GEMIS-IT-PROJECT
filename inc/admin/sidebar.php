@@ -1,5 +1,4 @@
 <?php 
-session_start();
 $school_year = $_SESSION['school_year'];
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->

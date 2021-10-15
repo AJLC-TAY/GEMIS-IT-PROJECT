@@ -11,13 +11,12 @@ $con = $dbConfig->connect();
        }
        else
        {
-            $inputPassword = $_POST['Password'];
-            $query = "SELECT id_no, password, user_type FROM user WHERE id_no='{$_POST['UName']}' AND is_active=1;";
+            
+            $query = "SELECT id_no, user_type FROM user WHERE id_no='{$_POST['UName']}' AND password='{$_POST['Password']}';";
             $result = mysqli_query($con,$query);
     
             if ($row = mysqli_fetch_assoc($result))
             {
-                if (password_verify($inputPassword, $row['password'])){
                 $id_no = $row['id_no'];
                 $u_type = $row['user_type'];
                 
@@ -35,6 +34,7 @@ $con = $dbConfig->connect();
                         $destination = "../admin/index.php";
                         break;
                 }
+
                 $user_res = mysqli_query($con, $query);
                 if ($u_row = mysqli_fetch_assoc($user_res)) {
                     session_start();
@@ -56,7 +56,6 @@ $con = $dbConfig->connect();
                     header("location: $destination");
                 }
             }
-        }
             else
             {
                 header("location:login.php?Invalid= Please Enter Correct User Name and Password ");
