@@ -1197,6 +1197,16 @@ trait Grade
         }
         return $data;   
     }
+
+    public function getSpecificDiscParamters() 
+    {
+        $data = [];
+        $result = $this->query("SELECT * FROM specificdiscipline;");
+        while($row = mysqli_fetch_assoc($result)) {
+            $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
+        }
+        return $data;
+    }
 }
 
 
