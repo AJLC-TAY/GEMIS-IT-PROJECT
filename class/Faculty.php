@@ -218,13 +218,31 @@ class FacultyModule extends Dbconfig
         $grade = $_POST['grade'];
         $code = $_POST['code'];
 
-        echo($stud_id);
-        echo($grading);
-        echo($grade);
-        echo($code);
-     
+        $grade = $grade != "" ? $grade : NULL ;
+
        $this->prepared_query("UPDATE `classgrade` SET `$grading` =? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
-                            [$grade, $stud_id, $code],"iii");  
+                            [$grade, $stud_id, $code],"sii");  
    }
+
+
+   function exportSubjectGradesToCSV(){
+        $teacher_id = 26; //SESSION
+        $sy_id = 9; //SESSION
+        $sub_class_code = $_POST['code']; 
+        
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename= "' . $sub_class_code . ' - grades.csv"'); // classcode sana + grade
+        $output = fopen('php://output', 'w');
+        $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE'); 
+        fputcsv($output, $fields);
+        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = '$sub_class_code' AND sy_id=9;"); 
+        while($row = mysqli_fetch_assoc($query)){
+            $data = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']); 
+            fputcsv($output, $data);
+        }
+        fclose($output);
+   }
+    
+    
     
 }

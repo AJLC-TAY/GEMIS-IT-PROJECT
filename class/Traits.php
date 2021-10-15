@@ -418,7 +418,6 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        echo($teacher_id);
         $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
                   JOIN subject AS s USING (sub_code) 
@@ -1073,7 +1072,7 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $class_code = $_GET['class_code'];
-        $qtr = '1';//to be changed to $_SESSION
+        $qtr = '2';//to be changed to $_SESSION
         
 
 
@@ -1092,7 +1091,7 @@ trait Grade
         while($grd = mysqli_fetch_assoc($res)) {
             $first = $qtr == '1' ? '': 'readonly';
             $second = $qtr == '2' ? '': 'readonly';
-            $final = $qtr == '3' ? '': 'readonly';
+            $final = $qtr == '2' ? '': 'readonly';
             $class_grades[] = [
                 'stud_id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
