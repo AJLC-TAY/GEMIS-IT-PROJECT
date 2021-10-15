@@ -33,20 +33,12 @@ var code = '';
 
 $(function() {
     
-    // $("."+currentGrading).removeAttr("readonly");
     
     preload('#grade');
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
     });
-
-
-    // document.getElementById("grade").addEventListener("click", grading());
-    function grading(){
-        console.log("clicked grade");
-        $("."+currentGrading).removeAttr("readonly");
-    }
 
     // Display current/selected section name
     let firstClass = $("#classes option:selected");
@@ -55,7 +47,8 @@ $(function() {
         code = firstClass.val();
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
-        changeName(classTmp) ;
+        $("#export_code").val(classTmp + " - " + code );
+        changeName(classTmp);
     }
 
     $(document).on("change", "#classes", function() {
@@ -65,17 +58,12 @@ $(function() {
         code = selected.val();
         sectionName = selected.attr("data-name");
         classType = selected.attr("data-class-type");
-
+        $("#export_code").val(sectionName + " - " + code );
         // toggleGradesColumn(classType);
-        console.log(classType);
         $("#classes").select2("close");
-        changeName(sectionName);
+        changeName(sectionName); 
         setTableData(classType, url);
     })
-
-    $(document).on("click", ".grade", () => {
-        $("."+currentGrading).removeAttr("readonly");
-    });
 
     $(document).on("click", ".confirm", () => {
         $(".grading-confirmation").modal("toggle");
@@ -95,13 +83,23 @@ $(function() {
                             'action' : 'gradeClass'};
 
             $.post("action.php", grades, function(data) {	
+                classGradeTable.bootstrapTable("refresh")
+                
             });
 
         });        
         $('.grading-confirmation').modal('hide');
-
         $(".number").attr('readOnly',true);
+        
         // $(".grade").addClass('hidden');
+    });
+
+    $(document).on("click", ".export", function(e)  {
+        var action = "export";
+        $.post("action.php", action , function(data) {	
+            console.log(data);
+            
+        });
     });
 
     hideSpinner();

@@ -8,10 +8,10 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 
 
+
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
-//$advisory = [];
-//$sub_classes = [];
+
 $sub_classes = $faculty->getHandled_sub_classes($teacher_id);
 $adv_opn = '';
 $sub_class_opn = '';
@@ -23,6 +23,8 @@ $sub_table_display = '';
 $schoolYearInfo = $faculty->getSchoolYearInfo($sy_id); //to be removed pag maayos ung sa session
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
+$qtrs = $schoolYearInfo['sem'] == '1' ? ['1st','2nd']  : ['3rd','4th'];
+
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
@@ -105,9 +107,12 @@ if (count($sub_classes) != 0) {
                                     <div class>
                                         <button type="button" class="btn btn-secondary">Template</button>
                                         <button type="button" class="btn btn-secondary">Import</button>
-                                        <!-- <form method="post" action="export.php"> <input type="submit" name="export" value="EXPORT"></form> -->
-                                        <button type="button" id='export' class="btn btn-secondary">Export</button>
-                                        <button type="button" class="btn btn-secondary grade">Grade</button>
+                                        <form method="post" action="action.php">
+                                            <input class = 'hidden' id = 'export_code' name = 'code' value = ''>
+                                            <input type="submit" name="export" value="EXPORT"></form>
+                                        <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->
+                                        <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
+                                        <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
                                         <button type="button" class="btn btn-success confirm" >SUBMIT</button>
 
 
@@ -118,8 +123,8 @@ if (count($sub_classes) != 0) {
                                                 <tr>
                                                     <th scope='col' data-width="150" data-align="center" data-field="stud_id"></th>
                                                     <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1">1st Quarter</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Quarter</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0];?> Quarter</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1];?> Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
                                                 </tr>
                                             </thead>
@@ -150,7 +155,7 @@ if (count($sub_classes) != 0) {
             </div>
             <div class="modal-body">
                 
-                <p class="modal-msg">Submitted grades are final and cannot be edited.</p>
+                <p class="modal-msg">Submitted grades are editable within the duration of the current quarter.</p>
             </div>
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
@@ -174,7 +179,6 @@ if (count($sub_classes) != 0) {
     <script src="../js/common-custom.js"></script>
     <script>
         var currentGrading = '<?php echo $grading; ?>';
-        var code = '<?php echo $section_code; ?>';
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
 </body>

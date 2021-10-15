@@ -418,7 +418,6 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        echo($teacher_id);
         $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
                   FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
                   JOIN subject AS s USING (sub_code) 
@@ -1073,7 +1072,8 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $class_code = $_GET['class_code'];
-
+        $qtr = '2';//to be changed to $_SESSION
+        
 
 
         $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
@@ -1087,13 +1087,17 @@ trait Grade
         AND sy_id=$sy_id");
         
         $class_grades = [];
+        
         while($grd = mysqli_fetch_assoc($res)) {
+            $first = $qtr == '1' ? '': 'readonly';
+            $second = $qtr == '2' ? '': 'readonly';
+            $final = $qtr == '2' ? '': 'readonly';
             $class_grades[] = [
                 'stud_id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
-                'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' readonly value='{$grd['first_grading']}'>",
-                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' readonly value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' readonly value='{$grd['final_grade']}'>"
+                'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
+                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second value='{$grd['second_grading']}'>",
+                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $final value='{$grd['final_grade']}'>"
             ];
             
         }
