@@ -98,11 +98,8 @@ $(function() {
     $("#deactivate-form").submit(function(e) {
         e.preventDefault();
         let formData = $(this).serializeArray();
-
-        formData.push(...selection.map(e => {return {name: "id[]", value: `${e.teacher_id}`}}));
-        $.post("action.php");
-
-    });
+        formData.push(...selection.map(e => {return {name: "user_id[]", value: `${e.teacher_id}`}}));
+        $.post("action.php");})
 
     hideSpinner();
 });

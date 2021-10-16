@@ -29,7 +29,7 @@
                     <div>
                         <button id="export-opt" type="submit" class="table-opt btn btn-primary btn-sm" title='Export' value='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
                         <input id="reset-pass-opt" type="submit" class="table-opt btn btn-secondary btn-sm" title='Reset Password' value="Reset Password">
-                        <input id="deactivate-opt" type="submit" form="deactivate-from" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
+                        <input id="deactivate-opt" type="submit" form="deactivate-form" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Faculty' value="Deactivate">
                     </div>
                 </div>
 
@@ -56,9 +56,11 @@
             </div>
             <div class="modal-body">
                 Deactivate <span id="question"></span><br>
+                <small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>
             </div>
             <div class="modal-footer">
-                <form id="deactivate-form" action="action.php">
+                <form id="deactivate-form" method="POST" action="action.php">
+                    <input type="hidden" name="user_type" value="FA" />
                     <input type="hidden" name="action" value="deactivate"/>
                     <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
