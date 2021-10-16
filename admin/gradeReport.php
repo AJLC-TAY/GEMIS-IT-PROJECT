@@ -157,19 +157,17 @@ include_once("../inc/head.html"); ?>
                         $midName = $userProfile->get_middle_name();
                         $sex = $userProfile->get_sex();
                         $age = $userProfile->get_age();
-                        $section = $userProfile->get_section();
-                        // $school_year = ;
+                        $section = $userProfile->get_section(); 
                         $teacherName = $_POST['teacher_name'];
                         // $teacherName = 'Kesley Bautista Trinidad';
-                        $grade = 12;
                         $grade = 12;
                         $signatoryName = $_POST['signatory_name'];
                         // $signatoryName = 'Whitney Houston';
                         // $position = 'Secondary School Principal III';
                         $position = $_POST['position'];
-                        $admittedIn = 'None';
-                        $eligible = '12';
-                        $date = 'October 5, 2021';
+                        // $admittedIn = 'None';
+                        // $eligible = '12';
+                        // $date = date("F j, Y");
                         $trackStrand = $admin->getTrackStrand();
                         $attendance = $admin->getStudentAttendance(1);
                         // echo json_encode($grades);
@@ -266,7 +264,7 @@ include_once("../inc/head.html"); ?>
                         <div class="d-flex-inline">
                             <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
                         </div>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow  overflow-auto">
+                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
                             <ul class="template p-0 w-100">
                             <li class="p-0 mb-0 mx-auto">
                                     <p>School Form 9 - SHS</p>
@@ -415,34 +413,34 @@ include_once("../inc/head.html"); ?>
                                     <br>
                                     <div class="parentLine fsize">
                                         <div class="subLine">Admitted to Grade: </div>
-                                        <div class="subLine text-center"> <?php echo $grade ?> </div>
+                                        <div class="subLine text-center">________________</div>
                                         <div class="subLine">Section: </div>
-                                        <div class="subLine text-center"> <?php echo $section ?> </div>
+                                        <div class="subLine text-center">________________</div>
                                     </div>
                                     <div class="parentLine fsize">
                                         <div class="subLine">Eligible for Admission to Grade: </div>
-                                        <div class="subLine"> <?php echo $eligible ?> </div>
+                                        <div class="subLine">________________</div>
                                     </div>
                                     <br>
                                     <div class="fsize left"><b> Approved: </b></div>
                                     <br>
                                     <div class="parentLine fsize text-center">
-                                        <div class="subLine3"> <?php echo $signatoryName ?></div>
-                                        <div class="subLine3"> <?php echo $teacherName ?> </div>
+                                        <div class="subLine3">___________________</div>
+                                        <div class="subLine3">___________________</div>
                                     </div>
                                     <div class="parentLine fsize text-center">
-                                        <div class="subLine3"><?php echo $position ?></div>
+                                        <div class="subLine3">___________________</div>
                                         <div class="subLine3">Teacher</div>
                                     </div>
                                     <br><br><br>
                                     <h6 class="text-center"><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
                                     <div class="parentLine fsize">
                                         <div class="subLine">Admitted in:</div>
-                                        <div class="subLine"> <?php echo $admittedIn ?></div>
+                                        <div class="subLine">___________________</div>
                                     </div>
                                     <div class="parentLine fsize">
                                         <div class="subLine">Date:</div>
-                                        <div class="subLine"> <?php echo $date ?></div>
+                                        <div class="subLine">___________________</div>
                                     </div>
                                 </li>
                                 <hr class='m-0'>
