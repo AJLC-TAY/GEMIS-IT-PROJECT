@@ -710,6 +710,14 @@ trait Enrollment
 
         $filter['status'] = ["0" => "Pending", "1" => "Enrolled", "2" => "Cancelled"];
 
+        # sections
+        // $sy_id = $_SESSION['sy_id'];
+        $sy_id = 9;
+        $result = $this->query("SELECT section_code, section_name FROM section WHERE sy_id = '{$sy_id}';");
+        while($row = mysqli_fetch_row($result)) {
+            $filter['section'][$row[0]] = $row["1"];
+        }
+
         return $filter;
     }
 
@@ -1208,6 +1216,46 @@ trait Grade
         $result = $this->query("SELECT * FROM specificdiscipline;");
         while($row = mysqli_fetch_assoc($result)) {
             $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
+        }
+        return $data;
+    }
+
+    public function listStudentAwardSelection($is_JSON = FALSE)
+    {
+        $data = [];
+        // $sy_id = $_SESSION['sy_id'];
+        $sy_id = 9;
+        $query = "SELECT stud_id, LRN, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name,''),' ',COALESCE(ext_name, '')) AS name, 
+                enrolled_in AS grd, curr_code, prog_code, section_code, section_name FROM enrollment AS e
+                JOIN student s USING (stud_id)
+                JOIN section USING (section_code)
+                JOIN schoolyear sy ON e.sy_id=sy.sy_id WHERE e.sy_id = '$sy_id' AND e.valid_stud_data = 1 ";
+        // $query .= (isset($_GET['curr_code']) ? "AND curr_code = '{$_GET['curr_code']}' " : "");
+        $query .= (isset($_GET['prog_code']) ? "AND prog_code = '{$_GET['prog_code']}' " : "");
+        $query .= (isset($_GET['grd']) ? "AND enrolled_in = '{$_GET['grd']}' " : "");
+        $query .= (isset($_GET['section_code']) ? "AND section_code = '{$_GET['section_code']}';" : ";");
+        $result = $this->query($query);
+
+        while($row = mysqli_fetch_assoc($result)) {
+            $id = $row['stud_id'];
+            $data[] = [
+                'id'            => $id,
+                'lrn'           => $row['stud_id'],
+                'name'          => $row['name'],
+                'grd'           => $row['grd'],
+                'curr_code'     => $row['curr_code'],
+                'prog_code'     => $row['prog_code'],
+                'section_code'  => $row['section_code'],
+                'section_name'  => $row['section_name'],
+                'action'        => "<div class='d-flex justify-content-center'>
+                                        <button data-id='$id' class='btn btn-sm btn-success action' data-type='add'>Add</button>
+                                    </div>"
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($data);
+            return;
         }
         return $data;
     }

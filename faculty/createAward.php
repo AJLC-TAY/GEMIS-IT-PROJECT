@@ -7,6 +7,8 @@ $_SESSION['sy_desc'] = '2021 - 2022';
 $_SESSION['enrollment'] = 0;
 $_SESSION['roles'] = ['can_enroll', 'award_coor'];
 include_once("../inc/head.html");
+include_once("../class/Faculty.php");
+$filters =  (new FacultyModule())->getEnrollFilters();
 ?>
 
 <title>Create Award | GEMIS</title>
@@ -15,11 +17,11 @@ include_once("../inc/head.html");
 
 <body>
     <!-- SPINNER -->
-    <!--<div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
@@ -110,10 +112,14 @@ include_once("../inc/head.html");
                                                             <!--SECTION FILTER-->
                                                             <li class="col-md-4 me-2">
                                                                 <div class="input-group input-group-sm ">
-                                                                    <label class="input-group-text " for="year-level">Section</label>
+                                                                    <label class="input-group-text " for="section">Section</label>
                                                                     <select class="form-select mb-0 filter-item " id="section">
                                                                         <option value="*" selected>All</option>
-                                                                        <option value=''>ABM 12</option>
+                                                                        <?php 
+                                                                            foreach ($filters['section'] as $id => $value) {
+                                                                                echo "<option value='$id' >$value</option>";
+                                                                            }
+                                                                        ?>
                                                                     </select>
                                                                 </div>
                                                             </li>
@@ -127,9 +133,30 @@ include_once("../inc/head.html");
                                                 <!-- TABLE -->
                                                 <tr>
                                                     <th data-checkbox="true"></th>
-                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="">LRN</th>
+                                                    <!-- <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="lrn">LRN</th> -->
                                                     <th scope='col' data-width="450" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="department">Section</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd">Yr Level</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="prog_code">Strand</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="section_name">Section</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <hr>                                        
+                                    <div Class='mt-3'>
+                                        <h6><b>SELECTED STUDENTS</b></h6>
+                                        <table id="student-selection" class="table-striped table-sm">
+                                            <thead class='thead-dark'>
+                                                <!-- TABLE -->
+                                                <tr>
+                                                    <th data-checkbox="true"></th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="lrn">LRN</th>
+                                                    <th scope='col' data-width="450" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd">Yr Level</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="prog_code">Strand</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="section_name">Section</th>
+                                                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="action">Action</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -151,6 +178,12 @@ include_once("../inc/head.html");
         </section>
     </section>
     <!-- MAIN CONTENT END -->
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
+
 
 
     <!--BOOTSTRAP TABLE JS-->
@@ -158,7 +191,7 @@ include_once("../inc/head.html");
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script type='module' src='../js/admin/faculty.js'></script>
+    <script type='module' src='../js/admin/award.js'></script>
 </body>
 
 </html>

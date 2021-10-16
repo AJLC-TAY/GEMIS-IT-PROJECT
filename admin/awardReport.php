@@ -138,7 +138,10 @@ include_once("../inc/head.html"); ?>
                                     require_once("award/perfectAttendance.php");
                                     break;
                                 case 'ca': # pa for conduct award
-                                    require_once("award/conductAward.php");
+                                    require_once("award/conduct.php");
+                                    break;
+                                case 'la': # la for loyalty award
+                                    require_once("award/loyalty.php");
                                     break;
                             }
                         } else {
