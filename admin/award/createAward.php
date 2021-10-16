@@ -1,17 +1,20 @@
 <?php
-session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
-include_once("../inc/head.html");
+$admin = new Administration();
 ?>
 
 <title>Create Award | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
+
+<header>
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item active">Create Award</a></li>
+        </ol>
+    </nav>
+</header>
 
 <body>
     <!-- SPINNER -->
@@ -29,17 +32,7 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-
-                            <header>
-                                <!-- BREADCRUMB -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active">Create Award</a></li>
-                                    </ol>
-                                </nav>
-                            </header>
-                            <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between">
                                 <h3 class="fw-bold">Create Award</h3>
                             </div>
 

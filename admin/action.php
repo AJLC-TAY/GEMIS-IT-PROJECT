@@ -40,8 +40,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
     $admin->validateEnrollment();
 }
 
-
-
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {
     $admin->deactivate();

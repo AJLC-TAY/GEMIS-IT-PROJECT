@@ -1,5 +1,4 @@
 <?php 
-session_start();
 $school_year = $_SESSION['school_year'];
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
@@ -75,6 +74,12 @@ $school_year = $_SESSION['school_year'];
                     <li><a id="section" href="section.php">Section</a></li>
                     <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
                 </ul>
+            </li>
+            <li class="sub-menu">
+                <a id="awards" href="award.php">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Awards</span>
+                </a>
             </li>
             <li class="sub-menu">
                 <a id='signatory' href="signatory.php">

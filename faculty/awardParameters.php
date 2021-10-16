@@ -2,6 +2,16 @@
 require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
 
+session_start();
+$_SESSION['user_type'] = 'FA';
+$_SESSION['id'] = 1;
+$_SESSION['sy_id'] = 15;
+$_SESSION['sy_desc'] = '2021 - 2022';
+$_SESSION['enrollment'] = 0;
+$_SESSION['roles'] = ['can_enroll', 'award_coor'];
+include_once("../inc/head.html");
+
+
 include("../class/Administration.php");
 $admin = new Administration();
 $result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest' 
@@ -79,28 +89,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
 
                                 </div>
-                            </div>
-                            <div class="card row mb-4">
-                                <h4>Specific Discipline</h4>
-                                <div class="container">
-                                    <div class='form-row row justify-content-around align-content-center mb-2'>
-                                        <label class='col-form-label col-md-6'></label>
-                                        <div class='col-md-4  text-center text-secondary'>Minimum Grade</div>
-                                    </div>
-                                    <div class="row">
-                                        <?php 
-                                        $spec_award = $admin->getSpecificDiscParamters();
-                                        foreach($spec_award as $code => $param) {
-                                            echo "<div class='col-md-6 row justify-content-around align-content-center'>
-                                                    <label class='col-form-label col-md-6'>{$param['desc']}</label>
-                                                    <div class='col-md-6'>
-                                                        <input value='{$param['grd']}' name='$code' type='number' class='form-control form-control-sm number text-center' placeholder='Enter Value'>
-                                                    </div>
-                                                </div>";
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="card row mb-4">
                                 <h4>Other Awards </h4>
@@ -135,6 +124,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 </div>
 
                             </div>
+                            SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, prog_code, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' WHEN (general_average>= 95 AND general_average <= 97) THEN 'high' WHEN (general_average>= 98 AND general_average <=100) THEN 'highest' END AS remark FROM `gradereport` JOIN student USING (stud_id) JOIN enrollment USING (stud_id) WHERE general_average>= 90;
 
                         </div>
                         <?php

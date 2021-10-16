@@ -117,7 +117,7 @@ include_once("../inc/head.html"); ?>
         </div>
     </div>
     <!-- SPINNER END -->
-    <section id="container">
+    <section id="container"></section>
     <?php include_once('../inc/admin/sidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
@@ -136,9 +136,6 @@ include_once("../inc/head.html"); ?>
                                     break;
                                 case 'pa': # pa for perfect attendance
                                     require_once("award/perfectAttendance.php");
-                                    break;
-                                case 'ca': # pa for conduct award
-                                    require_once("award/conductAward.php");
                                     break;
                             }
                         } else {

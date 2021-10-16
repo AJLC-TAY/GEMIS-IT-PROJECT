@@ -1,7 +1,6 @@
 <?php 
 require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
-session_start();
 
 $page_path = "faculty/facultyList.php";
 $js = "<script type='module' src='../js/admin/faculty-list.js'></script>";
