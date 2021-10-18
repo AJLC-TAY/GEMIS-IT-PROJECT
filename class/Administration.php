@@ -1745,8 +1745,6 @@ class Administration extends Dbconfig
         $result = mysqli_query($this->db, $query);
         $studentList = array();
 
-        $address = array();
-        $parent = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $studentList[] = new Student(
                 $row['stud_id'],
@@ -1763,15 +1761,18 @@ class Administration extends Dbconfig
                 $row['indigenous_group'],
                 $row['mother_tongue'],
                 $row['religion'],
-                $address,
+                NULL,
                 $row['cp_no'],
                 $row['psa_birth_cert'],
                 $row['belong_to_IPCC'],
                 $row['id_picture'],
-                NULL,
                 $row['section_code'],
-                $parent,
-                $parent
+                $row['section_code'],
+                NULL,
+                NULL,
+                NULL,
+                NULL
+                
             );
         }
         return $studentList;
@@ -1787,7 +1788,8 @@ class Administration extends Dbconfig
      * 1.   Get Student Personal Information
      * 2.   Get Student Parent Information
      * 3.   Get Student Guardian Information 
-     * 3.   Initialize Student object
+     * 4.   Get Student enrollment Status
+     * 5.   Initialize Student object
      * 
      * @return Student Student object.
      */
@@ -1798,8 +1800,6 @@ class Administration extends Dbconfig
                                         JOIN `address` as a ON a.stud_id = s.stud_id 
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
-
-
 
         // Step 2
         $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
@@ -1835,6 +1835,15 @@ class Administration extends Dbconfig
             ]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
         };
 
+        // Step 4
+         
+        $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e WHERE stud_id = ?;",[$id], "i");
+        while ($res = mysqli_fetch_row($status)) {
+            $stat = $res[0];
+        }
+
+        
+
         sizeof($parent) != 0 ?: $parent = NULL;
         sizeof($guardian) != 0 ?: $guardian = NULL;
 
@@ -1844,7 +1853,6 @@ class Administration extends Dbconfig
             $section_code = $res[1];
         }
 
-        // echo(($personalInfo['home_no'] = ""));
         $home_no = is_null($personalInfo['home_no']) ? "" : $personalInfo['home_no'];
         $street = is_null($personalInfo['street']) ? "" : $personalInfo['street'];
         $barangay = is_null($personalInfo['barangay']) ? "" : $personalInfo['barangay'];
@@ -1863,6 +1871,8 @@ class Administration extends Dbconfig
             'province' => $province,
             'zipcode' => $zipcode
         ];
+
+        //Step 5
         return new Student(
             $personalInfo['stud_id'],
             $personalInfo['id_no'],
@@ -1886,7 +1896,9 @@ class Administration extends Dbconfig
             $section_code,
             $section,
             $parent,
-            $guardian
+            $guardian,
+            is_null($personalInfo['form_137']) ? NULL : $personalInfo['form_137'],
+            $stat
         );
     }
 

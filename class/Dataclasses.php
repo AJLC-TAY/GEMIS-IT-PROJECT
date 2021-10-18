@@ -1501,9 +1501,12 @@ class StudentAward extends Award implements JsonSerializable
         private $section;
         private $parents;
         private $guardians;
+        private $form137;
+        private $status;
+
 
         
-            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians)
+            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians, $form137, $status)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1535,6 +1538,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->section = $section;
             $this->parents = $parents;
             $this->guardians = $guardians;
+            $this->form137 = $form137;
+            $this->status = $status;
         }
 
         
@@ -1543,6 +1548,14 @@ class StudentAward extends Award implements JsonSerializable
         public function get_stud_id()
         {
             return $this->stud_id;
+        }
+
+        public function get_form137(){
+            return $this->form137;
+        }
+
+        public function get_status(){
+            return $this->status;
         }
 
         public function get_id_no(){
@@ -1676,6 +1689,8 @@ class StudentAward extends Award implements JsonSerializable
             'action' => $this->action,
             'section_code' => $this->section_code,
             'section' => $this->section,
+            'form_137' => $this->form137,
+            'status' => $this->status
         ];}
 
     }
