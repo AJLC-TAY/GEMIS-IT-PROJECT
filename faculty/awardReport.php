@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html"); ?>
 <title>Award Document | GEMIS</title>
@@ -118,29 +118,34 @@ include_once("../inc/head.html"); ?>
     </div>
     <!-- SPINNER END -->
     <section id="container"></section>
-    <?php include_once('../inc/admin/sidebar.php'); ?>
+    <?php include_once('../inc/facultySidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
         <section class="wrapper">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="row mt ps-3">
-                        <?php 
+                        <?php
                         if (isset($_GET['type'])) {
                             switch ($_GET['type']) {
                                 case 'ae': # ae for academic excellence
-                                    require_once("award/academicExcellence.php");
+                                    require_once("../admin/award/academicExcellence.php");
                                     break;
                                 case 'sp': # sp for specific
-                                    require_once("award/awardGeneric.php");
+                                    require_once("../admin/award/awardGeneric.php");
                                     break;
                                 case 'pa': # pa for perfect attendance
-                                    require_once("award/perfectAttendance.php");
+                                    require_once("../admin/award/perfectAttendance.php");
+                                    break;
+                                case 'ca': # pa for conduct award
+                                    require_once("../admin/award/conduct.php");
+                                    break;
+                                case 'la': # la for loyalty award
+                                    require_once("../admin/award/loyalty.php");
                                     break;
                             }
                         } else {
-                            require_once("award/awardCards.php");
-
+                            require_once("../admin/award/awardCards.php");
                         }
                         ?>
                     </div>
