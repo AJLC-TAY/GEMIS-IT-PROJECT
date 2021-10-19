@@ -1,13 +1,6 @@
-<?php include("../inc/head.html");
-
-// session_start();
-$_SESSION['user_type'] = 'FA';
-$teacher_id = $_SESSION['id'] = 26;
-$sy_id = $_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-
-
+<?php 
+require_once("sessionHandling.php");
+include("../inc/head.html");
 
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();

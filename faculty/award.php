@@ -1,17 +1,6 @@
 <?php
-require_once("../inc/sessionHandling.php");
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
-
-session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
-
-
-
 include("../class/Administration.php");
 $admin = new Administration();
 $result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest' 
@@ -37,7 +26,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/facultySidebar.php'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper ps-4">

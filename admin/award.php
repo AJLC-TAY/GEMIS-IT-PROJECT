@@ -1,5 +1,5 @@
 <?php
-require_once("../inc/sessionHandling.php");
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 
 include("../class/Administration.php");

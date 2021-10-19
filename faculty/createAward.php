@@ -1,11 +1,6 @@
 <?php
 session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 include_once("../class/Faculty.php");
 $filters =  (new FacultyModule())->getEnrollFilters();
