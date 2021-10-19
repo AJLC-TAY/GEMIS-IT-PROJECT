@@ -1,17 +1,18 @@
-<?php include("../inc/head.html");
+<?php 
+require_once("sessionHandling.php");
+// session_start();
+// $_SESSION['user_type'] = 'FA';
+// $_SESSION['id'] = 1;
+// $_SESSION['sy_id'] = 9;
+// $_SESSION['sy_desc'] = '2021 - 2022';
+// $_SESSION['enrollment'] = 0;
+// $_SESSION['name'] = "Penaflor, Mariel";
 
-session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['name'] = "Penaflor, Mariel";
-
+include("../inc/head.html");
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
-//$sub_classes = [];
+$sub_classes = [];
 // $advisory = $faculty->getAdvisoryClass(9);
 // $sub_classes = $faculty->getHandled_sub_classes(1);
 $advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
@@ -22,7 +23,8 @@ $sub_class_opn = '';
 $adv_table_display = 'd-none';
 $sub_table_display = '';
 
-$adv_count_is_empty = count($advisory) != 0;
+
+$adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
     $adv_table_display = '';
     $sub_table_display = 'd-none';
@@ -36,8 +38,7 @@ if ($adv_count_is_empty) {
         . "</optgroup>";
 }
 
-
-if (count($sub_classes) != 0) {
+if (!(is_null($sub_classes))) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
     foreach ($sub_classes as $sub_class) {
         $section_code = $sub_class->get_sub_class_code();

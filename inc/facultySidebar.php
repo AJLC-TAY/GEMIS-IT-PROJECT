@@ -1,12 +1,5 @@
 <?php
-// session handling
-session_start();
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = "2021 - 2022";
-$_SESSION['user_type'] = "FA";
-$_SESSION['user_id'] = 1;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
-$school_year = $_SESSION['sy_desc'];
+$school_year = $_SESSION['school_year'];
 $roles = $_SESSION['roles'];
 
 $enrollment_item = '';
@@ -44,7 +37,7 @@ if (in_array('award_coor', $roles)) {
                 <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
             <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
-            <li><a class="logout" href=""><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
+            <li><a role="button" class="logout" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
 </header>

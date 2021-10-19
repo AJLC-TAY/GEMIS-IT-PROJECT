@@ -16,7 +16,7 @@ $school_year = $_SESSION['school_year'];
                 <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
             <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
-            <li><a class="logout" href=""><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
+            <li><a role="button" class="logout" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
 </header>

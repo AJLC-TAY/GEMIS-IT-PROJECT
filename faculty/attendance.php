@@ -1,4 +1,5 @@
 <?php
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 $class = 'ABM11';
 $current_month = date("F"); // ex. January
