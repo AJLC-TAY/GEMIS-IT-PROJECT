@@ -43,7 +43,12 @@ $(function() {
         readpsaURL(this);
     });
 
+    $("#form137Upload").change(function(){
+        readpsaURL(this);
+    });
+
     $(".psa-photo").click(()=> $("#psaUpload").click());
+    $(".form137-photo").click(()=> $("#form137Upload").click());
 
     $("#psa").click(function(){
         let preview = $('#imgPreview');
