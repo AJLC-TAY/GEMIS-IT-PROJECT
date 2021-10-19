@@ -1501,17 +1501,20 @@ class StudentAward extends Award implements JsonSerializable
         private $section;
         private $parents;
         private $guardians;
+        private $form137;
+        private $status;
+
 
         
-            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians)
+            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians, $form137, $status)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
             $this->lrn = $lrn;
             $this->first_name = $first_name;
-            $this->middle_name = $middle_name;
+            $this->middle_name = $middle_name ?? '';
             $this->last_name = $last_name;
-            $this->ext_name = $ext_name;
+            $this->ext_name = $ext_name ?? '';
             $this->name = "$last_name, $first_name $middle_name $ext_name";
             $this->sex = ($sex == 'm') ? "Male" : "Female";
             $this->age = $age;
@@ -1522,9 +1525,11 @@ class StudentAward extends Award implements JsonSerializable
             $this->religion = $religion;
             $this->address = $address;
             $this->cp_no = $cp_no;
-            $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
+            $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : "../".$psa_birth_cert;
+            // $this->psa_birth_cert = is_null($psa_birth_cert) ? NULL : ("data:image; base64,". base64_encode($psa_birth_cert));
             $this->belong_to_ipcc = $belong_to_ipcc;
-            $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
+            $this->id_picture = is_null($id_picture) ? NULL : "../".$id_picture;
+            // $this->id_picture = is_null($id_picture) ? NULL : ("data:image; base64,". base64_encode($id_picture));
             $this->action = "<div class='d-flex justify-content-center'>"
                             ."<a href='student.php?id=$stud_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Student'><i class='bi bi-eye'></i></a>"
                             ."<a href='student.php?id=$stud_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Student'><i class='bi bi-pencil-square'></i></a>"    
@@ -1533,6 +1538,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->section = $section;
             $this->parents = $parents;
             $this->guardians = $guardians;
+            $this->form137 = $form137;
+            $this->status = $status;
         }
 
         
@@ -1541,6 +1548,14 @@ class StudentAward extends Award implements JsonSerializable
         public function get_stud_id()
         {
             return $this->stud_id;
+        }
+
+        public function get_form137(){
+            return $this->form137;
+        }
+
+        public function get_status(){
+            return $this->status;
         }
 
         public function get_id_no(){
@@ -1674,6 +1689,8 @@ class StudentAward extends Award implements JsonSerializable
             'action' => $this->action,
             'section_code' => $this->section_code,
             'section' => $this->section,
+            'form_137' => $this->form137,
+            'status' => $this->status
         ];}
 
     }
@@ -1723,13 +1740,14 @@ class StudentAward extends Award implements JsonSerializable
         private $sy;
         private $action;
 
-        public function __construct($code, $sy, $name, $grd_level, $max_stud, $stud_no, $teacher_id){
+        public function __construct($code, $sy, $name, $grd_level, $max_stud, $stud_no, $teacher_id, $school_year = NULL){
             $this->code = $code;
             $this->sy = $sy;
             $this->name = $name;
             $this->grd_level = $grd_level;
             $this->max_stud = $max_stud;
             $this->stud_no = $stud_no;
+            $this->sy_desc = $school_year;
             $this->teacher_id = $teacher_id;
             $this->action = 
                         "<div class='d-flex justify-content-center'>"
@@ -1745,6 +1763,10 @@ class StudentAward extends Award implements JsonSerializable
         public function get_sy()
         {
             return $this->sy;
+        }
+        public function get_sy_desc()
+        {
+            return $this->sy_desc;
         }
 
         public function get_name(){
@@ -1780,9 +1802,11 @@ class StudentAward extends Award implements JsonSerializable
                 'grd_level'=> $this->grd_level,
                 'max_stud'=> $this->max_stud,
                 'stud_no'=> $this->stud_no,
+                'sy_desc' => $this->sy_desc,
                 'teacher_id'=> $this->teacher_id,
                 'action' => $this->action
-            ];}
+            ];
+        }
     }
 
     class ClassGrade implements JsonSerializable {

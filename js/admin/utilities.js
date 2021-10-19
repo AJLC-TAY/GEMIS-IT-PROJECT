@@ -273,3 +273,22 @@ export const listSearchEventBinder = (searchInputID, itemSelector, spinnerSelect
         }, 400);
     });
 };
+
+export const toggleEnrollment = () => {
+    $(document).on("click", "[name='enrollment']", function() {
+        showSpinner();
+        let statusE = $(this).next(".status");
+        let formData = `action=editEnrollStatus`;
+        if ($(this).is(":checked")) {
+            $(this).attr("title", "Turn off enrollment");
+            statusE.html("On-going");
+            formData += "&enrollment=on";
+        } else {
+            $(this).attr("title", "Turn on enrollment");
+            statusE.html("Ended");
+        }
+        $.post("action.php", formData, function(data) {
+            hideSpinner();
+        });
+    });
+}

@@ -1,15 +1,12 @@
 <?php
+require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html");
-session_start();
-$_SESSION['id'] = $user_id = 1;
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['user_type'] = 'AD';
 
 require_once("../class/Administration.php");
 $admin = new Administration();
+$user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
+[$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
 
 ?>
 <title>Home | GEMIS</title>
@@ -31,11 +28,6 @@ $admin_user = $admin->getProfile('AD');
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-                            <?php
-                            require_once("../class/Administration.php");
-                            $admin = new Administration();
-                            [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
-                            ?>
                             <!-- HEADER -->
                             <header class="mb-4">
                                 <!-- BREADCRUMB -->
@@ -48,15 +40,15 @@ $admin_user = $admin->getProfile('AD');
                                     <div class="form-row row">
                                         <div class="form-group col-md-6">
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
-                                            <ul class="ms-4 list-style">
+                                            <ul class="ms-4 list-style p-0">
                                                 <li>
                                                     <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
-                                                <li>School Year: 2023 - 2024 </li>
+                                                <li>School Year: <?php echo $_SESSION['school_year']; ?></li>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <img src="../assets/admin.png" style="width: 50%; display: block; margin-left: auto; float:right;">
+                                            <img src="../assets/admin.png" alt="Display image" style="width: 50%; display: block; margin-left: auto; float:right;">
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +139,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-book me-3" aria-hidden="true"></i>CURRICULUM</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="curriculumList.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="curriculum.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -159,7 +151,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-list-alt  me-3" aria-hidden="true"></i>PROGRAM</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="programlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="program.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -171,7 +163,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-file-text me-3" aria-hidden="true"></i>SUBJECT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="studentlist.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="student.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -196,7 +188,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-tasks me-3" aria-hidden="true"></i>ENROLLMENT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="enrollment.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -208,7 +200,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="enrollment.php?page=setup" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>

@@ -1,4 +1,5 @@
-<?php include_once("../inc/head.html"); ?>
+<?php 
+include_once("../inc/head.html"); ?>
 <title>Section | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>

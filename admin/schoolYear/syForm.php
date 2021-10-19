@@ -58,9 +58,32 @@ $subjects = $init_data['subjects'];
                         <label for="" class="col-lg-5 col-form-label">School Year (Start-End)</label>
                         <div class="col-lg-7">
                             <div class="d-flex align-items-center">
-                                <input type="text" name="start-year" class="form-control number" placeholder="Start">
+                                <input type="text" name="start-year" class="form-control form-control-sm number" placeholder="Start">
                                 <span class='mb-3 p-2 text-center'><i class="bi bi-dash"></i></span>
-                                <input type="text" name="end-year" class="form-control number" placeholder="End">
+                                <input type="text" name="end-year" class="form-control form-control-sm number" placeholder="End">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="" class="col-lg-5 col-form-label">Academic Month (Start-End)</label>
+                        <div class="col-lg-7">
+                            <div class="d-flex align-items-center">
+                                <?php 
+                                    $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                    $months_opt = '';
+                                    foreach($months as $id => $month) {
+                                        $months_opt .= "<option value='$id'>$month</option>";
+                                    }
+                                ?>
+                                <select name="start-month" id="start-month" class='form-select-sm form-select'>
+                                    <option selected>Start Month</option>
+                                    <?php echo $months_opt; ?>
+                                </select>
+                                <span class='mb-3 p-2 text-center'><i class="bi bi-dash"></i></span>
+                                <select name="end-month" id="end-month" class='form-select-sm form-select'>
+                                    <option selected>End Month</option>
+                                    <?php echo $months_opt; ?>
+                                </select>
                             </div>
                         </div>
                     </div>

@@ -1,67 +1,32 @@
 <?php
-include_once("../inc/head.html");
-session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
-$userProfile = $admin->getProfile("ST");
-$stud_id = $userProfile->get_stud_id();
-$user_id_no = $userProfile->get_id_no();
-$lrn = $userProfile->get_lrn();
-$lname = $userProfile->get_last_name();
-$fname = $userProfile->get_first_name();
-$mname = $userProfile->get_middle_name();
-$extname = $userProfile->get_ext_name();
-$sex = $userProfile->get_sex();
-$age = $userProfile->get_age();
-$birthdate = $userProfile->get_birthdate();
-$birth_place = $userProfile->get_birth_place();
-$indigenous_group = $userProfile->get_indigenous_group();
-$mother_tongue = $userProfile->get_mother_tongue();
-$religion = $userProfile->get_religion();
+$student = $admin->getProfile("ST");
+$stud_id = $student->get_stud_id();
+$user_id_no = $student->get_id_no();
+$lrn = $student->get_lrn();
+$name = $student->get_name();
+$sex = $student->get_sex();
+$id_picture = $student->get_id_picture();
+$birth_cert = $student->get_psa_birth_cert();
+$valid_status = 0;
 
-$address = $userProfile->get_address();
-$house_no = $address['home_no'];
-$street = $address['street'];
-$barangay = $address['barangay'];
-$city = $address['mun_city'];
-$province = $address['province'];
-$zip = $address['zipcode'];
-
-$cp_no = $userProfile->get_cp_no();
-$psa_birth_cert = $userProfile->get_psa_birth_cert();
-$belong_to_ipcc = $userProfile->get_belong_to_ipcc();
-$id_picture = $userProfile->get_id_picture();
-$section = $userProfile->get_section();
-
-$parents = $userProfile->get_parents();
-if (is_null($parents)) {
-    $parents = NULL;
-} else {
-    foreach ($parents as $par) {
-        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
-        ${$parent . '_first_name'} = $par['fname'];
-        ${$parent . '_last_name'} = $par['lname'];
-        ${$parent . '_middle_name'} = $par['mname'];
-        ${$parent . '_ext_name'} = $par['extname'];
-        ${$parent . '_occupation'} = $par['occupation'];
-        ${$parent . '_cp_no'} = $par['cp_no'];
-        ${$parent . '_sex'} = $par['sex'];
-    }
+const HIDE = "style='display: none;'";
+$change_btn_display = '';
+$form_display = HIDE;
+switch($valid_status) {
+    case 0:
+        $valid_desc = "Pending";
+        $change_btn_display = HIDE;
+        $form_display = '';
+        break;
+    case 1:
+        $valid_desc = "Enrolled";
+        break;
+    case 2:
+        $valid_desc = "Rejected";
+        break;
 }
-
-$guardian = $userProfile->get_guardians();
-if (is_null($guardian)) {
-    $guardian = NULL;
-} else {
-    $guardian_first_name = $guardian['fname'];
-    $guardian_last_name = $guardian['lname'];
-    $guardian_middle_name = $guardian['mname'];
-    $guardian_cp_no = $guardian['cp_no'];
-    $guardian_relationship = $guardian['relationship'];
-}
-
-$profile_image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
-$psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth_cert;
 ?>
 
 <!-- HEADER -->
@@ -71,7 +36,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
         <ol class='breadcrumb'>
             <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
             <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
-            <li class="breadcrumb-item active">Enrollment Credentials</li>
+            <li class="breadcrumb-item active">Credentials</li>
         </ol>
     </nav>
     <h3>Enrollment Credentials</h3>
@@ -96,13 +61,25 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-3">
-                            <?php $image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
+                            <?php $image = $id_picture ?? "../assets/profile.png";
                             echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
                             <br>
-                            <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
-                            <p><span class="fw-bold">Name: </span></p>
-                            <button type='button' class='btn btn-success ms-2 mb-2 w-100 '>ACCEPT ENROLLEE</button>
-                            <button class='btn btn-secondary ms-2 mb-2 w-100' title='Decline Enrollee'>DECLINE ENROLLEE</button>
+                            <p><span class="fw-bold">LRN:</span><?php echo $lrn; ?></p>
+                            <p><span class="fw-bold">Name:</span> <?php echo $name; ?></p>
+                            <p><span class="fw-bold">Sex:</span> <?php echo $sex; ?></p>
+                            <p><span class="fw-bold">Status:</span> <span id="status"><?php echo $valid_desc; ?> </span> 
+                                <span class="badge" <?php echo $change_btn_display; ?>>
+                                    <button id="valid-change-btn" data-type="change" class="action btn btn-sm btn-primary">Change</button>
+                                    <button class="btn btn-dark btn-sm action edit-opt" data-type="cancel" <?php echo HIDE; ?>>Cancel</button>
+                                </span>
+                            </p>
+                           
+                            <form id="validate-form" class='edit-opt' action="action.php" method="post" <?php echo $form_display; ?>>
+                                <input type="hidden" name='stud_id' value='<?php echo $stud_id; ?>'>
+                                <input type="hidden" name='action' value='validateEnrollment'>
+                                <input type="submit" class='btn btn-success mb-2 w-100' name='accept' title='Enroll student' value='ACCEPT ENROLLEE'>
+                                <input type="submit" class='btn btn-secondary mb-2 w-100' name='reject' title='Decline Enrollee' value='DECLINE ENROLLEE'>
+                            </form>
                         </div>
                         <!-- PROFILE PICTURE END -->
                         <!-- DOCUMENT DETAILS -->
@@ -112,7 +89,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
                                 
                                 <div class="col">
                                     <a href="#" id="pop">
-                                        <img id="imageresource" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Alien_Case_File_for_Francesca_Rhee_-_NARA_-_6336263_%28page_29%29.jpg" style="width: 50%; height: auto;">
+                                        <img id="imageresource" src="<?php echo $birth_cert; ?>" style="width: 50%; height: auto;">
                                     </a>
 
                                     <!-- Creates the bootstrap modal where the image will appear -->
@@ -200,10 +177,3 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
         </div>
     </div>
 </div>
-
-<script>
-    $("#pop").on("click", function() {
-        $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
-        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-    });
-</script>

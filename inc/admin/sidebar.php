@@ -1,6 +1,5 @@
 <?php 
-// session handling
-$school_year = "2021 - 2022";
+$school_year = $_SESSION['school_year'];
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
@@ -75,6 +74,12 @@ $school_year = "2021 - 2022";
                     <li><a id="section" href="section.php">Section</a></li>
                     <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
                 </ul>
+            </li>
+            <li class="sub-menu">
+                <a id="awards" href="award.php">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Awards</span>
+                </a>
             </li>
             <li class="sub-menu">
                 <a id='signatory' href="signatory.php">

@@ -13,6 +13,9 @@ const tableSetup = {
     ...commonTableSetup
 };
 
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"];
+
 var syTable = $("#table").bootstrapTable(tableSetup);
 var enrollAfter = false;
 try {
@@ -26,12 +29,10 @@ try {
  * @param {String} inputs    Receiving HTML tag of the current values
  */
 const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
-    let data, grade, quarter, semester, inputsToDisplay, inputsToHide;
+    let data, quarter, semester, inputsToDisplay, inputsToHide;
     // get values from table
     data = syTable.bootstrapTable("getRowByUniqueId", id);
-    console.log(id, "\n");
-    console.log(data);
-    grade = data.current_grd_val;
+    // grade = data.current_grd_val;
     quarter = data.current_qtr_val;
     semester = data.current_sem_val;
 
@@ -45,20 +46,20 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
 
     if (inputs == "input") {
         const SELECTOR = `select[data-id=${id}]`;
-        let grd = $(`${SELECTOR} [value=${grade}]`).text();
+        // let grd = $(`${SELECTOR} [value=${grade}]`).text();
         let qtr = $(`${SELECTOR} [value=${quarter}]`).text();
         let sem = $(`${SELECTOR} [value=${semester}]`).text();
 
         const INPUT = `input[data-id=${id}]`;
-        $(`${INPUT} [data-name=grade-level]`).val(grd);
+        // $(`${INPUT} [data-name=grade-level]`).val(grd);
         $(`${INPUT} [data-name=quarter]`).val(qtr);
         $(`${INPUT} [data-name=semester]`).val(sem);
         return;
     }
 
-    inputsToDisplay.eq(0).val(grade);
-    inputsToDisplay.eq(1).val(quarter);
-    inputsToDisplay.eq(2).val(semester);
+    // inputsToDisplay.eq(0).val(grade);
+    inputsToDisplay.eq(0).val(quarter);
+    inputsToDisplay.eq(1).val(semester);
 };
 
 
@@ -67,11 +68,11 @@ $(function() {
         syTable.bootstrapTable("showLoading");
         let element, row, id;
         element = $(this);
-        id = element.attr("data-id");                        // store the id of the row
-        element.toggleClass('d-none');                       // hide edit button
-        element.next(".edit-options").toggleClass('d-none'); // show the edit options div, which contains the cancel and save buttons
-        row = element.closest("tr");                         // get the row
-        $(".edit-btn").prop("disabled", true);               // disable other edit buttons
+        id = element.attr("data-id");                       // store the id of the row
+        element.toggle(false);                      // hide edit button
+        element.siblings(".edit-options").toggle(true);         // show the edit options div, which contains the cancel and save buttons
+        row = element.closest("tr");                        // get the row
+        $(".edit-btn").prop("disabled", true);              // disable other edit buttons
 
         setCurrentValuesToInput(id, row, "select");
         syTable.bootstrapTable("hideLoading");
@@ -87,8 +88,8 @@ $(function() {
 
         setCurrentValuesToInput(id, row);
         editOptions = element.closest(".edit-options");      // hide the edit options
-        editOptions.toggleClass("d-none");
-        editOptions.prev(".edit-btn").toggleClass("d-none");
+        editOptions.toggle(false);
+        editOptions.prev(".edit-btn").toggle(true);
         syTable.bootstrapTable("hideLoading");
     });
 
@@ -108,16 +109,16 @@ $(function() {
         $.post("action.php", formData);
 
         let newGradeVal, newQtrVal, newSemVal;
-        newGradeVal = selectInputs.eq(0).val(); // .eq() is like getting the element through its index
-        newQtrVal = selectInputs.eq(1).val();
-        newSemVal = selectInputs.eq(2).val();
+        // newGradeVal = selectInputs.eq(0).val(); // .eq() is like getting the element through its index
+        newQtrVal = selectInputs.eq(0).val();
+        newSemVal = selectInputs.eq(1).val();
 
         // update the current values in the record of bootstrap table with
         // the given row ID, and row values
         $("#table").bootstrapTable('updateByUniqueId', {
             id,
             row: {
-                current_grd_val: newGradeVal,
+                // current_grd_val: newGradeVal,
                 current_qtr_val: newQtrVal,
                 current_sem_val: newSemVal
             }}
@@ -125,14 +126,14 @@ $(function() {
 
         let grade, quarter, semester, inputsToDisplay;
         // find select inputs get their labels and set them to the input html tags
-        grade = selectInputs.eq(0).find(`[value='${newGradeVal}']`).text();
-        quarter = selectInputs.eq(1).find(`[value='${newQtrVal}']`).text();
-        semester = selectInputs.eq(2).find(`[value='${newSemVal}']`).text();
+        // grade = selectInputs.eq(0).find(`[value='${newGradeVal}']`).text();
+        quarter = selectInputs.eq(0).find(`[value='${newQtrVal}']`).text();
+        semester = selectInputs.eq(1).find(`[value='${newSemVal}']`).text();
 
         inputsToDisplay = $(`input[class*='form-control'][data-id='${id}']`);
-        inputsToDisplay.eq(0).val(grade);
-        inputsToDisplay.eq(1).val(quarter);
-        inputsToDisplay.eq(2).val(semester);
+        // inputsToDisplay.eq(0).val(grade);
+        inputsToDisplay.eq(0).val(quarter);
+        inputsToDisplay.eq(1).val(semester);
 
         $(".edit-btn").prop("disabled", false);         // enable all edit buttons
         syTable.bootstrapTable("hideLoading");
@@ -242,22 +243,83 @@ $(function() {
     });
 
     /** Month */
-    $(document).on("click", ".edit-month-btn", function () {
-        let idRow = $(this).attr("data-id");
-        let monthsOfSY = syTable.bootstrapTable('getRowByUniqueId', idRow);
-        let modal = $("#month-modal");
-        modal.find("input[type='number']").each(function (i, e) {
-            let inputID = e.getAttribute("id");
-            e.value = monthsOfSY[inputID];
-        });
-        modal.find("[name='sy-id']").val(idRow);
-        modal.modal("show");
+    function createMonthListItem(monthID, monthDesc, days) {
+        return `<li class='form-control-sm row'>
+                    <label for='${monthID}' class='col-form-label-sm col-4'>${monthDesc}</label>
+                    <div class='col-5'>
+                        <input value='${days}' id='${monthID}' type='number' name='month[${monthID}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
+                    </div>
+                    <div class='col-3 text-center'>
+                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
+                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                    </div>
+                </li>`;
+    }
 
+    function createNewMonthInputItem(monthDesc, days) {
+        return `<li class='form-control-sm row'>
+                    <label class='col-form-label-sm col-4'>${monthDesc}</label>
+                    <div class='col-5'>
+                        <input value='${days}' type='number' name='newmonth[${monthDesc}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
+                    </div>
+                    <div class='col-3 text-center'>
+                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
+                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                    </div>
+                </li>`;
+    }
+
+    $(document).on("click", ".edit-month-btn", function () {
+        let idRow, modal, row, monthsOfSY, syID;
+        idRow = $(this).attr("data-id");
+        modal = $("#month-modal");
+        row = syTable.bootstrapTable('getRowByUniqueId', idRow);
+        monthsOfSY = row.acad_months;
+
+        console.log(row);
+        let monthsHTML = '';
+        for (const monthID in monthsOfSY) {
+            let item = monthsOfSY[monthID];
+            let monthDesc = item['month'];
+            monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
+        }
+
+        $("#month-form").find("[name='sy-id']").val(row.id);
+        $("#month-list").html(monthsHTML);
+        modal.modal("show");
+    });
+
+    $(document).on("click", ".edit-opt", function(e) {
+        e.preventDefault();
+        let button = $(this);
+      
+
+        let toggle;
+        switch(button.attr("data-type")) {
+            case "add":
+                let lastMonth  = $("#month-list li").last().find("label").text();  // get month name of the last li
+                let index = MONTHS.indexOf(lastMonth) + 1;                         // get the next index month
+                let newMonth  = MONTHS[(index === 11) ? 0 : index];
+                $("#month-list").append(createNewMonthInputItem(newMonth, 20));
+                return;
+            case "remove":
+                toggle = true;
+                break;
+            case "undo":
+                toggle = false;
+                break;
+        }
+        button.toggle(false);
+        button.siblings().toggle(true);
+        button.closest("li").find("input").prop('disabled', toggle);
     });
 
     $(document).on("submit", "#month-form", function (e) {
         e.preventDefault();
+        console.log($(this).serializeArray());
         $.post("action.php", $(this).serializeArray(), function () {
+            syTable.bootstrapTable("refresh");
+            $("#month-modal").modal("hide");
             showToast("success", "Successfully updated");
         });
     });

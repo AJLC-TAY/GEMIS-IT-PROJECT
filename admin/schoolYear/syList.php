@@ -57,31 +57,12 @@
                     <input type="hidden" name="sy-id">
                     <input type="hidden" name="action" value="editAcademicDays">
                     <div class="container">
-                        <?php
-                        $months = array(
-                            'jan' => 'January',
-                            'feb' => 'February',
-                            'mar' => 'March',
-                            'apr' => 'April',
-                            'may' => 'May',
-                            'jun' => 'June',
-                            'jul' => 'July ',
-                            'aug' => 'August',
-                            'sep' => 'September',
-                            'oct' => 'October',
-                            'nov' => 'November',
-                            'dec' => 'December',
-                        );
-                        foreach ($months as $m => $month) {
-                            echo "<div class='form-control-sm row'>
-                                        <label for='#$m' class='col-form-label-sm col-4'>$month</label>
-                                        <div class='col-8'>
-                                            <input id='$m' type='number' name='month[$m]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='$month' min='0' max='30''>
-                                        </div>
-                                    </div>";
-                        }
-                        ?>
-
+                        <ul id="month-list" class="p-0"></ul>
+                        <div class='form-control-sm row'>
+                            <div class='col-6'>
+                                <button class='btn btn-sm btn-primary edit-opt' data-type='add'>Add Month</button>
+                            </div>
+                        </div>
                     </div>
                 </form>
              </div>

@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -7,20 +8,41 @@
             <li class="breadcrumb-item active">Enrollment</li>
         </ol>
     </nav>
-    <h3 class="fw-bold">Enrollment</h3>
+    <div class="d-flex justify-content-between mb-3">
+        <h3 class="fw-bold">Enrollment</h3>
+        <form id="enroll-form" action="action.php" method="post">
+            <input type="hidden" name="action" value="editEnrollStatus">
+            <!-- <div class="form-check form-switch">
+                <input id="auto-refresh" type="checkbox" class="form-check-input" checked>
+                <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
+            </div> -->
+            <div class="toggle d-flex flex-row-reverse align-items-center">
+                <label class="switch ms-3">
+                    <input name="enrollment" type="checkbox" <?php echo $_SESSION['enroll_status'] == 0 ? "" : "checked"; ?>>
+                    <span class="slider round"></span>
+                </label>
+                Accept enrollees
+            </div>
+        </form>
+    </div>
 </header>
-<div class="toggle d-flex flex-row-reverse">
-    <label class="switch">
-        <input type="checkbox">
-        <span class="slider round"></span>
-    </label>
-</div>
 <section class="row">
+    <div class="d-inline-flex align-items-center">
+        <!-- <div class="col-auto "> -->
+            <button class="me-3 btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
+        <!-- </div> -->
+        <!-- <div class="col-auto"> -->
+            <div class="form-check form-switch">
+                <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
+                <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
+            </div>
+        <!-- </div>     -->
+    </div>
     <div class="col-lg-4">
         <div class="card-box bg-warning">
             <div class="inner">
-                <h4>Pending: </h4>
-                <!-- <h2> <?php echo $pending; ?> </h2> -->
+                <h4>Pending</h4>
+                 <h2 id="pending"></h2>
             </div>
             
         </div>
@@ -28,8 +50,8 @@
     <div class="col-lg-4">
         <div class="card-box bg-default">
             <div class="inner">
-                <h4>Enrolled: </h4>
-                <!-- <h2> <?php echo $enrolled; ?> </h2> -->
+                <h4>Enrolled</h4>
+                 <h2 id='enrolled'></h2>
             </div>
             
         </div>
@@ -37,8 +59,8 @@
     <div class="col-lg-4">
         <div class="card-box bg-danger">
             <div class="inner">
-                <h4>Rejected: </h4>
-                <!-- <h2> <?php echo $rejected; ?> </h2> -->
+                <h4>Rejected</h4>
+                <h2 id="rejected"></h2>
             </div>
         </div>
     </div>
@@ -48,7 +70,6 @@
     <h4>QUICK ACTIONS</h4>
     <div class="col-lg-12">                       
         <div class="row mt ps-3">
-            
             <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-5x"></i><br>View Enrollment List</a>
             <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
             <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a>

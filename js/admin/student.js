@@ -43,37 +43,30 @@ $(function() {
         readpsaURL(this);
     });
 
+    $("#form137Upload").change(function(){
+        readpsaURL(this);
+    });
+
     $(".psa-photo").click(()=> $("#psaUpload").click());
-
-    $(document).on('click','.deactivate', function(){
-        user_id = $(this).attr('data-user-id');
-        let confirmationModal = $('#deactivateConfirmation');
-        confirmationModal.find('.modal-indentifier').html(section);
-        confirmationModal.modal('toggle');
-    });
-
-    $(document).on('click', '.deact-btn', function() {
-        var action = 'deactivate'
-        $.post("action.php", {user_id, action}, function() {	
-            $('#deactivateConfirmation').modal("hide");
-            showToast("success", "Student Deactivated.");
-            // location.reload();
-        });
-
-    });
+    $(".form137-photo").click(()=> $("#form137Upload").click());
 
     $("#psa").click(function(){
-        console.log(this.src)
         let preview = $('#imgPreview');
+        img = document.getElementById("psaPreview");
+        img.src = this.src;
+        //  this.src;
+        preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
 
-    // $(document).on('click','.img', function(){
-    //     let confirmationModal = $('#myModal');
-    //     // confirmationModal.find('.modal-indentifier').html(section);
-    //     confirmationModal.modal('toggle');
-    //     console.log("cjklasdjf");
-    // });
+    $("#form137").click(function(){
+        let preview = $('#imgPreview');
+        img = document.getElementById("psaPreview");
+        img.src = this.src;
+        //  this.src;
+        preview.find('.modal-title').text(this.alt);
+        preview.modal('toggle');
+    });
 
     hideSpinner();
 });

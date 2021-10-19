@@ -1,6 +1,6 @@
 <?php
 
-    $con=mysqli_connect('localhost','root','','login',3308);
+    $con = mysqli_connect('localhost','root','','gemis',3308);
 
     if(!$con)
     {
