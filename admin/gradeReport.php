@@ -1,4 +1,7 @@
-<?php 
+<?php
+
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
+
 require_once("../inc/sessionHandling.php");
 include_once("../inc/head.html"); ?>
 <title>Grade Report | GEMIS</title>
@@ -143,9 +146,10 @@ include_once("../inc/head.html"); ?>
                         <?php
                         include "../class/Administration.php";
                         $admin = new Administration();
-                        // $report_id = 1;
-                        $report_id = $_GET['report_id'];
-                        $stud_id = '1111';  // test
+                         $report_id = 1;
+                        // $report_id = $_GET['report_id'];
+                        $stud_id = '110001';  // test
+
                         // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
                         $grades = $admin->listGrade();
@@ -158,13 +162,13 @@ include_once("../inc/head.html"); ?>
                         $sex = $userProfile->get_sex();
                         $age = $userProfile->get_age();
                         $section = $userProfile->get_section(); 
-                        $teacherName = $_POST['teacher_name'];
-                        // $teacherName = 'Kesley Bautista Trinidad';
+                        // $teacherName = $_POST['teacher_name'];
+                         $teacherName = 'Kesley Bautista Trinidad';
                         $grade = 12;
-                        $signatoryName = $_POST['signatory_name'];
-                        // $signatoryName = 'Whitney Houston';
-                        // $position = 'Secondary School Principal III';
-                        $position = $_POST['position'];
+                        // $signatoryName = $_POST['signatory_name'];
+                        $signatoryName = 'Whitney Houston';
+                        $position = 'Secondary School Principal III';
+                        // $position = $_POST['position'];
                         // $admittedIn = 'None';
                         // $eligible = '12';
                         // $date = date("F j, Y");
@@ -174,14 +178,18 @@ include_once("../inc/head.html"); ?>
 
                         function prepareGradeRecordsHTML($grade)
                         {
-                            $row = '';
-                            // echo json_encode($grade);
-                            $row .= "<tr>
-                                        <td>{$grade[0]['sub_name']}</td>
-                                        <td align='center'>{$grade[0]['grade_1']}</td>
-                                        <td align='center'>{$grade[0]['grade_2']}</td>
-                                        <td align='center'>{$grade[0]['grade_f']}</td>
+                             $row = '';
+                             for ($x = 0; $x < sizeof($grade); $x++) {
+                                 
+                                $row .= "<tr>
+                                        <td>{$grade[$x]['sub_name']}</td>
+                                        <td align='center'>{$grade[$x]['grade_1']}</td>
+                                        <td align='center'>{$grade[$x]['grade_2']}</td>
+                                        <td align='center'>{$grade[$x]['grade_f']}</td>
                                         </tr>";
+
+                               }
+                              
                             return $row;
                         }
 
@@ -210,6 +218,7 @@ include_once("../inc/head.html"); ?>
                                             <tr class='bg-light'>
                                                 <td colspan='4'>Core Subjects</td>
                                             </tr>" .
+                                            
                                             prepareGradeRecordsHTML($grades['core'])
                                             . "<tr class='bg-light'>
                                                 <td colspan='4'>Applied Subjects</td>
@@ -258,21 +267,60 @@ include_once("../inc/head.html"); ?>
 
                         $observed_values = $admin->listValuesReport();
                         // print_r($attendance);
-                        ?>
+                        function otherinfo(){
+                            echo "
+                            <h5 class='text-center'><b>PARENT / GUARDIAN'S SIGNATURE</b></h5>
+                                    <div class='perLine text-center fsize'>1<sup>st</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>2<sup>nd</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>3<sup>rd</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>4<sup>th</sup> Quarter ______________________________</div>
 
-
-                        <div class="d-flex-inline">
-                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
-                        </div>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
-                            <ul class="template p-0 w-100">
-                            <li class="p-0 mb-0 mx-auto">
+                                    <br><br>
+                                    <h6 class='text-center'><b>CERTIFICATE OF TRANSFER</b></h6>
+                                    <br>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Admitted to Grade: </div>
+                                        <div class='subLine text-center'>________________</div>
+                                        <div class='subLine'>Section: </div>
+                                        <div class='subLine text-center'>________________</div>
+                                    </div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Eligible for Admission to Grade: </div>
+                                        <div class='subLine'>________________</div>
+                                    </div>
+                                    <br>
+                                    <div class='fsize left'><b> Approved: </b></div>
+                                    <br>
+                                    <div class='parentLine fsize text-center'>
+                                        <div class='subLine3'>___________________</div>
+                                        <div class='subLine3'>___________________</div>
+                                    </div>
+                                    <div class='parentLine fsize text-center'>
+                                        <div class='subLine3'>___________________</div>
+                                        <div class='subLine3'>Teacher</div>
+                                    </div>
+                                    <br><br><br>
+                                    <h6 class='text-center'><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Admitted in:</div>
+                                        <div class='subLine'>___________________</div>
+                                    </div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Date:</div>
+                                        <div class='subLine'>___________________</div>
+                                    </div>";
+                        }
+                        function logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position){ 
+                           
+                            
+                            echo "
+                            <li class='p-0 mb-0 mx-auto'>
                                     <p>School Form 9 - SHS</p>
-                                    <div class="row p-0 mx-1">
-                                        <div class="col-3 p-0">
-                                            <img src="../assets/deped_logo.png" alt="DEPED Logo" title="DEPED Logo">
+                                    <div class='row p-0 mx-1'>
+                                        <div class='col-3 p-0'>
+                                            <img src='../assets/deped_logo.png' alt='DEPED Logo' title='DEPED Logo'>
                                         </div>
-                                        <div class="col-6 p-0 text-center">
+                                        <div class='col-6 p-0 text-center'>
                                             <p>
                                                 Republic of the Philippines<br>
                                                 Department of Education<br>
@@ -283,68 +331,81 @@ include_once("../inc/head.html"); ?>
                                                 Magsaysay Ave., Baguio City
                                             </p>
                                         </div>
-                                        <div class="col-3 p-0" style="text-align: right;">
-                                            <img src="../assets/school_logo.jpg" alt="PCNSH Logo" title="PCNSH Logo">
+                                        <div class='col-3 p-0' style='text-align: right;'>
+                                            <img src='../assets/school_logo.jpg' alt='PCNSH Logo' title='PCNSH Logo'>
                                         </div>
                                     </div>
-                                    <h5 class="text-center"><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
+                                    <h5 class='text-center'><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
                                     <br><br><br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine2">Name: </div><br>
-                                        <?php // echo "$lastName, $firstName $midName"; ?>
-                                        <div class="subLine2 ind"><?php echo $lastName; ?></div><br>
-                                        <div class="subLine2 ind"><?php echo $firstName; ?></div><br>
-                                        <div class="subLine2 ind"><?php echo $midName; ?></div><br>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine2'>Name: </div><br>
+                                        <?php echo '$lastName, $firstName $midName'; ?>
+                                        <div class='subLine2 ind'><?php echo $lastName; ?></div><br>
+                                        <div class='subLine2 ind'><?php echo $firstName; ?></div><br>
+                                        <div class='subLine2 ind'><?php echo $midName; ?></div><br>
                                     </div>
-                                    <div class="parentLine fsizes">
-                                        <div class="subLine2 ind"> </div><br>
-                                        <div class="subLine2 ind">(Last Name)</div>
-                                        <div class="subLine2 ind">(First Name)</div>
-                                        <div class="subLine2 ind">(Middle Name)</div>
+                                    <div class='parentLine fsizes'>
+                                        <div class='subLine2 ind'> </div><br>
+                                        <div class='subLine2 ind'>(Last Name)</div>
+                                        <div class='subLine2 ind'>(First Name)</div>
+                                        <div class='subLine2 ind'>(Middle Name)</div>
                                     </div>
                                     <br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Age: </div>
-                                        <div class="subLine"><?php echo $age; ?></div>
-                                        <div class="subLine">Gender: </div>
-                                        <div class="subLine"><?php echo $sex; ?></div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Age: </div>
+                                        <div class='subLine'><?php echo $age; ?></div>
+                                        <div class='subLine'>Gender: </div>
+                                        <div class='subLine'><?php echo $sex; ?></div>
                                     </div>
-                                    <div class="parentLine  fsize">
-                                        <div class="subLine">Grade: </div>
-                                        <div class="subLine"><?php echo $grade; ?></div>
-                                        <div class="subLine">Section: </div>
-                                        <div class="subLine"><?php echo $section; ?></div>
+                                    <div class='parentLine  fsize'>
+                                        <div class='subLine'>Grade: </div>
+                                        <div class='subLine'><?php echo $grade; ?></div>
+                                        <div class='subLine'>Section: </div>
+                                        <div class='subLine'><?php echo $section; ?></div>
                                     </div>
-                                    <div class="perLine text-center fsize">LRN: <?php echo $lrn; ?></div> 
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">School Year: </div>
-                                        <div class="subLine"><?php echo $school_year; ?></div>
+                                    <div class='perLine text-center fsize'>LRN: <?php echo $lrn; ?></div> 
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>School Year: </div>
+                                        <div class='subLine'><?php echo $school_year; ?></div>
                                     </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Track/Strand: </div>
-                                        <div class="subLine"><?php echo $trackStrand[0]; ?></div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Track/Strand: </div>
+                                        <div class='subLine'><?php echo $trackStrand[0]; ?></div>
                                     </div>
                                     <br>
                                     <div class='parag'>
-                                        <h7 class="fsize">Dear Parent,<br><br></h7>
-                                        <p class="par">
+                                        <h7 class='fsize'>Dear Parent,<br><br></h7>
+                                        <p class='par'>
                                             This report card shows the ability and progress your child has made in the different learning areas as well as his/her core values.
                                         </p>
-                                        <p class="par">
+                                        <p class='par'>
                                             The school welcomes you should you desire to know more about your child's progress.
                                         </p>
                                     </div>
                                     <br><br><br>
-                                    <div class="fsize right">
+                                    <div class='fsize right'>
                                         <div> <?php echo $teacherName; ?></div>
                                         <div> Class Adviser </div>
                                     </div>
                                     <br><br><br>
-                                    <div class="fsize left">
+                                    <div class='fsize left'>
                                         <div><?php echo $signatoryName; ?></div>
                                         <div> <?php echo $position; ?> </div>
                                     </div>
-                                </li>
+                              </li>  
+                            ";
+                        }
+                        ?>
+
+
+                        <div class="d-flex-inline">
+                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
+                        </div>
+                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
+                            <ul class="template p-0 w-100">
+                            <?php if (!isset($_GET['module'])) {
+                                logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
+                            }?>
                                 <hr class='m-0'>
                                 <li class="p-0 mb-0 mx-auto">
                                     <h5 class="text-center"><b>REPORT ON ATTENDANCE</b></h5><br>
@@ -400,49 +461,14 @@ include_once("../inc/head.html"); ?>
                                                 ?>
                                             </tr>
                                         </tbody>
-                                    </table>
-                                    <br>
-                                    <h5 class="text-center"><b>PARENT / GUARDIAN'S SIGNATURE</b></h5>
-                                    <div class="perLine text-center fsize">1<sup>st</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">2<sup>nd</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">3<sup>rd</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">4<sup>th</sup> Quarter ______________________________</div>
-
-                                    <br><br>
-                                    <h6 class="text-center"><b>CERTIFICATE OF TRANSFER</b></h6>
-                                    <br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Admitted to Grade: </div>
-                                        <div class="subLine text-center">________________</div>
-                                        <div class="subLine">Section: </div>
-                                        <div class="subLine text-center">________________</div>
-                                    </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Eligible for Admission to Grade: </div>
-                                        <div class="subLine">________________</div>
-                                    </div>
-                                    <br>
-                                    <div class="fsize left"><b> Approved: </b></div>
-                                    <br>
-                                    <div class="parentLine fsize text-center">
-                                        <div class="subLine3">___________________</div>
-                                        <div class="subLine3">___________________</div>
-                                    </div>
-                                    <div class="parentLine fsize text-center">
-                                        <div class="subLine3">___________________</div>
-                                        <div class="subLine3">Teacher</div>
-                                    </div>
-                                    <br><br><br>
-                                    <h6 class="text-center"><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Admitted in:</div>
-                                        <div class="subLine">___________________</div>
-                                    </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Date:</div>
-                                        <div class="subLine">___________________</div>
-                                    </div>
+                                    </table> 
+                                    
+                                    <?php if (!isset($_GET['module'])) {
+                                        otherinfo(); 
+                                        
+                                    }?>
                                 </li>
+                                    
                                 <hr class='m-0'>
                                 <li class="p-0 mb-0 mx-auto">
                                     <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
