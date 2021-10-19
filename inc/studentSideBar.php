@@ -3,8 +3,9 @@
 session_start();
 $_SESSION['sy_id'] = 9;
 $_SESSION['sy_desc'] = "2021 - 2022";
-$_SESSION['user_type'] = "ST";
-$_SESSION['user_id'] = 1;
+$_SESSION['user_type'] = 'ST';
+$_SESSION['id'] = 110001;
+$_SESSION['sy_id'] = 9;
 $school_year = $_SESSION['sy_desc'];
 
 ?>
@@ -46,7 +47,7 @@ $school_year = $_SESSION['sy_desc'];
             </li>
             <!-- <?php echo $enrollment_item; ?> -->
             <li class="sub-menu">
-                <a id="" href="">
+                <a id="" href="enrollment.php?action=edit">
                 <i class="fa fa-tasks"></i>
                     <span>Enrollment</span>
                 </a>
@@ -58,7 +59,7 @@ $school_year = $_SESSION['sy_desc'];
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="" href="">
+                <a id="home" href="">
                     <i class="bi bi-card-list"></i>
                     <span>Grade</span>
                 </a>

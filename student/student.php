@@ -1,9 +1,8 @@
 <?php 
 // require_once("../inc/sessionHandling.php");
-$_SESSION['user_type'] = 'ST';
-$_SESSION['id'] = 110001;
-$_SESSION['sy_id'] = 9;
+
 include_once("../inc/head.html"); 
+include_once('../inc/studentSideBar.php');
 ?>
 <title>Student | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -19,6 +18,7 @@ include_once("../inc/head.html");
     <!-- SPINNER END -->
     <section id="container">
         <!-- MAIN CONTENT START -->
+        <?php  ?>
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">

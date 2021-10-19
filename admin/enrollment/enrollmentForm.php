@@ -532,7 +532,7 @@ if (isset($_GET['action'])) {
                     </div>
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
-                        <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
+                        <!-- <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit"> -->
                         <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>

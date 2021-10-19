@@ -14,6 +14,7 @@ include_once("../inc/head.html"); ?>
     </div>
     <!-- SPINNER END -->
     <section id="container">
+        <?php include_once('../inc/studentSideBar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -26,6 +27,7 @@ include_once("../inc/head.html"); ?>
                                 . '<script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>';
 
                             require("../admin/enrollment/enrollmentForm.php");
+                            // require("../admin/student/studentForm.php");
                             $bootstrapJS = '';
                             $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
 
