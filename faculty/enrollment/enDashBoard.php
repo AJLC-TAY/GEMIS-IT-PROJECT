@@ -9,12 +9,7 @@
     </nav>
     <h3 class="fw-bold">Enrollment</h3>
 </header>
-<div class="toggle d-flex flex-row-reverse">
-    <label class="switch">
-        <input type="checkbox">
-        <span class="slider round"></span>
-    </label>
-</div>
+
 <section class="row">
     <div class="col-lg-4">
         <div class="card-box bg-warning">
@@ -50,9 +45,10 @@
         <div class="row mt ps-3">
             
             <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-5x"></i><br>View Enrollment List</a>
-            <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
-            <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a>
-            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-5x"><br></i>Enrollment Form</a>      
+            <!-- <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
+            <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a> -->
+            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-5x"><br></i>Enroll Student</a>
+            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-person-plus-fill fa-5x"><br></i>Student Admission</a>        
         </div>
     </div>
 </div>
