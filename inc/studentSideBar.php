@@ -59,13 +59,13 @@ $school_year = $_SESSION['sy_desc'];
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="home" href="">
+                <a id="home" href="grade.php?module=student">
                     <i class="bi bi-card-list"></i>
                     <span>Grade</span>
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="" href="">
+                <a id="" href="transcript.php">
                     <i class="bi bi-list"></i>
                     <span>Transcript of Records</span>
                 </a>
