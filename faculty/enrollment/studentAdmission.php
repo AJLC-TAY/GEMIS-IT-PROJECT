@@ -16,7 +16,7 @@ require("../class/Administration.php");
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Student Admission</h3>
         <div>
-            <button type="button" class="btn btn-success"><i class="bi bi-eye me-2"></i>Admit</button>
+            <button type="button" class="btn btn-success">Admit</button>
             <a href="" id="add-btn" class="btn btn-danger">Reject</a>
         </div>
     </div>
