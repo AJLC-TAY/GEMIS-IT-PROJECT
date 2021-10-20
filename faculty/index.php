@@ -85,7 +85,7 @@ print_r($_SESSION['roles']);
                             <!-- CLASSES -->
                             <div class="container mb-3">
                                 <section class="row">
-                                    <h5 class="fw-bold">CLASSES</h5>
+                                    <h5 class="fw-bold">ASSIGNED CLASSES</h5>
                                     <div class="col-lg-4">
                                         <div class="card-box bg-default">
                                             <div class="inner">

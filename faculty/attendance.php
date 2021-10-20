@@ -35,73 +35,73 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
         <?php include_once('../inc/facultySidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
-            <section class="wrapper">
+            <section class="wrapper ps-4">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row mt ps-3">
-                            <!-- HEADER -->
-                            <header id="main-header">
-                                <!-- BREADCRUMB -->
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active">Attendance</li>
-                                    </ol>
-                                </nav>
-                                <div class="d-flex">
-                                    <div class="col-auto">
-                                        <p class="text-secondary m-0"><medium>First Semester</medium></p>
-                                        <h3 class="m-0 fw-bold">12 ABM A</h3>
-                                        <h5 class="m-0">Attendance</h5>
-                                    </div>
+                    <div class="row mt ps-3">
+                        <!-- HEADER -->
+                        <header id="main-header">
+                            <!-- BREADCRUMB -->
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                    <li class="breadcrumb-item active">Attendance</li>
+                                </ol>
+                            </nav>
+                            <div class="d-flex">
+                                <div class="col-auto">
+                                    <p class="text-secondary m-0">
+                                        <medium>First Semester</medium>
+                                    </p>
+                                    <h3 class="m-0 fw-bold">12 ABM A</h3>
+                                    <h5 class="m-0">Attendance</h5>
                                 </div>
-                                <hr class="mt-3 mb-4">
-                            </header>
-                            <!-- HEADER END -->
-                            <!-- ATTENDANCE TABLE -->
-                            <div class="container mt-1 ms-0">
-                                <div class="card w-100 h-auto bg-light">
-                                    <form id="attendance-form" action="action.php" method="POST">
-                                        <input type="hidden" name="action" value="changeAttendance">
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <!-- SEARCH BAR -->
-                                            <span class="flex-grow-1 me-3">
-                                                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                                            </span>
-                                            <div class="col-2 me-2">
-                                                <select name="month" class="form-select form-select-sm">
-                                                    <?php
-                                                    foreach ($months as $month) {
-                                                        echo "<option value='$month' " . ($month == $current_month ? "selected" : "") . ">$month</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                            <div class="col-1">
-                                                <input type="text" name="academicDays" class="form-control form-control-sm number" placeholder="Days" title="Academic Days">
-                                            </div>
+                            </div>
+                            <hr class="mt-3 mb-4">
+                        </header>
+                        <!-- HEADER END -->
+                        <!-- ATTENDANCE TABLE -->
+                        <div class="container mt-1 ms-0">
+                            <div class="card w-100 h-auto bg-light">
+                                <form id="attendance-form" action="action.php" method="POST">
+                                    <input type="hidden" name="action" value="changeAttendance">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <!-- SEARCH BAR -->
+                                        <span class="flex-grow-1 me-3">
+                                            <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                                        </span>
+                                        <div class="col-2 me-2">
+                                            <select name="month" class="form-select form-select-sm">
+                                                <?php
+                                                foreach ($months as $month) {
+                                                    echo "<option value='$month' " . ($month == $current_month ? "selected" : "") . ">$month</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-1">
+                                            <input type="text" name="academicDays" class="form-control form-control-sm number" placeholder="Days" title="Academic Days">
+                                        </div>
 
-                                            <div class="col-auto">
-                                                <button class="link btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
-                                                <div class="edit-options" style="display: none;">
-                                                    <a href="attendance.php" role="button" class="btn btn-sm btn-outline-dark me-1 ms-2">Cancel</a>
-                                                    <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">
-                                                </div>
+                                        <div class="col-auto">
+                                            <button class="link btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                            <div class="edit-options" style="display: none;">
+                                                <a href="attendance.php" role="button" class="btn btn-sm btn-outline-dark me-1 ms-2">Cancel</a>
+                                                <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">
                                             </div>
                                         </div>
-                                        <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
-                                            <thead class='thead-dark'>
-                                                <tr>
-                                                    <th scope='col' data-width="100" data-align="center" data-field="stud_id" title="Student ID">SID</th>
-                                                    <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present_e">Present</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent_e">Absent</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy_e">Tardy</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                </div>
+                                    </div>
+                                    <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <th scope='col' data-width="100" data-align="center" data-field="stud_id" title="Student ID">SID</th>
+                                                <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present_e">Present</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent_e">Absent</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy_e">Tardy</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </form>
                             </div>
                         </div>

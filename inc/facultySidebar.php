@@ -43,7 +43,7 @@ if (in_array('award_coor', $roles)) {
 <!-- HEADER END -->
 <!-- SIDE BAR START -->
 <aside>
-    <div id="sidebar" class="nav-collapse ">
+    <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
             <h5 class="centered">SY <?php echo $school_year ?></h5>
@@ -79,7 +79,7 @@ if (in_array('award_coor', $roles)) {
             </li>
             <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
-            <li class="sub-menu mt-5">
+            <li class="sub-menu">
                 <a id='archived' href="archived.php">
                     <i class="fa fa-archive"></i>
                     <span>Archived Classes</span>
