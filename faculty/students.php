@@ -20,14 +20,15 @@ $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 $adv_opn = '';
 $sub_class_opn = '';
 
-$adv_table_display = 'd-none';
-$sub_table_display = '';
+// $adv_table_display = 'd-none';
+$adv_table_display = '';
+// $sub_table_display = '';
 
 
 $adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
     $adv_table_display = '';
-    $sub_table_display = 'd-none';
+    // $sub_table_display = 'd-none';
     $section_code = $advisory['section_code'];
     $section_name = $advisory['section_name'];
 
@@ -54,7 +55,7 @@ if (!(is_null($sub_classes))) {
     if ($adv_count_is_empty) {
         # no advisory nor subject class at this point
         $adv_table_display = '';
-        $sub_table_display = 'd-none';
+        // $sub_table_display = 'd-none';
     }
 }
 

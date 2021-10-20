@@ -1098,14 +1098,13 @@ trait Grade
         
         while($grd = mysqli_fetch_assoc($res)) {
             $first = $qtr == '1' ? '': 'readonly';
-            $second = $qtr == '2' ? '': 'readonly';
-            $final = $qtr == '2' ? '': 'readonly';
+            $second_final = $qtr == '2' ? '': 'readonly';
             $class_grades[] = [
                 'stud_id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
                 'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
-                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $final value='{$grd['final_grade']}'>"
+                'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
+                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $second_final value='{$grd['final_grade']}'>"
             ];
             
         }

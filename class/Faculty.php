@@ -91,7 +91,7 @@ class FacultyModule extends Dbconfig
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'grd_1'  =>  $row['first_grading'],
                 'grd_2'  =>  $row['second_grading'],
-                'grd_f'  =>  $row['final_grading'],
+                'grd_f'  =>  $row['final_grade'],
                 'action' =>  "<div class='d-flex justify-content-center'>"
                     ."<a href='grade.php?id=$stud_id' class='btn btn-sm btn-primary' target='_blank'>Grade</a>"
                     ."</div>"

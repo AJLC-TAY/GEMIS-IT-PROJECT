@@ -5,7 +5,11 @@ include("../inc/head.html");
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 
-$sub_classes = $faculty->getHandled_sub_classes($teacher_id);
+// $sy_id = $_SESSION['sy_id'];
+$sy_id = 9;
+$teacher_id = (int) $_SESSION['id'];
+
+$sub_classes = $faculty->getHandled_sub_classes(26);
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -13,7 +17,7 @@ $adv_table_display = 'd-none';
 $sub_table_display = '';
 
 
-$schoolYearInfo = $faculty->getSchoolYearInfo($sy_id); //to be removed pag maayos ung sa session
+$schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
@@ -40,12 +44,11 @@ if (count($sub_classes) != 0) {
 
 ?>
 
-<title>Students | GEMIS</title>
+<title>Grade | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
 <body>
-
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
@@ -112,14 +115,13 @@ if (count($sub_classes) != 0) {
                                         <table id="table" class="table-striped table-sm">
                                             <thead class='thead-dark'>
                                                 <tr>
-                                                    <th scope='col' data-width="150" data-align="center" data-field="stud_id"></th>
+                                                    <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>
                                                     <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
                                                 </tr>
                                             </thead>
-
                                         </table>
                                     </form>
                                 </div>
@@ -127,8 +129,6 @@ if (count($sub_classes) != 0) {
                         </div>
                     </div>
                 </div>
-
-
                 <!-- FOOTER START -->
                 <?php include_once("../inc/footer.html"); ?>
                 <!-- FOOTER END -->

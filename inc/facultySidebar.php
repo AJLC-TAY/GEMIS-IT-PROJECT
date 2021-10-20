@@ -11,13 +11,12 @@ if (in_array('can_enroll', $roles)) {
                 ."</a>"
             ."</li>";
 }
-
 $award_coor_item = '';
 if (in_array('award_coor', $roles)) {
     $award_coor_item = " <li class='sub-menu'>"
                 ."<a id='awards' href='awards.php'>"
-                    ."<i class='fa fa-users'></i>"
-                    ."<span>Enrollment</span>"
+                    ."<i class='bi bi-award-fill'></i>"
+                    ."<span>Awards</span>"
                 ."</a>"
             ."</li>";
 }
@@ -60,7 +59,6 @@ if (in_array('award_coor', $roles)) {
                     <span>Profile</span>
                 </a>
             </li>
-            <?php echo $enrollment_item; ?>
             <li class="sub-menu">
                 <a id="students" href="students.php">
                     <i class="fa fa-graduation-cap"></i>
@@ -79,12 +77,7 @@ if (in_array('award_coor', $roles)) {
                     <span>Attendance</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="awards" href="awards.php">
-                    <i class="bi bi-award-fill"></i>
-                    <span>Awards</span>
-                </a>
-            </li>
+            <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
             <li class="sub-menu mt-5">
                 <a id='archived' href="archived.php">
