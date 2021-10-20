@@ -34,6 +34,11 @@ include_once("../inc/head.html"); ?>
                                     require("enrollment/enrollmentForm.php");
                                     $js = '<script type="text/javascript" src="../js/faculty/enrollment.js"></script>';
                                 }
+
+                                if ($_GET['page'] === 'admission') {
+                                    require("enrollment/studentAdmission.php");
+                                    $js = "<script type='module' src='../js/faculty/studentAdmission.js'></script>";
+                                }
                             } else {
                                 require("enrollment/enDashBoard.php");
                                 $js = "<script src='../js/faculty/enrollment.js'></script>";
