@@ -32,8 +32,6 @@ require("../class/Administration.php");
             </span>
             <div>
                 <button class="btn btn-primary btn-sm me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
-                <button id="export-opt" type="submit" class="btn btn-dark btn-sm me-1" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                <button id="track-archive-btn" class="btn btn-secondary btn-sm me-5"><i class="bi bi-archive me-2"></i>Archive</button>
                 <button id="" class="refresh btn btn-outline-primary btn-sm me-3"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
             </div>
             <div class="form-check form-switch my-1">
