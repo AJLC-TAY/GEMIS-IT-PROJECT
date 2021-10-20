@@ -200,7 +200,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists("../$form137") ? "../" . 
                             </div>
                         </div>
 
-                        <div class="col-md-4 card">
+                        <div class="col-md-4 card ms-4">
                             <div class="thumbnail">
                                 <div class="caption">
                                     <p class="fw-bold text-center">FORM 137</p>
