@@ -16,14 +16,13 @@ require("../class/Administration.php");
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Student Admission</h3>
         <div>
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
-            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success" title='Enroll a student' target="_blank"><i class="bi bi-plus me-2"></i>Enroll</a>
-            <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
+            <button type="button" class="btn btn-success"><i class="bi bi-eye me-2"></i>Admit</button>
+            <a href="" id="add-btn" class="btn btn-danger">Reject</a>
         </div>
     </div>
 </header>
 
-<!-- ENROLLEES TABLE -->
+<!-- STUDENT ADMISSION TABLE -->
 <div class="container">
     <div class="card w-100 h-auto bg-light">
         <div class="d-flex justify-content-between mb-2">
@@ -152,14 +151,11 @@ require("../class/Administration.php");
             <thead class='thead-dark'>
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
-                    <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="false" data-field="LRN">LRN</th>
                     <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
-                    <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
-                    <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
-                    <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                    <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="remarks">Remarks</th>
+                    <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>                    
                     <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
-                    <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+
                 </tr>
             </thead>
         </table>
