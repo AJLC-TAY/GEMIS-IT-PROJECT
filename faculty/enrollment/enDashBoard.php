@@ -48,7 +48,7 @@
             <!-- <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
             <a href='enrollment.php?page=setup' class="btn btn-secondary button col me-3"><i class="bi bi-gear-wide-connected fa-5x"></i><br>Enrollment Setup</a> -->
             <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-5x"><br></i>Enroll Student</a>
-            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-person-plus-fill fa-5x"><br></i>Student Admission</a>        
+            <a href='enrollment.php?page=admission' class="btn btn-secondary button col me-3"><i class="bi bi-person-plus-fill fa-5x"><br></i>Student Admission</a>        
         </div>
     </div>
 </div>
