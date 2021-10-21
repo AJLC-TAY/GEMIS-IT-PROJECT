@@ -1,6 +1,6 @@
 
 try {
-    var stepper = new Stepper($('#stepper')[0])
+    var stepper = new Stepper($('#stepper')[0]);
 } catch (e) {}
 
 $(function() {
@@ -42,6 +42,10 @@ $(function() {
         stepper.previous();
     });
 
+    /** Indigenous Group */
+    $(document).on("click", ".i-group-opt", function() {
+        $("[name='group-name']").prop("disabled", $(this).val() == "Yes" ? false : true);
+    });
 
     hideSpinner();
 });

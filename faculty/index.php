@@ -1,13 +1,19 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
-print_r($_SESSION['roles']);
 ?>
 
 <title>Home | GEMIS</title>
 </head>
 
 <body>
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
         <!--main content start-->
@@ -30,7 +36,7 @@ print_r($_SESSION['roles']);
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
                                             <ul class="ms-4 list-style p-0">
                                                 <li>
-                                                    <h4>Faculty User Name</h4>
+                                                    <h4><?php echo $_SESSION['User']; ?></h4>
                                                 </li>
                                                 <li>School Year: <?php echo $_SESSION['school_year']; ?></li>
                                             </ul>
@@ -127,6 +133,13 @@ print_r($_SESSION['roles']);
         </section>
         <!--main content end-->
     </section>
+    <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#home");
+            hideSpinner();
+        });
+    </script>
 </body>
 
 </html>

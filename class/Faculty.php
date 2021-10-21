@@ -205,11 +205,14 @@ class FacultyModule extends Dbconfig
 
     function getSchoolYearInfo($sy_id){
         //implement session for sy_id then remove param
-        $row_temp = $this->query("SELECT current_quarter AS qtr, current_semester AS sem FROM schoolyear WHERE sy_id='$sy_id';");
+        $row_temp = $this->query("SELECT current_quarter AS qtr, current_semester AS sem, can_enroll FROM schoolyear WHERE sy_id='$sy_id';");
         $sy = mysqli_fetch_row($row_temp);
         
-        return ['grading' => $sy[0],
-                'sem' => $sy[1]];
+        return [
+            'grading' => $sy[0],
+            'sem'     => $sy[1],
+            'enroll'  => $sy[2]
+        ];
     }
 
     public function editGrades() {
