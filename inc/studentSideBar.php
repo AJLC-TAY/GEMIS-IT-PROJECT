@@ -1,6 +1,6 @@
 <?php
 // session handling
-session_start();
+// session_start();
 $_SESSION['sy_id'] = 9;
 $_SESSION['sy_desc'] = "2021 - 2022";
 $_SESSION['user_type'] = 'ST';

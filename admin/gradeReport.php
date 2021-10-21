@@ -112,14 +112,14 @@ include_once("../inc/head.html"); ?>
 
 <body>
     <!-- SPINNER -->
-    <div id="main-spinner-con" class="spinner-con">
+    <!-- <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
+    </div> -->
     <!-- SPINNER END -->
     <section id="container"></section>
-    <?php include_once('../inc/admin/sidebar.php'); ?>
+    <?php //include_once('../inc/admin/sidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
         <section class="wrapper">
@@ -162,13 +162,13 @@ include_once("../inc/head.html"); ?>
                         $sex = $userProfile->get_sex();
                         $age = $userProfile->get_age();
                         $section = $userProfile->get_section(); 
-                        // $teacherName = $_POST['teacher_name'];
-                         $teacherName = 'Kesley Bautista Trinidad';
+                        $teacherName = $_POST['teacher_name'];
+                        //  $teacherName = 'Kesley Bautista Trinidad';
                         $grade = 12;
-                        // $signatoryName = $_POST['signatory_name'];
-                        $signatoryName = 'Whitney Houston';
+                        $signatoryName = $_POST['signatory_name'];
+                        // $signatoryName = 'Whitney Houston';
                         $position = 'Secondary School Principal III';
-                        // $position = $_POST['position'];
+                        $position = $_POST['position'];
                         // $admittedIn = 'None';
                         // $eligible = '12';
                         // $date = date("F j, Y");
@@ -178,9 +178,8 @@ include_once("../inc/head.html"); ?>
 
                         function prepareGradeRecordsHTML($grade)
                         {
-                             $row = '';
-                             for ($x = 0; $x < sizeof($grade); $x++) {
-                                 
+                            $row = '';
+                                for ($x = 0; $x < sizeof($grade); $x++) {
                                 $row .= "<tr>
                                         <td>{$grade[$x]['sub_name']}</td>
                                         <td align='center'>{$grade[$x]['grade_1']}</td>
@@ -195,7 +194,7 @@ include_once("../inc/head.html"); ?>
 
                         function renderSemesterGradeTable($semester_desc, $grades)
                         {
-                            echo "
+                            $grd =  "
                                     <h6><b>$semester_desc</b></h6>
                                     <table class='table w-100 table-sm'>
                                         <col style='width: 65%;'>
@@ -226,14 +225,30 @@ include_once("../inc/head.html"); ?>
                                             prepareGradeRecordsHTML($grades['applied'])
                                             . "<tr class='bg-light'>
                                                 <td colspan='4'>Specialized Subjects</td>
-                                            </tr>" .
-                                            prepareGradeRecordsHTML($grades['specialized'])
-                                            . "<tr class='bg-light fw-bold'>
-                                                <td colspan='3'>General Average for the Semester:</td>
+                                            </tr>";
+                                            if (array_key_exists('specialized',$grades)){
+                                                prepareGradeRecordsHTML($grades['specialized']);
+                                            } else {
+                                                for ($x = 0; $x < 5; $x++) {
+                                                    $grd.= "<tr height=26>
+                                                            <td> </td>
+                                                            <td align='center'> </td>
+                                                            <td align='center'> </td>
+                                                            <td align='center'> </td>
+                                                            </tr>";
+                    
+                                                   }
+                                            }
+
+                                $grd .= "<tr class='bg-light fw-bold'>
+                                            <td colspan='3'>General Average for the Semester:</td>
                                                 <td class='bg-white'></td>
                                             </tr>
                                         </tbody>
                                     </table>";
+
+                                echo $grd;
+                                    
                         }
 
                         function prepareStudentAttendanceHTML($label, $att)
