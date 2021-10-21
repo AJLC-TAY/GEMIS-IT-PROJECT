@@ -1506,7 +1506,10 @@ class StudentAward extends Award implements JsonSerializable
 
 
         
-            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,$sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,$religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, $section_code, $section, $parents, $guardians, $form137, $status)
+            public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
+                                        $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
+                                        $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, 
+                                        $section_code, $section, $parents, $guardians, $form137, $status)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1669,7 +1672,6 @@ class StudentAward extends Award implements JsonSerializable
             return $this->guardians;
         }
 
-
         public function jsonSerialize(){
         return [
             'stud_id' => $this->stud_id,
@@ -1720,7 +1722,7 @@ class StudentAward extends Award implements JsonSerializable
                 "curriculum"  => $this->curr_code,
                 "status"      => $this->status,
                 "action"      => "<div class='d-flex justify-content-center'>"
-                    ."<a href='enrollment.php?id={$this->stud_id}' class='btn btn-primary btn-sm w-auto me-1' title='View Enrollee' target='_blank'><i class='bi bi-eye'></i></a>"
+                    ."<a href='enrollment.php?page=credential&id={$this->stud_id}' class='btn btn-primary btn-sm w-auto me-1' title='View Enrollee' target='_blank'><i class='bi bi-eye'></i></a>"
                     ."<a href='enrollment.php?id={$this->stud_id}&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee' target='_blank'><i class='bi bi-box-arrow-up-left'></i></a>"
                     ."<button class='btn btn-secondary w-auto btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
                     ."</div>"

@@ -151,6 +151,124 @@ trait UserSharedMethods
         }
     }
 
+    /**
+     * Returns Student with the specified student ID.
+     * 1.   Get Student Personal Information
+     * 2.   Get Student Parent Information
+     * 3.   Get Student Guardian Information 
+     * 4.   Get Student enrollment Status
+     * 5.   Initialize Student object
+     * 
+     * @return Student Student object.
+     */
+    public function getStudent($id)
+    {
+        // Step 1
+        $result = $this->prepared_select("SELECT * FROM student as s
+                                        JOIN `address` as a ON a.stud_id = s.stud_id 
+                                        WHERE s.stud_id=?;", [$id], "i");
+        $personalInfo = mysqli_fetch_assoc($result);
+
+        // Step 2
+        $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
+        $parent = array();
+        while ($parentInfo = mysqli_fetch_assoc($result)) {
+            $extname = is_null($parentInfo['ext_name']) ? NULL : $parentInfo['ext_name'];
+            $name = $parentInfo['last_name'] . ", " . $parentInfo['first_name'] . " " . $parentInfo['middle_name'] . " " . $extname;
+            $parent[$parentInfo['sex']] = array(
+                'name' => $name,
+                'fname' => $parentInfo['first_name'],
+                'mname' => $parentInfo['middle_name'],
+                'lname' => $parentInfo['last_name'],
+                'extname' => $extname,
+                'sex' => $parentInfo['sex'],
+                'cp_no' => $parentInfo['cp_no'],
+                'occupation' => is_null($parentInfo['occupation']) ? NULL : $parentInfo['occupation']
+            );
+        };
+
+        // Step 3
+        $result = $this->prepared_select("SELECT * FROM guardian WHERE stud_id=?;", [$id], "i");
+        $guardian = array();
+
+        while ($guardianInfo = mysqli_fetch_assoc($result)) {
+            $name = $guardianInfo['guardian_last_name'] . ", " . $guardianInfo['guardian_first_name'] . " " . $guardianInfo['guardian_middle_name']; // to be added: $parentInfo['ext_name']
+            $guardian = [
+                'name' => $name,
+                'fname' => $guardianInfo['guardian_first_name'],
+                'mname' => $guardianInfo['guardian_last_name'],
+                'lname' => $guardianInfo['guardian_middle_name'],
+                'relationship' => $guardianInfo['relationship'],
+                'cp_no' => $guardianInfo['cp_no']
+            ]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
+        };
+
+        // Step 4
+         
+        $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;",[$id], "i");
+        while ($res = mysqli_fetch_row($status)) {
+            $stat = $res[0];
+        }
+
+
+        sizeof($parent) != 0 ?: $parent = NULL;
+        sizeof($guardian) != 0 ?: $guardian = NULL;
+
+        $result = $this->prepared_select("SELECT s.section_name, e.section_code FROM enrollment e JOIN section s ON s.section_code=e.section_code WHERE stud_id=?;", [$id], "i");
+        while ($res = mysqli_fetch_row($result)) {
+            $section = $res[0];
+            $section_code = $res[1];
+        }
+
+        $home_no = is_null($personalInfo['home_no']) ? "" : $personalInfo['home_no'];
+        $street = is_null($personalInfo['street']) ? "" : $personalInfo['street'];
+        $barangay = is_null($personalInfo['barangay']) ? "" : $personalInfo['barangay'];
+        $mun_city = is_null($personalInfo['mun_city']) ? "" : $personalInfo['mun_city'];
+        $province = is_null($personalInfo['mun_city']) ? "" : $personalInfo['mun_city'];
+        $zipcode  = is_null($personalInfo['zip_code']) ? "" : $personalInfo['zip_code'];
+
+
+        $complete_add = "$home_no $street $barangay, $mun_city, $province $zipcode";
+        $add = [
+            'address' => $complete_add,
+            'home_no' => $home_no,
+            'street' => $street,
+            'barangay' => $barangay,
+            'mun_city' => $mun_city,
+            'province' => $province,
+            'zipcode' => $zipcode
+        ];
+
+        //Step 5
+        return new Student(
+            $personalInfo['stud_id'],
+            $personalInfo['id_no'],
+            is_null($personalInfo['LRN']) ? NULL : $personalInfo['LRN'],
+            $personalInfo['first_name'],
+            is_null($personalInfo['middle_name']) ? NULL : $personalInfo['middle_name'],
+            $personalInfo['last_name'],
+            is_null($personalInfo['ext_name']) ? NULL : $personalInfo['ext_name'],
+            $personalInfo['sex'],
+            $personalInfo['age'],
+            $personalInfo['birthdate'],
+            is_null($personalInfo['birth_place']) ? NULL : $personalInfo['birth_place'],
+            is_null($personalInfo['indigenous_group']) ? NULL : $personalInfo['indigenous_group'],
+            is_null($personalInfo['mother_tongue']) ? NULL : $personalInfo['mother_tongue'],
+            is_null($personalInfo['religion']) ? NULL : $personalInfo['religion'],
+            $add,
+            is_null($personalInfo['cp_no']) ? NULL : $personalInfo['cp_no'],
+            is_null($personalInfo['psa_birth_cert']) ? NULL :  $personalInfo['psa_birth_cert'],
+            is_null($personalInfo['belong_to_IPCC']) ? NULL : $personalInfo['belong_to_IPCC'],
+            is_null($personalInfo['id_picture']) ? NULL : $personalInfo['id_picture'],
+            $section_code,
+            $section,
+            $parent,
+            $guardian,
+            is_null($personalInfo['form_137']) ? NULL : $personalInfo['form_137'],
+            $stat
+        );
+    }
+
 }
 
 trait FacultySharedMethods
@@ -543,17 +661,13 @@ trait Enrollment
 
     public function getEnrollees()
     {
-
-
         
-        $limit = $_GET['limit']; // 0
-        $offset = $_GET['offset']; // 25
+        $limit = $_GET['limit']; 
+        $offset = $_GET['offset']; 
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
             ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
             ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
-
-
 
         /**
          * Returns the sort query string in line with the received
@@ -629,11 +743,8 @@ trait Enrollment
         $result = $this->query($query);
         $num_rows_not_filtered = $result->num_rows;
 
-
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
-
-        // echo ($query);
 
         $result = $this->query($query);
         $records = array();
@@ -645,34 +756,11 @@ trait Enrollment
                 $row['curr_code'], $row['status'], $row['stud_id']
             );
         }
-
-
         $output = new stdClass();
         $output->total = $num_rows_not_filtered;
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);
-
-
-        //        $result = $this->query(
-//            "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-//            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
-//            ."JOIN student AS s USING (stud_id) "
-//            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id;"
-//        );
-//        echo json_encode($result);
-//        $enrollees = [];
-//        while ($row = mysqli_fetch_assoc($result)) {
-//            $enrollees[] = new Enrollee(
-//                $row['SY'], $row['LRN'], $row['name'],
-//                $row['date_of_enroll'], $row['enrolled_in'],
-//                $row['curr_code'], $row['status'], $row['stud_id']
-//            );
-//
-//        }
-//
-//
-//        return $enrollees;
     }
 
     public function getEnrollFilters():array
@@ -711,8 +799,7 @@ trait Enrollment
         $filter['status'] = ["0" => "Pending", "1" => "Enrolled", "2" => "Cancelled"];
 
         # sections
-        // $sy_id = $_SESSION['sy_id'];
-        $sy_id = 9;
+        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT section_code, section_name FROM section WHERE sy_id = '{$sy_id}';");
         while($row = mysqli_fetch_row($result)) {
             $filter['section'][$row[0]] = $row["1"];
@@ -1048,6 +1135,18 @@ trait Enrollment
                     }             
     }
 
+    public function getEnrollmentCurriculumOptions () 
+    {
+        $data = [];
+        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT * FROM program JOIN curriculum USING (curr_code) JOIN sycurriculum USING (curr_code) WHERE sy_id = '$sy_id'; ");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $code = $row['curr_code'];
+            $data[$code]['desc'] = $row['curr_desc'];
+            $data[$code]['programs'][] = [$row['prog_code'] => $row['description']];
+        }
+        return $data;
+    }
 }
 
 

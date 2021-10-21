@@ -106,6 +106,8 @@ if (isset($_GET['action'])) {
         }
     }
 }
+
+$enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
 ?>
 <!-- HEADER -->
 <header id="main-header">
@@ -524,7 +526,8 @@ if (isset($_GET['action'])) {
                                 <?php
                                 $grade_level = ["11" => 11, "12" => 12];
                                 foreach($grade_level as $id => $value) {
-                                    echo "<option value='$id'>$value</option>";                                                          }
+                                    echo "<option value='$id'>$value</option>";                                                          
+                                }
                                 ?>
                             </select>
                         </div>
@@ -532,7 +535,7 @@ if (isset($_GET['action'])) {
                     </div>
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
-                        <!-- <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit"> -->
+                        <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
                         <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
@@ -541,3 +544,6 @@ if (isset($_GET['action'])) {
     </div>
     <!-- STEPPER END -->
 </form>
+<script>
+    let enrollCurrOptions = <?php echo json_encode($enroll_curr_options); ?>;
+</script>

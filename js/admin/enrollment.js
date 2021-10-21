@@ -91,10 +91,35 @@ $(function() {
     });
 
      /** Indigenous Group */
-     $(document).on("click", ".i-group-opt", function() {
+    $(document).on("click", ".i-group-opt", function() {
         $("[name='group-name']").prop("disabled", $(this).val() == "Yes" ? false : true);
     });
-
+    
+    /** Enrollment curriculum options */
+    $(document).on("change, click", "#track-select, #program-select", function() {
+        let type = $(this).attr("name");
+        let value = $(this).val();
+        let html = '';
+        switch(type) {
+            case 'track':
+                enrollCurrOptions[value].programs.forEach(e => {
+                    html += `<option value='${Object.keys(e)}'>${Object.values(e)}</option>`;
+                })
+                $("#program-select").html(html);
+                break;
+            case 'program':
+                let track; 
+                Object.entries(enrollCurrOptions).forEach(e => {
+                    e[1].programs.forEach(ep => {
+                        if (Object.keys(ep)[0] == value) {
+                            track = e[0];
+                        }
+                    });
+                });
+                $("#track-select").val(track);
+                break;
+        }
+    });
 
     hideSpinner();
 });
