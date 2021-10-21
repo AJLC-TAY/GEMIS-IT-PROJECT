@@ -482,6 +482,7 @@ class SubjectClass extends Subject implements JsonSerializable
         $this->sub_code = $sub_code;
         $this->section_name = $section_name;
         $this->school_yr = $school_yr;
+        $this->sub_name = $sub_name;
         $color_badge = "success";
         $availability = "available";
         if ($teacher_id) {
@@ -512,6 +513,11 @@ class SubjectClass extends Subject implements JsonSerializable
     public function get_sub_code()
     {
         return $this->sub_code;
+    }
+
+    public function get_sub_name()
+    {
+        return $this->sub_name;
     }
 
     public function jsonSerialize()

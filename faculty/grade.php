@@ -7,6 +7,7 @@ $faculty = new FacultyModule();
 
 // $sy_id = $_SESSION['sy_id'];
 $sy_id = 9;
+echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
 
 $sub_classes = $faculty->getHandled_sub_classes(26);
@@ -29,10 +30,11 @@ if (count($sub_classes) != 0) {
         $section_code = $sub_class->get_sub_class_code();
         $section_name = $sub_class->get_section_name();
         $sub_code = $sub_class->get_sub_code();
+        $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
             . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
-            . "data-name='$section_name'>$section_name</option>";
+            . "data-name='$section_name'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {

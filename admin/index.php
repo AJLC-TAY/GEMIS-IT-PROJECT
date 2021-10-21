@@ -120,7 +120,7 @@ $admin_user = $admin->getProfile('AD');
                                                 <hr class="mt-1 mb-2">
                                                 <div class="d-flex flex-wrap">
                                                     <div class='row'>
-                                                        <div class="inner">
+                                                        
                                                             <div class="card-btn bg-pastel mx-4 mb-3">
                                                                 <div class="inner row">
                                                                     <div class="ms-4 col-sm-8">
