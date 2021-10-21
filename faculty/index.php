@@ -55,7 +55,7 @@ include_once("../inc/head.html");
                                         <div class="card-box bg-tea h-75">
                                             <div class="inner">
                                                 <h3>200</h3>
-                                                <p> TOTAL STUDENTS </p>
+                                                <h5> TOTAL STUDENTS </h5>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
