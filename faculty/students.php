@@ -128,19 +128,6 @@ if (!(is_null($sub_classes))) {
                                         </tr>
                                     </thead>
                                 </table>
-                                <!--                                    <table id="sub-table" class="table-striped table-sm --><?php //echo $sub_table_display; 
-                                                                                                                                ?>
-                                <!--">-->
-                                <!--                                        <thead class='thead-dark'>-->
-                                <!--                                        <tr>-->
-                                <!--                                            <th data-checkbox="true"></th>-->
-                                <!--                                            <th scope='col' data-width="200" data-align="center" data-field="id">ID</th>-->
-                                <!--                                            <th scope='col' data-width="450" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>-->
-                                <!--                                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sex">Sex</th>-->
-                                <!--                                            <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th>-->
-                                <!--                                        </tr>-->
-                                <!--                                        </thead>-->
-                                <!--                                    </table>-->
                             </div>
                         </div>
                         <!-- MODAL -->
@@ -168,7 +155,6 @@ if (!(is_null($sub_classes))) {
                             </div>
                         </div>
                         <!-- MODAL END -->
-
                     </div>
                 </div>
                 <!-- FOOTER START -->
@@ -220,8 +206,6 @@ if (!(is_null($sub_classes))) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <!--    --><?php //echo $js; 
-                ?>
     <script type='module' src='../js/faculty/students.js'></script>
 </body>
 

@@ -90,6 +90,11 @@ $(function() {
         $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
     });
 
+     /** Indigenous Group */
+     $(document).on("click", ".i-group-opt", function() {
+        $("[name='group-name']").prop("disabled", $(this).val() == "Yes" ? false : true);
+    });
+
 
     hideSpinner();
 });

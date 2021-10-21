@@ -234,12 +234,12 @@ if (isset($_GET['action'])) {
                             <div class="d-flex">
                                 <?php
                                 echo "<div class='form-check me-4'>
-                                                <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                                <input class='form-check-input i-group-opt' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                                 <label class='form-check-label' for='yes'> Yes </label>
                                         </div>
                                         <div class='form-check'>
-                                            <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
-                                                <label class='form-check-label' for='yes'> No </label>
+                                            <input class='form-check-input i-group-opt' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                                                <label class='form-check-label' for='no'> No </label>
                                         </div>";
                                 ?>
                             </div>
