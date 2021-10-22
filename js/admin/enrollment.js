@@ -31,15 +31,13 @@ $(function() {
 
     
     $(document).on('submit', '#enroll-report-form', function() {
-        // showSpinner();
-        console.log($(this).serializeArray());
         showToast('dark', 'Downloading file ...');
         setTimeout(() => {
             showToast('dark', 'Redirecting to enrollment dashboard ...');
         }, 2000);
-        // setTimeout(() => {
-        //     window.location.replace("enrollment.php?page=enrollees");
-        // }, 4000);
+        setTimeout(() => {
+            window.location.replace("enrollment.php?page=enrollees");
+        }, 4000);
     });
 
     $(document).on("change", "#id-no-select", function(e) {
@@ -110,8 +108,8 @@ $(function() {
             case 'program':
                 let track; 
                 Object.entries(enrollCurrOptions).forEach(e => {
-                    e[1].programs.forEach(ep => {
-                        if (Object.keys(ep)[0] == value) {
+                    e[1].programs.forEach(ep => { // e[1] holds the object containing the array e[0] = key of track
+                        if (Object.keys(ep)[0] == value) { // ep [0] holds the program code
                             track = e[0];
                         }
                     });

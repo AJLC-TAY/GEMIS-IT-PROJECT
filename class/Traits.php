@@ -563,19 +563,20 @@ trait FacultySharedMethods
     public function listAttendance($is_JSON = FALSE)
     {
         $attendance = [];
-        $result = $this->query("SELECT stud_id, report_id, CONCAT(last_name,', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) 
-                    AS name, no_of_present, no_of_days AS present, no_of_absent AS absent, no_of_tardy AS tardy FROM student s 
-                    JOIN enrollment e USING (stud_id)
-                    JOIN attendance a USING (stud_id) WHERE section_code = '{$_GET['class']}'
-                    AND month = '{$_GET['month']}'");
+        $result = $this->query("SELECT stud_id, attendance_id, CONCAT(last_name,', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) 
+                                AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
+                                JOIN enrollment e USING (stud_id)
+                                JOIN attendance a USING (stud_id) 
+                                JOIN academicdays USING (acad_days_id)
+                                WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
-            $report_id = $row['report_id'];
+            $attend_id = $row['attendance_id'];
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],
-                'present_e' => "<input name='data[{$report_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['present']}'>",
-                'absent_e'  => "<input name='data[{$report_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
-                'tardy_e'   => "<input name='data[{$report_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
+                'present_e' => "<input name='data[{$attend_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['present']}'>",
+                'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
+                'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
                                    <button class='btn btn-sm btn-secondary action' data-type='edit'>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
@@ -593,14 +594,61 @@ trait FacultySharedMethods
         return $attendance;
     }
 
-    public function changeAttendance() {
+    public function changeAttendance() 
+    {
         foreach($_POST['data'] as $id => $value) { // $id = report_id
             $this->prepared_query(
-                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE report_id = ? AND month=?;",
-                [$value['present'], $value['absent'], $value['tardy'], $id, $_POST['month']],
-                "iiiis"
+                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE attendance_id = ?;",
+                [$value['present'], $value['absent'], $value['tardy'], $id],
+                "iiii"
             );
         }
+    }
+
+    public function getAttendanceDays() 
+    {
+        $current_month = date("F"); // ex. January
+        $sy_id = $_SESSION['sy_id'];
+        // $sy_id = 13;
+        $result = $this->query("SELECT acad_days_id AS id, month, no_of_days FROM academicdays WHERE sy_id = '$sy_id' ORDER BY acad_days_id;");
+        $months = [];
+        while($row = mysqli_fetch_row($result)) {
+            $mnth = $row[0];
+            $mnth_desc = $row[1];
+            if ($current_month == $mnth_desc) {
+                $current_month = $mnth;
+            }
+            $months[$mnth] = [$mnth_desc, $row[2]]; 
+        }
+        return ['current' => $current_month, 'months' => $months];
+    }
+
+    public function listAdvisoryClasses($is_JSON = FALSE)
+    {
+        // session_start();
+        $id = $_GET['id'];
+        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
+        $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
+            . "CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
+            . "FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} $advisorCondition;");
+        $advisory_classes = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $advisory_classes[] = [
+                "sy"           => $row['school_year'],
+                "start_y"      => $row['start_year'],
+                "end_y"        => $row['end_year'],
+                "section_code" => $row['section_code'],
+                "section_name" => $row['section_name'],
+                "section_grd"  => $row['grd_level'],
+                "stud_no"      => $row['stud_no']
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($advisory_classes);
+            return;
+        }
+        return $advisory_classes;
     }
 }
 
@@ -610,15 +658,14 @@ trait Enrollment
 {
     public function enroll()
     {
-        // session_start();
-        $school_year = 15;
+        $school_year = $_SESSION['sy_id'];
         echo "Add student starting...<br>";
         $student_id = $this->addStudent();
         echo "Add student finished.<br>";
 
-        // School information
+        # School information
         echo "Add School info starting...<br>";
-
+        # enrollment
         $school_info = [$_POST['track'],  $_POST['program']];
         [$track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
@@ -634,7 +681,7 @@ trait Enrollment
             "iisss"
         );
         echo "Add School info ended...<br>";
-
+        # promotion
         echo 'Adding promotion record...<br>';
         $this->prepared_query(
             "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
@@ -926,6 +973,8 @@ trait Enrollment
      *      If valid, 
      *          1.1 Add student to a section and initialize subject classes.     
      *          1.2 Update enrollment attribute.
+     *          1.3 Initialize grade
+     *          1.4 Initialize attendance
      */
     public function validateEnrollment ()
     {
@@ -994,7 +1043,18 @@ trait Enrollment
         }
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid', section_code='$selected_section_code' WHERE stud_id='$stud_id';");
 
+        # step 1.3
         //call initializeGrades
+        $report_id = $this->initializeGrades($stud_id);
+
+        # step 1.4
+        $report_id = 0; // this will be taken from the initalization of grades 
+
+        $attend_data = $this->getAttendanceDays();
+        $attend_months = $attend_data['months'];
+        foreach($attend_months as $id => $val) {
+            $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES (?, ?, ?);");
+        }
     }
 
     public function addStudent()
@@ -1102,15 +1162,16 @@ trait Enrollment
         return $student_id;
     }
 
-    public function initializeGrades()
+    public function initializeGrades($stud_id)
     {
-        $stud_id = $_POST['stud_id'];// with the assumption na may stud id kong san man to matatawag HAHAHAH
+        // $stud_id = $_POST['stud_id'];// with the assumption na may stud id kong san man to matatawag HAHAHAH
 
         // 1. initialize gradereport
         $this->prepared_query("INSERT INTO gradereport (stud_id) VALUES (?);", [$stud_id], 'i');
 
         //2. Retrieve report_id of student
-        $report_id = mysqli_fetch_row(mysqli_query($this->db,  "SELECT report_id FROM gradereport WHERE stud_id=$stud_id;"));
+        // $report_id = mysqli_fetch_row($this->query("SELECT report_id FROM gradereport WHERE stud_id=$stud_id;"));
+        $report_id = mysqli_insert_id();
 
         //3. Initialize classgrade
         //3.a. retrieve student class
@@ -1123,7 +1184,7 @@ trait Enrollment
         }
 
         //4. Initialize array of default observed value ids
-        $values = $this->query("SELECT `value_id` FROM `values`"); 
+        $values = $this->query("SELECT `value_id` FROM `values`;"); 
 
         //4.a For each value_id, 
                     //for each quarter, create an observedvalue.                     
@@ -1132,7 +1193,9 @@ trait Enrollment
                             $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii'); 
                         }
 
-                    }             
+                    }    
+                    
+        return $report_id;
     }
 
     public function getEnrollmentCurriculumOptions () 
