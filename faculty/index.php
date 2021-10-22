@@ -52,10 +52,10 @@ include_once("../inc/head.html");
                                 <section class="row">
                                     <h4 class="fw-bold">OVERVIEW</h4>
                                     <div class="col-lg-4">
-                                        <div class="card-box bg-tea h-75">
+                                        <div class="card-box bg-forest h-75">
                                             <div class="inner">
                                                 <h3>200</h3>
-                                                <h5> TOTAL STUDENTS </h5>
+                                                <h5> Total Students</h5>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>
@@ -63,25 +63,26 @@ include_once("../inc/head.html");
                                             <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8">
-                                        <div class="card-box bg-green h-75 w-100 p-4">
-                                            <div class="inner d-flex justify-content-between">
-                                                <div>
-                                                    <h5>ATTENDANCE TODAY</h5>
-                                                    <h3>11 ABM A</h3>
-                                                </div>
-                                                <div>
-                                                    <h6>Present</h6>
-                                                    <h3>37</h3>
-                                                </div>
-                                                <div>
-                                                    <h6>Absent</h6>
-                                                    <h3>3</h3>
-                                                </div>
-                                                <div>
-                                                    <h6>Tardy</h6>
-                                                    <h3>8</h3>
-                                                </div>
+                                    <div class="col-lg-4">
+                                        <div class="card-box bg-tea h-75">
+                                            <div class="inner">
+                                                <h5>View</h5>
+                                                <h5>Grades</h5>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="bi bi-card-list" aria-hidden="true"></i>
+                                            </div>
+                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="card-box bg-green h-75">
+                                            <div class="inner">
+                                                <h5> View</h5>
+                                                <h5>Attendance</h5>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="bi bi-clipboard-check" aria-hidden="true"></i>
                                             </div>
                                             <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
