@@ -61,18 +61,6 @@ hr {
 
 /*Helpers*/
 
-.centered {
-    text-align: center;
-}
-
-.goleft {
-    text-align: left;
-}
-
-.goright {
-    text-align: right;
-}
-
 .mt {
     margin-top: 25px;
 }
@@ -140,11 +128,14 @@ ul.top-menu>li>.logout {
 }
 
 #sidebar .sub-menu>.sub li {
-    padding-left: 32px;
+    padding-left: 35px;
 }
 
+
+
+
 #sidebar .sub-menu>.sub li:last-child {
-    padding-bottom: 10px;
+    padding-bottom: 1px;
 }
 
 

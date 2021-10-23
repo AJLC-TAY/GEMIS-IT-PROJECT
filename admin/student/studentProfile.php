@@ -145,9 +145,13 @@ switch ($user_type) {
                             <br>
                             <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
                             <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
+                            <?php if ($user_type != 'ST'){
+                                echo "<a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
+                                        <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>";
+                            } else{
+                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
+                            }?>
                             
-                            <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
-                            <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
                         </div>
                         <?php $admin->listValuesReport() ?>
 
