@@ -3,6 +3,7 @@ require_once("sessionHandling.php");
 
 include_once("../inc/head.html"); 
 include_once('../inc/studentSideBar.php');
+
 ?>
 <title>Student | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -43,12 +44,18 @@ include_once('../inc/studentSideBar.php');
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <?php include_once("../inc/footer.html"); ?>
 
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>
-    <script type="text/javascript" src="../js/common-custom.js"></script>
-   
+    <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#grade");
+            hideSpinner();
+        });
+    </script>
     
 </body>
 

@@ -52,6 +52,12 @@ include_once("../inc/head.html"); ?>
     <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#enrollment");
+            hideSpinner();
+        });
+    </script>
     <!-- VALIDATION -->
     <script>
         /** MOVED TO enrollment.js */

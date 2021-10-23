@@ -25,16 +25,10 @@ include_once('../inc/studentSideBar.php');
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
-                            if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-                                include_once("../admin/student/studentForm.php");
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
-                            } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
-                                include_once("../admin/student/studentTransfer.php"); 
-                                $jsFilePath = "<script type='module' src='../js/admin/transfer-student.js'></script>";
-                            }else {
+                            
                                 include_once("../admin/student/studentProfile.php"); 
                                 $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
-                            } 
+                            
                         ?>
                         </div>
                     </div>
@@ -54,7 +48,13 @@ include_once('../inc/studentSideBar.php');
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>
-    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#student");
+            hideSpinner();
+        });
+    </script>
     <?php echo $jsFilePath; ?>;
     
 </body>
