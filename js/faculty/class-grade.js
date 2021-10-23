@@ -29,6 +29,24 @@ function setTableData (classType, url) {
     classGradeTable.bootstrapTable("refresh", {url});
 }
 
+/**
+ * Hides or shows grades column depending on the type of section specified.
+ * @param {String} classType Values may be 'advisory' or 'sub-class'.
+ */
+ function toggleGradesColumn(classType) {
+
+    let displayGrades = classType === 'advisory' ? 'hideColumn' : 'showColumn';
+    if (classType === 'advisory'){
+        // classGradeTable.bootstrapTable('showColumn', ['action']);
+        classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
+    } else {
+        classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
+        classGradeTable.bootstrapTable('hideColumn', ['action']);
+
+    }
+    
+};
+
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
@@ -48,7 +66,9 @@ $(function() {
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         code = firstClass.val();
         let classType = firstClass.attr("data-class-type");
-        classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
+        classGradeTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
+        toggleGradesColumn(classType)
+        // classGradeTable.bootstrapTable("refresh", {url: firstClass.attr('data-url')});
         $("#export_code").val(classTmp + " - " + code );
         changeName(classTmp);
     }
@@ -60,8 +80,10 @@ $(function() {
         code = selected.val();
         sectionName = selected.attr("data-name");
         classType = selected.attr("data-class-type");
+        console.log(classType);
+        toggleGradesColumn(classType);
         $("#export_code").val(sectionName + " - " + code );
-        // toggleGradesColumn(classType);
+        
         $("#classes").select2("close");
         changeName(sectionName); 
         setTableData(classType, url);

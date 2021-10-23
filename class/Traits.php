@@ -1242,9 +1242,8 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $class_code = $_GET['class_code'];
-        $qtr = '1';//to be changed to $_SESSION
+        $qtr = '1';
     
-        echo $class_code;
 
 
         $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 

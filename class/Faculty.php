@@ -47,23 +47,27 @@ class FacultyModule extends Dbconfig
         session_start();
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT stud_id, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
         while($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id
-            $row_temp = $this->query("SELECT report_id FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
+            $row_temp = $this->query("SELECT report_id, general_average FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
+            
             $report_id = mysqli_fetch_row($row_temp)[0];
             $students [] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
+                'grd_f'  =>  "",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'action' =>  "<div class='d-flex justify-content-center'>"
                         ."<button class='btn btn-sm btn-secondary me-1'>View</button>"
                         ."<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
                         ."<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
-                    ."</div>"
+                    ."</div>",
+                'action_2' => "<div class='d-flex justify-content-center'>"
+                ."<button class='btn btn-sm btn-secondary me-1'>Grade Values</button>"
             ];
         }
 
@@ -220,12 +224,12 @@ class FacultyModule extends Dbconfig
         $grading = $_POST['grading'];
         $grade = $_POST['grade'];
         $code = $_POST['code'];
-        $stat = $_POST['stat'];
+        $stat = (int) $_POST['stat'];
 
         $grade = $grade != "" ? $grade : NULL ;
 
-       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, stat = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
-                            [$grade, $stud_id, $stat, $code],"siii");  
+       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
+                            [$grade, $stat, $stud_id, $code],"siii");  
    }
 
 

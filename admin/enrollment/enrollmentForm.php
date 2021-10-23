@@ -1,14 +1,7 @@
 <?php
 require_once("../class/Administration.php");
 $admin = new Administration();
-
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-    if (!in_array($action, ['add', 'edit'])) {
-        die ("<div class='container'><h5>Page not found</h5></div>");
-    }
-
-    $stud_id = '';
+$stud_id = '';
     $user_id_no = '';
     $lrn = '';
     $lname = '';
@@ -51,6 +44,13 @@ if (isset($_GET['action'])) {
     $guardian_middle_name = '';
     $guardian_cp_no = '';
     $guardian_relationship = '';
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
+    if (!in_array($action, ['add', 'edit'])) {
+        die ("<div class='container'><h5>Page not found</h5></div>");
+    }
+
+    
 
     if ($action === 'edit') {
         $userProfile = $admin->getProfile("ST");

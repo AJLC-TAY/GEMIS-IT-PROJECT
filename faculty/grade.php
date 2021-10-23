@@ -6,10 +6,10 @@ require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 
 // $sy_id = $_SESSION['sy_id'];
-$sy_id = 9;
-echo($sy_id);
+$sy_id = $_SESSION['sy_id'];
+// echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-
+$advisory = $faculty->getAdvisoryClass($sy_id);
 $sub_classes = $faculty->getHandled_sub_classes(26);
 $adv_opn = '';
 $sub_class_opn = '';
@@ -17,12 +17,24 @@ $sub_class_opn = '';
 $adv_table_display = 'd-none';
 $sub_table_display = '';
 
-
 $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
+$adv_count_is_empty = !(is_null($advisory));
+if ($adv_count_is_empty) {
+    $adv_table_display = '';
+    // $sub_table_display = 'd-none';
+    $section_code = $advisory['section_code'];
+    $section_name = $advisory['section_name'];
+
+    $adv_opn = "<optgroup label='Advisory Class'>"
+        . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
+        . "data-url='getAction.php?data=student&section={$section_code}' "
+        . "data-name='$section_name'>$section_name</option>"
+        . "</optgroup>";
+}
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
@@ -34,7 +46,7 @@ if (count($sub_classes) != 0) {
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
             . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
-            . "data-name='$section_name'>$section_name [$sub_name]</option>";
+            . "data-name='$section_name'>$section_name [$sub_code]</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {
@@ -94,6 +106,7 @@ if (count($sub_classes) != 0) {
                                         <div class="w-25">
                                             <select class="form-select form-select-sm" id="classes">
                                                 <?php
+                                                echo $adv_opn;
                                                 echo $sub_class_opn;
                                                 ?>
                                             </select>
@@ -122,6 +135,8 @@ if (count($sub_classes) != 0) {
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
                                                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
+                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="action_2">Action</th>
+                                                    
                                                 </tr>
                                             </thead>
                                         </table>
