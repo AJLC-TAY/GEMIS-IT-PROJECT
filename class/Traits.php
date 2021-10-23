@@ -1184,7 +1184,7 @@ trait Enrollment
         }
 
         //4. Initialize array of default observed value ids
-        $values = $this->query("SELECT `value_id` FROM `values`;"); 
+        $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;"); 
 
         //4.a For each value_id, 
                     //for each quarter, create an observedvalue.                     
@@ -1196,6 +1196,21 @@ trait Enrollment
                     }    
                     
         return $report_id;
+
+        // 4. Initialize acad days filtered by months of sy
+        $acaddays = $this->query("SELECT `acad_days_id` FROM `academicdays` WHERE sy_id= {$_SESSION[`sy_id`]};");
+    
+        // 4.a For each acad_days instance, create attendance instance
+                    while($row = mysqli_fetch_assoc($values)) {
+                         foreach(Administration::QUARTER as $quarter) {
+                            $this->prepared_query("INSERT INTO `attendance` (`stud_id`, `report_id`, `acad_days_id`) VALUES (?,?,?);", 
+                            $stud_id, $report_id, [$row['acad_days_id']], 'iii'); 
+                        }
+
+                    }  
+        
+
+        //
     }
 
     public function getEnrollmentCurriculumOptions () 
