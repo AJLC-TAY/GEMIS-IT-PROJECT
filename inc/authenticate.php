@@ -32,7 +32,7 @@ $con = $dbConfig->connect();
                             break;
                         case "ST":
                             $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no FROM student WHERE id_no = '$id_no';";
-                            $destination = "../admin/index.php";
+                            $destination = "../student/index.php";
                             break;
                     }
                     $user_res = mysqli_query($con, $query);

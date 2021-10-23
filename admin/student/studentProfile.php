@@ -61,6 +61,9 @@ switch ($user_type) {
     case 'FA':
         $breadcrumb = '';
         break;
+    case 'ST':
+        $breadcrumb = '';
+        break;
 }
 ?>
 
