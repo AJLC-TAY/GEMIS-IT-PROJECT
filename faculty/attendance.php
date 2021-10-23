@@ -1,22 +1,13 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
-$class = 'ABM11';
-$current_month = date("F"); // ex. January
-$months = array(
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July ',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-);
+include_once("../class/Administration.php");
+$admin = new Administration();
+$data = $admin->getAttendanceDays();
+$current_month = $data['current'];
+$months = $data['months'];
+$class = $_GET['section_code'];
+
 $url = "getAction.php?data=attendance&class=$class&month=$current_month";
 ?>
 <title>Attendance | GEMIS</title>
@@ -72,15 +63,15 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                         <div class="col-2 me-2">
                                             <select name="month" class="form-select form-select-sm">
                                                 <?php
-                                                foreach ($months as $month) {
-                                                    echo "<option value='$month' " . ($month == $current_month ? "selected" : "") . ">$month</option>";
+                                                foreach ($months as $month => $days) {
+                                                    echo "<option value='$month' " . ($month == $current_month ? "selected" : "") . ">{$days[0]} ({$days[1]})</option>";
                                                 }
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="col-1">
+                                        <!-- <div class="col-1">
                                             <input type="text" name="academicDays" class="form-control form-control-sm number" placeholder="Days" title="Academic Days">
-                                        </div>
+                                        </div> -->
 
                                         <div class="col-auto">
                                             <button class="link btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>

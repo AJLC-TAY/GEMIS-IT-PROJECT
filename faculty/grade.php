@@ -108,8 +108,8 @@ if (count($sub_classes) != 0) {
                                             <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->
                                             <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
                                             <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
-                                            <button type="button" class="btn btn-secondary ms-2"><i class="bi bi-box-arrow-down-left me-2"></i>Import</button>
-                                            <button type="button" class="btn btn-success confirm">Submit</button>
+                                            <button type="button" class="btn btn-success ms-2 save" ></i>Save</button>
+                                            <button type="button" class="btn btn-success submit">Submit</button>
                                         </div>
                                     </div>
 
@@ -137,22 +137,22 @@ if (count($sub_classes) != 0) {
             </section>
         </section>
     </section>
-    <div class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div id = "" class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">Are you sure you want to submit?</h4>
+                        <h4 class="mb-0">Are you sure you want to <span id='label'></span>?</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
-                    <p class="modal-msg">Submitted grades are editable within the duration of the current quarter.</p>
+                    <p id="modal-msg"></p>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn close-btn btn-success submit">Submit</button>
+                    <button class="btn close-btn btn-success" id = "confirm">Submit</button>
                 </div>
             </div>
         </div>

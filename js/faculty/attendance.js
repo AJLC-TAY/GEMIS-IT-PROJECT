@@ -26,7 +26,7 @@ function saveRow(row) {
         val.setAttribute("readonly", true);
     });
     formData.append('action', "changeAttendance");
-    formData.append('month', $("[name='month'] option:selected").text());
+    // formData.append('month', $("[name='month']").val());
     $.ajax({
         url: "action.php",
         method: "POST",
@@ -217,7 +217,7 @@ $(function () {
 
     $(document).on("change", "select[name='month']", function (e) {
         e.preventDefault();
-        table.bootstrapTable("refresh", {url: `getAction.php?data=attendance&class=${currentClass}&month=${$("select[name='month'] option:selected").text()}` })
+        table.bootstrapTable("refresh", {url: `getAction.php?data=attendance&class=${currentClass}&month=${$("select[name='month']").val()}` })
     });
     hideSpinner();
 });

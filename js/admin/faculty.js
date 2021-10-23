@@ -5,7 +5,6 @@ import {
     implementAssignSubjectMethods as implementASMethods
 } from "./utilities.js";
 
-// const isViewPage = false;
 const ASSIGNEDSCID = "#assigned-sc-table";
 const SCID = "#sc-table";
 

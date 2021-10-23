@@ -1618,34 +1618,6 @@ class Administration extends Dbconfig
         );
     }
 
-    public function listAdvisoryClasses($is_JSON = FALSE)
-    {
-        // session_start();
-        $id = $_GET['id'];
-        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
-        $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
-            . "CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
-            . "FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} $advisorCondition;");
-        $advisory_classes = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $advisory_classes[] = [
-                "sy"           => $row['school_year'],
-                "start_y"      => $row['start_year'],
-                "end_y"        => $row['end_year'],
-                "section_code" => $row['section_code'],
-                "section_name" => $row['section_name'],
-                "section_grd"  => $row['grd_level'],
-                "stud_no"      => $row['stud_no']
-            ];
-        }
-
-        if ($is_JSON) {
-            echo json_encode($advisory_classes);
-            return;
-        }
-        return $advisory_classes;
-    }
-
     public function listSubClassFacultyOptions()
     {
         if (isset($_POST['exclude'])) {

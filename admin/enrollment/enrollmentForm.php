@@ -114,9 +114,11 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
-            <li class="breadcrumb-item active">Form</li>
+            <?php if ($_SESSION['user_type'] != 'ST'){
+                 echo "<li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+                 <li class='breadcrumb-item'><a href='enrollment.php'>Enrollment</a></li>
+                <li class='breadcrumb-item active'>Form</a></li>";
+            }?>
         </ol>
     </nav>
     <div class="container px-4 text-center">

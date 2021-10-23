@@ -1,5 +1,5 @@
 <?php
-
+require_once("sessionHandling.php");
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
 
 //require_once("sessionHandling.php");
@@ -112,11 +112,11 @@ include_once("../inc/head.html"); ?>
 
 <body>
     <!-- SPINNER -->
-    <!-- <div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container"></section>
     <?php include_once('../inc/studentSideBar.php'); ?>
@@ -128,12 +128,8 @@ include_once("../inc/head.html"); ?>
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <header>
-                            <!-- BREADCRUMB -->
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="index.php">Student</a></li>
-                                    <li class="breadcrumb-item active">Grade Report</li>
                                 </ol>
                             </nav>
                             
@@ -143,7 +139,7 @@ include_once("../inc/head.html"); ?>
                         $admin = new Administration();
                          $report_id = 1;
                         // $report_id = $_GET['report_id'];
-                        $stud_id = '110001';  // test
+                        $stud_id = $_SESSION['id'];  // test
 
                         // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
@@ -189,7 +185,7 @@ include_once("../inc/head.html"); ?>
 
                         function renderSemesterGradeTable($semester_desc, $grades)
                         {
-                            echo "
+                           $grd = "
                                     <h6><b>$semester_desc</b></h6>
                                     <table class='table w-100 table-sm'>
                                         <col style='width: 65%;'>
@@ -206,10 +202,16 @@ include_once("../inc/head.html"); ?>
                                         <tbody>
                                             " .
                                             prepareGradeRecordsHTML($grades['core']).  
-                                            prepareGradeRecordsHTML($grades['applied']). 
-                                            prepareGradeRecordsHTML($grades['specialized']). "
-                                        </tbody>
+                                            prepareGradeRecordsHTML($grades['applied']);
+
+                                            if (array_key_exists('specialized',$grades)){
+                                                prepareGradeRecordsHTML($grades['specialized']);
+                                            }
+                                        $grd.= " </tbody>
                                     </table>";
+
+                                    echo $grd;
+
                         }
                         ?>
                         <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
@@ -250,6 +252,12 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#transcript");
+            hideSpinner();
+        });
+    </script>
 </body>
 
 </html>
