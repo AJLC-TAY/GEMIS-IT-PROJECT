@@ -30,6 +30,8 @@ function setTableData (classType, url) {
 }
 
 var code = '';
+var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
+var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 
 $(function() {
     
@@ -65,11 +67,25 @@ $(function() {
         setTableData(classType, url);
     })
 
-    $(document).on("click", ".confirm", () => {
+    $(document).on("click", ".submit", () => {
+        document.getElementById("label").innerText="submit";
+        document.getElementById("modal-msg").innerText=submitMsg;
+        document.getElementById("confirm").innerText="Submit";
+        $(".grading-confirmation").modal("toggle");
+       
+    });
+
+    $(document).on("click", ".save", () => {
+        document.getElementById("label").innerText="save";
+        document.getElementById("modal-msg").innerText=saveMsg;
+        document.getElementById("confirm").innerText="Save";
         $(".grading-confirmation").modal("toggle");
     });
 
-    $(document).on("click", ".submit", function(e)  {
+    $(document).on("click", "#confirm", function(e)  {
+        var stat = document.getElementById("label").innerText == "submit"? "1": "0";
+        this.attr
+        console.log(stat);
         // let studGrades = new FormData();
         var studGrades = $("#grades").serializeArray();        
         studGrades.forEach(element => {
@@ -80,9 +96,11 @@ $(function() {
                             'grading' : recordInfo[1],
                             'grade': element['value'],
                             'code' : code,
+                            'stat': stat,
                             'action' : 'gradeClass'};
 
             $.post("action.php", grades, function(data) {	
+                console.log(grades);
                 classGradeTable.bootstrapTable("refresh")
                 
             });
