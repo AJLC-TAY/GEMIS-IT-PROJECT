@@ -2,7 +2,29 @@
 require("../class/Administration.php");
 //$admin = new Administration();
 $filters =  (new Administration())->getEnrollFilters();
+$archived_btn = '';
+$table_opts = '';
+$sy_filter = '';
+if ($_SESSION['user_type'] == 'AD') {
+    $archived_btn = "<button type='button' class='view-archive btn btn-secondary'><i class='bi bi-eye me-2'></i>View Archived Enrollees</button>";
 
+    $table_opts = "<button id='export-opt' type='submit' class='btn btn-dark btn-sm me-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
+                <button id='track-archive-btn' class='btn btn-secondary btn-sm me-5'><i class='bi bi-archive me-2'></i>Archive</button>";
+
+    $sy_filter = "<li class='col-3 mb-3 me-2'>
+                        <div class='input-group input-group-sm'>
+                            <label class='input-group-text ' for='sy'>School Year</label>
+                            <select class='filter-item form-select mb-0' id='sy'>
+                                <option value='*' selected>All</option>";
+                                foreach ($filters['school_year'] as $id => $value) {
+                                    $sy_filter .= "<option value='$id' >$value</option>";
+                                }
+                $sy_filter.= "</select>
+                        </div>
+                    </li>";
+                                
+    
+}
 ?>
 <!-- HEADER -->
 <header>
@@ -17,9 +39,8 @@ $filters =  (new Administration())->getEnrollFilters();
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Enrollees</h3>
         <div>
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Enrollees</button>
+            <?php echo $archived_btn; ?>
             <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success" title='Enroll a student' target="_blank"><i class="bi bi-plus me-2"></i>Enroll</a>
-            <!-- <a href="faculty.php?state=add" id="add-btn" class="btn btn-success add-prog" title='Add new faculty'>ADD FACULTY</a> -->
         </div>
     </div>
 </header>
@@ -34,8 +55,7 @@ $filters =  (new Administration())->getEnrollFilters();
             </span>
             <div>
                 <button class="btn btn-primary btn-sm me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
-                <button id="export-opt" type="submit" class="btn btn-dark btn-sm me-1" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                <button id="track-archive-btn" class="btn btn-secondary btn-sm me-5"><i class="bi bi-archive me-2"></i>Archive</button>
+                <?php echo $table_opts; ?>
                 <button id="" class="refresh btn btn-outline-primary btn-sm me-3"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
             </div>
             <div class="form-check form-switch my-1">
@@ -47,33 +67,7 @@ $filters =  (new Administration())->getEnrollFilters();
         <div class="collapse" id="filterCollapse">
             <div class="card">
                 <ul id="" class="row flex-wrap">
-                    <li class="col-3 mb-3 me-2">
-                        <div class="input-group input-group-sm">
-                            <label class="input-group-text " for="sy">School Year</label>
-                            <select class="filter-item form-select mb-0" id="sy">
-                                <option value="*" selected>All</option>
-                                <?php
-                                foreach ($filters['school_year'] as $id => $value) {
-                                    echo "<option value='$id' >$value</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </li>
-                    <!--                    <div class="dropdown">-->
-                    <!--                        <button class="btn btn-sm shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">-->
-                    <!--                            School Year-->
-                    <!--                        </button>-->
-                    <!--                        <ul class="dropdown-menu" aria-labelledby="section-filter">-->
-                    <!--                            <li><a role="button" href="#" id="all-section-btn" class="dropdown-item">All</a></li>-->
-                    <!--                            <li><hr class="dropdown-divider"></li>-->
-                    <!--                            <li><a role="button" id="no-adv-btn" class="dropdown-item active">Current</a></li>-->
-
-
-                    <!--                            <li><a role="button" id="with-adv-btn" class="dropdown-item">With Adviser</a></li>-->
-                    <!--                            <li><hr class="dropdown-divider"></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
+                    <?php echo $sy_filter; ?>
                     <!--TRACK FILTER-->
                     <li class="col-4 mb-3 me-2">
                         <div class="input-group input-group-sm">

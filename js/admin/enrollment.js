@@ -1,4 +1,3 @@
-
 try {
     var stepper = new Stepper($('#stepper')[0])
 } catch (e) {}
@@ -48,24 +47,27 @@ $(function() {
     });
 
     /** Stepper */ 
-    $(document).on("click", ".next", () => {
+    $(document).on("click", ".next", function(e) {
+        e.preventDefault();
         stepper.next();
     });
     
-    $(document).on("click", ".previous", () => {
+    $(document).on("click", ".previous", function(e) {
+        e.preventDefault();
         stepper.previous();
     });
 
     /** Validate Form */
     $(document).on("click", "#validate-form [type='submit']", function (e) {
         e.preventDefault();
+        showSpinner();
         let status = $(this).attr("name");
         let formData = $("#validate-form").serialize() + `&${status}=true`;
-        console.log(formData);
         $.post("action.php", formData, function() {
             $(".edit-opt").hide();
-            $("#valid-change-btn").closest(".badge").show();
+            $("#valid-change-btn").show();
             $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
+            hideSpinner();
         });
     });
 

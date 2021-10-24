@@ -1547,7 +1547,7 @@ class StudentAward extends Award implements JsonSerializable
             $this->section = $section;
             $this->parents = $parents;
             $this->guardians = $guardians;
-            $this->form137 = $form137;
+            $this->form137 =  is_null($form137) ? NULL : "../".$form137;
             $this->status = $status;
         }
 

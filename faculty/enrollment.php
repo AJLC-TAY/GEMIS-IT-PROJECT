@@ -25,14 +25,17 @@ include_once("../inc/head.html"); ?>
                             $js = '';
                             if (isset($_GET['page'])) {
                                 if ($_GET['page'] === 'enrollees') {
-                                    require("enrollment/enrollmentList.php");
-                                    $js = "<script type='module' src='../js/faculty/enrollment-list.js'></script>";
-                               
+                                    require("../admin/enrollment/enrollmentList.php");
+                                    $js = "<script type='module' src='../js/admin/enrollment-list.js'></script>";
+                                }
+                                if ($_GET['page'] === 'credential') {
+                                    require("../admin/enrollment/enrollmentCredentials.php");
+                                    $js = "<script type='module' src='../js/admin/enrollment.js'></script>";
                                 }
 
                                 if ($_GET['page'] === 'form') {
-                                    require("enrollment/enrollmentForm.php");
-                                    $js = '<script type="text/javascript" src="../js/faculty/enrollment.js"></script>';
+                                    require("../admin/enrollment/enrollmentForm.php");
+                                    $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
 
                                 if ($_GET['page'] === 'admission') {

@@ -2,55 +2,111 @@
 require_once("../class/Administration.php");
 $admin = new Administration();
 
+$stud_id = '';
+$user_id_no = '';
+//$lrn = '';
+//$lname = '';
+//$fname = '';
+//$mname = '';
+//$extname = '';
+//$sex = '';
+//$age = '';
+//$birthdate = '';
+//$birth_place = '';
+//$indigenous_group = '';
+//$mother_tongue = '';
+//$religion = '';
+//
+//$house_no = '';
+//$street = '';
+//$barangay = '';
+//$city = '';
+//$province = '';
+//$zip = '';
+//
+//$cp_no = '';
+//$psa_birth_cert = '';
+//$belong_to_ipcc = '';
+//$id_picture = '';
+//$section = '';
+//
+//$parents = ['mother', 'father'];
+//foreach ($parents as $par) {
+//    ${$par . '_first_name'} = '';
+//    ${$par . '_last_name'} = '';
+//    ${$par . '_middle_name'} = '';
+//    ${$par . '_ext_name'} = '';
+//    ${$par . '_occupation'} = '';
+//    ${$par . '_cp_no'} = '';
+//}
+//
+//$guardian_first_name = '';
+//$guardian_last_name = '';
+//$guardian_middle_name = '';
+//$guardian_cp_no = '';
+//$guardian_relationship = '';
+//$last_grd_level = '';
+//$last_sy = '';
+//$gen_ave = '';
+//$school_name = '';
+//$school_id_no = '';
+//$school_address = '';
+
+
+$lrn = rand(1, 1000000);
+$lname = 'Rizal';
+$fname = 'Jose';
+$mname = 'Test';
+$extname = 'III';
+$sex = '';
+$age = '21';
+$birthdate = '';
+$birth_place = 'Baguio City';
+$indigenous_group = 'Test';
+$mother_tongue = 'Kankanaey';
+$religion = 'Roman Catholic';
+
+$house_no = '123';
+$street = 'Street';
+$barangay = 'Bakakeng';
+$city = 'Baguio City';
+$province = 'Benguet';
+$zip = '2600';
+
+$cp_no = '09090990090';
+$psa_birth_cert = '923871';
+$belong_to_ipcc = '';
+$id_picture = '';
+$section = '';
+
+$parents = ['mother', 'father'];
+foreach ($parents as $par) {
+    ${$par . '_first_name'} = 'Ricardo';
+    ${$par . '_last_name'} = 'Jose';
+    ${$par . '_middle_name'} = 'L';
+    ${$par . '_ext_name'} = 'Dr.';
+    ${$par . '_occupation'} = 'Chef';
+    ${$par . '_cp_no'} = '0903423423';
+}
+
+$guardian_first_name = 'Cela';
+$guardian_last_name = 'Rizal';
+$guardian_middle_name = 'Me';
+$guardian_cp_no = '234978';
+$guardian_relationship = 'Siblings';
+
+$last_grd_level = '10';
+$last_sy = '2021';
+$gen_ave = '90';
+$school_name = 'SECF';
+$school_id_no = '123';
+$school_address = 'La Trinidad';
+
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
     if (!in_array($action, ['add', 'edit'])) {
         die ("<div class='container'><h5>Page not found</h5></div>");
     }
-
-    $stud_id = '';
-    $user_id_no = '';
-    $lrn = '';
-    $lname = '';
-    $fname = '';
-    $mname = '';
-    $extname = '';
-    $sex = '';
-    $age = '';
-    $birthdate = '';
-    $birth_place = '';
-    $indigenous_group = '';
-    $mother_tongue = '';
-    $religion = '';
-
-    $house_no = '';
-    $street = '';
-    $barangay = '';
-    $city = '';
-    $province = '';
-    $zip = '';
-
-    $cp_no = '';
-    $psa_birth_cert = '';
-    $belong_to_ipcc = '';
-    $id_picture = '';
-    $section = '';
-
-    $parents = ['mother', 'father'];
-    foreach ($parents as $par) {
-        ${$par . '_first_name'} = '';
-        ${$par . '_last_name'} = '';
-        ${$par . '_middle_name'} = '';
-        ${$par . '_ext_name'} = '';
-        ${$par . '_occupation'} = '';
-        ${$par . '_cp_no'} = '';
-    }
-
-    $guardian_first_name = '';
-    $guardian_last_name = '';
-    $guardian_middle_name = '';
-    $guardian_cp_no = '';
-    $guardian_relationship = '';
 
     if ($action === 'edit') {
         $userProfile = $admin->getProfile("ST");
@@ -305,7 +361,6 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                     </div>
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
-                            <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
                             <button class="btn btn-secondary next">Next</button>
                         </div>
                     </div>
@@ -453,30 +508,33 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                     <div class="form-group row">
                         <div class="col-md-4">
                             <label for="last-grade-level" class="col-form-label">Last Grade Level Completed</label>
-                            <input id="last-grade-level" class="form-control" name="last-grade-level" type="number"  value="">
+                            <input id="last-grade-level" class="form-control" name="last-grade-level" type="number"  value="<?php echo $last_grd_level; ?>">
                         </div>
                         <div class="col-md-4">
-                            <label for="last-sy" class="col-form-label">Last School Year Completed</label>
-                            <input id="last-sy" class="form-control" name="last-sy" type="number"  value="">
+                            <label  for="last-sy" class="col-form-label">Last School Year Completed</label>
+                            <div class="d-flex">
+                                <input id="last-sy" class="form-control number me-1" name="last-sy[]"  value="<?php echo $last_sy; ?>" placeholder="XXXX">
+                                <input class="form-control number ms-1" name="last-sy[]"  value="<?php echo $last_sy; ?>" placeholder="XXXX">
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label for="general-average" class="col-form-label">General Average</label>
-                            <input id="general-average" class="form-control" name="general-average" type="number"  value="">
+                            <input id="general-average" class="form-control" name="general-average" type="number"  value="<?php echo $gen_ave; ?>">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-9">
                             <label for="school-name" class="col-form-label">School Name</label>
-                            <input id="school-name" class="form-control" name="school-name" type="text"  value="">
+                            <input id="school-name" class="form-control" name="school-name" type="text"  value="<?php echo $school_name; ?>" >
                         </div>
                         <div class="col-md-3">
                             <label for="school-id-no" class="col-form-label">School ID Number</label>
-                            <input id="school-id-no" class="form-control" name="school-id-no" type="number"  value="">
+                            <input id="school-id-no" class="form-control" name="school-id-no" type="number"  value="<?php echo $school_id_no; ?>">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <label for="school-address" class="col-form-label">School Address</label>
-                        <input id="school-address" class="form-control" name="school-address" type="text"  value="">
+                        <input id="school-address" class="form-control" name="school-address" type="text"  value="<?php echo $school_address; ?>">
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column'>
                         <label for='image-studentid' class='form-label'>Student ID Photo</label>
@@ -491,12 +549,7 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                         <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class="row">
-                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user-type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
-<!--                        <div class="col-md-2">-->
-<!--                            <label class="col-form-label">Semester</label>-->
-<!--                            <input class="form-control" name="semester" type="text" value="" >-->
-<!--                        </div>-->
-
+                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                         <div class='col-md-4'>
                             <label class="col-form-label">Track</label>
                             <div class="input-group mb-3">
