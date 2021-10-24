@@ -35,14 +35,12 @@ function setTableData (classType, url) {
  */
  function toggleGradesColumn(classType) {
 
-    let displayGrades = classType === 'advisory' ? 'hideColumn' : 'showColumn';
     if (classType === 'advisory'){
-        // classGradeTable.bootstrapTable('showColumn', ['action']);
+        classGradeTable.bootstrapTable('showColumn', ['action_2']);
         classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
     } else {
         classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['action']);
-
+        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
     }
     
 };
@@ -108,19 +106,26 @@ $(function() {
         var stat = document.getElementById("label").innerText == "submit"? "1": "0";
         this.attr
         console.log(stat);
+
         // let studGrades = new FormData();
         var studGrades = $("#grades").serializeArray();        
         studGrades.forEach(element => {
             
             var recordInfo = element['name'].split("/")
-            
-            var grades  = {'id' : recordInfo[0],
-                            'grading' : recordInfo[1],
-                            'grade': element['value'],
-                            'code' : code,
-                            'stat': stat,
-                            'action' : 'gradeClass'};
-
+            if(recordInfo[2] == 'general_average'){
+                var grades = {'id' : recordInfo[0],
+                               'rep_id' : recordInfo[1],
+                               'gen_ave' : element['value'],
+                               'action' : 'gradeAdvisory',
+                               'stat': stat};
+            } else {
+                var grades  = {'id' : recordInfo[0],
+                                'grading' : recordInfo[1],
+                                'grade': element['value'],
+                                'code' : code,
+                                'stat': stat,
+                                'action' : 'gradeClass'};
+            }
             $.post("action.php", grades, function(data) {	
                 console.log(grades);
                 classGradeTable.bootstrapTable("refresh")

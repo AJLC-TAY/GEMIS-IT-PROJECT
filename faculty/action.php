@@ -14,8 +14,10 @@ if (isset($_POST['export'])) {
     // $faculty->tryExport();
 }
 if ((isset($_POST['action']) && $_POST['action'] == 'gradeClass')) {
-    $faculty->editGrades();
-    // $faculty->tryExport();
+    $faculty->gradeClass();
+}
+if ((isset($_POST['action']) && $_POST['action'] == 'gradeAdvisory')) {
+    $faculty->gradeAdvisory();
 }
 // if ((isset($_POST['action']) && $_POST['action'] == 'export')) {
 //     $faculty->exportSubjectGradesToCSV();

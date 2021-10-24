@@ -1262,7 +1262,7 @@ trait Grade
             $first = $qtr == '1' ? '': 'readonly';
             $second_final = $qtr == '2' ? '': 'readonly';
             $class_grades[] = [
-                'stud_id' => $grd['stud_id'],
+                'id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
                 'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
                 'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",

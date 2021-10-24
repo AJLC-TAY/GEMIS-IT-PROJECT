@@ -54,12 +54,17 @@ class FacultyModule extends Dbconfig
             # get report id
             $row_temp = $this->query("SELECT report_id, general_average FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
             
-            $report_id = mysqli_fetch_row($row_temp)[0];
+            $temp = mysqli_fetch_row($row_temp);
+            if($temp!=NULL){
+                $report_id = $temp[0];
+                $gen_ave = $temp[1];
+            }
+
             $students [] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'  =>  "",
+                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'action' =>  "<div class='d-flex justify-content-center'>"
                         ."<button class='btn btn-sm btn-secondary me-1'>View</button>"
@@ -67,7 +72,7 @@ class FacultyModule extends Dbconfig
                         ."<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
                     ."</div>",
                 'action_2' => "<div class='d-flex justify-content-center'>"
-                ."<button class='btn btn-sm btn-secondary me-1'>Grade Values</button>"
+                ."<a href='grade.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
             ];
         }
 
@@ -218,8 +223,43 @@ class FacultyModule extends Dbconfig
             'enroll'  => $sy[2]
         ];
     }
+    public function listValuesReport()
+    {
+        $qtr = '1'; //session
+        $values = [];
+        $values_desc = [];
+        $marking = [];
+        $stud_id = $_GET['id'];
+        $sy_id = 4;
+        $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
 
-    public function editGrades() {
+
+        while ($val = mysqli_fetch_assoc($result)) {
+
+
+                for ($x = 1; $x <= $qtr; $x++) {
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    while ($marks = mysqli_fetch_assoc($markings)) {
+                        if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
+                            $marking[$val['bhvr_statement']][] =  $marks['marking'];
+                        }
+                    }
+                }
+
+                if (sizeof($marking) != 4) {
+                    for ($x = 1; $x <= 3; $x++) {
+                        $marking[$val['bhvr_statement']][] =  '';
+                    }
+                }
+
+                $values[$val['value_name']][] = $marking;
+                $marking = [];
+            
+        }
+        return $values;
+    }
+
+    public function gradeClass() {
         $stud_id = $_POST['id'];
         $grading = $_POST['grading'];
         $grade = $_POST['grade'];
@@ -230,6 +270,18 @@ class FacultyModule extends Dbconfig
 
        $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
                             [$grade, $stat, $stud_id, $code],"siii");  
+   }
+
+   public function gradeAdvisory(){
+        $stud_id = $_POST['id'];
+        $report_id = $_POST['rep_id'];
+        $gen_ave = $_POST['gen_ave'];
+        $stat = (int) $_POST['stat'];
+
+        $gen_ave = $gen_ave != "" ? $gen_ave : NULL ;
+
+    $this->prepared_query("UPDATE `gradereport` SET `general_average` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
+                            [$gen_ave, $stat, $stud_id, $report_id],"iiii");  
    }
 
 
