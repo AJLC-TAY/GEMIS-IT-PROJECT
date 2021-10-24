@@ -27,7 +27,7 @@ $enroll = $sy[0];
               <input type="submit" name="loginBtn" class="btn" value="Login">
               <?php if ($enroll == 1) { ?>
                     <!-- <div class="d-flex justify-content-end mt-5"> -->
-                        <a href="enrollment.php" class="link">Enroll Now!</a><br>
+                        <a href="student/enrollment_form.php" class="link">Enroll Now!</a><br>
                         <!-- <div class="col-auto"> -->
                         <!-- </div> -->
                     <!-- </div> -->

@@ -1,6 +1,24 @@
 <?php
-require_once("../class/Administration.php");
-$admin = new Administration();
+$user = NULL;
+$breadcrumb = "<li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+            <li class='breadcrumb-item'><a href='enrollment.php'>Enrollment</a></li>
+            <li class='breadcrumb-item active'>Form</a></li>";
+switch($_SESSION['user_type']) {
+    case "AD":
+        require_once("../class/Administration.php");
+        $user = new Administration();
+        break;
+    case "FA":
+        require_once("../class/Faculty.php");
+        $user = new FacultyModule();
+        break;
+    case "ST":
+        require_once("../class/Student.php");
+        $user = new StudentModule();
+        $breadcrumb = '';
+        break;
+}
+
 
 $stud_id = '';
 $user_id_no = '';
@@ -51,7 +69,6 @@ $user_id_no = '';
 //$school_name = '';
 //$school_id_no = '';
 //$school_address = '';
-
 
 $lrn = rand(1, 1000000);
 $lname = 'Rizal';
@@ -109,7 +126,7 @@ if (isset($_GET['action'])) {
     }
 
     if ($action === 'edit') {
-        $userProfile = $admin->getProfile("ST");
+        $userProfile = $user->getProfile("ST");
         $stud_id = $userProfile->get_stud_id();
         $user_id_no = $userProfile->get_id_no();
         $lrn = $userProfile->get_lrn();
@@ -163,42 +180,52 @@ if (isset($_GET['action'])) {
     }
 }
 
-$enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
+$enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 ?>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <?php if ($_SESSION['user_type'] != 'ST'){
-                 echo "<li class='breadcrumb-item'><a href='index.php'>Home</a></li>
-                 <li class='breadcrumb-item'><a href='enrollment.php'>Enrollment</a></li>
-                <li class='breadcrumb-item active'>Form</a></li>";
-            }?>
+            <?php echo $breadcrumb; ?>
         </ol>
     </nav>
     <div class="container px-4 text-center">
-        <h2>Enrollment Form</h2>
+        <div class="d-flex justify-content-center">
+            <div class="w-auto mx-5">
+                <!-- <div class="row">
+                    <div class="col-4">
+                        <img src="../assets/logoSc.png" alt="PCNHS Logo" style="width: 50px; height: auto;">
+                    </div>
+                    <div class="col-8">
+                        <p><small>Pines City National High School <br> Baguio City</small></p>
+                    </div>
+                </div> -->
+                <p class="mb-0"><small>Pines City National High School</small></p>
+                <h3 class="mb-0">Enrollment Form</h3>
+                <p><small>Senior High <i class="bi bi-dot"></i> SY <?php echo $_SESSION['school_year']; ?><br>Baguio City</small></p>
+            </div>
+        </div>
     </div>
 </header>
 <form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
-            <div class="step mx-5" data-target="#test-l-1">
+            <div class="step mx-md-5" data-target="#test-l-1">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#test-l-2">
+            <div class="step mx-md-5" data-target="#test-l-2">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#test-l-3">
+            <div class="step mx-md-5" data-target="#test-l-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
@@ -556,7 +583,7 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                             <div class="input-group mb-3">
                                 <select class="form-select" name="track" id="track-select">
                                     <?php
-                                    $curriculum_list = $admin->listCurriculum('curriculum');
+                                    $curriculum_list = $user->listCurriculum('curriculum');
                                     foreach($curriculum_list as $curriculum) {
                                         echo "<option value='{$curriculum->get_cur_code()}'>{$curriculum->get_cur_name()}</option>";
                                     }
@@ -569,7 +596,7 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                             <label class="col-form-label">Strand</label>
                             <select class="form-select" name="program" id="program-select">
                                 <?php
-                                $programs = $admin->listPrograms('program');
+                                $programs = $user->listPrograms('program');
                                 foreach($programs as $program) {
                                     echo "<option value='{$program->get_prog_code()}'>{$program->get_prog_desc()}</option>";
                                 }

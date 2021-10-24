@@ -40,6 +40,30 @@ trait School
 
         return $departments;
     }
+
+     /** Returns the list of curriculum. */
+     public function listCurriculum($tbl)
+     {
+        $result = mysqli_query($this->db, "SELECT * FROM $tbl;");
+        $curriculumList = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $curriculumList[] = new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
+        }
+        return $curriculumList;
+    }
+
+    public function listPrograms($tbl)
+    {
+        $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
+        $result = mysqli_query($this->db, $query);
+        $programList = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $programList[] = new Program($row['prog_code'], $row['curr_code'], $row['description']);
+        }
+        return $programList;
+    }
+
     public function listSubjects($tbl)
     {
         $subjectList = [];
