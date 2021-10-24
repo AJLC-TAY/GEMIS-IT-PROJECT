@@ -47,23 +47,32 @@ class FacultyModule extends Dbconfig
         session_start();
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT stud_id, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
         while($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id
-            $row_temp = $this->query("SELECT report_id FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
-            $report_id = mysqli_fetch_row($row_temp)[0];
+            $row_temp = $this->query("SELECT report_id, general_average FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
+            
+            $temp = mysqli_fetch_row($row_temp);
+            if($temp!=NULL){
+                $report_id = $temp[0];
+                $gen_ave = $temp[1];
+            }
+
             $students [] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
+                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'action' =>  "<div class='d-flex justify-content-center'>"
                         ."<button class='btn btn-sm btn-secondary me-1'>View</button>"
                         ."<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
                         ."<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
-                    ."</div>"
+                    ."</div>",
+                'action_2' => "<div class='d-flex justify-content-center'>"
+                ."<a href='grade.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
             ];
         }
 
@@ -77,7 +86,7 @@ class FacultyModule extends Dbconfig
 
     public function listSubjectClass($is_JSON = false) {
         $students = [];
-        $result = $this->query("SELECT id_no, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
+        $result = $this->query("SELECT id_no, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
                                     JOIN enrollment USING (stud_id)
                                     JOIN classgrade USING (stud_id)
                                     WHERE sub_class_code='{$_GET['sub_class_code']}';"
@@ -165,43 +174,7 @@ class FacultyModule extends Dbconfig
             }
         }
     
-        
-        
-        // Redirect to the listing page
-        // header("Location: index.php".$qstring);
-
-    
-
-    // function array_to_csv_download($filename = "export.csv", $delimiter=";") {
-    //     $array = Array
-    //     (
-            
-    //             (
-    //                 ['fs_id'] => '4c524d8abfc6ef3b201f489c',
-    //                 ['name'] => 'restaurant',
-    //                 ['lat'] => 40.702692,
-    //                 ['lng'] => -74.012869,
-    //                 ['address'] => 'new york',
-    //                 ['postalCode'] => 'sadsada'
-    //             )
-        
-    //             );
-    //     // open raw memory as file so no temp files needed, you might run out of memory though
-    //     $f = fopen('php://memory', 'w'); 
-    //     // loop over the input array
-    //     foreach ($array as $line) { 
-    //         // generate csv lines from the inner arrays
-    //         fputcsv($f, $line, $delimiter); 
-    //     }
-    //     // reset the file pointer to the start of the file
-    //     fseek($f, 0);
-    //     // tell the browser it's going to be a csv file
-    //     header('Content-Type: text/csv');
-    //     // tell the browser we want to save it instead of displaying it
-    //     header('Content-Disposition: attachment; filename="'.$filename.'";');
-    //     // make php send the generated csv lines to the browser
-    //     fpassthru($f);
-    // }
+  
 
     function getSchoolYearInfo($sy_id){
         //implement session for sy_id then remove param
@@ -214,18 +187,74 @@ class FacultyModule extends Dbconfig
             'enroll'  => $sy[2]
         ];
     }
+    public function listValuesReport()
+    {
+        $list = "<select id='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
+        $marka = ['AO','SO','RO','NO'];
+        $qtr = '1'; //session
+        $values = [];
+        $values_desc = [];
+        $marking = [];
+        $stud_id = $_GET['id'];
+        $sy_id = 4;
+        $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
 
-    public function editGrades() {
+
+        while ($val = mysqli_fetch_assoc($result)) {
+
+
+                for ($x = 1; $x <= $qtr; $x++) {
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    while ($marks = mysqli_fetch_assoc($markings)) {
+                        if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
+                            foreach($marka as $markas){
+                                if ($markas == $marks['marking']){
+                                    $list .= "<option selected>$markas</option>";
+                                } else {
+                                    $list .= "<option>$markas</option>";
+                                }
+                            }
+                            $marking[$val['bhvr_statement']][] =  $list;
+                        }
+                    }
+                }
+
+                if (sizeof($marking) != 4) {
+                    for ($x = 1; $x <= 3; $x++) {
+                        $marking[$val['bhvr_statement']][] =  '';
+                    }
+                }
+
+                $values[$val['value_name']][] = $marking;
+                $marking = [];
+            
+        }
+        return $values;
+    }
+
+    public function gradeClass() {
         $stud_id = $_POST['id'];
         $grading = $_POST['grading'];
         $grade = $_POST['grade'];
         $code = $_POST['code'];
-        $stat = $_POST['stat'];
+        $stat = (int) $_POST['stat'];
 
         $grade = $grade != "" ? $grade : NULL ;
 
-       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, stat = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
-                            [$grade, $stud_id, $stat, $code],"siii");  
+       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
+                            [$grade, $stat, $stud_id, $code],"siii");  
+   }
+
+   public function gradeAdvisory(){
+        $stud_id = $_POST['id'];
+        $report_id = $_POST['rep_id'];
+        $gen_ave = $_POST['gen_ave'];
+        $stat = (int) $_POST['stat'];
+
+        $gen_ave = $gen_ave != "" ? $gen_ave : NULL ;
+
+    $this->prepared_query("UPDATE `gradereport` SET `general_average` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
+                            [$gen_ave, $stat, $stud_id, $report_id],"iiii");  
    }
 
 
@@ -246,7 +275,4 @@ class FacultyModule extends Dbconfig
         }
         fclose($output);
    }
-    
-    
-    
 }

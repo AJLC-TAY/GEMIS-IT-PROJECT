@@ -4,25 +4,37 @@ include("../inc/head.html");
 
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
-
+$id = $_SESSION['id'];
 // $sy_id = $_SESSION['sy_id'];
-$sy_id = 9;
-echo($sy_id);
+$sy_id = $_SESSION['sy_id'];
+// echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-
-$sub_classes = $faculty->getHandled_sub_classes(26);
+$advisory = $faculty->getAdvisoryClass($sy_id);
+$sub_classes = $faculty->getHandled_sub_classes($id);
 $adv_opn = '';
 $sub_class_opn = '';
 
 $adv_table_display = 'd-none';
 $sub_table_display = '';
 
-
 $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
+$adv_count_is_empty = !(is_null($advisory));
+if ($adv_count_is_empty) {
+    $adv_table_display = '';
+    // $sub_table_display = 'd-none';
+    $section_code = $advisory['section_code'];
+    $section_name = $advisory['section_name'];
+
+    $adv_opn = "<optgroup label='Advisory Class'>"
+        . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
+        . "data-url='getAction.php?data=student&section={$section_code}' "
+        . "data-name='$section_name'>$section_name</option>"
+        . "</optgroup>";
+}
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
@@ -34,7 +46,7 @@ if (count($sub_classes) != 0) {
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
             . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
-            . "data-name='$section_name'>$section_name [$sub_name]</option>";
+            . "data-name='$section_name'>$section_name [$sub_code]</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {
@@ -67,9 +79,9 @@ if (count($sub_classes) != 0) {
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <!-- HEADER -->
-                            <header>
+                            <!-- <header> -->
                                 <!-- BREADCRUMB -->
-                                <nav aria-label="breadcrumb">
+                                <!-- <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                                         <li class="breadcrumb-item active">Grade</li>
@@ -79,55 +91,19 @@ if (count($sub_classes) != 0) {
                                     <h3 class="fw-bold" id='class'></h3>
                                     <div>
                                         <button type="button" class="btn btn-outline-primary"><i class="bi bi-eye me-2"></i>Download Template</button>
-                                    </div>
-                            </header>
+                                    </div> -->
+                            <!-- </header> -->
                             <!-- STUDENTS TABLE -->
-
-                            <div class="container mt-1 ms-0">
-                                <div class="card w-100 h-auto bg-light" style="min-height: 70vh !important;">
-                                    <h5 class="fw-bold"><?php echo $sem ?> Semester & <?php echo $grading ?> Quarter</h5>
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <!-- SEARCH BAR -->
-                                        <div class="flex-grow-1 me-3">
-                                            <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                        </div>
-                                        <div class="w-25">
-                                            <select class="form-select form-select-sm" id="classes">
-                                                <?php
-                                                echo $sub_class_opn;
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <form method="post" action="action.php" class="ms-2">
-                                                <input class='hidden' id='export_code' name='code' value=''>
-                                                <input type="submit" name="export" value="Export">
-                                            </form>
-                                        </div>
-                                        <div>
-                                            <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->
-                                            <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
-                                            <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
-                                            <button type="button" class="btn btn-success ms-2 save" ></i>Save</button>
-                                            <button type="button" class="btn btn-success submit">Submit</button>
-                                        </div>
-                                    </div>
-
-                                    <form id='grades'>
-                                        <table id="table" class="table-striped table-sm">
-                                            <thead class='thead-dark'>
-                                                <tr>
-                                                    <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>
-                                                    <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
-                                                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </form>
-                                </div>
-                            </div>
+                            <?php
+                            if (isset($_GET['values_grade'])){
+                                include_once("grade/valuesGrade.php"); 
+                                $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
+                            } else {
+                                include_once("grade/gradeStudents.php"); 
+                                $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
+                            }
+                            ?>
+                            
                         </div>
                     </div>
                 </div>
@@ -174,6 +150,7 @@ if (count($sub_classes) != 0) {
         var currentGrading = '<?php echo $grading; ?>';
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
+    <?php echo $jsFilePath; ?>;
 </body>
 
 </html>

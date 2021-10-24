@@ -361,6 +361,7 @@ $enroll_curr_options = $admin->getEnrollmentCurriculumOptions();
                     </div>
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
+                            <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
                             <button class="btn btn-secondary next">Next</button>
                         </div>
                     </div>

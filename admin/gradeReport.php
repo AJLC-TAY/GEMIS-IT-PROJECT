@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
 require_once("sessionHandling.php");
 include_once("../inc/head.html"); 
 $user_type = $_SESSION['user_type'];
+$curr_sem = $_SESSION['current_semester'];
 if ($user_type != 'ST'){
     include_once('../inc/admin/sidebar.php');
     $teacherName = $_POST['teacher_name'];
@@ -173,7 +174,9 @@ if ($user_type != 'ST'){
 
                         // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
+                        
                         $grades = $admin->listGrade();
+                        
                         $userProfile = $admin->getProfile("ST");
                         $stud_id = $userProfile->get_stud_id();
                         $lrn = $userProfile->get_lrn();
@@ -237,23 +240,32 @@ if ($user_type != 'ST'){
                                             . "<tr class='bg-light'>
                                                 <td colspan='4'>Applied Subjects</td>
                                             </tr>" .
-                                            prepareGradeRecordsHTML($grades['applied'])
-                                            . "<tr class='bg-light'>
-                                                <td colspan='4'>Specialized Subjects</td>
-                                            </tr>";
-                                            if (array_key_exists('specialized',$grades)){
-                                                prepareGradeRecordsHTML($grades['specialized']);
+                                                prepareGradeRecordsHTML($grades['applied']);
+                                            
+
+                                            if($_SESSION['user_type'] == 'ST'){
+                                                if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                }
                                             } else {
-                                                for ($x = 0; $x < 5; $x++) {
-                                                    $grd.= "<tr height=26>
-                                                            <td> </td>
-                                                            <td align='center'> </td>
-                                                            <td align='center'> </td>
-                                                            <td align='center'> </td>
-                                                            </tr>";
-                    
-                                                   }
+                                                $grd.= "<tr class='bg-light'>
+                                                <td colspan='4'>Specialized Subjects</td>
+                                                </tr>";
+                                                    if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                } else {
+                                                    for ($x = 0; $x < 5; $x++) {
+                                                        $grd.= "<tr height=26>
+                                                                <td> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                </tr>";
+                        
+                                                    }
+                                                }
                                             }
+                                            
 
                                 $grd .= "<tr class='bg-light fw-bold'>
                                             <td colspan='3'>General Average for the Semester:</td>
@@ -498,7 +510,7 @@ if ($user_type != 'ST'){
                         </div>
                         <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
                             <ul class="template p-0 w-100">
-                            <?php if ($_SESSION['user_type']!="ST") {
+                            <?php if ($user_type!="ST") {
                                 attendance($attendance,$lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
 
                             }?>
@@ -511,9 +523,13 @@ if ($user_type != 'ST'){
                                 <li class="p-0 mb-0 mx-auto">
                                     <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                     <?php
-
-                                    renderSemesterGradeTable('1st Semester', $grades['1']);
-                                    renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    if($user_type=="ST"){
+                                        renderSemesterGradeTable('1st Semester', $grades[$curr_sem]);
+                                    } else {
+                                        renderSemesterGradeTable('1st Semester', $grades['1']);
+                                        renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    }
+                                   
                                     ?>
                                     <br>
                                 </li>
