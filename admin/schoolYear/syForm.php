@@ -7,9 +7,6 @@ $subjects = $init_data['subjects'];
 // $tracks = ['ACAD' => ["ABM" => "ABM desc", "HumSS" => "HumSS desc"], 'TVL' => ["BP" => "Bread & Pastry", "Elec" => "Electronics"]];
 // $subjects = ["core" => ["BMath" => "Business Math", "Research" => "Research 01"], "spap" => ["Test" => "Test 01", "Test02" => "Test 02"]];
 ?>
-<script> 
-    var stepper = new Stepper($('#school-year-stepper')[0]);
-</script>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->

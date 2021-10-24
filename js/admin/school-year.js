@@ -199,6 +199,7 @@ $(function() {
             let sy_code = JSON.parse(data);
             let message = 'Redirecting to the initialized school year';
             let url = `schoolYear.php?id=${sy_code}`;
+            console.log(url);
             if (enrollAfter) {
                 message = 'Redirecting to the enrollment setup page';
                 url = 'enrollment.php?page=setup';
