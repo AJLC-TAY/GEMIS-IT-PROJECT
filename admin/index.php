@@ -1,9 +1,9 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
-
 require_once("../class/Administration.php");
 $admin = new Administration();
+
 $user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
@@ -120,7 +120,7 @@ $admin_user = $admin->getProfile('AD');
                                                 <hr class="mt-1 mb-2">
                                                 <div class="d-flex flex-wrap">
                                                     <div class='row'>
-                                                        
+                                                        <div class="inner">
                                                             <div class="card-btn bg-pastel mx-4 mb-3">
                                                                 <div class="inner row">
                                                                     <div class="ms-4 col-sm-8">
@@ -197,7 +197,7 @@ $admin_user = $admin->getProfile('AD');
                                                             <div class="card-btn bg-white mx-4 mt-1 mb-1" style="height: 81%;">
                                                                 <div class="inner row">
                                                                     <div class="ms-4 col-sm-8">
-                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP</h5>
+                                                                        <h5 class="fw-bold mt-1"><i class="fa fa-cog me-3" aria-hidden="true"></i>SET UP ENROLLMENT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
                                                                         <a href="enrollment.php?page=setup" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>

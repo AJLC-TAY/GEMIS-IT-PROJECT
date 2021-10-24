@@ -9,7 +9,7 @@ $name = $student->get_name();
 $sex = $student->get_sex();
 $id_picture = $student->get_id_picture();
 $birth_cert = $student->get_psa_birth_cert();
-$birth_cert = "https://upload.wikimedia.org/wikipedia/commons/c/c8/Alien_Case_File_for_Francesca_Rhee_-_NARA_-_6336263_%28page_29%29.jpg";
+$form_137 = $student->get_form137();
 $valid_status = $student->get_status();
 
 
@@ -97,7 +97,7 @@ $image = $id_picture ?? "../assets/profile.png";
                                 </div>
                                 <div class="col-sm-9">
                                     <a href="#" id="pop">
-                                        <img id="imageresource" src="<?php echo $birth_cert; ?>" style="width: 50%; height: auto;">
+                                        <img id="imageresource" src="<?php echo $form_137; ?>" style="width: 50%; height: auto;">
                                     </a>
 
                                     <!-- Creates the bootstrap modal where the image will appear -->
@@ -109,7 +109,7 @@ $image = $id_picture ?? "../assets/profile.png";
                                                     <h4 class="modal-title" id="myModalLabel">Image preview</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+                                                    <img src="<?php echo $form_137; ?>" id="imagepreview" style="width: 400px; height: 264px;" >
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -127,7 +127,7 @@ $image = $id_picture ?? "../assets/profile.png";
                                 
                                 <div class="col-sm-9">
                                     <a href="#" id="pop">
-                                        <img id="imageresource" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Alien_Case_File_for_Francesca_Rhee_-_NARA_-_6336263_%28page_29%29.jpg" style="width: 50%; height: auto;">
+                                        <img id="imageresource" src="<?php echo $birth_cert; ?>" style="width: 50%; height: auto;">
                                     </a>
 
                                     <!-- Creates the bootstrap modal where the image will appear -->
@@ -139,7 +139,7 @@ $image = $id_picture ?? "../assets/profile.png";
                                                     <h4 class="modal-title" id="myModalLabel">Image preview</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+                                                    <img src="<?php echo $birth_cert;?>" id="imagepreview" style="width: 400px; height: 264px;" >
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

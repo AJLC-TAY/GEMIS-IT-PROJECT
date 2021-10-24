@@ -1,5 +1,5 @@
 <?php
-require_once("../inc/sessionHandling.php");
+require_once("sessionHandling.php");
 include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -52,6 +52,12 @@ include_once("../inc/head.html"); ?>
     <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script>
+        $(function () {
+            preload("#enrollment");
+            hideSpinner();
+        });
+    </script>
     <!-- VALIDATION -->
     <script>
         /** MOVED TO enrollment.js */

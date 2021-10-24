@@ -1,5 +1,5 @@
 <?php
-require('config.php');
+require_once('config.php');
 require('Dataclasses.php');
 require('Traits.php');
 
@@ -67,6 +67,30 @@ class Administration extends Dbconfig
         header("Location: admin.php?id=$id");
     }
 
+    public function listGradeStud(){
+        $id = $_SESSION['id'];
+        $sy = $_SESSION['sy_id'];
+        $curr_sem = $_SESSION['current_semester'];
+        $grado = [];
+        $result = $this->query(
+            "SELECT sub_name, first_grading, second_grading, final_grade, sub_type 
+            FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) 
+            JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) 
+            WHERE stud_id = $id AND sy_id = $sy AND current_semester = $curr_sem AND status = 1;"
+        );
+
+        while ($grd =  mysqli_fetch_assoc($result)){
+            $grado[] = [
+                'sub_name'  => $grd['sub_name'],
+                'grade_1'   => $grd['first_grading'],
+                'grade_2'   => $grd['second_grading'],
+                'grade_f'   => $grd['final_grade']
+            ];
+        }
+
+        return $grado;
+        
+    }
 
 
     public function editAdministrator()
@@ -324,23 +348,40 @@ class Administration extends Dbconfig
         while ($sem = mysqli_fetch_assoc($result)) {
             while ($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
                 for ($x = 1; $x <= $sem['current_semester']; $x++) {
-                    $stud_grade = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = $x"); //sub_name | first_grading | second_grading | final_grading | sub_type
-
+                    
+                    $stud_grade = $this->query("SELECT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = $x");
                     // foreach($sub_type as $type){
                     while ($grd = mysqli_fetch_assoc($stud_grade)) {
                         // echo json_encode($sub_type['sub_type']);
                         // echo ("-------------");
+                        
                         if ($sub_type['sub_type'] == $grd['sub_type']) {
-
-                            // echo ($grd['sub_type']);
-                            $grado[] = [
-                                'sub_name'  => $grd['sub_name'],
-                                'grade_1'   => $grd['first_grading'],
-                                'grade_2'   => $grd['second_grading'],
-                                'grade_f'   => $grd['final_grade']
-                            ];
-                        }
+                            if($_SESSION['user_type'] == 'ST'){
+                                if ($grd['status'] == 1){
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => $grd['first_grading'],
+                                    'grade_2'   => $grd['second_grading'],
+                                    'grade_f'   => $grd['final_grade']
+                                ];} else {
+                                    $grado[] = [
+                                        'sub_name'  => $grd['sub_name'],
+                                        'grade_1'   => '',
+                                        'grade_2'   => '',
+                                        'grade_f'   => ''
+                                    ];
+                                }
+                            } else {
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => $grd['first_grading'],
+                                    'grade_2'   => $grd['second_grading'],
+                                    'grade_f'   => $grd['final_grade']
+                                ];
+                            }
+                        } 
                     }
+                    
 
 
                     // }

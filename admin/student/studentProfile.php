@@ -1,8 +1,7 @@
 <?php include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-// $_SESSION['userType'] = 'admin';
-// $_SESSION['userID'] = 'alvin';
+$user_type = $_SESSION['user_type'];
 
 $link = "student.php";
 $userProfile = $admin->getProfile("ST");
@@ -61,6 +60,9 @@ switch ($user_type) {
     case 'FA':
         $breadcrumb = '';
         break;
+    case 'ST':
+        $breadcrumb = '';
+        break;
 }
 ?>
 
@@ -70,20 +72,29 @@ switch ($user_type) {
 </head>
 
 <header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <?php echo $breadcrumb; ?>
-            <li class="breadcrumb-item active">Profile</a></li>
-        </ol>
+    <nav aria-label='breadcrumb'>
+        <ol class='breadcrumb'>
+        <?php if($user_type != 'ST'){
+        echo "
+            <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+             $breadcrumb
+            <li class='breadcrumb-item active'>Profile</a></li>
+       
+        ";}?>
+         </ol>
     </nav>
+    <!-- BREADCRUMB -->
+    
+    
 </header>
 <div class="d-flex justify-content-between align-items-center">
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
-        <a href="student.php?action=edit&id=<?php echo $stud_id; ?>" role="button" class="btn btn-secondary link my-auto me-3"><i class="bi bi-pencil-square me-2"></i>Edit</a>
-        <button id="deactivate-btn" class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
+        <?php if ($user_type != 'ST'){
+            echo "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-secondary link my-auto me-3'><i class='bi bi-pencil-square me-2'></i>Edit</a>
+                <button id='deactivate-btn' class='btn btn-danger me-3' data-bs-toggle='modal' data-bs-target='#confirmation-modal'>Deactivate</button>";
+        }?>
+        
     </div>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -134,8 +145,13 @@ switch ($user_type) {
                             <br>
                             <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
                             <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
-                            <a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
-                            <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>
+                            <?php if ($user_type != 'ST'){
+                                echo "<a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
+                                        <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>";
+                            } else{
+                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
+                            }?>
+                            
                         </div>
                         <?php $admin->listValuesReport() ?>
 

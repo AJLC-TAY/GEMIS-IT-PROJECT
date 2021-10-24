@@ -3,7 +3,20 @@
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
 
 require_once("sessionHandling.php");
-include_once("../inc/head.html"); ?>
+include_once("../inc/head.html"); 
+$user_type = $_SESSION['user_type'];
+$curr_sem = $_SESSION['current_semester'];
+if ($user_type != 'ST'){
+    include_once('../inc/admin/sidebar.php');
+    $teacherName = $_POST['teacher_name'];
+    $teacherName = 'Kesley Bautista Trinidad';
+    $grade = 12;
+    $signatoryName = $_POST['signatory_name'];
+    // $signatoryName = 'Whitney Houston';
+    // $position = 'Secondary School Principal III';
+     $position = $_POST['position'];
+}
+?>
 <title>Grade Report | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
@@ -129,16 +142,25 @@ include_once("../inc/head.html"); ?>
                         <!-- HEADER -->
                         <header>
                             <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="index.php">Student</a></li>
-                                    <li class="breadcrumb-item active">Grade Report</li>
+                            <nav aria-label='breadcrumb'>
+                                <ol class='breadcrumb'>
+                            <?php if($user_type != 'ST'){
+                                echo "
+                                    <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+                                    <li class='breadcrumb-item'><a href='index.php'>Student</a></li>
+                                    $breadcrumb
+                                    <li class='breadcrumb-item active'>Grade Report</a></li>
+                                ";}?>
                                 </ol>
-                            </nav>
+                                </nav>
                             <div class="d-flex flex-column mb-3">
                                 <h6 class="fw-bold">Grade Report</h6>
-                                <h3>Student Name</h3>
+                                <?php if ($user_type == 'ST'){
+                                    echo "<h3>{$_SESSION['User']}</h3>";
+                                }else {
+                                    echo "<h3>Student Name</h3>";
+                                } ?>
+                                
                                 <hr class='m-1'>
                                 <p class='text-secondary'>School Year</p>
                             </div>
@@ -152,7 +174,9 @@ include_once("../inc/head.html"); ?>
 
                         // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
+                        
                         $grades = $admin->listGrade();
+                        
                         $userProfile = $admin->getProfile("ST");
                         $stud_id = $userProfile->get_stud_id();
                         $lrn = $userProfile->get_lrn();
@@ -162,13 +186,7 @@ include_once("../inc/head.html"); ?>
                         $sex = $userProfile->get_sex();
                         $age = $userProfile->get_age();
                         $section = $userProfile->get_section(); 
-                        $teacherName = $_POST['teacher_name'];
-                        //  $teacherName = 'Kesley Bautista Trinidad';
-                        $grade = 12;
-                        $signatoryName = $_POST['signatory_name'];
-                        // $signatoryName = 'Whitney Houston';
-                        $position = 'Secondary School Principal III';
-                        $position = $_POST['position'];
+                        
                         // $admittedIn = 'None';
                         // $eligible = '12';
                         // $date = date("F j, Y");
@@ -222,23 +240,32 @@ include_once("../inc/head.html"); ?>
                                             . "<tr class='bg-light'>
                                                 <td colspan='4'>Applied Subjects</td>
                                             </tr>" .
-                                            prepareGradeRecordsHTML($grades['applied'])
-                                            . "<tr class='bg-light'>
-                                                <td colspan='4'>Specialized Subjects</td>
-                                            </tr>";
-                                            if (array_key_exists('specialized',$grades)){
-                                                prepareGradeRecordsHTML($grades['specialized']);
+                                                prepareGradeRecordsHTML($grades['applied']);
+                                            
+
+                                            if($_SESSION['user_type'] == 'ST'){
+                                                if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                }
                                             } else {
-                                                for ($x = 0; $x < 5; $x++) {
-                                                    $grd.= "<tr height=26>
-                                                            <td> </td>
-                                                            <td align='center'> </td>
-                                                            <td align='center'> </td>
-                                                            <td align='center'> </td>
-                                                            </tr>";
-                    
-                                                   }
+                                                $grd.= "<tr class='bg-light'>
+                                                <td colspan='4'>Specialized Subjects</td>
+                                                </tr>";
+                                                    if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                } else {
+                                                    for ($x = 0; $x < 5; $x++) {
+                                                        $grd.= "<tr height=26>
+                                                                <td> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                </tr>";
+                        
+                                                    }
+                                                }
                                             }
+                                            
 
                                 $grd .= "<tr class='bg-light fw-bold'>
                                             <td colspan='3'>General Average for the Semester:</td>
@@ -325,6 +352,7 @@ include_once("../inc/head.html"); ?>
                                         <div class='subLine'>___________________</div>
                                     </div>";
                         }
+                        
                         function logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position){ 
                            
                             
@@ -410,21 +438,14 @@ include_once("../inc/head.html"); ?>
                               </li>  
                             ";
                         }
-                        ?>
+                        function attendance($attendance,$lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position){
+                            logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
 
-
-                        <div class="d-flex-inline">
-                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
-                        </div>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
-                            <ul class="template p-0 w-100">
-                            <?php if (!isset($_GET['module'])) {
-                                logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
-                            }?>
-                                <hr class='m-0'>
-                                <li class="p-0 mb-0 mx-auto">
-                                    <h5 class="text-center"><b>REPORT ON ATTENDANCE</b></h5><br>
-                                    <table class="table-bordered table w-100">
+                            echo "
+                            <hr class='m-0'>
+                                <li class='p-0 mb-0 mx-auto'>
+                                    <h5 class='text-center'><b>REPORT ON ATTENDANCE</b></h5><br>
+                                    <table class='table-bordered table w-100'>
                                         <col style='width: 25%;'>
                                         <col style='width: 7%;'>
                                         <col style='width: 7%;'>
@@ -441,56 +462,74 @@ include_once("../inc/head.html"); ?>
 
                                         <thead class='text-center fw-bold'>
                                             <tr>
-                                                <td></td>
-                                                <?php 
+                                                <td></td>";
+
+                                                
                                                     foreach(array_keys($attendance['no_of_days']) as $month_key) { 
-                                                        echo "<td>". ucwords(substr($month_key, 0, 3)) ."</td>"; 
+                                                        echo '<td>'. ucwords(substr($month_key, 0, 3)) .'</td>'; 
                                                     }
-                                                ?>
-                                                <td>Total</td>
+
+                                                
+                                                    echo "<td>Total</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="text-center">No. of school days</td>
-                                                <?php
-                                                prepareStudentAttendanceHTML('no_of_days', $attendance);
-                                                ?>
-                                            </tr>
+                                                <td class='text-center'>No. of school days</td>";
+                                                 prepareStudentAttendanceHTML('no_of_days', $attendance);
+                                                
+                                            echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of present</td>
-                                                <?php
-                                                prepareStudentAttendanceHTML('no_of_present', $attendance);
-                                                ?>
-                                            </tr>
+                                                <td class='text-center'>No. of present</td>";
+                                                
+                                                 prepareStudentAttendanceHTML('no_of_present', $attendance);
+                                                
+                                                echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of absent</td>
-                                                <?php
+                                                <td class='text-center'>No. of absent</td>";
+                                                
                                                 prepareStudentAttendanceHTML('no_of_absent', $attendance);
-                                                ?>
-                                            </tr>
+                                                
+                                                echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of tardy</td>
-                                                <?php
+                                                <td class='text-center'>No. of tardy</td>";
+                                                
                                                 prepareStudentAttendanceHTML('no_of_tardy', $attendance);
-                                                ?>
-                                            </tr>
+                                                
+                                                echo" </tr>
                                         </tbody>
-                                    </table> 
+                                    </table> ";
+
+                                otherinfo();
+                        }
+                        ?>
+
+
+                        <div class="d-flex-inline">
+                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
+                        </div>
+                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
+                            <ul class="template p-0 w-100">
+                            <?php if ($user_type!="ST") {
+                                attendance($attendance,$lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
+
+                            }?>
+                                
                                     
-                                    <?php if (!isset($_GET['module'])) {
-                                        otherinfo(); 
-                                        
-                                    }?>
+                                
                                 </li>
                                     
                                 <hr class='m-0'>
                                 <li class="p-0 mb-0 mx-auto">
                                     <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                     <?php
-
-                                    renderSemesterGradeTable('1st Semester', $grades['1']);
-                                    renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    if($user_type=="ST"){
+                                        renderSemesterGradeTable('1st Semester', $grades[$curr_sem]);
+                                    } else {
+                                        renderSemesterGradeTable('1st Semester', $grades['1']);
+                                        renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    }
+                                   
                                     ?>
                                     <br>
                                 </li>

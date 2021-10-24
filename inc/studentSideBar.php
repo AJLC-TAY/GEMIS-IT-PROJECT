@@ -1,12 +1,12 @@
 <?php
 // session handling
-// session_start();
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = "2021 - 2022";
-$_SESSION['user_type'] = 'ST';
-$_SESSION['id'] = 110001;
-$_SESSION['sy_id'] = 9;
-$school_year = $_SESSION['sy_desc'];
+//session_start();
+// $_SESSION['sy_id'] = 9;
+// $_SESSION['sy_desc'] = "2021 - 2022";
+// $_SESSION['user_type'] = 'ST';
+// $_SESSION['id'] = 110001;
+// $_SESSION['sy_id'] = 9;
+ $school_year = $_SESSION['school_year'];
 
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
@@ -24,7 +24,7 @@ $school_year = $_SESSION['sy_desc'];
                 <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8> 
             </li>
             <li>
-                <h8 class="topbar fw-bold">Hi, <?php echo ' Student' ?></h8>
+                <h8 class="topbar fw-bold">Hi, <?php echo $_SESSION['User']?></h8>
             </li>
             
             <!-- <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li> -->
@@ -47,7 +47,7 @@ $school_year = $_SESSION['sy_desc'];
             </li>
             <!-- <?php echo $enrollment_item; ?> -->
             <li class="sub-menu">
-                <a id="" href="enrollment.php?action=edit">
+                <a id="enrollment" href="enrollment.php?action=edit">
                 <i class="fa fa-tasks"></i>
                     <span>Enrollment</span>
                 </a>
@@ -59,13 +59,13 @@ $school_year = $_SESSION['sy_desc'];
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="home" href="grade.php?module=student">
+                <a id="grade" href="grade.php">
                     <i class="bi bi-card-list"></i>
                     <span>Grade</span>
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="" href="transcript.php">
+                <a id="transcript" href="transcript.php">
                     <i class="bi bi-list"></i>
                     <span>Transcript of Records</span>
                 </a>

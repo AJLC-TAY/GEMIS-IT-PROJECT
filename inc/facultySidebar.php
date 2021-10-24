@@ -80,7 +80,7 @@ if (in_array('award_coor', $roles)) {
             <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
             <li class="sub-menu">
-                <a id='archived' href="archived.php">
+                <a id='archived' href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
                     <span>Archived Classes</span>
                 </a>

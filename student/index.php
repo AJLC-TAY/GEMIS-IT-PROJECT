@@ -1,4 +1,5 @@
 <?php
+require_once("sessionHandling.php");
 include_once("../inc/head.html"); ?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 
@@ -26,7 +27,7 @@ include_once("../inc/head.html"); ?>
                                 <!-- BREADCRUMB -->
                                 <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item active">Home</li>
+                                        <!-- <li class="breadcrumb-item active">Home</li> -->
                                     </ol>
                                 </nav>
                                 <div class="card p-4">
@@ -35,7 +36,7 @@ include_once("../inc/head.html"); ?>
                                             <h2 class="fw-bold mt-3 ms-3">Welcome!</h2>
                                             <ul class="ms-4 list-style p-0">
                                                 <li>
-                                                    <h4>Student Name</h4>
+                                                    <h4> <?php echo $_SESSION['User']?></h4>
                                                 </li>
                                                 <li>
                                                     <h5>Currently Enrolled in: First Semester, 2022-2023</h5>

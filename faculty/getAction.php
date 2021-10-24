@@ -5,7 +5,9 @@ $faculty = new FacultyModule();
 if (isset($_GET['data']) && $_GET['data'] == 'student') {
     $faculty->getClass();
 }
-
+if (isset($_GET['data']) && $_GET['data'] == 'enrollees') {
+    $faculty->getEnrollees();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'classGrades') {
     $faculty->getClassGrades();
 }

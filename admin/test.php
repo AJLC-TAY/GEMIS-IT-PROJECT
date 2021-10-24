@@ -49,10 +49,17 @@
 
 include '../class/Administration.php';
 $admin = new Administration();
+$res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
+$sect_code = mysqli_fetch_row($res)[0];
+print_r($sect_code);
+if (!$sect_code) {
+    echo "test";
+}
+
 // $admin->editAcademicDays();
 // echo json_encode($admin->getConductAward());
-$_SESSION['sy_id'] = 13;
-print_r($admin->getEnrollmentCurriculumOptions());
+//$_SESSION['sy_id'] = 13;
+//print_r($admin->getEnrollmentCurriculumOptions());
 //print_r($admin->get_sy_info(9));
 //session_start();
 //$_SESSION['sy_id'] = 9;
