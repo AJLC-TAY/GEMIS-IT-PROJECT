@@ -1257,7 +1257,9 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $class_code = $_GET['class_code'];
-        $qtr = '1';
+        $qtr = 2;
+
+        
     
 
 

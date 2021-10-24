@@ -4,13 +4,13 @@ include("../inc/head.html");
 
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
-
+$id = $_SESSION['id'];
 // $sy_id = $_SESSION['sy_id'];
 $sy_id = $_SESSION['sy_id'];
 // echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
 $advisory = $faculty->getAdvisoryClass($sy_id);
-$sub_classes = $faculty->getHandled_sub_classes(26);
+$sub_classes = $faculty->getHandled_sub_classes($id);
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -97,8 +97,10 @@ if (count($sub_classes) != 0) {
                             <?php
                             if (isset($_GET['values_grade'])){
                                 include_once("grade/valuesGrade.php"); 
+                                $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
                             } else {
                                 include_once("grade/gradeStudents.php"); 
+                                $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
                             }
                             ?>
                             
@@ -148,6 +150,7 @@ if (count($sub_classes) != 0) {
         var currentGrading = '<?php echo $grading; ?>';
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
+    <?php echo $jsFilePath; ?>;
 </body>
 
 </html>

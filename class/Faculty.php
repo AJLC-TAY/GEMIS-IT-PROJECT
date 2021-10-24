@@ -86,7 +86,7 @@ class FacultyModule extends Dbconfig
 
     public function listSubjectClass($is_JSON = false) {
         $students = [];
-        $result = $this->query("SELECT id_no, lrn, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
+        $result = $this->query("SELECT id_no, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
                                     JOIN enrollment USING (stud_id)
                                     JOIN classgrade USING (stud_id)
                                     WHERE sub_class_code='{$_GET['sub_class_code']}';"
@@ -174,43 +174,7 @@ class FacultyModule extends Dbconfig
             }
         }
     
-        
-        
-        // Redirect to the listing page
-        // header("Location: index.php".$qstring);
-
-    
-
-    // function array_to_csv_download($filename = "export.csv", $delimiter=";") {
-    //     $array = Array
-    //     (
-            
-    //             (
-    //                 ['fs_id'] => '4c524d8abfc6ef3b201f489c',
-    //                 ['name'] => 'restaurant',
-    //                 ['lat'] => 40.702692,
-    //                 ['lng'] => -74.012869,
-    //                 ['address'] => 'new york',
-    //                 ['postalCode'] => 'sadsada'
-    //             )
-        
-    //             );
-    //     // open raw memory as file so no temp files needed, you might run out of memory though
-    //     $f = fopen('php://memory', 'w'); 
-    //     // loop over the input array
-    //     foreach ($array as $line) { 
-    //         // generate csv lines from the inner arrays
-    //         fputcsv($f, $line, $delimiter); 
-    //     }
-    //     // reset the file pointer to the start of the file
-    //     fseek($f, 0);
-    //     // tell the browser it's going to be a csv file
-    //     header('Content-Type: text/csv');
-    //     // tell the browser we want to save it instead of displaying it
-    //     header('Content-Disposition: attachment; filename="'.$filename.'";');
-    //     // make php send the generated csv lines to the browser
-    //     fpassthru($f);
-    // }
+  
 
     function getSchoolYearInfo($sy_id){
         //implement session for sy_id then remove param
@@ -225,6 +189,8 @@ class FacultyModule extends Dbconfig
     }
     public function listValuesReport()
     {
+        $list = "<select id='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
+        $marka = ['AO','SO','RO','NO'];
         $qtr = '1'; //session
         $values = [];
         $values_desc = [];
@@ -241,7 +207,14 @@ class FacultyModule extends Dbconfig
                     $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
                     while ($marks = mysqli_fetch_assoc($markings)) {
                         if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
-                            $marking[$val['bhvr_statement']][] =  $marks['marking'];
+                            foreach($marka as $markas){
+                                if ($markas == $marks['marking']){
+                                    $list .= "<option selected>$markas</option>";
+                                } else {
+                                    $list .= "<option>$markas</option>";
+                                }
+                            }
+                            $marking[$val['bhvr_statement']][] =  $list;
                         }
                     }
                 }
@@ -302,7 +275,4 @@ class FacultyModule extends Dbconfig
         }
         fclose($output);
    }
-    
-    
-    
 }
