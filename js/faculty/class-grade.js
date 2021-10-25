@@ -109,33 +109,43 @@ $(function() {
         console.log(stat);
 
         // let studGrades = new FormData();
-        var studGrades = $("#grades").serializeArray();        
-        studGrades.forEach(element => {
-            
-            var recordInfo = element['name'].split("/")
-            if(recordInfo[2] == 'general_average'){
-                var grades = {'id' : recordInfo[0],
-                               'rep_id' : recordInfo[1],
-                               'gen_ave' : element['value'],
-                               'action' : 'gradeAdvisory',
-                               'stat': stat};
-            } else {
-                var grades  = {'id' : recordInfo[0],
-                                'grading' : recordInfo[1],
-                                'grade': element['value'],
-                                'code' : code,
-                                'stat': stat,
-                                'action' : 'gradeClass'};
-            }
-            $.post("action.php", grades, function(data) {	
-                console.log(grades);
-                classGradeTable.bootstrapTable("refresh")
+        if (type == 'grades'){
+            var studGrades = $("#grades").serializeArray();        
+            studGrades.forEach(element => {
                 
-            });
+                var recordInfo = element['name'].split("/")
+                if(recordInfo[2] == 'general_average'){
+                    var grades = {'id' : recordInfo[0],
+                                'rep_id' : recordInfo[1],
+                                'gen_ave' : element['value'],
+                                'action' : 'gradeAdvisory',
+                                'stat': stat};
+                } else {
+                    var grades  = {'id' : recordInfo[0],
+                                    'grading' : recordInfo[1],
+                                    'grade': element['value'],
+                                    'code' : code,
+                                    'stat': stat,
+                                    'action' : 'gradeClass'};
+                }
+                $.post("action.php", grades, function(data) {	
+                    console.log(grades);
+                    classGradeTable.bootstrapTable("refresh")
+                    
+                });
 
-        });        
-        $('.grading-confirmation').modal('hide');
-        $(".number").attr('readOnly',true);
+            });        
+            $('.grading-confirmation').modal('hide');
+            $(".number").attr('readOnly',true);
+        } else {
+            var select = document.getElementsByClassName('markings');
+            select.forEach((element) => {
+                var value = element.options[element.selectedIndex].value;
+                var recordInfo = element['name'].split("/")
+                console.log(recordInfo[1]);
+            }); // en
+
+        }
         
         // $(".grade").addClass('hidden');
     });

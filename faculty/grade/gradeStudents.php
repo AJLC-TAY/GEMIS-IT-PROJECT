@@ -55,3 +55,4 @@
         </form>
     </div>
 </div>
+<script type="text/javascript">var type = 'grades'</script>
