@@ -1,12 +1,5 @@
 <?php
-// session handling
-session_start();
-$_SESSION['sy_id'] = 9;
-$_SESSION['sy_desc'] = "2021 - 2022";
-$_SESSION['user_type'] = "FA";
-$_SESSION['user_id'] = 1;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
-$school_year = $_SESSION['sy_desc'];
+$school_year = $_SESSION['school_year'];
 $roles = $_SESSION['roles'];
 
 $enrollment_item = '';
@@ -18,13 +11,12 @@ if (in_array('can_enroll', $roles)) {
                 ."</a>"
             ."</li>";
 }
-
 $award_coor_item = '';
 if (in_array('award_coor', $roles)) {
     $award_coor_item = " <li class='sub-menu'>"
                 ."<a id='awards' href='awards.php'>"
-                    ."<i class='fa fa-users'></i>"
-                    ."<span>Enrollment</span>"
+                    ."<i class='bi bi-award-fill'></i>"
+                    ."<span>Awards</span>"
                 ."</a>"
             ."</li>";
 }
@@ -44,14 +36,14 @@ if (in_array('award_coor', $roles)) {
                 <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
             <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
-            <li><a class="logout" href=""><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
+            <li><a role="button" class="logout" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
 </header>
 <!-- HEADER END -->
 <!-- SIDE BAR START -->
 <aside>
-    <div id="sidebar" class="nav-collapse ">
+    <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
             <h5 class="centered">SY <?php echo $school_year ?></h5>
@@ -67,7 +59,6 @@ if (in_array('award_coor', $roles)) {
                     <span>Profile</span>
                 </a>
             </li>
-            <?php echo $enrollment_item; ?>
             <li class="sub-menu">
                 <a id="students" href="students.php">
                     <i class="fa fa-graduation-cap"></i>
@@ -86,15 +77,10 @@ if (in_array('award_coor', $roles)) {
                     <span>Attendance</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="attendance" href="attendance.php">
-                    <i class="bi bi-award-fill"></i>
-                    <span>Awards</span>
-                </a>
-            </li>
+            <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
-            <li class="sub-menu mt-5">
-                <a id='archived' href="archived.php">
+            <li class="sub-menu">
+                <a id='archived' href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
                     <span>Archived Classes</span>
                 </a>

@@ -1,6 +1,22 @@
-<?php 
-require_once("../inc/sessionHandling.php");
-include_once("../inc/head.html"); ?>
+<?php
+
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
+
+require_once("sessionHandling.php");
+include_once("../inc/head.html"); 
+$user_type = $_SESSION['user_type'];
+$curr_sem = $_SESSION['current_semester'];
+if ($user_type != 'ST'){
+    include_once('../inc/admin/sidebar.php');
+    $teacherName = $_POST['teacher_name'];
+    $teacherName = 'Kesley Bautista Trinidad';
+    $grade = 12;
+    $signatoryName = $_POST['signatory_name'];
+    // $signatoryName = 'Whitney Houston';
+    // $position = 'Secondary School Principal III';
+     $position = $_POST['position'];
+}
+?>
 <title>Grade Report | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
@@ -109,14 +125,14 @@ include_once("../inc/head.html"); ?>
 
 <body>
     <!-- SPINNER -->
-    <div id="main-spinner-con" class="spinner-con">
+    <!-- <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
+    </div> -->
     <!-- SPINNER END -->
     <section id="container"></section>
-    <?php include_once('../inc/admin/sidebar.php'); ?>
+    <?php //include_once('../inc/admin/sidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
         <section class="wrapper">
@@ -126,16 +142,25 @@ include_once("../inc/head.html"); ?>
                         <!-- HEADER -->
                         <header>
                             <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="index.php">Student</a></li>
-                                    <li class="breadcrumb-item active">Grade Report</li>
+                            <nav aria-label='breadcrumb'>
+                                <ol class='breadcrumb'>
+                            <?php if($user_type != 'ST'){
+                                echo "
+                                    <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+                                    <li class='breadcrumb-item'><a href='index.php'>Student</a></li>
+                                    $breadcrumb
+                                    <li class='breadcrumb-item active'>Grade Report</a></li>
+                                ";}?>
                                 </ol>
-                            </nav>
+                                </nav>
                             <div class="d-flex flex-column mb-3">
                                 <h6 class="fw-bold">Grade Report</h6>
-                                <h3>Student Name</h3>
+                                <?php if ($user_type == 'ST'){
+                                    echo "<h3>{$_SESSION['User']}</h3>";
+                                }else {
+                                    echo "<h3>Student Name</h3>";
+                                } ?>
+                                
                                 <hr class='m-1'>
                                 <p class='text-secondary'>School Year</p>
                             </div>
@@ -143,12 +168,15 @@ include_once("../inc/head.html"); ?>
                         <?php
                         include "../class/Administration.php";
                         $admin = new Administration();
-                        // $report_id = 1;
-                        $report_id = $_GET['report_id'];
-                        $stud_id = '1111';  // test
+                         $report_id = 1;
+                        // $report_id = $_GET['report_id'];
+                        $stud_id = '110001';  // test
+
                         // $stud_id = $_GET['id'];
                         $filename = $stud_id . '_grade_report'; // 1111_grade_report
+                        
                         $grades = $admin->listGrade();
+                        
                         $userProfile = $admin->getProfile("ST");
                         $stud_id = $userProfile->get_stud_id();
                         $lrn = $userProfile->get_lrn();
@@ -157,19 +185,11 @@ include_once("../inc/head.html"); ?>
                         $midName = $userProfile->get_middle_name();
                         $sex = $userProfile->get_sex();
                         $age = $userProfile->get_age();
-                        $section = $userProfile->get_section();
-                        // $school_year = ;
-                        $teacherName = $_POST['teacher_name'];
-                        // $teacherName = 'Kesley Bautista Trinidad';
-                        $grade = 12;
-                        $grade = 12;
-                        $signatoryName = $_POST['signatory_name'];
-                        // $signatoryName = 'Whitney Houston';
-                        // $position = 'Secondary School Principal III';
-                        $position = $_POST['position'];
-                        $admittedIn = 'None';
-                        $eligible = '12';
-                        $date = 'October 5, 2021';
+                        $section = $userProfile->get_section(); 
+                        
+                        // $admittedIn = 'None';
+                        // $eligible = '12';
+                        // $date = date("F j, Y");
                         $trackStrand = $admin->getTrackStrand();
                         $attendance = $admin->getStudentAttendance(1);
                         // echo json_encode($grades);
@@ -177,19 +197,22 @@ include_once("../inc/head.html"); ?>
                         function prepareGradeRecordsHTML($grade)
                         {
                             $row = '';
-                            // echo json_encode($grade);
-                            $row .= "<tr>
-                                        <td>{$grade[0]['sub_name']}</td>
-                                        <td align='center'>{$grade[0]['grade_1']}</td>
-                                        <td align='center'>{$grade[0]['grade_2']}</td>
-                                        <td align='center'>{$grade[0]['grade_f']}</td>
+                                for ($x = 0; $x < sizeof($grade); $x++) {
+                                $row .= "<tr>
+                                        <td>{$grade[$x]['sub_name']}</td>
+                                        <td align='center'>{$grade[$x]['grade_1']}</td>
+                                        <td align='center'>{$grade[$x]['grade_2']}</td>
+                                        <td align='center'>{$grade[$x]['grade_f']}</td>
                                         </tr>";
+
+                               }
+                              
                             return $row;
                         }
 
                         function renderSemesterGradeTable($semester_desc, $grades)
                         {
-                            echo "
+                            $grd =  "
                                     <h6><b>$semester_desc</b></h6>
                                     <table class='table w-100 table-sm'>
                                         <col style='width: 65%;'>
@@ -212,21 +235,47 @@ include_once("../inc/head.html"); ?>
                                             <tr class='bg-light'>
                                                 <td colspan='4'>Core Subjects</td>
                                             </tr>" .
+                                            
                                             prepareGradeRecordsHTML($grades['core'])
                                             . "<tr class='bg-light'>
                                                 <td colspan='4'>Applied Subjects</td>
                                             </tr>" .
-                                            prepareGradeRecordsHTML($grades['applied'])
-                                            . "<tr class='bg-light'>
+                                                prepareGradeRecordsHTML($grades['applied']);
+                                            
+
+                                            if($_SESSION['user_type'] == 'ST'){
+                                                if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                }
+                                            } else {
+                                                $grd.= "<tr class='bg-light'>
                                                 <td colspan='4'>Specialized Subjects</td>
-                                            </tr>" .
-                                            prepareGradeRecordsHTML($grades['specialized'])
-                                            . "<tr class='bg-light fw-bold'>
-                                                <td colspan='3'>General Average for the Semester:</td>
+                                                </tr>";
+                                                    if (array_key_exists('specialized',$grades)){
+                                                    prepareGradeRecordsHTML($grades['specialized']);
+                                                } else {
+                                                    for ($x = 0; $x < 5; $x++) {
+                                                        $grd.= "<tr height=26>
+                                                                <td> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                <td align='center'> </td>
+                                                                </tr>";
+                        
+                                                    }
+                                                }
+                                            }
+                                            
+
+                                $grd .= "<tr class='bg-light fw-bold'>
+                                            <td colspan='3'>General Average for the Semester:</td>
                                                 <td class='bg-white'></td>
                                             </tr>
                                         </tbody>
                                     </table>";
+
+                                echo $grd;
+                                    
                         }
 
                         function prepareStudentAttendanceHTML($label, $att)
@@ -260,21 +309,61 @@ include_once("../inc/head.html"); ?>
 
                         $observed_values = $admin->listValuesReport();
                         // print_r($attendance);
-                        ?>
+                        function otherinfo(){
+                            echo "
+                            <h5 class='text-center'><b>PARENT / GUARDIAN'S SIGNATURE</b></h5>
+                                    <div class='perLine text-center fsize'>1<sup>st</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>2<sup>nd</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>3<sup>rd</sup> Quarter ______________________________</div>
+                                    <div class='perLine text-center fsize'>4<sup>th</sup> Quarter ______________________________</div>
 
-
-                        <div class="d-flex-inline">
-                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
-                        </div>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow  overflow-auto">
-                            <ul class="template p-0 w-100">
-                            <li class="p-0 mb-0 mx-auto">
+                                    <br><br>
+                                    <h6 class='text-center'><b>CERTIFICATE OF TRANSFER</b></h6>
+                                    <br>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Admitted to Grade: </div>
+                                        <div class='subLine text-center'>________________</div>
+                                        <div class='subLine'>Section: </div>
+                                        <div class='subLine text-center'>________________</div>
+                                    </div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Eligible for Admission to Grade: </div>
+                                        <div class='subLine'>________________</div>
+                                    </div>
+                                    <br>
+                                    <div class='fsize left'><b> Approved: </b></div>
+                                    <br>
+                                    <div class='parentLine fsize text-center'>
+                                        <div class='subLine3'>___________________</div>
+                                        <div class='subLine3'>___________________</div>
+                                    </div>
+                                    <div class='parentLine fsize text-center'>
+                                        <div class='subLine3'>___________________</div>
+                                        <div class='subLine3'>Teacher</div>
+                                    </div>
+                                    <br><br><br>
+                                    <h6 class='text-center'><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Admitted in:</div>
+                                        <div class='subLine'>___________________</div>
+                                    </div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Date:</div>
+                                        <div class='subLine'>___________________</div>
+                                    </div>";
+                        }
+                        
+                        function logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position){ 
+                           
+                            
+                            echo "
+                            <li class='p-0 mb-0 mx-auto'>
                                     <p>School Form 9 - SHS</p>
-                                    <div class="row p-0 mx-1">
-                                        <div class="col-3 p-0">
-                                            <img src="../assets/deped_logo.png" alt="DEPED Logo" title="DEPED Logo">
+                                    <div class='row p-0 mx-1'>
+                                        <div class='col-3 p-0'>
+                                            <img src='../assets/deped_logo.png' alt='DEPED Logo' title='DEPED Logo'>
                                         </div>
-                                        <div class="col-6 p-0 text-center">
+                                        <div class='col-6 p-0 text-center'>
                                             <p>
                                                 Republic of the Philippines<br>
                                                 Department of Education<br>
@@ -285,72 +374,78 @@ include_once("../inc/head.html"); ?>
                                                 Magsaysay Ave., Baguio City
                                             </p>
                                         </div>
-                                        <div class="col-3 p-0" style="text-align: right;">
-                                            <img src="../assets/school_logo.jpg" alt="PCNSH Logo" title="PCNSH Logo">
+                                        <div class='col-3 p-0' style='text-align: right;'>
+                                            <img src='../assets/school_logo.jpg' alt='PCNSH Logo' title='PCNSH Logo'>
                                         </div>
                                     </div>
-                                    <h5 class="text-center"><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
+                                    <h5 class='text-center'><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
                                     <br><br><br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine2">Name: </div><br>
-                                        <?php // echo "$lastName, $firstName $midName"; ?>
-                                        <div class="subLine2 ind"><?php echo $lastName; ?></div><br>
-                                        <div class="subLine2 ind"><?php echo $firstName; ?></div><br>
-                                        <div class="subLine2 ind"><?php echo $midName; ?></div><br>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine2'>Name: </div><br>
+                                        <?php echo '$lastName, $firstName $midName'; ?>
+                                        <div class='subLine2 ind'><?php echo $lastName; ?></div><br>
+                                        <div class='subLine2 ind'><?php echo $firstName; ?></div><br>
+                                        <div class='subLine2 ind'><?php echo $midName; ?></div><br>
                                     </div>
-                                    <div class="parentLine fsizes">
-                                        <div class="subLine2 ind"> </div><br>
-                                        <div class="subLine2 ind">(Last Name)</div>
-                                        <div class="subLine2 ind">(First Name)</div>
-                                        <div class="subLine2 ind">(Middle Name)</div>
+                                    <div class='parentLine fsizes'>
+                                        <div class='subLine2 ind'> </div><br>
+                                        <div class='subLine2 ind'>(Last Name)</div>
+                                        <div class='subLine2 ind'>(First Name)</div>
+                                        <div class='subLine2 ind'>(Middle Name)</div>
                                     </div>
                                     <br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Age: </div>
-                                        <div class="subLine"><?php echo $age; ?></div>
-                                        <div class="subLine">Gender: </div>
-                                        <div class="subLine"><?php echo $sex; ?></div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Age: </div>
+                                        <div class='subLine'><?php echo $age; ?></div>
+                                        <div class='subLine'>Gender: </div>
+                                        <div class='subLine'><?php echo $sex; ?></div>
                                     </div>
-                                    <div class="parentLine  fsize">
-                                        <div class="subLine">Grade: </div>
-                                        <div class="subLine"><?php echo $grade; ?></div>
-                                        <div class="subLine">Section: </div>
-                                        <div class="subLine"><?php echo $section; ?></div>
+                                    <div class='parentLine  fsize'>
+                                        <div class='subLine'>Grade: </div>
+                                        <div class='subLine'><?php echo $grade; ?></div>
+                                        <div class='subLine'>Section: </div>
+                                        <div class='subLine'><?php echo $section; ?></div>
                                     </div>
-                                    <div class="perLine text-center fsize">LRN: <?php echo $lrn; ?></div> 
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">School Year: </div>
-                                        <div class="subLine"><?php echo $school_year; ?></div>
+                                    <div class='perLine text-center fsize'>LRN: <?php echo $lrn; ?></div> 
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>School Year: </div>
+                                        <div class='subLine'><?php echo $school_year; ?></div>
                                     </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Track/Strand: </div>
-                                        <div class="subLine"><?php echo $trackStrand[0]; ?></div>
+                                    <div class='parentLine fsize'>
+                                        <div class='subLine'>Track/Strand: </div>
+                                        <div class='subLine'><?php echo $trackStrand[0]; ?></div>
                                     </div>
                                     <br>
                                     <div class='parag'>
-                                        <h7 class="fsize">Dear Parent,<br><br></h7>
-                                        <p class="par">
+                                        <h7 class='fsize'>Dear Parent,<br><br></h7>
+                                        <p class='par'>
                                             This report card shows the ability and progress your child has made in the different learning areas as well as his/her core values.
                                         </p>
-                                        <p class="par">
+                                        <p class='par'>
                                             The school welcomes you should you desire to know more about your child's progress.
                                         </p>
                                     </div>
                                     <br><br><br>
-                                    <div class="fsize right">
+                                    <div class='fsize right'>
                                         <div> <?php echo $teacherName; ?></div>
                                         <div> Class Adviser </div>
                                     </div>
                                     <br><br><br>
-                                    <div class="fsize left">
+                                    <div class='fsize left'>
                                         <div><?php echo $signatoryName; ?></div>
                                         <div> <?php echo $position; ?> </div>
                                     </div>
-                                </li>
-                                <hr class='m-0'>
-                                <li class="p-0 mb-0 mx-auto">
-                                    <h5 class="text-center"><b>REPORT ON ATTENDANCE</b></h5><br>
-                                    <table class="table-bordered table w-100">
+                              </li>  
+                            ";
+                        }
+                        function attendance($attendance,$lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position){
+                            logoToSignatory($lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
+
+                            echo "
+                            <hr class='m-0'>
+                                <li class='p-0 mb-0 mx-auto'>
+                                    <h5 class='text-center'><b>REPORT ON ATTENDANCE</b></h5><br>
+                                    <table class='table-bordered table w-100'>
                                         <col style='width: 25%;'>
                                         <col style='width: 7%;'>
                                         <col style='width: 7%;'>
@@ -367,91 +462,74 @@ include_once("../inc/head.html"); ?>
 
                                         <thead class='text-center fw-bold'>
                                             <tr>
-                                                <td></td>
-                                                <?php 
+                                                <td></td>";
+
+                                                
                                                     foreach(array_keys($attendance['no_of_days']) as $month_key) { 
-                                                        echo "<td>". ucwords(substr($month_key, 0, 3)) ."</td>"; 
+                                                        echo '<td>'. ucwords(substr($month_key, 0, 3)) .'</td>'; 
                                                     }
-                                                ?>
-                                                <td>Total</td>
+
+                                                
+                                                    echo "<td>Total</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="text-center">No. of school days</td>
-                                                <?php
-                                                prepareStudentAttendanceHTML('no_of_days', $attendance);
-                                                ?>
-                                            </tr>
+                                                <td class='text-center'>No. of school days</td>";
+                                                 prepareStudentAttendanceHTML('no_of_days', $attendance);
+                                                
+                                            echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of present</td>
-                                                <?php
-                                                prepareStudentAttendanceHTML('no_of_present', $attendance);
-                                                ?>
-                                            </tr>
+                                                <td class='text-center'>No. of present</td>";
+                                                
+                                                 prepareStudentAttendanceHTML('no_of_present', $attendance);
+                                                
+                                                echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of absent</td>
-                                                <?php
+                                                <td class='text-center'>No. of absent</td>";
+                                                
                                                 prepareStudentAttendanceHTML('no_of_absent', $attendance);
-                                                ?>
-                                            </tr>
+                                                
+                                                echo "</tr>
                                             <tr>
-                                                <td class="text-center">No. of tardy</td>
-                                                <?php
+                                                <td class='text-center'>No. of tardy</td>";
+                                                
                                                 prepareStudentAttendanceHTML('no_of_tardy', $attendance);
-                                                ?>
-                                            </tr>
+                                                
+                                                echo" </tr>
                                         </tbody>
-                                    </table>
-                                    <br>
-                                    <h5 class="text-center"><b>PARENT / GUARDIAN'S SIGNATURE</b></h5>
-                                    <div class="perLine text-center fsize">1<sup>st</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">2<sup>nd</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">3<sup>rd</sup> Quarter ______________________________</div>
-                                    <div class="perLine text-center fsize">4<sup>th</sup> Quarter ______________________________</div>
+                                    </table> ";
 
-                                    <br><br>
-                                    <h6 class="text-center"><b>CERTIFICATE OF TRANSFER</b></h6>
-                                    <br>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Admitted to Grade: </div>
-                                        <div class="subLine text-center"> <?php echo $grade ?> </div>
-                                        <div class="subLine">Section: </div>
-                                        <div class="subLine text-center"> <?php echo $section ?> </div>
-                                    </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Eligible for Admission to Grade: </div>
-                                        <div class="subLine"> <?php echo $eligible ?> </div>
-                                    </div>
-                                    <br>
-                                    <div class="fsize left"><b> Approved: </b></div>
-                                    <br>
-                                    <div class="parentLine fsize text-center">
-                                        <div class="subLine3"> <?php echo $signatoryName ?></div>
-                                        <div class="subLine3"> <?php echo $teacherName ?> </div>
-                                    </div>
-                                    <div class="parentLine fsize text-center">
-                                        <div class="subLine3"><?php echo $position ?></div>
-                                        <div class="subLine3">Teacher</div>
-                                    </div>
-                                    <br><br><br>
-                                    <h6 class="text-center"><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Admitted in:</div>
-                                        <div class="subLine"> <?php echo $admittedIn ?></div>
-                                    </div>
-                                    <div class="parentLine fsize">
-                                        <div class="subLine">Date:</div>
-                                        <div class="subLine"> <?php echo $date ?></div>
-                                    </div>
+                                otherinfo();
+                        }
+                        ?>
+
+
+                        <div class="d-flex-inline">
+                            <button onclick='generatePDF(`<?php echo $filename; ?>`)' class="btn btn-sm btn-primary">Download</button>
+                        </div>
+                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
+                            <ul class="template p-0 w-100">
+                            <?php if ($user_type!="ST") {
+                                attendance($attendance,$lastName,$firstName,$midName,$age,$sex,$grade,$section,$lrn,$school_year,$trackStrand,$teacherName,$signatoryName,$position);
+
+                            }?>
+                                
+                                    
+                                
                                 </li>
+                                    
                                 <hr class='m-0'>
                                 <li class="p-0 mb-0 mx-auto">
                                     <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
                                     <?php
-
-                                    renderSemesterGradeTable('1st Semester', $grades['1']);
-                                    renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    if($user_type=="ST"){
+                                        renderSemesterGradeTable('1st Semester', $grades[$curr_sem]);
+                                    } else {
+                                        renderSemesterGradeTable('1st Semester', $grades['1']);
+                                        renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                    }
+                                   
                                     ?>
                                     <br>
                                 </li>

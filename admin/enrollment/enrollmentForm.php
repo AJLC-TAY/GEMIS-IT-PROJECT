@@ -1,6 +1,123 @@
 <?php
-require_once("../class/Administration.php");
-$admin = new Administration();
+$user = NULL;
+$breadcrumb = "<li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+            <li class='breadcrumb-item'><a href='enrollment.php'>Enrollment</a></li>
+            <li class='breadcrumb-item active'>Form</a></li>";
+switch($_SESSION['user_type']) {
+    case "AD":
+        require_once("../class/Administration.php");
+        $user = new Administration();
+        break;
+    case "FA":
+        require_once("../class/Faculty.php");
+        $user = new FacultyModule();
+        break;
+    case "ST":
+        require_once("../class/Student.php");
+        $user = new StudentModule();
+        $breadcrumb = '';
+        break;
+}
+
+
+$stud_id = '';
+$user_id_no = '';
+//$lrn = '';
+//$lname = '';
+//$fname = '';
+//$mname = '';
+//$extname = '';
+//$sex = '';
+//$age = '';
+//$birthdate = '';
+//$birth_place = '';
+//$indigenous_group = '';
+//$mother_tongue = '';
+//$religion = '';
+//
+//$house_no = '';
+//$street = '';
+//$barangay = '';
+//$city = '';
+//$province = '';
+//$zip = '';
+//
+//$cp_no = '';
+//$psa_birth_cert = '';
+//$belong_to_ipcc = '';
+//$id_picture = '';
+//$section = '';
+//
+//$parents = ['mother', 'father'];
+//foreach ($parents as $par) {
+//    ${$par . '_first_name'} = '';
+//    ${$par . '_last_name'} = '';
+//    ${$par . '_middle_name'} = '';
+//    ${$par . '_ext_name'} = '';
+//    ${$par . '_occupation'} = '';
+//    ${$par . '_cp_no'} = '';
+//}
+//
+//$guardian_first_name = '';
+//$guardian_last_name = '';
+//$guardian_middle_name = '';
+//$guardian_cp_no = '';
+//$guardian_relationship = '';
+//$last_grd_level = '';
+//$last_sy = '';
+//$gen_ave = '';
+//$school_name = '';
+//$school_id_no = '';
+//$school_address = '';
+
+$lrn = rand(1, 1000000);
+$lname = 'Rizal';
+$fname = 'Jose';
+$mname = 'Test';
+$extname = 'III';
+$sex = '';
+$age = '21';
+$birthdate = '';
+$birth_place = 'Baguio City';
+$indigenous_group = 'Test';
+$mother_tongue = 'Kankanaey';
+$religion = 'Roman Catholic';
+
+$house_no = '123';
+$street = 'Street';
+$barangay = 'Bakakeng';
+$city = 'Baguio City';
+$province = 'Benguet';
+$zip = '2600';
+
+$cp_no = '09090990090';
+$psa_birth_cert = '923871';
+$belong_to_ipcc = '';
+$id_picture = '';
+$section = '';
+
+$parents = ['mother', 'father'];
+foreach ($parents as $par) {
+    ${$par . '_first_name'} = 'Ricardo';
+    ${$par . '_last_name'} = 'Jose';
+    ${$par . '_middle_name'} = 'L';
+    ${$par . '_ext_name'} = 'Dr.';
+    ${$par . '_occupation'} = 'Chef';
+    ${$par . '_cp_no'} = '0903423423';
+}
+
+$guardian_first_name = 'Cela';
+$guardian_last_name = 'Rizal';
+$guardian_middle_name = 'Me';
+$guardian_cp_no = '234978';
+$guardian_relationship = 'Siblings';
+
+$last_grd_level = '10';
+$last_sy = '2021';
+$gen_ave = '90';
+$school_name = 'SECF';
+$school_id_no = '123';
+$school_address = 'La Trinidad';
 
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -8,52 +125,8 @@ if (isset($_GET['action'])) {
         die ("<div class='container'><h5>Page not found</h5></div>");
     }
 
-    $stud_id = '';
-    $user_id_no = '';
-    $lrn = '';
-    $lname = '';
-    $fname = '';
-    $mname = '';
-    $extname = '';
-    $sex = '';
-    $age = '';
-    $birthdate = '';
-    $birth_place = '';
-    $indigenous_group = '';
-    $mother_tongue = '';
-    $religion = '';
-
-    $house_no = '';
-    $street = '';
-    $barangay = '';
-    $city = '';
-    $province = '';
-    $zip = '';
-
-    $cp_no = '';
-    $psa_birth_cert = '';
-    $belong_to_ipcc = '';
-    $id_picture = '';
-    $section = '';
-
-    $parents = ['mother', 'father'];
-    foreach ($parents as $par) {
-        ${$par . '_first_name'} = '';
-        ${$par . '_last_name'} = '';
-        ${$par . '_middle_name'} = '';
-        ${$par . '_ext_name'} = '';
-        ${$par . '_occupation'} = '';
-        ${$par . '_cp_no'} = '';
-    }
-
-    $guardian_first_name = '';
-    $guardian_last_name = '';
-    $guardian_middle_name = '';
-    $guardian_cp_no = '';
-    $guardian_relationship = '';
-
     if ($action === 'edit') {
-        $userProfile = $admin->getProfile("ST");
+        $userProfile = $user->getProfile("ST");
         $stud_id = $userProfile->get_stud_id();
         $user_id_no = $userProfile->get_id_no();
         $lrn = $userProfile->get_lrn();
@@ -106,39 +179,53 @@ if (isset($_GET['action'])) {
         }
     }
 }
+
+$enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 ?>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
-            <li class="breadcrumb-item active">Form</li>
+            <?php echo $breadcrumb; ?>
         </ol>
     </nav>
     <div class="container px-4 text-center">
-        <h2>Enrollment Form</h2>
+        <div class="d-flex justify-content-center">
+            <div class="w-auto mx-5">
+                <!-- <div class="row">
+                    <div class="col-4">
+                        <img src="../assets/logoSc.png" alt="PCNHS Logo" style="width: 50px; height: auto;">
+                    </div>
+                    <div class="col-8">
+                        <p><small>Pines City National High School <br> Baguio City</small></p>
+                    </div>
+                </div> -->
+                <p class="mb-0"><small>Pines City National High School</small></p>
+                <h3 class="mb-0">Enrollment Form</h3>
+                <p><small>Senior High <i class="bi bi-dot"></i> SY <?php echo $_SESSION['school_year']; ?><br>Baguio City</small></p>
+            </div>
+        </div>
     </div>
 </header>
 <form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
-            <div class="step mx-5" data-target="#test-l-1">
+            <div class="step mx-md-5" data-target="#test-l-1">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#test-l-2">
+            <div class="step mx-md-5" data-target="#test-l-2">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#test-l-3">
+            <div class="step mx-md-5" data-target="#test-l-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
@@ -234,12 +321,12 @@ if (isset($_GET['action'])) {
                             <div class="d-flex">
                                 <?php
                                 echo "<div class='form-check me-4'>
-                                                <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                                <input class='form-check-input i-group-opt' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                                 <label class='form-check-label' for='yes'> Yes </label>
                                         </div>
                                         <div class='form-check'>
-                                            <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
-                                                <label class='form-check-label' for='yes'> No </label>
+                                            <input class='form-check-input i-group-opt' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                                                <label class='form-check-label' for='no'> No </label>
                                         </div>";
                                 ?>
                             </div>
@@ -422,30 +509,33 @@ if (isset($_GET['action'])) {
                     <div class="form-group row">
                         <div class="col-md-4">
                             <label for="last-grade-level" class="col-form-label">Last Grade Level Completed</label>
-                            <input id="last-grade-level" class="form-control" name="last-grade-level" type="number"  value="">
+                            <input id="last-grade-level" class="form-control" name="last-grade-level" type="number"  value="<?php echo $last_grd_level; ?>">
                         </div>
                         <div class="col-md-4">
-                            <label for="last-sy" class="col-form-label">Last School Year Completed</label>
-                            <input id="last-sy" class="form-control" name="last-sy" type="number"  value="">
+                            <label  for="last-sy" class="col-form-label">Last School Year Completed</label>
+                            <div class="d-flex">
+                                <input id="last-sy" class="form-control number me-1" name="last-sy[]"  value="<?php echo $last_sy; ?>" placeholder="XXXX">
+                                <input class="form-control number ms-1" name="last-sy[]"  value="<?php echo $last_sy; ?>" placeholder="XXXX">
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label for="general-average" class="col-form-label">General Average</label>
-                            <input id="general-average" class="form-control" name="general-average" type="number"  value="">
+                            <input id="general-average" class="form-control" name="general-average" type="number"  value="<?php echo $gen_ave; ?>">
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-9">
                             <label for="school-name" class="col-form-label">School Name</label>
-                            <input id="school-name" class="form-control" name="school-name" type="text"  value="">
+                            <input id="school-name" class="form-control" name="school-name" type="text"  value="<?php echo $school_name; ?>" >
                         </div>
                         <div class="col-md-3">
                             <label for="school-id-no" class="col-form-label">School ID Number</label>
-                            <input id="school-id-no" class="form-control" name="school-id-no" type="number"  value="">
+                            <input id="school-id-no" class="form-control" name="school-id-no" type="number"  value="<?php echo $school_id_no; ?>">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <label for="school-address" class="col-form-label">School Address</label>
-                        <input id="school-address" class="form-control" name="school-address" type="text"  value="">
+                        <input id="school-address" class="form-control" name="school-address" type="text"  value="<?php echo $school_address; ?>">
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column'>
                         <label for='image-studentid' class='form-label'>Student ID Photo</label>
@@ -460,18 +550,13 @@ if (isset($_GET['action'])) {
                         <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class="row">
-                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user-type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
-<!--                        <div class="col-md-2">-->
-<!--                            <label class="col-form-label">Semester</label>-->
-<!--                            <input class="form-control" name="semester" type="text" value="" >-->
-<!--                        </div>-->
-
+                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                         <div class='col-md-4'>
                             <label class="col-form-label">Track</label>
                             <div class="input-group mb-3">
                                 <select class="form-select" name="track" id="track-select">
                                     <?php
-                                    $curriculum_list = $admin->listCurriculum('curriculum');
+                                    $curriculum_list = $user->listCurriculum('curriculum');
                                     foreach($curriculum_list as $curriculum) {
                                         echo "<option value='{$curriculum->get_cur_code()}'>{$curriculum->get_cur_name()}</option>";
                                     }
@@ -484,7 +569,7 @@ if (isset($_GET['action'])) {
                             <label class="col-form-label">Strand</label>
                             <select class="form-select" name="program" id="program-select">
                                 <?php
-                                $programs = $admin->listPrograms('program');
+                                $programs = $user->listPrograms('program');
                                 foreach($programs as $program) {
                                     echo "<option value='{$program->get_prog_code()}'>{$program->get_prog_desc()}</option>";
                                 }
@@ -497,7 +582,8 @@ if (isset($_GET['action'])) {
                                 <?php
                                 $grade_level = ["11" => 11, "12" => 12];
                                 foreach($grade_level as $id => $value) {
-                                    echo "<option value='$id'>$value</option>";                                                          }
+                                    echo "<option value='$id'>$value</option>";                                                          
+                                }
                                 ?>
                             </select>
                         </div>
@@ -514,3 +600,6 @@ if (isset($_GET['action'])) {
     </div>
     <!-- STEPPER END -->
 </form>
+<script>
+    let enrollCurrOptions = <?php echo json_encode($enroll_curr_options); ?>;
+</script>

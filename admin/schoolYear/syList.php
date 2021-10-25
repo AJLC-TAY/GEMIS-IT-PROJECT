@@ -41,7 +41,6 @@
          </table>
      </div>
  </div>
- <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#month-modal">Show month modal</button>
  <!-- MODAL -->
  <div class="modal fade" id="month-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered">

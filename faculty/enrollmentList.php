@@ -1,11 +1,5 @@
 <?php
-session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 ?>
 
@@ -165,21 +159,20 @@ include_once("../inc/head.html");
                                             <div class="buttons-toolbar">
 
                                             </div>
-                                            <table id="table" class="table-striped">
-                                                <thead class='thead-dark'>
-                                                    <tr>
-                                                        <th data-checkbox="true"></th>
-                                                        <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
-                                                        <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="false" data-field="LRN">LRN</th>
-                                                        <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
-                                                        <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
-                                                        <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
-                                                        <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
-                                                        <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
-                                                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
+
+                                            <tr>
+                                                <th data-checkbox="true"></th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>
+                                                <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="false" data-field="LRN">LRN</th>
+                                                <th scope='col' data-width="300" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
+                                                <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
+                                                <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
+                                                <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                                                <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
                                 </div>
                             </div>
                         </div>

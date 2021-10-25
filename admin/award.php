@@ -1,5 +1,5 @@
 <?php
-require_once("../inc/sessionHandling.php");
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 
 include("../class/Administration.php");
@@ -10,7 +10,7 @@ $result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 
                         min_gwa AS min, max_gwa AS max
                         FROM academicexcellence;");
 $param = [];
-while($row = mysqli_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($result)) {
     $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
 }
 ?>
@@ -19,20 +19,19 @@ while($row = mysqli_fetch_assoc($result)) {
 </head>
 
 <body>
-<!-- SPINNER -->
-<div id="main-spinner-con" class="spinner-con">
-    <div id="main-spinner-border" class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <!-- SPINNER -->
+    <div id="main-spinner-con" class="spinner-con">
+        <div id="main-spinner-border" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
-</div>
-<!-- SPINNER END -->
-<section id="container">
-    <?php include_once('../inc/admin/sidebar.php'); ?>
-    <!--MAIN CONTENT -->
-    <section id="main-content">
-        <section class="wrapper ps-4">
-            <div class="row">
-                <div class="col-lg-12">
+    <!-- SPINNER END -->
+    <section id="container">
+        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <!--MAIN CONTENT -->
+        <section id="main-content">
+            <section class="wrapper ps-4">
+                <div class="row">
                     <div class="row ps-3">
                         <header>
                             <!-- BREADCRUMB -->
@@ -46,9 +45,10 @@ while($row = mysqli_fetch_assoc($result)) {
                                 <h3 class="fw-bold">Award Parameters</h3>
                             </div>
                         </header>
-                        <div class="container w-75 ms-0">
+                        <div class="container w-75">
                             <div class="card row mb-4">
                                 <h4>Academic Excellence</h4>
+                                <hr>
                                 <form id="acad-parameter-form" action="action.php" method="post">
                                     <input type="hidden" name="editAcadParameters">
                                     <div class="container">
@@ -56,15 +56,15 @@ while($row = mysqli_fetch_assoc($result)) {
                                             <label class="col-form-label col-4">Description</label>
                                             <div class="col-8 pt-2">Range (Min - Max)</div>
                                         </div>
-                                        <?php 
-                                        foreach ($param AS $info => $range) {
+                                        <?php
+                                        foreach ($param as $info => $range) {
                                             echo "<div class='form-row row align-content-center'>
                                                     <label class='col-form-label col-md-4'>$info Honor</label>";
-                                                    foreach ($range AS $val) {
-                                                        echo "<div class='col-4'>
+                                            foreach ($range as $val) {
+                                                echo "<div class='col-4'>
                                                                 <input value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
                                                             </div>";
-                                                    }
+                                            }
                                             echo "</div>";
                                         }
                                         ?>
@@ -74,21 +74,44 @@ while($row = mysqli_fetch_assoc($result)) {
                             </div>
                             <div class="card row mb-4">
                                 <h4>Conduct Award</h4>
+                                <hr>
                                 <div class="container">
                                     <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
-                                
-                                </div>
 
+                                </div>
+                            </div>
+                            <div class="card row mb-4">
+                                <h4>Specific Discipline</h4>
+                                <div class="container">
+                                    <div class='form-row row justify-content-around align-content-center mb-2'>
+                                        <label class='col-form-label col-md-6'></label>
+                                        <div class='col-md-4  text-center text-secondary'>Minimum Grade</div>
+                                    </div>
+                                    <div class="row">
+                                        <?php 
+                                        $spec_award = $admin->getSpecificDiscParamters();
+                                        foreach($spec_award as $code => $param) {
+                                            echo "<div class='col-md-6 row justify-content-around align-content-center'>
+                                                    <label class='col-form-label col-md-6'>{$param['desc']}</label>
+                                                    <div class='col-md-6'>
+                                                        <input value='{$param['grd']}' name='$code' type='number' class='form-control form-control-sm number text-center' placeholder='Enter Value'>
+                                                    </div>
+                                                </div>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card row mb-4">
                                 <h4>Other Awards </h4>
+                                <hr>
                                 <div class="container">
                                     <div class='form-row row align-content-center justify-content-end text-center mt-1'>
                                         <div class="col-6">
-                                            Awards for
+                                            <b>Awards for</b>
                                         </div>
                                         <div class="col-6">
-                                            <p class='text-secondary'>Minimum Grade</p>
+                                            <p class='fw-bold'>Minimum Grade</p>
                                         </div>
                                     </div>
                                     <div class='form-row row align-content-center'>
@@ -112,7 +135,6 @@ while($row = mysqli_fetch_assoc($result)) {
                                 </div>
 
                             </div>
-                            SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, prog_code, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) THEN 'highest' END AS remark FROM `gradereport` JOIN student USING (stud_id) JOIN enrollment USING (stud_id) WHERE general_average >= 90;
 
                         </div>
                         <?php
@@ -126,18 +148,17 @@ while($row = mysqli_fetch_assoc($result)) {
                         ?>
                     </div>
                 </div>
-            </div>
+            </section>
+            <!-- FOOTER -->
+            <?php include_once("../inc/footer.html"); ?>
+            <!-- FOOTER END -->
         </section>
-        <!-- FOOTER -->
-        <?php include_once("../inc/footer.html"); ?>
-        <!-- FOOTER END -->
     </section>
-</section>
-<!-- TOAST -->
-<div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
-    <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
-</div>
-<!-- TOAST END -->
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
 </body>
 <!-- VALIDATION -->
 <script>
@@ -159,11 +180,13 @@ while($row = mysqli_fetch_assoc($result)) {
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
-<!-- <script type="module" src="<?php // echo $jsFilePath; ?>"></script> -->
+<!-- <script type="module" src="<?php // echo $jsFilePath; 
+                                ?>"></script> -->
 <script>
-    $(function () {
+    $(function() {
         preload("#curriculum");
         hideSpinner();
     });
 </script>
+
 </html>

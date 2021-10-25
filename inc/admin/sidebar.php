@@ -1,5 +1,4 @@
 <?php 
-session_start();
 $school_year = $_SESSION['school_year'];
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
@@ -17,7 +16,7 @@ $school_year = $_SESSION['school_year'];
                 <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
             </li>
             <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
-            <li><a class="logout" href=""><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
+            <li><a role="button" class="logout" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
 </header>
@@ -27,7 +26,7 @@ $school_year = $_SESSION['school_year'];
     <div id="sidebar" class="nav-collapse ">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="centered">SY <?php echo $school_year ?></h5>
+            <h5 class="d-flex justify-content-center">SY <?php echo $school_year ?></h5>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
@@ -75,6 +74,12 @@ $school_year = $_SESSION['school_year'];
                     <li><a id="section" href="section.php">Section</a></li>
                     <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
                 </ul>
+            </li>
+            <li class="sub-menu">
+                <a id="awards" href="award.php">
+                    <i class="bi bi-award-fill"></i>
+                    <span>Awards</span>
+                </a>
             </li>
             <li class="sub-menu">
                 <a id='signatory' href="signatory.php">

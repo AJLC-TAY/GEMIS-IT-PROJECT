@@ -1,15 +1,9 @@
 <?php
-session_start();
-$_SESSION['user_type'] = 'FA';
-$_SESSION['id'] = 1;
-$_SESSION['sy_id'] = 15;
-$_SESSION['sy_desc'] = '2021 - 2022';
-$_SESSION['enrollment'] = 0;
-$_SESSION['roles'] = ['can_enroll', 'award_coor'];
+require_once("sessionHandling.php");
 include_once("../inc/head.html");
 ?>
 
-<title>Awards | GEMIS</title>
+<title>Archived Classes | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
@@ -18,7 +12,7 @@ include_once("../inc/head.html");
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Awards</a></li>
+            <li class="breadcrumb-item active">Archived Classes</a></li>
         </ol>
     </nav>
 </header>
@@ -40,11 +34,7 @@ include_once("../inc/head.html");
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                             <div class="d-flex justify-content-between">
-                                <h3 class="fw-bold">Awards</h3>
-                                <span>
-                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"></i>Award Parameters</button>
-                                    <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
-                                </span>
+                                <h3 class="fw-bold">Archived Classes</h3>
                             </div>
                             <!-- SEARCH BAR -->
                             <div class="d-flex justify-content-between mb-1 mt-4">
@@ -52,43 +42,8 @@ include_once("../inc/head.html");
                                 <span class="flex-grow-1 me-3">
                                     <input id="search-input" type="search" class="form-control form-control" placeholder="Search something here">
                                 </span>
-                                <div>
-                                    <button class="btn btn-outline-primary me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
-                                </div>
                             </div>
                             <!--FILTER-->
-                            <div class="collapse" id="filterCollapse">
-                                <div class="card">
-                                    <ul id="" class="row flex-wrap">
-                                        <li class="col-3 mb-3 me-2">
-                                            <div class="input-group input-group-sm">
-                                                <label class="input-group-text " for="sy">School Year</label>
-                                                <select class="filter-item form-select mb-0" id="sy">
-                                                    <option value="*" selected>All</option>
-                                                    <?php
-                                                    foreach ($filters['school_year'] as $id => $value) {
-                                                        echo "<option value='$id' >$value</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </li>
-                                        <!--SEMESTER FILTER-->
-                                        <li class="col-3 me-2">
-                                            <div class="input-group input-group-sm ">
-                                                <label class="input-group-text " for="status">Semester</label>
-                                                <select class="form-select mb-0 filter-item " id="sem">
-                                                    <option value="*" selected>All</option>
-                                                    <option value=''>1st Semester</option>
-                                                </select>
-                                            </div>
-                                        </li>
-                                        <li class="col-3 me-2">
-                                            <button type="button" class="reset-filter-btn btn btn-outline-danger btn-sm me-5"><i class="bi bi-x-circle me-2"></i>Reset All</button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
 
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
@@ -107,9 +62,7 @@ include_once("../inc/head.html");
                                             <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
                                                 <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
                                                 <ul class='dropdown-menu' style='z-index: 99;'>
-                                                    <li><a class='dropdown-item' href=''>Edit</a></li>
-                                                    <li><button data-name='' class='export-option dropdown-item' id=''>Export</button></li>
-                                                    <li><button data-name='' class='archive-option dropdown-item' id=''>Archive</button></li>
+                                                    <li><button data-name='' class='archive-option dropdown-item' id=''>Unarchive</button></li>
                                                     <li><button data-name='' class='delete-option dropdown-item' id=''>Delete</button></li>
                                                 </ul>
                                             </div>
@@ -122,6 +75,7 @@ include_once("../inc/head.html");
                                         </div>
                                     </template>
                                     <!-- TEMPLATE END -->
+
                                 </div>
                             </div>
                         </div>
@@ -134,7 +88,6 @@ include_once("../inc/head.html");
         </section>
     </section>
     <!-- MAIN CONTENT END -->
-
 
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>

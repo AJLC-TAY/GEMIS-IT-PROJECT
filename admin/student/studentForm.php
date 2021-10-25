@@ -30,6 +30,8 @@ $psa_birth_cert = $userProfile->get_psa_birth_cert();
 $belong_to_ipcc = $userProfile->get_belong_to_ipcc();
 $id_picture = $userProfile->get_id_picture();
 $section = $userProfile->get_section();
+$form137 = $userProfile->get_form137();
+
 
 $parents = $userProfile->get_parents();
 if (is_null($parents)) {
@@ -58,8 +60,12 @@ if (is_null($guardian)) {
     $guardian_relationship = $guardian['relationship'];
 }
 
-$profile_image = is_null($id_picture) ? "../assets/profile.png" : $id_picture;
-$psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth_cert;
+const PROFILE_PATH = "../assets/profile.png";
+const NO_FILE = "../assets/no_preview.jpg";
+
+$image = !is_null($id_picture) ? (file_exists("../$id_picture") ? "../" . $id_picture : PROFILE_PATH) : PROFILE_PATH;
+$psa = !is_null($id_picture) ? (file_exists("../$psa_birth_cert") ? "../" . $psa_birth_cert : NO_FILE) : NO_FILE;
+$form137 = !is_null($id_picture) ? (file_exists("../$form137") ? "../" . $form137 : NO_FILE) : NO_FILE;
 ?>
 
 <!-- HEADER -->
@@ -81,7 +87,7 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>Student Photo</label>
             <div class="image-preview-con">
-                <img id='resultImg' src='<?php echo $profile_image; ?>' alt='Profile image' class='rounded-circle w-100 h-100' />
+                <img id='resultImg' src="<?php echo "../" . $image; ?>" alt='Profile image' class='rounded-circle w-100 h-100' />
                 <div class='edit-img-con text-center'>
                     <p role='button' class="edit-text profile-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
@@ -92,12 +98,22 @@ $psa_image = is_null($psa_birth_cert) ? "../assets/psa_preview.jpg" : $psa_birth
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>PSA Birth Certificate</label>
             <div class="image-preview-con">
-                <img id='psaResult' src='<?php echo $psa_image; ?>' alt='PSA image' class = "img-thumbnail w-100 h-100" />
+                <img id='psaResult' src="<?php echo "../" . $psa; ?>" alt='PSA image' class = "img-thumbnail w-100 h-100" />
                 <div class='edit-img-con text-center'>
                     <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
             <input id='psaUpload' class='form-control form-control-sm mt-2 w-75' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
+        </div>
+        <div class='form-group col-md-4 d-flex flex-column'>
+            <label for='photo' class='form-label'>Form 137</label>
+            <div class="image-preview-con">
+                <img id='form137Result' src="<?php echo "../" . $form137; ?>" alt='form137 image' class = "img-thumbnail w-100 h-100" />
+                <div class='edit-img-con text-center'>
+                    <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
+                </div>
+            </div>
+            <input id='form137Upload' class='form-control form-control-sm mt-2 w-75' name='form137Image' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
     </div>
     
