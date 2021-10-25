@@ -18,11 +18,12 @@ function prepareEmptyProgramOptions($programs) {
 }
 $action = $_GET['action'];
 $admin = new Administration();
-$content = new stdClass();
 // option lists
 $sub_opt = array('core' => 'Core', 'applied' => 'Applied', 'specialized' => 'Specialized' );        // subject type
-$semesters = array('0' => '-- Select semester --', '1' => 'First Semester','2'=>'Second Semester' );     // semseter
-$grd_lvl = array('0' => '-- Select grade level --', '11' => '11', '12' => '12' );                   // grade level
+$semesters = array('1' => 'First','2'=>'Second' );     
+$grd_lvl = array('11' => '11', '12' => '12' );                   // grade level
+// $semesters = array('0' => '-- Select semester --', '1' => 'First','2'=>'Second' );     
+// $grd_lvl = array('0' => '-- Select grade level --', '11' => '11', '12' => '12' );                   // grade level
 
 // retrieve subjects for each grade level
 $subjectGrade11 = $admin->listSubjectsbyLevel(11);
@@ -41,6 +42,7 @@ $sub_type_editable = '';
 $prog_opt = prepareEmptyProgramOptions($programs);
 $input_sub_with_prog = '';
 
+echo "tester";
 
 // subject data
 $title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
@@ -279,21 +281,41 @@ if ($action === 'edit') {
                         <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
                     </div>
                 </div>
-                <div class='form-group row'>
-                    <div class='form-group col-md-4'>
-                        <label for='subjectSemester1' class='  col-form-label'>Semester</label>
-                        <select name='semester' class='form-select' id='semester'><?php echo $semester_opt; ?></select>
-                    </div>
-                    <div class='form-group col-md-3'>
-                        <label for='grade-level' class='  col-form-label'>Grade Level</label>
-                        <select name='grade-level' class='form-select' id='grade-level'><?php echo $grade_level_opt; ?></select>
-                    </div>
-                </div>
-                <div class='form-row row'>
-
-                </div>
             </div>
         </div>
+        <!-- <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
+            <h5 class='text-start p-0 fw-bold'>SCHEDULE</h5>
+            <hr class='mt-1'>
+            <div class='row p-0'>
+                <div class="container">
+                    <table class='table table-striped table-bordered'>
+                        <thead class="text-center">
+                            <tr>
+                                <td>Strand</td>
+                                <td>Semester</td>
+                                <td>Grade Level</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <select name='semester' class='form-select form-select-sm' id='semester'><?php echo $semester_opt; ?></select>
+                                </td>
+                                <td>
+                                    <select name='grade-level' class='form-select form-select-sm' id='grade-level'><?php echo $grade_level_opt; ?></select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class='form-group row'>
+                    <ul id="schedule-list">
+                        
+                    </ul>
+                </div>
+            </div>
+        </div> -->
   
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
             <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>

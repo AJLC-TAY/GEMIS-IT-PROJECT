@@ -202,35 +202,34 @@ class Administration extends Dbconfig
         // echo "Added school year - strand: ". $sub_code ."<br>";
 
 
-        $query_core = "SELECT sub_sy_id, section_code FROM sysub JOIN section USING (sy_id) 
-                        JOIN subject USING (sub_code) 
-                        WHERE sub_sy_id='$sub_sy_id' AND for_grd_level = grd_level;";
-        $query_spap = "SELECT sysub.sub_sy_id, temp.section_code FROM subject sub
-                        JOIN sysub USING (sub_code) 	
-                        JOIN sharedsubject sh USING (sub_code)     
-                        JOIN sycurriculum syc USING (sy_id)    
-                        JOIN sycurrstrand sycs USING (syc_id)    
-                        JOIN sectionprog sp USING (sycs_id)    
-                        JOIN (SELECT * FROM section WHERE sy_id = '$sy_id') AS temp ON sp.section_code = temp.section_code
-                        WHERE syc.sy_id = '$sy_id' AND sysub.sub_sy_id = '$sub_sy_id' 
-                        AND sub.for_grd_level = temp.grd_level GROUP BY temp.section_code;";
-        # Step 4 - Create subject class
-        $result = $this->query($sub_type == "core" ? $query_core : $query_spap);
+        // $query_core = "SELECT sub_sy_id, section_code FROM sysub JOIN section USING (sy_id) 
+        //                 JOIN subject USING (sub_code) 
+        //                 WHERE sub_sy_id='$sub_sy_id' AND for_grd_level = grd_level;";
+        // $query_spap = "SELECT sysub.sub_sy_id, temp.section_code FROM subject sub
+        //                 JOIN sysub USING (sub_code) 	
+        //                 JOIN sharedsubject sh USING (sub_code)     
+        //                 JOIN sycurriculum syc USING (sy_id)    
+        //                 JOIN sycurrstrand sycs USING (syc_id)    
+        //                 JOIN sectionprog sp USING (sycs_id)    
+        //                 JOIN (SELECT * FROM section WHERE sy_id = '$sy_id') AS temp ON sp.section_code = temp.section_code
+        //                 WHERE syc.sy_id = '$sy_id' AND sysub.sub_sy_id = '$sub_sy_id' 
+        //                 AND sub.for_grd_level = temp.grd_level GROUP BY temp.section_code;";
+        // # Step 4 - Create subject class
+        // $result = $this->query($sub_type == "core" ? $query_core : $query_spap);
 
-        while ($row = mysqli_fetch_row($result)) {
-            // insert query sa subjectclass // sub_sy_id [0], section [1]
-            $this->query("INSERT INTO subjectclass (sub_sy_id, section_code) VALUES ('$row[0]', '$row[1]');");
-        }
+        // while ($row = mysqli_fetch_row($result)) {
+        //     // insert query sa subjectclass // sub_sy_id [0], section [1]
+        //     $this->query("INSERT INTO subjectclass (sub_sy_id, section_code) VALUES ('$row[0]', '$row[1]');");
+        // }
     }
 
     /**
      * Initializes school year.
      * 1.   Create school year record.
      * 2.   Initialize curriculum.
-     * 3.   Initialize sections.
-     * 4.   Initialize subject class.
-     * 5.   Initialize academic monthly days.
-     * 6.   Create directory for images file system.
+     * 3.   Initialize school year subjects.
+     * 4.   Initialize academic monthly days.
+     * 5.   Create directory for images file system.
      */
     public function initializeSY()
     {
@@ -271,19 +270,19 @@ class Administration extends Dbconfig
                 $new_sy_curr_strand_id = mysqli_insert_id($this->db);
                 // echo "Added school year - strand: ". $school_year_curr_id ." - ". $prog ."<br>";
 
-                # Prepare section
-                $alphabet = range('A', 'Z');
+                // # Prepare section
+                // $alphabet = range('A', 'Z');
 
-                # Step 3
-                foreach (Administration::GRADE_LEVEL as $grade) {
-                    $section_code = $this->addSection($grade, $prog, 50, $alphabet[0], $sy_id, $new_sy_curr_strand_id);
-                }
+                // # Step 3
+                // foreach (Administration::GRADE_LEVEL as $grade) {
+                //     $section_code = $this->addSection($grade, $prog, 50, $alphabet[0], $sy_id, $new_sy_curr_strand_id);
+                // }
             }
             // echo "----------"."<br>";
         }
 
 
-        # Step 4
+        # Step 3
         // insert subjects offered in the sysub
         ## Core subjects
         $subjects = $_POST['subjects']['core'];
@@ -297,8 +296,8 @@ class Administration extends Dbconfig
             $this->addSubjectClass($sy_id, $sub_code, 'applied');
         }
 
-        # Step 5
-        $start_month = $_POST['start-month']; // 9
+        # Step 4
+        $start_month = $_POST['start-month'];
         $end_month = $_POST['end-month'];
         $months_records = [];
         foreach (Administration::MONTHS as $ind => $month) {
@@ -317,7 +316,7 @@ class Administration extends Dbconfig
             $this->query("INSERT academicdays (month, no_of_days, sy_id) VALUES ('$mr', 20, '$sy_id');");
         }
 
-        # Step 6
+        # Step 5
         $dir_path = "../uploads/student/$sy_id";
         $cred_dir_path = "../uploads/credential/$sy_id";
         if (!file_exists($dir_path)) {
@@ -333,6 +332,24 @@ class Administration extends Dbconfig
         // header("Location: schoolYear.php");
     }
 
+    public function switchSY() 
+    {
+        session_start();
+        $sy_id = $_GET['id'];
+        $current_sy = $_SESSION['sy_id'];
+        echo $current_sy;
+        $this->query("UPDATE `schoolyear` SET `status` = '0' WHERE `schoolyear`.`sy_id` = '$current_sy';");
+        $this->query("UPDATE `schoolyear` SET `status` = '1' WHERE `schoolyear`.`sy_id` = '$sy_id';");
+        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear WHERE status = '1';";
+        $sy_res = $this->query($qry_sy);
+        $sy_row = mysqli_fetch_assoc($sy_res);
+        $_SESSION['school_year'] = $sy_row['sy'];
+        $_SESSION['sy_id'] = $sy_row['sy_id'];
+        $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
+        $_SESSION['current_semester'] = $sy_row['current_semester']; ;
+        $_SESSION['current_quarter'] = $sy_row['can_enroll'];
+        header("Location: schoolYear.php?id=$sy_id");
+    }
 
 
 
@@ -534,7 +551,8 @@ class Administration extends Dbconfig
 
     public function listSYJSON()
     {
-        $result = mysqli_query($this->db, "SELECT * FROM schoolyear ORDER BY end_year DESC;");
+        session_start();
+        $result = mysqli_query($this->db, "SELECT * FROM schoolyear ORDER BY status DESC;");
         $sy_list = [];
         $grd_list = array('11' => '11', '12' => '12');
         $quarter_list = array('1' => 'First', '2' => 'Second', '3' => 'Third', '4' => 'Fourth');
@@ -574,7 +592,7 @@ class Administration extends Dbconfig
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
                 "<div class='form-check form-switch ms-3 my-auto'>"
-                . "<input " . ($enrollment ? "checked" : "") . " name='enrollment' data-id='$sy_id' class='form-check-input' type='checkbox' title='Turn " . ($enrollment ? "off" : "on") . " enrollment'>"
+                . "<input " . ($enrollment ? "checked" : "") . " name='enrollment' data-id='$sy_id' class='form-check-input' type='checkbox' title='Turn " . ($enrollment ? "off" : "on") . " enrollment' " . ($_SESSION['sy_id'] == $sy_id ? "" : "disabled") .">"
                 . "<span class='status'>$enroll_opt</span>"
                 . "</div>";
 
@@ -585,6 +603,7 @@ class Administration extends Dbconfig
                 $acad_months[$acad_month['acad_days_id']] = ['month' => $acad_month['month'], 'days' => $acad_month['no_of_days']];
             }
 
+            $switch = ($_SESSION['sy_id'] == $sy_id) ? "" : "<a role='button' href='action.php?action=switchSY&id=$sy_id' class='btn btn-dark btn-sm m-1'>Switch</a>";
             $sy_list[] = [
                 'id'              => $sy_id,
                 's_year'          => $row['start_year'],
@@ -606,6 +625,7 @@ class Administration extends Dbconfig
                     . "</div>"
                     . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
                     . "<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
+                    . $switch
             ];
         }
         echo json_encode($sy_list);
@@ -1006,14 +1026,32 @@ class Administration extends Dbconfig
     /*** Subject Methods */
     public function listAllSub($tbl)
     {
-        $query = "SELECT * FROM {$tbl}";
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query("SELECT * FROM {$tbl};");
         $subjectList = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $subject =  new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $row['sub_type']);
             $subjectList[] = $subject;
         }
         echo json_encode($subjectList);
+    }
+
+    public function getSubjectScheduleData() 
+    {
+        $result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
+        $subjectList = array();
+        while ($row = mysqli_fetch_row($result)) {
+            $type = $row[2];
+            $subjectList['options'][$type][]  = [
+                'code' => $row[0], 
+                'name' => $row[1], 
+            ];
+        }
+        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code);");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $type = $row['sub_type'];
+            $subjectList['schedule'][$row['prog_code']][$row['for_grd_level']][$row['sub_semester']][$type][] =  $row['sub_code'];
+        }
+        return $subjectList;
     }
 
     private function setParentPrograms($code, $sub_type, $subject)
@@ -1299,7 +1337,7 @@ class Administration extends Dbconfig
     /** Returns the list of subjects by specified grade level. */
     public function listSubjectsByLevel($grd)
     {
-        $query = "SELECT * FROM subject WHERE for_grd_level = $grd;";
+        $query = "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level = $grd;";
         $result = mysqli_query($this->db, $query);
         $subjects = array();
 

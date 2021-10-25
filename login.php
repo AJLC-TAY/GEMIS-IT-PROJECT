@@ -2,7 +2,7 @@
 include_once("class/config.php"); 
 include_once("inc/head.html");
 $con = (new dbConfig())->connect();
-$row_temp = mysqli_query($con, "SELECT can_enroll FROM schoolyear ORDER BY sy_id DESC LIMIT 1;");
+$row_temp = mysqli_query($con, "SELECT can_enroll FROM schoolyear WHERE status = '1';");
 $sy = mysqli_fetch_row($row_temp);
 $enroll = $sy[0];
 ?>

@@ -11,6 +11,7 @@
         <h3 class="fw-bold">Subject</h3>
         <div>
             <button type="button" class="view-archive btn btn-secondary" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
+            <a href="subject.php?page=schedule" role="button" class="btn btn-secondary">Schedule</a>
             <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
         </div>
     </div>

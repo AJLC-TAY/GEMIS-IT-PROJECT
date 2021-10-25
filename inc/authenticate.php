@@ -58,13 +58,12 @@ $con = $dbConfig->connect();
                         }
 
                         # school year
-                        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear ORDER BY sy_id DESC LIMIT 1;";
+                        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear WHERE status = '1';";
                         
                         $sy_res = mysqli_query($con, $qry_sy);
                         $sy_row = mysqli_fetch_assoc($sy_res);
                         $_SESSION['school_year'] = $sy_row['sy'];
-                        // $_SESSION['sy_id'] = $sy_row['sy_id'];
-                        $_SESSION['sy_id'] = 9;
+                        $_SESSION['sy_id'] = $sy_row['sy_id'];
                         $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
                         $_SESSION['current_semester'] = $sy_row['current_semester']; ;
                         $_SESSION['current_quarter'] = $sy_row['can_enroll'];

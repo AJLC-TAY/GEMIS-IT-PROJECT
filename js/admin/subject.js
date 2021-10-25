@@ -35,6 +35,17 @@ preload('#curr-management', '#subject');
 
 let addAgain = false;
 $(function () {
+  /** Subject Schedule */
+  try {
+    $(".subject-select").select2({
+      theme: "bootstrap-5",
+      width: null,
+    });
+    Object.entries(schedule).forEach(item => {
+      $(`[name='${item[0]}']`).val(item[1]).change();
+    });
+  } catch (e) {}
+  /** Subject Schedule End */
   $('#sub-type').change(function () {
     let options = $('#app-spec-options');
     let type = $(this).val();

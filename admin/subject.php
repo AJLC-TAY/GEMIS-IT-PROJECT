@@ -22,7 +22,9 @@ include_once ("../inc/head.html");
                 <div class="col-lg-12">
                     <div class="row mt ps-3">
                         <?php 
-                            if (isset($_GET['action'])) {
+                            if (isset($_GET['page']) && $_GET['page'] === 'schedule') {
+                                include("subject/subjectSchedule.php");
+                            } else if (isset($_GET['action'])) {
                                 include("subject/subjectForm.php");
                             } 
                             else if (isset($_GET['sub_code'])){
@@ -79,7 +81,7 @@ include_once ("../inc/head.html");
     <!-- JQUERY FOR BOOTSTRAP TABLE -->"
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-    <script type='text/javascript' src="../js/common-custom.js"></script>
+    <script src="../js/common-custom.js"></script>
     <script type='module' src="../js/admin/subject.js"></script>
     <!-- <script type='text/javascript' src="../js/admin/subject.js"></script> -->
     <!-- <script type="module" src="../js/admin/subjectlist.js"></script> -->
