@@ -1,6 +1,6 @@
 <?php 
-// session handling
-$school_year = "2021 - 2022";
+session_start();
+$school_year = $_SESSION['school_year'];
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->

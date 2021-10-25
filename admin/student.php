@@ -1,4 +1,6 @@
-<?php include_once("../inc/head.html"); 
+<?php 
+require_once("../inc/sessionHandling.php");
+include_once("../inc/head.html"); 
       session_start();
 ?>
 <title>Student | GEMIS</title>

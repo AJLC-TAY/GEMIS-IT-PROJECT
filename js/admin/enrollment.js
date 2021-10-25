@@ -6,6 +6,22 @@ try {
 $(function() {
     preload("#enrollment", "#enrollment-sub");
 
+    /** Validation */
+    try {
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    } catch (e) {}
+
+
+    /** Select2 */
     try {
         $("#id-no-select").select2({
             theme: "bootstrap-5",

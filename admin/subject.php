@@ -1,4 +1,6 @@
-<?php include_once ("../inc/head.html"); 
+<?php 
+require_once("../inc/sessionHandling.php");
+include_once ("../inc/head.html"); 
     echo (!isset($_GET["action"]) ? "<link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>" : "");
 ?>
     <title>PCNHS GEMIS</title>

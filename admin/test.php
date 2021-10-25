@@ -34,14 +34,27 @@
 <!--    <a href="enrollment/enrollmentReport.php" target="_blank" class="btn btn-sm btn-primary" id='export'>Export</a>-->
 <!--</div>-->
 <?php
+//$sy_id = 9;
+//$dir_path = "../uploads/student/$sy_id";
+//$cred_dir_path = "../uploads/credential/$sy_id";
+//if (!file_exists($dir_path)) {
+//    mkdir($dir_path);
+//}
+//if (!file_exists($cred_dir_path)) {
+//    mkdir($cred_dir_path);
+//}
+
+//unlink("../uploads/faculty/1633440070_615c5146b02472.52287926.jpg");
 
 
 include '../class/Administration.php';
-
 $admin = new Administration();
-session_start();
-$_SESSION['sy_id'] = 9;
-print_r($admin->listAllSubjectClasses());
+// $admin->editAcademicDays();
+echo json_encode($admin->getPerfectAttendance());
+//print_r($admin->get_sy_info(9));
+//session_start();
+//$_SESSION['sy_id'] = 9;
+//print_r($admin->listAllSubjectClasses());
 //$img = $admin->getFaculty(37)->get_id_photo();
 //print_r($img);
 //echo "<img src='../upload/student/$img'>";

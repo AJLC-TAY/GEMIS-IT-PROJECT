@@ -20,6 +20,10 @@ class Administration extends Dbconfig
     const QUARTER = [1, 2, 3, 4];
     const GRADE_LEVEL = [11, 12];
     const SECTION_SIZE = 50;
+    const MONTHS = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July ', 'August','September','October', 'November', 'December'
+    ];
     use QueryMethods, School, UserSharedMethods, FacultySharedMethods, Enrollment, Grade;
 
     public function __construct()
@@ -188,6 +192,8 @@ class Administration extends Dbconfig
      * 2.   Initialize curriculum.
      * 3.   Initialize sections.
      * 4.   Initialize subject class.
+     * 5.   Initialize academic monthly days.
+     * 6.   Create directory for images file system.
      */
     public function initializeSY()
     {
@@ -202,9 +208,9 @@ class Administration extends Dbconfig
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, grd_level, current_quarter, current_semester, can_enroll) "
-                ."VALUES (?, ?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $grd_level, $current_quarter, $current_semester, $enrollment], "iiiiii");
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
+                ."VALUES (?, ?, ?, ?, ?);";
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -240,19 +246,50 @@ class Administration extends Dbconfig
         }
 
          
-        
+        # Step 4
         // insert subjects offered in the sysub
-        # Core subjects
+        ## Core subjects
         $subjects = $_POST['subjects']['core'];
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'core');
         }
 
-        # Specialized and Applied subjects
+        ## Specialized and Applied subjects
         $subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
         foreach($subjects as $sub_code) {
             $this->addSubjectClass($sy_id, $sub_code, 'applied');
         }
+
+        # Step 5
+        $start_month = $_POST['start-month']; // 9
+        $end_month = $_POST['end-month'];
+        $months_records = [];
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind >= $start_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach(Administration::MONTHS as $ind => $month) { 
+            if ($ind <= $end_month ) {
+                $months_records[] = $month;
+            }
+        }
+
+        foreach($months_records as $mr) {
+            $this->query("INSERT academicdays (month, no_of_days, sy_id) VALUES ('$mr', 20, '$sy_id');");
+        }
+
+        # Step 6
+        $dir_path = "../uploads/student/$sy_id";
+        $cred_dir_path = "../uploads/credential/$sy_id";
+        if (!file_exists($dir_path)) {
+            mkdir($dir_path);
+        }
+        if (!file_exists($cred_dir_path)) {
+            mkdir($cred_dir_path);
+        }
+
 
         // echo "School year successfully initialized.";
         echo json_encode($sy_id);
@@ -359,7 +396,7 @@ class Administration extends Dbconfig
                 } 
 
                 $values[$val['value_name']][]=$marking;
-                    $marking = []; 
+                    $marking = [];
             }
             
         } 
@@ -450,7 +487,6 @@ class Administration extends Dbconfig
             $quarter = $row['current_quarter'];
             $semester = $row['current_semester'];
             $enrollment = $row['can_enroll'];
-            $grd_level = $row['grd_level'];
 
             // grade options
             $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
@@ -484,24 +520,35 @@ class Administration extends Dbconfig
                             ."<input ". ($enrollment ? "checked" : "") ." name='enrollment' data-id='$sy_id' class='form-check-input' type='checkbox' title='Turn ". ($enrollment ? "off" : "on")." enrollment'>"
                             ."<span class='status'>$enroll_opt</span>"
                         ."</div>";
-             
-            $sy_list[] = [  'id' => $sy_id, 
-                            's_year' => $row['start_year'], 
-                            'e_year' => $row['end_year'], 
-                            'sy_year' => $row['start_year']." - ".$row['end_year'], 
+
+            # get academic days
+            $acad_months_res = $this->query("SELECT * FROM academicdays WHERE sy_id='$sy_id' ORDER BY acad_days_id; ");
+            $acad_months = [];
+            while ($acad_month = mysqli_fetch_assoc($acad_months_res)) {
+                $acad_months[$acad_month['acad_days_id']] = ['month' => $acad_month['month'], 'days' => $acad_month['no_of_days']];
+            }
+        
+            $sy_list[] = [  'id'              => $sy_id,
+                            's_year'          => $row['start_year'],
+                            'e_year'          => $row['end_year'],
+                            'sy_year'         => $row['start_year']." - ".$row['end_year'],
                             'current_grd_val' => $grd_level, 
-                            'grd_level' => $grd_opt, 
+                            'grd_level'       => $grd_opt,
                             'current_qtr_val' => $quarter, 
-                            'current_qtr' => $quarter_opt, 
-                            'current_sem_val' =>  $semester,
-                            'current_sem' => $sem_opt,
-                            'enrollment_val' => $enrollment, 
-                            'enrollment' => $enroll_opt, 
-                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm'>Edit</button>"
-                                        ."<div class='edit-options d-none'>"
-                                            ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm me-1'>Cancel</button>"
+                            'current_qtr'     => $quarter_opt,
+                            'current_sem_val' => $semester,
+                            'current_sem'     => $sem_opt,
+                            'enrollment_val'  => $enrollment,
+                            'enrollment'      => $enroll_opt,
+                            'acad_months'     => $acad_months,
+                            'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                                        ."<div class='edit-options' style='display: none;'>"
+                                            ."<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
                                             ."<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                                        ."</div>"];
+                                        ."</div>"
+                                        ."<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
+                                        ."<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
+                        ];
         }
         echo json_encode($sy_list);
     }
@@ -514,7 +561,7 @@ class Administration extends Dbconfig
             'id' => $row['sy_id'],
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
-            'grd_level' => $row['grd_level'],
+            // 'grd_level' => $row['grd_level'],
             'current_qtr' => $row['current_quarter'],
             'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
@@ -524,17 +571,120 @@ class Administration extends Dbconfig
     public function editSY()
     {
         $sy_id = $_POST['sy_id'];
-        $grd_level = $_POST['grade-level'];
+        // $grd_level = $_POST['grade-level'];
         $quarter = $_POST['quarter'];
         $semester = $_POST['semester'];
-        $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
+        // $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
+        $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $semester, $sy_id], "iii");
     }
 
+    public function editAcademicDays()
+    {
+        $sy_id = $_POST['sy-id'];
+        $new_month_values = $_POST['month'];
+        # delete current months if new months value array is zero
+        if (count($new_month_values) === 0) {
+            echo ("Delete all");
+            // $this->prepared_query("DELETE FROM academicdays WHERE sy_id = '$sy_id';");
+        } else {
+            # store current academic days
+            $cur_acad = [];
+            $cur_acad_res = $this->query("SELECT acad_days_id FROM academicdays WHERE sy_id = '$sy_id';");
+            while ($cur_row = mysqli_fetch_row($cur_acad_res)) {
+                $cur_acad[] = $cur_row[0];
+            }
+            echo ("Current months <br>");
+            print_r($cur_acad);
+        
+            # store new set of academic key ids
+            $new_months_keys = array_keys($new_month_values);
+            echo ("<br>To delete <br>");
+            print_r($new_months_keys);
+            
+            
+            # academic months to delete
+            $acad_months_to_delete = array_diff($cur_acad, $new_months_keys);
+            echo ("<br>To delete <br>");
+            print_r($acad_months_to_delete);
+            foreach ($acad_months_to_delete as $e) {
+                $this->query("DELETE FROM academicdays WHERE acad_days_id='$e';");
+            }
+
+            foreach($new_month_values as $m => $days) {
+                $this->prepared_query("UPDATE academicdays SET no_of_days=? WHERE sy_id = ? AND month = ?;", [$days, $sy_id, $m], "iis");
+            }
+        } 
+    
+        if (isset($_POST['newmonth'])) {
+            foreach($_POST['newmonth'] as $month => $days) {
+                $this->prepared_query("INSERT INTO academicdays (month, sy_id, no_of_days) VALUES (?, ?, ?);", [$month, $sy_id, $days], "sii");
+            }
+        }
+
+        // $this->listSYJSON();
+    }
+
+    public function getSYInfo()
+    {
+        $sy_id = $_GET['id'];
+        $sy_info = [
+            "curriculum" => [], "month" => [],
+            "subject" => [
+                'core' => [],
+                'spap' => []
+            ]
+        ];
+        # school year description
+        $sy_res = $this->query("SELECT CONCAT(start_year,' - ', end_year) AS sy_desc FROM schoolyear WHERE sy_id='$sy_id';");
+        $sy_info["desc"] = mysqli_fetch_row($sy_res)[0];
+
+        # curriculum
+        $result = $this->query("SELECT syc_id, curr_code, curr_name FROM schoolyear sy 
+                                        JOIN sycurriculum syc USING (sy_id)
+                                        JOIN curriculum USING (curr_code)
+                                        WHERE sy_id = '$sy_id';");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $curr_code = $row['curr_code'];
+            $syc_id = $row['syc_id'];
+            $sy_info["curriculum"][$curr_code]['desc'] = $row['curr_name'];
+
+            # program
+            $prog_res = $this->query("SELECT prog_code, description FROM program JOIN sycurrstrand 
+                                            USING (prog_code) WHERE curr_code='$curr_code'
+                                                            AND syc_id = '$syc_id';");
+            while ($prog_row = mysqli_fetch_assoc($prog_res)) {
+                $sy_info["curriculum"][$curr_code]["program"][$prog_row['prog_code']] =  $prog_row['description'];
+            }
+        }
+        # subject
+        $sub_res = $this->query("SELECT sub_code, sub_name, sub_type FROM subject JOIN sysub USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;");
+        while ($sub_row = mysqli_fetch_assoc($sub_res)){
+            $sub_type = $sub_row['sub_type'];
+            $key = ($sub_type === "core") ? $sub_type : 'spap';
+            $sub_code = $sub_row['sub_code'];
+            $sy_info['subject'][$key][$sub_code]['name'] = $sub_row['sub_name'];
+            if ($key == 'spap') {
+                $sub_prog = $this->query("SELECT prog_code FROM sharedsubject WHERE sub_code='$sub_code';");
+                while ($row_sub_prog = mysqli_fetch_row($sub_prog)) {
+                    $sy_info['subject'][$key][$sub_code]['prog'][] = $row_sub_prog[0];
+                }
+            }
+        }
+        # month
+        $mon_res = $this->query("SELECT * FROM academicdays WHERE sy_id='$sy_id';");
+        $days = [];
+        while ($mon_row = mysqli_fetch_assoc($mon_res)) {
+            $sy_info['month'][$mon_row['month']] = $days[] = $mon_row['no_of_days'];
+        }
+        $sy_info['total_days'] = array_sum($days);
+        return $sy_info;
+    }
+    /** School Year Methods End */
     /** Section Methods */
     public function listSection() 
     {
         session_start();
-        $query = "SELECT * FROM section ". ((isset($_GET['current']) && $_GET['current'] === 'true')
+        $query = "SELECT * FROM section". ((isset($_GET['current']) && $_GET['current'] === 'true')
                 ? "WHERE sy_id='{$_SESSION['sy_id']}'"
                 : "") .";";
         $result = mysqli_query($this->db, $query);
@@ -583,20 +733,43 @@ class Administration extends Dbconfig
 
     public function getSection() 
     {
-        $result = $this->prepared_select("SELECT * FROM section WHERE section_code=?", [$_GET["sec_code"]], "s");
+        $result = $this->prepared_select("SELECT * FROM section JOIN schoolyear USING(sy_id) WHERE section_code=?", [$_GET["sec_code"]], "s");
         $row = mysqli_fetch_assoc($result);
         $adv_result = mysqli_query($this->db, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
         $adviser = mysqli_fetch_assoc($adv_result);
+        $school_year = $row['start_year']." - ".$row['end_year'];
         if ($adviser) {
             $name = "{$adviser['last_name']}, {$adviser['first_name']} {$adviser['middle_name']} {$adviser['ext_name']}";
             $adviser = ["teacher_id" => $adviser['teacher_id'],
                         "name" => $name];
         }
         return new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'],
-                            $row['stud_no_max'], $row['stud_no'], $adviser);
+                            $row['stud_no_max'], $row['stud_no'], $adviser, $school_year);
     }
     public function listSectionStudentJSON() 
     {
+    }
+
+    /** Enrollment Methods */
+
+    public function editEnrollStatus()
+    {
+        session_start();
+        $can_enroll = isset($_POST['enrollment']) ? 1 : 0;
+        if (isset($_POST['sy_id'])) {
+            echo 'here';
+            # enrollment status of other previous school year
+            $sy_id = $_POST['sy_id'];
+        } else {
+            echo 'applied';
+            # enrollment status of current school year; hence, update session value
+            $sy_id = $_SESSION['sy_id'];
+            // unset($_SESSION['enroll_status']);
+            $_SESSION['enroll_status'] = $can_enroll;
+            echo $can_enroll;
+        }
+        $this->prepared_query("UPDATE schoolyear SET can_enroll=? WHERE sy_id=?;", [$can_enroll, $sy_id], "ii");
+        // header("Location: enrollment.php");
     }
     /*** Curriculum Methods */
 
@@ -1215,7 +1388,7 @@ class Administration extends Dbconfig
             SELECT COUNT(teacher_id) FROM faculty
         ) as teachers,
         (
-            SELECT COUNT(stud_id) FROM student
+            SELECT COUNT(stud_id) FROM student JOIN enrollment USING (stud_id) WHERE sy_id = {$_SESSION['sy_id']}
         ) as students";
         $result = mysqli_query($this->db, $query);
         $row = mysqli_fetch_row($result);
@@ -1260,11 +1433,8 @@ class Administration extends Dbconfig
         $params[] = $user_id;
         $types .= "i";
 
-        print_r($params);
-
         // Step 2
         $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
-//        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
                 ."VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
@@ -1284,7 +1454,7 @@ class Administration extends Dbconfig
 
         if ($id) {
             echo json_encode(["teacher_id" => $id]);
-//            header("Location: faculty.php?id=$id");
+            # header("Location: faculty.php?id=$id");
         } else {
             return "Faculty unsuccessfully added.";
         }
@@ -1302,7 +1472,6 @@ class Administration extends Dbconfig
             $current_asgn_sub_classes =[];
             while ($row = mysqli_fetch_row($result)) {
                 $current_as_class = $current_asgn_sub_classes[] = $row[0];
-                print_r($current_as_class);
                 if (!in_array($current_as_class, $asgn_sub_classes)) {
                     $this->query("UPDATE subjectclass SET teacher_id=NULL WHERE sub_class_code='$current_as_class';");
                 }
@@ -2209,5 +2378,88 @@ class Administration extends Dbconfig
         $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no=?;", [$id],"i");
     }
 
+    
+    
+    public function importSubjectGradesToCSV () {
+        // // Load the database configuration file
+        // //if(isset($_POST['importSubmit'])){
+            
+        //     // Allowed mime types
+        //     $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+            
+        //     // Validate whether selected file is a CSV file
+        //     if(!empty($_FILES['file']['name']) && in_array($_FILES['file']['type'], $csvMimes)){
+                
+        //         // If the file is uploaded
+        //         if(is_uploaded_file($_FILES['file']['tmp_name'])){
+                    
+        //             // Open uploaded CSV file with read-only mode
+        //             $csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+                    
+        //             // Skip the first line
+        //             fgetcsv($csvFile);
+                    
+        //             // Parse data from CSV file line by line
+        //             while(($line = fgetcsv($csvFile)) !== FALSE){
+        //                 // Get row data
+        //                 $LRN  = $line[0];
+        //                 $stud_name = $line[1]; 
+        //                 $first_grading  = $line[2];
+        //                 $second_grading = $line[3];
+        //                 $final_grading = $line[3];
+                        
+        //                 // Check whether member already exists in the database with the same email
+        //                 $prevQuery = "SELECT id FROM members WHERE email = '".$line[1]."'";
+        //                 $prevResult = $this->query($prevQuery);
+                        
+        //                 if($prevResult->num_rows > 0){
+        //                     // Update member data in the database
+        //                     $this->query("UPDATE members SET name = '".$name."', phone = '".$phone."', status = '".$status."', modified = NOW() WHERE email = '".$email."'");
+        //                 }else{
+        //                     // Insert member data in the database
+        //                     $this->query("INSERT INTO members (name, email, phone, created, modified, status) VALUES ('".$name."', '".$email."', '".$phone."', NOW(), NOW(), '".$status."')");
+        //                 }
+        //             }
+                    
+        //             // Close opened CSV file
+        //             fclose($csvFile);
+                    
+        //             $qstring = '?status=succ';
+        //         }else{
+        //             $qstring = '?status=err';
+        //         }
+        //     }else{
+        //         $qstring = '?status=invalid_file';
+        //     }
+        }
+        
+        // Redirect to the listing page
+        // header("Location: index.php".$qstring);
+
+    public function getStudentAttendance($report_id)
+    {
+        $status = ['no_of_days', 'no_of_present', 'no_of_absent', 'no_of_tardy'];
+        foreach ($status as $stat) {
+            $result = $this->query("SELECT no_of_days, no_of_present, no_of_absent, no_of_tardy, month FROM attendance 
+                                    JOIN academicdays USING (acad_days_id) WHERE report_id='$report_id';");
+            while ($row = mysqli_fetch_assoc($result)) {
+                $attendance[$stat][$row['month']] = $row[$stat];
+            }
+        }
+
+        return $attendance;
+    }
+
+    public function getTrackStrand()
+    {
+        $stud_id = 110001;
+        $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,' ', e.prog_code) FROM enrollment e JOIN curriculum c USING(curr_code) where stud_id=?;", [$stud_id], "i"));
+        return $trackStrand;
+    }
+
+    // public function addMonth{
+    //     $this->prepared_query("INSERT INTO sysub (sy_id, sub_code) VALUES (?, ?);", [$sy_id, $sub_code], 'is');
+    //     $sub_sy_id = mysqli_insert_id($this->db);
+    //     INSERT tablename (sy_id, month, days) VALUES ($sy_id, $month, 20);
+    // }
 }
-?>

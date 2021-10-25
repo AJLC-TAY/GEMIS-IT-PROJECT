@@ -1,4 +1,5 @@
-<?php include_once("../inc/head.html"); ?>
+<?php 
+include_once("../inc/head.html"); ?>
 <title>Section | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
@@ -57,6 +58,27 @@
     </div>
     <!-- TOAST END -->
 
+    <!-- MODAL -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0"></h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-sm btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-sm btn-primary "></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL END -->
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

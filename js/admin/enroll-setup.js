@@ -1,4 +1,4 @@
-import {commonTableSetup} from "./utilities.js";
+import {commonTableSetup, toggleEnrollment} from "./utilities.js";
 
 preload("#enrollment", "#set-up");
 
@@ -166,22 +166,7 @@ $(function () {
     });
 
     /** Changes the enrollment status of the current school year */
-    $(document).on("click", "[name='enrollment']", function() {
-        showSpinner();
-        let statusE = $(this).next(".status");
-        let formData = `action=editEnrollStatus`;
-        if ($(this).is(":checked")) {
-            $(this).attr("title", "Turn off enrollment");
-            statusE.html("On-going");
-            formData += "&enrollment=on";
-        } else {
-            $(this).attr("title", "Turn on enrollment");
-            statusE.html("Ended");
-        }
-        $.post("action.php", formData, function(data) {
-            hideSpinner();
-        });
-    });
+    toggleEnrollment();
 
     /** Stepper */ 
     $(document).on("click", ".next", () => {
