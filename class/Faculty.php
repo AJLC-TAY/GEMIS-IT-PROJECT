@@ -189,7 +189,7 @@ class FacultyModule extends Dbconfig
     }
     public function listValuesReport()
     {
-        $list = "<select id='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
+        
         $marka = ['AO','SO','RO','NO'];
         $qtr = '1'; //session
         $values = [];
@@ -204,17 +204,19 @@ class FacultyModule extends Dbconfig
 
 
                 for ($x = 1; $x <= $qtr; $x++) {
-                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    $markings = $this->query("SELECT value_name, value_id, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
                     while ($marks = mysqli_fetch_assoc($markings)) {
                         if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
+                            $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
                             foreach($marka as $markas){
                                 if ($markas == $marks['marking']){
-                                    $list .= "<option selected>$markas</option>";
+                                    $list .= "<option name='{$stud_id}/{$marks['value_id']}/{$x}' selected>$markas</option>";
                                 } else {
                                     $list .= "<option>$markas</option>";
                                 }
                             }
                             $marking[$val['bhvr_statement']][] =  $list;
+                            $list = '';
                         }
                     }
                 }

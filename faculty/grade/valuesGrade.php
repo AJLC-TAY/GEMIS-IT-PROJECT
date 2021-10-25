@@ -108,3 +108,4 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">var type = 'values'</script>
