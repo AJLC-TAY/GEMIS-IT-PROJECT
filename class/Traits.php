@@ -1316,7 +1316,7 @@ trait Enrollment
 
     public function getEnrollmentCurriculumOptions () 
     {
-        session_start();
+        // session_start();
         $data = [];
         $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT * FROM program JOIN curriculum USING (curr_code) JOIN sycurriculum USING (curr_code) WHERE sy_id = '$sy_id'; ");
@@ -1359,7 +1359,7 @@ trait Grade
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
         $sub_code = $_GET['sub_code'];
-        $qtr = 2;
+        $qtr = 1;
 
 
 

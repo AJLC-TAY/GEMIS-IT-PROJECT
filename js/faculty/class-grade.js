@@ -64,6 +64,8 @@ $(function() {
     if (firstClass != null) {
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         code = firstClass.val();
+        console.log(code);
+
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
         toggleGradesColumn(classType)
@@ -76,8 +78,8 @@ $(function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
         url = selected.attr("data-url");
-        code = selected.val();
-        sectionName = selected.attr("data-name");
+        console.log(code);
+        code = selected.attr("data-name");
         classType = selected.attr("data-class-type");
         console.log(classType);
         toggleGradesColumn(classType);
