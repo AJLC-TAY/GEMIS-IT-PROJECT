@@ -48,10 +48,10 @@ if (is_null($guardian)) {
 }
 
 const PROFILE_PATH = "../assets/profile.png";
-$image = !is_null($id_picture) ? (file_exists("../$id_picture") ? "../" . $id_picture : PROFILE_PATH) : PROFILE_PATH;
-$psaPreview = !is_null($id_picture) ? (file_exists("../$psa_birth_cert") ? "../" . $psa_birth_cert : "../uploads/credential/9/test.png") : "../uploads/credential/9/test.png";
+$image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFILE_PATH) : PROFILE_PATH;
+$psaPreview = !is_null($id_picture) ? (file_exists($psa_birth_cert) ? $psa_birth_cert : "../uploads/credential/9/test.png") : "../uploads/credential/9/test.png";
 
-$form137Preview = !is_null($id_picture) ? (file_exists("../$form137") ? "../" . $form137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
+$form137Preview = !is_null($id_picture) ? (file_exists($form137) ? $form137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
 $user_type = $_SESSION['user_type'];
 switch ($user_type) {
     case 'AD':

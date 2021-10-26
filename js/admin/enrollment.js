@@ -65,6 +65,7 @@ $(function() {
         let formData = $("#validate-form").serialize() + `&${status}=true`;
         $.post("action.php", formData, function() {
             $(".edit-opt").hide();
+            $("#valid-change-btn").closest(".badge").show();
             $("#valid-change-btn").show();
             $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
             hideSpinner();
@@ -79,7 +80,7 @@ $(function() {
                 break;
             case "cancel":
                 $(".edit-opt").hide();
-                $("#valid-change-btn").show();
+                $("#valid-change-btn").closest(".badge").show();
                 break;
         }
     });

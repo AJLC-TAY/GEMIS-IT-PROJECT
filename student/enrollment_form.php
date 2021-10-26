@@ -4,10 +4,11 @@ $_SESSION['id'] = rand();
 $_SESSION['user_type'] = 'ST';
 include_once("../class/Student.php"); 
 $user = new StudentModule();
-$row_temp = $user->query("SELECT start_year, end_year, can_enroll FROM schoolyear ORDER BY sy_id DESC LIMIT 1;");
+$row_temp = $user->query("SELECT sy_id, start_year, end_year, can_enroll FROM schoolyear WHERE status = '1';");
 $sy = mysqli_fetch_row($row_temp);
-$_SESSION['school_year'] = $sy_desc = $sy[0]." - ".$sy[1];
-$enroll = $sy[2];
+$_SESSION['sy_id'] = $sy[0];
+$_SESSION['school_year'] = $sy_desc = $sy[1]." - ".$sy[2];
+$enroll = $sy[3];
 include_once("../inc/head.html"); 
 ?>
 

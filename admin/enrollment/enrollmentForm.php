@@ -389,7 +389,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
                             <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
-                            <button class="btn btn-secondary next">Next</button>
+                            <button class="btn btn-success next">Next</button>
                         </div>
                     </div>
                 </div>
@@ -511,7 +511,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
 
                     <div class="d-flex flex-row-reverse mt-4">
-                        <a href="#" class="btn btn-secondary next">Next</a>
+                        <a href="#" class="btn btn-success next">Next</a>
                         <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>

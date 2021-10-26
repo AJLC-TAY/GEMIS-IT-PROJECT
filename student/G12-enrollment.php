@@ -3,7 +3,7 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 include_once('../inc/studentSideBar.php');
 ?>
-<title>Change Password | GEMIS</title>
+<title>Upcoming Grade 12 Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
@@ -16,41 +16,44 @@ include_once('../inc/studentSideBar.php');
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-
                             <header>
-                                <!-- BREADCRUMB -->
-                                <nav aria-label="breadcrumb">
+                            <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="index.php">Profile</a></li>
-                                        <li class="breadcrumb-item active">Change Password</a></li>
+                                        <li class="breadcrumb-item"><a href="login.php">Back</a></li>
                                     </ol>
                                 </nav>
                             </header>
                             <div class="d-flex justify-content-between">
-                                <h3 class="fw-bold">Change Password</h3>
+                                <h3 class="fw-bold">Upcoming Grade 12 Enrollment</h3>
                             </div>
 
-                            <div class="card h-auto bg-light mx-auto mt-3" style='width: 80%;'>
-                                <div class='form-row row mb-3'>
-                                    <label class="col-sm-3 fw-bold">Old Passsword</label>
-                                    <div class="col-sm-9">
-                                        <input class='form-input form-control' type='password' required>
+                            <div class="card h-auto bg-light mx-auto mt-3 p-4" style='width: 80%;'>
+                                <div class='form-row row'>
+                                    <h4>Will you enroll for grade 12 next school year in PCNHS-SHS?</h4>
+                                    <div class="form-check ms-4 mt-2">
+                                        <input class="form-check-input" type="radio"  name="radio" id="yes">
+                                        <label class="form-check-label" for="">
+                                            Yes
+                                        </label>
                                     </div>
-                                    <label class="col-sm-3 fw-bold">New Password</label>
-                                    <div class="col-sm-9">
-                                        <input class='form-input form-control' type='password' required>
+                                    <div class="form-check ms-4">
+                                        <input class="form-check-input" type="radio" name="radio" id="no">
+                                        <label class="form-check-label" for="">
+                                            No
+                                        </label>
                                     </div>
-                                    <label class="col-sm-3 fw-bold">Retype New Password</label>
-                                    <div class="col-sm-9">
-                                        <input class='form-input form-control' type='password' required>
+                                    <div class='p-4'>
+                                    <label>If no, indicate the reason:</label>
+                                        <textarea class='form-input form-control'></textarea>
                                     </div>
                                 </div>
+
 
                                 <div class="form-group row">
                                     <div class="d-flex justify-content-end">
                                         <input type='hidden' name='action' value=''>
-                                        <a href='student.php' class='btn btn-outline-danger me-2'>Cancel</a>
-                                        <input type='submit' form='admin-form' class='btn btn-success' value='Save'>
+                                        <a href='logout.php' class='btn btn-outline-danger me-2'>Cancel</a>
+                                        <input type='submit' form='admin-form' class='btn btn-success' value='Submit'>
                                     </div>
                                 </div>
                             </div>
@@ -72,4 +75,5 @@ include_once('../inc/studentSideBar.php');
     </div>
     <!-- TOAST END -->
 </body>
+
 </html>
