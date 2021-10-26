@@ -242,9 +242,10 @@ class FacultyModule extends Dbconfig
         $stat = (int) $_POST['stat'];
 
         $grade = $grade != "" ? $grade : NULL ;
+        echo ("stud id: $stud_id, grading: $grading, grade: $grade, code: $code, stat: $stat ");
 
        $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
-                            [$grade, $stat, $stud_id, $code],"siii");  
+                            [$grade, $stat, $stud_id, $code],"iiii");  
    }
 
    public function gradeAdvisory(){
