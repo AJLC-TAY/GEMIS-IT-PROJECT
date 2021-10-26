@@ -60,15 +60,15 @@ if (in_array('award_coor', $roles)) {
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="students" href="students.php">
+                <a id="advisory" href="advisory.php">
                     <i class="fa fa-graduation-cap"></i>
-                    <span>Students</span>
+                    <span>Advisory Class</span>
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="grade" href="grade.php">
+                <a id="subject" href="subject.php">
                     <i class="bi bi-card-list"></i>
-                    <span>Grade</span>
+                    <span>Subject Class</span>
                 </a>
             </li>
             <li class="sub-menu">
