@@ -361,12 +361,15 @@ class Administration extends Dbconfig
         $grado = [];
         $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
         $sy_id = 9; //$this->query("SELECT * FROM schoolyear WHERE status = 'current'"); '
-        $subject_type = $this->query("SELECT sub_type FROM classgrade JOIN subjectclass USING(sub_class_code) JOIN sysub USING(sub_sy_id) JOIN subject USING(sub_code) WHERE stud_id = $stud_id GROUP BY sub_type"); //insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
+        $subject_type = $this->query("SELECT DISTINCT sub_type FROM classgrade JOIN subjectclass USING(sub_code) JOIN sysub USING(sub_sy_id) JOIN subject WHERE stud_id = $stud_id"); //insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
         while ($sem = mysqli_fetch_assoc($result)) {
             while ($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
                 for ($x = 1; $x <= $sem['current_semester']; $x++) {
                     
-                    $stud_grade = $this->query("SELECT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = $x");
+                    $stud_grade = $this->query("SELECT cg.status, sub.sub_name, cg.first_grading, cg.second_grading, cg.final_grade, sub.sub_type
+                    FROM schoolyear as sy
+                    JOIN classgrade as cg
+                    JOIN subject as sub USING(sub_code) WHERE cg.stud_id = $stud_id AND sy.sy_id = $sy_id AND sy.current_semester = $x;");
                     // foreach($sub_type as $type){
                     while ($grd = mysqli_fetch_assoc($stud_grade)) {
                         // echo json_encode($sub_type['sub_type']);
@@ -409,7 +412,7 @@ class Administration extends Dbconfig
                 //ung kukunin lang is ung sub_name and sub_type ni stud
                 if (sizeof($grades) != 2) {
 
-                    $stud_grd = $this->query("SELECT sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code) WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    $stud_grd = $this->query("SELECT DISTINCT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1;"); //sub_name | first_grading | second_grading | final_grading | sub_type
 
                     // foreach($sub_type as $type){
                     while ($grds = mysqli_fetch_assoc($stud_grd)) {

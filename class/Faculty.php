@@ -89,7 +89,7 @@ class FacultyModule extends Dbconfig
         $result = $this->query("SELECT id_no, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
                                     JOIN enrollment USING (stud_id)
                                     JOIN classgrade USING (stud_id)
-                                    WHERE sub_class_code='{$_GET['sub_class_code']}';"
+                                    WHERE sub_code='{$_GET['sub_code']}';"
         );
         while($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['id_no'];
@@ -243,7 +243,7 @@ class FacultyModule extends Dbconfig
 
         $grade = $grade != "" ? $grade : NULL ;
 
-       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_class_code` = ?;",
+       $this->prepared_query("UPDATE `classgrade` SET `$grading` =?, status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
                             [$grade, $stat, $stud_id, $code],"siii");  
    }
 
