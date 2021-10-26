@@ -45,7 +45,7 @@ if (count($sub_classes) != 0) {
         $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_code={$sub_code}' "
             . "data-name='$section_name'>$section_name [$sub_code]</option>";
     }
     $sub_class_opn .= "</optgroup>";

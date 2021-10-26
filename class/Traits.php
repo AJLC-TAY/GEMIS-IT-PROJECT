@@ -436,7 +436,11 @@ trait FacultySharedMethods
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
-        $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM subjectfaculty WHERE teacher_id=?);", [$id], "i");
+        $result = $this->prepared_select("SELECT sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
+        FROM subjectclass AS sc 
+        JOIN subject AS s USING (sub_code) 
+        JOIN sharedsubject AS ss USING (sub_code)
+        JOIN section AS se USING (section_code) WHERE sc.teacher_id=?);", [$id], "i");
         $subjects = array();
         while ($s_row = mysqli_fetch_assoc($result)) {
             $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']);
@@ -562,10 +566,11 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
-                  FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
-                  JOIN subject AS s USING (sub_code) 
-                  JOIN section AS se USING (section_code) WHERE sc.teacher_id='$teacher_id';";
+        $query = "SELECT DISTINCT sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
+        FROM subjectclass AS sc 
+        JOIN subject AS s USING (sub_code) 
+        JOIN sharedsubject AS ss USING (sub_code)
+        JOIN section AS se USING (section_code) WHERE sc.teacher_id='$teacher_id';";
         $result = $this->query($query);
         $handled_sub_classes = array();
 
@@ -576,7 +581,7 @@ trait FacultySharedMethods
                 $sc_row['grd_level'],
                 $sc_row['sub_semester'],
                 $sc_row['sub_type'],
-                $sc_row['sub_class_code'],
+                NULL,
                 $sc_row['section_code'],
                 $sc_row['section_name'],
                 $sc_row['sy_id'],
@@ -1288,22 +1293,18 @@ trait Grade
     public function getClassGrades(){
         $teacher_id = $_GET['id'];
         $sy_id = $_GET['sy_id']; 
-        $class_code = $_GET['class_code'];
+        $sub_code = $_GET['sub_code'];
         $qtr = 2;
 
-        
-    
 
 
-        $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, 
-        first_grading, second_grading, final_grade FROM student 
-        JOIN classgrade USING(stud_id) 
-        JOIN subjectclass USING(sub_class_code) 
-        JOIN sysub USING (sub_sy_id) 
-        JOIN subject USING (sub_code) 
-        WHERE teacher_id=$teacher_id
-        AND sub_class_code =$class_code
-        AND sy_id=$sy_id");
+        $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        FROM student JOIN classgrade USING(stud_id) 
+        JOIN subjectclass USING(sub_code) 
+        JOIN sysub USING (sub_sy_id) JOIN subject 
+        WHERE teacher_id=$teacher_id 
+        AND classgrade.sub_code = '$sub_code' 
+        AND sy_id=$sy_id;" );
         
         $class_grades = [];
         
