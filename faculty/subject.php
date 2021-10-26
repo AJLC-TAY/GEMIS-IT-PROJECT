@@ -58,7 +58,7 @@ if (count($sub_classes) != 0) {
 
 ?>
 
-<title>Grade | GEMIS</title>
+<title>Subject Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
@@ -84,7 +84,7 @@ if (count($sub_classes) != 0) {
                                 <!-- <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active">Grade</li>
+                                        <li class="breadcrumb-item active">Subjecct Class</li>
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
