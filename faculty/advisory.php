@@ -86,7 +86,7 @@ if (!(is_null($sub_classes))) {
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item active">Students</li>
+                                    <li class="breadcrumb-item active">Advisory</li>
                                 </ol>
                             </nav>
                             <div class="row align-content-center">
