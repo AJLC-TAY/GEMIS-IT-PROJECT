@@ -1706,7 +1706,8 @@ class StudentAward extends Award implements JsonSerializable
 
         public function __construct (
             $SY, $LRN, $name, $date_of_enroll,
-            $enrolled_in, $curr_code, $status, $stud_id
+            $enrolled_in, $curr_code, $status, 
+            $stud_id, $section
         ) {
             $this->stud_id = $stud_id;
             $this->SY = $SY;
@@ -1716,6 +1717,7 @@ class StudentAward extends Award implements JsonSerializable
             $this->enrolled_in = $enrolled_in;
             $this->curr_code = $curr_code;
             $this->status = $status;
+            $this->section = $section;
         }
         public function jsonSerialize()
         {
@@ -1727,6 +1729,7 @@ class StudentAward extends Award implements JsonSerializable
                 "grade-level" => $this->enrolled_in,
                 "curriculum"  => $this->curr_code,
                 "status"      => $this->status,
+                "section"     => $this->section,
                 "action"      => "<div class='d-flex justify-content-center'>"
                     ."<a href='enrollment.php?page=credential&id={$this->stud_id}' class='btn btn-primary btn-sm w-auto me-1' title='View Enrollee' target='_blank'><i class='bi bi-eye'></i></a>"
                     ."<a href='enrollment.php?id={$this->stud_id}&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee' target='_blank'><i class='bi bi-box-arrow-up-left'></i></a>"

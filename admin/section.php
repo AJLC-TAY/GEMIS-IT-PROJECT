@@ -24,7 +24,9 @@ include_once("../inc/head.html"); ?>
                             <?php 
                                 $isViewPage = TRUE;
                                 $js = "<script type='module' src='../js/admin/section.js'></script>";
-                                if (isset($_GET["sec_code"])) {
+                                if (isset($_GET['action']) && $_GET['action'] === 'add') {
+                                    include_once("section/sectionForm.php");
+                                } else if (isset($_GET["sec_code"])) {
                                     include_once("section/sectionView.php");
                                 } else if (isset($_GET['page']) && $_GET['page'] == 'sub_classes') {
                                     include_once("section/subjectClasses.php");

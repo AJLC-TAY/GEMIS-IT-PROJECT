@@ -2,11 +2,26 @@ import {commonTableSetup} from "./utilities.js";
 
 preload('#enrollment', '#section')
 
-let tableSetup, url, id, table;
+let tableSetup, tableFormSetup, url, id, table, tableForm;
 tableSetup = {
     method:             'GET',
+    search: true,
+    searchSelector: "#search-input",
     ...commonTableSetup
 };
+
+tableFormSetup = {
+    url: "getAction.php?data=enrolled",
+    uniqueId: 'id',
+    idField: 'id',
+    search: true,
+    searchSelector: "#search-input",
+    method: 'GET',
+    ...commonTableSetup,
+    pageSize:  50,
+    pageList: "[50, 100, All]",
+    height: 800
+}
 
 url =  "getAction.php?";
 id = '';
@@ -25,14 +40,23 @@ tableSetup.uniqueId = id;
 tableSetup.height = 425;
 table = $("#table").bootstrapTable(tableSetup);
 
+try {
+    tableForm = $("#section-enrollees-table").bootstrapTable(tableFormSetup);
+} catch (e) {}
+
 let addAnother = false;
 
 $(function() {
     $("#adviser").select2({
         theme: "bootstrap-5",
         width: null,
-        dropdownParent: $('#add-modal')
+        // dropdownParent: $('#add-modal')
     });
+    // $("#adviser").select2({
+    //     theme: "bootstrap-5",
+    //     width: null,
+    //     dropdownParent: $('#add-modal')
+    // });
 
     $("#adviser-section").select2({
         theme: "bootstrap-5",
@@ -170,8 +194,49 @@ $(function() {
         $("#subject-table").bootstrapTable("resetSearch");
         hideSpinner();
     });
+    
+    
+    /** Section Form */
+    $(document).on("change", ".filter-form", function() {
+        showSpinner();
+        let value = $(this).val();
+        let otherFilter, filters;
+        let tb = $("#section-enrollees-table");
+        console.log(value);
+        switch($(this).attr("name")) {
+            case 'program': 
+                otherFilter = $("[name='grade-level']").val();
+                filters = (value == '*') ? {"grade": otherFilter} : {"strand": value, "grade" : otherFilter};
+                console.log(otherFilter);
+                break;
+            case 'grade-level': 
+                otherFilter = $("[name='program']").val()
+                filters = {"strand": otherFilter, "grade" : value};
+                break;
+            }
+        tb.bootstrapTable("filterBy", filters);
+        console.log(value);
+        hideSpinner();
+    });
+    
+    $(document).on("submit", "#section-form-page", function(e) {
+        e.preventDefault();
+        let formData = $(this).serializeArray();
+        let tb = $("#section-enrollees-table");
+        let selections = tb.bootstrapTable("getSelections");
+        selections.forEach(item => {
+            formData.push({name: "students[]", value: item.id});
+        });
 
+        formData = formData.filter(function(e) {
+            return !e.name.includes("btSelect");
+        });
 
+        formData.push({name: 'count', value: selections.length});
+        $.post("action.php", formData, function(data) {
+            window.location.replace(`section.php?sec_code=${JSON.parse(data)}`);
+        });
+    });
     
 
     // $('#save-btn').click(function() {

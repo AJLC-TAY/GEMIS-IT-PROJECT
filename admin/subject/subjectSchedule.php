@@ -48,7 +48,7 @@ foreach($subjectsData['schedule'] as $prog => $prog_data) {
 </header>
 <!-- HEADER END -->
 <section class="container">
-<div class='row card bg-white h-auto text-start mx-auto mt-3'>
+<div class='row card bg-white h-auto text-start mx-auto mt-3 overflow-auto'>
     <table class="table table-striped table-bordered">
         <col width="10%">
         <col width="45%">

@@ -30,7 +30,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'section') {
 if (isset($_GET['data']) && $_GET['data'] == 'enrollees') {
     $admin->getEnrollees();
 }
-
+if (isset($_GET['data']) && $_GET['data'] == 'enrolled') {
+    $admin->getEnrolled();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
     $admin->listFacultyPrivilegeJSON();
 }

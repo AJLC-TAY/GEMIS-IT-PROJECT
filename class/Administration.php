@@ -779,24 +779,6 @@ class Administration extends Dbconfig
         echo json_encode($this->listSection());
     }
 
-    //     public function addSection() 
-    //     {
-    //         session_start();
-    //         $code = $_POST['code'];
-    // //        $program = $_POST['program'];
-    //         $grade_level = $_POST['grade-level'];
-    //         $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
-    //         $section_name = $_POST['section-name'];
-    //         $adviser = $_POST['adviser'] ?: NULL;
-    //         $sy_id = $_SESSION['sy_id'];
-
-    //         $this->prepared_query(
-    //             "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
-    //             [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
-    //             "ssiiii"
-    //         );
-    //     }
-
     public function editSection()
     {
         $max_no = $_POST['max-no'];

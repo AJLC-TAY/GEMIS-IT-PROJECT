@@ -744,7 +744,7 @@ trait Enrollment
         $limit = $_GET['limit']; 
         $offset = $_GET['offset']; 
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status FROM enrollment AS e "
+            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status, e.section_code FROM enrollment AS e "
             ."JOIN student AS s USING (stud_id) "
             ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
 
@@ -835,7 +835,7 @@ trait Enrollment
             $records[] = new Enrollee(
                 $row['SY'], $row['LRN'], $row['name'],
                 $row['date_of_enroll'], $row['enrolled_in'],
-                $row['curr_code'], $row['status'], $row['stud_id']
+                $row['curr_code'], $row['status'], $row['stud_id'], $row['section_code']
             );
         }
         $output = new stdClass();
@@ -843,6 +843,30 @@ trait Enrollment
         $output->totalNotFiltered = $num_rows_not_filtered;
         $output->rows = $records;
         echo json_encode($output);
+    }
+
+    public function getEnrolled() 
+    {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
+        $enrolled = [];
+        $query = "SELECT e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+                ."e.enrolled_in AS grade, e.prog_code AS program, e.section_code AS section FROM enrollment e "
+                ."JOIN student AS s USING (stud_id) "
+                ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id';";
+        $result = $this->query($query);
+        while($row = mysqli_fetch_assoc($result)) {
+            $enrolled[] = [
+                'LRN' => $row['LRN'],
+                'name' => $row['name'],
+                'grade' => $row['grade'],
+                'strand' => $row['program'],
+                'section' => $row['section'],
+                'id' => $row['stud_id'],
+            ];
+        }
+
+        echo json_encode($enrolled);
     }
 
     public function getEnrollFilters():array
@@ -984,24 +1008,65 @@ trait Enrollment
         }, $params);
     }
 
-    public function addSection($grade_level, $prog_code, $stud_no, $letter, $sy, $sycs) {
-        echo "$grade_level, $prog_code, $stud_no, $letter, $sy, $sycs";
-        $section_name =  "$grade_level-{$letter}-{$prog_code}-Class";  // 11-A-ABM-Class
-        $section_code = rand(10, 10000000);
-        // echo "Added section: ".$section_name."<br>";
-        // echo "Section code: ". $section_code;
-        $this->prepared_query(
-            "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, sy_id) VALUES (?, ?, ?, ?, ?, ?);",
-            [$section_code, $section_name, $grade_level, 50, $stud_no, $sy],
-            "ssiiii"
-        );
-        $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
-            [$section_code, $sycs],
-            "si"
-        );
+    // public function addSection($grade_level, $prog_code, $stud_no, $letter, $sy, $sycs) {
+    //     echo "$grade_level, $prog_code, $stud_no, $letter, $sy, $sycs";
+    //     $section_name =  "$grade_level-{$letter}-{$prog_code}-Class";  // 11-A-ABM-Class
+    //     $section_code = rand(10, 10000000);
+    //     // echo "Added section: ".$section_name."<br>";
+    //     // echo "Section code: ". $section_code;
+    //     $this->prepared_query(
+    //         "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, sy_id) VALUES (?, ?, ?, ?, ?, ?);",
+    //         [$section_code, $section_name, $grade_level, 50, $stud_no, $sy],
+    //         "ssiiii"
+    //     );
+    //     $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
+    //         [$section_code, $sycs],
+    //         "si"
+    //     );
     
  
-        return $section_code;
+    //     return $section_code;
+    // }
+
+    // public function addSection() 
+    //     {
+    //         session_start();
+    //         $code = $_POST['code'];
+    // //        $program = $_POST['program'];
+    //         $grade_level = $_POST['grade-level'];
+    //         $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
+    //         $section_name = $_POST['section-name'];
+    //         $adviser = $_POST['adviser'] ?: NULL;
+    //         $sy_id = $_SESSION['sy_id'];
+
+    //         $this->prepared_query(
+    //             "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
+    //             [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
+    //             "ssiiii"
+    //         );
+    //     }
+
+
+    public function addSection()
+    {   
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
+        $grade_level = $_POST['grade-level'];
+        $max_no = $_POST['max-no'] ?: 50;
+        $section_name = $_POST['section-name'];
+        $adviser = $_POST['adviser'] == '*' ? NULL : $_POST['adviser'];
+        $count = $_POST['count'];
+        $section_code = rand();
+        $this->prepared_query(
+            "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?, ?) ;",
+            [$section_code, $section_name, $grade_level, $max_no, $count, $adviser, $sy_id],
+            "ssiiiii"
+        );
+        foreach($_POST['students'] as $stud) {
+            $this->query("UPDATE enrollment SET section_code = '$section_code' WHERE stud_id = '$stud' AND sy_id = '$sy_id';");
+        }
+
+        echo json_encode($section_code);
     }
 
     /**

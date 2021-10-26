@@ -181,23 +181,23 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 </div>
 <!-- STUDENT TABLE END -->
 <!-- SUBJECT CHECK LIST -->
-<div class="container mt-5">
+<!-- <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
             <h6 class='m-0 fw-bold'>Subject Checklist</h6>
-        </span>
+        </span> -->
         <!-- <span><button class="btn btn-success btn-sm">Add Student</button></span> -->
-    </div>
+    <!-- </div>
     <div class="card w-100 h-auto bg-light">
         <div class="list-group mb-3">
             <?php
-                foreach($program_list as $prog) {
-                    $prog_code = $prog->get_prog_code();
-                    echo "<label class='list-group-item'>
-                        <input name='program[]' data-grade-level='$sect_grd_level' class='form-check-input me-2' type='checkbox' value='$prog_code'>
-                        $prog_code - Grade $sect_grd_level Subjects
-                    </label>";
-                }
+                // foreach($program_list as $prog) {
+                //     $prog_code = $prog->get_prog_code();
+                //     echo "<label class='list-group-item'>
+                //         <input name='program[]' data-grade-level='$sect_grd_level' class='form-check-input me-2' type='checkbox' value='$prog_code'>
+                //         $prog_code - Grade $sect_grd_level Subjects
+                //     </label>";
+                // }
             ?>
         </div>
         <div>
@@ -206,9 +206,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <div id='subject-table-con' class='collapse mt-3'>
             <table id="subject-table" class="table-striped table-sm">
                 <thead class='thead-dark'>
-                    <div class="d-flex justify-content-between mb-1">
+                    <div class="d-flex justify-content-between mb-1"> -->
                         <!-- SEARCH BAR -->
-                        <span class="flex-grow-1 me-3">
+                        <!-- <span class="flex-grow-1 me-3">
                             <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
                         </span>
                         <span><button class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
@@ -227,7 +227,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             </table>
         </div>
     </div>
-</div>
+</div> -->
 <!-- STUDENT TABLE END -->
 <!-- MODAL -->
 <div class="modal fade" id="transfer-modal" tabindex="-1" aria-labelledby="modal transferStudent" aria-hidden="true">
