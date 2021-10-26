@@ -61,7 +61,7 @@ if (!(is_null($sub_classes))) {
 
 ?>
 
-<title>Students | GEMIS</title>
+<title>Advisory Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
