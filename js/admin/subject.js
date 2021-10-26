@@ -1,8 +1,6 @@
 /** SUBJECT TABLE LIST */
 import {commonTableSetup} from "./utilities.js";
 
-let onPostBodyOfTable = () => {};
-
 const tableSetup = {
   url: 'getAction.php?data=subjects',
   method: 'GET',
@@ -34,6 +32,28 @@ let prepareArchiveHTML = archivedData => {
 preload('#curr-management', '#subject');
 
 let addAgain = false;
+let progSelect;
+
+/** Program select from subject schedule page */
+try {
+  progSelect = $("#program-select").select2({
+    theme: "bootstrap-5",
+    width: 500
+  });
+} catch (e) {}
+
+function resetSchedTable() {
+  $(".subject-select").val([]).change();
+}
+
+function changeSchedTable(firstStrand) {
+  resetSchedTable();
+  Object.entries(schedule[firstStrand]).forEach(item => {
+    let id = item[0];
+    $(`[name='${id}']`).val(item[1]).change();
+  });
+}
+
 $(function () {
   /** Subject Schedule */
   try {
@@ -41,11 +61,36 @@ $(function () {
       theme: "bootstrap-5",
       width: null,
     });
-    Object.entries(schedule).forEach(item => {
-      $(`[name='${item[0]}']`).val(item[1]).change();
+  
+    let firstStrand = progSelect.val();
+    if (firstStrand.length > 0) {
+      changeSchedTable(firstStrand);
+    }
+
+    $(document).on("change", "#program-select", function () {
+      changeSchedTable($(this).val());
+    });
+    $(document).on("submit", "#schedule-form", function (e) {
+      e.preventDefault();
+      let formData = $(this).serializeArray();
+      formData.push({name: "action", value: "saveSchedule" });
+      formData.push({name: "program", value: progSelect.val() });
+      console.log(formData);
+      $.post("action.php", formData, function() {
+
+      });
+    });
+
+    $(document).on("click", ".edit-sched-btn", function() {
+      $(this).hide();
+      $("#program-select").prop("disabled", true);
+      $(".edit-opt-con").removeClass("d-none");
+      $(".subject-select").prop("disabled", false);
     });
   } catch (e) {}
   /** Subject Schedule End */
+
+
   $('#sub-type').change(function () {
     let options = $('#app-spec-options');
     let type = $(this).val();

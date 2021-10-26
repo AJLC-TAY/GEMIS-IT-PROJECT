@@ -49,18 +49,19 @@
 include '../class/Administration.php';
 $admin = new Administration();
 $tester = $admin->getSubjectScheduleData();
+$data = [];
 foreach($tester['schedule'] as $prog => $prog_data) {
     foreach($prog_data as $grade => $grade_data) {
         foreach($grade_data as $sem => $sem_data) {
             foreach($sem_data as $type => $codes) {
-                echo "[$prog][$grade][$sem][$type]<br>";
+                $data[$prog]["[$grade][$sem][$type][]"] = $codes;
             }
         }
     }
     // ['ABM']['11']['1']['core']
 }
 
-echo json_encode($tester);
+echo json_encode($data);
 // $res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
 // $sect_code = mysqli_fetch_row($res)[0];
 // print_r($sect_code);

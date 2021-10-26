@@ -211,21 +211,21 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 <form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
-            <div class="step mx-md-5" data-target="#test-l-1">
+            <div class="step mx-lg-5" data-target="#test-l-1">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-md-5" data-target="#test-l-2">
+            <div class="step mx-lg-5" data-target="#test-l-2">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-md-5" data-target="#test-l-3">
+            <div class="step mx-lg-5" data-target="#test-l-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
@@ -414,7 +414,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <label for='f-firstname'>First Name</label>
                             <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name' required>
                             <div class="invalid-feedback">
-                                Please enter father's first normalizer_is_normalized
+                                Please enter father's first name
                             </div>
                         </div>
                         <div class='form-group col-md-3'>

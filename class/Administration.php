@@ -1367,6 +1367,19 @@ class Administration extends Dbconfig
         // mysqli_multi_query($this->db, $query);
     }
 
+    public function saveSchedule()
+    {
+        $prog_code = $_POST['program'];
+        foreach($_POST['data'] as $grd => $values) {
+            foreach($values as $sem => $sem_val) {
+                foreach($sem_val as $type => $codes) {
+                    
+                }
+            }
+        }
+    }
+    /** Faculty Methods */
+
     public function listFacultyPrivilegeJSON()
     {
         $result = $this->query("SELECT teacher_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ',COALESCE(ext_name, '')) AS name, "

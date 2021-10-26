@@ -192,7 +192,7 @@ switch ($user_type) {
                                         $name = ${$parent . '_name'};
                                         $occupation = ${$parent . '_occupation'};
                                         $no = ${$parent . '_cp_no'};
-                                        echo "<li class='list-group-item'>$parent's Name: $name </li>
+                                        echo "<li class='list-group-item'>". ucwords($parent) ."'s Name: $name </li>
                                                  <li class='list-group-item'>Occupation: $occupation</li>
                                                  <li class='list-group-item'>Contact Number: $no</li>";
                                     }

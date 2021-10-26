@@ -739,7 +739,7 @@ trait Enrollment
             header("Location: ./enrollment.php?page=enrollees");
         } else {
             $_SESSION['enrolled'] = TRUE;
-            header("Location: ./finished.php");
+            header("Location: finished.php");
         }
     }
 
