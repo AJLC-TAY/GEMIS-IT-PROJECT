@@ -46,7 +46,7 @@ if (in_array('award_coor', $roles)) {
     <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="centered">SY <?php echo $school_year ?></h5>
+            <h5 class="text-center">SY <?php echo $school_year ?></h5>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>

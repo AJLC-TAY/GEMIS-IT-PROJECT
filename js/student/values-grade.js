@@ -1,49 +1,4 @@
-import {commonTableSetup} from "../admin/utilities.js";
 
-let tableSetup = {
-    search:             true,
-    searchSelector:     "#search-input",
-    method:             'GET',
-    uniqueId:           'lrn',
-    idField:            'lrn',
-    height:             440,
-    ...commonTableSetup
-};
-
-
-let classGradeTable = $("#table").bootstrapTable(tableSetup);
-/** Changes the name of class in the card */
-
-function changeName(name) {
-    $("#class").html(name);
-}
-
-
-/**
- *
- * @param classType
- * @param url
- * @returns {*}
- */
-function setTableData (classType, url) {
-    classGradeTable.bootstrapTable("refresh", {url});
-}
-
-/**
- * Hides or shows grades column depending on the type of section specified.
- * @param {String} classType Values may be 'advisory' or 'sub-class'.
- */
- function toggleGradesColumn(classType) {
-
-    if (classType === 'advisory'){
-        classGradeTable.bootstrapTable('showColumn', ['action_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
-    } else {
-        classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
-    }
-    
-};
 
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
@@ -74,21 +29,7 @@ $(function() {
         changeName(classTmp);
     }
 
-    $(document).on("change", "#classes", function() {
-        let selected, url, classType, sectionName, displayGrades;
-        selected = $("#classes option:selected");
-        url = selected.attr("data-url");
-        console.log(code);
-        code = selected.attr("data-name");
-        classType = selected.attr("data-class-type");
-        console.log(classType);
-        toggleGradesColumn(classType);
-        $("#export_code").val(sectionName + " - " + code );
-        
-        $("#classes").select2("close");
-        changeName(sectionName); 
-        setTableData(classType, url);
-    })
+
 
     $(document).on("click", ".submit", () => {
         document.getElementById("label").innerText="submit";
@@ -144,21 +85,8 @@ $(function() {
             var select = document.getElementsByClassName('markings');
             select.forEach((element) => {
                 var value = element.options[element.selectedIndex].value;
-                var recordInfo = value.split("/")
-                var values = {'id' : recordInfo[0],
-                                'val_id' : recordInfo[1],
-                                'qtr' : recordInfo[2],
-                                'rep_id' : recordInfo[4],
-                                'mark' : recordInfo[3],
-                                'stat': stat,
-                            'action' : 'gradeValues'};
-                            console.log(values);
-                            $.post("action.php", values, function(data) {	
-                                // console.log(grades);
-                                console.log(data)                                
-                            });
-            
-                
+                var recordInfo = element['name'].split("/")
+                console.log(recordInfo[1]);
             }); // en
 
         }

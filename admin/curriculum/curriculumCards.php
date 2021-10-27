@@ -1,4 +1,5 @@
 <?php
+include_once('../class/Administration.php');
 $admin = new Administration();
 ?>
 
