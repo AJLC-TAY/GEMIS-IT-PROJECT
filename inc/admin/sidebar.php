@@ -26,7 +26,7 @@ $school_year = $_SESSION['school_year'];
     <div id="sidebar" class="nav-collapse ">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="d-flex justify-content-center">SY <?php echo $school_year ?></h5>
+            <h5 class="text-center">SY <?php echo $school_year ?></h5>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
