@@ -20,6 +20,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'gradeAdvisory')) {
     $faculty->gradeAdvisory();
 }
 
+if ((isset($_POST['action']) && $_POST['action'] == 'gradeValues')) {
+    $faculty->updateValueGrades();
+}
+
 /** ENROLLMENT */
 if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
     $faculty->validateEnrollment();

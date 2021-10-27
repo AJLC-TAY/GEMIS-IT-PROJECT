@@ -85,11 +85,11 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <?php
-                        if (isset($_GET['values_grade'])){
-                            include_once("grade/valuesGrade.php"); 
-                            $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
-                        } else {  
-                            include_once("grade/gradeAdvisory.php"); 
+                        if (isset($_GET['values_grade'])) {
+                            include_once("grade/valuesGrade.php");
+                            $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
+                        } else {
+                            include_once("grade/gradeAdvisory.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/students.js'></script> ";
                         }
                         ?>
@@ -113,6 +113,26 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                                             <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                                             <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="" class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h4 class="mb-0">Are you sure you want to <span id='label'></span>?</h4>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p id="modal-msg"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn close-btn btn-success" id="confirm">Submit</button>
                                     </div>
                                 </div>
                             </div>
