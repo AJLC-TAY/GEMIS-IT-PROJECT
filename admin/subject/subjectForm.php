@@ -241,9 +241,7 @@ if ($action === 'edit') {
                 }
         $prog_opt .= '</div></div>';
     }
-
 }
-
 ?>
 
 <!-- HEADER -->
@@ -283,40 +281,6 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
-        <!-- <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
-            <h5 class='text-start p-0 fw-bold'>SCHEDULE</h5>
-            <hr class='mt-1'>
-            <div class='row p-0'>
-                <div class="container">
-                    <table class='table table-striped table-bordered'>
-                        <thead class="text-center">
-                            <tr>
-                                <td>Strand</td>
-                                <td>Semester</td>
-                                <td>Grade Level</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <select name='semester' class='form-select form-select-sm' id='semester'><?php echo $semester_opt; ?></select>
-                                </td>
-                                <td>
-                                    <select name='grade-level' class='form-select form-select-sm' id='grade-level'><?php echo $grade_level_opt; ?></select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class='form-group row'>
-                    <ul id="schedule-list">
-                        
-                    </ul>
-                </div>
-            </div>
-        </div> -->
-  
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
             <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
             <div class='accordion' id='accordionPanelsStayOpenExample'>

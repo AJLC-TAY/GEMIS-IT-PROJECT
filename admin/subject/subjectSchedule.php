@@ -20,21 +20,9 @@ foreach($sub_opt['specialized'] as $sub_spec) {
     $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
 }
 
-$schedule = [];
-foreach($subjectsData['schedule'] as $prog => $prog_data) {
-    foreach($prog_data as $grade => $grade_data) {
-        foreach($grade_data as $sem => $sem_data) {
-            foreach($sem_data as $type => $codes) {
-                $schedule[$prog]["data[$grade][$sem][$type][]"] = $codes;
-            }
-        }
-    }
-}
-
 foreach($programs as $prog) {
     $prog_opt .= "<option value='{$prog->get_prog_code()}'>{$prog->get_prog_desc()}</option>";
 }
-
 ?>
 <!-- HEADER -->
 <header>
@@ -153,7 +141,7 @@ foreach($programs as $prog) {
                             </select>
                         </td>
                         <td>
-                            <select class="js-example-basic-multiple subject-select" name="data[12][1][core][]" multiple="multiple" disabled>
+                            <select class="js-example-basic-multiple subject-select" name="data[12][2][core][]" multiple="multiple" disabled>
                                 <?php echo $core; ?>
                             </select>
                     </td>
@@ -195,5 +183,5 @@ foreach($programs as $prog) {
     </form>
 </section>
 <script>
-    let schedule = <?php echo json_encode($schedule); ?>;
+    let schedule = <?php echo json_encode($subjectsData['schedule']); ?>;
 </script>

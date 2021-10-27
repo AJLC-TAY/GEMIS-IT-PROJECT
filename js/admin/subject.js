@@ -75,9 +75,17 @@ $(function () {
       let formData = $(this).serializeArray();
       formData.push({name: "action", value: "saveSchedule" });
       formData.push({name: "program", value: progSelect.val() });
-      console.log(formData);
-      $.post("action.php", formData, function() {
-
+      $.post("action.php", formData, function(data) {
+        $("#program-select").prop("disabled", false);
+        $(".edit-sched-btn").show();
+        $(".edit-opt-con").addClass("d-none");
+        $(".subject-select").prop("disabled", true);
+        let newData = JSON.parse(data);
+        let prog = newData['program'];
+        delete schedule[prog];
+        schedule[prog] = newData['new'][prog];
+        
+        // schedule[newData['program']] = newData['new'][prog];
       });
     });
 
