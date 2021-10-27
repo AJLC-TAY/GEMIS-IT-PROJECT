@@ -1363,7 +1363,7 @@ trait Grade
 
 
 
-        $res = $this->query("SELECT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        $res = $this->query("SELECT DISTINCT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         FROM student JOIN classgrade USING(stud_id) 
         JOIN subjectclass USING(sub_code) 
         JOIN sysub USING (sub_sy_id) JOIN subject 

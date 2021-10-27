@@ -357,7 +357,13 @@ class Administration extends Dbconfig
     {
 
         $grades = [];
-        $stud_id = 110001;
+        if ($_SESSION['user_type'] == 'ST')
+        {
+            $stud_id = $_SESSION['id'];
+        } else  
+        {
+            $stud_id = 110001; //kesley
+        }
         $grado = [];
         $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
         $sy_id = 9; //$this->query("SELECT * FROM schoolyear WHERE status = 'current'"); '

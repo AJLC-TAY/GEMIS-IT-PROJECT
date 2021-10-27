@@ -131,7 +131,8 @@ $(function() {
                                     'action' : 'gradeClass'};
                 }
                 $.post("action.php", grades, function(data) {	
-                    console.log(grades);
+                    // console.log(grades);
+                    console.log(data)
                     classGradeTable.bootstrapTable("refresh")
                     
                 });
