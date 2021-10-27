@@ -58,7 +58,10 @@ if (!(is_null($sub_classes))) {
         // $sub_table_display = 'd-none';
     }
 }
-
+$schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
+$sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
+$grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
+$qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 ?>
 
 <title>Advisory Class | GEMIS</title>
@@ -67,11 +70,11 @@ if (!(is_null($sub_classes))) {
 
 <body>
     <!-- SPINNER -->
-    <div id="main-spinner-con" class="spinner-con">
+    <!-- <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
+    </div> -->
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
@@ -81,55 +84,15 @@ if (!(is_null($sub_classes))) {
                 <div class="row">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
-                        <header>
-                            <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item active">Advisory</li>
-                                </ol>
-                            </nav>
-                            <div class="row align-content-center">
-                                <div class="col-auto">
-                                    <h3 class="fw-bold">Classes</h3>
-                                </div>
-                            </div>
-                        </header>
-                        <!-- HEADER END -->
-                        <!-- STUDENTS TABLE -->
-                        <div class="container mt-1 ms-0">
-                            <div class="card h-auto bg-light" style="min-height: 70vh !important;">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <!-- SEARCH BAR -->
-                                    <div class="flex-grow-1 me-3">
-                                        <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                    </div>
-                                    <div class="col-auto" style="min-width: 250px !important;">
-                                    <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
-                                        <?php
-                                        echo $adv_opn;
-                                        echo $sub_class_opn;
-                                        ?>
-                                    </select>
-                                </div>
-
-                                </div>
-                                <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
-                                    <thead class='thead-dark'>
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
-                                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sex">Sex</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                                            <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
+                        <?php
+                        if (isset($_GET['values_grade'])){
+                            include_once("grade/valuesGrade.php"); 
+                            $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
+                        } else {  
+                            include_once("grade/gradeAdvisory.php"); 
+                            $jsFilePath = "<script type='module' src='../js/faculty/students.js'></script> ";
+                        }
+                        ?>
                         <!-- MODAL -->
                         <div id="deactivate-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -206,7 +169,8 @@ if (!(is_null($sub_classes))) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script type='module' src='../js/faculty/students.js'></script>
+    <?php echo $jsFilePath; ?>;
+
 </body>
 
 </html>

@@ -70,9 +70,8 @@ class FacultyModule extends Dbconfig
                         ."<button class='btn btn-sm btn-secondary me-1'>View</button>"
                         ."<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
                         ."<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
+                        ."<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
                     ."</div>",
-                'action_2' => "<div class='d-flex justify-content-center'>"
-                ."<a href='grade.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
             ];
         }
 
@@ -210,7 +209,7 @@ class FacultyModule extends Dbconfig
                             $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
                             foreach($marka as $markas){
                                 if ($markas == $marks['marking']){
-                                    $list .= "<option name='{$stud_id}/{$marks['value_id']}/{$x}' selected>$markas</option>";
+                                    $list .= "<option value = {$marks['marking']} >$markas</option>";
                                 } else {
                                     $list .= "<option>$markas</option>";
                                 }
