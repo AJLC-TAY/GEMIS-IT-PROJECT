@@ -7,8 +7,9 @@ const tableSetup = {
     method:             'GET',
     uniqueId:           'sub_code',
     idField:            'sub_code',
-    height:             300,
-    ...commonTableSetup
+    height:             600,
+    ...commonTableSetup,
+    pageSize:           20
 };
 
 let programTable = $("#table").bootstrapTable(tableSetup);
@@ -65,6 +66,17 @@ $(function() {
             hideSpinner();
         }).fail(function () {
 
+        });
+    });
+
+    $(document).on("submit", "#prog-form", function(e) {
+        e.preventDefault();
+        let form = $(this);
+        $.post("action.php", form.serializeArray(), function(data) {
+            let res = JSON.parse(data);
+            programTable.bootstrapTable("refresh", res['data']);
+            form.trigger("reset");
+            $("#add-modal").modal("hide");
         });
     });
     

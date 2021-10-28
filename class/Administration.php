@@ -120,7 +120,7 @@ class Administration extends Dbconfig
     {
         $id = $id ?? $_SESSION['id'];
         $result = $this->query(
-            "SELECT admin_id, "
+            "SELECT admin_id, admin_user_no, "
                 . "last_name, first_name, middle_name, ext_name, "
                 . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, "
                 . "age, cp_no, email, admin_user_no "
@@ -128,7 +128,8 @@ class Administration extends Dbconfig
         );
         $row = mysqli_fetch_assoc($result);
         return new Administrator(
-            $row['admin_id'],
+            // $row['admin_id'],
+            $row['admin_user_no'],
             $row['last_name'],
             $row['first_name'],
             $row['middle_name'],
@@ -143,13 +144,14 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        //        session_start();
-        $result = $this->query("SELECT admin_id, last_name, first_name, middle_name, ext_name, "
+        session_start();
+        $result = $this->query("SELECT admin_id, admin_user_no, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $administrators[] = new Administrator(
-                $row['admin_id'],
+                // $row['admin_id'],
+                $row['admin_user_no'],
                 $row['last_name'],
                 $row['first_name'],
                 $row['middle_name'],
@@ -968,6 +970,8 @@ class Administration extends Dbconfig
     /** Adds a new program */
     public function addProgram()
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $code = $_POST['code'];
         $currCode = $_POST['curr-code'];
         $description = $_POST['desc'];
@@ -975,6 +979,12 @@ class Administration extends Dbconfig
 
         // end of validation
         $this->prepared_query("INSERT INTO program (prog_code, description, curr_code) VALUES (?, ?, ?);", [$code, $description, $currCode]);
+
+        # retrieve core subjects to initialize sharedsubject records
+        $result = $this->query("SELECT DISTINCT(sub_code) FROM subject JOIN sysub USING (sub_code) WHERE sub_type = 'core' AND sy_id = '$sy_id';");
+        while($row = mysqli_fetch_row($result)) {
+            $this->addSharedSubject([$row[0], $code, $sy_id], "ssi");
+        }
         $this->listProgramsJSON();
     }
 
@@ -1020,7 +1030,7 @@ class Administration extends Dbconfig
         $result = $this->query("SELECT * FROM {$tbl};");
         $subjectList = array();
         while ($row = mysqli_fetch_assoc($result)) {
-            $subject =  new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $row['sub_type']);
+            $subject =  new Subject($row['sub_code'], $row['sub_name'], $row['sub_type']);
             $subjectList[] = $subject;
         }
         echo json_encode($subjectList);
@@ -1029,13 +1039,15 @@ class Administration extends Dbconfig
     public function getSubjectScheduleData($prog_code = NULL) 
     {
         session_start();
-        $result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
+        $result = $this->query("SELECT sub_code, sub_name, sub_type, prog_code FROM subject JOIN sharedsubject USING (sub_code);");
+        // $result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
         $subjectList = array();
         while ($row = mysqli_fetch_row($result)) {
             $type = $row[2];
             $subjectList['options'][$type][]  = [
                 'code' => $row[0], 
                 'name' => $row[1], 
+                'program' => $row[3]
             ];
         }
         $prog_condition = is_null($prog_code) ? "" : "AND prog_code = '$prog_code'";
@@ -1089,7 +1101,7 @@ class Administration extends Dbconfig
             while ($row = mysqli_fetch_assoc($result)) {
                 $code = $row['sub_code'];
                 $sub_type = $row['sub_type'];
-                $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+                $subject =  new Subject($code, $row['sub_name'], $sub_type);
 
                 if ($sub_type !== 'core') {
                     $subject = $this->setParentPrograms($code, $sub_type, $subject);
@@ -1103,13 +1115,26 @@ class Administration extends Dbconfig
 
     public function getSubject()
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $code = $_GET['sub_code'];
         $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
         // $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
         // $result = mysqli_query($this->db, $queryOne);
         $row = mysqli_fetch_assoc($result);
         $sub_type = $row['sub_type'];
-        $subject = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+
+        # schedule
+        $res = $this->query("SELECT prog_code, sub_semester, for_grd_level FROM sharedsubject WHERE sub_code = '$code' AND sy_id = '$sy_id';");
+        $schedule = [];
+        while ($sched_row = mysqli_fetch_row($res)) {
+            $grd = $sched_row[2];
+            if ($grd != 0) {
+                $schedule[] = ["program" => $sched_row[0], "semester" => $sched_row[1], "grade" => $grd];
+            }
+        }
+        $subject = new Subject($row['sub_code'], $row['sub_name'], $sub_type, $schedule);
+        # end schedule
 
         if ($sub_type != 'core') {
             $subject = $this->setParentPrograms($code, $sub_type, $subject);
@@ -1141,9 +1166,16 @@ class Administration extends Dbconfig
         return $subject;
     }
 
+    /** Adds a sharedsubject record */
+    public function addSharedSubject($params) {
+        $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES (?, ?, 0, 0, ?);", $params, "ssi");
+    }
+
     /** Adds a new subject */
     public function addSubject()
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $code = $_POST['code'];
         $subName = $_POST['name'];
         $type = $_POST["sub-type"];
@@ -1160,19 +1192,19 @@ class Administration extends Dbconfig
             $all_programs = $this->listPrograms('program');
             foreach($all_programs as $ap) {
                 $pcode = $ap->get_prog_code();
-                $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code) VALUES (?, ?);", [$code, $pcode]);
+                $this->addSharedSubject([$code, $pcode, $sy_id], "ssi");
             }
         }
         
         if ($type == 'specialized') {
-            $program_code = $_POST['prog_code'];
-            $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code) VALUES (?, ?);", [$code, $program_code]);
+            $program_code = $_POST['prog_code'][0];
+            $this->addSharedSubject([$code, $program_code, $sy_id], "ssi");
         }
 
         if ($type == 'applied') {
             $prog_code_list = $_POST['prog_code'];
             foreach ($prog_code_list as $prog_code) {
-                $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code) VALUES (?, ?);", [$code, $prog_code]);
+                $this->addSharedSubject([$code, $prog_code, $sy_id], "ssi");
             }
         }
 
@@ -1235,7 +1267,7 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $subName = $_POST['name'];
         $type = $_POST["sub-type"];
-        $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', for_grd_level='$grdLvl', sub_semester='$sem', sub_type='$type' WHERE sub_code='$code';";
+        $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', sub_type='$type' WHERE sub_code='$code';";
 
         $program_info = $this->getUpdateProgramQuery($code, $type, $_POST['old_program'], $_SESSION['sy_id']);
         $query .= ($type === 'specialized') ? $program_info[1] : $program_info;
@@ -1252,20 +1284,7 @@ class Administration extends Dbconfig
         // insert program and subject info in sharedsubject table
         if ($type === 'applied') {
             $prog_code_list = $_POST['prog_code'];
-
-            // get current program/s from db
-            // $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
-            // $result = mysqli_query($this->db, $queryTwo);
-            // $current_programs = [];
-            // while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-            //     $current_programs[] = $row[0];
-            // }
-
-            // delete rows with program codes not found in the submitted program code list
-            echo "test";
-            $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in array 2
-            echo "To delete:";
-            print_r($prog_codes_to_delete);
+            $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); 
             if (count($prog_codes_to_delete) > 0) {
                 foreach ($prog_codes_to_delete as $code_to_delete) {
                     $query .= "DELETE FROM sharedsubject WHERE prog_code='$code_to_delete' AND sub_code='$code' AND sy_id = '$sy_id';";
@@ -1273,41 +1292,36 @@ class Administration extends Dbconfig
             }
 
             // add new row with new program codes found in the submitted program code list
-            $new_prog_codes = array_diff($prog_code_list, $current_programs);       // codes not found in the current programs will be added as new row in the db
-            
-             echo "To add:";
-            print_r($new_prog_codes);
+            $new_prog_codes = array_diff($prog_code_list, $current_programs);       
             if (count($new_prog_codes) > 0) {
                 foreach ($new_prog_codes as $new_code) {
-                    $query .= "INSERT INTO sharedsubject (sub_code, prog_code, sy_id) VALUES ('$code', '$new_code', '$sy_id');";
+                    $query .= "INSERT INTO sharedsubject (sub_code, prog_code, sy_id, for_grd_level, sub_semester) VALUES ('$code', '$new_code', '$sy_id', 0, 0);";
                 }
             }
 
-            echo $query;
             return $query;
         }
 
         if ($type === 'specialized') {
-            $prog_code = $_POST['code'][0];
-
+            $new_prog_code = $_POST['prog_code'][0];
             // get current program/s from db
-            $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
-            $result = mysqli_query($this->db, $queryTwo);
+            $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code' AND sy_id = '$sy_id';";
+            $result = $this->query($queryTwo);
             $current_program = [];
 
-            while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+            while ($row = mysqli_fetch_row($result)) {
                 $current_program[] = $row[0];
             }
 
             if (count($current_program) > 1) {
-                $query .= "DELETE FROM sharedsubject WHERE sub_code='$code';";
-                $query .= "INSERT INTO sharedsubject VALUES('$code', '$prog_code');";
-                // print_r($query);
+                $query .= "DELETE FROM sharedsubject WHERE sub_code='$code' AND sy_id = '$sy_id';";
+                $query .= "INSERT INTO sharedsubject (prog_code, sub_code, for_grd_level, sub_semester, sy_id) VALUES ('$prog_code', '$code', 0, 0, '$sy_id');";
                 return $query;
             }
 
             $current_program = $current_program[0];
-            $query .= "UPDATE sharedsubject SET prog_code='$prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code';";
+            $query .= "UPDATE sharedsubject SET prog_code='$new_prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code' AND sy_id = '$sy_id';";
+            echo $query;
             return [$prog_code, $query];
         }
 
@@ -1346,12 +1360,13 @@ class Administration extends Dbconfig
     /** Returns the list of subjects by specified grade level. */
     public function listSubjectsByLevel($grd)
     {
-        $query = "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level = $grd;";
-        $result = mysqli_query($this->db, $query);
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level = '$grd' AND sy_id = '$sy_id';");
         $subjects = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $subjects[] = new Subject($row['sub_code'], $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $row['sub_type']);
+            $subjects[] = new Subject($row['sub_code'], $row['sub_name'], $row['sub_type']);
         }
         return $subjects;
     }
@@ -1404,8 +1419,8 @@ class Administration extends Dbconfig
                     
                     $result = $this->query("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
                          AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
-                    echo ("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
-                         AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
+                    // echo ("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
+                        //  AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
                     $current = [];
                     while ($row = mysqli_fetch_row($result)) {
                         $current[]  = $row[0];

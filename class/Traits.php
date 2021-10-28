@@ -64,28 +64,31 @@ trait School
         return $programList;
     }
 
-    public function listSubjects($tbl)
+    public function listSubjects($tbl, $tbl2)
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $subjectList = [];
 
         $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
-        $queryOne = (!isset($_GET['prog_code']))
-            ? "SELECT * FROM $tbl;"
-            : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub
-               WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
+        $queryOne = (isset($_GET['prog_code']))
+            ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
+            // ? "SELECT * FROM $tbl WHERE sub_code 
+            //    IN (SELECT sub_code FROM $shared_sub
+            //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
+            //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
+            : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
 
-        $resultOne = mysqli_query($this->db, $queryOne);
+        $resultOne = $this->query($queryOne);
 
         while ($row = mysqli_fetch_assoc($resultOne)) {
             $code = $row['sub_code'];
             $sub_type = $row['sub_type'];
-            $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+            $subject =  new Subject($code, $row['sub_name'], $sub_type);
 
             if ($sub_type == 'specialized') {
-                $resultTwo = mysqli_query($this->db,  "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
+                $resultTwo = $this->query("SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
                 $rowTwo = mysqli_fetch_row($resultTwo);
                 $subject->set_program($rowTwo[0] ?? "");
             }
@@ -97,7 +100,7 @@ trait School
 
     public function listSubjectsJSON()
     {
-        echo json_encode($this->listSubjects('subject'));
+        echo json_encode($this->listSubjects('subject', 'sharedsubject'));
     }
 
     public function listClass()

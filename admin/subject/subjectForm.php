@@ -1,8 +1,8 @@
 <?php
 require_once ("../class/Administration.php");
 
-function prepareEmptyProgramOptions($programs) {
-    $prog_opt = "<div id='app-spec-options' class='row d-none overflow-auto'>"
+function prepareEmptyProgramOptions($programs, $type = NULL) {
+    $prog_opt = "<div id='app-spec-options' class='row ". (($type != 'core') ? "" : "d-none" ). " overflow-auto'>"
         ."<label class='col-sm-4'>Program Options</label>"
         ."<div id='program-con' class='col-sm-8'>";
         foreach ($programs as $program) {
@@ -10,21 +10,19 @@ function prepareEmptyProgramOptions($programs) {
             $prog_name = $program->get_prog_name();
             $prog_opt .= "<div class='form-check'>"
                 ."<input class='form-check-input' type='radio' name='prog_code[]' id='$prog_code' value='$prog_code' readonly>"
-                ."<label class='form-check-label' for='$prog_name'>$prog_code</label>"
+                ."<label class='form-check-label' for='$prog_code'>$prog_code</label>"
                 ."</div>";
         }
     $prog_opt .= '</div></div>';
     return $prog_opt;
 }
+
 $action = $_GET['action'];
 $admin = new Administration();
 // option lists
-$sub_opt = array('core' => 'Core', 'applied' => 'Applied', 'specialized' => 'Specialized' );        // subject type
+$sub_opt = array('core' => 'Core', 'applied' => 'Applied', 'specialized' => 'Specialized' );   
 $semesters = array('1' => 'First','2'=>'Second' );     
-$grd_lvl = array('11' => '11', '12' => '12' );                   // grade level
-// $semesters = array('0' => '-- Select semester --', '1' => 'First','2'=>'Second' );     
-// $grd_lvl = array('0' => '-- Select grade level --', '11' => '11', '12' => '12' );                   // grade level
-
+$grd_lvl = array('11' => '11', '12' => '12' );                 
 // retrieve subjects for each grade level
 $subjectGrade11 = $admin->listSubjectsbyLevel(11);
 $subjectGrade12 = $admin->listSubjectsbyLevel(12);
@@ -39,10 +37,8 @@ $links = "<li class='breadcrumb-item'><a href='subject.php'>Subject</a></li>"
 $sub_type_editable = '';
 
 // prepare program options
-$prog_opt = prepareEmptyProgramOptions($programs);
+$prog_opt = "";
 $input_sub_with_prog = '';
-
-echo "tester";
 
 // subject data
 $title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
@@ -57,11 +53,12 @@ $grade_level_state = '';
 $button = '';
 
 if ($action === 'add') {
+    $prog_opt = prepareEmptyProgramOptions($programs, "core");
 
-    // prepare semester options
-    foreach ($semesters as $id => $value) {
-        $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
-    }
+    // // prepare semester options
+    // foreach ($semesters as $id => $value) {
+    //     $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
+    // }
 
     // prepare subject type options
     foreach ($sub_opt as $id => $value) {
@@ -112,7 +109,7 @@ if ($action === 'add') {
         $prog_code = $program->get_prog_code();
         
         // update link data
-        $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
+        $links = "<li class='breadcrumb-item'><a href='program.php'>Program</a></li>"
             . "<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
             . "<li class='breadcrumb-item active' aria-current='page'>Add</li>";
         $header = "<h2>$prog_name</h2>"
@@ -121,8 +118,9 @@ if ($action === 'add') {
         // overwrite program options
         $prog_opt = '';
 
-        $sub_type_editable = 'disabled';
-        $sub_type_opt = '<option selected>Specialized</option>';
+        $sub_type_editable = 'readonly';
+        $sub_type_opt = "<option value='specialized' selected>Specialized</option>";
+        $input_sub_with_prog = "<input type='hidden' name='prog_code[]' value='$prog_code'>";
     }
 }
 
@@ -132,25 +130,16 @@ if ($action === 'edit') {
     $subject_code = $subject->get_sub_code();
     $subject_name = $subject->get_sub_name();
     $subject_type = $subject->get_sub_type();
-    $subject_grd = $subject->get_for_grd_level();
     $prereq = $subject->get_prerequisite();
     $coreq = $subject->get_corequisite();
+
+    $prog_opt = prepareEmptyProgramOptions($programs, $subject_type);
 
     $title = "<h3>$subject_name</h3><hr>";
     $input_sub_with_prog = '';
 
     $links = "<li class='breadcrumb-item'><a href='subject.php'>Subject</a></li>"
             ."<li class='breadcrumb-item active' aria-current='page'>Edit</li>";
-
-    $semester_opt = '';
-    foreach ($semesters as $id => $value) { 
-        $semester_opt .= "<option value='$id' ". (($id == $subject->get_sub_semester()) ? 'selected' : '') .">$value</option>";
-    }
-
-    $grade_level_opt = '';
-    foreach ($grd_lvl as $id => $value) { 
-        $grade_level_opt .= "<option value='$id' ". (($id == $subject->get_for_grd_level()) ? 'selected' : '') .">$value</option>";
-    }
 
     $sub_type_opt = '';
     foreach ($sub_opt as $id => $value) { 
@@ -224,7 +213,7 @@ if ($action === 'edit') {
 
 
         // prepare links for bread crumb
-        $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
+        $links = "<li class='breadcrumb-item'><a href='program.php'>Program</a></li>"
                 ."<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
                 ."<li class='breadcrumb-item active' aria-current='page'>Edit</li>";
 
@@ -268,19 +257,19 @@ if ($action === 'edit') {
         <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
-            <div class='row p-0'>
+            <div class='container p-0'>
                 <div class='form-row row'>
-                    <div class='form-group col-md-3'>
+                    <div class='form-group col-lg-3'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
                         <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
                     </div>
-                    <div class='form-group col-md-4'>
+                    <div class='form-group col-lg-4'>
                         <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <?php echo $old_program; ?>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
                         <?php echo $prog_opt; ?>
                     </div>
-                    <div class='form-group col-md-5'>
+                    <div class='form-group col-lg-5'>
                         <label for='subjectName1' class='  col-form-label'>Name</label>
                         <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
                     </div>

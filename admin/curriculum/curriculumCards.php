@@ -64,7 +64,7 @@ $admin = new Administration();
         <!-- TEMPLATE END -->
     </div>
 </div>
-
+<!-- ADD CURRICULUM MODAL -->
 <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

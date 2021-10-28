@@ -1,5 +1,4 @@
 <?php
-// require_once("../class/Administration.php");
 $admin = new Administration() ?>
 <header>
     <!-- BREADCRUMB -->
@@ -61,7 +60,7 @@ $admin = new Administration() ?>
     </div>
 </div>
 
-<!-- MODAL -->
+<!-- ADD MODAL -->
 <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -110,7 +109,7 @@ $admin = new Administration() ?>
         </form>
     </div>
 </div>
-
+<!-- ARCHIVE MODAL -->
 <div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -132,6 +131,7 @@ $admin = new Administration() ?>
     </div>
 </div>
 
+<!-- UNARCHIVE MODAL -->
 <div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -153,6 +153,7 @@ $admin = new Administration() ?>
     </div>
 </div>
 
+<!-- VIEW ARCHIVED MODAL -->
 <div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -175,6 +176,7 @@ $admin = new Administration() ?>
     </div>
 </div>
 
+<!-- DELETE MODAL -->
 <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

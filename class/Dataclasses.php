@@ -133,22 +133,20 @@ class Subject implements JsonSerializable
 {
     private $sub_code;
     private $sub_name;
-    private $for_grd_level;
-    private $sub_semester;
     private $sub_type;
+    private $schedule;
     private $prerequisite = [];
     private $corequisite = [];
     private $program;
     private $programs = [];
     private $action;
 
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type)
+    public function __construct($sub_code, $sub_name, $sub_type, $schedule = NULL)
     {
         $this->sub_code = $sub_code;
         $this->sub_name = $sub_name;
-        $this->for_grd_level = $for_grd_level;
-        $this->sub_semester = $sub_semester;
         $this->sub_type = $sub_type;
+        $this->schedule = $schedule ?? [];
         $this->action = "<div class='d-flex justify-content-center'>"
                     ."<a href='subject.php?sub_code=".$sub_code."' class='btn btn-primary btn-sm w-auto me-1' title='View Subject'><i class='bi bi-eye'></i></a>"
                     ."<a href='subject.php?sub_code=".$sub_code."&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Subject'><i class='bi bi-pencil-square'></i></a>"
@@ -165,14 +163,9 @@ class Subject implements JsonSerializable
         return $this->sub_name;
     }
 
-    public function get_for_grd_level()
+    public function get_schedule() 
     {
-        return $this->for_grd_level;
-    }
-
-    public function get_sub_semester()
-    {
-        return $this->sub_semester;
+        return $this->schedule;
     }
 
     public function get_sub_type()
