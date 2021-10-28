@@ -101,9 +101,8 @@ if ($action === 'add') {
     }
 
     $button = "<div class='btn-con'>"
-                ."<input type='hidden' name='action' value='addSubject'>"
                 ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</button>"
-                ."<button class='submit-btn btn btn-success form-control w-auto'>Submit</button>"
+                ."<input type='submit' form='add-subject-form' class='submit-btn btn btn-success form-control w-auto' value='Submit' />"
             ."</div>";
 
     if (isset($_GET['prog_code'])) {                // add subject page is accessed from a program page
@@ -192,15 +191,16 @@ if ($action === 'edit') {
                         </tr>";
     }
 
-    $button = "<input type='hidden' name='action' value='updateSubject'>"
-             ."<input class='btn btn-success form-control' style='width: 120px;' type='submit' value='Save'>";
-
+    $button = "<input form='add-subject-form' class='btn btn-success form-control' style='width: 120px;' type='submit' value='Save'>";
+    $old_program = [];
     if ($subject_type === 'applied' ) {
         $sub_programs = $subject->get_programs();
-
+        foreach ($sub_programs as $sprog) {
+            $old_program[] = "<input type='hidden' name='old_program[]' value='$sprog'>";
+        }
         $prog_opt = "<div id='app-spec-options' class='form-group row overflow-auto'>"
                     ."<label class='col-sm-6'>Program Options</label>"
-                    ."<div id='program-con' class='col-sm-8'>";
+                    ."<div id='program-con' class='col-sm-8'><input type='hidden' name='old_type' value='applied'>";
         
         foreach ($programs as $program) {
             $prog_code = $program->get_prog_code();
@@ -208,7 +208,7 @@ if ($action === 'edit') {
             $sub_program_state = (in_array($prog_code, $sub_programs)) ? " original' checked" : "'";
             $prog_opt .= "<div class='form-check'>
                 <input class='form-check-input $sub_program_state type='checkbox' name='prog_code[]' id='$prog_code' value='$prog_code'>
-                <label class='form-check-label' for='$prog_name'>$prog_code</label>
+                <label class='form-check-label' for='$prog_code'>$prog_code</label>
             </div>";
         }
         $prog_opt .= '</div></div>';
@@ -219,7 +219,9 @@ if ($action === 'edit') {
         $program = $admin->getProgram();
         $prog_name = $program->get_prog_desc();
         $prog_code = $program->get_prog_code();
-        $input_sub_with_prog = "<input type='hidden' name='prog_code' value='$prog_code'>";
+        $input_sub_with_prog = "<input type='hidden' name='prog_code' value='$prog_code'>"
+                ."<input type='hidden' name='old_type' value='specialized'>";
+
 
         // prepare links for bread crumb
         $links = "<li class='breadcrumb-item'><a href='programlist.php'>Program</a></li>"
@@ -236,11 +238,13 @@ if ($action === 'edit') {
                     $prog_name_data = $program->get_prog_name();
                     $prog_opt .= "<div class='form-check'>
                         <input class='form-check-input' type='radio' name='prog_code[]' id='$prog_code_data' value='$prog_code_data' ". (($prog_code == $prog_code_data) ? 'checked': '') .">
-                        <label class='form-check-label' for='$prog_name_data'>$prog_code_data</label>
+                        <label class='form-check-label' for='$prog_code_data'>$prog_code_data</label>
                     </div>";
                 }
         $prog_opt .= '</div></div>';
+        $old_program[] = "<input type='hidden' name='old_program[]' value='$prog_code'>";
     }
+    $old_program = implode("", $old_program);
 }
 ?>
 
@@ -260,6 +264,7 @@ if ($action === 'edit') {
 <div class='row'>
     <form id='add-subject-form' method='POST'>
         <?php echo $input_sub_with_prog; ?>
+        <input type='hidden' name='action' value='<?php echo $action; ?>Subject'>
         <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
@@ -271,6 +276,7 @@ if ($action === 'edit') {
                     </div>
                     <div class='form-group col-md-4'>
                         <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
+                        <?php echo $old_program; ?>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
                         <?php echo $prog_opt; ?>
                     </div>
@@ -352,5 +358,5 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
+    </form>
     <div class='d-flex flex-row-reverse'><?php echo $button; ?></div>
-</form>

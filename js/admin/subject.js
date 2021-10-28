@@ -121,10 +121,6 @@ $(function () {
     $('#add-subject-form').submit();
   });
 
-  $('.submit-btn').click(() => {
-    $('#add-subject-form').submit();
-  });
-
   $('#add-subject-form').submit(function (e) {
     e.preventDefault();
     showSpinner();
@@ -167,17 +163,18 @@ $(function () {
     saveRequisiteCodes('CO[]', coreq);
 
     $.post('action.php', formData, function (data) {
-      hideSpinner(500);
+      hideSpinner();
       if (addAgain) {
         $('#add-subject-form').trigger('reset');
         $('#app-spec-options').addClass('d-none');
         $('#sub-code').attr('autofocus');
         addAgain = false;
+        // hideSpinner();ajlc9029
+
         return showToast('success', 'Subject successfully added!');
       }
-      console.log(data);
       data = JSON.parse(data);
-      window.location.href = `subject.php?${data.redirect}`;
+      // window.location.href = `subject.php?${data.redirect}`;
     });
   });
 

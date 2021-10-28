@@ -1156,6 +1156,14 @@ class Administration extends Dbconfig
         );
 
         # insert program and subject info in sharedsubject table
+        if ($type == 'core') {
+            $all_programs = $this->listPrograms('program');
+            foreach($all_programs as $ap) {
+                $pcode = $ap->get_prog_code();
+                $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code) VALUES (?, ?);", [$code, $pcode]);
+            }
+        }
+        
         if ($type == 'specialized') {
             $program_code = $_POST['prog_code'];
             $this->prepared_query("INSERT INTO sharedsubject (sub_code, prog_code) VALUES (?, ?);", [$code, $program_code]);
@@ -1223,19 +1231,13 @@ class Administration extends Dbconfig
 
     public function updateSubject()
     {
+        session_start();
         $code = $_POST['code'];
         $subName = $_POST['name'];
         $type = $_POST["sub-type"];
-        $grdLvl = $_POST['grade-level'];
-        $sem = $_POST['semester'];
-
-        // start of validation
-
-        // end of validation
-
         $query = "UPDATE subject SET sub_code='$code', sub_name='$subName', for_grd_level='$grdLvl', sub_semester='$sem', sub_type='$type' WHERE sub_code='$code';";
 
-        $program_info = $this->getUpdateProgramQuery($code, $type);
+        $program_info = $this->getUpdateProgramQuery($code, $type, $_POST['old_program'], $_SESSION['sy_id']);
         $query .= ($type === 'specialized') ? $program_info[1] : $program_info;
         $query .= $this->getUpdateRequisiteQry($code, 'PRE');
         $query .= $this->getUpdateRequisiteQry($code, 'CO');
@@ -1244,7 +1246,7 @@ class Administration extends Dbconfig
         echo json_encode((object) ["redirect" => $redirect, "status" => 'Subject successfully updated!']);
     }
 
-    private function getUpdateProgramQuery($code, $type)
+    private function getUpdateProgramQuery($code, $type, $current_programs, $sy_id)
     {
         $query = '';
         // insert program and subject info in sharedsubject table
@@ -1252,28 +1254,36 @@ class Administration extends Dbconfig
             $prog_code_list = $_POST['prog_code'];
 
             // get current program/s from db
-            $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
-            $result = mysqli_query($this->db, $queryTwo);
-            $current_programs = [];
-            while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-                $current_programs[] = $row[0];
-            }
+            // $queryTwo = "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';";
+            // $result = mysqli_query($this->db, $queryTwo);
+            // $current_programs = [];
+            // while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+            //     $current_programs[] = $row[0];
+            // }
 
             // delete rows with program codes not found in the submitted program code list
+            echo "test";
             $prog_codes_to_delete = array_diff($current_programs, $prog_code_list); // compares the two arrays, and returns an array of elements not found in array 2
+            echo "To delete:";
+            print_r($prog_codes_to_delete);
             if (count($prog_codes_to_delete) > 0) {
                 foreach ($prog_codes_to_delete as $code_to_delete) {
-                    $query .= "DELETE FROM sharedsubject WHERE prog_code='$code_to_delete' AND sub_code='$code';";
+                    $query .= "DELETE FROM sharedsubject WHERE prog_code='$code_to_delete' AND sub_code='$code' AND sy_id = '$sy_id';";
                 }
             }
 
             // add new row with new program codes found in the submitted program code list
             $new_prog_codes = array_diff($prog_code_list, $current_programs);       // codes not found in the current programs will be added as new row in the db
+            
+             echo "To add:";
+            print_r($new_prog_codes);
             if (count($new_prog_codes) > 0) {
                 foreach ($new_prog_codes as $new_code) {
-                    $query .= "INSERT INTO sharedsubject VALUES ('$code', '$new_code');";
+                    $query .= "INSERT INTO sharedsubject (sub_code, prog_code, sy_id) VALUES ('$code', '$new_code', '$sy_id');";
                 }
             }
+
+            echo $query;
             return $query;
         }
 

@@ -136,7 +136,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'getArchiveSubjectJSON') {
     $admin->listAllSub('archived_subject');
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
+if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
     $admin->updateSubject();
 }
 if (isset($_POST['action']) && $_POST['action'] === 'saveSchedule') {
