@@ -196,7 +196,7 @@ class FacultyModule extends Dbconfig
     {
 
         $marka = ['AO', 'SO', 'RO', 'NO'];
-        $qtr = '1'; //session
+        $qtr = '4'; //session
         $values = [];
         $values_desc = [];
         $marking = [];
@@ -209,19 +209,24 @@ class FacultyModule extends Dbconfig
 
 
             for ($x = 1; $x <= $qtr; $x++) {
-                $markings = $this->query("SELECT value_name, value_id, report_id, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                $markings = $this->query("SELECT value_name, status, value_id, report_id, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
                 while ($marks = mysqli_fetch_assoc($markings)) {
                     if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
-                        $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
-                        foreach ($marka as $markas) {
-                            if ($markas == $marks['marking']) {
-                                $list .= "<option value='{$stud_id}/{$marks['value_id']}/{$x}/{$markas}/{$marks['report_id']}' selected>$markas</option>";
-                            } else {
-                                $list .= "<option>$markas</option>";
+                        if ($x < $qtr || $marks['status'] == 1){
+                            $list = $marks['marking'];
+                        } else {
+                            $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
+                            foreach ($marka as $markas) {
+                                if ($markas == $marks['marking']) {
+                                    $list .= "<option value='{$stud_id}/{$marks['value_id']}/{$x}/{$markas}/{$marks['report_id']}' selected>$markas</option>";
+                                } else {
+                                    $list .= "<option value='{$stud_id}/{$marks['value_id']}/{$x}/{$markas}/{$marks['report_id']}'>$markas</option>";
+                                }
                             }
+                            
                         }
                         $marking[$val['bhvr_statement']][] =  $list;
-                        $list = '';
+                            $list = '';
                     }
                 }
             }
@@ -241,16 +246,16 @@ class FacultyModule extends Dbconfig
     public function updateValueGrades()
     {
         $mark = $_POST['mark'];
-        $status = $_POST['stat'];
+        $status = (int) $_POST['stat'];
         $stud_id = $_POST['id'];
         $value_id = $_POST['val_id'];
         $report_id = $_POST['rep_id'];
         $qtr = $_POST['qtr'];
-        echo("mark: $mark");
+        echo("mark: $mark stat: $status stud id: $stud_id value_id: $value_id report_id: $report_id qtr: $qtr");
         $this->prepared_query(
-            "UPDATE `observedvalues` SET `marking` = ?, `status` = ? WHERE `value_id`=? AND `stud_id`=? AND `report_id`=? AND `quarter`=? ;",
-            [$mark, $status, $stud_id, $value_id, $report_id, $qtr],
-            "siisii"
+            "UPDATE `observedvalues` SET `marking`=?, `status`=? WHERE `value_id`=? AND `stud_id`=? AND `report_id`=? AND `quarter`=? ;",
+            [$mark, $status, $value_id, $stud_id, $report_id, $qtr],
+            "sisiii"
         );
     }
 
