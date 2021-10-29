@@ -11,10 +11,10 @@ html {
     margin-left: 10px;
 }
 
-.tile:hover a.card-link, .add-tile {
+.tile:hover a.card-link,
+.add-tile {
     box-shadow: var(--shad);
 }
-
 
 .redirect-card {
     width: 120px !important;
@@ -40,10 +40,11 @@ html {
 }
 
 .link:hover {
-    color:  #0d6efd;
+    color: #0d6efd;
 }
+
 .link-green:hover {
-    color:  #28a745;
+    color: #28a745;
 }
 
 span[class='badge'] {
@@ -54,17 +55,28 @@ td .form-select {
     margin: 0;
 }
 
+
 /* SELECT2*/
+
 .select2-container {
     padding: 0;
 }
 
+
 /*.select2-selection {*/
+
+
 /*    z-index: 9999 !important;*/
+
+
 /*}*/
+
+
 /* IMAGE PREVIEW */
+
 .image-preview-con {
-    width: 250px; height: 250px;
+    width: 250px;
+    height: 250px;
     position: relative;
 }
 
@@ -81,7 +93,8 @@ td .form-select {
 .image-preview-con:hover #resultImg {
     opacity: 0.3;
 }
-.image-preview-con:hover .edit-text{
+
+.image-preview-con:hover .edit-text {
     opacity: 1;
 }
 
@@ -98,7 +111,10 @@ td .form-select {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
+
+
 /* IMAGE PREVIEW END */
+
 
 /* TOAST */
 
@@ -143,9 +159,22 @@ td .form-select {
 
 /* END SPINNER */
 
-.hidden{
-    display:none;
-    visibility:hidden;
-  }
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
 
 /* SELECT 2 */
+
+
+/* RESPONSIVE */
+
+
+/* STUDENT */
+
+@media screen and (max-width: 600px) {
+    .ms-5 {
+        margin-left: 0px!important;
+    }
+}

@@ -567,11 +567,13 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        $query = "SELECT DISTINCT sc.section_code, s.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name  
-        FROM subjectclass AS sc  
-        JOIN section AS se USING (teacher_id) 
-        JOIN sharedsubject AS ss USING(sy_id) 
-        JOIN subject AS s USING(sub_code)
+        $query = "SELECT DISTINCT sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, ss.for_grd_level, ss.sub_semester, 
+        se.section_name, syb.sy_id
+        from subjectclass as sc
+        join section as se USING(section_code)
+        join sysub as syb USING(sub_sy_id)
+        join subject as s USING(sub_code)
+        join sharedsubject as ss USING(sub_code)
         WHERE sc.teacher_id='$teacher_id';";
         $result = $this->query($query); //hindi ka pa ba inaanto
         $handled_sub_classes = array();
@@ -1416,17 +1418,21 @@ trait Grade
         $class_grades = [];
 
         while ($grd = mysqli_fetch_assoc($res)) {
-            if ($qtr == '2' || $grd['status'] == 1) {
+            if (($qtr == '1' && $grd['status']==1) || $qtr == '2' && $grd['status']==1) {
                 $first = 'readonly';
-            } else if ($grd['status'] == 1) {
-                $second = 'readonly';
+                $second_final = 'readonly';
+            } else if ($qtr == '2') {
+                $first = 'readonly';
+                $second_final = '';
+            } else if ($qtr == '1') {
+                $second_final = 'readonly';
+                $first = '';
             } else {
                 $first = '';
-                $second = '';
+                $second_final = '';
             }
 
-
-            $second_final = $qtr == '2' ? '' : 'readonly';
+            // $second_final = $qtr == '2' ? '' : 'readonly';
             $class_grades[] = [
                 'id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
