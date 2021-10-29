@@ -80,7 +80,7 @@ $admin = new Administration();
                 </div>
                 <div class="row justify-content-end mt-3">
                     <div class="col-auto">
-                        <a id='to-step-2' class="stepper-btn btn btn-success next" >Next</a>
+                        <a id='to-step-2' role="button" class="stepper-btn btn btn-success next" >Next</a>
                     </div>
                 </div>
             </div>
@@ -94,12 +94,12 @@ $admin = new Administration();
                 <!-- STEP 1 -->
                 <h4 class="fw-bold">Enable enrollment</h4>
                 <div class="row mt-3">
-                    <!-- <div class="col-lg-4 mb-3">
+                    <div class="col-lg-4 mb-3">
                         <h6>List of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
                         <ul id="faculty-list" class="list-group h-75 overflow-auto">
 
                         </ul>
-                    </div> -->
+                    </div>
                     <!-- <div class="col-lg-4 mb-3">
                         <h6>List of Sections <span id='section-count' class="badge bg-secondary rounded-pill"></span></h6>
                         <ul id="section-list" class="list-group h-75 overflow-auto">

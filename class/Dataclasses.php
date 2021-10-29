@@ -223,8 +223,6 @@ class Subject implements JsonSerializable
         return [
             'sub_code' => $this->sub_code,
             'sub_name' => $this->sub_name,
-            'for_grd_level' => $this->for_grd_level,
-            'sub_semester' => $this->sub_semester,
             'sub_type' => $this->sub_type,
             'prerequisite' => $this->prerequisite,
             'corequisite' => $this->corequisite,
