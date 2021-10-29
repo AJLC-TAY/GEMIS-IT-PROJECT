@@ -563,7 +563,7 @@ class Administration extends Dbconfig
     public function listSYJSON()
     {
         session_start();
-        $result = mysqli_query($this->db, "SELECT * FROM schoolyear ORDER BY status DESC;");
+        $result = $this->query("SELECT * FROM schoolyear ORDER BY status DESC;");
         $sy_list = [];
         $grd_list = array('11' => '11', '12' => '12');
         $quarter_list = array('1' => 'First', '2' => 'Second', '3' => 'Third', '4' => 'Fourth');
@@ -600,6 +600,11 @@ class Administration extends Dbconfig
             $sem_opt .= "</select>";
 
 
+            $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                        . "<div class='edit-options' style='display: none;'>"
+                        . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
+                        . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                        . "</div>");
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
                 "<div class='form-check form-switch ms-3 my-auto'>"
@@ -619,14 +624,9 @@ class Administration extends Dbconfig
                 'current_sem'     => $sem_opt,
                 'enrollment_val'  => $enrollment,
                 'enrollment'      => $enroll_opt,
-                'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
-                    . "<div class='edit-options' style='display: none;'>"
-                    . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
-                    . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                    . "</div>"
-                    . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
-                    . "<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
+                'action' => $actions_btn
                     . $switch
+                    . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
             ];
         }
         echo json_encode($sy_list);
@@ -1515,8 +1515,7 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-        $query = "SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);";
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query("SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);");
         $facultyList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1533,9 +1532,7 @@ class Administration extends Dbconfig
                 $row['cp_no'],
                 $row['email'],
                 $row['award_coor'],
-                $row['enable_enroll'],
-                $row['enable_edit_grd'],
-                $row['id_picture']
+                $row['enable_enroll']
             );
         }
         return $facultyList;
@@ -1620,8 +1617,8 @@ class Administration extends Dbconfig
         $types .= "i";
 
         // Step 2
-        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
-            . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, department, cp_no, id_picture, teacher_user_no) "
+            . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
         $this->prepared_query($query, $params, $types);
