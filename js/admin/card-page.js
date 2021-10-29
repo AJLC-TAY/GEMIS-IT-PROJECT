@@ -4,7 +4,7 @@ import { searchKeyBindEvent } from "./utilities.js";
 export let addBtn, cardCon, kebab, noResultMsg, searchInput, addModal, form;
 
 // Data
-export let pageName, camelized, action, deleteMessage, archiveMessage, unarchiveMessage, keywords, dataList, 
+export let pageName, camelized, action, deleteMessage, archiveMessage, unarchiveMessage, keywords, dataList,
     timeout, elementAccess;
 // Function
 export let prepareHTMLOfData, prepareHTMLofArchive, filterDataFn;
@@ -18,17 +18,17 @@ export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
             preload("#curr-management", "#curriculum")
             programString = "programs/strands, "
             elementAccess = "cur_code"
-            action = "getCurriculumJSON" 
+            action = "getCurriculumJSON"
             break;
         case 'program':
             preload("#curr-management", "#program")
             elementAccess = "prog_code"
-            action = "getProgramJSON" 
+            action = "getProgramJSON"
             break;
     }
 
     pageName = page;
-    camelized = page.charAt(0).toUpperCase() + page.slice(1);  // ex. camelized = Curriculum
+    camelized = page.charAt(0).toUpperCase() + page.slice(1); // ex. camelized = Curriculum
     dataList = data;
 
     // access html elements
@@ -44,7 +44,7 @@ export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
     deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`;
     archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`;
     unarchiveMessage = `Unarchiving this ${page} will also unarchive all ${programString}subjects and student grades under this ${page}.`;
-    
+
     // functions
     prepareHTMLOfData = prepareHTML;
     prepareHTMLofArchive = prepareArchiveHTML;
@@ -62,18 +62,21 @@ export const reload = (data = '') => {
     // getArchiveAction = `getArchived${camelized}JSON`
     console.log("Action: ", action);
     // $.post('action.php', {action}, (response) => {
-        // dataList = JSON.parse(response)
-        let addBtn = 
+    // dataList = JSON.parse(response)
+    let addBtn =
         `   <div class='tile card shadow-sm p-0 position-relative'>
                 <a role='button' class='card-link add-btn btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;'></a>
-                <div class='card-body position-absolute d-flex-column justify-content-between'>
+                <div class='card-body position-absolute d-flex justify-content-center align-items-center' style="height: auto; width: 100px; left: 50%; margin-left: -50px; top: 50%; margin-top: -50px;">
+                    <div
+                    <i class="bi bi-plus-circle-fill"></i><br>
                     Add ${camelized}
+                    </div>
                 </div>
             </div>`;
-        console.log(dataList.data);
-        console.log(dataList.archived);
-        $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn);
-        $('.arch-list').html(prepareHTMLofArchive(dataList.archived));
+    console.log(dataList.data);
+    console.log(dataList.archived);
+    $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn);
+    $('.arch-list').html(prepareHTMLofArchive(dataList.archived));
     // })
     // hideSpinner()
 }
@@ -115,7 +118,7 @@ export const reload = (data = '') => {
 export const eventDelegations = () => {
     /*** Event delegation applied here. This concept binds all the event listener to the target element even when dynamically created. */
     // search
-    $(document).on('search', '#search-input', () =>  $(".cards-con li").fadeIn());
+    $(document).on('search', '#search-input', () => $(".cards-con li").fadeIn());
 
     searchKeyBindEvent("#search-input", ".cards-con");
 
@@ -125,7 +128,7 @@ export const eventDelegations = () => {
     $(document).on('click', '.delete-btn', function() {
         var code = $(this).attr('id');
         var action = `delete${camelized}`;
-        $.post("action.php", {code, action}, function(data) {	
+        $.post("action.php", { code, action }, function(data) {
             $('#delete-modal').modal('hide');
             dataList = JSON.parse(data);
             reload();
@@ -157,8 +160,8 @@ export const eventDelegations = () => {
     /*** Footer modal buttons */
     /*** Reset form and hide error messages */
     $(document).on('click', ".close", () => {
-        $(`#${pageName}-form`).trigger('reset');            // reset form
-        $("[class*='error-msg']").addClass('invisible');     // hide error messages
+        $(`#${pageName}-form`).trigger('reset'); // reset form
+        $("[class*='error-msg']").addClass('invisible'); // hide error messages
     });
 
     $(document).on('click', ".view-archive", () => {
@@ -167,12 +170,12 @@ export const eventDelegations = () => {
     });
 
     $("#unarchive-modal").on('show.bs.modal', () => $("#view-arch-modal").modal("hide"));
-    
+
     //archive script
     $(document).on('click', '.archive-btn', function() {
         var code = $(this).attr('id');
         var action = `archive${camelized}`;
-        $.post("action.php", {code, action}, function(data) {	
+        $.post("action.php", { code, action }, function(data) {
             $('#archive-modal').modal('hide');
             console.log(data);
             dataList = JSON.parse(data);
@@ -182,13 +185,13 @@ export const eventDelegations = () => {
     });
 
     $(document).on('click', '.unarchive-btn', function() {
-        $('#view-arch-modal').modal('hide')	;
+        $('#view-arch-modal').modal('hide');
         var code = $(this).attr('id');
         var action = `unarchive${camelized}`;
         console.log('from cardPage');
         console.log(action);
         console.log(code);
-        $.post("action.php", {code, action}, function(data) {	
+        $.post("action.php", { code, action }, function(data) {
             $('#unarchive-modal').modal('hide');
             dataList = JSON.parse(data);
             console.log("datalist:\n", dataList);
