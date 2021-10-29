@@ -49,14 +49,26 @@ function resetSchedTable() {
 function changeSchedTable(firstStrand) {
   resetSchedTable();
   try {
+
+    prepareSchedOptions(firstStrand, 'applied');
+    prepareSchedOptions(firstStrand, 'core');
+    prepareSchedOptions(firstStrand, 'specialized');
+
+    $(".subject-select").select2({
+      theme: "bootstrap-5",
+      width: null,
+    });
     Object.entries(schedule[firstStrand]).forEach(item => {
       let id = item[0];
       $(`[name='${id}']`).val(item[1]).change();
     });
+
+
   } catch (e) {}
 }
 
 function getSubjectsByProgram(list, program) {
+  console.log("get subjects by pr");
   let temp = [];
   list.forEach(element => {
     if (element.program == program) {
@@ -67,6 +79,8 @@ function getSubjectsByProgram(list, program) {
 }
 
 function renderSubOptToHtml(list, type) {
+  console.log("render html /n");
+
   let html = '';
   const semester = [1, 2];
   const grade = [11, 12];
@@ -74,6 +88,7 @@ function renderSubOptToHtml(list, type) {
     html += `<option value='${e.code}'>${e.name}</option>`;
   });
 
+  console.log(html);
   grade.forEach(e => {
     semester.forEach(s => {
       $(`[name='data[${e}][${s}][${type}][]']`).html(html);
@@ -82,6 +97,7 @@ function renderSubOptToHtml(list, type) {
 }
 
 function prepareSchedOptions(firstStrand, type) {
+  console.log("prepare sched options /n");
   // filter subject options by subject type
   let opt = schedOptions[type];
   // filter subject options by program
@@ -92,16 +108,10 @@ function prepareSchedOptions(firstStrand, type) {
 $(function () {
   /** Subject Schedule */
   try {
-    console.log(schedule);
+    console.log("schedule", schedule);
+    console.log("options", schedule);
     let firstStrand = progSelect.val();
-    prepareSchedOptions(firstStrand, 'applied');
-    prepareSchedOptions(firstStrand, 'core');
-    prepareSchedOptions(firstStrand, 'specialized');
-
-    $(".subject-select").select2({
-      theme: "bootstrap-5",
-      width: null,
-    });
+   
   
     if (firstStrand.length > 0) {
       changeSchedTable(firstStrand);
@@ -110,6 +120,7 @@ $(function () {
     $(document).on("change", "#program-select", function () {
       changeSchedTable($(this).val());
     });
+
     $(document).on("submit", "#schedule-form", function (e) {
       e.preventDefault();
       let formData = $(this).serializeArray();

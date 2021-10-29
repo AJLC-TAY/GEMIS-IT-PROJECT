@@ -217,7 +217,7 @@ if ($action === 'edit') {
                 ."<li class='breadcrumb-item'><a href='program.php?prog_code=$prog_code'>$prog_code</a></li>"
                 ."<li class='breadcrumb-item active' aria-current='page'>Edit</li>";
 
-        $title = "<h3>$sub_name</h3><hr><h6>$prog_name</h6>";
+        $title = "<h3>$subject_name</h3><hr><h6>$prog_name</h6>";
 
         $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>
             <label class='col-sm-6'>Program Options</label>

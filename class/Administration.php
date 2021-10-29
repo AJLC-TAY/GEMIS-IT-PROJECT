@@ -1119,8 +1119,6 @@ class Administration extends Dbconfig
         $sy_id = $_SESSION['sy_id'];
         $code = $_GET['sub_code'];
         $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
-        // $queryOne = "SELECT * FROM subject WHERE sub_code='$code'";
-        // $result = mysqli_query($this->db, $queryOne);
         $row = mysqli_fetch_assoc($result);
         $sub_type = $row['sub_type'];
 
@@ -1140,7 +1138,7 @@ class Administration extends Dbconfig
             $subject = $this->setParentPrograms($code, $sub_type, $subject);
         }
 
-        $resultTwo = mysqli_query($this->db, "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='PRE';");
+        $resultTwo = $this->query("SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='PRE';");
         $prereq = [];
         if ($resultTwo) {
             while ($rowTwo = mysqli_fetch_assoc($resultTwo)) {
@@ -1148,7 +1146,7 @@ class Administration extends Dbconfig
             }
         }
 
-        $resultThree = mysqli_query($this->db, "SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='CO';");
+        $resultThree = $this->query("SELECT req_sub_code FROM requisite WHERE sub_code='$code' AND type='CO';");
         $coreq = [];
         if ($resultThree) {
             while ($rowThree = mysqli_fetch_assoc($resultThree)) {
@@ -1418,7 +1416,7 @@ class Administration extends Dbconfig
                     $codes = $_POST['data'][$grd][$sem][$type] ?? [];
                     
                     $result = $this->query("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
-                         AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
+                        AND prog_code = '$prog_code'  AND sy_id = '$sy_id' AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');");
                     // echo ("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
                         //  AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
                     $current = [];
@@ -1440,11 +1438,21 @@ class Administration extends Dbconfig
                     $add = array_diff($codes, $current);
                     echo "add<br>";
                     print_r($add);
+                    echo "end";
                     foreach ($add as $sub_add) {
                         $this->query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$sub_add', '$prog_code', '$grd', '$sem', '$sy_id');");
-                        echo("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$sub_add', '$prog_code', '$grd', '$sem', '$sy_id');");
                         // $this->query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester) VALUES ('$sub_add', '$prog_code', '$grd', '$sem');");
                     }
+
+                    # update
+                    $update = array_intersect($codes, $current);
+                    print_r("update");
+                    print_r($update);
+                    foreach($update as $sub_upd) {
+                        $this->query("UPDATE sharedsubject SET for_grd_level='$grd', sub_semester='$sem' WHERE sub_code='$sub_upd' AND prog_code='$prog_code' AND sy_id = '$sy_id';");
+                    }
+
+
                 }
             }
         }

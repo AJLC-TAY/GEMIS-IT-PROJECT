@@ -10,16 +10,16 @@ $applied = '';
 $specialized = '';
 $prog_opt = '';
 
-// echo json_encode($subjectsData);
-foreach($sub_opt['core'] as $sub_core) {
-    $core .= "<option value='{$sub_core['code']}'>{$sub_core['name']}</option>";
-}
-foreach($sub_opt['applied'] as $sub_app) {
-    $applied .= "<option value='{$sub_app['code']}'>{$sub_app['name']}</option>";
-}
-foreach($sub_opt['specialized'] as $sub_spec) {
-    $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
-}
+// // echo json_encode($subjectsData);
+// foreach($sub_opt['core'] as $sub_core) {
+//     $core .= "<option value='{$sub_core['code']}'>{$sub_core['name']}</option>";
+// }
+// foreach($sub_opt['applied'] as $sub_app) {
+//     $applied .= "<option value='{$sub_app['code']}'>{$sub_app['name']}</option>";
+// }
+// foreach($sub_opt['specialized'] as $sub_spec) {
+//     $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
+// }
 
 foreach($programs as $prog) {
     $prog_opt .= "<option value='{$prog->get_prog_code()}'>{$prog->get_prog_desc()}</option>";
