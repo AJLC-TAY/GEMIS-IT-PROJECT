@@ -25,7 +25,6 @@ trait QueryMethods
     {
         return mysqli_query($this->db, $query);
     }
-
 }
 
 trait School
@@ -41,9 +40,9 @@ trait School
         return $departments;
     }
 
-     /** Returns the list of curriculum. */
-     public function listCurriculum($tbl)
-     {
+    /** Returns the list of curriculum. */
+    public function listCurriculum($tbl)
+    {
         $result = mysqli_query($this->db, "SELECT * FROM $tbl;");
         $curriculumList = array();
 
@@ -64,28 +63,31 @@ trait School
         return $programList;
     }
 
-    public function listSubjects($tbl)
+    public function listSubjects($tbl, $tbl2)
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $subjectList = [];
 
         $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
-        $queryOne = (!isset($_GET['prog_code']))
-            ? "SELECT * FROM $tbl;"
-            : "SELECT * FROM $tbl WHERE sub_code 
-               IN (SELECT sub_code FROM $shared_sub
-               WHERE prog_code='{$_GET['prog_code']}')
-               UNION SELECT * FROM $tbl WHERE sub_type='CORE';";
+        $queryOne = (isset($_GET['prog_code']))
+            ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
+            // ? "SELECT * FROM $tbl WHERE sub_code 
+            //    IN (SELECT sub_code FROM $shared_sub
+            //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
+            //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
+            : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
 
-        $resultOne = mysqli_query($this->db, $queryOne);
+        $resultOne = $this->query($queryOne);
 
         while ($row = mysqli_fetch_assoc($resultOne)) {
             $code = $row['sub_code'];
             $sub_type = $row['sub_type'];
-            $subject =  new Subject($code, $row['sub_name'], $row['for_grd_level'], $row['sub_semester'], $sub_type);
+            $subject =  new Subject($code, $row['sub_name'], $sub_type);
 
             if ($sub_type == 'specialized') {
-                $resultTwo = mysqli_query($this->db,  "SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
+                $resultTwo = $this->query("SELECT prog_code FROM sharedsubject WHERE sub_code='$code';");
                 $rowTwo = mysqli_fetch_row($resultTwo);
                 $subject->set_program($rowTwo[0] ?? "");
             }
@@ -97,15 +99,13 @@ trait School
 
     public function listSubjectsJSON()
     {
-        echo json_encode($this->listSubjects('subject'));
+        echo json_encode($this->listSubjects('subject', 'sharedsubject'));
     }
 
     public function listClass()
     {
         if ($_GET['class'] === 'advisory') {
-
         } else {
-
         }
     }
 
@@ -114,10 +114,10 @@ trait School
         session_start();
         $en_data = ['pending' => 0, 'enrolled' => 0, 'rejected' => 0];
         $sy_id = 9;
-//        $sy_id = $_SESSION['sy_id'];
+        //        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT valid_stud_data AS status, COUNT(*) AS count FROM enrollment WHERE sy_id = '$sy_id' GROUP BY valid_stud_data;");
-        while($row = mysqli_fetch_assoc($result)) {
-            switch($row['status']) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            switch ($row['status']) {
                 case 0:
                     $status = 'pending';
                     break;
@@ -228,8 +228,8 @@ trait UserSharedMethods
         };
 
         // Step 4
-         
-        $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;",[$id], "i");
+
+        $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;", [$id], "i");
         while ($res = mysqli_fetch_row($status)) {
             $stat = $res[0];
         }
@@ -294,7 +294,6 @@ trait UserSharedMethods
             $stat
         );
     }
-
 }
 
 trait FacultySharedMethods
@@ -342,18 +341,18 @@ trait FacultySharedMethods
             $filename = basename($_FILES['image']['name']);
             $fileType = pathinfo($filename, PATHINFO_EXTENSION);
             if (in_array($fileType, $allowTypes)) {
-//                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
+                //                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
                 # Upload image
                 $imgContent = $_FILES['image']['tmp_name'];
-                $filename = time() ."_".uniqid("", true).".$fileType";  // 234236513_12323.png
+                $filename = time() . "_" . uniqid("", true) . ".$fileType";  // 234236513_12323.png
                 $fileDestination = "uploads/faculty/$filename"; // ex. uploads/faculty/234236513_12323.png
                 if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
                     $current_img_path = $_POST["current_image_path"];
                     if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-                        unlink("../".$current_img_path);                                 // delete current image
+                        unlink("../" . $current_img_path);                                 // delete current image
                     }
                 }
-                move_uploaded_file($imgContent, "../".$fileDestination);
+                move_uploaded_file($imgContent, "../" . $fileDestination);
             } else {
                 $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
                 http_response_code(400);
@@ -361,7 +360,7 @@ trait FacultySharedMethods
             }
         }
 
-        switch($user_type) {
+        switch ($user_type) {
             case "AD":
                 [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
                 $params = array_merge($params, [$awardRep, $canEnroll, $editGrades, $department, $cp_no, $fileDestination]);
@@ -373,7 +372,7 @@ trait FacultySharedMethods
                 break;
         }
 
-        if ($action == 'add' AND $user_type === 'AD') {
+        if ($action == 'add' and $user_type === 'AD') {
             $statusMsg = $this->addFaculty($params, $types);
         }
         if ($action == 'edit') {
@@ -477,7 +476,8 @@ trait FacultySharedMethods
      * Returns array of handled classes.
      * @return array|null Array of class detail.
      */
-    public function getAdvisoryClass($sy = null) {
+    public function getAdvisoryClass($sy = null)
+    {
         $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
         $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
         if (is_null($sy)) {
@@ -503,15 +503,16 @@ trait FacultySharedMethods
     public function listSectionOption($teacher_id)
     {
         $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
-            ."LEFT JOIN faculty AS f USING (teacher_id) "
-            ."WHERE teacher_id != '$teacher_id' "
-            ."OR teacher_id IS NULL ORDER BY teacher_id;";
+            . "LEFT JOIN faculty AS f USING (teacher_id) "
+            . "WHERE teacher_id != '$teacher_id' "
+            . "OR teacher_id IS NULL ORDER BY teacher_id;";
         $result = mysqli_query($this->db, $query);
         $section_list = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $teacher_id = $row['teacher_id'];
             $name = $teacher_id ? "T. {$row['last_name']}, {$row['first_name']} {$row['middle_name']} {$row['ext_name']}" : "";
-            $section_list[] = ["section_code" => $row['section_code'],
+            $section_list[] = [
+                "section_code" => $row['section_code'],
                 "section_name" => $row['section_name'],
                 "section_grd"  => $row['grd_level'],
                 "adviser_id"   => $teacher_id,
@@ -566,12 +567,13 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        $query = "SELECT DISTINCT sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
-        FROM subjectclass AS sc 
-        JOIN subject AS s USING (sub_code) 
-        JOIN sharedsubject AS ss USING (sub_code)
-        JOIN section AS se USING (section_code) WHERE sc.teacher_id='$teacher_id';";
-        $result = $this->query($query);
+        $query = "SELECT DISTINCT sc.section_code, s.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name  
+        FROM subjectclass AS sc  
+        JOIN section AS se USING (teacher_id) 
+        JOIN sharedsubject AS ss USING(sy_id) 
+        JOIN subject AS s USING(sub_code)
+        WHERE sc.teacher_id='$teacher_id';";
+        $result = $this->query($query); //hindi ka pa ba inaanto
         $handled_sub_classes = array();
 
         while ($sc_row = mysqli_fetch_assoc($result)) {
@@ -625,9 +627,9 @@ trait FacultySharedMethods
         return $attendance;
     }
 
-    public function changeAttendance() 
+    public function changeAttendance()
     {
-        foreach($_POST['data'] as $id => $value) { // $id = report_id
+        foreach ($_POST['data'] as $id => $value) { // $id = report_id
             $this->prepared_query(
                 "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE attendance_id = ?;",
                 [$value['present'], $value['absent'], $value['tardy'], $id],
@@ -636,20 +638,20 @@ trait FacultySharedMethods
         }
     }
 
-    public function getAttendanceDays() 
+    public function getAttendanceDays()
     {
         $current_month = date("F"); // ex. January
         $sy_id = $_SESSION['sy_id'];
         // $sy_id = 13;
         $result = $this->query("SELECT acad_days_id AS id, month, no_of_days FROM academicdays WHERE sy_id = '$sy_id' ORDER BY acad_days_id;");
         $months = [];
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $mnth = $row[0];
             $mnth_desc = $row[1];
             if ($current_month == $mnth_desc) {
                 $current_month = $mnth;
             }
-            $months[$mnth] = [$mnth_desc, $row[2]]; 
+            $months[$mnth] = [$mnth_desc, $row[2]];
         }
         return ['current' => $current_month, 'months' => $months];
     }
@@ -702,12 +704,12 @@ trait Enrollment
         [$track, $program] = $this->preprocessData($school_info);
         $this->prepared_query(
             "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code) "
-            ."VALUES (NOW(), 0, ?, ?, ?, ?, ?);",  // null for date_first_attended, and section code
+                . "VALUES (NOW(), 0, ?, ?, ?, ?, ?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
                 $school_year,  // should be replaced by the current school year
-                $track, 
+                $track,
                 $_POST['program']
             ],
             "iisss"
@@ -717,13 +719,13 @@ trait Enrollment
         echo 'Adding promotion record...<br>';
         $this->prepared_query(
             "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
-            ."balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $_POST['school-id-no'] ?: NULL,
                 $_POST['school-name'],
                 $_POST['school-address'],
                 $_POST['last-grade-level'],
-                $_POST['last-sy'][0]."-".$_POST['last-sy'][1],
+                $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1],
 
                 $_POST['balik'],
                 $_POST['grade-level'],
@@ -732,7 +734,7 @@ trait Enrollment
                 $student_id
             ],
             // 10 params
-            "issis". "iiiii" 
+            "issis" . "iiiii"
         );
         echo 'Added promotion record...<br>';
         if ($_SESSION['user_type'] != "ST") {
@@ -746,12 +748,12 @@ trait Enrollment
     public function getEnrollees()
     {
         session_start();
-        $limit = $_GET['limit']; 
-        $offset = $_GET['offset']; 
+        $limit = $_GET['limit'];
+        $offset = $_GET['offset'];
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-            ."e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status, e.section_code FROM enrollment AS e "
-            ."JOIN student AS s USING (stud_id) "
-            ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
+            . "e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status, e.section_code FROM enrollment AS e "
+            . "JOIN student AS s USING (stud_id) "
+            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
 
         /**
          * Returns the sort query string in line with the received
@@ -760,7 +762,7 @@ trait Enrollment
          */
         function get_sort_query(): string
         {
-            if(isset($_GET['sort'])) {
+            if (isset($_GET['sort'])) {
                 $sort = $_GET['sort'];
                 switch ($sort) {
                     case 'grade-level':
@@ -780,9 +782,9 @@ trait Enrollment
         }
 
         $search_query = "";
-        if(strlen(trim($_GET['search'])) > 0) {
+        if (strlen(trim($_GET['search'])) > 0) {
             $text = $_GET['search'];
-//            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
+            //            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
             $search_query .= " WHERE (sy.start_year LIKE \"%$text%\"";
             $search_query .= " OR sy.end_year LIKE \"%$text%\"";
             $search_query .= " OR s.last_name LIKE \"%$text%\"";
@@ -809,9 +811,9 @@ trait Enrollment
         if ($_GET['track'] !== '*') {
             $filter_query[] = " e.curr_code ='{$_GET['track']}'";
         }
-//        if ($_GET['strand'] !== '*') {
-//            $query .= " sy.sy_id = \"%{$_GET['strand']}%\" AND";
-//        }
+        //        if ($_GET['strand'] !== '*') {
+        //            $query .= " sy.sy_id = \"%{$_GET['strand']}%\" AND";
+        //        }
         if ($_GET['yearLevel'] !== '*') {
             $filter_query[] = " e.enrolled_in ='{$_GET['yearLevel']}'";
         }
@@ -821,9 +823,9 @@ trait Enrollment
         $filter_qr = implode(" AND ", $filter_query);
 
         if (strlen($search_query) > 0) {
-            $query .= $search_query. (strlen($filter_qr) > 0 ? " AND (".$filter_qr.")" : "");
+            $query .= $search_query . (strlen($filter_qr) > 0 ? " AND (" . $filter_qr . ")" : "");
         } else {
-            $query .= (strlen($filter_qr) > 0 ? " WHERE ".$filter_qr : "");
+            $query .= (strlen($filter_qr) > 0 ? " WHERE " . $filter_qr : "");
         }
 
         $query .= get_sort_query();
@@ -832,15 +834,21 @@ trait Enrollment
 
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
-    //    echo $query;
+        //    echo $query;
         $result = $this->query($query);
         $records = array();
 
         while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
             $records[] = new Enrollee(
-                $row['SY'], $row['LRN'], $row['name'],
-                $row['date_of_enroll'], $row['enrolled_in'],
-                $row['curr_code'], $row['status'], $row['stud_id'], $row['section_code']
+                $row['SY'],
+                $row['LRN'],
+                $row['name'],
+                $row['date_of_enroll'],
+                $row['enrolled_in'],
+                $row['curr_code'],
+                $row['status'],
+                $row['stud_id'],
+                $row['section_code']
             );
         }
         $output = new stdClass();
@@ -850,17 +858,17 @@ trait Enrollment
         echo json_encode($output);
     }
 
-    public function getEnrolled() 
+    public function getEnrolled()
     {
         session_start();
         $sy_id = $_SESSION['sy_id'];
         $enrolled = [];
         $query = "SELECT e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-                ."e.enrolled_in AS grade, e.prog_code AS program, e.section_code AS section FROM enrollment e "
-                ."JOIN student AS s USING (stud_id) "
-                ."JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id';";
+            . "e.enrolled_in AS grade, e.prog_code AS program, e.section_code AS section FROM enrollment e "
+            . "JOIN student AS s USING (stud_id) "
+            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id';";
         $result = $this->query($query);
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $enrolled[] = [
                 'LRN' => $row['LRN'],
                 'name' => $row['name'],
@@ -874,15 +882,15 @@ trait Enrollment
         echo json_encode($enrolled);
     }
 
-    public function getEnrollFilters():array
+    public function getEnrollFilters(): array
     {
         $filter = [];
 
         # Get school year
-//        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear;");
+        //        $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear;");
         $result = $this->query("SELECT sy_id, CONCAT(start_year,' - ', end_year) as sy FROM schoolyear GROUP BY sy;");
         $school_years = [];
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $school_years[$row["0"]] = $row["1"];
         }
         $filter['school_year'] = $school_years;
@@ -891,7 +899,7 @@ trait Enrollment
         # Get tracks
         $result = $this->query("SELECT curr_code, curr_name FROM curriculum;");
         $programs = [];
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $programs[$row["0"]] = $row["1"];
         }
         $filter['tracks'] = $programs;
@@ -899,7 +907,7 @@ trait Enrollment
         # Get strands
         $result = $this->query("SELECT prog_code, description FROM program;");
         $programs = [];
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $programs[$row["0"]] = $row["1"];
         }
         $filter['programs'] = $programs;
@@ -912,7 +920,7 @@ trait Enrollment
         # sections
         $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT section_code, section_name FROM section WHERE sy_id = '{$sy_id}';");
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $filter['section'][$row[0]] = $row["1"];
         }
 
@@ -923,7 +931,7 @@ trait Enrollment
     private function in_multi_array(string $string, array $array): bool
     {
         $bool = false;
-        foreach($array as $id => $value) {
+        foreach ($array as $id => $value) {
             $bool = $string == $id;
         }
         return $bool;
@@ -936,7 +944,7 @@ trait Enrollment
         $data = [];
 
         $track = "";
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $track = $row['curr_code'];
             $program = $row['prog_code'];
             $count =  $row['count'];
@@ -959,10 +967,9 @@ trait Enrollment
             exit;
         }
         return $data;
-
     }
 
-    public function validateImage($file, $file_size):array
+    public function validateImage($file, $file_size): array
     {
         echo "<br>Start validating image ... <br>";
         // default values
@@ -985,7 +992,7 @@ trait Enrollment
 
             if (in_array($file_type, array('jpg', 'png', 'jpeg'))) {
                 echo "<br>Image is valid ... <br>";
-                $img_name = time() ."_".uniqid("", true).".$file_type";
+                $img_name = time() . "_" . uniqid("", true) . ".$file_type";
                 $img_content = $file['tmp_name'];
             } else {
                 $statusInfo['status'] = $status;
@@ -1007,7 +1014,7 @@ trait Enrollment
      */
     public static function preprocessData(array $params): array
     {
-        return array_map(function($e) {
+        return array_map(function ($e) {
             $e = trim($e);
             return  $e ?? NULL;
         }, $params);
@@ -1028,8 +1035,8 @@ trait Enrollment
     //         [$section_code, $sycs],
     //         "si"
     //     );
-    
- 
+
+
     //     return $section_code;
     // }
 
@@ -1053,7 +1060,7 @@ trait Enrollment
 
 
     public function addSection()
-    {   
+    {
         session_start();
         $sy_id = $_SESSION['sy_id'];
         $grade_level = $_POST['grade-level'];
@@ -1067,12 +1074,43 @@ trait Enrollment
             [$section_code, $section_name, $grade_level, $max_no, $count, $adviser, $sy_id],
             "ssiiiii"
         );
-        foreach($_POST['students'] as $stud) {
+        foreach ($_POST['students'] as $stud) {
             $this->query("UPDATE enrollment SET section_code = '$section_code' WHERE stud_id = '$stud' AND sy_id = '$sy_id';");
         }
 
         echo json_encode($section_code);
     }
+
+    //Change adviser
+    //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = '9562371';
+
+
+    //Get advisers as replacement
+    public function getTeachersList()
+    {
+    $id = 26;
+    $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit 
+    while ($adviser = mysqli_fetch_assoc($advisers)) {
+        $name = $adviser['name'];
+            $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
+            
+                if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty 
+                    $list .= "<option value='' selected>$name</option>";
+                } else {
+
+                    $list .= "<option value=''>$name</option>";
+                }
+            }
+            $adv[] =  $list;
+             $list = '';
+    }
+     
+    
+
+    //Change subject teacher
+    //UPDATE `subjectclass` SET `teacher_id` = '0000000022' WHERE `subjectclass`.`sub_class_code` = '123';
+
+    //Get subject teachers as replacement
 
     /**
      *  Officially accept or reject enrollment request. 
@@ -1083,7 +1121,7 @@ trait Enrollment
      *          1.3 Initialize grade
      *          1.4 Initialize attendance
      */
-    public function validateEnrollment ()
+    public function validateEnrollment()
     {
         session_start();
         // $stud_id, $current_sy, $is_valid
@@ -1165,12 +1203,12 @@ trait Enrollment
         # step 1.4
         $attend_data = $this->getAttendanceDays();
         $attend_months = $attend_data['months'];
-        foreach($attend_months as $id => $val) {
+        foreach ($attend_months as $id => $val) {
             $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
         }
     }
 
-    function prepareParentData ($type): array
+    function prepareParentData($type): array
     {
         $parent =  [$_POST["$type-lastname"], $_POST["$type-firstname"], $_POST["$type-middlename"]];
         if ($type === 'f') {
@@ -1216,20 +1254,20 @@ trait Enrollment
         $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
 
         $img_list = [$psa_img, $form_img, $profile_img];
-        foreach($img_list as $i => $image) {
+        foreach ($img_list as $i => $image) {
             // add image to the parameters if valid
             if ($image['status'] == 'valid') {
                 # Upload image
                 $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
                 $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
                 // for editing
-//                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-//                    $current_img_path = $_POST["current_image_path"];
-//                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-//                        unlink("../".$current_img_path);                                 // delete current image
-//                    }
-//                }
-                move_uploaded_file($image['file'], "../".$fileDestination);
+                //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+                //                    $current_img_path = $_POST["current_image_path"];
+                //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+                //                        unlink("../".$current_img_path);                                 // delete current image
+                //                    }
+                //                }
+                move_uploaded_file($image['file'], "../" . $fileDestination);
                 echo "Successfully uploaded image<br>";
                 $params[] = $fileDestination;
             }
@@ -1241,10 +1279,10 @@ trait Enrollment
 
         $this->prepared_query(
             "INSERT INTO student (LRN, last_name, first_name, middle_name, ext_name, "
-            ."birthdate, sex, age, birth_place, indigenous_group, "
-            ."mother_tongue, religion, cp_no, psa_num, belong_to_IPCC, "
-            ."psa_birth_cert, form_137, id_picture, id_no) "
-            ."VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?, ?, ?);",
+                . "birthdate, sex, age, birth_place, indigenous_group, "
+                . "mother_tongue, religion, cp_no, psa_num, belong_to_IPCC, "
+                . "psa_birth_cert, form_137, id_picture, id_no) "
+                . "VALUES (?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,   ?, ?, ?, ?, ?,  ?, ?, ?, ?);",
             $params,
             "sssss" . "ssiss" . "ssssi" . "sssi"
         );
@@ -1297,24 +1335,24 @@ trait Enrollment
                                 AND (prog_code = '$program' OR sub_type = 'core')
                                 GROUP BY s.sub_code");
 
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');");
         }
         # 4. Initialize array of default observed value ids
-        $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;"); 
+        $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");
 
         # 4.a For each value_id, 
         # for each quarter, create an observedvalue.                     
-        while($row = mysqli_fetch_assoc($values)) {
-            foreach([1, 2, 3, 4] as $quarter) {
-                $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii'); 
+        while ($row = mysqli_fetch_assoc($values)) {
+            foreach ([1, 2, 3, 4] as $quarter) {
+                $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?)", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii');
             }
-        }    
+        }
         echo "End initializing grade: $report_id<br>";
         return $report_id;
     }
 
-    public function getEnrollmentCurriculumOptions () 
+    public function getEnrollmentCurriculumOptions()
     {
         // session_start();
         $data = [];
@@ -1330,13 +1368,14 @@ trait Enrollment
 }
 
 
-trait Grade 
+trait Grade
 {
 
-    public function getGrade() {
+    public function getGrade()
+    {
         $stud_id = 120089;
         $sy_id = 15;
-        $grade_report_id = 141; 
+        $grade_report_id = 141;
 
         $result = $this->query("SELECT sub_code, sub_name, first_grading, second_grading, final_grade FROM `classgrade` 
             JOIN subjectclass USING (sub_class_code) 
@@ -1355,27 +1394,39 @@ trait Grade
         return $grades;
     }
 
-    public function getClassGrades(){
+    public function getClassGrades()
+    {
         $teacher_id = $_GET['id'];
-        $sy_id = $_GET['sy_id']; 
+        $sy_id = $_GET['sy_id'];
         $sub_code = $_GET['sub_code'];
         $qtr = 1;
 
 
 
-        $res = $this->query("SELECT DISTINCT stud_id, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
-        FROM student JOIN classgrade USING(stud_id) 
-        JOIN subjectclass USING(sub_code) 
-        JOIN sysub USING (sub_sy_id) JOIN subject 
+        $res = $this->query("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        FROM student 
+        JOIN classgrade USING(stud_id) 
+        JOIN subject USING(sub_code) 
+        JOIN sysub USING(sub_code) 
+        JOIN subjectclass USING(sub_sy_id)
         WHERE teacher_id=$teacher_id 
         AND classgrade.sub_code = '$sub_code' 
-        AND sy_id=$sy_id;" );
-        
+        AND sy_id=$sy_id;");
+
         $class_grades = [];
-        
-        while($grd = mysqli_fetch_assoc($res)) {
-            $first = $qtr == '1' ? '': 'readonly';
-            $second_final = $qtr == '2' ? '': 'readonly';
+
+        while ($grd = mysqli_fetch_assoc($res)) {
+            if ($qtr == '2' || $grd['status'] == 1) {
+                $first = 'readonly';
+            } else if ($grd['status'] == 1) {
+                $second = 'readonly';
+            } else {
+                $first = '';
+                $second = '';
+            }
+
+
+            $second_final = $qtr == '2' ? '' : 'readonly';
             $class_grades[] = [
                 'id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
@@ -1383,13 +1434,12 @@ trait Grade
                 'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
                 'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $second_final value='{$grd['final_grade']}'>"
             ];
-            
         }
 
         echo json_encode($class_grades);
     }
 
-    public function getAwardExcellenceData() 
+    public function getAwardExcellenceData()
     {
         $is_graduating = false;
         if (isset($_GET['graduating']) && in_array(strtolower($_GET['graduating']), array('true', 'false'))) {
@@ -1397,22 +1447,22 @@ trait Grade
         }
         $grd = ($is_graduating === 'true' ? "12" : "11");
         $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
-                ."curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
-                ."WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
-                ."THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
-                ."AND enrolled_in = '$grd' AND e.sy_id = '9' "
-                ."ORDER BY program DESC, general_average DESC;";
+            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
+            . "WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
+            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
+            . "AND enrolled_in = '$grd' AND e.sy_id = '9' "
+            . "ORDER BY program DESC, general_average DESC;";
         $result = $this->query($query);
         $excellence = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'].' Honors')];
+            $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'] . ' Honors')];
         }
 
-        foreach($excellence as $curr => $prog_rec) {
-            foreach($prog_rec as $prog => $prog_list) {
+        foreach ($excellence as $curr => $prog_rec) {
+            foreach ($prog_rec as $prog => $prog_list) {
                 $excellence[$curr][$prog]['size'] = count($prog_list['students']);
             }
-        }    
+        }
 
         return $excellence;
     }
@@ -1444,7 +1494,7 @@ trait Grade
         return $data;
     }
 
-    public function getPerfectAttendance() 
+    public function getPerfectAttendance()
     {
         // $sy_id = $_GET['sy_id'] ?? $_SESSION['sy_id'];
         $sy_id = 9;
@@ -1457,7 +1507,7 @@ trait Grade
                     JOIN academicdays USING (acad_days_id)
                     WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS attend WHERE attend.total_attend = attend.total_days;";
         $result = $this->query($query);
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
         }
         return $data;
@@ -1477,20 +1527,20 @@ trait Grade
                         JOIN section USING (section_code)
                         WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS conduct WHERE conduct.counts >= '$min';";
         $result = $this->query($query);
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $section_code = $row['section_code'];
             $grd = $row['grd'];
             $data[$grd][$section_code]['section_name'] = $row['section_name'];
             $data[$grd][$section_code]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
         }
-        return $data;   
+        return $data;
     }
 
-    public function getSpecificDiscParamters() 
+    public function getSpecificDiscParamters()
     {
         $data = [];
         $result = $this->query("SELECT * FROM specificdiscipline;");
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
         }
         return $data;
@@ -1512,7 +1562,7 @@ trait Grade
         $query .= (isset($_GET['section_code']) ? "AND section_code = '{$_GET['section_code']}';" : ";");
         $result = $this->query($query);
 
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
             $id = $row['stud_id'];
             $data[] = [
                 'id'            => $id,
@@ -1536,8 +1586,3 @@ trait Grade
         return $data;
     }
 }
-
-
-
-    
-

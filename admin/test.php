@@ -48,7 +48,7 @@
 
 include '../class/Administration.php';
 $admin = new Administration();
-$tester = $admin->getSubjectScheduleData('TVL-E');
+// $tester = $admin->getSubjectScheduleData('TVL-E');
 // $data = [];
 // foreach($tester['schedule'] as $prog => $prog_data) {
 //     foreach($prog_data as $grade => $grade_data) {
@@ -61,7 +61,9 @@ $tester = $admin->getSubjectScheduleData('TVL-E');
 //     // ['ABM']['11']['1']['core']
 // }
 
-echo json_encode($tester['schedule']);
+$subject = $admin->getSubject();
+print_r($subject);
+// echo json_encode($tester['schedule']);
 // $res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
 // $sect_code = mysqli_fetch_row($res)[0];
 // print_r($sect_code);

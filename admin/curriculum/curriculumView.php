@@ -139,7 +139,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="prog-form" action="">
+                <form id="prog-form" method="POST" action="action.php">
+                    <input type="hidden" name="action" id="action" value="addProgram" />
+                    <p><small class='text-secondary'>Please complete the following: </small></p>
                     <div class="form-group needs-validation" novalidate>
                         <label for="prog-code">Strand Code</label>
                         <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
@@ -153,7 +155,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             </div>
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary">Add</button>
             </div>
         </div>
     </div>

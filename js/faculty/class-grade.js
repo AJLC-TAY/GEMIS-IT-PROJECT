@@ -152,7 +152,7 @@ $(function() {
                                 'mark' : recordInfo[3],
                                 'stat': stat,
                             'action' : 'gradeValues'};
-                            console.log(values);
+                            // console.log(values);
                             $.post("action.php", values, function(data) {	
                                 // console.log(grades);
                                 console.log(data)                                
@@ -160,7 +160,8 @@ $(function() {
             
                 
             }); // en
-
+            $('.grading-confirmation').modal('hide');
+            location.reload(true);
         }
         
         // $(".grade").addClass('hidden');

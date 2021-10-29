@@ -48,21 +48,71 @@ function resetSchedTable() {
 
 function changeSchedTable(firstStrand) {
   resetSchedTable();
-  Object.entries(schedule[firstStrand]).forEach(item => {
-    let id = item[0];
-    $(`[name='${id}']`).val(item[1]).change();
+  try {
+
+    prepareSchedOptions(firstStrand, 'applied');
+    prepareSchedOptions(firstStrand, 'core');
+    prepareSchedOptions(firstStrand, 'specialized');
+
+    $(".subject-select").select2({
+      theme: "bootstrap-5",
+      width: null,
+    });
+    Object.entries(schedule[firstStrand]).forEach(item => {
+      let id = item[0];
+      $(`[name='${id}']`).val(item[1]).change();
+    });
+
+
+  } catch (e) {}
+}
+
+function getSubjectsByProgram(list, program) {
+  console.log("get subjects by pr");
+  let temp = [];
+  list.forEach(element => {
+    if (element.program == program) {
+      temp.push(element);
+    }
   });
+  return temp;
+}
+
+function renderSubOptToHtml(list, type) {
+  console.log("render html /n");
+
+  let html = '';
+  const semester = [1, 2];
+  const grade = [11, 12];
+  list.forEach(e => {
+    html += `<option value='${e.code}'>${e.name}</option>`;
+  });
+
+  console.log(html);
+  grade.forEach(e => {
+    semester.forEach(s => {
+      $(`[name='data[${e}][${s}][${type}][]']`).html(html);
+    });
+  });
+}
+
+function prepareSchedOptions(firstStrand, type) {
+  console.log("prepare sched options /n");
+  // filter subject options by subject type
+  let opt = schedOptions[type];
+  // filter subject options by program
+  let finalOpt = getSubjectsByProgram(opt, firstStrand);
+  renderSubOptToHtml(finalOpt, type);
 }
 
 $(function () {
   /** Subject Schedule */
   try {
-    $(".subject-select").select2({
-      theme: "bootstrap-5",
-      width: null,
-    });
-  
+    console.log("schedule", schedule);
+    console.log("options", schedule);
     let firstStrand = progSelect.val();
+   
+  
     if (firstStrand.length > 0) {
       changeSchedTable(firstStrand);
     }
@@ -70,6 +120,7 @@ $(function () {
     $(document).on("change", "#program-select", function () {
       changeSchedTable($(this).val());
     });
+
     $(document).on("submit", "#schedule-form", function (e) {
       e.preventDefault();
       let formData = $(this).serializeArray();
@@ -169,19 +220,19 @@ $(function () {
         $('#app-spec-options').addClass('d-none');
         $('#sub-code').attr('autofocus');
         addAgain = false;
-        // hideSpinner();ajlc9029
+        // hideSpinner();
 
         return showToast('success', 'Subject successfully added!');
       }
       data = JSON.parse(data);
-      // window.location.href = `subject.php?${data.redirect}`;
+      window.location.href = `subject.php?${data.redirect}`;
     });
   });
 
   $(document).on('click', '#edit-btn', function (e) {
     let editBtn = $('#edit-btn');
     editBtn.addClass('d-none');
-    let cancelBtn = $('.cancel-btn');
+    let cancelBtn = $('.cancel-btn');7
     let link = editBtn.attr('data-link');
     cancelBtn.attr('href', link);
     cancelBtn.removeClass('disabled');

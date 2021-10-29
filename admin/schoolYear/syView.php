@@ -70,14 +70,14 @@ $sy_info = $admin->getSYInfo();
                 <hr class='mt-1'>
                 <div class='row'>
                     <?php
-                        foreach($sy_info['curriculum'] as $curr => $curriculum ) {
-                            echo "<div class='fw-bold ms-3'>{$curriculum['desc']}</div>";
-                            echo "<ul class='ms-4'>";
-                                foreach($curriculum['program'] AS $curr_prog_id => $curr_prog_desc) {
-                                    echo "<li><a href='program.php?prog_code=$curr_prog_id' target='_blank' class='btn link'>$curr_prog_desc</a></li>";
-                                }
-                            echo "</ul>";
-                        }
+                    foreach($sy_info['curriculum'] as $curr => $curriculum ) {
+                        echo "<div class='fw-bold ms-3'>{$curriculum['desc']}</div>";
+                        echo "<ul class='ms-4'>";
+                            foreach($curriculum['program'] AS $curr_prog_id => $curr_prog_desc) {
+                                echo "<li><a href='program.php?prog_code=$curr_prog_id' target='_blank' class='btn link'>$curr_prog_desc</a></li>";
+                            }
+                        echo "</ul>";
+                    }
                     ?>
             </div>
         </section>

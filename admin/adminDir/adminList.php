@@ -15,9 +15,6 @@ $user = $admin->getAdministrator($user_id);
      </nav>
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h3 class="fw-bold">Administrator</h3>
-<!--         <span>-->
-<!--            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'>Add admin</a>-->
-<!--         </span>-->
      </div>
  </header>
  <!-- HEADER END -->
@@ -37,16 +34,18 @@ $user = $admin->getAdministrator($user_id);
             <div class="col-md-6">
                 <h6><b>GENERAL INFORMATION</b></h6>
                 <ul class='list-group ms-3'>
-                    <li class='list-group-item'><b>ID:</b> <?php echo $user->admin_id; ?><br>
-                    <li class='list-group-item'><b>Name: </b> <?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
-                    <li class='list-group-item'><b>Age: </b> <?php echo $user->age; ?><br>
-                    <li class='list-group-item'><b>Sex: </b> <?php echo $user->sex; ?>
+                    <li class='list-group-item'><b>UID:</b><?php echo $user->admin_id; ?><br>
+                    <li class='list-group-item'><b>Name:</b><?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
+                    <li class='list-group-item'><b>Age:</b><?php echo $user->age; ?><br>
+                    <li class='list-group-item'><b>Sex:</b><?php echo $user->sex; ?>
+                </ul>
             </div>
             <div class="col-md-6">
                 <h6 class="fw-bold">CONTACT INFORMATION</h6>
                 <ul class='list-group ms-3'>
                     <li class='list-group-item'><b>Cellphone No: </b><?php echo $user->cp_no; ?><br>
                     <li class='list-group-item'><b>Email: </b><?php echo $user->email; ?>
+                </ul>
             </div>
         </div>
     </div>

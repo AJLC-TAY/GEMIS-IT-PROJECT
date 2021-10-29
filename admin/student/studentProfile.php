@@ -113,6 +113,7 @@ switch ($user_type) {
                     <form id="deactivate-form" method="POST" action="action.php">
                         <input type="hidden" name="user_type" value="ST" />
                         <input type="hidden" name="action" value="deactivate" />
+                        <input type="hidden" name="user_id" value="<?php echo $stud_id; ?>">
                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                         <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
                     </form>

@@ -10,15 +10,16 @@ $applied = '';
 $specialized = '';
 $prog_opt = '';
 
-foreach($sub_opt['core'] as $sub_core) {
-    $core .= "<option value='{$sub_core['code']}'>{$sub_core['name']}</option>";
-}
-foreach($sub_opt['applied'] as $sub_app) {
-    $applied .= "<option value='{$sub_app['code']}'>{$sub_app['name']}</option>";
-}
-foreach($sub_opt['specialized'] as $sub_spec) {
-    $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
-}
+// // echo json_encode($subjectsData);
+// foreach($sub_opt['core'] as $sub_core) {
+//     $core .= "<option value='{$sub_core['code']}'>{$sub_core['name']}</option>";
+// }
+// foreach($sub_opt['applied'] as $sub_app) {
+//     $applied .= "<option value='{$sub_app['code']}'>{$sub_app['name']}</option>";
+// }
+// foreach($sub_opt['specialized'] as $sub_spec) {
+//     $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
+// }
 
 foreach($programs as $prog) {
     $prog_opt .= "<option value='{$prog->get_prog_code()}'>{$prog->get_prog_desc()}</option>";
@@ -73,12 +74,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][core][]" multiple="multiple" disabled>
-                                <?php echo $core;  ?>
+                                <?php // echo $core;  ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][core][]" multiple="multiple" disabled>
-                                <?php echo $core; ?>
+                                <?php // echo $core; ?>
                             </select>
                     </td>
                     </tr>
@@ -88,12 +89,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][applied][]" multiple="multiple" disabled>
-                                <?php echo $applied; ?>
+                                <?php // echo $applied; ?>
                             </select>
                     </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][applied][]" multiple="multiple" disabled>
-                                <?php echo $applied; ?>
+                                <?php // echo $applied; ?>
                             </select>
                     </td>
                     </tr>
@@ -103,12 +104,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][specialized][]" multiple="multiple" disabled>
-                                <?php echo $specialized; ?>
+                                <?php // echo $specialized; ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][specialized][]" multiple="multiple" disabled>
-                                <?php echo $specialized; ?>
+                                <?php //  echo $specialized; ?>
                             </select>
                     </td>
                     </tr>
@@ -137,12 +138,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][core][]" multiple="multiple" disabled>
-                                <?php echo $core; ?>
+                                <?php // echo $core; ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][core][]" multiple="multiple" disabled>
-                                <?php echo $core; ?>
+                                <?php // echo $core; ?>
                             </select>
                     </td>
                     </tr>
@@ -152,12 +153,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][applied][]" multiple="multiple" disabled>
-                                <?php echo $applied; ?>
+                                <?php //  echo $applied; ?>
                             </select>
                     </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][applied][]" multiple="multiple" disabled>
-                                <?php echo $applied; ?>
+                                <?php // echo $applied; ?>
                             </select>
                     </td>
                     </tr>
@@ -167,12 +168,12 @@ foreach($programs as $prog) {
                         </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][specialized][]" multiple="multiple" disabled>
-                                <?php echo $specialized; ?>
+                                <?php // echo $specialized; ?>
                             </select>
                     </td>
                     <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][specialized][]" multiple="multiple" disabled>
-                                <?php echo $specialized; ?>
+                                <?php // echo $specialized; ?>
                                 
                             </select>
                     </td>
@@ -183,5 +184,6 @@ foreach($programs as $prog) {
     </form>
 </section>
 <script>
+    let schedOptions = <?php echo json_encode($sub_opt); ?>;
     let schedule = <?php echo json_encode($subjectsData['schedule']); ?>;
 </script>
