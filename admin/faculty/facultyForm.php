@@ -1,8 +1,7 @@
 <?php
-session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
-$subjects = $admin->listSubjects("subject");
+$subjects = $admin->listSubjects("subject", "sharedsubject");
 $departments = $admin->listDepartments();
 $action = $_GET['action'];
 
@@ -34,7 +33,6 @@ if ($action == 'add') {
         $department_option .= "<option value='$dep'>";
     }
     $department = "";
-    $edit_grades_checked = "";
     $enrollment_checked = "";
     $award_report_checked = "";
     $image = $PROFILE_PATH;
@@ -61,7 +59,6 @@ if ($action == 'add') {
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
     }
-    $edit_grades_checked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
     $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
     $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
     $id_photo = $faculty->get_id_photo();
@@ -104,10 +101,6 @@ switch ($user_type) {
         ."</div>";
         $access_options = " <div class='form-group col-md-4'>"
             ."<label for='facultyAccess' class='mb-2'>Faculty Access</label>"
-            ."<div class='form-check'>"
-                ."<input class='form-check-input' name='access[]' type='checkbox' value='editGrades' $edit_grades_checked>"
-                ."<label class='form-check-label'>Edit Grades</label>"
-            ."</div>"
             ."<div class='form-check'>"
                 ."<input id='enrollment-in' class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollment_checked>"
                 ."<label for='enrollment-in' class='form-check-label'>Enrollment</label>"
@@ -208,23 +201,11 @@ switch ($user_type) {
         </div>
         <?php echo $dept_input; ?>
     </div>
-    <div class='form-row row'>
-        <div class='form-group col-md-4 d-flex flex-column'>
-            <label for='photo' class='form-label'>Faculty ID Photo</label>
-            <div class="image-preview-con">
-                <input type="hidden" name="current_image_path" value="<?php echo $image; ?>">
-                <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100 shadow border'' />
-                <div class=' edit-img-con text-center'>
-                <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
-            </div>
-        </div>
-        <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
-    </div>
     <?php echo $access_options; ?>
     <br>
     <!-- SUBJECT CLASS -->
     <?php if ($user_type == 'AD') { ?>
-    <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3'>
+    <div class='row card bg-light w-100 h-auto text-start mx-auto '>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>SUBJECT CLASS</h5>
             <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#sc-class-con' type='button' value='Assign'>-->
@@ -259,7 +240,7 @@ switch ($user_type) {
     </div>
     <!-- SUBJECT CLASS END -->
     <!-- ASSIGN SUBJECTS -->
-    <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3 mt-4'>
+    <div class='row card bg-light w-100 h-auto text-start mx-auto mt-4'>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
             <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>-->

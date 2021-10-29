@@ -24,14 +24,14 @@ include_once("../inc/head.html"); ?>
                         <div class='d-flex justify-content-center'>
                             <div class="card h-auto bg-light mx-auto mt-5 p-5 text-center " style='width: 65%;'>
                                     <h1><i class="bi bi-check-circle"></i></h1>
-                                    <h4>You have successfully submitted an enrollment request for PCNHS Senior Highschool SY <? echo $_SESSION['school_year']; ?></h4>
+                                    <h4>You have successfully submitted an enrollment request for PCNHS Senior Highschool SY <?php echo $_SESSION['school_year']; ?></h4>
                                     <p>Please submit the physical copy of the following documents to the school to be fully enrolled.</h6>    
                                     <ol class="list-group list-group-numbered">
                                         <li class="list-group-item">PSA Birth Certificate</li>
                                         <li class="list-group-item">Form 137</li>
                                     </ol>
                                 <div class='d-flex justify-content-center mt-2'>
-                                    <a href='login.php' class='btn btn-outline-primary me-2 mt-3' data-bs-toggle="modal"><i class="bi bi-arrow-left-circle me-2"></i>Back</a>
+                                    <a href='../login.php' class='btn btn-outline-primary me-2 mt-3' data-bs-toggle="modal"><i class="bi bi-arrow-left-circle me-2"></i>Back</a>
                                 </div>
                             </div>
                         </div>

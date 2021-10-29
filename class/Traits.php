@@ -31,7 +31,7 @@ trait School
 {
     public function listDepartments()
     {
-        $result = mysqli_query($this->db, "SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
+        $result = $this->query("SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
         $departments = [];
         while ($row = mysqli_fetch_row($result)) {
             $departments[] = $row[0];
@@ -65,7 +65,6 @@ trait School
 
     public function listSubjects($tbl, $tbl2)
     {
-        session_start();
         $sy_id = $_SESSION['sy_id'];
         $subjectList = [];
 
@@ -331,44 +330,16 @@ trait FacultySharedMethods
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
         ];
         $types = "sssssdss";
-        // Profile image
-        $fileDestination = NULL;
-        $fileSize = $_FILES['image']['size'];
-        if ($fileSize > 0) {
-            if ($fileSize > 5242880) { //  file is greater than 5MB
-                $statusMsg["imageSize"] = "Sorry, image size should not be greater than 5 MB";
-            }
-            $filename = basename($_FILES['image']['name']);
-            $fileType = pathinfo($filename, PATHINFO_EXTENSION);
-            if (in_array($fileType, $allowTypes)) {
-                //                $imgContent = file_get_contents($_FILES['image']['tmp_name']);
-                # Upload image
-                $imgContent = $_FILES['image']['tmp_name'];
-                $filename = time() . "_" . uniqid("", true) . ".$fileType";  // 234236513_12323.png
-                $fileDestination = "uploads/faculty/$filename"; // ex. uploads/faculty/234236513_12323.png
-                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-                    $current_img_path = $_POST["current_image_path"];
-                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-                        unlink("../" . $current_img_path);                                 // delete current image
-                    }
-                }
-                move_uploaded_file($imgContent, "../" . $fileDestination);
-            } else {
-                $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
-                http_response_code(400);
-                die(json_encode($statusMsg));
-            }
-        }
-
+      
         switch ($user_type) {
             case "AD":
                 [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-                $params = array_merge($params, [$awardRep, $canEnroll, $editGrades, $department, $cp_no, $fileDestination]);
-                $types .= "iiisss"; // data types of the current parameters
+                $params = array_merge($params, [$awardRep, $canEnroll, $editGrades, $department, $cp_no]);
+                $types .= "iiiss"; // data types of the current parameters
                 break;
             case "FA":
-                $params = array_merge($params + [$cp_no, $fileDestination]);
-                $types .= "ss";
+                $params = array_merge($params + [$cp_no]);
+                $types .= "s";
                 break;
         }
 
@@ -383,32 +354,23 @@ trait FacultySharedMethods
     }
     /**
      * Implementation of updating Faculty
-     * 1.   Remove image content from parameters and types if null
-     * 2.   Add teacher id to the parameter and types before executing the query.
+     * 1.   Add teacher id to the parameter and types before executing the query.
      *      End if user is faculty.
-     * 3.   Update every subject handled if exist
-     * 4.   Update every subject classes handled
+     * 2.   Update every subject handled if exist
+     * 3.   Update every subject classes handled
      *  */
     private function editFaculty(array $params, String $types, String $user_type)
     {
-        // Step 1
-        $imgContent = end($params);                             // Image content is the last element of the parameter array
-        $imgQuery = ", id_picture=?";
-        if (is_null($imgContent)) {                                    // If image content is null
-            $imgQuery = "";
-            array_pop($params);                                 // remove image in params
-            $types = substr_replace($types, "", -1);      // remove last type
-        }
         // Step 2
         $params[] = $id = $_POST['teacher_id'];
         $types .= "i";
 
         $query = "UPDATE faculty SET last_name=?, first_name=?, middle_name=?, ext_name=?, birthdate=?, age=?, sex=?, email=?,";
         if ($user_type === 'FA') {
-            $query .= " cp_no=?$imgQuery WHERE teacher_id=?;";
+            $query .= " cp_no=? WHERE teacher_id=?;";
             $this->prepared_query($query, $params, $types);
         } else if ($user_type === 'AD') {
-            $query .= " award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=?$imgQuery WHERE teacher_id=?;";
+            $query .= " award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=? WHERE teacher_id=?;";
             $this->prepared_query($query, $params, $types);
             // Step 3
             $this->updateFacultySubjects($id);
