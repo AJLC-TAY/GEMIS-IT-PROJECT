@@ -35,7 +35,7 @@
 <!-- HEADER END -->
 <!-- SIDE BAR START -->
 <aside>
-    <div id="sidebar" class="nav-collapse ">
+    <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
             <h5 class="text-center">SY <?php echo $school_year ?></h5>
