@@ -144,7 +144,7 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        session_start();
+        //session_start();
         $result = $this->query("SELECT admin_id, admin_user_no, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
