@@ -41,8 +41,13 @@ include_once("../inc/head.html");
                                             <div class="col-md-6">
                                                 <div class="container">
                                                     <h6 class=" fw-bold d-flex justify-content-center mb-2">SUBJECTS</h6>
-                                                    <div class="row border">
-                                                        <label for="" class="col-form-label">EAPP</label>
+                                                    <div class="row list-group">
+                                                        <ul>
+                                                            <li> <label for="" class="col-form-label list-group-item">EAPP</label></li><br>
+                                                            <li><label for="" class="col-form-label list-group-item">GEN MATH</label></li>
+                                                        </ul>
+                                                       
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -51,6 +56,9 @@ include_once("../inc/head.html");
                                                 <div class="container">
                                                     <h6 class="fw-bold d-flex justify-content-center mb-2">FACULTY</h6>
                                                     <div class="row">
+                                                        <select name="month" class="form-select form-select">
+                                                            <option value=""></option>
+                                                        </select>
                                                         <select name="month" class="form-select">
                                                             <option value=""></option>
                                                         </select>
