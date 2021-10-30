@@ -7,66 +7,65 @@ include_once("../inc/head.html");
 </head>
 
 <body>
-    <!-- SPINNER -->
-    <!--    <div id="main-spinner-con" class="spinner-con">
+    <!-- SPINNER 
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
-    <!-- SPINNER END -->
+    </div>
+     SPINNER END -->
     <section id="container">
         <?php include_once('../inc/admin/sidebar.php'); ?>
-        <!--MAIN CONTENT -->
+        <!-- MAIN CONTENT START -->
         <section id="main-content">
-            <section class="wrapper ps-4">
+            <section class="wrapper">
                 <div class="row">
-                    <div class="row ps-3">
-                        <header>
-                            <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item active">Assign Faculty to Subject</a></li>
-                                </ol>
-                            </nav>
-                            <div class="d-flex justify-content-between mb-3">
-                                <h3 class="fw-bold">Assign Faculty to Subject</h3>
-                            </div>
-                        </header>
-                        <div class="card body w-100 h-auto p-4 ms-3">
-                            <div class="form-group row d-flex justify-content-center">
-                                <div class="col-md-5">
-                                    <div class="container">
-                                        <label class="col-form-label col-auto fw-bold d-flex justify-content-center">SUBJECTS</label>
-                                        <div class="row border overflow-auto">
-                                            <ul id="" class="list-group p-0">
-
-                                                <li class="list-group-item">Cras justo odio</li>
-                                                <li class="list-group-item">Dapibus ac facilisis in</li>
-                                                <li class="list-group-item">Morbi leo risus</li>
-                                                <li class="list-group-item">Porta ac consectetur ac</li>
-                                                <li class="list-group-item">Vestibulum at eros</li>
-
-
-                                            </ul>
-                                        </div>
-                                    </div>
+                    <div class="col-lg-12">
+                        <div class="row mt ps-3">
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active">Assign Faculty</a></li>
+                                    </ol>
+                                </nav>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h3 class="fw-bold">Assign Faculty to Subjects</h3>
                                 </div>
+                            </header>
+                            <div class="container w-75">
+                                <div class="card">
+                                    <form>
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <div class="container">
+                                                    <h6 class=" fw-bold d-flex justify-content-center mb-2">SUBJECTS</h6>
+                                                    <div class="row border">
+                                                        <label for="" class="col-form-label">EAPP</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-5">
-                                    <div class="container">
-                                        <label class="col-form-label col-auto fw-bold d-flex justify-content-center">FACULTY</label>
-                                        <div class="row border overflow-auto">
-                                            <ul id="" class="list-group p-0">
-
-                                            </ul>
+                                            <div class="col-md-6">
+                                                <div class="container">
+                                                    <h6 class="fw-bold d-flex justify-content-center mb-2">FACULTY</h6>
+                                                    <div class="row">
+                                                        <select name="month" class="form-select">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </section>
+
             <!-- FOOTER -->
             <?php include_once("../inc/footer.html"); ?>
             <!-- FOOTER END -->
