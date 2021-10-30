@@ -1767,16 +1767,10 @@ class Administration extends Dbconfig
 
     public function listSubClassFacultyOptions()
     {
-<<<<<<< HEAD
         $condition = '';
         if (isset($_POST['exclude'])) {
             $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
         }
-=======
-        //if (isset($_POST['exclude'])) {
-            // $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
-        //}
->>>>>>> 360ac9be23ccf29f16ce43f57ffc41e3b2e5f781
         $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
                                     middle_name, ' ',COALESCE(ext_name, '')) AS name
                                     FROM faculty WHERE teacher_id <> {$_SESSION['id']};");
