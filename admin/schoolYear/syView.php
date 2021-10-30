@@ -38,7 +38,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                 </div>
                 <hr class='mt-2'>
                 <div class='row d-flex justify-content-center'>
-                    <div class="inner container">
+                    <div class="inner container">unch
                         <?php
                         foreach($sy_info['month'] as $month => $days) {
                             echo "<div class='row ps-4'>"

@@ -144,7 +144,7 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        session_start();
+        //session_start();
         $result = $this->query("SELECT admin_id, admin_user_no, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
@@ -1767,13 +1767,19 @@ class Administration extends Dbconfig
 
     public function listSubClassFacultyOptions()
     {
+<<<<<<< HEAD
         $condition = '';
         if (isset($_POST['exclude'])) {
             $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
         }
+=======
+        //if (isset($_POST['exclude'])) {
+            // $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
+        //}
+>>>>>>> 360ac9be23ccf29f16ce43f57ffc41e3b2e5f781
         $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
                                     middle_name, ' ',COALESCE(ext_name, '')) AS name
-                                    FROM faculty " . $condition ?? '' . ";");
+                                    FROM faculty WHERE teacher_id <> {$_SESSION['id']};");
         $faculty_list = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $faculty_list[] = [

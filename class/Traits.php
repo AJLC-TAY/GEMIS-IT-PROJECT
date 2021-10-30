@@ -1049,9 +1049,24 @@ trait Enrollment
     }
 
     //Change adviser
-    //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = '9562371';
+    public function changeAdviser()
+    {
+        $teacher_id = $_POST['teacher_id'];
+        $section_code = $_POST['code'];
 
+        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;",[$teacher_id, $section_code], "is");
+        //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = $section_code;
+    }
+   
 
+    //Change subject teacher
+    public function changeSubjectTeacher() {
+        $teacher_id = $_POST['teacher_id'];
+        $sub_class_code = $_POST['sub_class_code'];
+
+        $this->prepared_query("UPDATE `subjectclass` SET `teacher_id` = ? WHERE `subjectclass`.`sub_class_code` = ?;", [$teacher_id, $sub_class_code], "ii");
+    }
+    
     //Get advisers as replacement
     public function getTeachersList()
     {
@@ -1074,8 +1089,7 @@ trait Enrollment
      
     
 
-    //Change subject teacher
-    //UPDATE `subjectclass` SET `teacher_id` = '0000000022' WHERE `subjectclass`.`sub_class_code` = '123';
+
 
     //Get subject teachers as replacement
 
