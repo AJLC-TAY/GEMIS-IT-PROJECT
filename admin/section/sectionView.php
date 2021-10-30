@@ -53,7 +53,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <div class="d-flex justify-content-between">
             <h5>Information</h5>
             <div class="btn-con my-a">
-                <button id='edit-btn' data-current-adviser='<?php echo $sect_adviser;?>' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                <button id='edit-btn' data-current-adviser='<?php echo $sect_adviser['teacher_id'];?>' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class='edit-opt <?php echo $display; ?>'>
                     <a href='section.php?sec_code=<?php echo $sect_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
                     <input type="submit" form="section-edit-form" class="btn btn-success btn-sm" value="Save">
@@ -96,6 +96,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                     </div>
                     <div class="col-md-7">
                         <div class="container">
+                            <div class="row align-content-center">
+                                <label for="sect-name" class="col-form-label col-sm-4 text-secondary fw-bold">Section Name</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" name="sect-name" id="sect-name" value="<?php echo $sect_name; ?>" <?php echo $state; ?> />
+                                </div>
+                            </div>
                             <div class="row align-content-center">
                                 <label for="sect-max-no" class="col-form-label col-sm-4 text-secondary fw-bold">Max Student No.</label>
                                 <div class="col-sm-8">
@@ -155,7 +161,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <span class="my-auto">
             <h6 class='m-0 fw-bold'>Student List</h6>
         </span>
-        <span><button class="btn btn-success btn-sm"><i class="bi bi-plus me-2"></i>Add Student</button></span>
+        <span><button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#add-student-modal"><i class="bi bi-plus me-2"></i>Add Student</button></span>
     </div>
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">
@@ -172,7 +178,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
-                    <th scope='col' data-width="500" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                    <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
@@ -233,7 +239,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="modal fade" id="transfer-modal" tabindex="-1" aria-labelledby="modal transferStudent" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <form id="transfer-form" method="POST">
-            <input type="hidden" name="action" vaue="transferStudent">
+            <input type="hidden" name="action" value="transferStudent">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -278,9 +284,104 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                     <div class="col-lg-8">
                                         <select id="grade-level" class='form-select' name='grade-level'>
                                             <?php
-                                            $grade_level_list = ["11" => "11", "12" => "12"];
-                                            foreach ($grade_level_list as $id => $value) {
-                                                echo "<option value='$id'>$value</option>";
+                                            $grade_level_list = ["11", "12"];
+                                            foreach ($grade_level_list as $value) {
+                                                echo "<option value='$value'>$value</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <div class="form-row row">
+                                    <label for="max-no" class="col-lg-4 col-form-label">Max student no.</label>
+                                    <div class="col-lg-8">
+                                        <input value="50" type="text" name="max-no" class="form-control number" id="max-no" placeholder="Enter maximum student no.">
+                                    </div>
+                                </div>
+                                <div class="form-row row">
+                                    <label for="section-name" class="col-lg-4 col-form-label">Class Adviser (Optional)</label>
+                                    <div class="col-lg-8">
+                                        <input class='form-control' name='adviser' list='adviser-list' placeholder='Type to search ...'>
+                                        <datalist id='adviser-list'>
+                                            <?php
+                                            $faculty_list = $admin->listFaculty();
+                                            foreach ($faculty_list as $faculty) {
+                                                $teacher_id = $faculty->get_teacher_id();
+                                                $teacher_name = $faculty->get_name();
+                                                echo "<option value='$teacher_id'>$teacher_id - $teacher_name</option>";
+                                            }
+                                            ?>
+                                        </datalist>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="action" id="action" value="addSection" />
+                    <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Close</button>
+                    <button class="submit-another btn btn-secondary">Submit and add again</button>
+                    <input type="submit" form="section-form" class="submit btn btn-success" value="Submit" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="add-student-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <form id="transfer-form" method="POST">
+            <input type="hidden" name="action" value="transferStudent">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Add Student</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><small class='text-secondary'>Select section/s where students will be transferred. </small></p>
+                    <form id='section-form' method="POST">
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <div class="form-row row d-none">
+                                    <label for="sect-code" class="col-lg-5 col-form-label">Code</label>
+                                    <div class="col-lg-7">
+                                        <input value="" type="text" name="code" class="form-control" id="sect-code" placeholder="Enter unique code">
+                                    </div>
+                                </div>
+                                <div class="form-row row d-none">
+                                    <label for="program" class="col-lg-5 col-form-label">Program/Strand</label>
+                                    <div class="col-lg-7">
+                                        <select id="program" class='form-select' name='program'>
+                                            <option value="" selected>-- Select --</option>
+                                            <?php
+                                            foreach ($program_list as $program) {
+                                                $prog_code = $program->get_prog_code();
+                                                $prog_name = $program->get_prog_desc();
+                                                echo "<option value='$prog_code'>$prog_name</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row row">
+                                    <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
+                                    <div class="col-lg-8">
+                                        <textarea id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-row row">
+                                    <label for="grade-level" class="col-lg-4 col-form-label">Grade Level</label>
+                                    <div class="col-lg-8">
+                                        <select id="grade-level" class='form-select' name='grade-level'>
+                                            <?php
+                                            $grade_level_list = ["11", "12"];
+                                            foreach ($grade_level_list as $value) {
+                                                echo "<option value='$value'>$value</option>";
                                             }
                                             ?>
                                         </select>

@@ -1,8 +1,6 @@
 <?php
 # session handling here
-// session_start();
 const STYLE_DISPLAY_NONE = "style='display: none'";
-//$_SESSION['user_type'] = 'FA';
 # Determine what class to import basing on the user type
 
 $user_type = $_SESSION['user_type'];
@@ -18,11 +16,11 @@ switch ($user_type) {
         $edit_link = "";
 
         # department
-        $dept_edit_btn = "<span class='badge'><button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>";
+        $dept_edit_btn = "<button id='dept-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button>";
         $dept_options = "";
 
         # role
-        $role_edit_btn = "<span class='badge'><button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span>";
+        $role_edit_btn = "<button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button>";
         $role_options = "<div id='role-decide-con' class='my-auto d-none'>"
             . "<button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>"
             . "<input type='submit' form='role-form' id='role-save-btn' class='btn btn-sm btn-success' value='Save'>"
@@ -65,10 +63,7 @@ $advisory_class = $school->getAdvisoryClass();
 $advisory_code = is_null($advisory_class) ? "" : $advisory_class["section_code"];
 $advisory_get_variable = $advisory_code == "" ? "" : "&currentAdvisory=$advisory_code";
 $current_teacher_id = $school_user->get_teacher_id();
-const PROFILE_PATH = "../assets/profile.png";
 
-$id_photo = $school_user->get_id_photo();
-$image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../" . $id_photo : PROFILE_PATH) : PROFILE_PATH;
 $display_style = STYLE_DISPLAY_NONE;
 $section_list = $school->listSectionOption($current_teacher_id);
 $no_match_display = count($section_list) == 0 ? "" : "d-none";
@@ -80,7 +75,9 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
     . $advisory_class['section_name'] . "</a>$chg_adv_btn</div>"
     : "No advisory class set";
 
-
+$birthdate = $school_user->get_birthdate();
+$birthdate = date("F j, Y", strtotime($birthdate));
+$name = $school_user->get_name();
 ?>
 
 <!-- HEADER -->
@@ -95,7 +92,10 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
     </nav>
     <!-- BREADCRUMB END -->
     <div class="d-flex justify-content-between align-items-center">
-        <h3 class="my-auto fw-bold">Faculty Profile</h3>
+        <div class="d-flex-column">
+            <hp class="my-auto">Faculty Profile</hp>
+            <h5><?php echo $name; ?></h5>
+        </div>
         <div class="d-flex justify-content-center">
             <button id="deactivate-btn" class="btn btn-outline-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
             <a href="faculty.php?id=<?php echo $current_teacher_id; ?>&action=edit" role="button" class="btn btn-primary link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
@@ -117,130 +117,129 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
             <!-- GENERAL INFORMATION -->
             <div class="tab-pane fade bg-white p-4 show active" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
                 <div class="row w-100 h-auto text-start mx-auto">
-                    <!-- <h5>GENERAL INFORMATION</h5> -->
-                    <!-- <hr> -->
-                    <div class="row p-0">
-                        <!-- PROFILE PICTURE -->
-                        <div class="col-xl-5">
-                            <img src="<?php echo "../" . $image; ?>" alt='Profile image' class='rounded-circle shadow border' style='width: 250px; height: 250px;'>
-                            <p>Faculty ID: <?php echo $current_teacher_id; ?></p>
-                        </div>
-                        <!-- PROFILE PICTURE END -->
+                    <div class="container p-0">
                         <!-- INFORMATION DETAILS -->
-                        <div class="col-xl-7">
-                            <div class="row">
-                                <?php
-                                $birthdate = $school_user->get_birthdate();
-                                $birthdate = date("F j, Y", strtotime($birthdate));
-                                $name = $school_user->get_name();
-                                echo "<p>Name: $name<br>"
-                                    . "Gender: {$school_user->get_sex()}<br>"
-                                    . "Age: {$school_user->get_age()}<br>"
-                                    . "Birthdate: {$birthdate}</p>";
-                                ?>
-                            </div>
-                            <div class="row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class='col-sm-3'>Name</dt>
+                                    <dd class='col-sm-9'><?php echo $name; ?></dd>
+                                    <dt class='col-sm-3'>Gender</dt>
+                                    <dd class='col-sm-9'><?php echo $school_user->get_sex(); ?></dd>
+                                    <dt class='col-sm-3'>Age</dt>
+                                    <dd class='col-sm-9'><?php echo $school_user->get_age(); ?></dd>
+                                    <dt class='col-sm-3'>Birthdate</dt>
+                                    <dd class='col-sm-9'><?php echo $birthdate; ?></dd>
+                                </dl>
                                 <h6><b>Contact Information</b></h6>
-                                <?php echo "<p>Cellphone No.: {$school_user->get_cp_no()}<br>"
-                                    . "Email: {$school_user->get_email()}</p>"; ?>
+                                <dl class="row">
+                                    <dt class='col-sm-3'>Cellphone No.</dt>
+                                    <dd class='col-sm-9'><?php echo $school_user->get_cp_no(); ?></dd>
+                                    <dt class='col-sm-3'>Email</dt>
+                                    <dd class='col-sm-9'><?php echo $school_user->get_email(); ?></dd>
+                                </dl>
                             </div>
-                            <!-- DEPARTMENT SECTION -->
-                            <div id="dept-section" class="row pt-2 mb-2">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <div class="my-auto">
-                                        <h6 class='m-0 fw-bold'>Department
-                                            <?php echo $dept_edit_btn; ?>
-                                        </h6>
-                                    </div>
-                                    <div id="dept-decide-con" class='my-auto' <?php echo $display_style; ?>>
-                                        <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
-                                        <input type="submit" form='dept-form' id='dept-save-btn' class='btn btn-sm btn-success' value="Save">
-                                    </div>
-                                </div>
-                                <div class="dept-con">
-                                    <?php
-                                    $depOpt = $school->listDepartments();
-                                    $departmentOption = "";
-                                    foreach ($depOpt as $dep) {
-                                        $departmentOption .= "<option value='$dep'>";
-                                    }
-                                    $department = $school_user->get_department();
-                                    $dept_exist = TRUE;
-                                    if ($department == '') {
-                                        $dept_exist = FALSE;
-                                        $department = 'No department set';
-                                    }
-                                    ?>
-                                    <form id='dept-form'>
-                                        <input type='hidden' name='teacher_id' value='<?php echo $current_teacher_id; ?>'>
-                                        <input type='hidden' name='action' value='editDepartment'>
-                                        <div class='d-flex-column mb-2'>
-                                            <div class='d-flex'>
-                                                <div class='flex-grow-1'>
-                                                    <input id='dept-input' class='form-control m-0' value='<?php echo $department; ?>' name='department' list='departmentListOptions' placeholder='Type to search or add...' readonly>
-                                                    <datalist id='departmentListOptions'>
-                                                        <?php echo $departmentOption; ?>
-                                                    </datalist>
-                                                </div>
-                                                <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1' <?php echo $display_style; ?>><i class='bi bi-x-square-fill'></i></button></span>
+                            <div class="col-md-6 border p-2 px-3">
+                                <!-- DEPARTMENT SECTION -->
+                                <div id="dept-section" class="row pt-2 mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <div class="my-auto">
+                                            <div class="d-flex justify-content-center">
+                                                <h6 class='my-auto fw-bold'>Department</h6>
+                                                <?php echo $dept_edit_btn; ?>
                                             </div>
-                                            <small class='dept-ins ms-1 text-secondary' <?php echo $display_style; ?>>Clear field to remove department</small>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <!-- ROLE SECTION -->
-                            <div id="role-section" class="row d-flex-column pt-2">
-                                <!-- INITIAL FORM -->
-                                <form id='role-form'>
-                                    <input type="hidden" name="teacher_id" value="<?php echo $current_teacher_id; ?>">
-                                    <input type="hidden" name="action" value="updateFacultyRoles">
-                                </form>
-                                <!-- ROLE HEADER -->
-                                <div class="d-flex justify-content-between">
-                                    <div class="my-auto">
-                                        <h6 class='m-0 fw-bold'>Roles
-                                            <?php echo $role_edit_btn; ?>
-                                        </h6>
+                                        <div id="dept-decide-con" class='my-auto' <?php echo $display_style; ?>>
+                                            <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
+                                            <input type="submit" form='dept-form' id='dept-save-btn' class='btn btn-sm btn-success' value="Save">
+                                        </div>
                                     </div>
-                                    <?php echo $role_options; ?>
+                                    <div class="dept-con">
+                                        <?php
+                                        $depOpt = $school->listDepartments();
+                                        $departmentOption = "";
+                                        foreach ($depOpt as $dep) {
+                                            $departmentOption .= "<option value='$dep'>";
+                                        }
+                                        $department = $school_user->get_department();
+                                        $dept_exist = TRUE;
+                                        if ($department == '') {
+                                            $dept_exist = FALSE;
+                                            $department = 'No department set';
+                                        }
+                                        ?>
+                                        <form id='dept-form'>
+                                            <input type='hidden' name='teacher_id' value='<?php echo $current_teacher_id; ?>'>
+                                            <input type='hidden' name='action' value='editDepartment'>
+                                            <div class='d-flex-column mb-2'>
+                                                <div class='d-flex'>
+                                                    <div class='flex-grow-1'>
+                                                        <input id='dept-input' class='form-control m-0' value='<?php echo $department; ?>' name='department' list='departmentListOptions' placeholder='Type to search or add...' readonly>
+                                                        <datalist id='departmentListOptions'>
+                                                            <?php echo $departmentOption; ?>
+                                                        </datalist>
+                                                    </div>
+                                                    <span class='m-auto'><button id='dept-clear-btn' class='btn btn-link text-danger w-auto ms-2 p-1' <?php echo $display_style; ?>><i class='bi bi-x-square-fill'></i></button></span>
+                                                </div>
+                                                <small class='dept-ins ms-1 text-secondary' <?php echo $display_style; ?>>Clear field to remove department</small>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                                <!-- ROLE HEADER END -->
-                                <!-- ROLE CONTENT -->
-                                <div id="role-tag-con">
-                                    <?php
-                                    $data = $school_user->get_access_data();
-                                    $roles = $data['roles'];
-                                    $rData = $data['data'];
-                                    $rSize = $data['size'];
+                                <!-- ROLE SECTION -->
+                                <div id="role-section" class="row d-flex-column pt-2">
+                                    <!-- INITIAL FORM -->
+                                    <form id='role-form'>
+                                        <input type="hidden" name="teacher_id" value="<?php echo $current_teacher_id; ?>">
+                                        <input type="hidden" name="action" value="updateFacultyRoles">
+                                    </form>
+                                    <!-- ROLE HEADER -->
+                                    <div class="d-flex justify-content-between">
+                                        <div class="my-auto">
+                                            <div class="d-flex justify-content-center">
+                                                <h6 class='my-auto fw-bold'>Roles</h6>
+                                                <?php echo $role_edit_btn; ?>
+                                            </div>
+                                        </div>
+                                        <?php echo $role_options; ?>
+                                    </div>
+                                    <!-- ROLE HEADER END -->
+                                    <!-- ROLE CONTENT -->
+                                    <div id="role-tag-con">
+                                        <?php
+                                        $data = $school_user->get_access_data();
+                                        $roles = $data['roles'];
+                                        $rData = $data['data'];
+                                        $rSize = $data['size'];
 
-                                    $icon_display = 'd-none';
-                                    foreach ($rData as $role) {
-                                        echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>"
-                                            . "<span class='ms-3 me-2'>{$role['desc']}</span>"
-                                            . "<button class='btn btn-link text-danger btn-sm p-0 me-2 $icon_display'>"
-                                            . "<i class='bi bi-x-square-fill '></i>"
-                                            . "</button>"
-                                            . "</div>";
-                                    }
+                                        $icon_display = 'd-none';
+                                        foreach ($rData as $role) {
+                                            echo "<div role='' class='role-to-delete-btn rounded border border-secondary d-inline-block m-1 py-1 pe-1 {$role['disp']}' data-value='{$role['value']}'>"
+                                                . "<span class='ms-3 me-2'>{$role['desc']}</span>"
+                                                . "<button class='btn btn-link text-danger btn-sm p-0 me-2 $icon_display'>"
+                                                . "<i class='bi bi-x-square-fill '></i>"
+                                                . "</button>"
+                                                . "</div>";
+                                        }
 
-                                    $role_msg_display = (!$rSize) ? "" : "d-none";
-                                    echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles or access set</p>";
-                                    ?>
+                                        $role_msg_display = (!$rSize) ? "" : "d-none";
+                                        echo "<p id='role-empty-msg' class='text-center mt-3 mb-2 $role_msg_display'>No roles or access set</p>";
+                                        ?>
+                                    </div>
+                                    <div id='role-option-tag-con' class='d-none'>
+                                        <hr class='m-2 '>
+                                        <div class="my-auto d-inline-block mx-2"><small>Options:</small></div>
+                                        <?php
+                                        foreach ($rData as $role) {
+                                            $role['disp'] = $role['disp'] == '' ? 'd-none' : '';
+                                            echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>"
+                                                . "<i class='bi bi-plus-square me-2'></i>{$role['desc']}"
+                                                . "</button>";
+                                        }
+                                        ?>
+                                    </div>
+                                    <!-- ROLE CONTENT END -->
                                 </div>
-                                <div id='role-option-tag-con' class='d-none'>
-                                    <hr class='m-2 '>
-                                    <div class="my-auto d-inline-block mx-2"><small>Options:</small></div>
-                                    <?php
-                                    foreach ($rData as $role) {
-                                        $role['disp'] = $role['disp'] == '' ? 'd-none' : '';
-                                        echo "<button data-value='{$role['value']}' class='btn rounded btn-sm btn-outline-success d-inline-block m-1 {$role['disp']}'>"
-                                            . "<i class='bi bi-plus-square me-2'></i>{$role['desc']}"
-                                            . "</button>";
-                                    }
-                                    ?>
-                                </div>
-                                <!-- ROLE CONTENT END -->
                             </div>
                         </div>
                         <!-- ROLE SECTION END -->
@@ -262,7 +261,7 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
                         <!-- ADVISORY HEADER -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="my-auto ">
-                                <h5 class='m-0 fw-bold'>ADVISORY CLASS</h5>
+                                <h5 class='my-auto fw-bold'>ADVISORY CLASS</h5>
                             </div>
                         </div>
                         <div class="my-auto w-100">
@@ -352,7 +351,7 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
                         <input id="search-subject" type="text" class="form-control mb-4" placeholder="Search subject here ...">
                         <div class="assigned-sub-con list-group border">
                             <?php
-                            $subjects = $school->listSubjects('subject');
+                            $subjects = $school->listSubjects('subject', 'sharedsubject');
                             $assigned_sub = $school_user->get_subjects();
                             echo "<div id='empty-as-msg' class='list-group-item " . (count($assigned_sub) > 0 ? "d-none" : "") . "' aria-current='true'>"
                                 . "<div class='d-flex w-100'>"
@@ -371,7 +370,7 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
                                     . "<p class='mb-1'>{$subject->get_sub_name()}</p>"
                                     . "<small>$type</small>"
                                     . "</div>"
-                                    . "<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
+                                    // . "<small class='mb-1 text-secondary'><b>{$subject->get_for_grd_level()}</b> | $sub_code</small>"
                                     . "</a>";
                             }
                             $assigned_sub = array_map(function ($e) {

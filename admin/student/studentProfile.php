@@ -204,7 +204,7 @@ switch ($user_type) {
                                         <ul class='list-group ms-3'>
                                             <li class='list-group-item'>Guardian's Name: $guardian_name</li>
                                             <li class='list-group-item'>Relationship: $guardian_relationship</li>
-                                            <li class='list-group-item'>Contact Number: $guardian_cp_no</li>'</ul>";
+                                            <li class='list-group-item'>Contact Number: $guardian_cp_no</li></ul>";
                                 } ?>
                             </div>
                         </div>

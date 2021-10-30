@@ -1,7 +1,7 @@
 let mainMenuItem, mainSubMenuItem, spinner;
 
 /** Display active menu item */
-function preload(menuItem, subMenuItem= null) {
+function preload(menuItem, subMenuItem = null) {
     spinner = $('#main-spinner-con');
     spinner.show();
     if (subMenuItem == null) {
@@ -30,7 +30,7 @@ function hideSpinner(selector = null, bs = false) {
         spinner.hide();
     }, 300);
 }
-    
+
 /** 
  *  Show toast basing from the specified toast type, message, and/or delay.
  * 
@@ -47,7 +47,7 @@ function showToast(type, msg, options = null) {
                 </div>`);
     toast.prependTo('#toast-con');
     let newToast = new bootstrap.Toast(toast, options);
-    toast.bind('hidden.bs.toast', function () {
+    toast.bind('hidden.bs.toast', function() {
         // this removes the toast instance when hidden
         $(this).remove();
     });
@@ -58,15 +58,15 @@ function showToast(type, msg, options = null) {
  * Function responsible for not allowing non-numeric characters 
  * to be entered in an input tag
  */
-function isNumberKey(e){
-	var charCode = (e.which) ? e.which : e.keyCode;
-	return !(charCode > 31 && (charCode < 48 || charCode > 57));
+function isNumberKey(e) {
+    var charCode = (e.which) ? e.which : e.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
 function loadingTemplate(message) {
-    return '<div class="spinner-border" role="status">'
-        + '<span class="visually-hidden">Loading...</span>'
-    +'</div>';
+    return '<div class="spinner-border" role="status">' +
+        '<span class="visually-hidden">Loading...</span>' +
+        '</div>';
 }
 $(document).on("keypress", ".number", isNumberKey);
 

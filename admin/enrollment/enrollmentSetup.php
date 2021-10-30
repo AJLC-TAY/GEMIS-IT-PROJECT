@@ -72,8 +72,8 @@ $admin = new Administration();
                         <thead class='thead-dark'>
                             <tr>
                                 <th data-checkbox="true"></th>
-                                <th scope='col' data-width="600" data-halign="center" data-align="left" data-sortable="true" data-field="name">Faculty Name</th>
-                                <th scope='col' data-width="100" data-align="center" data-field="can-enroll">Can Enroll</th>
+                                <th scope='col' data-width="800" data-halign="center" data-align="left" data-sortable="true" data-field="name">Faculty Name</th>
+                                <th scope='col' data-width="200" data-align="center" data-field="can-enroll">Can Enroll</th>
                             </tr>
                         </thead>
                     </table>
@@ -94,8 +94,8 @@ $admin = new Administration();
                 <!-- STEP 1 -->
                 <h4 class="fw-bold">Enable enrollment</h4>
                 <div class="row mt-3">
-                    <div class="col-lg-4 mb-3">
-                        <h6>List of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
+                    <div class="col-lg-6 mb-3">
+                        <h6>Summary list of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
                         <ul id="faculty-list" class="list-group h-75 overflow-auto">
 
                         </ul>
@@ -106,7 +106,7 @@ $admin = new Administration();
 
                         </ul>
                     </div> -->
-                    <div class="col-lg-4 mb-3">
+                    <div class="col-lg-6 mb-3">
                         <h6>Enrollment status</h6>
                         <div class="container p-4 border border-2">
                             <div class='form-check form-switch my-auto'>

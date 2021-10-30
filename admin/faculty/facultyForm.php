@@ -15,14 +15,22 @@ $sub_classes = [];
 
 // Content
 if ($action == 'add') {
-    $last_name = '';
-    $first_name = '';
-    $middle_name = '';
+    // $last_name = '';
+    // $first_name = '';
+    // $middle_name = '';
+    // $ext_name = '';
+    // $cp_no = '';
+    // $email = '';
+    // $age = '';
+    // $sex = "";
+    $last_name = 'Cutay';
+    $first_name = 'Alvin';
+    $middle_name = 'Loquis';
     $ext_name = '';
-    $cp_no = '';
-    $email = '';
-    $age = '';
-    $sex = "";
+    $cp_no = '090909090909';
+    $email = 'alvin@gmail.com';
+    $age = '22';
+    $sex = "m";
     $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
@@ -61,8 +69,6 @@ if ($action == 'add') {
     }
     $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
     $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
-    $id_photo = $faculty->get_id_photo();
-    $image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : $PROFILE_PATH) : $PROFILE_PATH;
     $handled_subjects_list = $faculty->get_subjects();
     $handled_subjects = '';
     foreach ($handled_subjects_list as $sub) {
@@ -132,10 +138,10 @@ switch ($user_type) {
         </ol>
     </nav>
     <h3><?php echo $camel_action." ".$user_desc; ?></h3>
-    <h6 class='text-secondary'>Please complete the following:</h6>
+    <small class='text-secondary'>Please complete the following:</small>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' data-action="" class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+<form id='faculty-form' data-action="" class="needs-validation mt-3" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
     <?php echo $teacher_id_input; ?>
     <input type='hidden' name='action' value='<?php echo $action; ?>'><input type='hidden' name='profile' value='faculty'>
     <div class='form-row row'>
@@ -265,7 +271,7 @@ switch ($user_type) {
                         <th scope='col' data-width="200" data-align="center" data-field="sub_code">Code</th>
                         <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
-                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
                         <!-- <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th> -->
                     </tr>
                 </thead>

@@ -65,6 +65,7 @@ trait School
 
     public function listSubjects($tbl, $tbl2)
     {
+        session_start();
         $sy_id = $_SESSION['sy_id'];
         $subjectList = [];
 
@@ -306,14 +307,13 @@ trait FacultySharedMethods
         $user_type = $_SESSION['user_type'];
         $statusMsg = array();
         $action = $_POST['action'];                 // value = "add" or "edit"
-        $allowTypes = array('jpg', 'png', 'jpeg');  // allowed image extensions
 
 
         // General information
         $lastname = trim($_POST['lastname']);
         $firstname = trim($_POST['firstname']);
         $middlename = trim($_POST['middlename']);
-        $extname = trim($_POST['extensionname']) ?: NULL; // return null if first value is '', otherwise return first value
+        $extname = trim($_POST['extensionname']) ?: NULL;
         $lastname = trim($_POST['lastname']);
         $age = trim($_POST['age']);
         $birthdate = trim($_POST['birthdate']);
@@ -333,9 +333,9 @@ trait FacultySharedMethods
       
         switch ($user_type) {
             case "AD":
-                [$editGrades, $canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
-                $params = array_merge($params, [$awardRep, $canEnroll, $editGrades, $department, $cp_no]);
-                $types .= "iiiss"; // data types of the current parameters
+                [$canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
+                $params = array_merge($params, [$awardRep, $canEnroll, $department, $cp_no]);
+                $types .= "iiss"; // data types of the current parameters
                 break;
             case "FA":
                 $params = array_merge($params + [$cp_no]);
@@ -370,7 +370,7 @@ trait FacultySharedMethods
             $query .= " cp_no=? WHERE teacher_id=?;";
             $this->prepared_query($query, $params, $types);
         } else if ($user_type === 'AD') {
-            $query .= " award_coor=?, enable_enroll=?, enable_edit_grd=?, department=?, cp_no=? WHERE teacher_id=?;";
+            $query .= " award_coor=?, enable_enroll=?, department=?, cp_no=? WHERE teacher_id=?;";
             $this->prepared_query($query, $params, $types);
             // Step 3
             $this->updateFacultySubjects($id);
@@ -397,14 +397,15 @@ trait FacultySharedMethods
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
-        $result = $this->prepared_select("SELECT sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
-        FROM subjectclass AS sc 
-        JOIN subject AS s USING (sub_code) 
-        JOIN sharedsubject AS ss USING (sub_code)
-        JOIN section AS se USING (section_code) WHERE sc.teacher_id=?);", [$id], "i");
+        // $result = $this->prepared_select("SELECT DISTINCT sc.section_code, sc.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
+        //                                     FROM subjectclass AS sc 
+        //                                     JOIN subject AS s ON sc.sub_code=s.sub_code 
+        //                                     JOIN sharedsubject AS ss ON ss.sub_code=s.sub_code
+        //                                     JOIN section AS se USING (section_code) WHERE sc.teacher_id=? AND sub_semester != 0;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM subjectfaculty JOIN subject USING (sub_code) WHERE teacher_id = ?;", [$id], "i");
         $subjects = array();
         while ($s_row = mysqli_fetch_assoc($result)) {
-            $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['for_grd_level'], $s_row['sub_semester'], $s_row['sub_type']);
+            $subjects[] = new Subject($s_row['sub_code'], $s_row['sub_name'], $s_row['sub_type']);
         }
 
         // Step 3
@@ -425,8 +426,6 @@ trait FacultySharedMethods
             $row['email'],
             $row['award_coor'],
             $row['enable_enroll'],
-            $row['enable_edit_grd'],
-            $row['id_picture'],
             $subjects
         );
 
@@ -499,10 +498,14 @@ trait FacultySharedMethods
     public function listSubjectClasses($teacher_id = "")
     {
         $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
-        $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, s.sub_name, s.sub_type, se.grd_level, s.sub_semester, se.sy_id, se.section_name 
-                  FROM subjectclass AS sc JOIN sysub AS sys USING (sub_sy_id) 
-                  JOIN subject AS s USING (sub_code) 
-                  JOIN section AS se USING (section_code) $condition ORDER BY sc.teacher_id; ";
+        $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, CONCAT('T.', f.last_name,', ', f.first_name,' ', COALESCE(f.middle_name, ''),' ', COALESCE(f.ext_name, '')) AS teacher_name, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
+                    FROM subjectclass sc JOIN sysub sys USING (sub_sy_id) 
+                    JOIN subject s ON s.sub_code=sys.sub_code 
+                    JOIN sharedsubject ss ON ss.sub_code = s.sub_code
+                    JOIN section AS se USING (section_code)
+                    LEFT JOIN faculty f ON f.teacher_id=se.teacher_id
+                    $condition
+                    GROUP BY section_code";
         $result = $this->query($query);
         $sub_classes = array();
 
@@ -517,7 +520,7 @@ trait FacultySharedMethods
                 $sc_row['section_code'],
                 $sc_row['section_name'],
                 $sc_row['sy_id'],
-                $sc_row['teacher_id']
+                $sc_row['teacher_name']
             );
         }
         return $sub_classes;
@@ -529,14 +532,14 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
-        $query = "SELECT DISTINCT sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, ss.for_grd_level, ss.sub_semester, 
-        se.section_name, syb.sy_id
-        from subjectclass as sc
-        join section as se USING(section_code)
-        join sysub as syb USING(sub_sy_id)
-        join subject as s USING(sub_code)
-        join sharedsubject as ss USING(sub_code)
-        WHERE sc.teacher_id='$teacher_id';";
+        $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, sh.for_grd_level, sh.sub_semester, se.section_name, syb.sy_id
+                FROM subjectclass sc
+                JOIN section se USING(section_code)
+                JOIN sysub syb USING(sub_sy_id)
+                JOIN subject s ON s.sub_code=syb.sub_code
+                JOIN sharedsubject sh ON sh.sub_code=s.sub_code
+                WHERE sc.teacher_id='$teacher_id' AND for_grd_level != 0 GROUP BY section_code";
+
         $result = $this->query($query); //hindi ka pa ba inaanto
         $handled_sub_classes = array();
 
@@ -544,10 +547,10 @@ trait FacultySharedMethods
             $handled_sub_classes[] = new SubjectClass(
                 $sc_row['sub_code'],
                 $sc_row['sub_name'],
-                $sc_row['grd_level'],
+                $sc_row['for_grd_level'],
                 $sc_row['sub_semester'],
                 $sc_row['sub_type'],
-                NULL,
+                $sc_row['sub_class_code'],
                 $sc_row['section_code'],
                 $sc_row['section_name'],
                 $sc_row['sy_id'],
@@ -830,7 +833,7 @@ trait Enrollment
         $query = "SELECT e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
             . "e.enrolled_in AS grade, e.prog_code AS program, e.section_code AS section FROM enrollment e "
             . "JOIN student AS s USING (stud_id) "
-            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id';";
+            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id' AND e.section_code IS NULL;";
         $result = $this->query($query);
         while ($row = mysqli_fetch_assoc($result)) {
             $enrolled[] = [
@@ -1518,15 +1521,15 @@ trait Grade
         return $data;
     }
 
-    public function getSpecificDiscParamters()
-    {
-        $data = [];
-        $result = $this->query("SELECT * FROM specificdiscipline;");
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
-        }
-        return $data;
-    }
+    // public function getSpecificDiscParamters()
+    // {
+    //     $data = [];
+    //     $result = $this->query("SELECT * FROM specificdiscipline;");
+    //     while ($row = mysqli_fetch_assoc($result)) {
+    //         $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
+    //     }
+    //     return $data;
+    // }
 
     public function listStudentAwardSelection($is_JSON = FALSE)
     {
