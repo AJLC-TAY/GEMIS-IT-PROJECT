@@ -10,7 +10,7 @@
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h3 class="fw-bold">School Year</h3>
          <span>
-            <a href="" id="add-btn" class="btn btn-secondary" title='Initialize a school year'><i class="bi bi-eye me-2"></i>View</a>
+            <!-- <a href="" id="add-btn" class="btn btn-secondary" title='Initialize a school year'><i class="bi bi-eye me-2"></i>View</a> -->
             <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
          </span>
      </div>
@@ -41,35 +41,3 @@
          </table>
      </div>
  </div>
- <!-- MODAL -->
- <div class="modal fade" id="month-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <div class="modal-title">
-                     <h4 class="mb-0">Academic days by Month</h4>
-                 </div>
-                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-             </div>
-             <div class="modal-body overflow-auto" style="height: 50vh;">
-                <form id="month-form" action="action.php" method="POST">
-                    <input type="hidden" name="sy-id">
-                    <input type="hidden" name="action" value="editAcademicDays">
-                    <div class="container">
-                        <ul id="month-list" class="p-0"></ul>
-                        <div class='form-control-sm row'>
-                            <div class='col-6'>
-                                <button class='btn btn-sm btn-primary edit-opt' data-type='add'>Add Month</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-             </div>
-             <div class="modal-footer">
-                 <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
-                 <input type="submit" form="month-form" class="btn btn-sm btn-success" value="Save">
-             </div>
-         </div>
-     </div>
- </div>
- <!-- MODAL END -->

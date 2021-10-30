@@ -121,6 +121,7 @@ if ($action === 'add') {
         $sub_type_editable = 'readonly';
         $sub_type_opt = "<option value='specialized' selected>Specialized</option>";
         $input_sub_with_prog = "<input type='hidden' name='prog_code[]' value='$prog_code'>";
+        $old_program = "<input type='hidden' name='old_program[]' value='$prog_code'>";
     }
 }
 

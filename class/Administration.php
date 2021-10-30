@@ -144,7 +144,7 @@ class Administration extends Dbconfig
 
     public function listAdministrators()
     {
-        session_start();
+        //session_start();
         $result = $this->query("SELECT admin_id, admin_user_no, last_name, first_name, middle_name, ext_name, "
             . "CASE WHEN sex = 'm' THEN 'Male' ELSE 'Female' END AS sex, age, cp_no, email FROM administrator WHERE admin_id!='{$_SESSION['id']}';");
         $administrators = [];
@@ -563,7 +563,7 @@ class Administration extends Dbconfig
     public function listSYJSON()
     {
         session_start();
-        $result = mysqli_query($this->db, "SELECT * FROM schoolyear ORDER BY status DESC;");
+        $result = $this->query("SELECT * FROM schoolyear ORDER BY status DESC;");
         $sy_list = [];
         $grd_list = array('11' => '11', '12' => '12');
         $quarter_list = array('1' => 'First', '2' => 'Second', '3' => 'Third', '4' => 'Fourth');
@@ -574,14 +574,14 @@ class Administration extends Dbconfig
             $semester = $row['current_semester'];
             $enrollment = $row['can_enroll'];
 
-            // grade options
-            $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
-                . "<select data-id='$sy_id' name='grade-level' class='form-select d-none'>";
-            foreach ($grd_list as $id => $value) {
-                // $grd_opt .= "<option value='$id' ". (($id == $grd_level) ? "selected" : "") .">$value</option>";
-                $grd_opt .= "<option value='$id'>$value</option>";
-            }
-            $grd_opt .= "</select>";
+            // // grade options
+            // $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
+            //     . "<select data-id='$sy_id' name='grade-level' class='form-select d-none'>";
+            // foreach ($grd_list as $id => $value) {
+            //     // $grd_opt .= "<option value='$id' ". (($id == $grd_level) ? "selected" : "") .">$value</option>";
+            //     $grd_opt .= "<option value='$id'>$value</option>";
+            // }
+            // $grd_opt .= "</select>";
 
             // quarter options
             $quarter_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='quarter' type='text'  data-key='$quarter' value='{$quarter_list[$quarter]}' readonly><select data-id='$sy_id' name='quarter' class='form-select d-none'>";
@@ -600,6 +600,11 @@ class Administration extends Dbconfig
             $sem_opt .= "</select>";
 
 
+            $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                        . "<div class='edit-options' style='display: none;'>"
+                        . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
+                        . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                        . "</div>");
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
                 "<div class='form-check form-switch ms-3 my-auto'>"
@@ -607,36 +612,21 @@ class Administration extends Dbconfig
                 . "<span class='status'>$enroll_opt</span>"
                 . "</div>";
 
-            # get academic days
-            $acad_months_res = $this->query("SELECT * FROM academicdays WHERE sy_id='$sy_id' ORDER BY acad_days_id; ");
-            $acad_months = [];
-            while ($acad_month = mysqli_fetch_assoc($acad_months_res)) {
-                $acad_months[$acad_month['acad_days_id']] = ['month' => $acad_month['month'], 'days' => $acad_month['no_of_days']];
-            }
-
             $switch = ($_SESSION['sy_id'] == $sy_id) ? "" : "<a role='button' href='action.php?action=switchSY&id=$sy_id' class='btn btn-dark btn-sm m-1'>Switch</a>";
             $sy_list[] = [
                 'id'              => $sy_id,
                 's_year'          => $row['start_year'],
                 'e_year'          => $row['end_year'],
                 'sy_year'         => $row['start_year'] . " - " . $row['end_year'],
-                'current_grd_val' => $grd_level,
-                'grd_level'       => $grd_opt,
                 'current_qtr_val' => $quarter,
                 'current_qtr'     => $quarter_opt,
                 'current_sem_val' => $semester,
                 'current_sem'     => $sem_opt,
                 'enrollment_val'  => $enrollment,
                 'enrollment'      => $enroll_opt,
-                'acad_months'     => $acad_months,
-                'action' => "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
-                    . "<div class='edit-options' style='display: none;'>"
-                    . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
-                    . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                    . "</div>"
-                    . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
-                    . "<button data-id='$sy_id' class='btn btn-secondary btn-sm edit-month-btn'>Edit Acad Days</button>"
+                'action' => $actions_btn
                     . $switch
+                    . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
             ];
         }
         echo json_encode($sy_list);
@@ -1038,7 +1028,6 @@ class Administration extends Dbconfig
 
     public function getSubjectScheduleData($prog_code = NULL) 
     {
-        session_start();
         $result = $this->query("SELECT sub_code, sub_name, sub_type, prog_code FROM subject JOIN sharedsubject USING (sub_code);");
         // $result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
         $subjectList = array();
@@ -1115,7 +1104,6 @@ class Administration extends Dbconfig
 
     public function getSubject()
     {
-        session_start();
         $sy_id = $_SESSION['sy_id'];
         $code = $_GET['sub_code'];
         $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
@@ -1313,14 +1301,14 @@ class Administration extends Dbconfig
 
             if (count($current_program) > 1) {
                 $query .= "DELETE FROM sharedsubject WHERE sub_code='$code' AND sy_id = '$sy_id';";
-                $query .= "INSERT INTO sharedsubject (prog_code, sub_code, for_grd_level, sub_semester, sy_id) VALUES ('$prog_code', '$code', 0, 0, '$sy_id');";
+                $query .= "INSERT INTO sharedsubject (prog_code, sub_code, for_grd_level, sub_semester, sy_id) VALUES ('$new_prog_code', '$code', 0, 0, '$sy_id');";
                 return $query;
             }
 
             $current_program = $current_program[0];
             $query .= "UPDATE sharedsubject SET prog_code='$new_prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code' AND sy_id = '$sy_id';";
             echo $query;
-            return [$prog_code, $query];
+            return [$new_prog_code, $query];
         }
 
         // subject type is core at this point
@@ -1358,9 +1346,8 @@ class Administration extends Dbconfig
     /** Returns the list of subjects by specified grade level. */
     public function listSubjectsByLevel($grd)
     {
-        session_start();
         $sy_id = $_SESSION['sy_id'];
-        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level = '$grd' AND sy_id = '$sy_id';");
+        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level = '$grd' AND sy_id = '$sy_id' GROUP BY sub_code;");
         $subjects = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1376,7 +1363,7 @@ class Administration extends Dbconfig
 
     function listArchSubjectsJSON()
     {
-        echo json_encode($this->listSubjects('archived_subject'));
+        // echo json_encode($this->listSubjects('archived_subject'));
     }
 
     public function moveSubject($pref_og, $pref_dest)
@@ -1528,8 +1515,7 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-        $query = "SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);";
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query("SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);");
         $facultyList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1546,9 +1532,7 @@ class Administration extends Dbconfig
                 $row['cp_no'],
                 $row['email'],
                 $row['award_coor'],
-                $row['enable_enroll'],
-                $row['enable_edit_grd'],
-                $row['id_picture']
+                $row['enable_enroll']
             );
         }
         return $facultyList;
@@ -1633,8 +1617,8 @@ class Administration extends Dbconfig
         $types .= "i";
 
         // Step 2
-        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, enable_edit_grd, department, cp_no, id_picture, teacher_user_no) "
-            . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, department, cp_no, id_picture, teacher_user_no) "
+            . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 
         $this->prepared_query($query, $params, $types);
@@ -1788,12 +1772,12 @@ class Administration extends Dbconfig
 
     public function listSubClassFacultyOptions()
     {
-        if (isset($_POST['exclude'])) {
-            $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
-        }
+        //if (isset($_POST['exclude'])) {
+            // $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
+        //}
         $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
                                     middle_name, ' ',COALESCE(ext_name, '')) AS name
-                                    FROM faculty " . $condition ?? '' . ";");
+                                    FROM faculty WHERE teacher_id <> {$_SESSION['id']};");
         $faculty_list = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $faculty_list[] = [

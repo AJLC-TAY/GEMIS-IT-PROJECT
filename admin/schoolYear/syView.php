@@ -3,6 +3,13 @@
 include_once ("../class/Administration.php");
 $admin = new Administration();
 $sy_info = $admin->getSYInfo();
+$switch_btn = "";
+$sy_id_in_link = $_GET['id'];
+$edit_acads_btn = "<button data-id='$sy_id_in_link' data-bs-toggle='modal' data-bs-target='#month-modal' class='btn btn-secondary btn-sm edit-month-btn'><i class='bi bi-pencil-square me-2'></i>Edit</button>";
+if ($_SESSION['sy_id'] != $sy_id_in_link) {
+    $switch_btn = "<a role='button' href='action.php?action=switchSY&id=$sy_id_in_link' class='btn btn-dark btn-sm m-1'>Switch</a>";
+    $edit_acads_btn = "";
+}
 ?>
 <header>
     <!-- BREADCRUMB -->
@@ -13,7 +20,10 @@ $sy_info = $admin->getSYInfo();
             <li class='breadcrumb-item active'><?php echo $sy_info['desc']; ?></li>
         </ol>
     </nav>
-    <h4 class="fw-bold">School Year <?php echo $sy_info['desc']; ?></h4>
+    <div class="d-flex align-content-center justify-content-between ">
+        <h4 class="fw-bold mb-0">School Year <?php echo $sy_info['desc']; ?></h4>
+        <?php echo $switch_btn; ?>
+    </div>
     <hr>
 </header>
 <div class="container">
@@ -23,7 +33,7 @@ $sy_info = $admin->getSYInfo();
                 <div class="d-flex justify-content-between">
                     <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
                     <div>
-                        <button type="button" class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                        <?php echo $edit_acads_btn; ?>
                     </div>
                 </div>
                 <hr class='mt-2'>
@@ -119,3 +129,52 @@ $sy_info = $admin->getSYInfo();
         </section>
     </section>
 </div>
+
+ <!-- MODAL -->
+ <div class="modal fade" id="month-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <div class="modal-title">
+                     <h4 class="mb-0">Academic days by Month</h4>
+                 </div>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body overflow-auto" style="height: 50vh;">
+                <form id="month-form" action="action.php" method="POST">
+                    <input type="hidden" name="sy-id">
+                    <input type="hidden" name="action" value="editAcademicDays">
+                    <div class="container">
+                        <ul id="month-list" class="p-0">
+                            <?php 
+                            foreach($sy_info['month'] as $month => $days) {
+                            echo "<li class='form-control-sm row'>
+                                    <label class='col-form-label-sm col-4'>${month}</label>
+                                    <div class='col-5'>
+                                        <input value='${days}' type='number' name='newmonth[${month}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${month}' min='0' max='30''>
+                                    </div>
+                                    <div class='col-3 text-center'>
+                                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
+                                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                                    </div>
+                                </li>";
+                            }
+                            ?>
+                        </ul>
+                        <div class='form-control-sm row'>
+                            <div class='col-6'>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </form>
+             </div>
+             <div class="modal-footer">
+                 <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                 <button class='btn btn-sm btn-primary edit-opt' data-type='add'>Add Month</button>
+                 <input type="submit" form="month-form" class="btn btn-sm btn-success" value="Save">
+             </div>
+         </div>
+     </div>
+ </div>
+ <!-- MODAL END -->

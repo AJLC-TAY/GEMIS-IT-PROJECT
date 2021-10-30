@@ -223,8 +223,6 @@ class Subject implements JsonSerializable
         return [
             'sub_code' => $this->sub_code,
             'sub_name' => $this->sub_name,
-            'for_grd_level' => $this->for_grd_level,
-            'sub_semester' => $this->sub_semester,
             'sub_type' => $this->sub_type,
             'prerequisite' => $this->prerequisite,
             'corequisite' => $this->corequisite,
@@ -293,12 +291,10 @@ class Faculty implements JsonSerializable
     private $access;
     private $award_coor;
     private $enable_enroll;
-    private $enable_edit_grd;
-    private $id_photo;
     private $handled_sub_classes;
     private $action;
 
-    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $enable_edit_grd, $id_photo, $subjects=[])
+    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $subjects=[])
     {
         $this->teacher_id = $teacher_id;
         $this->last_name = $last_name;
@@ -315,15 +311,12 @@ class Faculty implements JsonSerializable
         $this->access = [];
         $this->award_coor = $award_coor;
         $this->enable_enroll = $enable_enroll;
-        $this->enable_edit_grd = $enable_edit_grd;
         $this->subjects = $subjects;
         $this->handled_sub_classes = [];
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
                       ."</div>";
-        $this->id_photo = $id_photo;
-//        $this->id_photo = is_null($id_photo) ? NULL : ("data:image;base64,". base64_encode($id_photo));
     }
 
     public function get_teacher_id()
@@ -383,10 +376,6 @@ class Faculty implements JsonSerializable
     {
         return $this->enable_enroll;
     }
-    public function get_enable_edit_grd()
-    {
-        return $this->enable_edit_grd;
-    }
     public function get_id_photo()
     {
         return $this->id_photo;
@@ -421,12 +410,6 @@ class Faculty implements JsonSerializable
         $cEnrl = ["value" => "canEnroll",
                   "desc"  => "Can Enroll", 
                   "disp"  => $disp];          
-
-        if ($this->get_enable_edit_grd()) {
-            $roles[] = $cEdit['value'];
-            $cEdit['disp'] = "";
-            $size += 1;
-        }
 
         if ($this->get_enable_enroll()) {
             $roles[] = $cEnrl['value'];

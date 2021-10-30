@@ -8,6 +8,7 @@ $sub_code = $subject->get_sub_code();
 $sub_name = $subject->get_sub_name();
 $sub_type = $subject->get_sub_type();
 $prog_name = '';
+$prog_code = '';
 
 // view
 $links = "<li class='breadcrumb-item'><a href='subject.php'>Subject</a></li>";
@@ -109,7 +110,7 @@ $title =  "<div class='d-flex justify-content-between'>
                             <h6>Prerequisite <span class='badge rounded-circle bg-secondary'>$countPre</span></h6>
                             <div class='list-group ms-3'>";
                                 foreach($prereq as $req) {
-                                    $requisite .= "<a href='subject.php?code=$req&state=view' class='list-group-item list-group-item-action'>$req</a>";
+                                    $requisite .= "<a href='subject.php?sub_code=$req&state=view' class='list-group-item list-group-item-action'>$req</a>";
                                 }
                             $requisite .= "</div>
                         </div>";
@@ -120,7 +121,7 @@ $title =  "<div class='d-flex justify-content-between'>
                             <h6>Corequisite<span class='badge rounded-circle bg-secondary'>$countCo</span></h6>
                             <div class='list-group ms-3'>";
                                 foreach($coreq as $req) {
-                                    $requisite .= "<a href='subject.php?code=$req&state=view' class='list-group-item list-group-item-action'>$req</a>";
+                                    $requisite .= "<a href='subject.php?sub_code=$req&state=view' class='list-group-item list-group-item-action'>$req</a>";
                                 }
                             $requisite .= "</div>
                         </div>";
