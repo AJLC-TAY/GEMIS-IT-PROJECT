@@ -8,7 +8,7 @@
         </ol>
     </nav>
     <div class="d-flex justify-content-between mb-3">
-        <h3 class="fw-bold">Section</h3>
+        <h3 class="fw-bold mb-0">Section</h3>
         <!-- <button id="add-btn" class="btn btn-success" title='Add section'><i class="bi bi-plus me-2"></i>Add Section</button> -->
         <a href="section.php?action=add" class="btn btn-success" title='Add section'><i class="bi bi-plus me-2"></i>Add Section</a>
     </div>

@@ -137,12 +137,14 @@ $(function() {
         let facultyCount = 0;
         console.log(facultyTable.bootstrapTable('getData'));
         let faculty = facultyTable.bootstrapTable('getData').map(e => {
-            if (e.status === 1) {
+            if (e.status == 1) {
                 facultyCount++;
-                console.log(e.teacher_id);
+                // console.log(e.teacher_id);
+                console.log(e);
                 return `<a class="list-group-item list-group-item-action" target='_blank' href="faculty.php?id=${e.teacher_id}">T. ${e.name}</a>`;
             }
         });
+        // console.log(faculty);
         // let sections = sectionTable.bootstrapTable('getData').map(e => {
         //     return `<a class="list-group-item list-group-item-action" target='_blank' href="section.php?sec_code=${e.code}">${e.name}</a>`;
         // });

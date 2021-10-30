@@ -782,14 +782,15 @@ class Administration extends Dbconfig
 
     public function editSection()
     {
+        $name = trim($_POST['sect-name']) ?: NULL;
         $max_no = $_POST['max-no'];
         $adviser = $_POST['adviser'] ?: NULL;
         $section = $_POST['section'];
 
         $this->prepared_query(
-            "UPDATE section SET stud_no_max=?, teacher_id=? WHERE section_code=?;",
-            [$max_no, $adviser, $section],
-            "iis"
+            "UPDATE section SET section_name=?, stud_no_max=?, teacher_id=? WHERE section_code=?;",
+            [$name, $max_no, $adviser, $section],
+            "siis"
         );
         echo json_encode(["section" => $section]);
     }
@@ -798,7 +799,7 @@ class Administration extends Dbconfig
     {
         $result = $this->prepared_select("SELECT * FROM section JOIN schoolyear USING(sy_id) WHERE section_code=?", [$_GET["sec_code"]], "s");
         $row = mysqli_fetch_assoc($result);
-        $adv_result = mysqli_query($this->db, "SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
+        $adv_result = $this->query("SELECT teacher_id, last_name, first_name, middle_name, ext_name FROM faculty where teacher_id='{$row['teacher_id']}'");
         $adviser = mysqli_fetch_assoc($adv_result);
         $school_year = $row['start_year'] . " - " . $row['end_year'];
         if ($adviser) {
@@ -1603,7 +1604,6 @@ class Administration extends Dbconfig
      * Implementation of inserting Faculty
      * 1.   Create user default password by concatenating the prefix and the next 
      *      auto increment value (that is maximum of column id_no + 1). ex. FA1234567890
-     *      1.1 Move image to directory
      * 2.   Create faculty record
      * 3.   Insert every subject handled if exist
      * 4.   Insert every subject class handled
@@ -1617,9 +1617,8 @@ class Administration extends Dbconfig
         $types .= "i";
 
         // Step 2
-        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, department, cp_no, id_picture, teacher_user_no) "
-            . "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
+        $query = "INSERT INTO faculty (last_name, first_name, middle_name, ext_name, birthdate, age, sex,  email, award_coor, enable_enroll, department, cp_no, teacher_user_no) "
+            . "VALUES(?, ?, ?, ?, ?,  ?, ?, ?, ?, ?,  ?, ?, ?);";
 
         $this->prepared_query($query, $params, $types);
         $id = mysqli_insert_id($this->db);  // store the last inserted primary key (that is the teacher_id)
@@ -1676,9 +1675,9 @@ class Administration extends Dbconfig
         $param = $this->prepareFacultyRolesValue();
         $param[] = $_POST['teacher_id'];
         $this->prepared_query(
-            "UPDATE faculty SET enable_edit_grd=?, enable_enroll=?, award_coor=? WHERE teacher_id=?;",
+            "UPDATE faculty SET enable_enroll=?, award_coor=? WHERE teacher_id=?;",
             $param,
-            "iiii"
+            "iii"
         );
     }
 
@@ -1701,14 +1700,10 @@ class Administration extends Dbconfig
      */
     private function prepareFacultyRolesValue()
     {
-        $editGrades = 0; // Roles are set to 0 by default
         $canEnroll = 0;
         $awardRep = 0;
         if (isset($_POST['access'])) {
             foreach ($_POST['access'] as $accessRole) {
-                if ($accessRole == 'editGrades') {
-                    $editGrades = 1;
-                }
                 if ($accessRole == 'canEnroll') {
                     $canEnroll = 1;
                 }
@@ -1717,7 +1712,7 @@ class Administration extends Dbconfig
                 }
             }
         }
-        return [$editGrades, $canEnroll, $awardRep];
+        return [$canEnroll, $awardRep];
     }
 
     /**
@@ -1772,6 +1767,7 @@ class Administration extends Dbconfig
 
     public function listSubClassFacultyOptions()
     {
+        $condition = '';
         if (isset($_POST['exclude'])) {
             $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
         }
@@ -2007,11 +2003,8 @@ class Administration extends Dbconfig
         // faculty will be assigned to new section
         if (!isset($_POST['current-adviser'])) {
             // no adviser to the section where the faculty will be transfered
-            $query_1 = "UPDATE section SET teacher_id=NULL WHERE teacher_id='$teacher_id';";
-            $query_2 = "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';";
-
-            mysqli_query($this->db, $query_1);
-            mysqli_query($this->db, $query_2);
+            $this->query("UPDATE section SET teacher_id=NULL WHERE teacher_id='$teacher_id';");
+            $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
             $this->prepareSectionResult($section_dest, $teacher_id);
             return;
         }
@@ -2027,8 +2020,8 @@ class Administration extends Dbconfig
 
         // switch of advisory classes
         $section_adviser = $_POST['current-adviser'];
-        mysqli_query($this->db, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
-        mysqli_query($this->db, "UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
+        $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+        $this->query("UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
         $this->prepareSectionResult($section_dest, $teacher_id);
     }
 

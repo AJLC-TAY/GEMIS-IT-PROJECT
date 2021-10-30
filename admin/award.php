@@ -80,7 +80,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                                 </div>
                             </div>
-                            <div class="card row mb-4">
+                            <!-- <div class="card row mb-4">
                                 <h4>Specific Discipline</h4>
                                 <div class="container">
                                     <div class='form-row row justify-content-around align-content-center mb-2'>
@@ -89,19 +89,19 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     </div>
                                     <div class="row">
                                         <?php 
-                                        $spec_award = $admin->getSpecificDiscParamters();
-                                        foreach($spec_award as $code => $param) {
-                                            echo "<div class='col-md-6 row justify-content-around align-content-center'>
-                                                    <label class='col-form-label col-md-6'>{$param['desc']}</label>
-                                                    <div class='col-md-6'>
-                                                        <input value='{$param['grd']}' name='$code' type='number' class='form-control form-control-sm number text-center' placeholder='Enter Value'>
-                                                    </div>
-                                                </div>";
-                                        }
+                                        // $spec_award = $admin->getSpecificDiscParamters();
+                                        // foreach($spec_award as $code => $param) {
+                                        //     echo "<div class='col-md-6 row justify-content-around align-content-center'>
+                                        //             <label class='col-form-label col-md-6'>{$param['desc']}</label>
+                                        //             <div class='col-md-6'>
+                                        //                 <input value='{$param['grd']}' name='$code' type='number' class='form-control form-control-sm number text-center' placeholder='Enter Value'>
+                                        //             </div>
+                                        //         </div>";
+                                        // }
                                         ?>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="card row mb-4">
                                 <h4>Other Awards </h4>
                                 <hr>

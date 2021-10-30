@@ -376,10 +376,6 @@ class Faculty implements JsonSerializable
     {
         return $this->enable_enroll;
     }
-    public function get_id_photo()
-    {
-        return $this->id_photo;
-    }
     public function get_subjects()
     {
         return $this->subjects;
@@ -404,9 +400,6 @@ class Faculty implements JsonSerializable
         $aCoor = ["value" => 'awardReport',
                   "desc"  => "Award Coordinator", 
                   "disp"  => $disp];
-        $cEdit = ["value" => "editGrades",
-                  "desc"  => "Can Edit Grade", 
-                  "disp"  => $disp];          
         $cEnrl = ["value" => "canEnroll",
                   "desc"  => "Can Enroll", 
                   "disp"  => $disp];          
@@ -423,7 +416,7 @@ class Faculty implements JsonSerializable
             $size += 1;
         }
 
-        return ['roles' => $roles, 'data' => [$cEdit, $cEnrl, $aCoor], 'size' => $size];
+        return ['roles' => $roles, 'data' => [$cEnrl, $aCoor], 'size' => $size];
     }
 
     public function jsonSerialize()
@@ -449,24 +442,26 @@ class Faculty implements JsonSerializable
 class SubjectClass extends Subject implements JsonSerializable
 {
     private $sub_class_code;
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher_id)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher)
     {
-        parent::__construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type);
+        parent::__construct($sub_code, $sub_name, $sub_type);
         $this->sub_class_code = $sub_class_code;
         $this->section_code = $section_code;
-        $this->teacher_id = $teacher_id;
+        $this->teacher = $teacher;
         $this->sub_code = $sub_code;
         $this->section_name = $section_name;
         $this->school_yr = $school_yr;
         $this->sub_name = $sub_name;
+        $this->grd_level = $for_grd_level;
+        $this->semester = $sub_semester;
         $color_badge = "success";
         $availability = "available";
-        if ($teacher_id) {
+        if ($teacher) {
             $color_badge = "warning";
             $availability = "taken";
         }
         $this->status = $availability;
-        $this->statusImg = "<span class='badge $availability'><div class='bg-$color_badge rounded-circle me-2' style='width: 10px; height: 10px;' title='$availability'></div></span>";
+        $this->statusImg = "<div class='d-flex justify-content-center'><span class='badge $availability'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;' title='$availability'></div></span></div>";
     }
 
     public function get_sub_class_code()
@@ -482,9 +477,9 @@ class SubjectClass extends Subject implements JsonSerializable
     {
         return $this->section_code;
     }
-    public function get_teacher_id()
+    public function get_teacher()
     {
-        return $this->teacher_id;
+        return $this->teacher;
     }
     public function get_sub_code()
     {
@@ -494,6 +489,14 @@ class SubjectClass extends Subject implements JsonSerializable
     public function get_sub_name()
     {
         return $this->sub_name;
+    }
+    public function get_semester()
+    {
+        return $this->semester;
+    }
+    public function get_grade_level()
+    {
+        return $this->grd_level;
     }
 
     public function jsonSerialize()
@@ -506,11 +509,14 @@ class SubjectClass extends Subject implements JsonSerializable
         return array_merge($jsonSerialize, [
             'sub_class_code' => $this->sub_class_code,
             'section_code' => $this->section_code,
-            'teacher_id' => $this->teacher_id,
+            'teacher' => $this->teacher,
             'sub_code' => $this->sub_code,
             'section_name' => $this->section_name,
             'sy_id' => $this->school_yr,
             'status' => $this->status,
+            'grd_level'=> $this->grd_level,
+            'semester'=> $this->semester,
+            
             'statusImg' => $this->statusImg
         ]);
     }
