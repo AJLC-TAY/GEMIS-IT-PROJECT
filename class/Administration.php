@@ -1367,6 +1367,19 @@ class Administration extends Dbconfig
         // echo json_encode($this->listSubjects('archived_subject'));
     }
 
+    /** Returns the list of subjects by specified grade level. */
+    public function listFacultySubjects()
+    {
+        $code = 'ABM11'; //$_POST['section_code'];
+        $result = $this->query("SELECT sub_class_code, s.sub_code, s.sub_name FROM subjectclass JOIN subject as s USING (sub_code) WHERE section_code= '$code';");
+        $subjects = array();
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $subjects[] = new Subject($row['sub_class_code'], $row['sub_code'], $row['sub_name']);
+        }
+        return $subjects;
+    }
+
     public function moveSubject($pref_og, $pref_dest)
     {
 

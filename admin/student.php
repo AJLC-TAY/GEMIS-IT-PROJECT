@@ -32,7 +32,10 @@ include_once("../inc/head.html");
                             }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
                                 $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
-                            } else {
+                            }else if (isset($_GET['page'])){
+                                include_once("student/gradeRectification.php");
+                                $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
+                            }else {
                                 include_once("student/studentList.php"); 
                                 $jsFilePath = "<script type='text/javascript' src='../js/admin/student-list.js'></script>";
                             }

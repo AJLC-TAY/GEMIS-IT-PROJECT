@@ -1,6 +1,20 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
+require_once("../class/Administration.php");
+$admin = new Administration();
+$assignFaculty = $admin->listFacultySubjects();
+// echo ($assignFaculty);
+
+$facultyassignlist = '';
+
+foreach ($assignFaculty as $af) {
+    // $sub_code = $af->get_sub_code();
+    $sub_name = $af->get_sub_name();
+    // $sub_type = $af->get_sub_type();
+    $facultyassignlist .= "<li><label for='subject' class='col-form-label list-group-item'>$sub_name</label></li><br>";
+}
+
 ?>
 <title>Assign Faculty to Subject | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -36,41 +50,47 @@ include_once("../inc/head.html");
                             </header>
                             <div class="container w-75">
                                 <div class="card">
-                                    <form>
-                                        <div class="form-group row">
-                                            <div class="col-md-6">
-                                                <div class="container">
-                                                    <h6 class=" fw-bold d-flex justify-content-center mb-2">SUBJECTS</h6>
-                                                    <div class="row list-group">
-                                                        <ul>
-                                                            <li> <label for="" class="col-form-label list-group-item">EAPP</label></li><br>
-                                                            <li><label for="" class="col-form-label list-group-item">GEN MATH</label></li>
-                                                        </ul>
-                                                       
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <form action="action.php" method="POST>
+                                        <div class=" form-group row">
+                                        <div class="col-md-6">
+                                            <div class="container">
+                                                <h6 class=" fw-bold d-flex justify-content-center mb-2">SUBJECTS</h6>
+                                                <div class="row list-group">
+                                                    <ul>
+                                                        <!-- <li> <label for="" class="col-form-label list-group-item">EAPP</label></li><br>
+                                                        <li><label for="" class="col-form-label list-group-item">GEN MATH</label></li> -->
+                                                        <?php echo $facultyassignlist ?>
+                                                    </ul>
 
-                                            <div class="col-md-6">
-                                                <div class="container">
-                                                    <h6 class="fw-bold d-flex justify-content-center mb-2">FACULTY</h6>
-                                                    <div class="row">
-                                                        <select name="month" class="form-select form-select">
-                                                            <option value=""></option>
-                                                        </select>
-                                                        <select name="month" class="form-select">
-                                                            <option value=""></option>
-                                                        </select>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+
+                                        <div class="col-md-6">
+                                            <div class="container">
+                                                <h6 class="fw-bold d-flex justify-content-center mb-2">FACULTY</h6>
+                                                <div class="row">
+                                                    <form id="assignFacultyToSub" action="action.php" method="POST">
+                                                        <input type="hidden" name="action" value="listFacultySubjects" />
+                                                        <select name="teacher_id" id="faculty-select" class="form-select form-select">
+                                                        </select>
+                                                    </form>
+                                                    <!-- <select name="faculty_id" class="form-select form-select" id="assign-faculty">
+                                                        <option value=""></option>
+                                                    </select>
+                                                    <select name="faculty_id" class="form-select">
+                                                        <option value=""></option>
+                                                    </select> -->
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </section>
 

@@ -34,10 +34,14 @@ $school_year = $_SESSION['school_year'];
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="student" href="student.php">
-                    <i class="fa fa-graduation-cap"></i>
+                <a href="javascript:;">
+                    <i class="fa fa-book"></i>
                     <span>Student</span>
                 </a>
+                <ul class="sub">
+                    <li><a id="student" href="student.php">Student List</a></li>
+                    <li><a id="" href="student.php?page=grade_rectification">Grade Rectification</a></li>
+                </ul>
             </li>
             <li class="sub-menu">
                 <a id="faculty" href="faculty.php">

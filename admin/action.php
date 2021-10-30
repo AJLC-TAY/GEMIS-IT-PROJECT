@@ -123,9 +123,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteSubject') {
 }
 
 
-
 if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
     $admin->listSubjectsJSON();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'listFacultySubjects') {
+    $admin->listFacultySubjects();
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getAllSubjectJSON') {
