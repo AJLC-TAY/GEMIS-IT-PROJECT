@@ -1,6 +1,6 @@
-<?php 
+<?php
 $user = '';
-switch($_SESSION['user_type']) {
+switch ($_SESSION['user_type']) {
     case 'AD':
         include_once("../class/Administration.php");
         $user = new Administration();
@@ -9,7 +9,6 @@ switch($_SESSION['user_type']) {
         include_once("../class/Faculty.php");
         $user = new FacultyModule();
         break;
-
 }
 $program_list = $user->listPrograms("program");
 $filters =  $user->getEnrollFilters();
@@ -24,19 +23,19 @@ $filters =  $user->getEnrollFilters();
             <li class="breadcrumb-item active" aria-current="page">Add</li>
         </ol>
     </nav>
-    <div class="mb-3 d-flex justify-content-between">
+    <div class="mb-2 d-flex justify-content-between">
         <span>
             <h3 class="fw-bold">Section Form</h3>
             <p><small class='text-secondary'>Please complete the following: </small></p>
         </span>
     </div>
-    
+
 </header>
 <!-- HEADER END -->
 <form id="section-form-page" method="POST" action="action.php">
     <input type="hidden" name="action" value="addSection">
 
-    <div class="container card w-75 ms-0 bg-white mb-3">
+    <div class="container card w-100 ms-0 bg-white mb-3">
         <div class="row">
             <div class="form-group col-sm-6">
                 <div class="form-row row d-none">
@@ -48,7 +47,7 @@ $filters =  $user->getEnrollFilters();
                 <div class="form-row row">
                     <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
                     <div class="col-lg-8">
-                        <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
+                        <input id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
                     </div>
                 </div>
                 <div class="form-row row">
@@ -56,10 +55,10 @@ $filters =  $user->getEnrollFilters();
                     <div class="col-lg-8">
                         <select id="grade-level" class='form-select filter-form' name='grade-level'>
                             <?php
-                                $grade_level_list = ["11" => "11", "12" => "12"];
-                                foreach($grade_level_list as $id => $value) {
-                                    echo "<option value='$id'>$value</option>";
-                                }
+                            $grade_level_list = ["11" => "11", "12" => "12"];
+                            foreach ($grade_level_list as $id => $value) {
+                                echo "<option value='$id'>$value</option>";
+                            }
                             ?>
                         </select>
                     </div>
@@ -79,10 +78,10 @@ $filters =  $user->getEnrollFilters();
                         <select name="adviser" id="adviser" class="form-select">
                             <option value="*">-- Select faculty --</option>
                             <?php
-                                $faculty_list = $user->listNotAdvisers();
-                                foreach($faculty_list as $faculty) {
-                                    echo "<option value='{$faculty['teacher_id']}'>T. {$faculty['name']}</option>";
-                                }
+                            $faculty_list = $user->listNotAdvisers();
+                            foreach ($faculty_list as $faculty) {
+                                echo "<option value='{$faculty['teacher_id']}'>T. {$faculty['name']}</option>";
+                            }
                             ?>
                         </select>
                     </div>
@@ -90,22 +89,27 @@ $filters =  $user->getEnrollFilters();
             </div>
         </div>
         <hr>
-        <div class="row">
-            <div id="toolbar">
-                <div class="d-flex">
-                    <input type="search" id="search-input" class="form-control form-control-sm me-3" placeholder="Search something here">
-                    <div class="input-group input-group-sm mb-3">
-                        <label class="input-group-text " for="tracks">Strand</label>
-                        <select id="program" class='form-select mb-0 filter-form' name='program'>
-                            <option value="*" selected>All</option>
-                            <?php
-                            foreach($program_list as $program) {
-                                $prog_code = $program->get_prog_code();
-                                $prog_name = $program->get_prog_desc();
-                                echo "<option value='$prog_code'>$prog_name</option>";
-                            }
-                            ?>
-                        </select>
+        <div class="container">
+            <div id="">
+                <div class="d-flex justify-content-between mb-3">
+                    <!-- SEARCH BAR -->
+                    <span class="flex-grow-1 me-3">
+                        <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                    </span>
+                    <div>
+                        <div class="input-group input-group-sm mb-3">
+                            <label class="input-group-text " for="tracks">Strand</label>
+                            <select id="program" class='form-select mb-0 filter-form' name='program'>
+                                <option value="*" selected>All</option>
+                                <?php
+                                foreach ($program_list as $program) {
+                                    $prog_code = $program->get_prog_code();
+                                    $prog_name = $program->get_prog_desc();
+                                    echo "<option value='$prog_code'>$prog_name</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -124,11 +128,11 @@ $filters =  $user->getEnrollFilters();
             </table>
         </div>
     </div>
-    <div class="w-75 ms-0 d-flex justify-content-end">
-        <input type="submit" class="btn btn-secondary me-1" value="Submit & Create another" disabled/>
-        <input type="submit" class="btn btn-success" value="Create"/>
+    <div class="ms-0 d-flex justify-content-end">
+        <input type="submit" class="btn btn-outline-secondary me-1" value="Submit & Create another" disabled />
+        <input type="submit" class="btn btn-success" value="Create" />
     </div>
 </form>
 <script type="text/javascript">
     let isViewPage = false;
-</script>               
+</script>
