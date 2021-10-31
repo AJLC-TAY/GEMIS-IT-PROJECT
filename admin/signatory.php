@@ -9,7 +9,7 @@ $faculty = $admin->listFaculty();
 
 
 ?>
-<title>Admin | GEMIS</title>
+<title>Signatory | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
@@ -56,7 +56,7 @@ $faculty = $admin->listFaculty();
                                                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button id="delete-signatory" class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
+                                                    <button id="delete-signatory" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
                                                 </div>
                                             </div>
                                             <tr>
@@ -64,7 +64,7 @@ $faculty = $admin->listFaculty();
                                                 <th scope='col' data-width="100" data-align="center" data-field="sign_id">Sign ID</th>
                                                 <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="years">Years</th>
                                                 <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                                <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
+                                                <th scope='col' data-width="200" data-halign="center" data-align="center" data-sortable="true" data-field="position">Position</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
                                             </tr>
                                         </thead>
@@ -162,47 +162,21 @@ $faculty = $admin->listFaculty();
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modal-view" aria-hidden="true">
+    <div class="modal fade" id="confirmation-modal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">View Signatory Details</h4>
+                        <h4 class="mb-0">Confirmation Message</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-column">
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="id-no-view">ID No</label>
-                            <div class="col-8">
-                                <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="name-view">Name</label>
-                            <div class="col-8">
-                                <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="position-view">Position</label>
-                            <div class="col-8">
-                                <input id="position-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="years-view">Years</label>
-                            <div class="col-8">
-                                <input id="years-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
-                            </div>
-                        </div>
-                    </div>
+                    Delete selected signatory?
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
-                    <button data-action='Edit' data-bs-toggle="modal" data-bs-target="#modal-form" class="show-modal edit-btn btn btn-primary btn-sm">Edit</button>
+                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button id="delete-signatory-confirm" class="edit-btn btn btn-danger btn-sm">Delete</button>
                 </div>
             </div>
         </div>

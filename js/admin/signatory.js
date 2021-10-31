@@ -98,16 +98,17 @@ $(function() {
     });
     hideSpinner();
 
-    $('#delete-signatory').click(function(e){
+    $('#delete-signatory-confirm').click(function(e){
+        e.preventDefault();
         var $table = $("#table");
         var action = 'deleteSignatory';
 
         let selected = $table.bootstrapTable('getSelections');
-        console.log(selected);
         selected.forEach(element => { 
             var id = element.sign_id;
             $.post("action.php", {id,action}, function(data) {	
                 $table.bootstrapTable('refresh');
+                $("#confirmation-modal").modal("hide");
             });
         });
     })

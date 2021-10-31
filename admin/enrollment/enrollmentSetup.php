@@ -96,7 +96,7 @@ $admin = new Administration();
                 <div class="row mt-3">
                     <div class="col-lg-6 mb-3">
                         <h6>Summary list of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
-                        <ul id="faculty-list" class="list-group h-75 overflow-auto">
+                        <ul id="faculty-list" class="list-group overflow-auto" style="max-height: 350px;">
 
                         </ul>
                     </div>
@@ -125,7 +125,7 @@ $admin = new Administration();
             </div>
             <div class="row justify-content-end mt-3">
                     <div class="col-auto">
-                        <a href="#" class="stepper-btn btn btn-secondary me-1 previous">Back</a>
+                        <a class="stepper-btn btn btn-secondary me-1 previous">Back</a>
                         <a href="enrollment.php" class="stepper-btn btn btn-success">Go to Enrollment Dashboard</a>
                     </div>
                 </div>

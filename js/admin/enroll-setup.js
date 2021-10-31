@@ -179,6 +179,7 @@ $(function() {
     });
     $(document).on("click", ".previous", () => {
         stepper.previous();
+        facultyTable.bootstrapTable('resetView');
     });
 
     /** Remove section from enrollment setup */
