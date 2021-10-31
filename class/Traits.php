@@ -442,19 +442,30 @@ trait FacultySharedMethods
      */
     public function getAdvisoryClass($sy = null)
     {
-        $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
-        $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
-        if (is_null($sy)) {
-            $params = [$id];
-            $types = "i";
+
+        if ($_SESSION['user_type'] == 'AD'){
+            $query = "SELECT section_code, section_name FROM section";
+            while ($data = mysqli_fetch_assoc($this->query($query))) {
+                $advisory[] = ["section_code" => $data[0], "section_name" => $data[1]];
+            }
+            $data = mysqli_fetch_row($this->query($query));
         } else {
-            $query .= " AND sy_id=?; ";
-            $params = [$id, $sy];
-            $types = "ii";
-        }
-        $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
+            $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
+            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
+            if (is_null($sy)) {
+                $params = [$id];
+                $types = "i";
+            } else {
+                $query .= " AND sy_id=?; ";
+                $params = [$id, $sy];
+                $types = "ii";
+            }
+            $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
+        }        
+        
+        
         if ($data) {
-            return ["section_code" => $data[0], "section_name" => $data[1]];
+            return $advisory;
         }
         return NULL;
     }
@@ -535,15 +546,18 @@ trait FacultySharedMethods
      */
     public function getHandled_sub_classes($teacher_id): array
     {
+
+        $teacher_id = $teacher_id == 'admin' ? '' : "sc.teacher_id='$teacher_id' AND ";
+
         $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, sh.for_grd_level, sh.sub_semester, se.section_name, syb.sy_id
                 FROM subjectclass sc
                 JOIN section se USING(section_code)
                 JOIN sysub syb USING(sub_sy_id)
                 JOIN subject s ON s.sub_code=syb.sub_code
                 JOIN sharedsubject sh ON sh.sub_code=s.sub_code
-                WHERE sc.teacher_id='$teacher_id' AND for_grd_level != 0 GROUP BY section_code";
+                WHERE $teacher_id for_grd_level != 0 GROUP BY section_code";
 
-        $result = $this->query($query); //hindi ka pa ba inaanto
+        $result = $this->query($query);
         $handled_sub_classes = array();
 
         while ($sc_row = mysqli_fetch_assoc($result)) {
