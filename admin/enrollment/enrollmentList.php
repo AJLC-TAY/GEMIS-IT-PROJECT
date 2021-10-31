@@ -8,8 +8,9 @@ $sy_filter = '';
 if ($_SESSION['user_type'] == 'AD') {
     $archived_btn = "<button type='button' class='view-archive btn btn-secondary'><i class='bi bi-eye me-2'></i>View Archived Enrollees</button>";
 
-    $table_opts = "<button id='export-opt' type='submit' class='btn btn-dark btn-sm me-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
-                <button id='track-archive-btn' class='btn btn-secondary btn-sm me-5'><i class='bi bi-archive me-2'></i>Archive</button>";
+    $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm me-1 my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
+                <button id='export-opt' class='table-opt btn btn-dark btn-sm me-1 my-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
+                <button id='archive-opt' class='table-opt btn btn-secondary btn-sm me-5 my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
 
     $sy_filter = "<li class='col-3 mb-3 me-2'>
                         <div class='input-group input-group-sm'>
@@ -56,7 +57,7 @@ if ($_SESSION['user_type'] == 'AD') {
             <div>
                 <button class="btn btn-primary btn-sm me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
                 <?php echo $table_opts; ?>
-                <button id="" class="refresh btn btn-outline-primary btn-sm me-3"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
+                <button id="" class="refresh btn btn-outline-primary btn-sm me-3 my-1"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
             </div>
             <div class="form-check form-switch my-1">
                 <input class="form-check-input auto-refresh-switch" type="checkbox" title="Turn off auto refresh" data-status="on" checked>
@@ -161,5 +162,29 @@ if ($_SESSION['user_type'] == 'AD') {
         </table>
     </div>
 </div>
-
 <!-- ENROLLMENT TABLE END-->
+<div class="modal fade" id="delete-student-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <form id="delete-form" method="POST">
+            <input type="hidden" name="action" value="deleteStudent">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Delete Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Delete <span id="student-count"></span> selected student/s?
+                    <ul id="student-selected" class="list-group mt-3 overflow-auto" style="max-height: 300px"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" form="delete-form" class="submit btn btn-success btn-sm" value="Delete"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

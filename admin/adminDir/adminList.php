@@ -1,7 +1,7 @@
 <?php
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$user_id = $_SESSION['id'] = 2;
+$user_id = $_SESSION['id'];
 $user = $admin->getAdministrator($user_id);
 ?>
 <!-- HEADER -->
@@ -101,8 +101,8 @@ $user = $admin->getAdministrator($user_id);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger" value="Delete">
+                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger btn-sm" value="Delete">
                 </div>
             </form>
         </div>
@@ -141,8 +141,8 @@ $user = $admin->getAdministrator($user_id);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary" value="Change">
+                    <button class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary btn-sm" value="Change">
                 </div>
             </form>
         </div>

@@ -65,7 +65,9 @@ trait School
 
     public function listSubjects($tbl, $tbl2)
     {
-        session_start();
+        if(!isset($_SESSION)) {
+            session_start();
+        }
         $sy_id = $_SESSION['sy_id'];
         $subjectList = [];
 
@@ -146,9 +148,10 @@ trait UserSharedMethods
      */
     public function createUser(String $type): int
     {
-        $qry = mysqli_query($this->db, "SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
+        $qry = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
         $PASSWORD = mysqli_fetch_row($qry)[0];
-        mysqli_query($this->db, "INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
+        $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
+        $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
         return mysqli_insert_id($this->db);  // Return User ID ex. 123456789
     }
 

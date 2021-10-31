@@ -48,6 +48,18 @@
 
 include '../class/Administration.php';
 $admin = new Administration();
+
+$result = $admin->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '120087';");
+$row = mysqli_fetch_row($result);
+print_r($row);
+foreach([$row[0], $row[1], $row[2]] as $path) {
+    $path = "../$path";
+    echo $path;
+    if (file_exists($path)) {
+        echo "$path<br>";
+//        unlink($path);
+    }
+}
 // $tester = $admin->getSubjectScheduleData('TVL-E');
 // $data = [];
 // foreach($tester['schedule'] as $prog => $prog_data) {

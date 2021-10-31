@@ -1,4 +1,3 @@
-preload("#enrollment", "#enrollment-sub")
 
 // const tableSetup = {
 //     url:                'getAction.php?data=enrollees',
@@ -67,7 +66,45 @@ enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-al
 
 
 $(function() {
+    preload("#enrollment", "#enrollment-sub");
+
     $(".buttons-toolbar").hide();
+
+    /** Table options */
+    $(document).on("click", ".table-opt", function() {
+        if (selections.length === 0) {
+            return showToast("danger", "Please select a student first");
+        }
+       switch($(this).attr("id")) {
+           case "delete-opt":
+               let modal = $("#delete-student-modal");
+               modal.find("#student-count").html(selections.length);
+               let studentList = '';
+               enrolleesTable.bootstrapTable('getSelections').forEach(e => {
+                   studentList += `<li class="list-group-item"><div class="d-flex justify-content-between"><span>${e.name}</span><span>${e.status}</span></div></li>`;
+               });
+               modal.find("#student-selected").html(studentList);
+               modal.modal("show");
+               break;
+           case "export-opt":
+               break;
+           case "archive-opt":
+               break;
+
+       }
+    });
+
+    /** Delete students */
+    $(document).on("submit", "#delete-form", function (e) {
+        e.preventDefault();
+        let formData = $(this).serializeArray();
+        enrolleesTable.bootstrapTable('getSelections').forEach(e => {
+            formData.push({'name': 'students[]', 'value': e.stud_id});
+        });
+        $.post("action.php", formData, function() {
+           showToast("success", "Students successfully deleted");
+        });
+    });
 
     /** Updates the button title of the switch */
     function autoRefreshEvents(elem) {

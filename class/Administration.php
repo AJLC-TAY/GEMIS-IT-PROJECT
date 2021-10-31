@@ -1566,17 +1566,20 @@ class Administration extends Dbconfig
     public function getUserCounts()
     {
         $query = "SELECT (
-            SELECT COUNT(admin_id) FROM administrator
+            SELECT COALESCE(COUNT(admin_id), 0) FROM administrator
         ) AS administrators, 
         (    
-            SELECT COUNT(teacher_id) FROM faculty
+            SELECT COALESCE(COUNT(teacher_id), 0) FROM faculty
         ) as teachers,
         (
-            SELECT COUNT(stud_id) FROM student JOIN enrollment USING (stud_id) WHERE sy_id = {$_SESSION['sy_id']}
-        ) as students";
-        $result = mysqli_query($this->db, $query);
+            SELECT COALESCE(COUNT(stud_id), 0) FROM student JOIN enrollment USING (stud_id) WHERE sy_id = '{$_SESSION['sy_id']}'
+        ) as students, 
+        (
+           SELECT COALESCE(COUNT(sign_id), 0) FROM signatory
+        ) as sign;";
+        $result = $this->query($query);
         $row = mysqli_fetch_row($result);
-        return [$row[0], $row[1], $row[2], 0];
+        return [$row[0], $row[1], $row[2], $row[3]];
     }
 
     /**
@@ -1596,6 +1599,28 @@ class Administration extends Dbconfig
     {
         foreach ($list as $user_id) {
             $this->resetPassword($user_id);
+        }
+    }
+
+    public function deleteStudent()
+    {
+        $students = $_POST['students'];
+        foreach($students as $stud) {
+            # delete student images
+            $result = $this->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '$stud';");
+            $row = mysqli_fetch_row($result);
+            foreach([$row[0], $row[1], $row[2]] as $path) {
+                $path = "../".$path;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+
+            # reduce section student no if student have section
+            $this->query("UPDATE section SET stud_no = (stud_no - 1) WHERE section_code = ANY(SELECT section_code FROM enrollment WHERE stud_id = '$stud');");
+
+            # delete user record
+            $this->query("DELETE FROM user WHERE id_no = ANY(SELECT s.id_no FROM student s WHERE stud_id = '$stud');");
         }
     }
 

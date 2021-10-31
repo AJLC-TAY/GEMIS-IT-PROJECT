@@ -42,6 +42,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'enroll') {
 if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
     $admin->validateEnrollment();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'deleteStudent') {
+    $admin->deleteStudent();
+}
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {

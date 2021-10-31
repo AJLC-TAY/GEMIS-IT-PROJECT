@@ -1712,6 +1712,7 @@ class StudentAward extends Award implements JsonSerializable
                 "curriculum"  => $this->curr_code,
                 "status"      => $this->status,
                 "section"     => $this->section,
+                "stud_id"     => $this->stud_id,
                 "action"      => "<div class='d-flex justify-content-center'>"
                     ."<a href='enrollment.php?page=credential&id={$this->stud_id}' class='btn btn-primary btn-sm w-auto me-1' title='View Enrollee' target='_blank'><i class='bi bi-eye'></i></a>"
                     ."<a href='enrollment.php?id={$this->stud_id}&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee' target='_blank'><i class='bi bi-box-arrow-up-left'></i></a>"
