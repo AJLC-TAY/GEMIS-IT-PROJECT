@@ -22,7 +22,7 @@
                 <div class="d-flex justify-content-between mb-3">
                     <!-- SEARCH BAR -->
                     <span class="flex-grow-1 me-3 ">
-                        <input id="search-input" type="search" class="form-control m-0" placeholder="Search something here">
+                        <input id="search-input" type="search" class="form-control form-control-sm m-0" placeholder="Search something here">
                     </span>
                     <div class="button-con my-auto">
                         <button class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
@@ -37,7 +37,7 @@
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
                     <th scope='col' data-width="100" data-align="center" data-field="max_stud">Maximum Students</th>
                     <th scope='col' data-width="100" data-align="center" data-field="stud_no">Student Number</th>
-                    <th scope='col' data-width="150" data-align="center" data-field="teacher_id">Adviser (ID)</th>
+                    <th scope='col' data-width="150" data-align="center" data-field="teacher_id">Adviser</th>
                     <th scope='col' data-width="250" data-align="center" data-field="action">Action</th>
                 </tr>
             </thead>

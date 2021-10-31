@@ -763,13 +763,15 @@ class Administration extends Dbconfig
     public function listSection()
     {
         session_start();
-        $query = "SELECT * FROM section" . ((isset($_GET['current']) && $_GET['current'] === 'true')
+        $query = "SELECT section_code, section_name, sy_id, grd_level, stud_no_max, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM section" . ((isset($_GET['current']) && $_GET['current'] === 'true')
             ? "WHERE sy_id='{$_SESSION['sy_id']}'"
-            : "") . ";";
-        $result = mysqli_query($this->db, $query);
+            : "") . "";
+        $query .= " LEFT JOIN faculty USING (teacher_id);";
+
+        $result = $this->query($query);
         $sectionList = array();
         while ($row = mysqli_fetch_assoc($result)) {
-            $sectionList[] = new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'], $row['stud_no_max'], $row['stud_no'], $row['teacher_id']);
+            $sectionList[] = new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'], $row['stud_no_max'], $row['stud_no'],$row['name']);
         }
         return $sectionList;
     }
@@ -1615,25 +1617,35 @@ class Administration extends Dbconfig
         }
     }
 
+    public function deleteStudentData($stud_id) {
+          # delete student images
+          $result = $this->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '$stud_id';");
+          $row = mysqli_fetch_row($result);
+          foreach([$row[0], $row[1], $row[2]] as $path) {
+              if (!is_null($path)) {
+                  $path = "../".$path;
+                  if (file_exists($path)) {
+                      unlink($path);
+                  }
+              }
+          }
+
+          # reduce section student no if student have section
+          $this->query("UPDATE section SET stud_no = (stud_no - 1) WHERE section_code = ANY(SELECT section_code FROM enrollment WHERE stud_id = '$stud_id');");
+
+          # delete user record
+          $this->query("DELETE FROM user WHERE id_no = ANY(SELECT s.id_no FROM student s WHERE stud_id = '$stud_id');");
+    }
+
     public function deleteStudent()
     {
+        if (isset($_GET['id'])) {
+            $this->deleteStudentData($_GET['id']);
+            return;
+        }
         $students = $_POST['students'];
         foreach($students as $stud) {
-            # delete student images
-            $result = $this->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '$stud';");
-            $row = mysqli_fetch_row($result);
-            foreach([$row[0], $row[1], $row[2]] as $path) {
-                $path = "../".$path;
-                if (file_exists($path)) {
-                    unlink($path);
-                }
-            }
-
-            # reduce section student no if student have section
-            $this->query("UPDATE section SET stud_no = (stud_no - 1) WHERE section_code = ANY(SELECT section_code FROM enrollment WHERE stud_id = '$stud');");
-
-            # delete user record
-            $this->query("DELETE FROM user WHERE id_no = ANY(SELECT s.id_no FROM student s WHERE stud_id = '$stud');");
+            $this->deleteStudentData($stud);
         }
     }
 
@@ -1900,7 +1912,7 @@ class Administration extends Dbconfig
         $query = "SELECT * from student AS s "
             . "JOIN enrollment AS e ON e.stud_id = s.stud_id "
             . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : "AND s.id_no IN (SELECT id_no FROM user WHERE is_active=1);");
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query($query);
         $studentList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1935,6 +1947,36 @@ class Administration extends Dbconfig
         }
         return $studentList;
     }
+
+    public function listStudents($is_JSON = FALSE) 
+    {
+        // session_start();
+        $sy_id = $_GET['sy_id'];
+        $grade = $_GET['grade'];
+        $student_list = [];
+        $result = $this->query("SELECT LRN, stud_id, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name, '')) AS name,
+                                 section_code, section_name, enrolled_in AS grade, prog_code FROM student JOIN enrollment e USING (stud_id) 
+                                LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade';");
+        while($row = mysqli_fetch_assoc($result)) {
+            $student_list[] = [
+                'lrn'           => $row['LRN'], 
+                'stud_id'       => $row['stud_id'],
+                'name'          => $row['name'], 
+                'section_code'  => $row['section_code'], 
+                'section_name'  => $row['section_name'], 
+                'program'       => $row['prog_code'], 
+                'grade'         => $row['grade']
+            ];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($student_list);
+            return;
+        }
+        return $student_list;
+    }
+
+
 
     public function listStudentJSON()
     {
@@ -2080,6 +2122,32 @@ class Administration extends Dbconfig
     public function unassignSubClasses($return_all = FALSE)
     {
         $this->assignSubClasses(NULL, TRUE);
+    }
+
+    public function addStudentInSection() 
+    {
+        $new_section_code = $_POST['section_code'];
+        $new_count = [];
+        $count_to_be_added = count($_POST['students']);
+        foreach($_POST['students'] as $stud_id => $section)
+        {
+            if ($section != '') {
+                if (!isset($new_count[$section])) {     # initialize section count if not included in the array
+                    $new_count[$section] = 1;
+                } else {                                # increment section count by 1
+                    $new_count[$section] = $new_count[$section] + 1;
+                }
+            }
+            # update section of student
+            $this->query("UPDATE enrollment SET section_code='$new_section_code' WHERE stud_id = '$stud_id';");
+        }
+        # update current section count 
+        $this->query("UPDATE section SET stud_no='$count_to_be_added' WHERE section_code = '$new_section_code';");
+        # update counts of sections where students transferred from
+        foreach($new_count as $sect_id => $count) {
+            $this->query("UPDATE section SET stud_no=(stud_no - $count) WHERE section_code = '$sect_id';");
+
+        } 
     }
 
     public function editStudent()

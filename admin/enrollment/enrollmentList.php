@@ -49,19 +49,29 @@ if ($_SESSION['user_type'] == 'AD') {
 <!-- ENROLLEES TABLE -->
 <div class="container">
     <div class="card w-100 h-auto bg-light">
-        <div class="d-flex justify-content-between mb-2">
+        <div class="row justify-content-between mb-3">
             <!-- SEARCH BAR -->
-            <span class="flex-grow-1 me-3">
-                <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-            </span>
-            <div>
-                <button class="btn btn-primary btn-sm me-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
-                <?php echo $table_opts; ?>
-                <button id="" class="refresh btn btn-outline-primary btn-sm me-3 my-1"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
+            <div class="col-lg-4 row">
+                <div class="col-8">
+                    <input id="search-input" type="search" class="form-control form-control-sm m-1" placeholder="Search something here">
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary btn-sm m-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
+                </div>
             </div>
-            <div class="form-check form-switch my-1">
-                <input class="form-check-input auto-refresh-switch" type="checkbox" title="Turn off auto refresh" data-status="on" checked>
-                <span>Auto Refresh</span>
+            <div class="col-lg-4" >
+                <?php echo $table_opts; ?>
+            </div>
+            <div class="col-lg-4 row justify-content-end">
+                <div class="col-auto">
+                    <button id="" class="refresh btn btn-outline-primary btn-sm m-1"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
+                </div>
+                <div class="col-auto">
+                    <div class="form-check form-switch my-2">
+                        <input class="form-check-input auto-refresh-switch" type="checkbox" title="Turn off auto refresh" data-status="on" checked>
+                        <span>Auto Refresh</span>
+                    </div>
+                </div>
             </div>
         </div>
         <!--FILTER-->

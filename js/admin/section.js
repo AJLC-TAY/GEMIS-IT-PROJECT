@@ -1,10 +1,10 @@
-import {commonTableSetup} from "./utilities.js";
+import { commonTableSetup } from "./utilities.js";
 
 preload('#enrollment', '#section')
 
 let tableSetup, tableFormSetup, url, id, table, tableForm;
 tableSetup = {
-    method:             'GET',
+    method: 'GET',
     search: true,
     searchSelector: "#search-input",
     ...commonTableSetup
@@ -18,19 +18,18 @@ tableFormSetup = {
     searchSelector: "#search-input",
     method: 'GET',
     ...commonTableSetup,
-    pageSize:  50,
+    pageSize: 50,
     pageList: "[50, 100, All]",
     height: 800
 }
 
-url =  "getAction.php?";
+url = "getAction.php?";
 id = '';
 
 if (isViewPage) {
     url += `data=student&section=${sectionCode}`;
     id = 'lrn';
-}
-else {
+} else {
     url += 'data=section';
     id = 'seciton_code';
 }
@@ -79,7 +78,7 @@ $(function() {
             // console.log(JSON.parse(data))
             form.trigger("reset");
             $("#table").bootstrapTable('refresh');
-            if (!addAnother) { 
+            if (!addAnother) {
                 $("#add-modal").modal("hide");
                 addAnother = false;
             }
@@ -106,7 +105,7 @@ $(function() {
         $(".edit-opt").addClass("d-none");
         $('#edit-btn').toggleClass('d-none');
 
-        if (!adviser) $("#empty-msg").removeClass("d-none");     // show empty message if no assigned adviser originally
+        if (!adviser) $("#empty-msg").removeClass("d-none"); // show empty message if no assigned adviser originally
 
         let inputs = $("#section-edit-form").find('input');
         let maxInput = inputs.eq(0);
@@ -116,7 +115,7 @@ $(function() {
         let teacherInput = inputs.eq(1);
         teacherInput.val(tempData[1]);
         // teacherInput.addClass("d-none")
-        
+
         $("a.link").removeClass("d-none");
     });
 
@@ -124,7 +123,7 @@ $(function() {
         e.preventDefault();
         showSpinner();
         let form = $(this);
-        let formData= form.serializeArray();
+        let formData = form.serializeArray();
         console.log(formData);
         $.post("action.php", formData, function(data) {
             let teacherID, inputs, teacherInput, teacherLink;
@@ -153,7 +152,7 @@ $(function() {
             //
             // }
             location.replace(`section.php?sec_code=${data.section}`);
-          
+
 
             // $("#edit-btn").toggleClass('d-none')
             // $(".edit-opt").addClass('d-none')
@@ -172,12 +171,12 @@ $(function() {
     });
 
     $(document).on("click", "#transfer-btn", function() {
-                
+
     });
 
     /** Specific subject */
     $(document).on("click", "#add-subject-btn", function() {
-        let subSetUp = {...tableSetup};
+        let subSetUp = {...tableSetup };
         subSetUp.url = "getAction.php?data=subjects";
         subSetUp.idField = 'sub_code';
         subSetUp.uniqueId = 'sub_code';
@@ -188,14 +187,14 @@ $(function() {
 
     });
 
-     // clear button for search subject input in the as-modal
-     $(document).on("click", ".clear-table-btn", () => {
+    // clear button for search subject input in the as-modal
+    $(document).on("click", ".clear-table-btn", () => {
         showSpinner();
         $("#subject-table").bootstrapTable("resetSearch");
         hideSpinner();
     });
-    
-    
+
+
     /** Section Form */
     $(document).on("change", ".filter-form", function() {
         showSpinner();
@@ -203,41 +202,79 @@ $(function() {
         let otherFilter, filters;
         let tb = $("#section-enrollees-table");
         console.log(value);
-        switch($(this).attr("name")) {
-            case 'program': 
+        switch ($(this).attr("name")) {
+            case 'program':
                 otherFilter = $("[name='grade-level']").val();
-                filters = (value == '*') ? {"grade": otherFilter} : {"strand": value, "grade" : otherFilter};
+                filters = (value == '*') ? { "grade": otherFilter } : { "strand": value, "grade": otherFilter };
                 console.log(otherFilter);
                 break;
-            case 'grade-level': 
+            case 'grade-level':
                 otherFilter = $("[name='program']").val()
-                filters = {"strand": otherFilter, "grade" : value};
+                filters = { "strand": otherFilter, "grade": value };
                 break;
-            }
+        }
         tb.bootstrapTable("filterBy", filters);
         console.log(value);
         hideSpinner();
     });
-    
+
     $(document).on("submit", "#section-form-page", function(e) {
         e.preventDefault();
         let formData = $(this).serializeArray();
         let tb = $("#section-enrollees-table");
         let selections = tb.bootstrapTable("getSelections");
         selections.forEach(item => {
-            formData.push({name: "students[]", value: item.id});
+            formData.push({ name: "students[]", value: item.id });
         });
 
         formData = formData.filter(function(e) {
             return !e.name.includes("btSelect");
         });
 
-        formData.push({name: 'count', value: selections.length});
+        formData.push({ name: 'count', value: selections.length });
         $.post("action.php", formData, function(data) {
             window.location.replace(`section.php?sec_code=${JSON.parse(data)}`);
         });
     });
-    
+
+    /** Add student */
+    $(document).on("click", "#add-student", function() {
+        let syID = $(this).attr("data-sy-id");
+        // let gradeLevel = $(this).attr("data-section-code");
+        let gradeLevel = $(this).attr("data-grade-level");
+        let tableSetup = {
+            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}`,
+            maintainMetaDat: true,
+            clickToSelect: true,
+            method: "GET",
+            uniqueId: 'stud_id',
+            idField: 'stud_id',
+            search: true,
+            height: 450,
+            searchSelector: "#search-student-input",
+        }
+        $("#student-options-table").bootstrapTable(tableSetup);
+        $("#add-student-modal").modal('show');
+    });
+
+    $("#add-student-modal").on("shown.bs.modal", function() {
+        $("#student-options-table").bootstrapTable('resetView');
+    });
+
+    $(document).on("submit", "#add-student-form", function(e) {
+        e.preventDefault();
+        let formData = $(this).serializeArray();
+        let selections = $("#student-options-table").bootstrapTable("getSelections");
+        selections.forEach(e => {
+            formData.push({ name: `students[${e.stud_id}]`, value: e.section_code });
+        });
+
+
+        $.post("action.php", formData, function() {
+            $("#add-student-modal").modal("hide");
+            $("#student-options-table").bootstrapTable("refresh");
+        });
+    });
 
     // $('#save-btn').click(function() {
     //     $(this).prop("disabled", true)

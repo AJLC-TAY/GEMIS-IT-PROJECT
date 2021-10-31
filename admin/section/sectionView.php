@@ -9,6 +9,7 @@ $sect_max_no = $section->get_max_stud();
 $sect_stud_no = $section->get_stud_no();
 $sect_adviser = $section->get_teacher_id();
 $school_year = $section->get_sy_desc();
+$sy_id = $section->get_sy();
 
 $program_list = $admin->listPrograms("program");
 
@@ -161,7 +162,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <span class="my-auto">
             <h6 class='m-0 fw-bold'>Student List</h6>
         </span>
-        <span><button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#add-student-modal"><i class="bi bi-plus me-2"></i>Add Student</button></span>
+        <span><button id="add-student" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>" class="btn btn-success btn-sm"><i class="bi bi-plus me-2"></i>Add Student</button></span>
     </div>
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">
@@ -331,7 +332,57 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         </form>
     </div>
 </div>
-<div class="modal fade" id="add-student-modal" tabindex="-1">
+<div class="modal fade" id="add-student-modal" tabindex="-1" aria-labelledby="modal add-student" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Add Student</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><small class='text-secondary'>Select students who will be added or transferred to this section</small></p>
+
+                <form action="">
+                    <div class="d-flex justify-content-between mb-1"> 
+                        <!-- SEARCH BAR -->
+                        <span class="flex-grow-1 me-3">
+                            <input id="search-student-input" type="search" class="form-control form-control-sm" placeholder="Search students here">
+                        </span>
+                        <span><input type='reset' class='clear-table-btn btn btn-dark btn-sm shadow-sm' value='Clear'/></span>
+                    </div>
+                </form>
+                <form id="add-student-form" method="post">
+                    <input type="hidden" name="action" id="action" value="addStudentInSection" />
+                    <input type="hidden" name="section_code" value="<?php echo $sect_code; ?>" />
+                </form>
+                <table id="student-options-table" class="table-striped table-sm">
+                    <thead class='thead-dark'>
+                        <tr>
+                            <th data-checkbox="true"></th>
+                            <th scope='col' data-width="100" data-align="center" data-field="stud_id">SID</th>
+                            <th scope='col' data-width="100" data-align="center" data-field="lrn">LRN</th>
+                            <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grade">Grade</th>
+                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="program">Strand</th>
+                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
+                            <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" form="add-student-form" class="submit btn btn-success btn-sm" value="Add" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="modal fade" id="add-student-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <form id="transfer-form" method="POST">
             <input type="hidden" name="action" value="transferStudent">
@@ -346,9 +397,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                     <p><small class='text-secondary'>Select students who will be added or transferred to this section. </small></p>
                     <table id="add-student-table" class="table-striped table-sm">
                         <thead class='thead-dark'>
-                        <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between mb-3"> -->
                             <!-- SEARCH BAR -->
-                            <span class="flex-grow-1 me-2">
+                            <!-- <span class="flex-grow-1 me-2">
                         <input id="add-student-search" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                             <div>
@@ -372,7 +423,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             </div>
         </form>
     </div>
-</div>
+</div> -->
 <!-- MODAL END -->
 <script type="text/javascript">
     let isViewPage = <?php echo json_encode($isViewPage); ?>;
