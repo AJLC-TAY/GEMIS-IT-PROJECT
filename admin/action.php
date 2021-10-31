@@ -217,7 +217,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'assignSubClasses') {
 if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
     $admin->unassignSubClasses();
 }
-if (isset($_POST['action']) && $_POST['action'] === 'addStudentInSection') {
+if (isset($_POST['action']) && ($_POST['action'] === 'addStudentInSection' || $_POST['action'] === 'transferStudentInSection')) {
     $admin->addStudentInSection();
 }
 

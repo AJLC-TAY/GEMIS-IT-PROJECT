@@ -1,7 +1,5 @@
 import { commonTableSetup } from "./utilities.js";
 
-preload('#enrollment', '#section')
-
 let tableSetup, tableFormSetup, url, id, table, tableForm;
 tableSetup = {
     method: 'GET',
@@ -45,7 +43,13 @@ try {
 
 let addAnother = false;
 
+
+function refreshCount() {
+    $("#table").bootstrapTable("refresh");
+    $("#no-of-stud").html( $("#table").bootstrapTable("getData").length);
+}
 $(function() {
+    preload('#enrollment', '#section');
     $("#adviser").select2({
         theme: "bootstrap-5",
         width: null,
@@ -240,7 +244,6 @@ $(function() {
     /** Add student */
     $(document).on("click", "#add-student", function() {
         let syID = $(this).attr("data-sy-id");
-        // let gradeLevel = $(this).attr("data-section-code");
         let gradeLevel = $(this).attr("data-grade-level");
         let tableSetup = {
             url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}`,
@@ -272,7 +275,53 @@ $(function() {
 
         $.post("action.php", formData, function() {
             $("#add-student-modal").modal("hide");
-            $("#student-options-table").bootstrapTable("refresh");
+            location.reload();
+            // $("#student-options-table").bootstrapTable("refresh");
+            // refreshCount();
+        });
+    });
+
+    /** Transfer student */
+    $(document).on("click", "#transfer-btn", function() {
+        let selections = $("#table").bootstrapTable("getSelections");
+        if (selections.length == 0) {
+            return showToast('danger', "Please select a student first");
+        }
+        let syID = $(this).attr("data-sy-id");
+        let gradeLevel = $(this).attr("data-grade-level");
+        let section = $(this).attr("data-section");
+        let tableSetup = {
+            url: `getAction.php?data=sections&sy_id=${syID}&grade=${gradeLevel}&section=${section}`,
+            maintainMetaDat: true,
+            clickToSelect: true,
+            method: "GET",
+            uniqueId: 'section_code',
+            idField: 'section_code',
+            search: true,
+            height: 450,
+            searchSelector: "#search-section-input"
+        };
+        $("#section-options-table").bootstrapTable(tableSetup);
+        $("#transfer-modal").modal('show');
+    });
+
+    $(document).on("submit", "#transfer-form", function(e) {
+        e.preventDefault();
+
+        let formData = $(this).serializeArray();
+        let selections = $("#table").bootstrapTable("getSelections");
+        selections.forEach(e => {
+            formData.push({ name: `students[${e.stud_id}]`, value: e.section_code });
+        });
+
+        let newSection = $("#section-options-table").bootstrapTable("getSelections")[0].section_code;
+        formData.push({name: "section_code", value: newSection});
+        
+        $.post("action.php", formData, function() {
+            $("#transfer-modal").modal("hide");
+            location.reload();
+            // $("#section-options-table").bootstrapTable("refresh");
+            // refreshCount();
         });
     });
 
