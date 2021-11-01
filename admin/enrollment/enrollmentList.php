@@ -8,9 +8,9 @@ $sy_filter = '';
 if ($_SESSION['user_type'] == 'AD') {
     $archived_btn = "<button type='button' class='view-archive btn btn-secondary'><i class='bi bi-eye me-2'></i>View Archived Enrollees</button>";
 
-    $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm me-1 my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
-                <button id='export-opt' class='table-opt btn btn-dark btn-sm me-1 my-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
-                <button id='archive-opt' class='table-opt btn btn-secondary btn-sm me-5 my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
+    $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm  my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
+                <button id='export-opt' class='table-opt btn btn-dark btn-sm  my-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
+                <button id='archive-opt' class='table-opt btn btn-secondary btn-sm my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
 
     $sy_filter = "<li class='col-3 mb-3 me-2'>
                         <div class='input-group input-group-sm'>
@@ -62,7 +62,7 @@ if ($_SESSION['user_type'] == 'AD') {
             <div class="col-lg-4" >
                 <?php echo $table_opts; ?>
             </div>
-            <div class="col-lg-4 row justify-content-end">
+            <div class="col-lg-4 row">
                 <div class="col-auto">
                     <button id="" class="refresh btn btn-outline-primary btn-sm m-1"><i class="bi bi-arrow-repeat me-2"></i>Refresh</button>
                 </div>
