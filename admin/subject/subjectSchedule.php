@@ -1,5 +1,5 @@
-<?php 
-require_once ("../class/Administration.php");
+<?php
+require_once("../class/Administration.php");
 $admin = new Administration();
 $programs = $admin->listPrograms('program');
 $grd_level = [11, 12];
@@ -21,7 +21,7 @@ $prog_opt = '';
 //     $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
 // }
 
-foreach($programs as $prog) {
+foreach ($programs as $prog) {
     $prog_opt .= "<option value='{$prog->get_prog_code()}'>{$prog->get_prog_desc()}</option>";
 }
 ?>
@@ -42,7 +42,7 @@ foreach($programs as $prog) {
         <select id="program-select" class="form-select me-1">
             <?php echo $prog_opt; ?>
         </select>
-        <button class='btn btn-primary edit-sched-btn ms-1'>Edit</button>
+        <button class='btn btn-outline-primary edit-sched-btn ms-2'>Edit</button>
         <div class="d-flex edit-opt-con d-none ms-1">
             <a href="subject.php?page=schedule" class="btn btn-dark me-1">Cancel</a>
             <input type="submit" form="schedule-form" class="btn btn-success save-sched-btn" value="Save">
@@ -60,58 +60,58 @@ foreach($programs as $prog) {
                 <thead class="text-center bg-light">
                     <tr>
                         <td rowspan="2"></td>
-                        <td colspan="2">Grade 11</td>
+                        <td colspan="2"><b>Grade 11</b></td>
                     </tr>
                     <tr>
-                        <td>1st Semester</td>
-                        <td>2nd Semester</td>
+                        <td><b>1st Semester</b></td>
+                        <td><b>2nd Semester</b></td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td class="text-center"><b>Core</b></td>
                         <td>
-                            Core
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][core][]" multiple="multiple" disabled>
-                                <?php // echo $core;  ?>
+                                <?php // echo $core;  
+                                ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][core][]" multiple="multiple" disabled>
-                                <?php // echo $core; ?>
+                                <?php // echo $core; 
+                                ?>
                             </select>
-                    </td>
+                        </td>
                     </tr>
                     <tr>
+                        <td class="text-center"><b>Contextualized</b></td>
                         <td>
-                            Contextualized
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][applied][]" multiple="multiple" disabled>
-                                <?php // echo $applied; ?>
+                                <?php // echo $applied; 
+                                ?>
                             </select>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][applied][]" multiple="multiple" disabled>
-                                <?php // echo $applied; ?>
+                                <?php // echo $applied; 
+                                ?>
                             </select>
-                    </td>
+                        </td>
                     </tr>
                     <tr>
+                        <td class="text-center"><b>Specialization</b></td>
                         <td>
-                            Specialization
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][specialized][]" multiple="multiple" disabled>
-                                <?php // echo $specialized; ?>
+                                <?php // echo $specialized; 
+                                ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][specialized][]" multiple="multiple" disabled>
-                                <?php //  echo $specialized; ?>
+                                <?php //  echo $specialized; 
+                                ?>
                             </select>
-                    </td>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -124,59 +124,59 @@ foreach($programs as $prog) {
                 <thead class="text-center bg-light">
                     <tr>
                         <td rowspan="2"></td>
-                        <td colspan="2">Grade 12</td>
+                        <td colspan="2"><b>Grade 12</b></td>
                     </tr>
                     <tr>
-                        <td>1st Semester</td>
-                        <td>2nd Semester</td>
+                        <td><b>1st Semester</b></td>
+                        <td><b>2nd Semester</b></td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
+                        <td class="text-center"><b>Core</b></td>
                         <td>
-                            Core
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][core][]" multiple="multiple" disabled>
-                                <?php // echo $core; ?>
+                                <?php // echo $core; 
+                                ?>
                             </select>
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][core][]" multiple="multiple" disabled>
-                                <?php // echo $core; ?>
+                                <?php // echo $core; 
+                                ?>
                             </select>
-                    </td>
+                        </td>
                     </tr>
                     <tr>
+                        <td class="text-center"><b>Contextualized</b></td>
                         <td>
-                            Contextualized
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][applied][]" multiple="multiple" disabled>
-                                <?php //  echo $applied; ?>
+                                <?php //  echo $applied; 
+                                ?>
                             </select>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][applied][]" multiple="multiple" disabled>
-                                <?php // echo $applied; ?>
+                                <?php // echo $applied; 
+                                ?>
                             </select>
-                    </td>
+                        </td>
                     </tr>
                     <tr>
+                        <td class="text-center"><b>Specialization</b></td>
                         <td>
-                            Specialization
-                        </td>
-                    <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][1][specialized][]" multiple="multiple" disabled>
-                                <?php // echo $specialized; ?>
+                                <?php // echo $specialized; 
+                                ?>
                             </select>
-                    </td>
-                    <td>
+                        </td>
+                        <td>
                             <select class="js-example-basic-multiple subject-select" name="data[12][2][specialized][]" multiple="multiple" disabled>
-                                <?php // echo $specialized; ?>
-                                
+                                <?php // echo $specialized; 
+                                ?>
+
                             </select>
-                    </td>
+                        </td>
                     </tr>
                 </tbody>
             </table>

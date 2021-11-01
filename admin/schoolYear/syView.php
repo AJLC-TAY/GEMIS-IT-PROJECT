@@ -7,7 +7,7 @@ $switch_btn = "";
 $sy_id_in_link = $_GET['id'];
 $edit_acads_btn = "<button data-id='$sy_id_in_link' data-bs-toggle='modal' data-bs-target='#month-modal' class='btn btn-secondary btn-sm edit-month-btn'><i class='bi bi-pencil-square me-2'></i>Edit</button>";
 if ($_SESSION['sy_id'] != $sy_id_in_link) {
-    $switch_btn = "<a role='button' href='action.php?action=switchSY&id=$sy_id_in_link' class='btn btn-dark btn-sm m-1'>Switch</a>";
+    $switch_btn = "<a role='button' href='action.php?action=switchSY&id=$sy_id_in_link' class='btn btn-primary m-1'>Switch</a>";
     $edit_acads_btn = "";
 }
 ?>
@@ -29,7 +29,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
 <div class="container">
     <section class="row">
         <section class="col-md-4">
-            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4'>
+            <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4' style="height: 95.5%;">
                 <div class="d-flex justify-content-between">
                     <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
                     <div>
@@ -38,14 +38,14 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                 </div>
                 <hr class='mt-2'>
                 <div class='row d-flex justify-content-center'>
-                    <div class="inner container">unch
+                    <div class="inner container">
                         <?php
                         foreach($sy_info['month'] as $month => $days) {
                             echo "<div class='row ps-4'>"
                                 ."<div class='col-sm-8'>"
                                     ."<h7 class='fw-bold mt-1'>$month</h7>"
                                 ."</div>"
-                                ."<div class='col-sm-3 text-end'>"
+                                ."<div class='col-sm-3 mb-2 text-end'>"
                                     ."<h7>$days</h7>"
                                 ."</div>"
                             ."</div>";
@@ -65,7 +65,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
         </section>
         <section class="col-sm-8">
             <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4 '>
-                <h5 class='text-start p-0 fw-bold'>TRACKS</h5>
+                <h5 class='text-start fw-bold'>TRACKS</h5>
                 <hr class='mt-1'>
                 <div class='row p-2 ms-2'>
                     <?php
@@ -96,7 +96,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
 <h5 class="fw-bold mb-3">SUBJECT CHECKLIST</h5>
 <div class="container">
     <section class="row">
-        <section class="col-sm-6">
+        <section class="col-sm-5">
             <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4 ">
                 <h5 class='text-start p-0 fw-bold'>CORE SUBJECTS</h5>
                 <hr class='mt-1'>
@@ -109,7 +109,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                 </ul>
             </div>
         </section>
-        <section class="col-sm-6">
+        <section class="col-sm-7">
             <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4">
                 <h5 class='text-start p-0 fw-bold'>SPECIALIZED | APPLIED SUBJECTS </h5>
                 <hr class='mt-1'>
@@ -149,13 +149,13 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                             <?php 
                             foreach($sy_info['month'] as $month => $days) {
                             echo "<li class='form-control-sm row'>
-                                    <label class='col-form-label-sm col-4'>${month}</label>
+                                    <label class='col-form-label-sm col-4 fw-bold'>${month}</label>
                                     <div class='col-5'>
-                                        <input value='${days}' type='number' name='newmonth[${month}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${month}' min='0' max='30''>
+                                        <input value='${days}' type='number' name='newmonth[${month}]' class='text-center number form-control form-control-sm' placeholder='Enter no. of days' title='${month}' min='0' max='30''>
                                     </div>
                                     <div class='col-3 text-center'>
-                                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
-                                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                                        <button class='btn btn-sm btn-outline-danger edit-opt' data-type='remove'><i class='bi bi-dash-circle'></i></button>
+                                        <button class='btn btn-sm btn-secondary edit-opt' data-type='undo' style='display: none;'>Undo</button>
                                     </div>
                                 </li>";
                             }
@@ -170,7 +170,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                 </form>
              </div>
              <div class="modal-footer">
-                 <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                 <button class="close btn btn-sm btn-outline-dark close-btn" data-bs-dismiss="modal">Cancel</button>
                  <button class='btn btn-sm btn-primary edit-opt' data-type='add'>Add Month</button>
                  <input type="submit" form="month-form" class="btn btn-sm btn-success" value="Save">
              </div>

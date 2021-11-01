@@ -31,7 +31,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     <h5><?php //echo $prog_curr_code;
         ?></h5>
     <!-- <hr> -->
-    <h2><?php echo $prog_name; ?></h2>
+    <h3><b><?php echo $prog_name; ?></b></h3>
     <h5><?php echo $prog_curr_code; ?></h5>
 </header>
 
