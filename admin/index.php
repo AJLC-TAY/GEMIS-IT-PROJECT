@@ -3,11 +3,11 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-
 $user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
 ?>
+
 <title>Home | GEMIS</title>
 </head>
 
