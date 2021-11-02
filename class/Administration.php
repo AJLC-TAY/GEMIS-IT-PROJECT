@@ -1619,16 +1619,31 @@ class Administration extends Dbconfig
      */
     public function resetPassword(int $user_id)
     {
-        mysqli_query($this->db, "UPDATE user SET user.password=CONCAT(user_type, id_no) WHERE id='$user_id';");
+        $query = '';
+        $user_type = $_POST['user_type'];
+        switch($user_type) {
+            case "AD":
+                $query = "SELECT admin_user_no FROM administrator WHERE admin_id='$user_id';";
+                break;
+            case "FA":
+                $query = "SELECT teacher_user_no FROM faculty WHERE teacher_id='$user_id';";
+                break;
+            case "ST":
+                $query = "SELECT id_no FROM student WHERE stud_id ='$user_id'";
+                break;
+        }
+        $row = mysqli_fetch_row($this->query($query))[0];
+        echo $row;
+        $default_password = password_hash($user_type.$row, PASSWORD_DEFAULT);
+        $this->query("UPDATE user SET password='$default_password' WHERE id_no='$row';");
     }
 
     /**
      * Resets the password of users stored in the given array.
-     * @param array $list An array containing multiple User ID.
      */
-    public function resetMultiplePassword(array $list)
+    public function resetMultiplePassword()
     {
-        foreach ($list as $user_id) {
+        foreach ($_POST['id'] as $user_id) {
             $this->resetPassword($user_id);
         }
     }
@@ -1926,9 +1941,10 @@ class Administration extends Dbconfig
     public function listStudent()
     {
 
-        $query = "SELECT * from student AS s "
-            . "JOIN enrollment AS e ON e.stud_id = s.stud_id "
-            . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : "AND s.id_no IN (SELECT id_no FROM user WHERE is_active=1);");
+        $query = "SELECT * from student s "
+            . "JOIN enrollment e ON e.stud_id = s.stud_id "
+            . "JOIN user u ON u.id_no = s.id_no "
+            . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : ""); # WHERE s.id_no IN (SELECT id_no FROM user WHERE is_active=1);
         $result = $this->query($query);
         $studentList = array();
 
@@ -1958,8 +1974,8 @@ class Administration extends Dbconfig
                 NULL,
                 NULL,
                 NULL,
-                NULL
-
+                NULL,
+                $row['is_active']
             );
         }
         return $studentList;
@@ -2353,13 +2369,16 @@ class Administration extends Dbconfig
     {
         $stud_id = $_GET['id'];
         $stud_data = mysqli_fetch_row($this->prepared_select("SELECT section_code , enrolled_in FROM enrollment WHERE stud_id=?", [$stud_id], "i"));
+        $section_code = '';
+        $grade_level = '';
         if ($stud_data) {
-            $data = ["section_code" => $stud_data[0], "grdlvl" => $stud_data[1]];
+            $section_code = $stud_data[0];
+            $grade_level = $stud_data[1];
         }
 
         $res = $this->prepared_select("SELECT t.last_name, t.first_name, t.middle_name, s.section_name, s.stud_no, s.section_code 
         from section s left join faculty t ON s.teacher_id = t.teacher_id 
-        where stud_no <> stud_no_max AND section_code <> ? AND grd_level = ?", [$data['section_code'], $data['grdlvl']], "si");
+        where stud_no <> stud_no_max AND section_code <> ? AND grd_level = ?", [$section_code, $grade_level], "si");
 
         $available_sections =  array();
         // while ($list = mysqli_fetch_row($this->prepared_select($retrieve_sec_query, [$data["section_code"], $data["grdlvl"]], "si"))){
@@ -2578,23 +2597,22 @@ class Administration extends Dbconfig
         $this->prepared_query("DELETE FROM signatory WHERE sign_id=?;", [$_POST['id']], "i");
     }
 
-    public function deactivate()
+    public function toggleAccountStatus($activate)
     {
-        $id = $_POST['user_id'];
+        $id = $_POST['id'];
         $user_type = $_POST['user_type'];
+        $value = ($activate == TRUE ? 1 : 0);
         switch ($user_type) {
-                // case 'AD':
-                //     $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no IN (SELECT admin_user_no from administrator where admin_id = ?);", [$id], "i");
-                //     header('location: admin.php');
-                //     break;
             case 'FA':
-                $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no IN (SELECT teacher_user_no from faculty where teacher_id = ?);", [$id], "i");
-                header('location: faculty.php');
+                $sub_query = "SELECT teacher_user_no from faculty where teacher_id = ?;";
                 break;
             case 'ST':
-                $this->prepared_query("UPDATE user SET is_active = 0 WHERE id_no IN (SELECT id_no from student where stud_id = ?);", [$id], "i");
-                header('location: student.php');
+                $sub_query = "SELECT id_no FROM student WHERE stud_id = ?";
                 break;
+        }
+
+        foreach($id as $id_no) {
+            $this->prepared_query("UPDATE user SET is_active = $value WHERE id_no = ANY($sub_query);", [$id_no], "i");
         }
     }
 

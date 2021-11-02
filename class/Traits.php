@@ -191,8 +191,9 @@ trait UserSharedMethods
     public function getStudent($id)
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM student as s
-                                        JOIN `address` as a ON a.stud_id = s.stud_id 
+        $result = $this->prepared_select("SELECT * FROM student as s 
+                                        JOIN user USING (id_no)
+                                        JOIN address as a ON a.stud_id = s.stud_id 
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
@@ -231,7 +232,7 @@ trait UserSharedMethods
         };
 
         // Step 4
-
+        $stat = '';
         $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;", [$id], "i");
         while ($res = mysqli_fetch_row($status)) {
             $stat = $res[0];
@@ -267,6 +268,8 @@ trait UserSharedMethods
             'province' => $province,
             'zipcode' => $zipcode
         ];
+        $active_status = $personalInfo['is_active'];
+
 
         //Step 5
         return new Student(
@@ -294,7 +297,8 @@ trait UserSharedMethods
             $parent,
             $guardian,
             is_null($personalInfo['form_137']) ? NULL : $personalInfo['form_137'],
-            $stat
+            $stat,
+            $active_status
         );
     }
 }

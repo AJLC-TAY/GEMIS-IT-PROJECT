@@ -1497,7 +1497,7 @@ class StudentAward extends Award implements JsonSerializable
             public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
                                         $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
                                         $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, 
-                                        $section_code, $section, $parents, $guardians, $form137, $status)
+                                        $section_code, $section, $parents, $guardians, $form137, $status, $is_active)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1531,11 +1531,9 @@ class StudentAward extends Award implements JsonSerializable
             $this->guardians = $guardians;
             $this->form137 =  is_null($form137) ? NULL : "../".$form137;
             $this->status = $status;
+            $this->is_active = ($is_active == 1) ? "Active" : "Deactivated";
         }
 
-        
-        
-        //getter functions
         public function get_stud_id()
         {
             return $this->stud_id;
@@ -1659,6 +1657,10 @@ class StudentAward extends Award implements JsonSerializable
         {
             return $this->guardians;
         }
+        public function get_active_status()
+        {
+            return $this->is_active;
+        }
 
         public function jsonSerialize(){
         return [
@@ -1680,7 +1682,8 @@ class StudentAward extends Award implements JsonSerializable
             'section_code' => $this->section_code,
             'section' => $this->section,
             'form_137' => $this->form137,
-            'status' => $this->status
+            'status' => $this->status,
+            'active' => $this->is_active
         ];}
 
     }

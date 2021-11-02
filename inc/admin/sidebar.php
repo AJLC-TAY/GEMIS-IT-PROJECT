@@ -33,14 +33,14 @@ $school_year = $_SESSION['school_year'];
                     <span>Home</span>
                 </a>
             </li>
-            <li class="sub-menu">
+            <li id="student" class="sub-menu">
                 <a href="javascript:;">
                     <i class="fa fa-book"></i>
                     <span>Student</span>
                 </a>
                 <ul class="sub">
-                    <li><a id="student" href="student.php">Student List</a></li>
-                    <li><a id="" href="student.php?page=grade_rectification">Grade Rectification</a></li>
+                    <li><a id="student-list" href="student.php">Student List</a></li>
+                    <li><a id="grade-rect" href="student.php?page=grade_rectification">Grade Rectification</a></li>
                 </ul>
             </li>
             <li class="sub-menu">
