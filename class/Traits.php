@@ -65,7 +65,7 @@ trait School
 
     public function listSubjects($tbl, $tbl2)
     {
-        if(!isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             session_start();
         }
         $sy_id = $_SESSION['sy_id'];
@@ -333,7 +333,7 @@ trait FacultySharedMethods
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
         ];
         $types = "sssssdss";
-      
+
         switch ($user_type) {
             case "AD":
                 [$canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
@@ -440,31 +440,36 @@ trait FacultySharedMethods
      * Returns array of handled classes.
      * @return array|null Array of class detail.
      */
-    public function getAdvisoryClass($sy = null, $module = null)
+    public function getAdvisoryClass($sy = null)
     {
-
-        // if ($module == 'admin'){
-        //     $query = "SELECT section_code, section_name FROM section";
-        //     while ($row = mysqli_fetch_assoc($this->query($query))) {
-        //         $data[] = $row['section_name'];
-        //     }
-        // } else {
-            $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
-            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
-            if (is_null($sy)) {
-                $params = [$id];
-                $types = "i";
-            } else {
-                $query .= " AND sy_id=?; ";
-                $params = [$id, $sy];
-                $types = "ii";
-            }
-            $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
-            if ($data) {
-                return ["section_code" => $data[0], "section_name" => $data[1]];
-            }
-            return NULL;
+        $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
+        $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
+        if (is_null($sy)) {
+            $params = [$id];
+            $types = "i";
+        } else {
+            $query .= " AND sy_id=?; ";
+            $params = [$id, $sy];
+            $types = "ii";
+        }
+        $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
+        if ($data) {
+            return ["section_code" => $data[0], "section_name" => $data[1]];
+        }
+        return NULL;
     }
+
+    // public function getSectionList()
+    // {
+    //     $sy_id = $_SESSION['sy_id'];
+    //     $query= "SELECT section_code, section_name FROM section;";
+    //     $result = mysqli_query($this->db, $query);
+    //     $section_list=array();
+    //     while($row = mysqli_fetch_assoc($result))
+    //     {
+
+    //     }
+    // }
 
     /**
      * Returns an array of sections/classes handled by a specified teacher.
@@ -1067,40 +1072,41 @@ trait Enrollment
         $teacher_id = $_POST['teacher_id'];
         $section_code = $_POST['code'];
 
-        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;",[$teacher_id, $section_code], "is");
+        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;", [$teacher_id, $section_code], "is");
         //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = $section_code;
     }
-   
+
 
     //Change subject teacher
-    public function changeSubjectTeacher() {
+    public function changeSubjectTeacher()
+    {
         $teacher_id = $_POST['teacher_id'];
         $sub_class_code = $_POST['sub_class_code'];
 
         $this->prepared_query("UPDATE `subjectclass` SET `teacher_id` = ? WHERE `subjectclass`.`sub_class_code` = ?;", [$teacher_id, $sub_class_code], "ii");
     }
-    
+
     //Get advisers as replacement
     public function getTeachersList()
     {
-    $id = 26;
-    $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit 
-    while ($adviser = mysqli_fetch_assoc($advisers)) {
-        $name = $adviser['name'];
+        $id = 26;
+        $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit 
+        while ($adviser = mysqli_fetch_assoc($advisers)) {
+            $name = $adviser['name'];
             $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
-            
-                if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty 
-                    $list .= "<option value='' selected>$name</option>";
-                } else {
 
-                    $list .= "<option value=''>$name</option>";
-                }
+            if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty 
+                $list .= "<option value='' selected>$name</option>";
+            } else {
+
+                $list .= "<option value=''>$name</option>";
             }
-            $adv[] =  $list;
-             $list = '';
+        }
+        $adv[] =  $list;
+        $list = '';
     }
-     
-    
+
+
 
 
 
@@ -1410,7 +1416,7 @@ trait Grade
         $class_grades = [];
 
         while ($grd = mysqli_fetch_assoc($res)) {
-            if (($qtr == '1' && $grd['status']==1) || $qtr == '2' && $grd['status']==1) {
+            if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
                 $first = 'readonly';
                 $second_final = 'readonly';
             } else if ($qtr == '2') {
@@ -1582,5 +1588,64 @@ trait Grade
             return;
         }
         return $data;
+    }
+    public function getClass()
+    {
+        if (isset($_GET['section'])) {
+            $this->listAdvisoryStudents(true);
+        }
+        if (isset($_GET['sub_class_code'])) {
+            $this->listSubjectClass(true);
+        }
+    }
+
+
+
+    public function listAdvisoryStudents($is_JSON = false)
+    {
+        session_start();
+        $students = [];
+        $section_code = $_GET['section'];
+        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $stud_id = $row['stud_id'];
+            # get report id
+            $row_temp = $this->query("SELECT `report_id`, `status`, `general_average` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
+
+            $temp = mysqli_fetch_row($row_temp);
+            if ($temp != NULL) {
+                $report_id = $temp[0];
+                $gen_ave = $temp[2];
+            }
+            $editable = '';
+
+            if ($_SESSION['user_type'] != 'AD') {
+                if ($temp[1] == 1) {
+                    $editable = 'readonly';
+                } 
+            }
+
+
+
+            $students[] = [
+                'id'     =>  $stud_id,
+                'lrn'    =>  $row['LRN'],
+                'name'   =>  $row['name'],
+                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
+                'action' =>  "<div class='d-flex justify-content-center'>"
+                    . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
+                    . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
+                    . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
+                    . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
+                    . "</div>",
+            ];
+        }
+        if ($is_JSON) {
+            echo json_encode($students);
+            return;
+        }
+        return $students;
     }
 }

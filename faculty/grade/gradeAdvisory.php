@@ -29,6 +29,10 @@
                     ?>
                 </select>
             </div>
+            <div>
+                <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
+                <button type="button" class="btn btn-success submit">Submit</button>
+            </div>
 
         </div>
 

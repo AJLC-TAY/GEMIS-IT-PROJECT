@@ -70,10 +70,13 @@ function setTableData (classType, url) {
  * @param {String} classType Values may be 'advisory' or 'sub-class'.
  */
 function toggleGradesColumn(classType) {
-    let displayGrades = classType === 'advisory' ? 'hideColumn' : 'showColumn';
-    studentTable.bootstrapTable(displayGrades, ['grd_1', 'grd_2', 'grd_f'])
+    // let displayGrades = classType === 'advisory' ? 'hideColumn' : 'showColumn';
+    // studentTable.bootstrapTable('showColumn', ['grd_f','action_2','sex']);
+    studentTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
 }
 
+var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
+var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 $(function() {
     preload('#students');
 
@@ -114,5 +117,51 @@ $(function() {
         form.attr("action", `../admin/gradeReport.php?id=${studID}&report_id=${reportID}`);
         $("#confirm-sig-modal").modal("show");
     });
+
+    $(document).on("click", ".submit", () => {
+        document.getElementById("label").innerText="submit";
+        document.getElementById("modal-msg").innerText=submitMsg;
+        document.getElementById("confirm").innerText="Submit";
+        $(".grading-confirmation").modal("toggle");
+       
+    });
+
+    $(document).on("click", ".save", () => {
+        document.getElementById("label").innerText="save";
+        document.getElementById("modal-msg").innerText=saveMsg;
+        document.getElementById("confirm").innerText="Save";
+        $(".grading-confirmation").modal("toggle");
+    });
+
+    $(document).on("click", "#confirm", function(e)  {
+        var stat = document.getElementById("label").innerText == "submit"? "1": "0";
+        this.attr
+        console.log(stat);
+
+        // let studGrades = new FormData();
+            var studGrades = document.getElementsByClassName("gen-ave");    
+            console.log(studGrades);    
+            studGrades.forEach(element => {
+        
+                var recordInfo = element['name'].split("/")
+                    var grades = {'id' : recordInfo[0],
+                                'rep_id' : recordInfo[1],
+                                'gen_ave' : element['value'],
+                                'action' : 'gradeAdvisory',
+                                'stat': stat};
+
+                $.post("action.php", grades, function(data) {	
+                    // console.log(grades);
+                    console.log(grades);
+                    studentTable.bootstrapTable("refresh")
+                    
+                });
+
+            });        
+            $('.grading-confirmation').modal('hide');
+            $(".number").attr('readOnly',true);
+    });
+        
+        
     hideSpinner();
 });

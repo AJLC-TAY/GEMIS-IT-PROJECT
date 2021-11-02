@@ -36,53 +36,7 @@ class FacultyModule extends Dbconfig
         }
     }
 
-    public function getClasses()
-    {
-        $advisory = $this->getAdvisoryClass($_SESSION['sy_id']);
-        $subjects = $this->getHandled_sub_classes($_SESSION['id']);
-
-        return ['advisory' => $advisory, 'sub_class' => $subjects];
-    }
-
-    public function listAdvisoryStudents($is_JSON = false)
-    {
-        session_start();
-        $students = [];
-        $section_code = $_GET['section'];
-        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
-        while ($row = mysqli_fetch_assoc($result)) {
-            $stud_id = $row['stud_id'];
-            # get report id
-            $row_temp = $this->query("SELECT report_id, general_average FROM gradereport WHERE stud_id='$stud_id' AND sy_id='{$_SESSION['sy_id']}';");
-
-            $temp = mysqli_fetch_row($row_temp);
-            if ($temp != NULL) {
-                $report_id = $temp[0];
-                $gen_ave = $temp[1];
-            }
-
-            $students[] = [
-                'id'     =>  $stud_id,
-                'lrn'    =>  $row['LRN'],
-                'name'   =>  $row['name'],
-                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' value='{$gen_ave}'>",
-                'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
-                'action' =>  "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
-                    . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
-                    . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
-                    . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
-                    . "</div>",
-            ];
-        }
-
-        if ($is_JSON) {
-            echo json_encode($students);
-            return;
-        }
-        return $students;
-    }
+   
 
     public function listSubjectClass($is_JSON = false)
     {
@@ -116,14 +70,12 @@ class FacultyModule extends Dbconfig
         return $students;
     }
 
-    public function getClass()
+    public function getClasses()
     {
-        if (isset($_GET['section'])) {
-            $this->listAdvisoryStudents(true);
-        }
-        if (isset($_GET['sub_class_code'])) {
-            $this->listSubjectClass(true);
-        }
+        $advisory = $this->getAdvisoryClass($_SESSION['sy_id']);
+        $subjects = $this->getHandled_sub_classes($_SESSION['id']);
+
+        return ['advisory' => $advisory, 'sub_class' => $subjects];
     }
 
 
@@ -285,6 +237,8 @@ class FacultyModule extends Dbconfig
         $stat = (int) $_POST['stat'];
 
         $gen_ave = $gen_ave != "" ? $gen_ave : NULL;
+
+        echo("stud id:$stud_id rep_id: $report_id gen_ave: $gen_ave stat: $stat"  );
 
         $this->prepared_query(
             "UPDATE `gradereport` SET `general_average` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
