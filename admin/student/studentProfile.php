@@ -27,6 +27,7 @@ $section = $userProfile->get_section();
 $form137 = $userProfile->get_form137();
 
 $parents = $userProfile->get_parents();
+$guardian = $userProfile->get_guardians();
 if (is_null($parents)) {
     $parents = NULL;
 } else {
@@ -38,7 +39,6 @@ if (is_null($parents)) {
     }
 }
 
-$guardian = $userProfile->get_guardians();
 if (is_null($guardian)) {
     $guardian = NULL;
 } else {
@@ -48,18 +48,17 @@ if (is_null($guardian)) {
 }
 
 const PROFILE_PATH = "../assets/profile.png";
+const PREVIEW_PATH = "../assets/no_preview.jpg";
 $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFILE_PATH) : PROFILE_PATH;
-$psaPreview = !is_null($id_picture) ? (file_exists($psa_birth_cert) ? $psa_birth_cert : "../uploads/credential/9/test.png") : "../uploads/credential/9/test.png";
+$psaPreview = !is_null($id_picture) ? (file_exists($psa_birth_cert) ? $psa_birth_cert : PREVIEW_PATH) : PREVIEW_PATH;
 
-$form137Preview = !is_null($id_picture) ? (file_exists($form137) ? $form137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
+$form137Preview = !is_null($id_picture) ? (file_exists($form137) ? $form137 : PREVIEW_PATH) : PREVIEW_PATH;
 $user_type = $_SESSION['user_type'];
 switch ($user_type) {
     case 'AD':
         $breadcrumb = "<li class='breadcrumb-item'><a href='student.php' target='_self'>Student</a></li>";
         break;
     case 'FA':
-        $breadcrumb = '';
-        break;
     case 'ST':
         $breadcrumb = '';
         break;
@@ -74,13 +73,13 @@ switch ($user_type) {
 <header>
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
-        <?php if($user_type != 'ST'){
-        echo "
-            <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+        <?php
+        if($user_type != 'ST'){
+            echo "<li class='breadcrumb-item'><a href='index.php'>Home</a></li>
              $breadcrumb
-            <li class='breadcrumb-item active'>Profile</a></li>
-       
-        ";}?>
+            <li class='breadcrumb-item active'>Profile</a></li>";
+        }
+        ?>
          </ol>
     </nav>
     <!-- BREADCRUMB -->
@@ -90,10 +89,10 @@ switch ($user_type) {
 <div class="d-flex justify-content-between align-items-center">
     <h4 class="my-auto fw-bold">Student Profile</h4>
     <div class="d-flex justify-content-center">
-        <?php if ($user_type != 'ST'){
-            echo "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-secondary link my-auto me-3'><i class='bi bi-pencil-square me-2'></i>Edit</a>
-                <button id='deactivate-btn' class='btn btn-danger me-3' data-bs-toggle='modal' data-bs-target='#confirmation-modal'>Deactivate</button>";
-        }?>
+<!--        --><?php //if ($user_type != 'ST'){
+//            echo "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-secondary link my-auto me-3'><i class='bi bi-pencil-square me-2'></i>Edit</a>
+//                <button id='deactivate-btn' class='btn btn-danger me-3' data-bs-toggle='modal' data-bs-target='#confirmation-modal'>Deactivate</button>";
+//        }?>
         
     </div>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
@@ -113,10 +112,34 @@ switch ($user_type) {
                     <form id="deactivate-form" method="POST" action="action.php">
                         <input type="hidden" name="user_type" value="ST" />
                         <input type="hidden" name="action" value="deactivate" />
-                        <input type="hidden" name="user_id" value="<?php echo $stud_id; ?>">
-                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                        <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
+                        <input type="hidden" name="id[]" value="<?php echo $stud_id; ?>">
+                        <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <input type="submit" form="deactivate-form" class="submit btn btn-danger btn-sm" value="Deactivate">
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="reset-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Reset password of <?php echo $name; ?>?<br>
+                </div>
+                <div class="modal-footer">
+                    <form id="reset-form" method="POST" action="action.php">
+                        <input type="hidden" name="user_type" value="ST" />
+                        <input type="hidden" name="action" value="reset" />
+                        <input type="hidden" name="id[]" value="<?php echo $stud_id; ?>" />
+                    </form>
+                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" form="reset-form" class="submit btn btn-secondary btn-sm" value="Reset Password">
                 </div>
             </div>
         </div>
@@ -147,8 +170,14 @@ switch ($user_type) {
                             <p><span class="fw-bold">Student LRN: </span><?php echo $lrn; ?></p>
                             <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
                             <?php if ($user_type != 'ST'){
-                                echo "<a href='student.php?action=transfer&id=<?php echo $stud_id ?>' class='transfer-stud btn btn-success ms-2 mb-2 w-100'>TRANSFER STUDENT</a>
-                                        <button class='btn btn-secondary ms-2 mb-2 w-100' title='Reset Password'>RESET PASSWORD</button>";
+                                echo "<a href='student.php?action=transfer&id=$stud_id' class='transfer-stud btn btn-success btn-sm  ms-2 mb-2 w-100'>Transfer Student</a>";
+                                $edit_btn = "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-primary link my-auto btn-sm ms-2 mb-2 w-100'><i class='bi bi-pencil-square me-2'></i>Edit</a>";
+                                if ($user_type == 'AD') {
+                                    echo "<button data-id='$stud_id' class='btn btn-secondary ms-2 mb-2 btn-sm w-100' data-bs-toggle='modal' data-bs-target='#reset-confirmation-modal' title='Reset Password'>Reset Password</button>$edit_btn";
+                                    echo "<button id='deactivate-btn' class='btn btn-danger btn-sm ms-2 mb-2 w-100' data-bs-toggle='modal' data-bs-target='#confirmation-modal'>Deactivate</button>";
+                                } else {
+                                    echo $edit_btn;
+                                }
                             } else{
                                 echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
                             }?>

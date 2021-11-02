@@ -41,11 +41,12 @@ $(function() {
 
 
     $(document).on('click', '.transfer-btn', function() {
+        showSpinner();
         var action = 'transferStudent'
         $.post("action.php", {section_id, stud_id, current_section, action}, function() {	
             $('#transferConfirmation').modal("hide");
-            showToast("success", "Student Successfully Transferred");
-            // location.reload();
+            // showToast("success", "Student Successfully Transferred");
+            location.reload();
         });
 
     });

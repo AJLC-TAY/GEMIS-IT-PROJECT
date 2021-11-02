@@ -48,7 +48,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteStudent') {
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {
-    $admin->deactivate();
+    $admin->toggleAccountStatus(FALSE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'activate') {
+    $admin->toggleAccountStatus(TRUE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'reset') {
+    $admin->resetMultiplePassword();
 }
 
 /******** CURRICULUM ********/

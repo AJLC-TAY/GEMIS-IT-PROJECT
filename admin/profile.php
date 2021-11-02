@@ -16,9 +16,9 @@ include_once("../inc/head.html");
     $userType = ucwords( $_SESSION['userType']);
 
     $link = "{$profileType}list.php";  // ex. AdminList.php / Facultylist.php
-    $userProfile = $admin->getProfile("FA");
+    $student = $admin->getProfile("FA");
 
-    $id = $userProfile->get_teacher_id();
+    $id = $student->get_teacher_id();
 
     echo "<title>Faculty Profile | GEMIS</title>";
 ?>
@@ -67,7 +67,7 @@ include_once("../inc/head.html");
                                     <!-- PROFILE PICTURE -->
                                     <div class="col-xl-5">
                                         <?php 
-                                            $image = is_null($userProfile->get_id_photo()) ? "../assets/profile.png" : $userProfile->get_id_photo();
+                                            $image = is_null($student->get_id_photo()) ? "../assets/profile.png" : $student->get_id_photo();
                                             echo "<img src='$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>";
                                             echo "<p>Faculty ID: $id</p>";
                                         ?> 
@@ -76,21 +76,21 @@ include_once("../inc/head.html");
                                     <!-- INFORMATION DETAILS -->
                                     <div class="col-xl-7">
                                         <div class="row">
-                                            <?php echo "<p>Name: {$userProfile->get_name()}<br>
-                                                        Gender: {$userProfile->get_sex()}<br>
-                                                        Age: {$userProfile->get_age()}<br>
-                                                        Birthdate: {$userProfile->get_birthdate()}</p>"; ?>
+                                            <?php echo "<p>Name: {$student->get_name()}<br>
+                                                        Gender: {$student->get_sex()}<br>
+                                                        Age: {$student->get_age()}<br>
+                                                        Birthdate: {$student->get_birthdate()}</p>"; ?>
                                         </div>
                                         <div class="row">
                                             <h6><b>Contact Information</b></h6>
-                                            <?php echo "<p>Cellphone No.: {$userProfile->get_cp_no()}<br>
-                                                        Email: {$userProfile->get_email()}</p>"; ?>
+                                            <?php echo "<p>Cellphone No.: {$student->get_cp_no()}<br>
+                                                        Email: {$student->get_email()}</p>"; ?>
                                         </div>
                                         <div class="row">
                                             <h6><b>Department</b></h6>
                                             <div class="tag-con">
                                                 <?php 
-                                                    $departments = $userProfile->get_department();
+                                                    $departments = $student->get_department();
                                                     if (is_null($departments)) {
                                                         echo "<p class='text-center'>No department set</p>";
                                                     } else {
@@ -130,7 +130,7 @@ include_once("../inc/head.html");
                                                     }
                                                 
                                                     
-                                                    $data = $userProfile->get_access_data();
+                                                    $data = $student->get_access_data();
                                                     $roles = $data['roles'];
                                                     $rData = $data['data'];
                                                     $rSize = $data['size'];
@@ -222,7 +222,7 @@ include_once("../inc/head.html");
                                             </thead>
                                             <tbody>
                                                 <?php 
-                                                    $assigned_sub = $userProfile->get_subjects();
+                                                    $assigned_sub = $student->get_subjects();
                                                     $state = '';
                                                     if (count($assigned_sub) > 0) {
                                                         $state = 'd-none';

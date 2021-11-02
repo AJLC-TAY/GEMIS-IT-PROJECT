@@ -73,7 +73,7 @@ $(document).on("keypress", ".number", isNumberKey);
 function generatePDF(filename) {
     const template = document.querySelector(".template");
     var opt = {
-        margin: 0,
+        margin: [0.5, 0,0,0],
         filename: filename + '.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 4, dpi: 300 },

@@ -23,15 +23,16 @@ include_once("../inc/head.html");
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
+                            $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                             if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
+                            } else if (isset($_GET['action']) && $_GET['action'] == 'export') {
+                                include_once("student/export.php");
                             } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
                                 include_once("student/studentTransfer.php"); 
                                 $jsFilePath = "<script type='module' src='../js/admin/transfer-student.js'></script>";
                             }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                             }else if (isset($_GET['page'])){
                                 include_once("student/gradeRectification.php");
                                 $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
@@ -54,7 +55,6 @@ include_once("../inc/head.html");
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>

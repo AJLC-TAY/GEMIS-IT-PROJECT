@@ -10,21 +10,20 @@ let prepareSectionHTML = section => {
 var message = 'Are you sure you want to transfer the student?';
 var stud_id;
 $(function() {
-    
-    preload('#student');
-    
-    const readURL = input => {
+    preload('#student', '#student-list');
+
+    const readURL = (input, destination) => {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#resultImg').attr('src', e.target.result);
+                $(destination).attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         };
     };
 
     $("#upload").change(function(){
-        readURL(this);
+        readURL(this, "#resultImg");
     });
 
     $(".profile-photo").click(()=> $("#upload").click());
@@ -40,11 +39,11 @@ $(function() {
     };
 
     $("#psaUpload").change(function(){
-        readpsaURL(this);
+        readURL(this, "#psaResult");
     });
 
     $("#form137Upload").change(function(){
-        readpsaURL(this);
+        readURL(this, "#form137Result");
     });
 
     $(".psa-photo").click(()=> $("#psaUpload").click());
@@ -66,6 +65,22 @@ $(function() {
         //  this.src;
         preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
+    });
+
+    // $(document).on("click", "#reset-btn", function() {
+    //     let modal = $("#confirmation-modal");
+    //     modal.find(".message").html("Reset password of this student?");
+    //     $("#reset-form").html(`<input type="hidden" name="id[]" value="${$(this).attr("data-id")}">`);
+    //     modal.modal("show");
+    // });
+
+    $(document).on("submit", "#reset-form", function(e) {
+        e.preventDefault();
+        $.post("action.php", $(this).serializeArray(), function () {
+            $("#reset-confirmation-modal").modal("hide");
+            $(".modal-backdrop").remove();
+            showToast('success', "Password successfully put to default");
+        });
     });
 
     hideSpinner();
