@@ -23,10 +23,12 @@ $user = $admin->getAdministrator($user_id);
         <div class="col-auto">
             <h5><b>INFORMATION</b></h5>
         </div>
-        <div class="col-auto d-flex">
-            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
-            <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
+        <div class="col-auto d-flex">            
             <button class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#confirmation-modal"><i class="bi bi-trash me-2"></i>Delete Account</button>
+            <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
+            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+
+
         </div>
     </div>
     <div class="card w-100 h-auto bg-light">
@@ -34,10 +36,10 @@ $user = $admin->getAdministrator($user_id);
             <div class="col-md-6">
                 <h6><b>GENERAL INFORMATION</b></h6>
                 <ul class='list-group ms-3'>
-                    <li class='list-group-item'><b>UID:</b><?php echo $user->admin_id; ?><br>
-                    <li class='list-group-item'><b>Name:</b><?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
-                    <li class='list-group-item'><b>Age:</b><?php echo $user->age; ?><br>
-                    <li class='list-group-item'><b>Sex:</b><?php echo $user->sex; ?>
+                    <li class='list-group-item'><b>UID: </b><?php echo $user->admin_id; ?><br>
+                    <li class='list-group-item'><b>Name: </b><?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
+                    <li class='list-group-item'><b>Age: </b><?php echo $user->age; ?><br>
+                    <li class='list-group-item'><b>Sex: </b><?php echo $user->sex; ?>
                 </ul>
             </div>
             <div class="col-md-6">

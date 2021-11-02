@@ -444,16 +444,15 @@ trait FacultySharedMethods
      * Returns array of handled classes.
      * @return array|null Array of class detail.
      */
-    public function getAdvisoryClass($sy = null)
+    public function getAdvisoryClass($sy = null, $module = null)
     {
 
-        if ($_SESSION['user_type'] == 'AD'){
-            $query = "SELECT section_code, section_name FROM section";
-            while ($data = mysqli_fetch_assoc($this->query($query))) {
-                $advisory[] = ["section_code" => $data[0], "section_name" => $data[1]];
-            }
-            $data = mysqli_fetch_row($this->query($query));
-        } else {
+        // if ($module == 'admin'){
+        //     $query = "SELECT section_code, section_name FROM section";
+        //     while ($row = mysqli_fetch_assoc($this->query($query))) {
+        //         $data[] = $row['section_name'];
+        //     }
+        // } else {
             $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
             $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
             if (is_null($sy)) {
@@ -465,13 +464,10 @@ trait FacultySharedMethods
                 $types = "ii";
             }
             $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
-        }        
-        
-        
-        if ($data) {
-            return $advisory;
-        }
-        return NULL;
+            if ($data) {
+                return ["section_code" => $data[0], "section_name" => $data[1]];
+            }
+            return NULL;
     }
 
     /**
