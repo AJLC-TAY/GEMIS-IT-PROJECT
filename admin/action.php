@@ -56,6 +56,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'activate') {
 if (isset($_POST['action']) && $_POST['action'] === 'reset') {
     $admin->resetMultiplePassword();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'changePassword') {
+    $admin->changePassword();
+}
 
 /******** CURRICULUM ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addCurriculum') {
@@ -181,7 +184,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'editDepartment') {
     $admin->updateFacultyDepartment();
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
+if (isset($_POST['action']) && $_POST['action'] === 'editSubjectFaculty') {
     $admin->updateFacultySubjects($_POST['teacher_id']);
 }
 

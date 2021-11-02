@@ -292,9 +292,10 @@ class Faculty implements JsonSerializable
     private $award_coor;
     private $enable_enroll;
     private $handled_sub_classes;
+    private $is_active;
     private $action;
 
-    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $subjects=[])
+    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $is_active, $subjects=[])
     {
         $this->teacher_id = $teacher_id;
         $this->last_name = $last_name;
@@ -313,6 +314,7 @@ class Faculty implements JsonSerializable
         $this->enable_enroll = $enable_enroll;
         $this->subjects = $subjects;
         $this->handled_sub_classes = [];
+        $this->is_active = $is_active == '1' ? 'Active' : 'Deactivated';
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
@@ -392,6 +394,11 @@ class Faculty implements JsonSerializable
     }
 
 
+    public function get_active_status()
+    {
+        return $this->is_active;
+    }
+
     public function get_access_data() {
         $roles = [];
         $size = 0;
@@ -434,6 +441,7 @@ class Faculty implements JsonSerializable
             // 'enable_enroll' => $this->enable_enroll,
             // 'enable_edit_grd' => $this->enable_edit_grd,
             // 'id_photo' => $this->id_photo
+            'active' => $this->is_active,
             'action' => $this->action
         ];
     }

@@ -301,6 +301,22 @@ trait UserSharedMethods
             $active_status
         );
     }
+
+    public function changePassword()
+    {
+        session_start();
+        $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
+        print_r($result);
+        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+        if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
+            echo "test";
+            $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+            $this->query("UPDATE user SET password='$new_password' WHERE id_no = '{$_SESSION['user_id']}';");
+        } else {
+            http_response_code(403);
+            die("Incorrect password");
+        }
+    }
 }
 
 trait FacultySharedMethods
@@ -400,7 +416,7 @@ trait FacultySharedMethods
     public function getFaculty($id): Faculty
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no WHERE teacher_id=?;", [$id], "i");
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
@@ -433,6 +449,7 @@ trait FacultySharedMethods
             $row['email'],
             $row['award_coor'],
             $row['enable_enroll'],
+            $row['is_active'],
             $subjects
         );
 
@@ -444,7 +461,7 @@ trait FacultySharedMethods
      * Returns array of handled classes.
      * @return array|null Array of class detail.
      */
-    public function getAdvisoryClass($sy = null, $module = null)
+    public function getAdvisoryClass($sy = null, $module = null, $id = null)
     {
 
         // if ($module == 'admin'){
@@ -454,7 +471,7 @@ trait FacultySharedMethods
         //     }
         // } else {
             $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
-            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
+            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
             if (is_null($sy)) {
                 $params = [$id];
                 $types = "i";
@@ -640,10 +657,10 @@ trait FacultySharedMethods
         return ['current' => $current_month, 'months' => $months];
     }
 
-    public function listAdvisoryClasses($is_JSON = FALSE)
+    public function listAdvisoryClasses($id = NULL, $is_JSON = FALSE)
     {
         // session_start();
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? $id;
         $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
         $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
             . "CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "

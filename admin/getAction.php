@@ -57,7 +57,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'signatory') {
    $admin->listSignatory(TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'advisoryClasses') {
-   $admin->listAdvisoryClasses(TRUE);
+   $admin->listAdvisoryClasses(NULL, TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'all-sub-classes') {
    $admin->listAllSubjectClasses(TRUE);

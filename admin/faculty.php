@@ -7,8 +7,13 @@ $js = "<script type='module' src='../js/admin/faculty-list.js'></script>";
 $action = "";
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
-    $page_path = "faculty/facultyForm.php";
-    $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    if ($action != 'export') {
+        $page_path = "faculty/facultyForm.php";
+        $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    } else {
+        $page_path = "faculty/export.php";
+//        $js = "<script type='module' src='../js/admin/faculty.js'></script>";
+    }
 } else if (isset($_GET['id'])) {
     $action = "profile";
     $page_path = "faculty/facultyProfile.php";
@@ -107,7 +112,7 @@ if (isset($_GET['action'])) {
                         <input type="hidden" name="teacher_id" value="" />
                         <input type="hidden" name="action" value="assignSubClasses">
                         <button id='cancel-as-btn' class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
-                        <input type="submit" form="sc-form" id='assigned-sc-btn' class="submit btn btn-success btn-sm" value="Assign">
+                        <input type="submit" form="sc-form" id='assigned-sc-btn' class="btn btn-success btn-sm" value="Assign">
                     </form>
                 </div>
             </div>

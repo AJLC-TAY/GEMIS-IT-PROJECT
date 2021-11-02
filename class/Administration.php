@@ -1547,7 +1547,8 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-        $result = $this->query("SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);");
+//        $result = $this->query("SELECT * FROM faculty WHERE teacher_user_no IN (SELECT id_no from user WHERE is_active=1);");
+        $result = $this->query("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no;");
         $facultyList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1564,7 +1565,8 @@ class Administration extends Dbconfig
                 $row['cp_no'],
                 $row['email'],
                 $row['award_coor'],
-                $row['enable_enroll']
+                $row['enable_enroll'],
+                $row['is_active']
             );
         }
         return $facultyList;
@@ -2604,7 +2606,7 @@ class Administration extends Dbconfig
         $value = ($activate == TRUE ? 1 : 0);
         switch ($user_type) {
             case 'FA':
-                $sub_query = "SELECT teacher_user_no from faculty where teacher_id = ?;";
+                $sub_query = "SELECT teacher_user_no from faculty where teacher_id = ?";
                 break;
             case 'ST':
                 $sub_query = "SELECT id_no FROM student WHERE stud_id = ?";
