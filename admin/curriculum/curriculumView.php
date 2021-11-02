@@ -30,7 +30,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
         </ol>
     </nav>
-    <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
+    <h3 class="fw-bold"><?php echo $curr_name; ?></h3>
     <hr class="my-2">
     <h6 class="fw-bold">Curriculum</h6>
 </header>

@@ -3,11 +3,11 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-
 $user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
 ?>
+
 <title>Home | GEMIS</title>
 </head>
 
@@ -211,7 +211,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-list-ul me-3" aria-hidden="true"></i>SECTION</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="section.php" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
