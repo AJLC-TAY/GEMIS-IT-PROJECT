@@ -65,7 +65,7 @@ trait School
 
     public function listSubjects($tbl, $tbl2)
     {
-        if(!isset($_SESSION)) {
+        if (!isset($_SESSION)) {
             session_start();
         }
         $sy_id = $_SESSION['sy_id'];
@@ -416,7 +416,7 @@ trait FacultySharedMethods
     public function getFaculty($id): Faculty
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no WHERE teacher_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
@@ -449,7 +449,6 @@ trait FacultySharedMethods
             $row['email'],
             $row['award_coor'],
             $row['enable_enroll'],
-            $row['is_active'],
             $subjects
         );
 
@@ -486,6 +485,18 @@ trait FacultySharedMethods
             }
             return NULL;
     }
+
+    // public function getSectionList()
+    // {
+    //     $sy_id = $_SESSION['sy_id'];
+    //     $query= "SELECT section_code, section_name FROM section;";
+    //     $result = mysqli_query($this->db, $query);
+    //     $section_list=array();
+    //     while($row = mysqli_fetch_assoc($result))
+    //     {
+
+    //     }
+    // }
 
     /**
      * Returns an array of sections/classes handled by a specified teacher.
@@ -657,10 +668,10 @@ trait FacultySharedMethods
         return ['current' => $current_month, 'months' => $months];
     }
 
-    public function listAdvisoryClasses($id = NULL, $is_JSON = FALSE)
+    public function listAdvisoryClasses($is_JSON = FALSE)
     {
         // session_start();
-        $id = $_GET['id'] ?? $id;
+        $id = $_GET['id'];
         $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
         $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
             . "CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
@@ -1104,21 +1115,21 @@ trait Enrollment
     //Get advisers as replacement
     public function getTeachersList()
     {
-    $id = 26;
-    $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit 
-    while ($adviser = mysqli_fetch_assoc($advisers)) {
-        $name = $adviser['name'];
+        $id = 26;
+        $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit
+        while ($adviser = mysqli_fetch_assoc($advisers)) {
+            $name = $adviser['name'];
             $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
-            
-                if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty 
-                    $list .= "<option value='' selected>$name</option>";
-                } else {
 
-                    $list .= "<option value=''>$name</option>";
-                }
+            if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty
+                $list .= "<option value='' selected>$name</option>";
+            } else {
+
+                $list .= "<option value=''>$name</option>";
             }
-            $adv[] =  $list;
-             $list = '';
+        }
+        $adv[] =  $list;
+        $list = '';
     }
      
     
@@ -1603,5 +1614,64 @@ trait Grade
             return;
         }
         return $data;
+    }
+    public function getClass()
+    {
+        if (isset($_GET['section'])) {
+            $this->listAdvisoryStudents(true);
+        }
+        if (isset($_GET['sub_class_code'])) {
+            $this->listSubjectClass(true);
+        }
+    }
+
+
+
+    public function listAdvisoryStudents($is_JSON = false)
+    {
+        session_start();
+        $students = [];
+        $section_code = $_GET['section'];
+        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $stud_id = $row['stud_id'];
+            # get report id
+            $row_temp = $this->query("SELECT `report_id`, `status`, `general_average` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
+
+            $temp = mysqli_fetch_row($row_temp);
+            if ($temp != NULL) {
+                $report_id = $temp[0];
+                $gen_ave = $temp[2];
+            }
+            $editable = '';
+
+            if ($_SESSION['user_type'] != 'AD') {
+                if ($temp[1] == 1) {
+                    $editable = 'readonly';
+                }
+            }
+
+
+
+            $students[] = [
+                'id'     =>  $stud_id,
+                'lrn'    =>  $row['LRN'],
+                'name'   =>  $row['name'],
+                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
+                'action' =>  "<div class='d-flex justify-content-center'>"
+                    . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
+                    . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
+                    . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
+                    . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
+                    . "</div>",
+            ];
+        }
+        if ($is_JSON) {
+            echo json_encode($students);
+            return;
+        }
+        return $students;
     }
 }

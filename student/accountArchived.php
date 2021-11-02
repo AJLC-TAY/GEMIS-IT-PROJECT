@@ -20,7 +20,7 @@ include_once("../inc/head.html");
                                 <h3>This account has been archived!</h3>
                                 <p>If you want to re-activate your account, you may contact any faculty in charge for enrolment. You may only reactivate your account until first quarter.</h6>
                                     <br>
-                                    <a href='login.php' class='btn btn-outline-primary me-2 mt-3' data-bs-toggle="modal"><i class="bi bi-arrow-left-circle me-2"></i>Back</a>
+                                    <a href='../login.php' class='btn btn-outline-primary me-2 mt-3' data-bs-toggle="modal"><i class="bi bi-arrow-left-circle me-2"></i>Back</a>
                             </div>
                         </div>
                     </div>

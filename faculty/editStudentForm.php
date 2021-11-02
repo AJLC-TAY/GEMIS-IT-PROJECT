@@ -3,17 +3,6 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 ?>
 
-<!-- HEADER -->
-<header>
-    <!-- BREADCRUMB -->
-    <nav aria-label='breadcrumb'>
-        <ol class='breadcrumb'>
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="student.php">Student</a></li>
-            <li class="breadcrumb-item active">Edit Student</li>
-        </ol>
-    </nav>
-</header>
 <!-- CONTENT  -->
 
 <body>
@@ -32,6 +21,17 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label='breadcrumb'>
+                                    <ol class='breadcrumb'>
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="student.php">Student</a></li>
+                                        <li class="breadcrumb-item active">Edit Student</li>
+                                    </ol>
+                                </nav>
+                            </header>
                             <h4 class="my-auto fw-bold">Edit Student Information</h4>
                             <div class='container mt-3'>
                                 <form id='student-form' class='needs-validation' method='POST' action='action.php' enctype='multipart/form-data' novalidate>

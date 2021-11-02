@@ -35,12 +35,12 @@ function setTableData (classType, url) {
  */
  function toggleGradesColumn(classType) {
 
-    if (classType === 'advisory'){
-        classGradeTable.bootstrapTable('showColumn', ['action_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
+    if (classType == 'advisory'){
+        classGradeTable.bootstrapTable('showColumn', ['grd_f','action_2']);
+        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
     } else {
         classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
+        classGradeTable.bootstrapTable('hideColumn', ['action_2',]);
     }
     
 };

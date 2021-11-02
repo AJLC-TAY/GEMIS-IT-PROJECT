@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once("sessionHandling.php");
 include("../inc/head.html");
 
@@ -9,9 +9,9 @@ $id = $_SESSION['id'];
 $sy_id = $_SESSION['sy_id'];
 // echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-$advisory = $faculty->getAdvisoryClass($sy_id,'admin');
-echo($advisory);
-echo("grade Rectification");
+$advisory = $faculty->listSectionOption('');//dapat my sy
+// echo json_encode($advisory);
+// echo ("grade Rectification");
 $sub_classes = $faculty->getHandled_sub_classes('admin');
 $adv_opn = '';
 $sub_class_opn = '';
@@ -31,19 +31,22 @@ if ($adv_count_is_empty) {
     // $section_code = $advisory['section_code'];
     // $section_name = $advisory;
 
-    $adv_opn = "<optgroup label='Advisory Class'>";
+    $adv_opn .= "<optgroup label='SECTION'>";
 
-    // echo ($advisory);
-    foreach($advisory as $advsr){
-$adv_opn . "<option value='123' title='123'  data-class-type='advisory' "
-        . "data-url='getAction.php?data=student&section=123' "
-        . "data-name='$advsr'>$advsr</option>"
-        . "</optgroup>";
+    foreach ($advisory as $advsr) {
+        $name = $advsr['section_name'];
+        $code = $advsr['section_code'];
+        $adv_name = $advsr['adviser_name'];
+        $adv_opn .= "<option value='$name' title='$code' "
+        . "data-class-type='advisory' "
+        . "data-url='getAction.php?data=grdAdvisor&section={$code}' "
+        . "data-name='$code'>$name [$adv_name]</option>";
     }
+    $adv_opn .= "</optgroup>";
 }
 
 if (count($sub_classes) != 0) {
-    $sub_class_opn .= "<optgroup label='Subject Class'>";
+    $sub_class_opn .= "<optgroup label='SUBJECT CLASS'>";
     foreach ($sub_classes as $sub_class) {
         $section_code = $sub_class->get_sub_class_code();
         $section_name = $sub_class->get_section_name();
@@ -51,7 +54,7 @@ if (count($sub_classes) != 0) {
         $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$sub_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_code={$sub_code}' "
+            . "data-url='getAction.php?data=studentgrds&section={$section_code}' "
             . "data-name='$sub_code'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";
@@ -109,8 +112,6 @@ if (count($sub_classes) != 0) {
                     <tr>
                         <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                         <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="action_2">Action</th>
 
@@ -120,4 +121,6 @@ if (count($sub_classes) != 0) {
         </form>
     </div>
 </div>
-<script type="text/javascript">var type = 'grades'</script>
+<script type="text/javascript">
+    var type = 'grades'
+</script>

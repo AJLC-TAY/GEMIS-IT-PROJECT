@@ -1,9 +1,14 @@
 <?php
-include('../class/Administration.php');
+require_once('../class/Administration.php');
+
 $admin = new Administration();
 
 if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
     $admin->listAdministratorsJSON();
+}
+
+if (isset($_GET['data']) && $_GET['data'] == 'grdAdvisor') {
+    $admin->getClass();
 }
 
 if (isset($_GET['data']) && $_GET['data'] == 'program') {
