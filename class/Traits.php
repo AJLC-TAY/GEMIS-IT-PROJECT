@@ -115,7 +115,7 @@ trait School
     {
         session_start();
         $en_data = ['pending' => 0, 'enrolled' => 0, 'rejected' => 0];
-        $sy_id = 9;
+        $sy_id = $_SESSION['sy_id'];
         //        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT valid_stud_data AS status, COUNT(*) AS count FROM enrollment WHERE sy_id = '$sy_id' GROUP BY valid_stud_data;");
         while ($row = mysqli_fetch_assoc($result)) {
