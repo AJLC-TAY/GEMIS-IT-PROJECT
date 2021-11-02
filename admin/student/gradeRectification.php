@@ -9,7 +9,9 @@ $id = $_SESSION['id'];
 $sy_id = $_SESSION['sy_id'];
 // echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-// $advisory = $faculty->getAdvisoryClass($sy_id);
+$advisory = $faculty->getAdvisoryClass($sy_id,'admin');
+echo($advisory);
+echo("grade Rectification");
 $sub_classes = $faculty->getHandled_sub_classes('admin');
 $adv_opn = '';
 $sub_class_opn = '';
@@ -22,24 +24,23 @@ $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
-// $adv_count_is_empty = !(is_null($advisory));
-// if ($adv_count_is_empty) {
-//     $adv_table_display = '';
-//     // $sub_table_display = 'd-none';
-//     $section_code = $advisory['section_code'];
-//     $section_name = $advisory['section_name'];
+$adv_count_is_empty = !(is_null($advisory));
+if ($adv_count_is_empty) {
+    $adv_table_display = '';
+    // $sub_table_display = 'd-none';
+    // $section_code = $advisory['section_code'];
+    // $section_name = $advisory;
 
-//     $adv_opn = "<optgroup label='Advisory Class'>";
+    $adv_opn = "<optgroup label='Advisory Class'>";
 
-//     echo ($advisory);
-//     foreach($advisory as $advsr){
-
-//     }
-//         // . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
-//         // . "data-url='getAction.php?data=student&section={$section_code}' "
-//         // . "data-name='$section_name'>$section_name</option>"
-//         // . "</optgroup>";
-// }
+    // echo ($advisory);
+    foreach($advisory as $advsr){
+$adv_opn . "<option value='123' title='123'  data-class-type='advisory' "
+        . "data-url='getAction.php?data=student&section=123' "
+        . "data-name='$advsr'>$advsr</option>"
+        . "</optgroup>";
+    }
+}
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
