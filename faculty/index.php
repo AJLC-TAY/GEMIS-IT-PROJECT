@@ -42,7 +42,7 @@ include_once("../inc/head.html");
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <img src="../assets/faculty.png" alt="Display image" style="width: 50%; display: block; margin-left: auto; float:right;">
+                                            <img src="../assets/faculty.png" alt="Display image" style="width: 40%; display: block; margin-left: auto; float:right;">
                                         </div>
                                     </div>
                                 </div>

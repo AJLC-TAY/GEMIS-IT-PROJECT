@@ -43,15 +43,13 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                     <p class="text-secondary m-0">
                                         <medium>First Semester</medium>
                                     </p>
-                                    <h3 class="m-0 fw-bold">12 ABM A</h3>
-                                    <h5 class="m-0">Attendance</h5>
+                                    <h3><b>12 ABM A </b>Attendance</h3>
                                 </div>
                             </div>
-                            <hr class="mt-3 mb-4">
                         </header>
                         <!-- HEADER END -->
                         <!-- ATTENDANCE TABLE -->
-                        <div class="container mt-1 ms-0">
+                        <div class="container mt-2 ms-0">
                             <div class="card w-100 h-auto bg-light">
                                 <form id="attendance-form" action="action.php" method="POST">
                                     <input type="hidden" name="action" value="changeAttendance">
