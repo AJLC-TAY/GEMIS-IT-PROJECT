@@ -123,22 +123,19 @@ $user = $admin->getAdministrator($user_id);
             </div>
             <form id="change-pass-form" method="POST" action="deleteAccount.php">
                 <div class="modal-body">
-                    <p class="text-secondary"><small>Please complete the following</small></small></p>
                     <div class="container">
                         <div class="form-group row">
-                            <!-- <label for="current-pass">Current password</label> -->
-                            <input id="current-pass" type="password" name="current-pass" class='form-control' placeholder="Current password" required>
+                            <input type="hidden" name="action" value="changePassword">
+                            <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
+                            <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password" required>
                         </div>
-                    </div>
-                    <p class="text-secondary"><small>Enter new password:</small></small></p>
-                    <div class="container">
                         <div class="form-group row mt-3">
-                            <!-- <label for="new-pass">New password</label> -->
-                            <input id="new-pass" type="password" name="new-pass" class='form-control' placeholder="New password" required>
+                            <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
+                            <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password" required>
                         </div>
                         <div class="form-group row">
                             <!-- <label for="reenter-new-pass">Re-enter new password</label> -->
-                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control' placeholder="Re-enter new password" required>
+                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password" required>
                         </div>
                     </div>
                 </div>

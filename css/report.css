@@ -1,17 +1,18 @@
 .doc {
     width: 8.5in !important;
-    padding: 0.5in 0 0 0 !important;
+    padding: 0.5in !important;
     height: auto;
 }
 .template {
     width: 7.5in !important;
     font-family: Arial !important;
     font-size: 13px !important;
+    margin: 0;
 }
 .template li {
     width: 100%;
-    height: 9.98in !important;
-    margin: 0 0.5in 0.5in 0.5in  !important;
+    min-height: 9.98in !important;
+    margin: 0 !important;
 }
 
 /*Header*/

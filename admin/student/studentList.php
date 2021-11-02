@@ -25,10 +25,10 @@
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <button id="export-opt" type="submit" data-type="export" class="table-opt btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                        <button id="reset-pass-opt" data-type="reset" class="table-opt btn btn-secondary btn-sm" title='Reset Password'>Reset Password</button>
+                        <button data-type="export" class="table-opt btn btn-dark btn-sm" title='Export'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                        <button data-type="reset" class="table-opt btn btn-secondary btn-sm" title='Reset Password'>Reset Password</button>
                         <button data-type="activate" class="table-opt btn btn-success btn-sm" title='Activate account'>Activate</button>
-                        <button id="deactivate-opt" data-type="deactivate" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Student'>Deactivate</button>
+                        <button data-type="deactivate" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Student'>Deactivate</button>
                     </div>
                 </div>
 

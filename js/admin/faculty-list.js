@@ -1,4 +1,4 @@
-import {commonTableSetup} from "./utilities.js";
+import {commonTableSetup, tableUserOptionsEventListener} from "./utilities.js";
 
 function buttons () {
     return {
@@ -59,47 +59,8 @@ $(function() {
         })
     });
 
-    /** 
-     *  Counts the number of selected records, then shows a warning if empty and returns false; 
-     *  otherwise, return true.
-     */
-    const countSelection = () => {
-        selection = facultyTable.bootstrapTable('getSelections');
-        let length = selection.length;
-        if (length < 1) showToast("danger", "No faculty selected");
-        return length;
-    };
-
-    /** Event handler for clicking a table option [export, reset password, and deactivate] actions */
-    $(document).on("click", ".table-opt", function(e) {
-        e.preventDefault();
-        let btnValue = $(this).val();
-        let length = countSelection();
-        if (length) {
-            switch(btnValue) {
-                case 'Export':
-                    // export implementation
-                    break;
-                case 'Reset Password':
-                    // reset implementation
-                    break;
-                case 'Deactivate':
-                    let modal = $("#deactivate-modal")         ;
-                    let question = (length == 1) ? "this faculty?" : `${length} faculties?`;
-                    modal.find("#question").html(question);
-                    modal.modal("show");
-                    break;
-            }
-        }
-    });
-
-    $("#deactivate-btn").click(() => $("#deactivate-form").submit());
-
-    $("#deactivate-form").submit(function(e) {
-        e.preventDefault();
-        let formData = $(this).serializeArray();
-        formData.push(...selection.map(e => {return {name: "user_id[]", value: `${e.teacher_id}`}}));
-        $.post("action.php");})
+    /** Table options events */
+    tableUserOptionsEventListener('FA');
 
     hideSpinner();
 });

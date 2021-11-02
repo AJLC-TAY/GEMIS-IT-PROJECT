@@ -35,8 +35,8 @@ $students = $_POST['id'];
 <div class="doc bg-white ms-2 p-0 shadow overflow-auto">
     <ul class="template p-0">
         <?php
-                const PROFILE_PATH = "../assets/profile.png";
-                foreach($students as $id) { ?>
+        const PROFILE_PATH = "../assets/profile.png";
+        foreach($students as $index => $id) { ?>
         <li class="p-0 mb-0 mx-auto">
             <!-- DOCUMENT HEADER -->
             <div class="row p-0 mx-1">
@@ -126,7 +126,8 @@ $students = $_POST['id'];
                                 <dl class='row'>
                                     <dt class="col-3">Parents</dt>
                                     <dd class='col-8'>
-                                            <?php foreach($parents as $parent) {
+                                            <?php
+                                            foreach($parents as $parent) {
                                                 $sex = ($parent['sex'] == 'f' ? "Female" : "Male");
                                                 echo "<dl class='row mb-0'>
                                                         <dd class='mb-0'>{$parent['name']}</dd>
@@ -142,7 +143,6 @@ $students = $_POST['id'];
                                 <dl class="row">
                                     <dt class="col-3">Guardian</dt>
                                     <dd class='col-8'>
-
                                         <?php
                                         echo "<dl class='row mb-0'>
                                                 <dd class='mb-0'>{$guardian['name']}</dd>
@@ -158,6 +158,10 @@ $students = $_POST['id'];
 
             </div>
         </li>
-        <?php } ?>
+            <?php
+            if (!(array_key_last($students) == $index)) {
+                echo '<div class="html2pdf__page-break"></div>';
+            }
+        } ?>
     </ul>
 </div>

@@ -301,6 +301,22 @@ trait UserSharedMethods
             $active_status
         );
     }
+
+    public function changePassword()
+    {
+        session_start();
+        $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
+        print_r($result);
+        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+        if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
+            echo "test";
+            $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
+            $this->query("UPDATE user SET password='$new_password' WHERE id_no = '{$_SESSION['user_id']}';");
+        } else {
+            http_response_code(403);
+            die("Incorrect password");
+        }
+    }
 }
 
 trait FacultySharedMethods
@@ -337,7 +353,7 @@ trait FacultySharedMethods
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
         ];
         $types = "sssssdss";
-
+      
         switch ($user_type) {
             case "AD":
                 [$canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
@@ -444,23 +460,30 @@ trait FacultySharedMethods
      * Returns array of handled classes.
      * @return array|null Array of class detail.
      */
-    public function getAdvisoryClass($sy = null)
+    public function getAdvisoryClass($sy = null, $module = null, $id = null)
     {
-        $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
-        $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : die());
-        if (is_null($sy)) {
-            $params = [$id];
-            $types = "i";
-        } else {
-            $query .= " AND sy_id=?; ";
-            $params = [$id, $sy];
-            $types = "ii";
-        }
-        $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
-        if ($data) {
-            return ["section_code" => $data[0], "section_name" => $data[1]];
-        }
-        return NULL;
+
+        // if ($module == 'admin'){
+        //     $query = "SELECT section_code, section_name FROM section";
+        //     while ($row = mysqli_fetch_assoc($this->query($query))) {
+        //         $data[] = $row['section_name'];
+        //     }
+        // } else {
+            $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
+            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
+            if (is_null($sy)) {
+                $params = [$id];
+                $types = "i";
+            } else {
+                $query .= " AND sy_id=?; ";
+                $params = [$id, $sy];
+                $types = "ii";
+            }
+            $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
+            if ($data) {
+                return ["section_code" => $data[0], "section_name" => $data[1]];
+            }
+            return NULL;
     }
 
     // public function getSectionList()
@@ -1077,30 +1100,29 @@ trait Enrollment
         $teacher_id = $_POST['teacher_id'];
         $section_code = $_POST['code'];
 
-        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;", [$teacher_id, $section_code], "is");
+        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;",[$teacher_id, $section_code], "is");
         //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = $section_code;
     }
-
+   
 
     //Change subject teacher
-    public function changeSubjectTeacher()
-    {
+    public function changeSubjectTeacher() {
         $teacher_id = $_POST['teacher_id'];
         $sub_class_code = $_POST['sub_class_code'];
 
         $this->prepared_query("UPDATE `subjectclass` SET `teacher_id` = ? WHERE `subjectclass`.`sub_class_code` = ?;", [$teacher_id, $sub_class_code], "ii");
     }
-
+    
     //Get advisers as replacement
     public function getTeachersList()
     {
         $id = 26;
-        $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit 
+        $advisers = $this->query("SELECT teacher_id, CONCAT(first_name, ' ', last_name, ' ', COALESCE(ext_name, '')) as name FROM `faculty`;"); // insert here ung retrieve mo lsit
         while ($adviser = mysqli_fetch_assoc($advisers)) {
             $name = $adviser['name'];
             $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
 
-            if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty 
+            if ($id == $adviser['teacher_id']) { //if faculty id nung nitrieve == current faculty
                 $list .= "<option value='' selected>$name</option>";
             } else {
 
@@ -1110,8 +1132,8 @@ trait Enrollment
         $adv[] =  $list;
         $list = '';
     }
-
-
+     
+    
 
 
 

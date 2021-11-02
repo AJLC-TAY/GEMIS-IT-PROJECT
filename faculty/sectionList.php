@@ -7,15 +7,6 @@ include_once("../inc/head.html");
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
-<header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">ABM</a></li>
-        </ol>
-    </nav>
-</header>
 
 <body>
     <!-- SPINNER -->
@@ -33,12 +24,21 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
+                        <header>
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item active">ABM</a></li>
+        </ol>
+    </nav>
+</header>
                             <div class="d-flex justify-content-between mb-3">
                                 <h3 class="fw-bold">ABM 12 A</h3>
                                 <div>
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Select Class<i class="bi bi-chevron-down ms-2"></i>
+                                            Select Class
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                             <li><a class="dropdown-item" href="#">Advisory</a></li>

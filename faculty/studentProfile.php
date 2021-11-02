@@ -7,16 +7,6 @@ include_once("../inc/head.html");
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
-<header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Profile</a></li>
-        </ol>
-    </nav>
-</header>
-
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -33,6 +23,15 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active">Profile</a></li>
+                                    </ol>
+                                </nav>
+                            </header>
                             <h4 class="my-auto fw-bold">Student Profile</h4>
                             <div class='container my-3'>
                                 <div class="card p-3 text-center">

@@ -28,40 +28,42 @@ include_once('../inc/studentSideBar.php');
                             </div>
 
                             <div class="card h-auto bg-light mx-auto mt-3 p-4" style='width: 80%;'>
-                                <div class='form-row row'>
-                                    <h4>Will you enroll for grade 12 next school year in PCNHS-SHS?</h4>
-                                    <div class="form-check ms-4 mt-2">
-                                        <input class="form-check-input" type="radio" name="radio" id="yes">
-                                        <label class="form-check-label" for="">
-                                            Yes
-                                        </label>
+                                <form>
+                                    <div class='form-row row'>
+                                        <h4>Will you enroll for grade 12 next school year in PCNHS-SHS?</h4>
+                                        <div class="form-check ms-4 mt-2">
+                                            <input class="form-check-input" type="radio" name="radio" id="yes">
+                                            <label class="form-check-label" for="">
+                                                Yes
+                                            </label>
+                                        </div>
+                                        <div class="form-check ms-4">
+                                            <input class="form-check-input" type="radio" name="radio" id="no">
+                                            <label class="form-check-label" for="">
+                                                No
+                                            </label>
+                                        </div>
+                                        <div class='p-4'>
+                                            <label>If no, indicate the reason:</label>
+                                            <textarea class='form-input form-control'></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-check ms-4">
-                                        <input class="form-check-input" type="radio" name="radio" id="no">
-                                        <label class="form-check-label" for="">
-                                            No
-                                        </label>
-                                    </div>
-                                    <div class='p-4'>
-                                        <label>If no, indicate the reason:</label>
-                                        <textarea class='form-input form-control'></textarea>
-                                    </div>
-                                </div>
 
 
-                                <div class="form-group row">
-                                    <div class="d-flex justify-content-end">
-                                        <input type='hidden' name='action' value=''>
-                                        <a href='logout.php' class='btn btn-outline-danger me-2' data-bs-toggle="modal">Cancel</a>
-                                        <a href='enrollment.php' type='submit' form='admin-form' class='btn btn-success' value='Submit'>
+                                    <div class="form-group row">
+                                        <div class="d-flex justify-content-end">
+                                            <input type='hidden' name='action' value=''>
+                                            <a href='logout.php' class='btn btn-outline-danger me-2' data-bs-toggle="modal">Cancel</a>
+                                            <a href='enrollment.php' type='submit' form='admin-form' class='btn btn-success' value='Submit'>Submit</a>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                </div>
+
             </section>
             <!-- MAIN CONTENT END-->
             <!-- FOOTER -->

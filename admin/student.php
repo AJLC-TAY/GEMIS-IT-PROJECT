@@ -38,7 +38,7 @@ include_once("../inc/head.html");
                                 $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
                             }else {
                                 include_once("student/studentList.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student-list.js'></script>";
+                                $jsFilePath = "<script type='module' src='../js/admin/student-list.js'></script>";
                             }
                         ?>
                         </div>
