@@ -37,7 +37,7 @@ function setTableData (classType, url) {
 
     if (classType == 'advisory'){
         classGradeTable.bootstrapTable('showColumn', ['grd_f','action_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
+        classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
     } else {
         classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
         classGradeTable.bootstrapTable('hideColumn', ['action_2',]);
@@ -48,6 +48,7 @@ function setTableData (classType, url) {
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
+var stat = document.getElementById("label").innerText == "submit?"? "1": "0";
 
 $(function() {
     
@@ -91,7 +92,9 @@ $(function() {
     })
 
     $(document).on("click", ".submit", () => {
-        document.getElementById("label").innerText="submit";
+        stat = "1";
+        document.getElementById("stmt").innerText="Are you sure you want to ";
+        document.getElementById("label").innerText="submit?";
         document.getElementById("modal-msg").innerText=submitMsg;
         document.getElementById("confirm").innerText="Submit";
         $(".grading-confirmation").modal("toggle");
@@ -99,14 +102,22 @@ $(function() {
     });
 
     $(document).on("click", ".save", () => {
-        document.getElementById("label").innerText="save";
-        document.getElementById("modal-msg").innerText=saveMsg;
+        console.log("from class-grade.js save clicked");
+        if (typeof user!== 'undefined'){
+            document.getElementById("label").innerText="CONFIRMATION";
+            stat = "1";
+            document.getElementById("modal-msg").innerText="Are you sure you want to save?";
+        } else {
+            document.getElementById("stmt").innerText="Are you sure you want to ";
+            document.getElementById("label").innerText="save?";
+            document.getElementById("modal-msg").innerText=saveMsg;
+        }
+        
         document.getElementById("confirm").innerText="Save";
         $(".grading-confirmation").modal("toggle");
     });
 
     $(document).on("click", "#confirm", function(e)  {
-        var stat = document.getElementById("label").innerText == "submit"? "1": "0";
         this.attr
         console.log(stat);
 
@@ -130,9 +141,9 @@ $(function() {
                                     'stat': stat,
                                     'action' : 'gradeClass'};
                 }
-                $.post("action.php", grades, function(data) {	
+                $.post("../faculty/action.php", grades, function(data) {	
                     // console.log(grades);
-                    console.log(data)
+                    console.log(grades)
                     classGradeTable.bootstrapTable("refresh")
                     
                 });
@@ -171,7 +182,6 @@ $(function() {
         var action = "export";
         $.post("action.php", action , function(data) {	
             console.log(data);
-            
         });
     });
 

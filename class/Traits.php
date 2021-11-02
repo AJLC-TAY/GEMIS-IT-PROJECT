@@ -484,7 +484,7 @@ trait FacultySharedMethods
     {
         $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
             . "LEFT JOIN faculty AS f USING (teacher_id) "
-            . "WHERE teacher_id != '$teacher_id' "
+            . "WHERE teacher_id != '$teacher_id'"
             . "OR teacher_id IS NULL ORDER BY teacher_id;";
         $result = mysqli_query($this->db, $query);
         $section_list = array();
@@ -742,7 +742,8 @@ trait Enrollment
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
             . "e.date_of_enroll, e.enrolled_in, e.curr_code, CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Cancelled' END AS status, e.section_code FROM enrollment AS e "
             . "JOIN student AS s USING (stud_id) "
-            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id ";
+            . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id "
+            . "WHERE e.sy_id = {$_SESSION['sy_id']} ";
 
         /**
          * Returns the sort query string in line with the received
@@ -823,7 +824,7 @@ trait Enrollment
 
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
-        //    echo $query;
+            // echo $query;
         $result = $this->query($query);
         $records = array();
 
@@ -1401,6 +1402,13 @@ trait Grade
     public function getClassGrades()
     {
         $teacher_id = $_GET['id'];
+        if ($teacher_id == 'admin') {
+            $addOn = "";
+            $first = '';
+            $second_final = '';
+        } else {
+            $addOn = "teacher_id=$teacher_id AND ";
+        }
         $sy_id = $_GET['sy_id'];
         $sub_code = $_GET['sub_code'];
         $qtr = 1;
@@ -1413,26 +1421,28 @@ trait Grade
         JOIN subject USING(sub_code) 
         JOIN sysub USING(sub_code) 
         JOIN subjectclass USING(sub_sy_id)
-        WHERE teacher_id=$teacher_id 
-        AND classgrade.sub_code = '$sub_code' 
+        WHERE $addOn classgrade.sub_code = '$sub_code' 
         AND sy_id=$sy_id;");
 
         $class_grades = [];
 
         while ($grd = mysqli_fetch_assoc($res)) {
-            if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
-                $first = 'readonly';
-                $second_final = 'readonly';
-            } else if ($qtr == '2') {
-                $first = 'readonly';
-                $second_final = '';
-            } else if ($qtr == '1') {
-                $second_final = 'readonly';
-                $first = '';
-            } else {
-                $first = '';
-                $second_final = '';
+            if ($teacher_id != 'admin') {
+                if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
+                    $first = 'readonly';
+                    $second_final = 'readonly';
+                } else if ($qtr == '2') {
+                    $first = 'readonly';
+                    $second_final = '';
+                } else if ($qtr == '1') {
+                    $second_final = 'readonly';
+                    $first = '';
+                } else {
+                    $first = '';
+                    $second_final = '';
+                }
             }
+
 
             // $second_final = $qtr == '2' ? '' : 'readonly';
             $class_grades[] = [
@@ -1627,7 +1637,7 @@ trait Grade
             if ($_SESSION['user_type'] != 'AD') {
                 if ($temp[1] == 1) {
                     $editable = 'readonly';
-                } 
+                }
             }
 
 

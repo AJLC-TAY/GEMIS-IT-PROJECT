@@ -9,7 +9,7 @@
 </header>
 <div class="container mt-1 ms-0">
     <div class="card w-100 h-auto bg-light" style="min-height: 70vh !important;">
-        <h5 class="fw-bold"><?php echo $sem ?> Semester & 2nd Quarter</h5>
+        <h5 class="fw-bold"><?php echo $sem ?> Semester & 1st Quarter</h5>
         <div class="d-flex justify-content-between mb-1">
             <!-- SEARCH BAR -->
             <div class="flex-grow-1 me-3">

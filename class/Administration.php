@@ -767,10 +767,11 @@ class Administration extends Dbconfig
         $query = '';
         $sectionList = array();
         if (is_null($sy_id) && is_null($grade_level)) {
-            $query = "SELECT section_code, section_name, sy_id, grd_level, stud_no_max, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM section" . ((isset($_GET['current']) && $_GET['current'] === 'true')
-                ? "WHERE sy_id='{$_SESSION['sy_id']}'"
-                : "");
-            $query .= " LEFT JOIN faculty USING (teacher_id);";
+            $query = "SELECT section_code, section_name, sy_id, grd_level, stud_no_max, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM section LEFT JOIN faculty USING (teacher_id) ";
+            $query .= ((isset($_GET['current']) && $_GET['current'] == 'true')
+            ? "WHERE sy_id={$_SESSION['sy_id']};"
+            : "");
+
             $result = $this->query($query);
             while ($row = mysqli_fetch_assoc($result)) {
                 $sectionList[] = new Section($row['section_code'], $row['sy_id'], $row['section_name'], $row['grd_level'], $row['stud_no_max'], $row['stud_no'], $row['name']);

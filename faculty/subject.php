@@ -118,7 +118,7 @@ if (count($sub_classes) != 0) {
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">Are you sure you want to <span id='label'></span>?</h4>
+                        <h4 class="mb-0"><span id='stmt'></span><span id='label'></span></h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -147,7 +147,7 @@ if (count($sub_classes) != 0) {
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
-        var currentGrading = '<?php echo $grading; ?>';
+        var currentGrading = '<?php echo $grading; ?>'
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
     <?php echo $jsFilePath; ?>;

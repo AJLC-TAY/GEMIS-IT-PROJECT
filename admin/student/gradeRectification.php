@@ -54,7 +54,7 @@ if (count($sub_classes) != 0) {
         $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$sub_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=studentgrds&section={$section_code}' "
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id=admin&sub_code={$sub_code}' "
             . "data-name='$sub_code'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";
@@ -98,11 +98,7 @@ if (count($sub_classes) != 0) {
                 </form>
             </div>
             <div>
-                <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->
-                <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
-                                            <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
                 <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
-                <button type="button" class="btn btn-success submit">Submit</button>
             </div>
         </div>
 
@@ -110,10 +106,12 @@ if (count($sub_classes) != 0) {
             <table id="table" class="table-striped table-sm">
                 <thead class='thead-dark'>
                     <tr>
-                        <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
-                        <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="action_2">Action</th>
+                    <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
+                    <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="action_2">Action</th>
 
                     </tr>
                 </thead>
@@ -121,6 +119,29 @@ if (count($sub_classes) != 0) {
         </form>
     </div>
 </div>
+
+
+<div id="" class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h4 class="mb-0"> <span id='label'></span></h4>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p id="modal-msg"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn close-btn btn-success" id="confirm">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 <script type="text/javascript">
-    var type = 'grades'
+    var type = 'grades';
+    var user = 'admin';
 </script>

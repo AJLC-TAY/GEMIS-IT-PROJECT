@@ -28,7 +28,7 @@ if (isViewPage) {
     url += `data=student&section=${sectionCode}`;
     id = 'lrn';
 } else {
-    url += 'data=section';
+    url += 'data=section&current=true';
     id = 'seciton_code';
 }
 tableSetup.url = url;

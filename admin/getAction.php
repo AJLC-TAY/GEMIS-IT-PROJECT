@@ -10,6 +10,10 @@ if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
 if (isset($_GET['data']) && $_GET['data'] == 'grdAdvisor') {
     $admin->getClass();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'classGrades') {
+    $admin->getClassGrades();
+}
+
 
 if (isset($_GET['data']) && $_GET['data'] == 'program') {
     $admin->listProgramsUnderCurrJSON('program');
