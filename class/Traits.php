@@ -623,7 +623,7 @@ trait FacultySharedMethods
                 'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
                 'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
-                                   <button class='btn btn-sm btn-secondary action' data-type='edit'>Edit</button>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
                                        <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
