@@ -148,12 +148,13 @@ class FacultyModule extends Dbconfig
     {
 
         $marka = ['AO', 'SO', 'RO', 'NO'];
-        $qtr = '4'; //session
+        $qtr = '2'; //session
+
         $values = [];
         $values_desc = [];
         $marking = [];
         $stud_id = 110001; //$_GET['id'];
-        $sy_id = 4;
+        $sy_id = 9;
         $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
 
 
@@ -259,7 +260,14 @@ class FacultyModule extends Dbconfig
         $output = fopen('php://output', 'w');
         $fields = array('LRN', 'NAME', 'FIRST GRADING', 'SECOND GRADING', 'FINAL GRADE');
         fputcsv($output, $fields);
-        $query = $this->query("SELECT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade FROM student JOIN classgrade USING(stud_id) JOIN subjectclass USING(sub_class_code) JOIN sysub USING (sub_sy_id) JOIN subject USING (sub_code) WHERE teacher_id=26 AND sub_class_code = '$sub_class_code' AND sy_id=9;");
+        $query = $this->query("SELECT DISTINCT LRN, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        FROM student 
+        JOIN classgrade USING(stud_id) 
+        JOIN subject USING(sub_code) 
+        JOIN sysub USING(sub_code) 
+        JOIN subjectclass USING(sub_sy_id)
+        WHERE classgrade.sub_code = 'OCC1' 
+        AND sy_id=$sy_id;");
         while ($row = mysqli_fetch_assoc($query)) {
             $data = array($row['LRN'], $row['stud_name'], $row['first_grading'], $row['second_grading'], $row['final_grade']);
             fputcsv($output, $data);

@@ -93,20 +93,20 @@ $(function() {
 
 
     $("#psa").click(function(){
-        let preview = $('#imgPreview');
-        img = document.getElementById("psaPreview");
-        img.src = "http://localhost:3000/uploads/credential/14/1635868394_61815eead9dc89.54219229.jpg";
+        let preview = $('#psaPreview');
+        // img = document.getElementById("psaPreview");
+        // img.src = "http://localhost:3000/uploads/credential/14/1635868394_61815eead9dc89.54219229.jpg";
 
-        preview.find('.modal-title').text(this.alt);
+        // preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
 
     $("#form137").click(function(){
-        let preview = $('#imgPreview');
-        img = document.getElementById("psaPreview");
-        img.src = this.src;
-        //  this.src;
-        preview.find('.modal-title').text(this.alt);
+        let preview = $('#137Preview');
+        // img = document.getElementById("psaPreview");
+        // img.src = this.src;
+        // //  this.src;
+        // preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
 

@@ -1433,7 +1433,7 @@ trait Grade
         }
         $sy_id = $_GET['sy_id'];
         $sub_code = $_GET['sub_code'];
-        $qtr = 1;
+        $qtr = '2';
 
 
 
@@ -1660,6 +1660,10 @@ trait Grade
                 if ($temp[1] == 1) {
                     $editable = 'readonly';
                 }
+            }
+
+            if(4 != $_SESSION['current_quarter'] AND $_SESSION['user_type'] != 'AD'){
+                $editable = 'readonly';
             }
 
 
