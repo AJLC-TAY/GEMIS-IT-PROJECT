@@ -1326,7 +1326,6 @@ class Administration extends Dbconfig
 
             $current_program = $current_program[0];
             $query .= "UPDATE sharedsubject SET prog_code='$new_prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code' AND sy_id = '$sy_id';";
-            echo $query;
             return [$new_prog_code, $query];
         }
 

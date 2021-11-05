@@ -45,91 +45,88 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <h3 class="fw-bold">Award Parameters</h3>
                             </div>
                         </header>
-                        <div class="container w-75">
-                            <div class="card row mb-4">
-                                <h4>Academic Excellence</h4>
-                                <hr>
-                                <form id="acad-parameter-form" action="action.php" method="post">
-                                    <input type="hidden" name="editAcadParameters">
-                                    <div class="container">
-                                        <div class="form-row row align-content-center mb-3 text-center fw-bold">
-                                            <label class="col-form-label col-4">Description</label>
-                                            <div class="col-8 pt-2">Range (Min - Max)</div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-8 mb-4">
+                                    <div class="card p-3">
+                                        <div class="d-flex justify-content-between align-content-center px-0">
+                                            <h5 class="mb-0">Academic Excellence</h5>
+                                            <div class="my-auto">
+                                                <button class="btn-sm btn btn-success">Generate report</button>
+                                            </div>
                                         </div>
-                                        <?php
-                                        foreach ($param as $info => $range) {
-                                            echo "<div class='form-row row align-content-center'>
-                                                    <label class='col-form-label col-md-4'>$info Honor</label>";
-                                            foreach ($range as $val) {
-                                                echo "<div class='col-4'>
-                                                                <input value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
-                                                            </div>";
-                                            }
-                                            echo "</div>";
-                                        }
-                                        ?>
+                                        <form id="acad-parameter-form" action="action.php" method="post">
+                                            <input type="hidden" name="editAcadParameters">
+                                                <table class="table table-sm mt-2">
+                                                    <thead class="text-center">
+                                                        <th>Description</th>
+                                                        <th colspan='2'>Range Min-Max (Grades)</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        foreach ($param as $info => $range) {
+                                                            echo "<tr>
+                                                                    <td align='center' class='align-middle'>$info Honor</td>";
+                                                                    foreach ($range as $val) {
+                                                                        echo "<td><input value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'></td>";
+                                                                    }
+                                                            echo "</tr>";
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            <!-- <input type="submit" form="acad-parameter-form" class="form-control form-control-sm btn-success" value="Save"> -->
+                                        </form>
                                     </div>
-                                    <!-- <input type="submit" form="acad-parameter-form" class="form-control form-control-sm btn-success" value="Save"> -->
-                                </form>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card p-3 h-100 d-flex-column justify-content-between">
+                                        <h5>Conduct Award</h4>
+                                        <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
+                                        <button class="btn-sm btn btn-success">Generate report</button>
+                                    </div>       
+                                </div>
                             </div>
-                            <div class="card row mb-4">
-                                <h4>Conduct Award</h4>
-                                <hr>
-                                <div class="container">
-                                    <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
+                         
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="card p-3">
+                                        <h5>Perfect Attendance</h4>
+                                        <!-- <div class="container"> -->
+                                            <button class="btn-sm btn btn-success">Generate report</button>            
+                                        <!-- </div> -->
+                                    </div>
+                                </div>
 
-                                </div>
-                            </div>
-                            <!-- <div class="card row mb-4">
-                                <h4>Specific Discipline</h4>
-                                <div class="container">
-                                    <div class='form-row row justify-content-around align-content-center mb-2'>
-                                        <label class='col-form-label col-md-6'></label>
-                                        <div class='col-md-4  text-center text-secondary'>Minimum Grade</div>
-                                    </div>
-                                    <div class="row">
-                                        <?php 
-                                        // $spec_award = $admin->getSpecificDiscParamters();
-                                        // foreach($spec_award as $code => $param) {
-                                        //     echo "<div class='col-md-6 row justify-content-around align-content-center'>
-                                        //             <label class='col-form-label col-md-6'>{$param['desc']}</label>
-                                        //             <div class='col-md-6'>
-                                        //                 <input value='{$param['grd']}' name='$code' type='number' class='form-control form-control-sm number text-center' placeholder='Enter Value'>
-                                        //             </div>
-                                        //         </div>";
-                                        // }
-                                        ?>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="card row mb-4">
-                                <h4>Other Awards </h4>
-                                <hr>
-                                <div class="container">
-                                    <div class='form-row row align-content-center justify-content-end text-center mt-1'>
-                                        <div class="col-6">
-                                            <b>Awards for</b>
+                                <div class="col-auto">
+                                    <div class="card p-3">
+                                        <div class="d-flex justify-content-between align-content-center px-0">
+                                            <h5 class="mb-0">Other Awards</h5>
+                                            <div class="my-auto">
+                                                <button class="btn-sm btn btn-success">Generate report</button>
+                                            </div>
                                         </div>
-                                        <div class="col-6">
-                                            <p class='fw-bold'>Minimum Grade</p>
-                                        </div>
-                                    </div>
-                                    <div class='form-row row align-content-center'>
-                                        <label class='col-form-label col-md-6'>Research</label>
-                                        <div class="col-md-6">
-                                            <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
-                                        </div>
-                                    </div>
-                                    <div class='form-row row align-content-center'>
-                                        <label class='col-form-label col-md-6'>Outstanding Performance in Specific Disciplines</label>
-                                        <div class="col-md-6">
-                                            <input value='90' name='outstanding' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
-                                        </div>
-                                    </div>
-                                    <div class='form-row row align-content-center'>
-                                        <label class='col-form-label col-md-6'>Work Immersion Senior High</label>
-                                        <div class="col-md-6">
-                                            <input value='90' name='immersion' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                        <div class="container mt-2">
+                                            <div class='form-row row align-content-center justify-content-end text-center mt-1'>
+                                                <div class="col-6">
+                                                    <b>Awards for</b>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class='fw-bold'>Minimum Grade</p>
+                                                </div>
+                                            </div>
+                                            <div class='form-row row align-content-center'>
+                                                <label class='col-form-label col-md-6'>Research</label>
+                                                <div class="col-md-6">
+                                                    <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                                </div>
+                                            </div>
+                                            <div class='form-row row align-content-center'>
+                                                <label class='col-form-label col-md-6'>Work Immersion Senior High</label>
+                                                <div class="col-md-6">
+                                                    <input value='90' name='immersion' type='text' class='form-control form-control-sm number text-end' placeholder='Enter Value'>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

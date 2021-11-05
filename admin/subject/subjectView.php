@@ -51,7 +51,7 @@ $title =  "<div class='d-flex justify-content-between'>
 </header>
 <!-- HEADER END -->
 <h6><?php echo $prog_name; ?></h6>
-<div id='add-subject-info' class='row justify-content-around mt-3'>
+<div id='add-subject-info' class='row justify-content-around mt-3' style="min-height: 70vh;">
     <div class='col-sm-12 col-lg-6 col-xl-5 text-start mb-3'>
         <div class="card border bg-white p-4">
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
