@@ -24,7 +24,7 @@ $user = $admin->getAdministrator($user_id);
             <h5><b>INFORMATION</b></h5>
         </div>
         <div class="col-auto d-flex">            
-            <button class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#confirmation-modal"><i class="bi bi-trash me-2"></i>Delete Account</button>
+            <button id="delete-account-btn" class="btn btn-outline-danger ms-2"><i class="bi bi-trash me-2"></i>Delete Account</button>
             <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
             <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
 
@@ -123,12 +123,12 @@ $user = $admin->getAdministrator($user_id);
             </div>
             <form id="change-pass-form" method="POST">
                 <div class="modal-body">
-                    You are the only administrator in the system, deleting this account will set the admin account to default.<br>
-                    Would you like to proceed?
+                    <h6>You are the only administrator in the system, deleting this account will set the admin account to default.<br>
+                    Would you like to proceed?</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="confirmation-modal" class="btn btn-primary btn-sm">Proceed</button>
+                    <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn  btn-outline-secondary btn-sm">Proceed</button>
                 </div>
             </form>
         </div>

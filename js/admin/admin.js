@@ -29,14 +29,18 @@ var adminTable = $("#table").bootstrapTable(tableSetup);
 
 $(function () { // document ready
     preload("#admin");
+
+    $(document).on('click', "#delete-account-btn", function() {
+        $.get("getAction.php?data=adminCount").fail(function() {
+            $("#single-admin-confirm-modal").modal("show");
+        });
+    });
     $(document).on('submit', '#change-pass-form', function(e) {
         e.preventDefault();
         $.post("action.php", $(this).serializeArray(), function() {
             $("#change-pass-modal").modal('hide');
             showToast('success', 'Password successfully changed');
-        }).fail(function(data) {
-            alert(data.responseText);
-        }) ;
+        });
     });
     hideSpinner();
 });

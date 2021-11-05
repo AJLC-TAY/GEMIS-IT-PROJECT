@@ -1681,14 +1681,37 @@ class Administration extends Dbconfig
         }
     }
 
+    public function checkAdministratorCount() 
+    {
+        $count = mysqli_fetch_row($this->query("SELECT COUNT(admin_id) FROM administrator; "))[0];
+        // $is_allowed_to_delete = TRUE;
+        if ($count == 1) {
+            http_response_code(403);
+            die();
+        } 
+        // echo json_encode(["allowed" => $is_allowed_to_delete]);
+    }
+
     public function deleteAdmin()
     {
-
+        session_start();
+        $id = $_SESSION['id'];
+        $user_id = mysqli_fetch_row($this->query("SELECT admin_user_no FROM administrator WHERE admin_id = '$id';"))[0];
+        $this->query("DELETE FROM administrator WHERE admin_id = '$id';");
+        $this->query("DELETE FROM user WHERE id_no = $user_id AND type = 'AD';");
+        $this->createDefaultAdmin();
+        echo json_encode("../logout.php");
     }
 
     public function createDefaultAdmin()
     {
+        // if (!empty($_SESSION)) {
+        //     session_start();
+        // }
+        session_start();
+        define("NAME", "PCNHS");
         $id = $this->createUser('AD', TRUE);
+        $this->query("INSERT INTO administrator (admin_id, last_name, admin_user_no) VALUES (1, '". NAME ."', '$id');");
     }
 
     /** Faculty Methods */
