@@ -1688,7 +1688,7 @@ class Administration extends Dbconfig
 
     public function createDefaultAdmin()
     {
-        $id = $this->createUser()
+        $id = $this->createUser('AD', TRUE);
     }
 
     /** Faculty Methods */
