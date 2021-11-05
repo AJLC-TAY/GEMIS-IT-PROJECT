@@ -7,7 +7,7 @@ include_once("../inc/head.html");
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
 if ($user_type != 'ST') {
-    include_once('../inc/admin/sidebar.php');
+    include_once('../inc/admin/adminSidebar.php');
     $teacherName = $_POST['teacher_name'];
     $teacherName = 'Kesley Bautista Trinidad';
     $grade = 12;
@@ -132,7 +132,7 @@ if ($user_type != 'ST') {
     </div> -->
     <!-- SPINNER END -->
     <section id="container">
-        <?php //include_once('../inc/admin/sidebar.php'); 
+        <?php //include_once('../inc/adminSidebar.php');
         ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">

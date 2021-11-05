@@ -32,7 +32,7 @@ $(function () { // document ready
     $(document).on('submit', '#change-pass-form', function(e) {
         e.preventDefault();
         $.post("action.php", $(this).serializeArray(), function() {
-            $(this).closest('.modal').modal('hide');
+            $("#change-pass-modal").modal('hide');
             showToast('success', 'Password successfully changed');
         }).fail(function(data) {
             alert(data.responseText);

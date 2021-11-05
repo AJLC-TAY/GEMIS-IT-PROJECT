@@ -15,7 +15,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -39,6 +39,11 @@ include_once("../inc/head.html");
             <!-- FOOTER END -->
         </section>
     </section>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
     <!-- VIEW MODAL -->
     <div class="modal fade" id="view-modal" tabindex="-1" aria-labelledby="modal viewSchoolYear" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

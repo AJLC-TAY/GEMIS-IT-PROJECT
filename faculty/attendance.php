@@ -7,8 +7,12 @@ $data = $faculty->getAttendanceDays();
 $current_month = $data['current'];
 $months = $data['months'];
 $class_data =  $faculty->getAdvisoryClass();
-$class = $class_data['section_code'];
-$class_name= $class_data['section_name'];
+$class = '';
+$class_name = '';
+if (!empty($class_data)) {
+    $class = $class_data['section_code'];
+    $class_name= $class_data['section_name'];
+}
 $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
 ?>
 <title>Attendance | GEMIS</title>

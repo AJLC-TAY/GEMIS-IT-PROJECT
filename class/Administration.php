@@ -641,7 +641,6 @@ class Administration extends Dbconfig
             'id' => $row['sy_id'],
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
-            // 'grd_level' => $row['grd_level'],
             'current_qtr' => $row['current_quarter'],
             'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
@@ -651,10 +650,8 @@ class Administration extends Dbconfig
     public function editSY()
     {
         $sy_id = $_POST['sy_id'];
-        // $grd_level = $_POST['grade-level'];
         $quarter = $_POST['quarter'];
         $semester = $_POST['semester'];
-        // $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
         $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $semester, $sy_id], "iii");
     }
 
@@ -1684,6 +1681,16 @@ class Administration extends Dbconfig
         }
     }
 
+    public function deleteAdmin()
+    {
+
+    }
+
+    public function createDefaultAdmin()
+    {
+        $id = $this->createUser()
+    }
+
     /** Faculty Methods */
     /**
      * Implementation of inserting Faculty
@@ -1813,8 +1820,17 @@ class Administration extends Dbconfig
         if (isset($_POST['subjects'])) {
             // Step 1
             $subjects = $_POST['subjects'];
-            $result = mysqli_query($this->db, "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
+            $result = $this->query( "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
             $current_subjects = [];
+
+            if (mysqli_num_rows($result) == 0) {
+                foreach ($subjects as $sub) {
+                    echo "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');";
+                    $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');");
+                }
+                return;
+            }
+
             while ($row =  mysqli_fetch_row($result)) {
                 $current_subjects[] = $row[0];
             }
@@ -1822,17 +1838,17 @@ class Administration extends Dbconfig
             // Step 2
             $sub_codes_to_delete = array_diff($current_subjects, $subjects); // compares the two arrays, and returns an array of elements not found in array 2
             foreach ($sub_codes_to_delete as $code_to_delete) {
-                mysqli_query($this->db, "DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
+                $this->query("DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
             }
 
             // Step 3
             $new_sub_codes = array_diff($subjects, $current_subjects);       // codes not found in the current subjects will be added as new row in the db
             foreach ($new_sub_codes as $new_code) {
-                mysqli_query($this->db, "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
+                $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
             }
         } else {
             // Delete all subject rows handled by the faculty
-            $result = mysqli_query($this->db, "DELETE FROM subjectfaculty 
+            $result = $this->query("DELETE FROM subjectfaculty 
                                                       WHERE teacher_id='$id' 
                                                       AND (SELECT COUNT(sub_code) WHERE teacher_id='$id');") > 0;
         }
@@ -2110,34 +2126,35 @@ class Administration extends Dbconfig
 
         $section_dest = $_POST['section'];
 
-        // if (!$section_dest) {
-        //     // faculty will be unassigned to any section
-        //     $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
-        //     return;
-        // }
+         if (!$section_dest) {
+             // faculty will be unassigned to any section
+             $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
+             return;
+         }
 
-        // faculty will be assigned to new section
+        # faculty will be assigned to new section
         if (!isset($_POST['current-adviser'])) {
-            // no adviser to the section where the faculty will be transfered
+            // no adviser to the section where the faculty will be transferred
             $this->query("UPDATE section SET teacher_id=NULL WHERE teacher_id='$teacher_id';");
             $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
             $this->prepareSectionResult($section_dest, $teacher_id);
             return;
         }
 
-        // there is an adviser to the section destination
-        $current_section = $_POST['current-section'];
-        if (!$current_section) {
-            // the current adviser will be replaced as the new adviser of the section destination
-            mysqli_query($this->db, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+        # there is an adviser to the section destination
+        if (isset($_POST['current-section'])) {
+            $current_section = $_POST['current-section'];
+            # switch of advisory classes
+            $section_adviser = $_POST['current-adviser'];
+            $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+            $this->query("UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
             $this->prepareSectionResult($section_dest, $teacher_id);
             return;
         }
 
-        // switch of advisory classes
-        $section_adviser = $_POST['current-adviser'];
+        # the current adviser does not have an advisory class
+        # this adviser will be replaced as the new adviser of the section destination
         $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
-        $this->query("UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
         $this->prepareSectionResult($section_dest, $teacher_id);
     }
 

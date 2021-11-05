@@ -291,6 +291,7 @@ class Faculty implements JsonSerializable
     private $access;
     private $award_coor;
     private $enable_enroll;
+    private $subjects;
     private $handled_sub_classes;
     private $is_active;
     private $action;

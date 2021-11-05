@@ -148,8 +148,8 @@ trait UserSharedMethods
      */
     public function createUser(String $type): int
     {
-        $qry = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
-        $PASSWORD = mysqli_fetch_row($qry)[0];
+        $result = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
+        $PASSWORD = mysqli_fetch_row($result)[0];
         $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
         $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
         return mysqli_insert_id($this->db);  // Return User ID ex. 123456789
@@ -160,7 +160,6 @@ trait UserSharedMethods
      * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
      * @return Administrator|Faculty|Student
      */
-
     public function getProfile($type)
     {
         $id = $_GET['id'] ?? $_SESSION['id'];
@@ -306,8 +305,8 @@ trait UserSharedMethods
     {
         session_start();
         $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
-        print_r($result);
-        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+//        print_r($result);
+//        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
         if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
             echo "test";
             $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
@@ -449,6 +448,7 @@ trait FacultySharedMethods
             $row['email'],
             $row['award_coor'],
             $row['enable_enroll'],
+            NULL,
             $subjects
         );
 
@@ -1423,6 +1423,7 @@ trait Grade
 
     public function getClassGrades()
     {
+        session_start();
         $teacher_id = $_GET['id'];
         if ($teacher_id == 'admin') {
             $addOn = "";
@@ -1433,7 +1434,7 @@ trait Grade
         }
         $sy_id = $_GET['sy_id'];
         $sub_code = $_GET['sub_code'];
-        $qtr = '2';
+        $qtr = $_SESSION['current_quarter'];
 
 
 
@@ -1451,8 +1452,8 @@ trait Grade
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
                 if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
-                    $first = 'readonly';
-                    $second_final = 'readonly';
+                    $first = $second_final =  'readonly';
+//                    $second_final = 'readonly';
                 } else if ($qtr == '2') {
                     $first = 'readonly';
                     $second_final = '';
