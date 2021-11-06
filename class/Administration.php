@@ -384,7 +384,7 @@ class Administration extends Dbconfig
                         // echo ("-------------");
 
                         if ($sub_type['sub_type'] == $grd['sub_type']) {
-                            if ($_SESSION['user_type'] == 'ST') {
+                            // if ($_SESSION['user_type'] == 'ST') {
                                 if ($grd['status'] == 1) {
                                     $grado[] = [
                                         'sub_name'  => $grd['sub_name'],
@@ -400,14 +400,14 @@ class Administration extends Dbconfig
                                         'grade_f'   => ''
                                     ];
                                 }
-                            } else {
-                                $grado[] = [
-                                    'sub_name'  => $grd['sub_name'],
-                                    'grade_1'   => $grd['first_grading'],
-                                    'grade_2'   => $grd['second_grading'],
-                                    'grade_f'   => $grd['final_grade']
-                                ];
-                            }
+                            // } else {
+                            //     $grado[] = [
+                            //         'sub_name'  => $grd['sub_name'],
+                            //         'grade_1'   => $grd['first_grading'],
+                            //         'grade_2'   => $grd['second_grading'],
+                            //         'grade_f'   => $grd['final_grade']
+                            //     ];
+                            // }
                         }
                     }
 
@@ -421,7 +421,7 @@ class Administration extends Dbconfig
                 //ung kukunin lang is ung sub_name and sub_type ni stud
                 if (sizeof($grades) != 2) {
 
-                    $stud_grd = $this->query("SELECT DISTINCT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1;"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    $stud_grd = $this->query("SELECT DISTINCT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1 AND classgrade.status = 1;"); //sub_name | first_grading | second_grading | final_grading | sub_type
 
                     // foreach($sub_type as $type){
                     while ($grds = mysqli_fetch_assoc($stud_grd)) {
@@ -457,7 +457,7 @@ class Administration extends Dbconfig
             $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = $sy_id");
             while ($qtrs = mysqli_fetch_assoc($qtr)) {
                 for ($x = 1; $x <= $qtrs['current_quarter']; $x++) {
-                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x AND status = 1");
                     while ($marks = mysqli_fetch_assoc($markings)) {
                         if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
                             $marking[$val['bhvr_statement']][] =  $marks['marking'];
