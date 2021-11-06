@@ -1486,32 +1486,61 @@ trait Grade
         echo json_encode($class_grades);
     }
 
-    public function getAwardExcellenceData()
+    public function getExcellenceAwardData()
     {
-        $is_graduating = false;
-        if (isset($_GET['graduating']) && in_array(strtolower($_GET['graduating']), array('true', 'false'))) {
-            $is_graduating = $_GET['graduating'];
-        }
-        $grd = ($is_graduating === 'true' ? "12" : "11");
+        $sy_id = $_GET['sy_id'];
+        $grade = $_GET['grade'];
+        $highest_min = $_GET['highest_min'];
+        $highest_max = $_GET['highest_max'];
+        $high_min = $_GET['high_min'];
+        $high_max = $_GET['high_max'];
+        $with_min = $_GET['with_min'];
+        $with_max = $_GET['with_max'];
         $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
-            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
-            . "WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
-            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
-            . "AND enrolled_in = '$grd' AND e.sy_id = '9' "
+            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= '$with_min' AND general_average <= '$with_max') THEN 'with' "
+            . "WHEN (general_average >= '$high_min' AND general_average <= '{$high_max}') THEN 'high' WHEN (general_average >= '{$highest_min}' AND general_average <= '{$highest_max}') "
+            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= '{$with_min}' "
+            . "AND enrolled_in = '$grade' AND e.sy_id = '$sy_id' "
             . "ORDER BY program DESC, general_average DESC;";
         $result = $this->query($query);
         $excellence = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'] . ' Honors')];
+            $stud_id = $row['stud_id'];
+            $name = $row['name'];
+            $curriculum = $row['curriculum'];
+            $program = $row['program'];
+            $ga = $row['general_average'];
+            $remark = ucwords($row['remark'] . ' Honors');
+            $sex = ucwords($row['sex']);
+            $excellence[] = [
+//            $excellence[$row['curriculum']][$row['program']]['students'][] = [
+                'id' => $stud_id,
+                'name' => $name. "<input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][curriculum]' value='$curriculum'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][name]' value='$name'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][sex]' value='$name'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][ga]' value='$ga'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][program]' value='$program'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][remark]' value='$remark'>",
+                'curriculum' => $curriculum, 'program' => $program,
+                'ga' => $ga, 'sex' => $sex,
+                'remark' => $remark,
+                'input' => "
+                           
+                            ",
+                'action' => "<div class='d-flex justify-content-center'>
+                                <button data-id='$stud_id' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
+                                <button data-id='$stud_id' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
+                            </div>"
+            ];
         }
 
-        foreach ($excellence as $curr => $prog_rec) {
-            foreach ($prog_rec as $prog => $prog_list) {
-                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
-            }
-        }
+//        foreach ($excellence as $curr => $prog_rec) {
+//            foreach ($prog_rec as $prog => $prog_list) {
+//                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
+//            }
+//        }
 
-        return $excellence;
+        echo json_encode($excellence);
     }
 
     public function getAwardDataFromSubject()

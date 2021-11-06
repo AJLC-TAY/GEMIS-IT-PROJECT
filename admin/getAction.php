@@ -77,5 +77,8 @@ if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
 if (isset($_GET['data']) && $_GET['data'] == 'adminCount') {
     $admin->checkAdministratorCount();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
+    $admin->getExcellenceAwardData();
+}
 ?>
 

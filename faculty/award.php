@@ -121,7 +121,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         //     include_once("award/awardView.php");
                         //     $jsFilePath = "../js/admin/award.js";
                         // } else {
-                        //     include_once("award/awardCards.php");
+                        //     include_once("award/parameters.php");
                         //     $jsFilePath = "../js/admin/award.js";
                         // }
                         ?>

@@ -4,109 +4,7 @@ include_once("../inc/head.html"); ?>
 <title>Award Document | GEMIS</title>
 <!-- <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'> -->
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
-<style>
-    .doc {
-        width: 8.5in !important;
-        height: auto;
-    }
-
-    .template {
-        width: 7.5in !important;
-        font-family: Arial !important;
-        font-size: 13px !important;
-    }
-
-    .template li {
-        width: 100%;
-        min-height: 9.98in;
-        height: auto;
-        /* height: 9.98in !important; */
-        margin: 0.5in !important;
-    }
-
-    * {
-        box-sizing: border-box;
-    }
-
-    /*Header*/
-    .report-title {
-        text-align: center;
-        margin-top: 40px;
-        margin-bottom: 40px;
-    }
-
-    .title {
-        margin-bottom: 0;
-    }
-
-    .sub-title {
-        margin-top: 0;
-    }
-
-    /*Content*/
-    img {
-        height: 100px;
-        width: 100px;
-    }
-
-    td {
-        border: 0.5px solid #C5C5C5;
-    }
-
-    .fsize {
-        font-size: 15px;
-    }
-
-    .fsizes {
-        font-size: 12px;
-    }
-
-    .perLine {
-        line-height: 45px;
-    }
-
-    .parentLine {
-        display: flex;
-    }
-
-    .subLine {
-        min-width: 150px;
-        line-height: 45px;
-    }
-
-    .subLine2 {
-        min-width: 170px;
-    }
-
-    .subLine3 {
-        min-width: 350px;
-    }
-
-    .subLine4 {
-        min-width: 250px;
-    }
-
-    .ind {
-        text-indent: 10px;
-    }
-
-    .par {
-        text-indent: 50px;
-        text-align: justify;
-        font-size: 15px;
-        word-wrap: break-word;
-    }
-
-    .right {
-        float: right;
-    }
-
-    /*Footer*/
-    .signatory-con {
-        width: 50%;
-        display: table-column;
-    }
-</style>
+<link rel="stylesheet" href="../css/report.css">
 </head>
 
 <body>
@@ -131,21 +29,19 @@ include_once("../inc/head.html"); ?>
                                 case 'ae': # ae for academic excellence
                                     require_once("award/academicExcellence.php");
                                     break;
-                                case 'sp': # sp for specific
-                                    require_once("award/awardGeneric.php");
-                                    break;
                                 case 'pa': # pa for perfect attendance
                                     require_once("award/perfectAttendance.php");
                                     break;
-                                case 'ca': # pa for conduct award
+                                case 'ca': # ca for conduct award
                                     require_once("award/conduct.php");
                                     break;
-                                case 'la': # la for loyalty award
-                                    require_once("award/loyalty.php");
+                                case "re":
+                                case "im":
+                                    require_once ("award/awardGeneric.php");
                                     break;
                             }
                         } else {
-                            require_once("award/awardCards.php");
+                            require_once("award/parameters.php");
 
                         }
                         ?>
@@ -198,7 +94,7 @@ include_once("../inc/head.html"); ?>
         }
         // window.generatePDF = generatePDF;
         $(function() {
-            preload("#faculty");
+            preload("#awards");
             hideSpinner();
         });
     </script>

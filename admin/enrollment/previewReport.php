@@ -3,8 +3,8 @@ require "../class/Administration.php";
 $admin = new Administration();
 $tracks = $admin->getEnrollmentReportData();
 $school_year = "2021 - 2022";
-$signatory = "Alvin John Cutay";
-$position = "Student";
+$signatory = $_SESSION['User'];
+$position = $_SESSION['user_type'] == 'FA' ? "Faculty" : "Admin";
 $date = strftime('%Y-%m-%d', strtotime(date("F j, Y")));
 
 $signatory_list = $admin->listSignatory();

@@ -124,7 +124,7 @@ $user = $admin->getAdministrator($user_id);
             <form id="change-pass-form" method="POST">
                 <div class="modal-body">
                     <h6>You are the only administrator in the system, deleting this account will set the admin account to default.<br>
-                    Would you like to proceed?</p>
+                    Would you like to proceed?</h6>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
