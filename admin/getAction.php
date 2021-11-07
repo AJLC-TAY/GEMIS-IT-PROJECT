@@ -74,5 +74,11 @@ if (isset($_GET['data']) && $_GET['data'] == 'all-sub-classes') {
 if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
     $admin->listEnrollmentData(TRUE);
 }
+if (isset($_GET['data']) && $_GET['data'] == 'adminCount') {
+    $admin->checkAdministratorCount();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
+    $admin->getExcellenceAwardData();
+}
 ?>
 

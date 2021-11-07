@@ -23,8 +23,27 @@ let table = $("#table").bootstrapTable(tableSetup);
 let selectionTable = $("#student-selection").bootstrapTable(selectedTableSetup);
 let selection = [];
 
+function checkAll() {
+    $("#ae-table").bootstrapTable('onPost');
+}
 $(function () {
     preload('#awards');
+
+    try {
+        $("#id-no-select").select2({
+            theme: "bootstrap-5",
+            width: null
+        });
+    } catch (e) {}
+
+    try {
+        // $("#ae-table").bootstrapTable('hideColumn', "input");
+
+        // /** Check all rows after rendering the academic excellence table */
+        // $(document).on("post-body.bs.table", "#ae-table", function() {
+        //     $("#ae-table").bootstrapTable('checkAll');
+        // });
+    } catch (e) {}
 
     $(document).on("change", ".filter-item", function () {
         let yearLevel = $("#year-level").val();
@@ -73,7 +92,35 @@ $(function () {
                 break;
         }
     });
-    
+
+    $(document).on("click", "#ae-table .action", function(e) {
+        e.preventDefault();
+        let id, row, elementToToggle, type;
+        $(this).hide();
+
+        id = $(this).attr("data-id");
+        row = $(this).closest("tr");
+        let inputState = true;
+
+        switch($(this).attr("data-type")) {
+            case "remove":
+                type = "undo";
+                row.addClass("bg-light");
+                break;
+            case "undo":
+                type = "remove";
+                inputState = false;
+                row.removeClass("bg-light");
+                break;
+        }
+        $(`.action[data-id='${id}'][data-type='${type}']`).show();
+        row.find("input").prop("disabled", inputState);
+        console.log($("#ae-table").bootstrapTable("getRowByUniqueId", id));
+    });
+
+    $(document).on("click", "button[form='ae-form']", function() {
+        $("#academic-excellence-form").append(`<input type='hidden' name='test' value='test1'>`);
+    })
 
     /** Sets all select filter into All with value of '*' and refreshes the table */
     $(document).on("click", ".reset-filter-btn", function() {

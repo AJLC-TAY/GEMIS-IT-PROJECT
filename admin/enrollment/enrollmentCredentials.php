@@ -23,7 +23,7 @@ if ($valid_status === "Pending") {
 
 const PROFILE_PATH = "../assets/profile.png";
 $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFILE_PATH) : PROFILE_PATH;
-$psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : "../uploads/credential/9/test.png") : "../uploads/credential/9/test.png";
+$psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : "../uploads/credential/9/psa.jpg") : "../uploads/credential/9/psa.jpg";
 $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
 ?>
 
@@ -188,17 +188,33 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
 </div> -->
 
  <!-- Creates the bootstrap modal where the image will appear -->
- <div class="modal fade" id="imgPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+ <div class="modal fade" id="psaPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="modal-title">
-                            <h4 class="mb-0">Document Preview</h4>
+                            <h4 class="mb-0">PSA Preview</h4>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="img01">
-                        <img id="psaPreview" class="img-responsive" alt="PSA document" style="width:100%">
+                        <img  src ="<?php echo $psaPreview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="137Preview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">137 Preview</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="img01">
+                        <img  src ="<?php echo $form137Preview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
                     </div>
                 </div>
             </div>

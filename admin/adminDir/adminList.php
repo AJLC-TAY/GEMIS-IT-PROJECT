@@ -24,7 +24,7 @@ $user = $admin->getAdministrator($user_id);
             <h5><b>INFORMATION</b></h5>
         </div>
         <div class="col-auto d-flex">            
-            <button class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#confirmation-modal"><i class="bi bi-trash me-2"></i>Delete Account</button>
+            <button id="delete-account-btn" class="btn btn-outline-danger ms-2"><i class="bi bi-trash me-2"></i>Delete Account</button>
             <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
             <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
 
@@ -93,7 +93,7 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="delete-account-form" method="POST" action="deleteAccount.php">
+            <form id="delete-account-form" method="POST" action="action.php">
                 <div class="modal-body">
                     <p class="text-secondary"><small>Enter your password to confirm account deletion</small></p>
                     <div class="container">
@@ -103,8 +103,32 @@ $user = $admin->getAdministrator($user_id);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger btn-sm" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal fade" id="single-admin-confirm-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Warning</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="change-pass-form" method="POST">
+                <div class="modal-body">
+                    <h6>You are the only administrator in the system, deleting this account will set the admin account to default.<br>
+                    Would you like to proceed?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn  btn-outline-secondary btn-sm">Proceed</button>
                 </div>
             </form>
         </div>
@@ -121,7 +145,7 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="change-pass-form" method="POST" action="deleteAccount.php">
+            <form id="change-pass-form" method="POST">
                 <div class="modal-body">
                     <div class="container">
                         <div class="form-group row">

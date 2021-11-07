@@ -51,7 +51,7 @@ $reqRowsGrd11 = '';
 $reqRowsGrd12 = '';
 $grade_level_state = '';
 $button = '';
-
+$old_program = '';
 if ($action === 'add') {
     $prog_opt = prepareEmptyProgramOptions($programs, "core");
 
@@ -164,7 +164,8 @@ if ($action === 'edit') {
                         </tr>";
     }
 
-    $grade_level_state = ($subject_grd == 11) ? 'disabled': '';
+    // $grade_level_state = ($subject_grd == 11) ? 'disabled': '';
+    $grade_level_state = '';
     $reqRowsGrd12 = '';
     foreach ($subjectGrade12 as $subGr12) {
         $sub_code = $subGr12->get_sub_code();
@@ -251,20 +252,20 @@ if ($action === 'edit') {
 </header>
 <!-- HEADER END -->
 
-<div class='row'>
+<div class='CONTAINER'>
     <form id='add-subject-form' method='POST'>
         <?php echo $input_sub_with_prog; ?>
         <input type='hidden' name='action' value='<?php echo $action; ?>Subject'>
         <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
-            <div class='container p-0'>
+            <div class='container'>
                 <div class='form-row row'>
-                    <div class='form-group col-lg-3'>
+                    <div class='form-group col-lg-4'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
                         <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
                     </div>
-                    <div class='form-group col-lg-4'>
+                    <div class='form-group col-lg-3'>
                         <label for='sub-type' class='col-sm-3 col-form-label'>Type</label>
                         <?php echo $old_program; ?>
                         <select name='sub-type' class='form-select' id='sub-type' <?php echo $sub_type_editable?>><?php echo $sub_type_opt; ?></select>
@@ -348,5 +349,6 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
+        
     </form>
     <div class='d-flex flex-row-reverse'><?php echo $button; ?></div>

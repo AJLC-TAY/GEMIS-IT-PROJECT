@@ -1,12 +1,12 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-$excellence = $admin->getAwardExcellenceData();
+$excellence = $_POST['excellence'];
 $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
-$date_desc = date("F j, Y");
 $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
-$position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");
+$position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");$date_desc = date("F j, Y");
+
 ?>
 
 <!-- HEADER -->
@@ -58,14 +58,8 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                 </div>
 
                 <h6 class="text-center m-0"><b>Academic Excellence Award</b></h6>
-                <h6 class="text-center"><b><?php (isset($_GET['graduating']) && strtolower($_GET['graduating']) == 'true') ? "Senior High School Graduates" : "<br>"; ?></b></h6>
-                <!-- 
-                <div class="d-flex justify-content-between">
-                    <p><b>AO</b> - Always Observed</p>
-                    <p><b>SO</b> - Sometimes Observed</p>
-                    <p><b>RO</b> - Rarely Observed</p>
-                    <p><b>NO</b> - Not Observed</p>
-                </div> -->
+                <h6 class="text-center"><b><?php (($_GET['grade'] && $_GET['grade']) == '12') ? "Senior High School Graduates" : "<br>"; ?></b></h6>
+                <p class='text-secondary text-center'>SY <?php echo $school_year; ?></p>
 
                 <table class="table-bordered table w-100 table-sm text-center mt-3">
                     <thead class="text-center">
@@ -84,7 +78,8 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                             # get tracks rowspan
                             $track_row_span = 0;
                             foreach ($val as $prog_code => $prog_data) {
-                                $track_row_span += $prog_data['size'];
+
+                                $track_row_span += count($prog_data['students']);
                             }
                             echo "<tr><td rowspan='$track_row_span'>$track</td>";
                             $first_prog = array_key_first($val);
@@ -92,11 +87,11 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                                 if ($prog_code != $first_prog) {
                                     echo "<tr>";
                                 }
-                                echo "<td rowspan='" . $prog_data['size'] . "'>$prog_code</td>";
+                                echo "<td rowspan='" . count($prog_data['students']) . "'>$prog_code</td>";
                                 $stud_list = $prog_data['students'];
-                                foreach ($stud_list as $record) {
-                                    $first_rec  = $record[0]['id'];
-                                    if ($first_rec != $record['stud_id']) {
+                                foreach ($stud_list as $id => $record) {
+                                    $first_rec  = array_key_first($stud_list);
+                                    if ($first_rec != $id) {
                                         echo "<tr>";
                                     }
                                     echo "<td class='text-start'>{$record['name']}</td>"

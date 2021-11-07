@@ -67,13 +67,13 @@ $current_teacher_id = $school_user->get_teacher_id();
 $display_style = STYLE_DISPLAY_NONE;
 $section_list = $school->listSectionOption($current_teacher_id);
 $no_match_display = count($section_list) == 0 ? "" : "d-none";
-$chg_adv_btn = $user_type == 'AD'
+$chg_adv_btn = ($user_type == 'AD')
     ? "<span><button data-bs-toggle='modal' data-bs-target='#advisory-modal' "
     . "class='ms-5 form-control btn btn-sm btn-dark shadow w-auto my-auto'>Change</button></span>"
     : '';
 $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_code=$advisory_code' id='current-advisory' class='text-secondary'> {$advisory_code} "
     . $advisory_class['section_name'] . "</a>$chg_adv_btn</div>"
-    : "No advisory class set";
+    : "<p>No advisory class set $chg_adv_btn </p>";
 
 $birthdate = $school_user->get_birthdate();
 $birthdate = date("F j, Y", strtotime($birthdate));
@@ -120,26 +120,26 @@ $name = $school_user->get_name();
                     <div class="container p-0">
                         <!-- INFORMATION DETAILS -->
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <dl class="row">
-                                    <dt class='col-sm-3'>Name</dt>
-                                    <dd class='col-sm-9'><?php echo $name; ?></dd>
-                                    <dt class='col-sm-3'>Gender</dt>
-                                    <dd class='col-sm-9'><?php echo $school_user->get_sex(); ?></dd>
-                                    <dt class='col-sm-3'>Age</dt>
-                                    <dd class='col-sm-9'><?php echo $school_user->get_age(); ?></dd>
-                                    <dt class='col-sm-3'>Birthdate</dt>
-                                    <dd class='col-sm-9'><?php echo $birthdate; ?></dd>
+                                    <dt class='col-md-3'>Name</dt>
+                                    <dd class='col-md-9'><?php echo $name; ?></dd>
+                                    <dt class='col-md-3'>Gender</dt>
+                                    <dd class='col-md-9'><?php echo $school_user->get_sex(); ?></dd>
+                                    <dt class='col-md-3'>Age</dt>
+                                    <dd class='col-md-9'><?php echo $school_user->get_age(); ?></dd>
+                                    <dt class='col-md-3'>Birthdate</dt>
+                                    <dd class='col-md-9'><?php echo $birthdate; ?></dd>
                                 </dl>
                                 <h6><b>Contact Information</b></h6>
                                 <dl class="row">
-                                    <dt class='col-sm-3'>Cellphone No.</dt>
-                                    <dd class='col-sm-9'><?php echo $school_user->get_cp_no(); ?></dd>
-                                    <dt class='col-sm-3'>Email</dt>
-                                    <dd class='col-sm-9'><?php echo $school_user->get_email(); ?></dd>
+                                    <dt class='col-md-3'>Cellphone No.</dt>
+                                    <dd class='col-md-9'><?php echo $school_user->get_cp_no(); ?></dd>
+                                    <dt class='col-md-3'>Email</dt>
+                                    <dd class='col-md-9'><?php echo $school_user->get_email(); ?></dd>
                                 </dl>
                             </div>
-                            <div class="col-md-6 border p-2 px-3">
+                            <div class="col-lg-6 border p-2 px-3">
                                 <!-- DEPARTMENT SECTION -->
                                 <div id="dept-section" class="row pt-2 mb-2">
                                     <div class="d-flex justify-content-between mb-2">
@@ -301,8 +301,8 @@ $name = $school_user->get_name();
                                 </h5>
                             </div>
                             <div id="adviser-decide-con" class='d-none my-auto'>
-                                <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
-                                <button id='adviser-save-btn' class='btn btn-sm btn-success'>Save</button>
+                                <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1 btn-sm'>Cancel</button>
+                                <button id='adviser-save-btn' class='btn btn-sm btn-success btn-sm'>Save</button>
                             </div>
                         </div>
                         <!-- SUBJECT CLASS HEADER END -->
@@ -451,8 +451,8 @@ $name = $school_user->get_name();
                 <form id="as-form" method="POST" action="action.php">
                     <input type="hidden" name="teacher_id" value="<?php echo $current_teacher_id; ?>" />
                     <input type="hidden" name="action" value="editSubjectFaculty">
-                    <button id='cancel-as-btn' class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" form="as-form" id='save-as-btn' class="submit btn btn-success" value="Save">
+                    <button id='cancel-as-btn' class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" form="as-form" id='save-as-btn' class="submit btn btn-success btn-sm" value="Save">
                 </form>
             </div>
         </div>
@@ -547,8 +547,8 @@ $name = $school_user->get_name();
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-outline-dark close-btn" data-bs-dismiss="modal">Cancel</button>
-                <input type="submit" form="advisory-form" class="submit btn btn-success" value="Save">
+                <button class="close btn btn-outline-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" form="advisory-form" class="submit btn btn-success btn-sm" value="Save">
             </div>
         </div>
     </div>

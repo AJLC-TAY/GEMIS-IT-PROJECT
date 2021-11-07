@@ -13,9 +13,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
 if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
     $admin->addAdministrator();
 }
-
 if (isset($_POST['action']) && $_POST['action'] === 'editAdministrator') {
     $admin->editAdministrator();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'deleteAdmin') {
+    $admin->deleteAdmin();
 }
 
 /******** SCHOOL YEAR ********/

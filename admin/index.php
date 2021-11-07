@@ -20,7 +20,7 @@ $admin_user = $admin->getProfile('AD');
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper ps-4">
@@ -162,7 +162,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-file-text me-3" aria-hidden="true"></i>SUBJECT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="student.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="subject.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>

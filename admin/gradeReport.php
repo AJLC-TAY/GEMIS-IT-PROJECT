@@ -4,18 +4,48 @@ require_once("sessionHandling.php");
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
 
 include_once("../inc/head.html");
+include_once("../inc/adminSidebar.php");
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
 if ($user_type != 'ST') {
-    include_once('../inc/admin/sidebar.php');
-    $teacherName = $_POST['teacher_name'];
+    // include_once('../inc/admin/adminSidebar.php');
+    // $teacherName = $_POST['teacher_name'];
     $teacherName = 'Kesley Bautista Trinidad';
     $grade = 12;
-    $signatoryName = $_POST['signatory_name'];
-    // $signatoryName = 'Whitney Houston';
-    // $position = 'Secondary School Principal III';
-    $position = $_POST['position'];
+    // $signatoryName = $_POST['signatory_name'];
+    $signatoryName = 'Whitney Houston';
+    $position = 'Secondary School Principal III';
+    // $position = $_POST['position'];
+    $school_year = '9';
+    $breadcrumb = '';
 }
+include "../class/Administration.php";
+$admin = new Administration();
+$report_id = 1;
+// $report_id = $_GET['report_id'];
+$stud_id = '110001';  // test
+
+// $stud_id = $_GET['id'];
+
+
+$grades = $admin->listGrade();
+
+$userProfile = $admin->getProfile("ST");
+$stud_id = $userProfile->get_stud_id();
+$lrn = $userProfile->get_lrn();
+$lastName = $userProfile->get_last_name();
+$firstName = $userProfile->get_first_name();
+$midName = $userProfile->get_middle_name();
+$sex = $userProfile->get_sex();
+$age = $userProfile->get_age();
+$section = $userProfile->get_section();
+
+// $admittedIn = 'None';
+// $eligible = '12';
+// $date = date("F j, Y");
+$trackStrand = $admin->getTrackStrand();
+$attendance = $admin->getStudentAttendance(1);
+$filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report'; // 1111_grade_report
 ?>
 <title>Grade Report | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -132,7 +162,7 @@ if ($user_type != 'ST') {
     </div> -->
     <!-- SPINNER END -->
     <section id="container">
-        <?php //include_once('../inc/admin/sidebar.php'); 
+        <?php //include_once('../inc/adminSidebar.php');
         ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
@@ -158,11 +188,11 @@ if ($user_type != 'ST') {
                                 <div class="d-flex justify-content-between">
                                     <span>
                                         <h4><b>Grade Report</b></h4>
-                                        <?php echo $school_year; ?>
+                                        <?php //echo $school_year; ?>
                                         <?php if ($user_type == 'ST') {
                                             echo "<h3>{$_SESSION['User']}</h3>";
                                         } else {
-                                            echo "<h3>Student Name</h3>";
+                                            echo "<h3>$lastName, $firstName $midName</h3>";
                                         } ?>
                                     </span>
                                     <div class="mt-4">
@@ -172,32 +202,7 @@ if ($user_type != 'ST') {
                             </header>
                             <hr class='m-1'>
                             <?php
-                            include "../class/Administration.php";
-                            $admin = new Administration();
-                            $report_id = 1;
-                            // $report_id = $_GET['report_id'];
-                            $stud_id = '110001';  // test
-
-                            // $stud_id = $_GET['id'];
-                            $filename = $stud_id . '_grade_report'; // 1111_grade_report
-
-                            $grades = $admin->listGrade();
-
-                            $userProfile = $admin->getProfile("ST");
-                            $stud_id = $userProfile->get_stud_id();
-                            $lrn = $userProfile->get_lrn();
-                            $lastName = $userProfile->get_last_name();
-                            $firstName = $userProfile->get_first_name();
-                            $midName = $userProfile->get_middle_name();
-                            $sex = $userProfile->get_sex();
-                            $age = $userProfile->get_age();
-                            $section = $userProfile->get_section();
-
-                            // $admittedIn = 'None';
-                            // $eligible = '12';
-                            // $date = date("F j, Y");
-                            $trackStrand = $admin->getTrackStrand();
-                            $attendance = $admin->getStudentAttendance(1);
+                           
                             // echo json_encode($grades);
 
                             function prepareGradeRecordsHTML($grade)
@@ -387,10 +392,9 @@ if ($user_type != 'ST') {
                                     <br><br><br>
                                     <div class='parentLine fsize'>
                                         <div class='subLine2'>Name: </div><br>
-                                        <?php echo '$lastName, $firstName $midName'; ?>
-                                        <div class='subLine2 ind'><?php echo $lastName; ?></div><br>
-                                        <div class='subLine2 ind'><?php echo $firstName; ?></div><br>
-                                        <div class='subLine2 ind'><?php echo $midName; ?></div><br>
+                                        <div class='subLine2 ind'>$lastName</div><br>
+                                        <div class='subLine2 ind'>$firstName</div><br>
+                                        <div class='subLine2 ind'>$midName</div><br>
                                     </div>
                                     <div class='parentLine fsizes'>
                                         <div class='subLine2 ind'> </div><br>
@@ -401,24 +405,24 @@ if ($user_type != 'ST') {
                                     <br>
                                     <div class='parentLine fsize'>
                                         <div class='subLine'>Age: </div>
-                                        <div class='subLine'><?php echo $age; ?></div>
+                                        <div class='subLine'>$age</div>
                                         <div class='subLine'>Gender: </div>
-                                        <div class='subLine'><?php echo $sex; ?></div>
+                                        <div class='subLine'>$sex</div>
                                     </div>
                                     <div class='parentLine  fsize'>
                                         <div class='subLine'>Grade: </div>
-                                        <div class='subLine'><?php echo $grade; ?></div>
+                                        <div class='subLine'>$grade</div>
                                         <div class='subLine'>Section: </div>
-                                        <div class='subLine'><?php echo $section; ?></div>
+                                        <div class='subLine'>$section</div>
                                     </div>
-                                    <div class='perLine text-center fsize'>LRN: <?php echo $lrn; ?></div> 
+                                    <div class='perLine text-center fsize'>LRN: $lrn</div> 
                                     <div class='parentLine fsize'>
                                         <div class='subLine'>School Year: </div>
-                                        <div class='subLine'><?php echo $school_year; ?></div>
+                                        <div class='subLine'>$school_year</div>
                                     </div>
                                     <div class='parentLine fsize'>
                                         <div class='subLine'>Track/Strand: </div>
-                                        <div class='subLine'><?php echo $trackStrand[0]; ?></div>
+                                        <div class='subLine'>$trackStrand[0]</div>
                                     </div>
                                     <br>
                                     <div class='parag'>
@@ -432,13 +436,13 @@ if ($user_type != 'ST') {
                                     </div>
                                     <br><br><br>
                                     <div class='fsize right'>
-                                        <div> <?php echo $teacherName; ?></div>
+                                        <div> $teacherName</div>
                                         <div> Class Adviser </div>
                                     </div>
                                     <br><br><br>
                                     <div class='fsize left'>
-                                        <div><?php echo $signatoryName; ?></div>
-                                        <div> <?php echo $position; ?> </div>
+                                        <div>$signatoryName</div>
+                                        <div> $position</div>
                                     </div>
                               </li>  
                             ";
@@ -575,11 +579,11 @@ if ($user_type != 'ST') {
                                                         foreach ($values as $bh_staments => $bh_qtr) { // $bh_staments = sfdsdfsdfdsf
                                                             foreach ($bh_qtr as $bh_staments => $marking) {
                                                                 echo "<td>$bh_staments</td>";
-
-                                                                $first = $marking[0];
-                                                                $second = $marking[1];
-                                                                $third = $marking[2];
-                                                                $fourth = $marking[3];
+                                                                
+                                                                $first = $marking[0] = ""?$marking[0]:" ";
+                                                                $second = $marking[1] = ""?$marking[1]:" ";;
+                                                                $third = $marking[2] = ""?$marking[2]:" ";
+                                                                $fourth = $marking[3] = ""?$marking[3]:" ";
                                                                 echo "<td>$first</td>";
                                                                 echo "<td>$second</td>";
                                                                 echo "<td>$third</td>";

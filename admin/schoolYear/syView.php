@@ -21,7 +21,10 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
         </ol>
     </nav>
     <div class="d-flex align-content-center justify-content-between ">
-        <h4 class="fw-bold mb-0">School Year <?php echo $sy_info['desc']; ?></h4>
+        <div class="d-flex-column">
+            <h4 class="fw-bold mb-0">School Year <?php echo $sy_info['desc']; ?></h4>
+            <?php echo "SY ID: ".$sy_id_in_link ;?> 
+        </div>
         <?php echo $switch_btn; ?>
     </div>
     <hr>

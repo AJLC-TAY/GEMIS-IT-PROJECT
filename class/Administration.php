@@ -384,7 +384,7 @@ class Administration extends Dbconfig
                         // echo ("-------------");
 
                         if ($sub_type['sub_type'] == $grd['sub_type']) {
-                            if ($_SESSION['user_type'] == 'ST') {
+                            // if ($_SESSION['user_type'] == 'ST') {
                                 if ($grd['status'] == 1) {
                                     $grado[] = [
                                         'sub_name'  => $grd['sub_name'],
@@ -400,14 +400,14 @@ class Administration extends Dbconfig
                                         'grade_f'   => ''
                                     ];
                                 }
-                            } else {
-                                $grado[] = [
-                                    'sub_name'  => $grd['sub_name'],
-                                    'grade_1'   => $grd['first_grading'],
-                                    'grade_2'   => $grd['second_grading'],
-                                    'grade_f'   => $grd['final_grade']
-                                ];
-                            }
+                            // } else {
+                            //     $grado[] = [
+                            //         'sub_name'  => $grd['sub_name'],
+                            //         'grade_1'   => $grd['first_grading'],
+                            //         'grade_2'   => $grd['second_grading'],
+                            //         'grade_f'   => $grd['final_grade']
+                            //     ];
+                            // }
                         }
                     }
 
@@ -421,7 +421,7 @@ class Administration extends Dbconfig
                 //ung kukunin lang is ung sub_name and sub_type ni stud
                 if (sizeof($grades) != 2) {
 
-                    $stud_grd = $this->query("SELECT DISTINCT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1;"); //sub_name | first_grading | second_grading | final_grading | sub_type
+                    $stud_grd = $this->query("SELECT DISTINCT classgrade.status, sub_name, first_grading, second_grading, final_grade, sub_type FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code) JOIN subjectclass USING (sub_sy_id) JOIN classgrade WHERE stud_id = $stud_id AND sy_id = $sy_id AND current_semester = 1 AND classgrade.status = 1;"); //sub_name | first_grading | second_grading | final_grading | sub_type
 
                     // foreach($sub_type as $type){
                     while ($grds = mysqli_fetch_assoc($stud_grd)) {
@@ -457,7 +457,7 @@ class Administration extends Dbconfig
             $qtr = $this->query("SELECT current_quarter FROM schoolyear WHERE sy_id = $sy_id");
             while ($qtrs = mysqli_fetch_assoc($qtr)) {
                 for ($x = 1; $x <= $qtrs['current_quarter']; $x++) {
-                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
+                    $markings = $this->query("SELECT value_name, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x AND status = 1");
                     while ($marks = mysqli_fetch_assoc($markings)) {
                         if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
                             $marking[$val['bhvr_statement']][] =  $marks['marking'];
@@ -641,7 +641,6 @@ class Administration extends Dbconfig
             'id' => $row['sy_id'],
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
-            // 'grd_level' => $row['grd_level'],
             'current_qtr' => $row['current_quarter'],
             'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
@@ -651,10 +650,8 @@ class Administration extends Dbconfig
     public function editSY()
     {
         $sy_id = $_POST['sy_id'];
-        // $grd_level = $_POST['grade-level'];
         $quarter = $_POST['quarter'];
         $semester = $_POST['semester'];
-        // $this->prepared_query("UPDATE schoolyear SET grd_level=?, current_quarter=?, current_semester=? WHERE sy_id=?", [$grd_level, $quarter, $semester, $sy_id], "iiii");
         $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $semester, $sy_id], "iii");
     }
 
@@ -1329,7 +1326,6 @@ class Administration extends Dbconfig
 
             $current_program = $current_program[0];
             $query .= "UPDATE sharedsubject SET prog_code='$new_prog_code' WHERE prog_code='{$current_program}' AND sub_code='$code' AND sy_id = '$sy_id';";
-            echo $query;
             return [$new_prog_code, $query];
         }
 
@@ -1684,6 +1680,39 @@ class Administration extends Dbconfig
         }
     }
 
+    public function checkAdministratorCount() 
+    {
+        $count = mysqli_fetch_row($this->query("SELECT COUNT(admin_id) FROM administrator; "))[0];
+        // $is_allowed_to_delete = TRUE;
+        if ($count == 1) {
+            http_response_code(403);
+            die();
+        } 
+        // echo json_encode(["allowed" => $is_allowed_to_delete]);
+    }
+
+    public function deleteAdmin()
+    {
+        session_start();
+        $id = $_SESSION['id'];
+        $user_id = mysqli_fetch_row($this->query("SELECT admin_user_no FROM administrator WHERE admin_id = '$id';"))[0];
+        $this->query("DELETE FROM administrator WHERE admin_id = '$id';");
+        $this->query("DELETE FROM user WHERE id_no = $user_id AND type = 'AD';");
+        $this->createDefaultAdmin();
+        echo json_encode("../logout.php");
+    }
+
+    public function createDefaultAdmin()
+    {
+        // if (!empty($_SESSION)) {
+        //     session_start();
+        // }
+        session_start();
+        define("NAME", "PCNHS");
+        $id = $this->createUser('AD', TRUE);
+        $this->query("INSERT INTO administrator (admin_id, last_name, admin_user_no) VALUES (1, '". NAME ."', '$id');");
+    }
+
     /** Faculty Methods */
     /**
      * Implementation of inserting Faculty
@@ -1813,8 +1842,17 @@ class Administration extends Dbconfig
         if (isset($_POST['subjects'])) {
             // Step 1
             $subjects = $_POST['subjects'];
-            $result = mysqli_query($this->db, "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
+            $result = $this->query( "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
             $current_subjects = [];
+
+            if (mysqli_num_rows($result) == 0) {
+                foreach ($subjects as $sub) {
+                    echo "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');";
+                    $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');");
+                }
+                return;
+            }
+
             while ($row =  mysqli_fetch_row($result)) {
                 $current_subjects[] = $row[0];
             }
@@ -1822,17 +1860,17 @@ class Administration extends Dbconfig
             // Step 2
             $sub_codes_to_delete = array_diff($current_subjects, $subjects); // compares the two arrays, and returns an array of elements not found in array 2
             foreach ($sub_codes_to_delete as $code_to_delete) {
-                mysqli_query($this->db, "DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
+                $this->query("DELETE FROM subjectfaculty WHERE sub_code='$code_to_delete' AND teacher_id='$id';");
             }
 
             // Step 3
             $new_sub_codes = array_diff($subjects, $current_subjects);       // codes not found in the current subjects will be added as new row in the db
             foreach ($new_sub_codes as $new_code) {
-                mysqli_query($this->db, "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
+                $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
             }
         } else {
             // Delete all subject rows handled by the faculty
-            $result = mysqli_query($this->db, "DELETE FROM subjectfaculty 
+            $result = $this->query("DELETE FROM subjectfaculty 
                                                       WHERE teacher_id='$id' 
                                                       AND (SELECT COUNT(sub_code) WHERE teacher_id='$id');") > 0;
         }
@@ -2110,34 +2148,35 @@ class Administration extends Dbconfig
 
         $section_dest = $_POST['section'];
 
-        // if (!$section_dest) {
-        //     // faculty will be unassigned to any section
-        //     $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
-        //     return;
-        // }
+         if (!$section_dest) {
+             // faculty will be unassigned to any section
+             $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
+             return;
+         }
 
-        // faculty will be assigned to new section
+        # faculty will be assigned to new section
         if (!isset($_POST['current-adviser'])) {
-            // no adviser to the section where the faculty will be transfered
+            // no adviser to the section where the faculty will be transferred
             $this->query("UPDATE section SET teacher_id=NULL WHERE teacher_id='$teacher_id';");
             $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
             $this->prepareSectionResult($section_dest, $teacher_id);
             return;
         }
 
-        // there is an adviser to the section destination
-        $current_section = $_POST['current-section'];
-        if (!$current_section) {
-            // the current adviser will be replaced as the new adviser of the section destination
-            mysqli_query($this->db, "UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+        # there is an adviser to the section destination
+        if (isset($_POST['current-section'])) {
+            $current_section = $_POST['current-section'];
+            # switch of advisory classes
+            $section_adviser = $_POST['current-adviser'];
+            $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
+            $this->query("UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
             $this->prepareSectionResult($section_dest, $teacher_id);
             return;
         }
 
-        // switch of advisory classes
-        $section_adviser = $_POST['current-adviser'];
+        # the current adviser does not have an advisory class
+        # this adviser will be replaced as the new adviser of the section destination
         $this->query("UPDATE section SET teacher_id='$teacher_id' WHERE section_code='$section_dest';");
-        $this->query("UPDATE section SET teacher_id='$section_adviser' WHERE section_code='$current_section';");
         $this->prepareSectionResult($section_dest, $teacher_id);
     }
 

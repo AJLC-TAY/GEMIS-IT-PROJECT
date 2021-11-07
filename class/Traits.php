@@ -146,12 +146,18 @@ trait UserSharedMethods
      * @param   String $type Can either be AD, FA, or ST, short for Admin, Faculty, and Student, respectively.
      * @return  int User ID number.
      */
-    public function createUser(String $type): int
+    public function createUser(String $type, $is_default = FALSE): int
     {
-        $qry = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
-        $PASSWORD = mysqli_fetch_row($qry)[0];
-        $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
-        $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
+        if ($is_default) {
+            define("ID", "7264723646");
+            define("PASSWORD", "AD7264723646");
+            $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('". ID ."', NOW(), '$type', '". PASSWORD ."');");
+        } else {
+            $result = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
+            $PASSWORD = mysqli_fetch_row($result)[0];
+            $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
+            $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
+        }
         return mysqli_insert_id($this->db);  // Return User ID ex. 123456789
     }
 
@@ -160,7 +166,6 @@ trait UserSharedMethods
      * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
      * @return Administrator|Faculty|Student
      */
-
     public function getProfile($type)
     {
         $id = $_GET['id'] ?? $_SESSION['id'];
@@ -306,8 +311,8 @@ trait UserSharedMethods
     {
         session_start();
         $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
-        print_r($result);
-        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+//        print_r($result);
+//        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
         if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
             echo "test";
             $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
@@ -449,6 +454,7 @@ trait FacultySharedMethods
             $row['email'],
             $row['award_coor'],
             $row['enable_enroll'],
+            NULL,
             $subjects
         );
 
@@ -623,7 +629,7 @@ trait FacultySharedMethods
                 'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
                 'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
-                                   <button class='btn btn-sm btn-secondary action' data-type='edit'>Edit</button>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
                                        <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
@@ -1423,6 +1429,7 @@ trait Grade
 
     public function getClassGrades()
     {
+        session_start();
         $teacher_id = $_GET['id'];
         if ($teacher_id == 'admin') {
             $addOn = "";
@@ -1433,7 +1440,7 @@ trait Grade
         }
         $sy_id = $_GET['sy_id'];
         $sub_code = $_GET['sub_code'];
-        $qtr = 1;
+        $qtr = $_SESSION['current_quarter'];
 
 
 
@@ -1451,8 +1458,8 @@ trait Grade
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
                 if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
-                    $first = 'readonly';
-                    $second_final = 'readonly';
+                    $first = $second_final =  'readonly';
+//                    $second_final = 'readonly';
                 } else if ($qtr == '2') {
                     $first = 'readonly';
                     $second_final = '';
@@ -1479,32 +1486,61 @@ trait Grade
         echo json_encode($class_grades);
     }
 
-    public function getAwardExcellenceData()
+    public function getExcellenceAwardData()
     {
-        $is_graduating = false;
-        if (isset($_GET['graduating']) && in_array(strtolower($_GET['graduating']), array('true', 'false'))) {
-            $is_graduating = $_GET['graduating'];
-        }
-        $grd = ($is_graduating === 'true' ? "12" : "11");
+        $sy_id = $_GET['sy_id'];
+        $grade = $_GET['grade'];
+        $highest_min = $_GET['highest_min'];
+        $highest_max = $_GET['highest_max'];
+        $high_min = $_GET['high_min'];
+        $high_max = $_GET['high_max'];
+        $with_min = $_GET['with_min'];
+        $with_max = $_GET['with_max'];
         $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
-            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= 90 AND general_average <= 94) THEN 'with' "
-            . "WHEN (general_average >= 95 AND general_average <= 97) THEN 'high' WHEN (general_average >= 98 AND general_average <=100) "
-            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= 90 "
-            . "AND enrolled_in = '$grd' AND e.sy_id = '9' "
+            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= '$with_min' AND general_average <= '$with_max') THEN 'with' "
+            . "WHEN (general_average >= '$high_min' AND general_average <= '{$high_max}') THEN 'high' WHEN (general_average >= '{$highest_min}' AND general_average <= '{$highest_max}') "
+            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= '{$with_min}' "
+            . "AND enrolled_in = '$grade' AND e.sy_id = '$sy_id' "
             . "ORDER BY program DESC, general_average DESC;";
         $result = $this->query($query);
         $excellence = [];
         while ($row = mysqli_fetch_assoc($result)) {
-            $excellence[$row['curriculum']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'ga' => $row['general_average'], 'sex' => ucwords($row['sex']), 'remark' => ucwords($row['remark'] . ' Honors')];
+            $stud_id = $row['stud_id'];
+            $name = $row['name'];
+            $curriculum = $row['curriculum'];
+            $program = $row['program'];
+            $ga = $row['general_average'];
+            $remark = ucwords($row['remark'] . ' Honors');
+            $sex = ucwords($row['sex']);
+            $excellence[] = [
+//            $excellence[$row['curriculum']][$row['program']]['students'][] = [
+                'id' => $stud_id,
+                'name' => $name. "<input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][curriculum]' value='$curriculum'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][name]' value='$name'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][sex]' value='$name'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][ga]' value='$ga'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][program]' value='$program'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][remark]' value='$remark'>",
+                'curriculum' => $curriculum, 'program' => $program,
+                'ga' => $ga, 'sex' => $sex,
+                'remark' => $remark,
+                'input' => "
+                           
+                            ",
+                'action' => "<div class='d-flex justify-content-center'>
+                                <button data-id='$stud_id' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
+                                <button data-id='$stud_id' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
+                            </div>"
+            ];
         }
 
-        foreach ($excellence as $curr => $prog_rec) {
-            foreach ($prog_rec as $prog => $prog_list) {
-                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
-            }
-        }
+//        foreach ($excellence as $curr => $prog_rec) {
+//            foreach ($prog_rec as $prog => $prog_list) {
+//                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
+//            }
+//        }
 
-        return $excellence;
+        echo json_encode($excellence);
     }
 
     public function getAwardDataFromSubject()
@@ -1660,6 +1696,10 @@ trait Grade
                 if ($temp[1] == 1) {
                     $editable = 'readonly';
                 }
+            }
+
+            if(4 != $_SESSION['current_quarter'] AND $_SESSION['user_type'] != 'AD'){
+                $editable = 'readonly';
             }
 
 

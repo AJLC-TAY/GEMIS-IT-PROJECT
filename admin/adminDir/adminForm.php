@@ -120,8 +120,8 @@ if ($action == 'add') {
             <div class="form-group row mt-2">
                 <div class="d-flex justify-content-end">
                     <input type='hidden' name='action' value='<?php echo $action; ?>Administrator'>
-                    <a href='admin.php' class='btn btn-outline-danger me-2'>Cancel</a>
-                    <input type='submit' form='admin-form' class='btn btn-success' value='<?php echo $button; ?>'>
+                    <a href='admin.php' class='btn btn-outline-danger me-2 btn-sm'>Cancel</a>
+                    <input type='submit' form='admin-form' class='btn btn-success btn-sm' value='<?php echo $button; ?>'>
                 </div>
             </div>
             <!-- DECISION END -->

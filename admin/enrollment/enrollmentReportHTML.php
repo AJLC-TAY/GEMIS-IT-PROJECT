@@ -4,8 +4,10 @@ include("../inc/head.html");
 $tracks = $_POST['tracks'];
 $school_year = $_POST['school-year'];
 $title_desc = $_POST['report-title'];
-$signatory_desc = $_POST['signatory'];
-$position_desc = $_POST['position'];
+// $signatory_desc = $_POST['signatory'];
+// $position_desc = $_POST['position'];
+$signatory_desc = "Paul Mendez Cabello";
+$position_desc = "Department Head";
 $date_desc = date('F j, Y', strtotime($_POST['date']));
 $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
 

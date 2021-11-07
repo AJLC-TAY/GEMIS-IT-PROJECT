@@ -9,10 +9,10 @@ $assignFaculty = $admin->listFacultySubjects();
 $facultyassignlist = '';
 
 foreach ($assignFaculty as $af) {
-    // $sub_code = $af->get_sub_code();
+    $sub_code = $af->get_sub_code();
     $sub_name = $af->get_sub_name();
-    // $sub_type = $af->get_sub_type();
-    $facultyassignlist .= "<li><label for='subject' class='col-form-label list-group-item'>$sub_name</label></li><br>";
+    $sub_type = $af->get_sub_type();
+    $facultyassignlist .= "<li><label for='subject' class='col-form-label list-group-item'>$sub_type</label></li><br>";
 }
 
 ?>
@@ -29,7 +29,7 @@ foreach ($assignFaculty as $af) {
     </div>
      SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -50,7 +50,7 @@ foreach ($assignFaculty as $af) {
                             </header>
                             <div class="container w-75">
                                 <div class="card">
-                                    <form action="action.php" method="POST>
+                                    <form action="action.php" method="POST">
                                         <div class=" form-group row">
                                         <div class="col-md-6">
                                             <div class="container">

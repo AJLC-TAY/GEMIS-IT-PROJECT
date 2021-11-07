@@ -13,10 +13,9 @@ require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 //$advisory = [];
 $sub_classes = [];
-// $advisory = $faculty->getAdvisoryClass(9);
-// $sub_classes = $faculty->getHandled_sub_classes(1);
-$advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
-$sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
+$advisory = $faculty->getAdvisoryClass(9);
+$sub_classes = $faculty->getHandled_sub_classes(1);
+// $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -60,7 +59,7 @@ if (!(is_null($sub_classes))) {
 }
 $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
-$grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
+$grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 ?>
 

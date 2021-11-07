@@ -15,7 +15,7 @@ include_once ("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">

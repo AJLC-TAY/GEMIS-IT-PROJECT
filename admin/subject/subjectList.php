@@ -28,7 +28,7 @@
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <button class="btn btn-primary btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                        <!-- <button class="btn btn-primary btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button> -->
                         <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
                     </div>
                 </div>

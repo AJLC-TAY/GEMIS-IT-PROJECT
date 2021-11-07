@@ -11,7 +11,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'enrollees') {
 if (isset($_GET['data']) && $_GET['data'] == 'classGrades') {
     $faculty->getClassGrades();
 }
-if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
+if (isset($_GET['data']) && $_GET['data'] == 'class_attendance') {
     $faculty->listAttendance(TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'student-award-selection') {
