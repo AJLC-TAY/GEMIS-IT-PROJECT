@@ -12,15 +12,12 @@ $faculty_options = $admin->listSubClassFacultyOptions();
             <li class="breadcrumb-item active" aria-current="page">Subject Classes</li>
         </ol>
     </nav>
-<!--    <div class="d-flex justify-content-between">-->
+    <div class="d-flex justify-content-between">
         <h2 class="fw-bold">Subject Classes</h2>
-<!--        <span>-->
-<!--            <button type="button" class="btn btn-secondary me-1"><i class="bi bi-archive me-2"></i>Archive Section</button>-->
-<!--            <button class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>-->
-<!--        </span>-->
-<!--    </div>-->
-<!--    <hr class="my-2">-->
-<!--    <h6 class="fw-bold">Section</h6>-->
+        <span>
+            <a href="section.php?page=sub_class_form" class="btn btn-success" title='Add subject class'><i class="bi bi-plus-lg me-3"></i>Subject Class</a>
+        </span>
+    </div>
 </header>
 <!-- HEADER END -->
 <!-- FACULTY TABLE -->

@@ -28,6 +28,9 @@ include_once("../inc/head.html"); ?>
                                     include_once("section/sectionForm.php");
                                 } else if (isset($_GET["sec_code"])) {
                                     include_once("section/sectionView.php");
+                                } else if (isset($_GET['page']) && $_GET['page'] == 'sub_class_form') {
+                                    include_once("section/subjectClassForm.php");
+                                    $js = "<script type='module' src='../js/admin/subject-class.js'></script>";
                                 } else if (isset($_GET['page']) && $_GET['page'] == 'sub_classes') {
                                     include_once("section/subjectClasses.php");
                                     $js = "<script type='module' src='../js/admin/subject-class.js'></script>";
