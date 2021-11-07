@@ -93,8 +93,8 @@ $name = $school_user->get_name();
     <!-- BREADCRUMB END -->
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex-column">
-            <hp class="my-auto">Faculty Profile</hp>
-            <h5><?php echo $name; ?></h5>
+            <large class="my-auto">Faculty Profile</large>
+            <h3 class="fw-bold"><?php echo $name; ?></h3>
         </div>
         <div class="d-flex justify-content-center">
             <button id="deactivate-btn" class="btn btn-outline-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
@@ -340,7 +340,7 @@ $name = $school_user->get_name();
                     <div class="d-flex justify-content-between p-0">
                         <h5 class="my-auto fw-bold">ASSIGNED SUBJECTS</h5>
                         <div class='edit-con my-auto'>
-                            <a role="button" id='edit-as-btn' data-action='Edit handled subject' class='edit-as-btn btn link btn-sm' data-bs-toggle="modal" data-bs-target="#as-modal"><i class='bi bi-pencil-square me-2'></i></a>
+                            <a role="button" id='edit-as-btn' data-action='Edit handled subject' class='edit-as-btn btn link btn-sm' data-bs-toggle="modal" data-bs-target="#as-modal"><i class='bi bi-pencil-square me-2'></i> Edit</a>
                         </div>
                         <!-- <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='View'> -->
                     </div>

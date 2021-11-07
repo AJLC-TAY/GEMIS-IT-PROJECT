@@ -14,7 +14,7 @@ $enroll = $sy[0];
 
 <body>
     <div class="container h-100">
-        <div class="login_name_wrapper">
+        <div class="login_name_wrapper mb-5">
             <div class="d-flex justify-content-center">Welcome!</div>
         </div>
         <div class="d-flex justify-content-center h-50">
@@ -55,9 +55,13 @@ $enroll = $sy[0];
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">
                                 <a href="passwordReset/forgotPassword.php">Forgot your password?</a>
+                                <br>
+                            </div>
+                            <div class="mt-5 d-flex justify-content-center ">
                                 <?php if ($enroll == 1) { ?>
                                     <!-- <div class="d-flex justify-content-end mt-5"> -->
-                                    <span><small class='text-secondary'>New student?</small> <a href="student/enrollment_form.php" class="link">Enroll Now!</a><br></span>
+                                    <small class='text-secondary'>New student? </small>
+                                    <small><a href="student/enrollment_form.php" class="link"> Enroll Now!</a></small>
                                     <!-- <div class="col-auto"> -->
                                     <!-- </div> -->
                                     <!-- </div> -->

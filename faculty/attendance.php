@@ -41,7 +41,7 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                             <div class="d-flex">
                                 <div class="col-auto">
                                     <p class="text-secondary m-0">
-                                        <medium>First Semester</medium>
+                                        <large>First Semester</large>
                                     </p>
                                     <h3><b>12 ABM A </b>Attendance</h3>
                                 </div>

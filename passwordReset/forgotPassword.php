@@ -16,7 +16,7 @@ include_once("../inc/head.html");
                     <h4>Forgot your password?</h4>
                     <p class="p-2">Enter your email address and we'll send you a link to reset your password.</p>
                 </div>
-                <div class="d-flex justify-content-center form_container">
+                <div class="d-flex justify-content-center form_container_fp">
                     <form action="../admin/action.php" method="POST" style="width: 320px">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">

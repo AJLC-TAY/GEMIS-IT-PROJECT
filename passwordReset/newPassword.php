@@ -15,7 +15,7 @@ include_once("../inc/head.html");
                 <div class="text-center mt-5">
                     <h4>Enter your new password:</h4>
                 </div>
-                <div class="d-flex justify-content-center form_container">
+                <div class="d-flex justify-content-center form_container_fp">
                     <form action="../admin/action.php" method="POST" style="width: 320px">
                         <div class="input-group">
                             <input type="hidden" name='action' value="newPassword">
