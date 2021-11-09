@@ -6,7 +6,7 @@ if ($_SESSION['enrolled'] != TRUE) {
 include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

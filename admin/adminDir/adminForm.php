@@ -41,6 +41,7 @@ if ($action == 'add') {
 
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

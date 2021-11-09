@@ -64,7 +64,7 @@ if (is_null($guardian)) {
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="validate.js"></script>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER START -->
     <div class="spinner-con">

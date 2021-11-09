@@ -4,6 +4,7 @@ $admin = new Administration();
 $user_id = $_SESSION['id'];
 $user = $admin->getAdministrator($user_id);
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
  <header>
      <!-- BREADCRUMB -->

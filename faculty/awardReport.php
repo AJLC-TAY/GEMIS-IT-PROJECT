@@ -108,7 +108,7 @@ include_once("../inc/head.html"); ?>
     }
 </style>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

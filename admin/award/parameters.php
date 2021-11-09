@@ -11,6 +11,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
 }
 ?>
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

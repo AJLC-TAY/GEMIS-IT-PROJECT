@@ -7,6 +7,7 @@ $faculty_list = $admin->listNotAdvisers();
 <script type="text/javascript">
     let isViewPage = false;
 </script>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

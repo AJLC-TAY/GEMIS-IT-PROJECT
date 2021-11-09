@@ -3,6 +3,7 @@ require("../class/Administration.php");
 //$admin = new Administration();
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

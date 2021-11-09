@@ -16,7 +16,7 @@ $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
     <link rel="stylesheet" href="../css/report.css">
 </head>
 <body>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

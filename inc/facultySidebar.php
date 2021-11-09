@@ -23,6 +23,7 @@ if (in_array('award_coor', $roles)) {
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
+<!DOCTYPE html>
 <header class="header black-bg">
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right"></div>
