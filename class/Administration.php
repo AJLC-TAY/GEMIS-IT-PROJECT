@@ -364,11 +364,11 @@ class Administration extends Dbconfig
         if ($_SESSION['user_type'] == 'ST') {
             $stud_id = $_SESSION['id'];
         } else {
-            $stud_id = 110001; //kesley
+            $stud_id = 110001;
         }
         $grado = [];
-        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = 9"); //insert ung query nung pagretrieve ng sem  // kastoy ba HHSHAHSHA
-        $sy_id = 9; //$this->query("SELECT * FROM schoolyear WHERE status = 'current'"); '
+        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = {$_SESSION['sy_id']}"); 
+        $sy_id = $_SESSION['sy_id']; 
         $subject_type = $this->query("SELECT DISTINCT sub_type FROM classgrade JOIN subjectclass USING(sub_code) JOIN sysub USING(sub_sy_id) JOIN subject WHERE stud_id = $stud_id"); //insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
         while ($sem = mysqli_fetch_assoc($result)) {
             while ($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
@@ -447,7 +447,7 @@ class Administration extends Dbconfig
         $values_desc = [];
         $marking = [];
         $stud_id = 110003;
-        $sy_id = 4;
+        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
 
 

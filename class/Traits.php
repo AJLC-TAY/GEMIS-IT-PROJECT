@@ -151,7 +151,7 @@ trait UserSharedMethods
         if ($is_default) {
             define("ID", "7264723646");
             define("PASSWORD", "AD7264723646");
-            $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('". ID ."', NOW(), '$type', '". PASSWORD ."');");
+            $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('" . ID . "', NOW(), '$type', '" . PASSWORD . "');");
         } else {
             $result = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
             $PASSWORD = mysqli_fetch_row($result)[0];
@@ -311,8 +311,8 @@ trait UserSharedMethods
     {
         session_start();
         $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
-//        print_r($result);
-//        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+        //        print_r($result);
+        //        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
         if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
             echo "test";
             $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
@@ -358,7 +358,7 @@ trait FacultySharedMethods
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
         ];
         $types = "sssssdss";
-      
+
         switch ($user_type) {
             case "AD":
                 [$canEnroll, $awardRep] = $this->prepareFacultyRolesValue();
@@ -475,21 +475,21 @@ trait FacultySharedMethods
         //         $data[] = $row['section_name'];
         //     }
         // } else {
-            $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
-            $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
-            if (is_null($sy)) {
-                $params = [$id];
-                $types = "i";
-            } else {
-                $query .= " AND sy_id=?; ";
-                $params = [$id, $sy];
-                $types = "ii";
-            }
-            $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
-            if ($data) {
-                return ["section_code" => $data[0], "section_name" => $data[1]];
-            }
-            return NULL;
+        $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
+        $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
+        if (is_null($sy)) {
+            $params = [$id];
+            $types = "i";
+        } else {
+            $query .= " AND sy_id=?; ";
+            $params = [$id, $sy];
+            $types = "ii";
+        }
+        $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
+        if ($data) {
+            return ["section_code" => $data[0], "section_name" => $data[1]];
+        }
+        return NULL;
     }
 
     // public function getSectionList()
@@ -853,7 +853,7 @@ trait Enrollment
 
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
-            // echo $query;
+        // echo $query;
         $result = $this->query($query);
         $records = array();
 
@@ -1106,19 +1106,20 @@ trait Enrollment
         $teacher_id = $_POST['teacher_id'];
         $section_code = $_POST['code'];
 
-        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;",[$teacher_id, $section_code], "is");
+        $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;", [$teacher_id, $section_code], "is");
         //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = $section_code;
     }
-   
+
 
     //Change subject teacher
-    public function changeSubjectTeacher() {
+    public function changeSubjectTeacher()
+    {
         $teacher_id = $_POST['teacher_id'];
         $sub_class_code = $_POST['sub_class_code'];
 
         $this->prepared_query("UPDATE `subjectclass` SET `teacher_id` = ? WHERE `subjectclass`.`sub_class_code` = ?;", [$teacher_id, $sub_class_code], "ii");
     }
-    
+
     //Get advisers as replacement
     public function getTeachersList()
     {
@@ -1138,8 +1139,8 @@ trait Enrollment
         $adv[] =  $list;
         $list = '';
     }
-     
-    
+
+
 
 
 
@@ -1205,7 +1206,7 @@ trait Enrollment
         //         $row['teacher_id']
         //     );
         //     $sections[] = $section;
-        //     if ($stud_no < $stud_max_no) { // 0 < 50
+        //     if ($stud_no < $stud_max_no) { // 0 <div 50
         //         $avail_section[] = $section;
         //     }
         // }    
@@ -1459,7 +1460,7 @@ trait Grade
             if ($teacher_id != 'admin') {
                 if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
                     $first = $second_final =  'readonly';
-//                    $second_final = 'readonly';
+                    //                    $second_final = 'readonly';
                 } else if ($qtr == '2') {
                     $first = 'readonly';
                     $second_final = '';
@@ -1479,7 +1480,7 @@ trait Grade
                 'name' => $grd['stud_name'],
                 'grd_1' => "<input name='{$grd['stud_id']}/first_grading' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
                 'grd_2' => "<input name='{$grd['stud_id']}/second_grading' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 number' $second_final value='{$grd['final_grade']}'>"
+                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 Final number' $second_final value='{$grd['final_grade']}'>"
             ];
         }
 
@@ -1513,9 +1514,9 @@ trait Grade
             $remark = ucwords($row['remark'] . ' Honors');
             $sex = ucwords($row['sex']);
             $excellence[] = [
-//            $excellence[$row['curriculum']][$row['program']]['students'][] = [
+                //            $excellence[$row['curriculum']][$row['program']]['students'][] = [
                 'id' => $stud_id,
-                'name' => $name. "<input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][curriculum]' value='$curriculum'>
+                'name' => $name . "<input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][curriculum]' value='$curriculum'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][name]' value='$name'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][sex]' value='$name'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][ga]' value='$ga'>
@@ -1534,11 +1535,11 @@ trait Grade
             ];
         }
 
-//        foreach ($excellence as $curr => $prog_rec) {
-//            foreach ($prog_rec as $prog => $prog_list) {
-//                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
-//            }
-//        }
+        //        foreach ($excellence as $curr => $prog_rec) {
+        //            foreach ($prog_rec as $prog => $prog_list) {
+        //                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
+        //            }
+        //        }
 
         echo json_encode($excellence);
     }
@@ -1672,9 +1673,39 @@ trait Grade
     }
 
 
-
     public function listAdvisoryStudents($is_JSON = false)
     {
+
+        function actions($report_id, $stud_id)
+        {
+            return "<div class='d-flex justify-content-center'>
+            <div class='dropdown'>
+            <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+              View
+            </button>
+            <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
+              <li><a class='dropdown-item' href='#'>Details</a></li>
+              <li><a class='dropdown-item' href='grade.php?id=$report_id'>Grades</a></li>
+            </ul>
+          </div>
+          <div class='dropdown'>
+            <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+              Grade
+            </button>
+            <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
+              <li><a class='dropdown-item' href='#'>Export</a></li>
+              <li><a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
+            </ul>
+          </div>
+          <button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button>
+          </div>";
+        }
+        // <div class='d-flex justify-content-center'>"
+        //             . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
+        //             . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
+        //             . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
+        //             . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
+        //             . "</div>
         session_start();
         $students = [];
         $section_code = $_GET['section'];
@@ -1698,11 +1729,9 @@ trait Grade
                 }
             }
 
-            if(4 != $_SESSION['current_quarter'] AND $_SESSION['user_type'] != 'AD'){
+            if (4 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD') {
                 $editable = 'readonly';
             }
-
-
 
             $students[] = [
                 'id'     =>  $stud_id,
@@ -1710,12 +1739,7 @@ trait Grade
                 'name'   =>  $row['name'],
                 'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
-                'action' =>  "<div class='d-flex justify-content-center'>"
-                    . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
-                    . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
-                    . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
-                    . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
-                    . "</div>",
+                'action' =>  actions($report_id, $stud_id)
             ];
         }
         if ($is_JSON) {
@@ -1723,5 +1747,13 @@ trait Grade
             return;
         }
         return $students;
+    }
+
+    public function promoteStudent()
+    {
+        $promote = 1;
+        $stud_id = $_POST['stud_id'];
+       
+        $this->query("UPDATE `enrollment` SET `promote`= $promote WHERE stud_id = $stud_id;");
     }
 }

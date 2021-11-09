@@ -161,7 +161,17 @@ $(function() {
             $('.grading-confirmation').modal('hide');
             $(".number").attr('readOnly',true);
     });
-        
+    $(document).on("click", ".promote", function() {
+        let studID = $(this).attr("data-stud-id");
+        console.log(studID);
+        var record = {'action': 'promote', 
+                      'stud_id':studID};
+    
+        $.post("action.php", record, function(data) {	
+            console.log(data);
+        });
+       
+    });
         
     hideSpinner();
 });

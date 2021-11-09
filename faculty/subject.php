@@ -17,10 +17,10 @@ $sub_class_opn = '';
 $adv_table_display = 'd-none';
 $sub_table_display = '';
 
-$schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
-$sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
+// $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
+$sem = $_SESSION['current_semester'] == '1' ? 'First' : 'Second';
 $grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
-$qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
+$qtrs = $_SESSION['current_semester'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
 // $adv_count_is_empty = !(is_null($advisory));
 // if ($adv_count_is_empty) {
