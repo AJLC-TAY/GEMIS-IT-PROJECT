@@ -66,6 +66,7 @@ if (count($sub_classes) != 0) {
 }
 
 ?>
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

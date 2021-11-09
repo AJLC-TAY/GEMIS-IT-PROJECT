@@ -16,7 +16,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 }
 ?>
 
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

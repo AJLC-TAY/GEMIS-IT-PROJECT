@@ -5,7 +5,7 @@ include_once("../inc/head.html");
 <title>Account Archived | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
 
     <section id="container">

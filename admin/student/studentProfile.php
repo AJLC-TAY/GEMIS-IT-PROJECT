@@ -69,7 +69,7 @@ switch ($user_type) {
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
-
+<!DOCTYPE html>
 <header>
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>

@@ -14,6 +14,7 @@ $faculty = $admin->listFaculty();
 </head>
 
 <body>
+<!DOCTYPE html>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">

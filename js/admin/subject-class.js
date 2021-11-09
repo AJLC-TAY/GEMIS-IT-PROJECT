@@ -45,7 +45,9 @@ function reloadOptions(currentID = null) {
 
 $(function() {
     preload("#enrollment", "#sub-classes");
-    reloadOptions();
+    try {
+        reloadOptions();
+    } catch(e) {}
 
     /** Event listener when multiple assign button is clicked */
     $(document).on("click", '#multiple-assign-opt', function() {

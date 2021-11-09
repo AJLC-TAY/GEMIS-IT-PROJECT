@@ -1759,7 +1759,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->action = 
                         "<div class='d-flex justify-content-center'>"
                             ."<a href='section.php?sec_code=$code' target='_blank' class='btn btn-primary btn-sm w-auto me-1' title='View Section'><i class='bi bi-eye'></i></a>"
-                            ."<a href='section.php?sec_code=$code&action=edit' target='_blank' class='btn btn-secondary btn-sm w-auto' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                            ."<a href='section.php?sec_code=$code&action=edit' target='_blank' class='btn btn-secondary btn-sm w-auto me-1' title='Edit Section'><i class='bi bi-pencil-square'></i></a>"
+                            ."<button data-code='$code' class='btn btn-dark btn-sm edit-sub-class' title='Subject classes'><i class='bi bi-pencil-square me-1'></i>SC</button>"
                         ."</div>";
         }
 

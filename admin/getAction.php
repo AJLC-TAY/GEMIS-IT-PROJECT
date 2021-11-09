@@ -39,6 +39,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
 if (isset($_GET['data']) && $_GET['data'] == 'section') {
     $admin->listSectionJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'sectionInfo') {
+    $admin->getSectionSubClassInfo();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'sections') {
     $admin->listSectionJSON($_GET['sy_id'], $_GET['grade'], $_GET['section']);
 }

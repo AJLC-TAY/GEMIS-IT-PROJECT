@@ -67,7 +67,7 @@ $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFI
 $psa = !is_null($id_picture) ? (file_exists($psa_birth_cert) ? $psa_birth_cert : NO_FILE) : NO_FILE;
 $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) : NO_FILE;
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

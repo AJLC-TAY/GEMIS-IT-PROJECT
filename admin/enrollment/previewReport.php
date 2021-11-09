@@ -11,7 +11,7 @@ $signatory_list = $admin->listSignatory();
 $track_names = [];
 $programs = [];
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

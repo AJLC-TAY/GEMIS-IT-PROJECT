@@ -6,7 +6,7 @@ include_once("../inc/head.html");
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

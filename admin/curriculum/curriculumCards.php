@@ -2,7 +2,7 @@
 include_once('../class/Administration.php');
 $admin = new Administration();
 ?>
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

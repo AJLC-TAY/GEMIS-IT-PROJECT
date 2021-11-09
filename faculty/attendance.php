@@ -18,7 +18,7 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
 <title>Attendance | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

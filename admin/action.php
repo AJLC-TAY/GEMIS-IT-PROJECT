@@ -231,6 +231,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
 if (isset($_POST['action']) && ($_POST['action'] === 'addStudentInSection' || $_POST['action'] === 'transferStudentInSection')) {
     $admin->addStudentInSection();
 }
+if (isset($_POST['action']) &&  $_POST['action'] === 'editSubjectSection') {
+    $admin->editSubjectSection();
+}
 
 
 /******** STUDENT ********/

@@ -107,6 +107,7 @@ if (isset($_GET['action'])) {
     }
 }
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->

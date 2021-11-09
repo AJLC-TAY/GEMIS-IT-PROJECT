@@ -238,7 +238,7 @@ if ($action === 'edit') {
     $old_program = implode("", $old_program);
 }
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

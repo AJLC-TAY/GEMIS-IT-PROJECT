@@ -1,3 +1,13 @@
+<?php
+include_once("../class/Administration.php");
+$admin = new Administration();
+$program_list = $admin->listPrograms("program");
+$faculty_list = $admin->listNotAdvisers();
+?>
+<script type="text/javascript">
+    let isViewPage = false;
+</script>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -9,7 +19,6 @@
     </nav>
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold mb-0">Section</h3>
-        <!-- <button id="add-btn" class="btn btn-success" title='Add section'><i class="bi bi-plus me-2"></i>Add Section</button> -->
         <a href="section.php?action=add" class="btn btn-success" title='Add section'><i class="bi bi-plus me-2"></i>Add Section</a>
     </div>
 </header>
@@ -17,18 +26,18 @@
 <!-- SCHOOL YEAR TABLE -->
 <div class="container mt-1">
     <div class="card w-100 h-auto bg-light">
+        <div class="d-flex justify-content-between mb-3">
+            <!-- SEARCH BAR -->
+            <span class="flex-grow-1 me-3 ">
+                <input id="search-input" type="search" class="form-control form-control-sm m-0" placeholder="Search something here">
+            </span>
+            <div class="button-con my-auto">
+                <button class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
+                <button class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+            </div>
+        </div>
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
-                <div class="d-flex justify-content-between mb-3">
-                    <!-- SEARCH BAR -->
-                    <span class="flex-grow-1 me-3 ">
-                        <input id="search-input" type="search" class="form-control form-control-sm m-0" placeholder="Search something here">
-                    </span>
-                    <div class="button-con my-auto">
-                        <button class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
-                        <button class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
-                    </div>
-                </div>
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="150" data-align="center" data-field="code">Section Code</th>
@@ -45,10 +54,10 @@
     </div>
 </div>
 <!-- MODAL  -->
-<div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
+<div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addSection" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <form id="section-form" method="POST">
-            <input type="hidden" name="action" vaue="editSection">
+            <input type="hidden" name="action" value="editSection">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -72,10 +81,6 @@
                                     <select id="program" class='form-select' name='program'>
                                         <option value="" selected>-- Select --</option>
                                         <?php
-                                        include_once("../class/Administration.php");
-                                        $admin = new Administration();
-                                        $program_list = $admin->listPrograms("program");
-
                                         foreach($program_list as $program) {
                                             $prog_code = $program->get_prog_code();
                                             $prog_name = $program->get_prog_desc();
@@ -88,7 +93,7 @@
                             <div class="form-row row">
                                 <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
                                 <div class="col-lg-8">
-                                    <input id='section-name'name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
+                                    <input id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name" />
                                 </div>
                             </div>
                             <div class="form-row row">
@@ -119,7 +124,6 @@
                                     <select name="adviser" id="adviser" class="form-select">
                                         <option>-- Select faculty --</option>
                                         <?php
-                                            $faculty_list = $admin->listNotAdvisers();
                                             foreach($faculty_list as $faculty) {
                                                 echo "<option value='{$faculty['teacher_id']}'>T. {$faculty['name']}</option>";
                                             }
@@ -140,7 +144,67 @@
         </form>
     </div>
 </div>
+<div class="modal fade" id="sub-class-modal" tabindex="-1" aria-labelledby="modal subClass" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0 fw-bold">Subject</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row border p-3 mb-3">
+                        <div class="col-md-7">
+                            <dl class="row mb-0">
+                                <dt class="col-4">Section Name</dt>
+                                <dd class="col-8">
+                                    <p id="sect-name"></p>
+                                </dd>
+                                <dt class="col-4">Program</dt>
+                                <dd class="col-8">
+                                    <ul id="program-list" class="list-group list-group-horizontal"></ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-5">
+                            <dl class="row mb-0">
+                                <dt class="col-4">Grade Level</dt>
+                                <dd class="col-8">
+                                    <p id="grd-level"></p>
+                                </dd>
+                                <dt class="col-4">No of Students</dt>
+                                <dd class="col-8">
+                                    <p id="stud-no"></p>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <form id="subject-class-form" action="action.php" method="post">
+                        <input type="hidden" id="selected-section" name="section" value="">
+                        <input type="hidden" name="action" value="editSubjectSection">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="row"><p class="px-0 fw-bold">Recommended</p></div>
+                                    <div class="row recommended"></div>
+                                </div>
+                                <div class="col-5">
+                                    <div class="d-inline-flex"><button class="btn btn-sm btn-dark"><i class="bi bi-plus-lg me-2"></i>Custom subject</button></div>
+                                    <div class="row other"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Close</button>
+                <input type="submit" form="subject-class-form" class="submit btn btn-success btn-sm" value="Submit" />
+            </div>
+        </div>
+    </div>
+</div>
 <!-- MODAL END -->
-<script type="text/javascript">
-    let isViewPage = false;
-</script>

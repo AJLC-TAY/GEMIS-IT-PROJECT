@@ -45,7 +45,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         </span>
     </div>
     <hr class="my-2">
-    <h6 class="fw-bold">Section</h6>
+    <h4 class="fw-bold">Section</h4>
 </header>
 <!-- HEADER END -->
 <!-- INFORMATION -->
@@ -137,7 +137,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                 }
                                                 ?>
                                             </select>
-                                            <button id='adviser-clear-btn' class='btn btn-danger edit-opt <?php echo $display; ?> btn-sm w-auto mt-1'><i class='bi bi-x-square'></i> Unassign</button>
+                                            <button id='adviser-clear-btn' class='btn btn-outline-danger edit-opt <?php echo $display; ?> btn-sm w-auto mt-1'><i class="bi bi-dash-circle me-2"></i> Unassign</button>
 
                                             <!--                                        <small class='editjjquery-opt ms-1 text-secondary --><?php //echo $display; ?><!--'>Clear field to unassign adviser</small>-->
                                         </div>
@@ -159,9 +159,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h6 class='m-0 fw-bold'>Student List</h6>
+            <h4 class='m-0 fw-bold'>Student List</h4>
         </span>
-        <span><button id="add-student" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>" class="btn btn-success btn-sm"><i class="bi bi-plus me-2"></i>Add Student</button></span>
+        <span><button id="add-student" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>" class="btn btn-success btn"><i class="bi bi-plus bi-plus-lg me-2"></i>Add Student</button></span>
     </div>
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">

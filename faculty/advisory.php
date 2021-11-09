@@ -66,7 +66,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 <title>Advisory Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <!-- <div id="main-spinner-con" class="spinner-con">

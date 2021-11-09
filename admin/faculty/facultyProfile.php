@@ -29,7 +29,7 @@ switch ($user_type) {
         # classes
         ## subject class
         $sub_class_options = "<div>"
-            . "<button id='add-sc-option' class='btn btn-sm btn-success'><i class='bi bi-plus me-2'></i>Add subject class</button>"
+            . "<button id='add-sc-option' class='btn btn-sm btn-success me-2'><i class='bi bi-plus me-2'></i>Add subject class</button>"
             . "<button class='unassign-selected-btn btn btn-sm btn-outline-danger'><i class='bi bi-dash-circle me-2'></i>Unassign Selected</button>"
             . "</div>";
         $action_column = "<th scope='col' data-width='100' data-align='center' data-field='action'>Actions</th>";
@@ -79,7 +79,7 @@ $birthdate = $school_user->get_birthdate();
 $birthdate = date("F j, Y", strtotime($birthdate));
 $name = $school_user->get_name();
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

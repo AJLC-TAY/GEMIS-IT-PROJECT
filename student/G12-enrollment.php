@@ -6,7 +6,7 @@ include_once('../inc/studentSideBar.php');
 <title>Upcoming Grade 12 Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
 
     <section id="container">

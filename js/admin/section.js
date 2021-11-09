@@ -3,6 +3,8 @@ import { commonTableSetup } from "./utilities.js";
 let tableSetup, tableFormSetup, url, id, table, tableForm;
 tableSetup = {
     method: 'GET',
+    uniqueId: 'code',
+    idField: 'code',
     search: true,
     searchSelector: "#search-input",
     ...commonTableSetup
@@ -28,8 +30,8 @@ if (isViewPage) {
     url += `data=student&section=${sectionCode}`;
     id = 'lrn';
 } else {
-    url += 'data=section&current=true';
-    id = 'seciton_code';
+    url += 'data=section';
+    id = 'code';
 }
 tableSetup.url = url;
 tableSetup.idField = id;
@@ -325,13 +327,56 @@ $(function() {
         });
     });
 
-    // $('#save-btn').click(function() {
-    //     $(this).prop("disabled", true)
-    //     $("#edit-btn").prop("disabled", false)
-    //     $(this).closest('form').find('input').each(function() {
-    //         $(this).prop('disabled', true)
-    //     })
-    // })
+
+    $(document).on("click", ".edit-sub-class", function() {
+        let sectionCode, sectionName, row, studNo, grdLevel;
+        sectionCode = $(this).attr("data-code");
+        // section data
+        row = $("#table").bootstrapTable('getRowByUniqueId', sectionCode );
+        $("#sect-name").html(row.name);
+        $("#stud-no").html(row.stud_no);
+        $("#grd-level").html(row.grd_level);
+
+        $.get(`getAction.php?data=sectionInfo&code=${sectionCode}`, function (data) {
+            let temp = JSON.parse(data);
+            // update the section input in form
+            $("#selected-section").val(sectionCode);
+            // reset program list and update
+            $("#program-list").html('');
+            temp.programs.forEach(e => {
+                $("#program-list").append(e.link);
+            });
+            let form = $("#subject-class-form");
+            let recommendedHTML = '';
+            Object.entries(temp.recommended).forEach(e => {
+                let progCode = e[0];
+                recommendedHTML += `<div class="d-flex justify-content-between border rounded-3 p-3"><span class="fw-bold">${progCode}</span><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#${progCode}-collapse"><i class="bi bi-eye"></i></button></div>`; // strand code
+                recommendedHTML += `<div id="${progCode}-collapse" class="collapse p-3 bg-light">`; // strand code
+                Object.entries(e[1]).forEach(semester => {
+                    let semDesc = semester[0]; // 1 or 2
+                    recommendedHTML += `<div class="form-check">
+                                          <input class="form-check-input" type="checkbox" value="" id="${progCode}-${semDesc}">
+                                          <label class="form-check-label" for="${progCode}-${semDesc}">
+                                            ${(semDesc == 1 ? "First Semester" : "Second Semester" )}
+                                          </label>
+                                        </div>`; // strand code
+                    recommendedHTML += `<ul data-program="${progCode}" data-semester="${semDesc}" class="list-group mb-3">`;
+                    semester[1].forEach(semItem => {
+                        recommendedHTML += semItem;
+                    });
+                    recommendedHTML += "</ul>";
+                });
+                recommendedHTML += `</div>`; // strand code
+            });
+            // console.log(temp.recommended)
+            // temp['recommended'].forEach(function(e, i) {
+            //     console.log(i);
+            // })
+            form.find(".recommended").html(recommendedHTML);
+            // form.find(".other");
+        });
+        $("#sub-class-modal").modal("show");
+    });
 
     hideSpinner();
 })

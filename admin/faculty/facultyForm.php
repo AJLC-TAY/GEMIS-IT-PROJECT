@@ -126,7 +126,7 @@ switch ($user_type) {
         break;
 }
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -221,16 +221,17 @@ switch ($user_type) {
             <div class="d-flex justify-content-between mb-3">
                 <!-- SEARCH BAR - SUBJECT CLASS -->
                 <form>
-                    <div class="form-group d-flex flex-grow-1 me-3">
+                    <div class="form-group d-flex flex-grow-1 me-2 ms-2">
                         <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
                         <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                     </div>
                 </form>
-                <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
+                <span><button id='add-sc-option' class='btn btn-sm btn-success me-2'><i class="bi bi-plus me-2"></i>Add subject class</button></span>
+                <button class="unassign-selected-btn btn btn-sm btn-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
             </div>
             <table id='assigned-sc-table' class="table-striped table-sm">
                 <thead>
-                    <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
+                    <div class="d-flex jusitify-content-end mb-3"></div>
                     <tr>
                         <th data-checkbox="true"></th>
                         <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
