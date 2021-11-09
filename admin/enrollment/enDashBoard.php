@@ -37,6 +37,7 @@ if ($_SESSION['user_type'] === "AD") {
 }
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

@@ -152,8 +152,9 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
     }
 </style>
 </head>
-
+<!DOCTYPE html>
 <body>
+    
     <!-- SPINNER -->
     <!-- <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">

@@ -182,6 +182,7 @@ if (isset($_GET['action'])) {
 
 $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->

@@ -29,6 +29,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
     $faculty->validateEnrollment();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'promote') {
+    $faculty->promoteStudent();
+}
+
 // if ((isset($_POST['action']) && $_POST['action'] == 'export')) {
 //     $faculty->exportSubjectGradesToCSV();
 // }

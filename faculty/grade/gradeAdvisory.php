@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -8,12 +9,13 @@
     </nav>
     <div class="row align-content-center">
         <div class="col-auto">
-            <h3 class="fw-bold">Classes</h3>
+            <h3 class="fw-bold"><?php echo $advisory['section_name']?></h3>
         </div>
     </div>
 </header>
 <!-- HEADER END -->
 <!-- STUDENTS TABLE -->
+
 <div class="container mt-1 ms-0">
     <div class="card h-auto bg-light" style="min-height: 70vh !important;">
         <div class="d-flex justify-content-between mb-3">

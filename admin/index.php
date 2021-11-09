@@ -10,7 +10,7 @@ $admin_user = $admin->getProfile('AD');
 
 <title>Home | GEMIS</title>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

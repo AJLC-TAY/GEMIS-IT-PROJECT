@@ -8,6 +8,7 @@ $faculty_list = $admin->listNotAdvisers();
     let isViewPage = false;
     //let activeFacultyList = <?php //echo json_encode($admin->listFaculty()); ?>//;
 </script>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

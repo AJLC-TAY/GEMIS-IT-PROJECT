@@ -4,7 +4,7 @@ include_once("../inc/head.html");
 ?>
 
 <!-- CONTENT  -->
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

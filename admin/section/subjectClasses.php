@@ -3,6 +3,7 @@ require_once ("../class/Administration.php");
 $admin = new Administration();
 $faculty_options = $admin->listSubClassFacultyOptions();
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

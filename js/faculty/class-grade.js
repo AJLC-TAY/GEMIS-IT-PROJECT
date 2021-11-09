@@ -45,6 +45,7 @@ function setTableData (classType, url) {
     
 };
 
+
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
@@ -54,7 +55,7 @@ $(function() {
     
     
     preload('#grade');
-
+    
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
@@ -185,5 +186,14 @@ $(function() {
         });
     });
 
+    
+    $(document).on("keyup", ".Second", function() {
+        let row = $(this).closest("tr");
+        let inputs = row.find("input"); 
+        var final = (parseInt(inputs.eq(0).val()) + parseInt(inputs.eq(1).val())) / 2;
+        inputs.eq(2).val(Math.round(final) == "NaN" ?"":Math.round(final));
+    })
+
+    
     hideSpinner();
 });

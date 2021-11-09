@@ -8,7 +8,7 @@ $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
 $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");$date_desc = date("F j, Y");
 
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

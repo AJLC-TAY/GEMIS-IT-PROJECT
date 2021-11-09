@@ -6,7 +6,7 @@ include_once("../inc/head.html"); ?>
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="../css/report.css">
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

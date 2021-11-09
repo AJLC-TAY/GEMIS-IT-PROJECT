@@ -1,6 +1,7 @@
 <?php 
 $school_year = $_SESSION['school_year'];
 ?>
+<!DOCTYPE html>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
 <header class="header black-bg">
@@ -33,22 +34,6 @@ $school_year = $_SESSION['school_year'];
                     <span>Home</span>
                 </a>
             </li>
-            <li id="student" class="sub-menu">
-                <a href="javascript:;">
-                    <i class="fa fa-book"></i>
-                    <span>Student</span>
-                </a>
-                <ul class="sub">
-                    <li><a id="student-list" href="student.php">Student List</a></li>
-                    <li><a id="grade-rect" href="student.php?page=grade_rectification">Grade Rectification</a></li>
-                </ul>
-            </li>
-            <li class="sub-menu">
-                <a id="faculty" href="faculty.php">
-                    <i class="fa fa-users"></i>
-                    <span>Faculty</span>
-                </a>
-            </li>
             <li class="sub-menu">
                 <a id="admin" href="admin.php">
                     <i class="fa fa-user"></i>
@@ -79,6 +64,22 @@ $school_year = $_SESSION['school_year'];
                     <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
                 </ul>
             </li>
+            <li id="student" class="sub-menu">
+                <a href="javascript:;">
+                    <i class="fa fa-book"></i>
+                    <span>Student</span>
+                </a>
+                <ul class="sub">
+                    <li><a id="student-list" href="student.php">Student List</a></li>
+                    <li><a id="grade-rect" href="student.php?page=grade_rectification">Grade Rectification</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu">
+                <a id="faculty" href="faculty.php">
+                    <i class="fa fa-users"></i>
+                    <span>Faculty</span>
+                </a>
+            </li>      
             <li class="sub-menu">
                 <a id="awards" href="award.php">
                     <i class="bi bi-award-fill"></i>

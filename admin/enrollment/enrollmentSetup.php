@@ -1,6 +1,7 @@
 <?php require_once("../class/Administration.php");
 $admin = new Administration();
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->

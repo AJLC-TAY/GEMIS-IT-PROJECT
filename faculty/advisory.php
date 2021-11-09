@@ -66,7 +66,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 <title>Advisory Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <!-- <div id="main-spinner-con" class="spinner-con">
@@ -188,6 +188,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <script>let code = <?php echo $advisory['section_code'];?>;</script>
     <?php echo $jsFilePath; ?>;
 
 </body>

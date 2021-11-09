@@ -38,6 +38,7 @@ $title =  "<div class='d-flex justify-content-between'>
 
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

@@ -4,6 +4,7 @@ require("../class/Administration.php");
 $filters =  (new Administration())->getEnrollFilters();
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

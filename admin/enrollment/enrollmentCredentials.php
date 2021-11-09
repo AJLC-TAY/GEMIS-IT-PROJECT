@@ -26,7 +26,7 @@ $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFI
 $psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : "../uploads/credential/9/psa.jpg") : "../uploads/credential/9/psa.jpg";
 $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

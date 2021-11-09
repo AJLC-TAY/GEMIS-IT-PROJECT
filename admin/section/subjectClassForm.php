@@ -18,7 +18,7 @@ print_r($sections);
 //}
 
 ?>
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

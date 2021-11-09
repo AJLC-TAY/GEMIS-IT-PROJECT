@@ -11,6 +11,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
     $edit_acads_btn = "";
 }
 ?>
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label='breadcrumb'>
