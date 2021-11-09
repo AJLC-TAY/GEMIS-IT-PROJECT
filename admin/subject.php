@@ -83,8 +83,6 @@ include_once ("../inc/head.html");
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src="../js/common-custom.js"></script>
     <script type='module' src="../js/admin/subject.js"></script>
-    <!-- <script type='text/javascript' src="../js/admin/subject.js"></script> -->
-    <!-- <script type="module" src="../js/admin/subjectlist.js"></script> -->
 </body>
 
 </html>

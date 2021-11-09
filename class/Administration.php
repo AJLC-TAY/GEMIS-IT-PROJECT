@@ -860,20 +860,58 @@ class Administration extends Dbconfig
 
         # retrieve current subjects assigned to the section
         $current_sub_code = $this->getCurrentSubjectsOfSection($code, $sy_id);
+
+        # retrieve faculty options
+        $faculties = $this->listFaculty();
+        function createFacultySelect ($sub_class_code, $teacher_id, $faculties) {
+            $select = "<select name='subjectClass[$sub_class_code]' class='teacher-select select2--small'>
+                        <option value=''>-- Select Faculty --</option>'";
+            foreach ($faculties as $faculty) {
+                $teach_id = $faculty->get_teacher_id();
+                $select .= "<option value='{$teach_id}' ". ($teach_id == $teacher_id ? "selected" : "") .">{$faculty->get_name()}</option>";
+            }
+            $select .= "</select>";
+            return $select;
+        }
         foreach($programs as $prog) {
             $prog_code = $prog['code'];
             $result = $this->query("SELECT sub_code, sub_semester, sub_name FROM sharedsubject JOIN subject USING (sub_code) WHERE prog_code = '$prog_code' AND sy_id = '$sy_id' AND for_grd_level = '$grd_level';");
             while($row = mysqli_fetch_assoc($result)) {
                 $sub_code = $row['sub_code'];
                 $checked_state = (in_array($sub_code, $current_sub_code) ? "checked" : "");
-                $recommended[$prog_code][$row['sub_semester']][] = "<li class='list-group-item'>
-                       <div class='form-check'>
-                          <input class='form-check-input' type='checkbox' name='subjects[$prog_code][]' value='$sub_code' id='$sub_code' $checked_state>
+
+                # get current subject teacher
+                $teach_row = NULL;
+                $sub_class_code = NULL;
+                $teacher_id = NULL;
+                $teacher_name = NULL;
+
+                $teach_result = $this->query("SELECT sc.sub_class_code, sc.teacher_id FROM subjectclass sc
+                                        JOIN sysub s ON sc.sub_sy_id = s.sub_sy_id
+                                        LEFT JOIN faculty f ON sc.teacher_id = f.teacher_id WHERE sc.section_code='$code' AND sc.sub_code='$sub_code';");
+
+                if (mysqli_num_rows($teach_result) != 0) {
+                    $teach_row = mysqli_fetch_row($teach_result);
+                    [$sub_class_code, $teacher_id] = [$teach_row[0], $teach_row[1] ?? NULL];
+                }
+
+                $add_btn_display =  is_null($teacher_id) ? "" : "d-none";
+                $unassign_display = is_null($teacher_id) ? "d-none" : "";
+                $action = "<div class='d-flex'>"
+                            . "<button class='btn-success btn btn-sm me-1 action $add_btn_display' data-type='add' type='button'><i class='bi bi-plus-lg'></i></button>"
+                            . "<button class='btn-danger btn btn-sm me-1 action $unassign_display' data-type='unassign'  data-sub-class-code='$sub_class_code' title='Unassign Faculty' type='button'><i class='bi bi-person-dash-fill'></i></button>"
+                            . "<span>". createFacultySelect($sub_class_code, $teacher_id, $faculties)."</span>"
+                            . "</p></div>";
+
+                $recommended[$prog_code][$row['sub_semester']][] = "<tr>
+                    <td class='text-center'><input class='form-check-input' type='checkbox' name='subjects[$prog_code][]' value='$sub_code' id='$sub_code' $checked_state></td>
+                    <td>
                           <label class='form-check-label' for='$sub_code'>
                             {$row['sub_name']}
                           </label>
-                      </div>
-                </li>";
+                    </td>
+                    <td>$action</td>
+                </tr>";
             }
         }
 
@@ -1092,8 +1130,9 @@ class Administration extends Dbconfig
 
     public function getSubjectScheduleData($prog_code = NULL)
     {
-        $result = $this->query("SELECT sub_code, sub_name, sub_type, prog_code FROM subject JOIN sharedsubject USING (sub_code);");
-        // $result = $this->query("SELECT sub_code, sub_name, sub_type FROM subject;");
+        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT sub_code, sub_name, sub_type, prog_code FROM sysub JOIN subject USING (sub_code) 
+                                        JOIN sharedsubject USING (sub_code) WHERE sysub.sy_id='$sy_id';");
         $subjectList = array();
         while ($row = mysqli_fetch_row($result)) {
             $type = $row[2];
@@ -1104,7 +1143,7 @@ class Administration extends Dbconfig
             ];
         }
         $prog_condition = is_null($prog_code) ? "" : "AND prog_code = '$prog_code'";
-        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '{$_SESSION['sy_id']}'  $prog_condition;");
+        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '$sy_id'  $prog_condition;");
         // $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '{$_SESSION['sy_id']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $subjectList['schedule'][$row['prog_code']]["data[" . $row['for_grd_level'] . "][" . $row['sub_semester'] . "][" . $row['sub_type'] . "][]"][] =  $row['sub_code'];
@@ -2124,7 +2163,9 @@ class Administration extends Dbconfig
     /** Section Methods */
     public function listAllSubjectClasses($is_JSON = FALSE)
     {
-        session_start();
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', middle_name, ' ',COALESCE(ext_name, ''))
                                         AS name, grd_level FROM subjectclass sc
                                         JOIN sysub s ON sc.sub_sy_id = s.sub_sy_id
@@ -2297,19 +2338,24 @@ class Administration extends Dbconfig
             # delete
             $to_delete = array_diff($current_sub_codes, $sub_codes);
             foreach($to_delete as $sub_code_delete) {
-                echo "DELETE FROM subjectclass WHERE section_code = '$code' AND sub_code = '$sub_code_delete' AND
-                           sub_sy_id = ANY(SELECT sub_sy_id FROM sysub WHERE sy_id = '$sy_id' AND sub_code = '$sub_code_delete');";
-//                $this->query("DELETE FROM subjectclass WHERE section_code = '$code' AND sub_code = '$sub_code_delete' AND
-//                           sub_sy_id = ANY(SELECT sub_sy_id FROM sysub WHERE sy_id = '$sy_id' AND sub_code = '$sub_code_delete');");
+                $this->query("DELETE FROM subjectclass WHERE section_code = '$code' AND sub_code = '$sub_code_delete' AND
+                           sub_sy_id = ANY(SELECT sub_sy_id FROM sysub WHERE sy_id = '$sy_id' AND sub_code = '$sub_code_delete');");
             }
             # add
             $to_add = array_diff($sub_codes, $current_sub_codes);
             foreach($to_add as $sub_code_add) {
                 $sub_sy_id = mysqli_fetch_row($this->query("SELECT sub_sy_id FROM sysub WHERE sy_id = '$sy_id' AND sub_code = '$sub_code_add';"))[0];
-                echo "SELECT sub_sy_id FROM sysub WHERE sy_id = '$sy_id' AND sub_code = '$sub_code_add';";
-                echo "INSERT INTO subjectclass (sub_sy_id, section_code, sub_code) VALUES ('$sub_sy_id', '$code', '$sub_code_add');";
-//                $this->query("INSERT INTO subjectclass (sub_sy_id, section_code, sub_code) VALUES ('$sub_sy_id', '$code', '$sub_code_add');");
+                $this->query("INSERT INTO subjectclass (sub_sy_id, section_code, sub_code) VALUES ('$sub_sy_id', '$code', '$sub_code_add');");
             }
+        }
+
+        # update subject faculty
+        foreach($_POST['subjectClass'] as $sub_class_code => $teacher_id) {
+            $teacher_id = empty($teacher_id) ? "NULL" : "'$teacher_id'";
+            echo $teacher_id;
+            echo "<br>";
+//            echo "UPDATE subjectclass SET teacher_id = $teacher_id WHERE sub_class_code = '$sub_class_code';";
+            $this->query("UPDATE subjectclass SET teacher_id = $teacher_id WHERE sub_class_code = '$sub_class_code';");
         }
     }
 
