@@ -6,7 +6,7 @@ $faculty_list = $admin->listNotAdvisers();
 ?>
 <script type="text/javascript">
     let isViewPage = false;
-    //let activeFacultyList = <?php //echo json_encode($admin->listFaculty()); ?>//;
+    let activeFacultyList = <?php echo json_encode($admin->listFaculty()); ?>;
 </script>
 <!DOCTYPE html>
 <!-- HEADER -->
