@@ -3,7 +3,7 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 include_once('../inc/studentSideBar.php');
 ?>
-<title>Upcoming Grade 12 Enrollment | GEMIS</title>
+<title>Incoming Grade 12 Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <!DOCTYPE html>
