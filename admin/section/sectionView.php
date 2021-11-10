@@ -180,6 +180,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
                     <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                    <th scope='col' data-width="500" data-align="center" data-sortable="true" data-field="program">Strand</th>
                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>

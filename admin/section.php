@@ -67,7 +67,7 @@ include_once("../inc/head.html"); ?>
                                 <dl class="row mb-0">
                                     <dt class="col-4">Section Name</dt>
                                     <dd class="col-8">
-                                        <p id="section-name"></p>
+                                        <p id="section-name-modal"></p>
                                     </dd>
                                     <dt class="col-4">Program</dt>
                                     <dd class="col-8">
