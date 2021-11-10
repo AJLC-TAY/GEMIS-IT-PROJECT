@@ -215,7 +215,7 @@ $(function() {
         // $(`[data-track-id='${selector}']`).closest('label').toggle($(this).is(":checked"));
         let isChecked = $(this).is(":checked");
         toggleListElement(selector, isChecked);
-    })
+    });
 
     /** Stepper */
     $(document).on("click", ".next", () => {

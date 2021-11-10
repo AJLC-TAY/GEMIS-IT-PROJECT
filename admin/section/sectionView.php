@@ -40,6 +40,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     <div class="d-flex justify-content-between">
         <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
         <span>
+            <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class' title='Subject classes'><i class='bi bi-pencil-square me-1'></i>SC</button>
             <button type="button" class="btn btn-secondary me-1"><i class="bi bi-archive me-2"></i>Archive Section</button>
             <button class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
         </span>
@@ -75,7 +76,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                         <div class="row">
                             <label for="grd-level" class="col-sm-4 text-secondary fw-bold">Grade Level</label>
                             <div class="col-sm-8">
-                                <p id="grd-level"><?php echo $sect_grd_level; ?></p>
+                                <p class="grd-level"><?php echo $sect_grd_level; ?></p>
                             </div>
                         </div>
                         <div class="row">
@@ -179,6 +180,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
                     <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                    <th scope='col' data-width="500" data-align="center" data-sortable="true" data-field="program">Strand</th>
                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
@@ -370,4 +372,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     let sectionCode = <?php echo json_encode($sect_code); ?>;
     let adviser = <?php echo json_encode($sect_adviser); ?>;
     let tempData = <?php echo json_encode([$sect_max_no, $teacher_id]); ?>;
+    let currentSectName = <?php echo json_encode($sect_name); ?>;
+    let currentSectNo = <?php echo json_encode($sect_stud_no); ?>;
+    let currentSectLevel = <?php echo json_encode($sect_grd_level); ?>;
 </script>

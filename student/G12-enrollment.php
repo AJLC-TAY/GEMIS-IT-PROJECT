@@ -3,7 +3,7 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 include_once('../inc/studentSideBar.php');
 ?>
-<title>Upcoming Grade 12 Enrollment | GEMIS</title>
+<title>Incoming Grade 12 Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ include_once('../inc/studentSideBar.php');
                                 </nav>
                             </header>
                             <div class="d-flex justify-content-between">
-                                <h3 class="fw-bold">Upcoming Grade 12 Enrollment</h3>
+                                <h3 class="fw-bold">Incoming Grade 12 Enrollment</h3>
                             </div>
 
                             <div class="card h-auto bg-light mx-auto mt-3 p-4" style='width: 80%;'>
