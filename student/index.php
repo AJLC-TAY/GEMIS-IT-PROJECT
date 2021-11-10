@@ -1,6 +1,7 @@
 <?php
 require_once("sessionHandling.php");
-include_once("../inc/head.html"); ?>
+include_once("../inc/head.html"); 
+?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 
 <title>Home | GEMIS</title>

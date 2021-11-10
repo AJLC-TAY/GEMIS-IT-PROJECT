@@ -75,10 +75,12 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <?php
-                        if (isset($_GET['values_grade'])) {
+                        if (isset($_GET['page']) && $_GET['page'] === 'values_grade' ) {
                             include_once("grade/valuesGrade.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
-                        } else {
+                        } else if(isset($_GET['page']) && $_GET['page'] === 'report_card'){
+                            include_once("../admin/gradeReport.php");
+                        }else {
                             include_once("grade/gradeAdvisory.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/students.js'></script> ";
                         }

@@ -746,30 +746,35 @@ trait Enrollment
         );
         echo "Add School info ended...<br>";
         # promotion
-        echo 'Adding promotion record...<br>';
-        $this->prepared_query(
-            "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
-                . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $_POST['school-id-no'] ?: NULL,
-                $_POST['school-name'],
-                $_POST['school-address'],
-                $_POST['last-grade-level'],
-                $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1],
+        if ($_SESSION['user_type'] != 'ST' AND $_SESSION['promotion'] != 1){
+                echo 'Adding promotion record...<br>';
+                        $this->prepared_query(
+                            "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
+                                . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            [
+                                $_POST['school-id-no'] ?: NULL,
+                                $_POST['school-name'],
+                                $_POST['school-address'],
+                                $_POST['last-grade-level'],
+                                $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1],
 
-                $_POST['balik'],
-                $_POST['grade-level'],
-                $_POST['general-average'],
-                $_POST['semester'] ?? 1, # default is 1
-                $student_id
-            ],
-            // 10 params
-            "issis" . "iiiii"
-        );
-        echo 'Added promotion record...<br>';
+                                $_POST['balik'],
+                                $_POST['grade-level'],
+                                $_POST['general-average'],
+                                $_POST['semester'] ?? 1, # default is 1
+                                $student_id
+                            ],
+                            // 10 params
+                            "issis" . "iiiii"
+                        );
+                        echo 'Added promotion record...<br>';
+        }
+        
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
-        } else {
+        } if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
+            header("Location: student.php");
+        }else {
             $_SESSION['enrolled'] = TRUE;
             header("Location: finished.php");
         }
@@ -1295,34 +1300,38 @@ trait Enrollment
         $address = $this->preprocessData($address);
 
         // Image validation
-        $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
-        $form_img = $this->validateImage($_FILES['image-form'], 8000000);
-        $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
+        // $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
+        // $form_img = $this->validateImage($_FILES['image-form'], 8000000);
+        // $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
 
-        $img_list = [$psa_img, $form_img, $profile_img];
-        foreach ($img_list as $i => $image) {
-            // add image to the parameters if valid
-            if ($image['status'] == 'valid') {
-                # Upload image
-                $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
-                $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
-                // for editing
-                //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-                //                    $current_img_path = $_POST["current_image_path"];
-                //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-                //                        unlink("../".$current_img_path);                                 // delete current image
-                //                    }
-                //                }
-                move_uploaded_file($image['file'], "../" . $fileDestination);
-                echo "Successfully uploaded image<br>";
-                $params[] = $fileDestination;
-            }
-        }
+        // $img_list = [$psa_img, $form_img, $profile_img];
+        // foreach ($img_list as $i => $image) {
+        //     // add image to the parameters if valid
+        //     if ($image['status'] == 'valid') {
+        //         # Upload image
+        //         $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
+        //         $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
+        //         // for editing
+        //         //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+        //         //                    $current_img_path = $_POST["current_image_path"];
+        //         //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+        //         //                        unlink("../".$current_img_path);                                 // delete current image
+        //         //                    }
+        //         //                }
+        //         move_uploaded_file($image['file'], "../" . $fileDestination);
+        //         echo "Successfully uploaded image<br>";
+        //         $params[] = $fileDestination;
+        //     }
+        // }
+        $params[] = "test";
+        $params[] = "test";
+        $params[] = "test";
 
         // Values are valid; hence, create a user and add the created user id to the parameter
         $user_id = $this->createUser("ST");
         $params[] = $user_id;
 
+        // echo json_encode($params);
         $this->prepared_query(
             "INSERT INTO student (LRN, last_name, first_name, middle_name, ext_name, "
                 . "birthdate, sex, age, birth_place, indigenous_group, "
@@ -1688,10 +1697,10 @@ trait Grade
 
     public function listAdvisoryStudents($is_JSON = false)
     {
-        function actions($report_id, $stud_id)
+        function actions($report_id, $stud_id, $promote)
         {
             $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
-            return "<div class='d-flex justify-content-center'>
+            $action =  "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
             <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               View
@@ -1706,12 +1715,17 @@ trait Grade
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-              <li><a class='dropdown-item' href='#'>Export</a></li>
-              <li><a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
+              <li><a class='dropdown-item' href='advisory.php?page=grade_report&id=$stud_id'>Export</a></li>
+              <li><a href='advisory.php?page=values_grade&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
             </ul>
           </div>
           $promote_btn
           </div>";
+
+        //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
+          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger unpromote'>---</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>promote</button></div>";
+          return $action;
+
         }
         // <div class='d-flex justify-content-center'>"
         //             . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
@@ -1722,7 +1736,7 @@ trait Grade
         session_start();
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT stud_id, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+        $result = $this->query("SELECT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
@@ -1751,8 +1765,9 @@ trait Grade
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
                 'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
-                'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
-                'action' =>  actions($report_id, $stud_id)
+                // 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
+                'status' => $row['promote'] == 1 ? 'Promoted' : "",
+                'action' =>  actions($report_id, $stud_id,$row['promote'] )
             ];
         }
         if ($is_JSON) {
@@ -1764,7 +1779,7 @@ trait Grade
 
     public function promoteStudent()
     {
-        $promote = 1;
+        $promote = $_POST['promote'];
         $stud_id = $_POST['stud_id'];
        
         $this->query("UPDATE `enrollment` SET `promote`= $promote WHERE stud_id = $stud_id;");
