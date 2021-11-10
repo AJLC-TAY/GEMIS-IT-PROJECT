@@ -1,7 +1,7 @@
 <?php
-require('config.php');
-require('Dataclasses.php');
-require('Traits.php');
+require_once('config.php');
+require_once('Dataclasses.php');
+require_once('Traits.php');
 
 // sending email
 use PHPMailer\PHPMailer\PHPMailer;
@@ -45,7 +45,7 @@ class FacultyModule extends Dbconfig
             "SELECT id_no, LRN, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name, first_grading, second_grading, final_grade FROM student
                                     JOIN enrollment USING (stud_id)
                                     JOIN classgrade USING (stud_id)
-                                    WHERE sub_code='{$_GET['sub_code']}';"
+                                    WHERE sub_code='{$_GET['sub_code']}' ;"
         );
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['id_no'];

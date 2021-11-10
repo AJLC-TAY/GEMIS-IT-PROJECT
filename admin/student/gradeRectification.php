@@ -1,18 +1,13 @@
 <?php
-require_once("sessionHandling.php");
-include("../inc/head.html");
-
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 $id = $_SESSION['id'];
-// $sy_id = $_SESSION['sy_id'];
 $sy_id = $_SESSION['sy_id'];
-// echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-$advisory = $faculty->listSectionOption('');//dapat my sy
+$advisory = $faculty->listSectionOption();//dapat my sy
 // echo json_encode($advisory);
 // echo ("grade Rectification");
-$sub_classes = $faculty->getHandled_sub_classes('admin');
+$sub_classes = $faculty->getHandled_sub_classes();
 $adv_opn = '';
 $sub_class_opn = '';
 
@@ -54,7 +49,7 @@ if (count($sub_classes) != 0) {
         $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$sub_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id=admin&sub_code={$sub_code}' "
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id=admin&sub_class_code={$section_code}' "
             . "data-name='$sub_code'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";

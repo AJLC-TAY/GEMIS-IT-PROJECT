@@ -509,13 +509,16 @@ trait FacultySharedMethods
      * @param   string  $teacher_id     ID of the faculty.
      * @return  array   $section_list   Collection of sections.
      */
-    public function listSectionOption($teacher_id)
+    public function listSectionOption($teacher_id = NULL)
     {
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $query = "SELECT s.section_code, s.section_name, s.grd_level, s.teacher_id, f.last_name, f.first_name, f.middle_name, f.ext_name FROM section AS s "
             . "LEFT JOIN faculty AS f USING (teacher_id) "
-            . "WHERE teacher_id != '$teacher_id'"
-            . "OR teacher_id IS NULL ORDER BY teacher_id;";
-        $result = mysqli_query($this->db, $query);
+            . (is_null($teacher_id) ? " WHERE sy_id = '{$_SESSION['sy_id']}';" : "WHERE teacher_id != '$teacher_id'"
+                . "OR teacher_id IS NULL ORDER BY teacher_id;");
+        $result = $this->query($query);
         $section_list = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $teacher_id = $row['teacher_id'];
@@ -578,10 +581,19 @@ trait FacultySharedMethods
      * @param mixed $teacher_id
      * @return array
      */
-    public function getHandled_sub_classes($teacher_id): array
+    public function getHandled_sub_classes($teacher_id = NULL): array
     {
+        if(empty($_SESSION)) {
+            session_start();
+        }
+        $section_condition = '';
 
-        $teacher_id = $teacher_id == 'admin' ? '' : "sc.teacher_id='$teacher_id' AND ";
+        if (!is_null($teacher_id)) {
+            $section_condition = "GROUP BY section_code";
+            $teacher_id = "sc.teacher_id='$teacher_id' AND ";
+        } else {
+            $teacher_id = '';
+        }
 
         $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, sh.for_grd_level, sh.sub_semester, se.section_name, syb.sy_id
                 FROM subjectclass sc
@@ -589,7 +601,7 @@ trait FacultySharedMethods
                 JOIN sysub syb USING(sub_sy_id)
                 JOIN subject s ON s.sub_code=syb.sub_code
                 JOIN sharedsubject sh ON sh.sub_code=s.sub_code
-                WHERE $teacher_id for_grd_level != 0 GROUP BY section_code";
+                WHERE $teacher_id for_grd_level != 0 $section_condition AND syb.sy_id = {$_SESSION['sy_id']}";
 
         $result = $this->query($query);
         $handled_sub_classes = array();
@@ -804,7 +816,7 @@ trait Enrollment
         if (strlen(trim($_GET['search'])) > 0) {
             $text = $_GET['search'];
             //            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
-            $search_query .= " WHERE (sy.start_year LIKE \"%$text%\"";
+            $search_query .= " AND (sy.start_year LIKE \"%$text%\"";
             $search_query .= " OR sy.end_year LIKE \"%$text%\"";
             $search_query .= " OR s.last_name LIKE \"%$text%\"";
             $search_query .= " OR s.first_name LIKE \"%$text%\"";
@@ -844,7 +856,7 @@ trait Enrollment
         if (strlen($search_query) > 0) {
             $query .= $search_query . (strlen($filter_qr) > 0 ? " AND (" . $filter_qr . ")" : "");
         } else {
-            $query .= (strlen($filter_qr) > 0 ? " WHERE " . $filter_qr : "");
+            $query .= (strlen($filter_qr) > 0 ? " AND " . $filter_qr : "");
         }
 
         $query .= get_sort_query();
@@ -853,7 +865,7 @@ trait Enrollment
 
         $query .= " LIMIT $limit";
         $query .= " OFFSET $offset";
-        // echo $query;
+//         echo $query;
         $result = $this->query($query);
         $records = array();
 
@@ -1440,7 +1452,8 @@ trait Grade
             $addOn = "teacher_id=$teacher_id AND ";
         }
         $sy_id = $_GET['sy_id'];
-        $sub_code = $_GET['sub_code'];
+//        $sub_code = $_GET['sub_code'];
+        $sub_class_code = $_GET['sub_class_code'];
         $qtr = $_SESSION['current_quarter'];
 
 
@@ -1450,8 +1463,8 @@ trait Grade
         JOIN classgrade USING(stud_id) 
         JOIN subject USING(sub_code) 
         JOIN sysub USING(sub_code) 
-        JOIN subjectclass USING(sub_sy_id)
-        WHERE $addOn classgrade.sub_code = '$sub_code' 
+        JOIN subjectclass sc USING(sub_sy_id)
+        WHERE $addOn sc.sub_class_code = '$sub_class_code' 
         AND sy_id=$sy_id;");
 
         $class_grades = [];
@@ -1675,12 +1688,12 @@ trait Grade
 
     public function listAdvisoryStudents($is_JSON = false)
     {
-
         function actions($report_id, $stud_id)
         {
+            $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             return "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
-            <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               View
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
@@ -1689,7 +1702,7 @@ trait Grade
             </ul>
           </div>
           <div class='dropdown'>
-            <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
@@ -1697,7 +1710,7 @@ trait Grade
               <li><a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
             </ul>
           </div>
-          <button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button>
+          $promote_btn
           </div>";
         }
         // <div class='d-flex justify-content-center'>"

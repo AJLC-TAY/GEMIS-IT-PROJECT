@@ -197,5 +197,3 @@ if ($_SESSION['user_type'] == 'AD') {
         </form>
     </div>
 </div>
-
-

@@ -1,20 +1,11 @@
 <?php
 require_once("sessionHandling.php");
-// session_start();
-// $_SESSION['user_type'] = 'FA';
-// $_SESSION['id'] = 1;
-// $_SESSION['sy_id'] = 9;
-// $_SESSION['sy_desc'] = '2021 - 2022';
-// $_SESSION['enrollment'] = 0;
-// $_SESSION['name'] = "Penaflor, Mariel";
-
 include("../inc/head.html");
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
-//$advisory = [];
 $sub_classes = [];
-$advisory = $faculty->getAdvisoryClass(9);
-$sub_classes = $faculty->getHandled_sub_classes(1);
+$advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
+$sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 // $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 $adv_opn = '';
 $sub_class_opn = '';
@@ -57,7 +48,7 @@ if (!(is_null($sub_classes))) {
         // $sub_table_display = 'd-none';
     }
 }
-$schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
+$schoolYearInfo = $faculty->getSchoolYearInfo($_SESSION['sy_id']);
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
@@ -69,11 +60,11 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 <!DOCTYPE html>
 <body>
     <!-- SPINNER -->
-    <!-- <div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>

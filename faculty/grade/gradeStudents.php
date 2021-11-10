@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">

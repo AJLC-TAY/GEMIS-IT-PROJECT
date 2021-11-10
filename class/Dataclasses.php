@@ -1,6 +1,5 @@
 <?php
 
-
 class Administrator implements JsonSerializable
 {
     public function __construct($admin_id, $last_name, $first_name, $middle_name, $ext_name, $age, $sex, $cp_no, $email, $admin_user_id = NULL)

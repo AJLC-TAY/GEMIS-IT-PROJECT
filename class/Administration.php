@@ -1,7 +1,7 @@
 <?php
 require_once('config.php');
-require('Dataclasses.php');
-require('Traits.php');
+require_once('Dataclasses.php');
+require_once('Traits.php');
 
 // sending email
 use PHPMailer\PHPMailer\PHPMailer;

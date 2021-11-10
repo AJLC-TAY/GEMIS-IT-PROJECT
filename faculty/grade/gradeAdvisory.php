@@ -1,17 +1,16 @@
-<!DOCTYPE html>
 <header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Advisory</li>
-        </ol>
-    </nav>
-    <div class="row align-content-center">
-        <div class="col-auto">
-            <h3 class="fw-bold"><?php echo $advisory['section_name']?></h3>
-        </div>
+<!-- BREADCRUMB -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+        <li class="breadcrumb-item active">Advisory</li>
+    </ol>
+</nav>
+<div class="row align-content-center">
+    <div class="col-auto">
+        <h3 class="fw-bold"><?php echo $advisory['section_name']?></h3>
     </div>
+</div>
 </header>
 <!-- HEADER END -->
 <!-- STUDENTS TABLE -->
@@ -32,10 +31,8 @@
                 </select>
             </div>
             <div>
-                <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
-                <button type="button" class="btn btn-success submit">Submit</button>
+                <?php echo ($_SESSION['current_quarter'] == 4 ? '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>' : ""); ?>
             </div>
-
         </div>
 
         <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">

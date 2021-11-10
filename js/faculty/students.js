@@ -78,7 +78,7 @@ function toggleGradesColumn(classType) {
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 $(function() {
-    preload('#students');
+    preload('#advisory');
 
     $("#classes").select2({
         theme: "bootstrap-5",
@@ -127,9 +127,12 @@ $(function() {
     });
 
     $(document).on("click", ".save", () => {
-        document.getElementById("label").innerText="save";
-        document.getElementById("modal-msg").innerText=saveMsg;
-        document.getElementById("confirm").innerText="Save";
+        $("#label").text("save");
+        $("#modal-msg").text(saveMsg);
+        $("#confirm").text("Save");
+        // document.getElementById("label").innerText="save";
+        // document.getElementById("modal-msg").innerText=saveMsg;
+        // document.getElementById("confirm").innerText="Save";
         $(".grading-confirmation").modal("toggle");
     });
 

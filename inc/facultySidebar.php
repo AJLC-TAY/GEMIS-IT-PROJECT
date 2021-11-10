@@ -54,34 +54,34 @@ if (in_array('award_coor', $roles)) {
                     <span>Home</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id='faculty' href="faculty.php">
+            <li id='faculty' class="sub-menu">
+                <a href="faculty.php">
                     <i class="bi bi-person-square"></i>
                     <span>Profile</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="advisory" href="advisory.php">
+            <li id="advisory" class="sub-menu">
+                <a href="advisory.php">
                     <i class="fa fa-graduation-cap"></i>
                     <span>Advisory Class</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="subject" href="subject.php">
+            <li id="subject" class="sub-menu">
+                <a href="subject.php">
                     <i class="bi bi-card-list"></i>
                     <span>Subject Class</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="attendance" href="attendance.php">
+            <li id="attendance" class="sub-menu">
+                <a  href="attendance.php">
                     <i class="bi bi-clipboard-check"></i>
                     <span>Attendance</span>
                 </a>
             </li>
             <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
-            <li class="sub-menu">
-                <a id='archived' href="archivedClasses.php">
+            <li id='archived'  class="sub-menu">
+                <a href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
                     <span>Archived Classes</span>
                 </a>
