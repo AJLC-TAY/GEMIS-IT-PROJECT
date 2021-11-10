@@ -20,7 +20,7 @@ $enroll = $sy[0];
         <div class="d-flex justify-content-center h-50">
             <div class="user_card">
                 <div class="d-flex justify-content-center">
-                    <div class="login_logo_container"> <img src="assets/logoSc.png" class="login_logo" alt="Logo"> </div>
+                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo"> </div>
                 </div>
                 <?php if (isset($_GET['Empty'])) { ?>
                     <div class="alert-light text-danger text-center py-3"><?php echo $_GET['Empty'] ?></div>
