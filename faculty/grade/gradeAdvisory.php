@@ -44,7 +44,7 @@
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                     <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sex">Sex</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>

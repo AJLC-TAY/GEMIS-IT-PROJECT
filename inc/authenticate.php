@@ -31,7 +31,7 @@ $con = $dbConfig->connect();
                             $destination = "../faculty/index.php";
                             break;
                         case "ST":
-                            $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no FROM student WHERE id_no = '$id_no';";
+                            $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no, promote FROM student JOIN enrollment using (stud_id) WHERE id_no = '$id_no';";
                             $destination = "../student/index.php";
                             break;
                     }
@@ -56,6 +56,10 @@ $con = $dbConfig->connect();
                                 $roles[] = 'can_enroll';
                             }
                             $_SESSION['roles'] = $roles;
+                        } 
+
+                        if ($u_type == 'ST'){
+                            $_SESSION['promote'] = $u_row['promote'];
                         }
 
                         # school year

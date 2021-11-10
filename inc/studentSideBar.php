@@ -7,7 +7,15 @@
 // $_SESSION['id'] = 110001;
 // $_SESSION['sy_id'] = 9;
  $school_year = $_SESSION['school_year'];
-
+ $enrollment_item = '';
+ if ($_SESSION['promote'] == 1 AND $_SESSION['enroll_status'] == 1) {
+    $enrollment_item = " <li class='sub-menu'>"
+                ."<a id='enrollment' href='enrollment.php?action=edit'>"
+                    ."<i class='fa fa-tasks'></i>"
+                    ."<span>Enrollment</span>"
+                ."</a>"
+            ."</li>";
+}
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
@@ -45,13 +53,8 @@
                     <span>Home</span>
                 </a>
             </li>
-            <!-- <?php echo $enrollment_item; ?> -->
-            <li class="sub-menu">
-                <a id="enrollment" href="enrollment.php?action=edit">
-                <i class="fa fa-tasks"></i>
-                    <span>Enrollment</span>
-                </a>
-            </li> 
+            <?php echo $enrollment_item; ?>
+             
             <li class="sub-menu">
                 <a id="student" href="student.php">
                     <i class="bi bi-person-square"></i>
@@ -70,7 +73,6 @@
                     <span>Transcript of Records</span>
                 </a>
             </li>
-            <!-- <?php echo $award_coor_item; ?>  -->
         </ul>
         <!-- SIDEBAR MENU END -->
     </div>

@@ -153,7 +153,7 @@ $(function() {
                 $.post("action.php", grades, function(data) {	
                     // console.log(grades);
                     console.log(grades);
-                    studentTable.bootstrapTable("refresh")
+                    studentTable.bootstrapTable("refresh");
                     
                 });
 
@@ -165,10 +165,27 @@ $(function() {
         let studID = $(this).attr("data-stud-id");
         console.log(studID);
         var record = {'action': 'promote', 
-                      'stud_id':studID};
+                      'stud_id':studID,
+                    'promote': 1};
     
         $.post("action.php", record, function(data) {	
             console.log(data);
+            studentTable.bootstrapTable("refresh");
+
+        });
+       
+    });
+    $(document).on("click", ".unpromote", function() {
+        let studID = $(this).attr("data-stud-id");
+        console.log(studID);
+        var record = {'action': 'promote', 
+                      'stud_id':studID,
+                    'promote': 0};
+    
+        $.post("action.php", record, function(data) {	
+            console.log(data);
+            studentTable.bootstrapTable("refresh");
+
         });
        
     });
