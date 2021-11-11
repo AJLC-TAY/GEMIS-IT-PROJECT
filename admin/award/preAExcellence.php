@@ -14,7 +14,7 @@ $signatory_list = $admin->listSignatory();
 $url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&grade=$grade".
         "&highest_min={$highest[0]}&highest_max={$highest[1]}&high_min={$high[0]}&high_max={$high[1]}&with_min={$with[0]}&with_max={$with[1]}";
 ?>
-<!DOCTYPE html>
+
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

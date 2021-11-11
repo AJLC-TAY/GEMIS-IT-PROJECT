@@ -1540,7 +1540,7 @@ trait Grade
                 'id' => $stud_id,
                 'name' => $name . "<input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][curriculum]' value='$curriculum'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][name]' value='$name'>
-                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][sex]' value='$name'>
+                            <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][sex]' value='$sex'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][ga]' value='$ga'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][program]' value='$program'>
                             <input type='hidden' name='excellence[$curriculum][$program][students][$stud_id][remark]' value='$remark'>",

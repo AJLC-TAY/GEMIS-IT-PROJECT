@@ -23,7 +23,7 @@ if (isset($_GET['action'])) {
 <title>Faculty | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-<!DOCTYPE html>
+
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

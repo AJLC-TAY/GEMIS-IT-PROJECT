@@ -2,11 +2,9 @@
 require_once("sessionHandling.php");
 include_once("../inc/head.html"); ?>
 <title>Award Document | GEMIS</title>
-<!-- <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'> -->
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="../css/report.css">
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -67,31 +65,31 @@ include_once("../inc/head.html"); ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
-        function generatePDF(filename) {
-            // hide horizontal line 
-            // $(".doc hr").addClass('d-none');
-            const template = document.querySelector(".template");
-            var opt = {
-                margin: [0.5, 0, 0.5, 0],
-                // margin: 0,
-                filename: filename + '.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 0.98
-                },
-                html2canvas: {
-                    scale: 4,
-                    dpi: 300
-                },
-                jsPDF: {
-                    unit: 'in',
-                    format: 'letter',
-                    orientation: 'portrait'
-                }
-            };
-            html2pdf().from(template).set(opt).save();
-            // $(".doc hr").removeClass('d-none');
-        }
+        // function generatePDF(filename) {
+        //     // hide horizontal line
+        //     // $(".doc hr").addClass('d-none');
+        //     const template = document.querySelector(".template");
+        //     var opt = {
+        //         margin: [0.5, 0, 0.5, 0],
+        //         // margin: 0,
+        //         filename: filename + '.pdf',
+        //         image: {
+        //             type: 'jpeg',
+        //             quality: 0.98
+        //         },
+        //         html2canvas: {
+        //             scale: 4,
+        //             dpi: 300
+        //         },
+        //         jsPDF: {
+        //             unit: 'in',
+        //             format: 'letter',
+        //             orientation: 'portrait'
+        //         }
+        //     };
+        //     html2pdf().from(template).set(opt).save();
+        //     // $(".doc hr").removeClass('d-none');
+        // }
         // window.generatePDF = generatePDF;
         $(function() {
             preload("#awards");

@@ -8,7 +8,6 @@ $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
 $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");$date_desc = date("F j, Y");
 
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -31,11 +30,9 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
     </div>
 </header>
 <hr class='m-1'>
-
-
 <div class="d-flex justify-content-center">
-    <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto ">
-        <ul class="template p-0 w-100">
+    <div class="doc bg-white ms-2 p-0 shadow overflow-auto">
+        <ul class="template p-0">
             <li class="p-0 mb-0 mx-auto">
                 <div class="row p-0 mx-1">
                     <div class="col-3 p-0">
@@ -95,8 +92,8 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                                         echo "<tr>";
                                     }
                                     echo "<td class='text-start'>{$record['name']}</td>"
-                                        . "<td>{$record['sex']}</td>"
                                         . "<td>{$record['remark']}</td>"
+                                        . "<td>{$record['sex']}</td>"
                                         . "<td>{$record['ga']}</td>";
                                     echo "</tr>";
                                 }
