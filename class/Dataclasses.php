@@ -295,8 +295,9 @@ class Faculty implements JsonSerializable
     private $is_active;
     private $action;
 
-    public function __construct($teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $is_active, $subjects=[])
+    public function __construct($teacher_user_no, $teacher_id, $last_name, $middle_name, $first_name, $ext_name, $birthdate, $age, $sex, $department, $cp_no, $email, $award_coor, $enable_enroll, $is_active, $subjects=[])
     {
+        $this->teacher_user_no = $teacher_user_no;
         $this->teacher_id = $teacher_id;
         $this->last_name = $last_name;
         $this->middle_name = $middle_name;
@@ -324,6 +325,10 @@ class Faculty implements JsonSerializable
     public function get_teacher_id()
     {
         return $this->teacher_id;
+    }
+    public function get_teacher_user_no()
+    {
+        return $this->teacher_user_no;
     }
     public function get_last_name()
     {
@@ -429,6 +434,7 @@ class Faculty implements JsonSerializable
     public function jsonSerialize()
     {
         return [
+            'user_id'  => $this->teacher_user_no,
             'teacher_id' => $this->teacher_id,
             'name' => $this->name,
             // 'birthdate' => $this->birthdate,

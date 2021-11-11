@@ -421,7 +421,7 @@ trait FacultySharedMethods
     public function getFaculty($id): Faculty
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM faculty JOIN user USING(teacher_user_no) WHERE teacher_id=?;", [$id], "i");
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
@@ -441,6 +441,7 @@ trait FacultySharedMethods
         $handled_sub_classes = $this->getHandled_sub_classes($teacher_id);
         // Step 4
         $faculty = new Faculty(
+            $row['teacher_user_no'],
             $teacher_id,
             $row['last_name'],
             $row['middle_name'],
@@ -772,9 +773,9 @@ trait Enrollment
         
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
-        } if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
+        } else if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
             header("Location: student.php");
-        }else {
+        } else {
             $_SESSION['enrolled'] = TRUE;
             header("Location: finished.php");
         }
