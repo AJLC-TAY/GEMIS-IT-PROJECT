@@ -75,7 +75,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                     <div class="row mt ps-3">
                         <!-- HEADER -->
                         <?php
-                        if (isset($_GET['page']) && $_GET['page'] === 'values_grade' ) {
+                        if (isset($_GET['page']) && $_GET['page'] == 'values_grade' ) {
                             include_once("grade/valuesGrade.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
                         }
@@ -128,6 +128,27 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                                     <div class="modal-footer">
                                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                                         <button class="btn close-btn btn-success" id="confirm">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="" class="modal fade promotion-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h4 class="mb-0">CONFIRMATION</span></h4>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p id="modal-msg">You won't be able to undo this action once the student is promoted.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn close-btn btn-success" id="promote">Promote</button>
                                     </div>
                                 </div>
                             </div>

@@ -77,6 +77,7 @@ function toggleGradesColumn(classType) {
 
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
+var studID = '';
 $(function() {
     preload('#advisory');
 
@@ -164,8 +165,8 @@ $(function() {
             $('.grading-confirmation').modal('hide');
             $(".number").attr('readOnly',true);
     });
-    $(document).on("click", ".promote", function() {
-        let studID = $(this).attr("data-stud-id");
+    $(document).on("click", "#promote", function() {
+        console.log('entered');
         console.log(studID);
         var record = {'action': 'promote', 
                       'stud_id':studID,
@@ -176,22 +177,28 @@ $(function() {
             studentTable.bootstrapTable("refresh");
 
         });
+        $('.promotion-confirmation').modal('hide');
        
     });
-    $(document).on("click", ".unpromote", function() {
-        let studID = $(this).attr("data-stud-id");
-        console.log(studID);
-        var record = {'action': 'promote', 
-                      'stud_id':studID,
-                    'promote': 0};
+    $(document).on("click", ".stud-promote", function() {
+        studID = $(this).attr("data-stud-id");
+        $('.promotion-confirmation').modal('show');
+       
+    });
+    // $(document).on("click", ".unpromote", function() {
+    //     let studID = $(this).attr("data-stud-id");
+    //     console.log(studID);
+    //     var record = {'action': 'promote', 
+    //                   'stud_id':studID,
+    //                 'promote': 0};
     
-        $.post("action.php", record, function(data) {	
-            console.log(data);
-            studentTable.bootstrapTable("refresh");
+    //     $.post("action.php", record, function(data) {	
+    //         console.log(data);
+    //         studentTable.bootstrapTable("refresh");
 
-        });
+    //     });
        
-    });
+    // });
         
     hideSpinner();
 });
