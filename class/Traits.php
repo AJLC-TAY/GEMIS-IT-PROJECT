@@ -421,7 +421,7 @@ trait FacultySharedMethods
     public function getFaculty($id): Faculty
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM faculty JOIN user USING(teacher_user_no) WHERE teacher_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no WHERE teacher_id=?;", [$id], "i");
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
