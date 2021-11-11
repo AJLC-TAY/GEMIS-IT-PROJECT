@@ -1716,7 +1716,7 @@ trait Grade
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-              <li><a class='dropdown-item' href='advisory.php?page=grade_report&id=$stud_id'>Export</a></li>
+              <li><a class='dropdown-item' href='gradeReport.php?id=$stud_id'>Export</a></li>
               <li><a href='advisory.php?page=values_grade&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
             </ul>
           </div>
