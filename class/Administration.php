@@ -1684,7 +1684,7 @@ class Administration extends Dbconfig
 
     public function listFacultyPrivilegeJSON()
     {
-        $result = $this->query("SELECT teacher_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ',COALESCE(ext_name, '')) AS name, "
+        $result = $this->query("SELECT teacher_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ',COALESCE(ext_name, '')) AS name, "
             . "enable_enroll FROM faculty ORDER BY name;");
         $faculty_list = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1720,6 +1720,7 @@ class Administration extends Dbconfig
 
         while ($row = mysqli_fetch_assoc($result)) {
             $facultyList[] = new Faculty(
+                $row['teacher_user_no'],
                 $row['teacher_id'],
                 $row['last_name'],
                 $row['middle_name'] ?: "",
@@ -1741,7 +1742,7 @@ class Administration extends Dbconfig
 
     public function listNotAdvisers($teacher_id = NULL)
     {
-        $result = $this->query("SELECT CONCAT(last_name, ', ', first_name, ' ', middle_name ) as name, teacher_id FROM faculty WHERE teacher_id NOT IN (SELECT DISTINCT (teacher_id)
+        $result = $this->query("SELECT CONCAT(last_name, ', ', first_name,' ',COALESCE(middle_name,'')) as name, teacher_id FROM faculty WHERE teacher_id NOT IN (SELECT DISTINCT (teacher_id)
                     FROM section WHERE teacher_id IS NOT NULL)" . (!is_null($teacher_id) ? " OR teacher_id = '{$teacher_id}';" : ";"));
         $not_advisers = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -2252,7 +2253,7 @@ class Administration extends Dbconfig
         if (empty($_SESSION)) {
             session_start();
         }
-        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', middle_name, ' ',COALESCE(ext_name, ''))
+        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', COALESCE (middle_name, ''), ' ',COALESCE(ext_name, ''))
                                         AS name, grd_level FROM subjectclass sc
                                         JOIN sysub s ON sc.sub_sy_id = s.sub_sy_id
                                         JOIN subject su ON s.sub_code = su.sub_code

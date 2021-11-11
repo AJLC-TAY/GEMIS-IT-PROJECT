@@ -421,7 +421,7 @@ trait FacultySharedMethods
     public function getFaculty($id): Faculty
     {
         // Step 1
-        $result = $this->prepared_select("SELECT * FROM faculty WHERE teacher_id=?;", [$id], "i");
+        $result = $this->prepared_select("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no WHERE teacher_id=?;", [$id], "i");
         $row = mysqli_fetch_assoc($result);
 
         // Step 2
@@ -441,6 +441,7 @@ trait FacultySharedMethods
         $handled_sub_classes = $this->getHandled_sub_classes($teacher_id);
         // Step 4
         $faculty = new Faculty(
+            $row['teacher_user_no'],
             $teacher_id,
             $row['last_name'],
             $row['middle_name'],
@@ -772,9 +773,9 @@ trait Enrollment
         
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
-        } if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
+        } else if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
             header("Location: student.php");
-        }else {
+        } else {
             $_SESSION['enrolled'] = TRUE;
             header("Location: finished.php");
         }
@@ -1702,7 +1703,7 @@ trait Grade
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               View
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
@@ -1711,7 +1712,7 @@ trait Grade
             </ul>
           </div>
           <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>

@@ -36,7 +36,7 @@
 
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="teacher_id">UID</th>
+                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="user_id">UID</th>
                     <th scope='col' data-width="350" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="department">Department</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="active">Account Status</th>
