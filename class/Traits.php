@@ -1699,7 +1699,7 @@ trait Grade
     {
         function actions($report_id, $stud_id, $promote)
         {
-            $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
+            // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
             <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -1719,11 +1719,10 @@ trait Grade
               <li><a href='advisory.php?page=values_grade&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
             </ul>
           </div>
-          $promote_btn
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger unpromote'>---</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>promote</button></div>";
+          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote'>promote</button></div>";
           return $action;
 
         }
