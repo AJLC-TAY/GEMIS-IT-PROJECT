@@ -29,7 +29,7 @@
     <div class="top-menu">
         <ul class="nav pull-right top-menu mt-3">
             <li>
-                <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8> 
+                <h8 class="topbar fw-bold"><?php echo date('F j, Y'); ?></h8>
             </li>
             <li>
                 <h8 class="topbar fw-bold">Hi, <?php echo $_SESSION['User']?></h8>
@@ -62,7 +62,7 @@
                 </a>
             </li>
             <li class="sub-menu">
-                <a id="grade" href="grade.php">
+                <a id="grade" href="gradeReport.php?id=<?php echo $_SESSION['id']; ?>">
                     <i class="bi bi-card-list"></i>
                     <span>Grade</span>
                 </a>

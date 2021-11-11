@@ -1554,15 +1554,18 @@ class StudentAward extends Award implements JsonSerializable
             return $this->stud_id;
         }
 
-        public function get_form137(){
+        public function get_form137()
+        {
             return $this->form137;
         }
 
-        public function get_status(){
+        public function get_status()
+        {
             return $this->status;
         }
 
-        public function get_id_no(){
+        public function get_id_no()
+        {
             return $this->id_no;
         }
 

@@ -35,7 +35,7 @@
 
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field='stud_id'>SID</th>
+                    <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field='user_id_no'>UID</th>
                     <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field='lrn'>LRN</th>
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field='name'>Student Name</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field='section'>Section</th>

@@ -1,6 +1,10 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
+if ($_GET['id'] != $_SESSION['id']) {
+    header('index.php');
+    return;
+}
 ?>
 <title>Grade Report | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -83,14 +87,14 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/adminSidebar.php'); ?>
+        <?php include_once('../inc/studentSideBar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-                            <?php include_once ("award/gradeReport.php"); ?>
+                            <?php include_once ("../admin/award/gradeReport.php"); ?>
                         </div>
                     </div>
                 </div>
