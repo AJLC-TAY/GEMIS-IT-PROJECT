@@ -161,7 +161,8 @@ if (isset($_GET['action'])) {
         $zip = $address['zipcode'];
 
         $cp_no = $userProfile->get_cp_no();
-        $psa_birth_cert = $userProfile->get_psa_birth_cert();
+        // $psa_birth_cert = $userProfile->get_psa_birth_cert();
+        $psa_birth_cert = '232345';
         $belong_to_ipcc = $userProfile->get_belong_to_ipcc();
         $id_picture = $userProfile->get_id_picture();
         $section = $userProfile->get_section();
@@ -639,9 +640,10 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <label class="col-form-label">Semester</label>
                             <div class="d-flex">
                                 <?php $sem = [1 => "first", 2 => "second"];
+                                $val = 2;
                                 foreach ($sem as $id => $value) {
                                     echo "<div class='form-check me-3'>
-                                                <input class='form-check-input' type='radio' name='semester' id='$id'  value='$id' " . (($sem == $value) ? "checked" : "") . " required>
+                                                <input class='form-check-input' type='radio' name='semester' id='$id'  value='$id' " . (($val == $id) ? "checked" : "") . " required>
                                                 <label class='form-check-label' for='$id'>
                                                 $value
                                                 </label>

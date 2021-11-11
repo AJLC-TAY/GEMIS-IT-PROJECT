@@ -1723,7 +1723,7 @@ trait Grade
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger unpromote'>---</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>promote</button></div>";
+          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger btn-sm unpromote'>Undo</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>promote</button></div>";
           return $action;
 
         }
