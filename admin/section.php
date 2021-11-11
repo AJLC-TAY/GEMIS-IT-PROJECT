@@ -4,14 +4,13 @@ include_once("../inc/head.html"); ?>
 <title>Section | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
-    <div id="main-spinner-con" class="spinner-con">
-        <div id="main-spinner-border" class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
+<!--    <div id="main-spinner-con" class="spinner-con">-->
+<!--        <div id="main-spinner-border" class="spinner-border" role="status">-->
+<!--            <span class="visually-hidden">Loading...</span>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/adminSidebar.php'); ?>
@@ -26,6 +25,9 @@ include_once("../inc/head.html"); ?>
                                 $js = "<script type='module' src='../js/admin/section.js'></script>";
                                 if (isset($_GET['action']) && $_GET['action'] === 'add') {
                                     include_once("section/sectionForm.php");
+                                } else if (isset($_GET['action']) && $_GET['action'] === 'export') {
+                                    echo "<link href='../css/report.css' rel='stylesheet'>";
+                                    include_once("section/sectionExport.php");
                                 } else if (isset($_GET["sec_code"])) {
                                     include_once("section/sectionView.php");
                                 } else if (isset($_GET['page']) && $_GET['page'] == 'sub_class_form') {
