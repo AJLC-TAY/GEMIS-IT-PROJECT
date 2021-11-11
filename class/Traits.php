@@ -1703,7 +1703,7 @@ trait Grade
             $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               View
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
@@ -1712,7 +1712,7 @@ trait Grade
             </ul>
           </div>
           <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
+            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
@@ -1724,7 +1724,7 @@ trait Grade
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger unpromote'>---</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>promote</button></div>";
+          $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-danger btn-sm unpromote'>Undo</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-primary btn-sm promote'>promote</button></div>";
           return $action;
 
         }
