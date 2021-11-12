@@ -40,9 +40,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     <div class="d-flex justify-content-between">
         <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
         <span>
-            <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class' title='Subject classes'><i class='bi bi-pencil-square me-1'></i>SC</button>
+            <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class me-1' title='Subject classes'><i class='bi bi-pencil-square me-1'></i>Subject Class</button>
             <button type="button" class="btn btn-secondary me-1"><i class="bi bi-archive me-2"></i>Archive Section</button>
-            <button class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+            <a href="section.php?sec_code=<?php echo $sect_code; ?>&action=export" class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</a>
         </span>
     </div>
     <hr class="my-2">

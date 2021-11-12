@@ -1716,14 +1716,14 @@ trait Grade
               Grade
             </button>
             <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-              <li><a class='dropdown-item' href='advisory.php?page=grade_report&id=$stud_id'>Export</a></li>
+              <li><a class='dropdown-item' href='gradeReport.php?id=$stud_id'>Export</a></li>
               <li><a href='advisory.php?page=values_grade&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
             </ul>
           </div>
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote'>promote</button></div>";
+          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1'>promote</button></div>";
           return $action;
 
         }
@@ -1733,11 +1733,13 @@ trait Grade
         //             . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
         //             . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
         //             . "</div>
-        session_start();
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $students = [];
         $section_code = $_GET['section'];
         $result = $this->query("SELECT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code'");
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id
@@ -1765,7 +1767,7 @@ trait Grade
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
                 'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
-                // 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
+                'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'] )
             ];

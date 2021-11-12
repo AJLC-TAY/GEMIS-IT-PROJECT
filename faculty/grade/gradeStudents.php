@@ -26,7 +26,7 @@
             <div>
                 <form method="post" action="action.php" class="ms-2">
                     <input class='hidden' id='export_code' name='code' value=''>
-                    <input type="submit" name="export" value="Export">
+                    <button type="submit" class="btn btn-primary" name="export" value="Export"><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
                 </form>
             </div>
             <div>
@@ -34,7 +34,7 @@
                 <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
                                             <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
                 <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
-                <button type="button" class="btn btn-success submit">Submit</button>
+                <button type="button" class="btn btn-success ms-1 submit">Submit</button>
             </div>
         </div>
 
