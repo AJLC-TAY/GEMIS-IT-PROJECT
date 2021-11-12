@@ -31,6 +31,9 @@
                 </select>
             </div>
             <div>
+            <button type="button" class="btn btn-primary ms-2 multi-promote"></i>Promote Students</button>
+            </div>
+            <div>
                 <?php echo ($_SESSION['current_quarter'] == 4 ? '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>' : ""); ?>
             </div>
         </div>
@@ -49,5 +52,42 @@
                 </tr>
             </thead>
         </table>
+    </div>
+</div>
+<div class="fade modal" id="view-candidates-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Students Qualified for Promotion</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="overflow-auto" style="height: 50vh;">
+                <table class="table table-striped table-sm" id = 'stud-table'>
+                    <tr class ='text-center'><th>ID</th>
+                        <th>Student Name</th>
+                        <th>Average</th>
+                        <th>Action</th></tr>
+                <?php $students = $faculty->listStudentsForPromotion($advisory['section_code']);
+                    foreach ($students as $student){ 
+                        // $name = ${student['name']}
+                        echo "<tr class ='text-center'><td>{$student['stud_id']}</td> 
+                                  <td>{$student['name']}</td> 
+                                  <td>{$student['gen_ave']} </td>
+                     <td><button data-name='' class='unarchive-option btn link' id=''>Remove</button></td></tr>";
+                      } 
+                ?>
+                    
+                </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary promote-btn" data-bs-dismiss="modal">Promote</button>
+
+            </div>
+        </div>
     </div>
 </div>

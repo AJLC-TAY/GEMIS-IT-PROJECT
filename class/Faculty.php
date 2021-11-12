@@ -144,6 +144,17 @@ class FacultyModule extends Dbconfig
             'enroll'  => $sy[2]
         ];
     }
+
+    public function listStudentsForPromotion($section_code){
+        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+        JOIN enrollment USING (stud_id)JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74;");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $students[] = [ 'stud_id' => $row['stud_id'],
+                            'name' => $row['name'],
+                            'gen_ave' => $row['general_average']];
+        }
+        return $students;
+    }
     public function listValuesReport()
     {
 

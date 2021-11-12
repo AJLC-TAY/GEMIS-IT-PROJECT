@@ -17,4 +17,5 @@ if (isset($_GET['data']) && $_GET['data'] == 'class_attendance') {
 if (isset($_GET['data']) && $_GET['data'] == 'student-award-selection') {
     $faculty->listStudentAwardSelection(TRUE);
 }
+
 ?>
