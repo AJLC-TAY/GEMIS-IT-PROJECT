@@ -232,8 +232,8 @@ include_once("../inc/head.html"); ?>
                                             <h5 class="text-center"><b>Transcript of Record</b></h5>
                                             <?php
 
-                                            renderSemesterGradeTable('1st Semester', $grades['1']);
-                                            renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1']);
+                                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2']);
                                             ?>
                                             <br>
                                         </li>
