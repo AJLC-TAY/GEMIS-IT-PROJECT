@@ -98,11 +98,13 @@ function renderSubOptToHtml(list, type) {
 
 function prepareSchedOptions(firstStrand, type) {
   console.log("prepare sched options /n");
-  // filter subject options by subject type
-  let opt = schedOptions[type];
-  // filter subject options by program
-  let finalOpt = getSubjectsByProgram(opt, firstStrand);
-  renderSubOptToHtml(finalOpt, type);
+  try {
+    // filter subject options by subject type
+    let opt = schedOptions[type];
+    // filter subject options by program
+    let finalOpt = getSubjectsByProgram(opt, firstStrand);
+    renderSubOptToHtml(finalOpt, type);
+  } catch (e) {}
 }
 
 $(function () {
@@ -177,6 +179,7 @@ $(function () {
     showSpinner();
     var form = $(this);
     var formData = form.serializeArray();
+    console.log(formData)
 
     // initialize requisites array
     var prereq = [];
@@ -232,7 +235,7 @@ $(function () {
   $(document).on('click', '#edit-btn', function (e) {
     let editBtn = $('#edit-btn');
     editBtn.addClass('d-none');
-    let cancelBtn = $('.cancel-btn');7
+    let cancelBtn = $('.cancel-btn');
     let link = editBtn.attr('data-link');
     cancelBtn.attr('href', link);
     cancelBtn.removeClass('disabled');

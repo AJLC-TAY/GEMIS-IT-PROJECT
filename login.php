@@ -1,11 +1,14 @@
 <?php
-
 include_once("class/config.php");
 include_once("inc/head.html");
 $con = (new dbConfig())->connect();
 $row_temp = mysqli_query($con, "SELECT can_enroll FROM schoolyear WHERE status = '1';");
-$sy = mysqli_fetch_row($row_temp);
-$enroll = $sy[0];
+if (mysqli_num_rows($row_temp) == 0) {
+    $enroll = 0;
+} else {
+    $sy = mysqli_fetch_row($row_temp);
+    $enroll = $sy[0];
+}
 ?>
 <title>Login | GEMIS</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -180,9 +180,11 @@ $subjects = $init_data['subjects'];
                                         <p id="core-empty-msg" class="no-result-msg my-auto" style="display: none;">No results found</p>
                                     </div>
                                     <ul id="core-list" class="list-group p-0">
-                                        <?php 
-                                        foreach($subjects['core'] as $id => $value) {
-                                            echo "<label class='list-group-item'><input name='subjects[core][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
+                                        <?php
+                                        if (!empty($subjects['core'])) {
+                                            foreach($subjects['core'] as $id => $value) {
+                                                echo "<label class='list-group-item'><input name='subjects[core][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
+                                            }
                                         }
                                         ?>
                                     </ul>
@@ -223,14 +225,21 @@ $subjects = $init_data['subjects'];
                                         <p id="spap-empty-msg" class="no-result-msg my-auto" style="display: none;">No results found</p>
                                     </div>
                                     <ul id="spap-list" class="list-group p-0">
-                                        <?php 
-                                        foreach($subjects['specialized'] as $id => $value) {
-                                            echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
-                                        
+                                        <?php
+                                        if (!empty($subjects['specialized'])) {
+
+                                            foreach ($subjects['specialized'] as $id => $value) {
+                                                echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
+
+                                            }
                                         }
-                                        foreach($subjects['applied'] as $id => $value) {
-                                            echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
-                                        
+
+                                        if (!empty($subjects['applied'])) {
+
+                                            foreach ($subjects['applied'] as $id => $value) {
+                                                echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
+
+                                            }
                                         }
                                         ?>
                                     </ul>
