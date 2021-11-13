@@ -23,7 +23,7 @@ if (mysqli_num_rows($row_temp) == 0) {
         <div class="d-flex justify-content-center h-50">
             <div class="user_card">
                 <div class="d-flex justify-content-center">
-                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo"> </div>
+                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo" style="width: 100%; height: 100%;">  </div>
                 </div>
                 <?php if (isset($_GET['Empty'])) { ?>
                     <div class="alert-light text-danger text-center py-3"><?php echo $_GET['Empty'] ?></div>
