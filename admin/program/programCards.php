@@ -12,8 +12,8 @@ $admin = new Administration() ?>
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">Programs</h3>
         <span>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
             <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
         </span>
     </div>
     <!-- SEARCH BAR -->
