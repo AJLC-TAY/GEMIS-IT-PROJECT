@@ -6,11 +6,24 @@ $admin = new Administration();
 $user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
+
+$edit = "disabled";
+$disable_when_edit = "";
+$none_when_edit = "";
+$display_when_edit = "d-none";
+
+if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+    $edit = '';
+    $display_when_edit = "";
+    $disable_when_edit = "disabled";
+    $none_when_edit = "d-none";
+}
 ?>
 
 <title>Home | GEMIS</title>
 </head>
 <!DOCTYPE html>
+
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -52,7 +65,41 @@ $admin_user = $admin->getProfile('AD');
                                     </div>
                                 </div>
                             </header>
-                            <div class="container mb-3">
+
+                            <div class='card'>
+                                <div class="d-flex justify-content-between">
+                                    <h5><b>SCHOOL YEAR</b></h5>
+                                    <div class="btn-con my-a">
+                                        <input type="hidden" name="action" value="">
+                                        <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class='bi bi-pencil-square me-2'></i>Edit</button>
+                                        <button class="btn btn-sm btn-primary">View</button>
+                                        <div class="decide-con <?php echo $display_when_edit; ?>">
+                                            <a id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</a>
+                                            <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mt-1">
+                                <section class="d-flex justify-content-center">
+                                    <div class="w-50">
+                                        <form id='' class="" action="action.php" method="POST">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label>Current Quarter</label>
+                                                    <input class='form-input form-control' value='First' readonly></input>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Current Semester</label>
+                                                    <input class='form-input form-control' value='First' readonly></input>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="container mb-3 mt-3">
                                 <!-- PEOPLE MANAGEMENT -->
                                 <section class="row">
                                     <h5 class="fw-bold">PEOPLE MANAGEMENT</h5>
