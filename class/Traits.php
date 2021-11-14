@@ -55,7 +55,7 @@ trait School
     public function listPrograms($tbl)
     {
         $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query($query);
         $programList = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curr_code'], $row['description']);
@@ -68,18 +68,23 @@ trait School
         if (!isset($_SESSION)) {
             session_start();
         }
-        $sy_id = $_SESSION['sy_id'];
+        $sy_id = $_SESSION['sy_id'] ?? NULL;
         $subjectList = [];
 
         $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
-        $queryOne = (isset($_GET['prog_code']))
-            ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
-            // ? "SELECT * FROM $tbl WHERE sub_code 
-            //    IN (SELECT sub_code FROM $shared_sub
-            //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
-            //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
-            : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+        $queryOne = '';
+        if (is_null($sy_id)) {
+            $queryOne = "SELECT * FROM subject";
+        } else {
+            $queryOne = (isset($_GET['prog_code']))
+                ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
+                // ? "SELECT * FROM $tbl WHERE sub_code
+                //    IN (SELECT sub_code FROM $shared_sub
+                //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
+                //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
+                : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+        }
 
         $resultOne = $this->query($queryOne);
 
@@ -1733,7 +1738,7 @@ trait Grade
         //             . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
         //             . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
         //             . "</div>
-        if (empty($_SESSION)) {
+        if (empty($_SESSION)) { 
             session_start();
         }
         $students = [];

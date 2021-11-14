@@ -56,7 +56,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 <li>
                                                     <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
-                                                <li>School Year: <?php echo $_SESSION['school_year']; ?></li>
+                                                <li><?php echo (!empty($_SESSION['sy_id']) ? "School Year: ".$_SESSION['school_year'] : "")  ; ?></li>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">

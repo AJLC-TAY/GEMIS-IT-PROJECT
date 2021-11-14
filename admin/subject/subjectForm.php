@@ -238,7 +238,6 @@ if ($action === 'edit') {
     $old_program = implode("", $old_program);
 }
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -272,14 +271,14 @@ if ($action === 'edit') {
                         <?php echo $prog_opt; ?>
                     </div>
                     <div class='form-group col-lg-5'>
-                        <label for='subjectName1' class='  col-form-label'>Name</label>
-                        <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
+                        <label for='sub-name' class='  col-form-label'>Name</label>
+                        <textarea name='name' class='form-control' id='sub-name' maxlength='250' placeholder='Enter subject name (max of 250 characters)'><?php echo $subject_name; ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
-            <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
+            <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | CO-REQUISITE SUBJECTS (if applicable)</h5>
             <div class='accordion' id='accordionPanelsStayOpenExample'>
                 <div class='accordion-item'>
                     <h2 class='accordion-header' id='panelsStayOpen-headingOne'>
@@ -349,6 +348,5 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
-        
     </form>
     <div class='d-flex flex-row-reverse'><?php echo $button; ?></div>
