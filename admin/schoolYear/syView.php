@@ -5,7 +5,7 @@ $admin = new Administration();
 $sy_info = $admin->getSYInfo();
 $switch_btn = "";
 $sy_id_in_link = $_GET['id'];
-$edit_acads_btn = "<button data-id='$sy_id_in_link' data-bs-toggle='modal' data-bs-target='#month-modal' class='btn btn-secondary btn-sm edit-month-btn'><i class='bi bi-pencil-square me-2'></i>Edit</button>";
+$edit_acads_btn = "<button data-id='$sy_id_in_link' class='btn btn-secondary btn-sm edit-month-btn'><i class='bi bi-pencil-square me-2'></i>Edit</button>";
 if ($_SESSION['sy_id'] != $sy_id_in_link) {
     $switch_btn = "<a role='button' href='action.php?action=switchSY&id=$sy_id_in_link' class='btn btn-primary m-1'>Switch</a>";
     $edit_acads_btn = "";
@@ -35,7 +35,7 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
         <section class="col-md-4">
             <div class='col-xl-12 shadow-sm p-3 bg-light border rounded-3 text-start mb-4' style="height: 95.5%;">
                 <div class="d-flex justify-content-between">
-                    <h5 class='text-start p-0 fw-bold'>ACADEMIC DAYS</h5>
+                    <h5 class='text-start p-0 fw-bold mb-0'>ACADEMIC DAYS</h5>
                     <div>
                         <?php echo $edit_acads_btn; ?>
                     </div>
@@ -47,10 +47,10 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                         foreach($sy_info['month'] as $month => $days) {
                             echo "<div class='row ps-4'>"
                                 ."<div class='col-sm-8'>"
-                                    ."<h7 class='fw-bold mt-1'>$month</h7>"
+                                    ."<h7 class='fw-bold mt-1'>{$days['month']}</h7>"
                                 ."</div>"
                                 ."<div class='col-sm-3 mb-2 text-end'>"
-                                    ."<h7>$days</h7>"
+                                    ."<h7>{$days['number']}</h7>"
                                 ."</div>"
                             ."</div>";
                         }
@@ -122,8 +122,10 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                     foreach($sy_info['subject']['spap'] as $spap_id => $spap) {
                         echo "<li class='list-group-item bg-light'>"
                             ."<a href='subject.php?sub_code=$spap_id' class='link text-start btn' target='_blank'>{$spap['name']}</a>";
-                            foreach($spap['prog'] as $prog_badge) {
-                                echo "<span class='badge bg-primary badge-pill ms-1'><a href='program.php?prog_code=$prog_badge' class='text-white' target='_blank'>$prog_badge</a></span>";
+                            if (isset($spap['prog'])) {
+                                foreach($spap['prog'] as $prog_badge) {
+                                    echo "<span class='badge bg-primary badge-pill ms-1'><a href='program.php?prog_code=$prog_badge' class='text-white' target='_blank'>$prog_badge</a></span>";
+                                }
                             }
                         echo "</li>";
                     }
@@ -151,11 +153,11 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
                     <div class="container">
                         <ul id="month-list" class="p-0">
                             <?php 
-                            foreach($sy_info['month'] as $month => $days) {
+                            foreach($sy_info['month'] as $acad_days_id => $daysData) {
                             echo "<li class='form-control-sm row'>
-                                    <label class='col-form-label-sm col-4 fw-bold'>${month}</label>
+                                    <label class='col-form-label-sm col-4 fw-bold'>${daysData['month']}</label>
                                     <div class='col-5'>
-                                        <input value='${days}' type='number' name='newmonth[${month}]' class='text-center number form-control form-control-sm' placeholder='Enter no. of days' title='${month}' min='0' max='30''>
+                                        <input value='${daysData['number']}' type='number' name='month[$acad_days_id]' class='text-center number form-control form-control-sm' placeholder='Enter no. of days' title='${month}' min='0' max='30''>
                                     </div>
                                     <div class='col-3 text-center'>
                                         <button class='btn btn-sm btn-outline-danger edit-opt' data-type='remove'><i class='bi bi-dash-circle'></i></button>

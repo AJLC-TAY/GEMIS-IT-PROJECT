@@ -73,6 +73,7 @@ foreach ($programs as $prog) {
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][1][core][]" multiple="multiple" disabled>
                             </select>
+
                         </td>
                         <td>
                             <select class="js-example-basic-multiple subject-select" name="data[11][2][core][]" multiple="multiple" disabled>

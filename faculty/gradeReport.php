@@ -18,7 +18,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/adminSidebar.php'); ?>
+        <?php include_once('../inc/facultySidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -49,7 +49,7 @@ include_once("../inc/head.html");
     <script src="../js/common-custom.js"></script>
     <script>
         $(function() {
-            preload("#students");
+            preload("#advisory");
             hideSpinner();
         });
     </script>

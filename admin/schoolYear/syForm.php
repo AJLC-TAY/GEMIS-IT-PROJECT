@@ -39,13 +39,13 @@ $subjects = $init_data['subjects'];
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
-            <!-- <div class="line"></div>
+            <div class="line"></div>
             <div class="step mx-5" data-target="#step-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
                 </button>
-            </div> -->
+            </div>
         </div>
         <div class="bs-stepper-content">
             <div id="step-1" class="content">
@@ -144,7 +144,7 @@ $subjects = $init_data['subjects'];
                 </div>
                 <div class="d-flex justify-content-end mt-4">
                     <a href="schoolYear.php" class="btn me-1 btn-dark">Cancel</a>
-                    <a href="#" class="btn btn-success next">Next</a>
+                    <a class="btn btn-primary next">Next</a>
                 </div>
             </div>
             <!-- STEP 1 END -->
@@ -227,7 +227,6 @@ $subjects = $init_data['subjects'];
                                     <ul id="spap-list" class="list-group p-0">
                                         <?php
                                         if (!empty($subjects['specialized'])) {
-
                                             foreach ($subjects['specialized'] as $id => $value) {
                                                 echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
 
@@ -235,7 +234,6 @@ $subjects = $init_data['subjects'];
                                         }
 
                                         if (!empty($subjects['applied'])) {
-
                                             foreach ($subjects['applied'] as $id => $value) {
                                                 echo "<label class='list-group-item'><input name='subjects[spap][]' class='form-check-input me-2 track-checkbox' type='checkbox' checked value='$id'>$value</label>";
 
@@ -257,25 +255,63 @@ $subjects = $init_data['subjects'];
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse mt-4">
-                    <!-- <a href="#" class="btn btn-success next">Next</a> -->
                     <div class="col-auto">
-                        <input type="submit" class="form-control btn btn-success" name="initialize" value="Initialize">
+                         <a class="btn btn-primary next">Next</a>
                     </div>
                     <div class="col-auto me-1">
-                        <input type="submit" class="form-control btn btn-secondary" name="initAndEnroll" value="Initialize and Setup Enrollment">
-                    </div>
-                    <div class="col-auto me-1">
-                        <a href="#" class="btn btn-dark previous">Back</a>
+                        <a class="btn btn-dark previous">Back</a>
                     </div>
                 </div>
             </div>
             <!-- STEP 2 END -->
             <!-- STEP 3 -->
-            <!-- <div id="step-3" class="content">
+            <div id="step-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-              
+                    <h4 class="fw-bold">Subject Schedule</h4>
+                    <?php if (empty($_SESSION['sy_id'])) { ?>
+                        <div style="min-height: 180px;" class="text-center d-flex align-items-center justify-content-center" >
+                            <p>There is no set subject schedule yet. Please enter the subject schedule after initializing this school year.</p>
+                        </div>
+                    <?php }  else { ?>
+                        <p class="text-secondary"><small><i class="bi bi-info-circle me-1"></i> Please select one of the following: </small></p>
+                        <ul class="list-group">
+                            <label class="list-group-item">
+                                <input id="copy" name="schedule" type="radio" class="form-check-input" value="copy" required>
+                                <b>(Recommended)</b> Copy subject schedule from SY <?php echo $_SESSION['school_year']; ?>
+                            </label>
+                            <label class="list-group-item">
+                                <input id="copy" name="schedule" type="radio" class="form-check-input" value="reset" required>
+                                 Have an empty subject schedule for this school year that is about to be created
+                            </label>
+                        </ul>
+
+                    <?php }  ?>
+
                 </div>
-            </div> -->
+                <div class="d-flex flex-row-reverse mt-4">
+                    <?php if (empty($_SESSION['sy_id'])) { ?>
+                    <div class="col-auto me-1">
+                        <input type="hidden" name="action" value="initAndSchedule">
+                        <input type="submit" class="form-control btn btn-success" name="initAndSchedule" value="Initialize & Set Subject Schedule">
+                    </div>
+                    <?php }  else { ?>
+                    <div class="col-auto me-1">
+                        <input type="hidden" name="action" value="initializeSY">
+                        <input type="submit" class="form-control btn btn-success" disabled name="initialize" value="Initialize">
+                    </div>
+                    <div class="col-auto me-1">
+                        <input type="submit" class="form-control btn btn-secondary" disabled name="initAndSwitch" value="Initialize & Switch">
+                    </div>
+                    <div class="col-auto me-1">
+                        <input type="hidden" name="action" value="initAndSchedule">
+                        <input type="submit" class="form-control btn btn-secondary" disabled name="initAndSchedule" value="Initialize & Set Subject Schedule">
+                    </div>
+                    <?php } ?>
+                    <div class="col-auto me-1">
+                        <a href="#" class="btn btn-dark previous">Back</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- STEPPER END -->

@@ -392,26 +392,18 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                     <tr>
                         <td class='text-center' style='font-size: 10px;'>No. of School days</td>";
                         prepareStudentAttendanceHTML('no_of_days', $attendance);
-
-                    echo "</tr>
+                echo "</tr>
                     <tr>
                         <td class='text-center' style='font-size: 10px;'>No. of Days Present</td>";
                         prepareStudentAttendanceHTML('no_of_present', $attendance);
-                    echo "</tr>
-                                <tr>
-                                    <td class='text-center' style='font-size: 10px;'>No. of Days Absent</td>";
+                echo "</tr>
+                    <tr>
+                        <td class='text-center' style='font-size: 10px;'>No. of Days Absent</td>";
                     prepareStudentAttendanceHTML('no_of_absent', $attendance);
-
-                    echo "</tr>";
-//                    echo "<tr>
-//                            <td class='text-center'>No. of tardy</td>";
-//                            prepareStudentAttendanceHTML('no_of_tardy', $attendance);
-//                    echo " </tr>";
-                    echo "      </tbody>
-                        </table> ";
-                otherinfo();
-    logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
-
+                echo "</tr>";
+            echo "</tbody></table>";
+            otherinfo();
+            logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
 }
 ?>
 
@@ -455,8 +447,7 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                         foreach($qtrs as $qtr) {
                             echo "<td>QUARTER $qtr</td>";
                         }
-                        echo "</tr>";
-                        echo "</thead>";
+                        echo "</tr></thead>";
                         echo "<tbody>";
                         echo "<tr class='text-center'><td>MODULAR(PRINTED)</td><td>MODULAR(PRINTED)</td></tr>";
                         echo "</tbody></table></div>";

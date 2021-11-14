@@ -262,6 +262,7 @@ if ($action === 'edit') {
                 <div class='form-row row'>
                     <div class='form-group col-lg-4'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
+                        <input value='<?php echo $subject_code; ?>' name = 'current_sub_code' type="hidden">
                         <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
                     </div>
                     <div class='form-group col-lg-3'>

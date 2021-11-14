@@ -1,7 +1,28 @@
 <?php 
 $school_year = $_SESSION['school_year'];
+$enroll_menu_item = '';
+$award_menu_item = '';
+if (isset($_SESSION['sy_id'])) {
+    $enroll_menu_item = "<li id='enrollment' class='sub-menu'>
+                <a href='javascript:;'>
+                    <i class='fa fa-tasks'></i>
+                    <span>Enrollment Management</span>
+                </a>
+                <ul class='sub'>
+                    <li><a id='enrollment-sub' href='enrollment.php'>Enrollment</a></li>
+                    <li><a id='set-up' href='enrollment.php?page=setup'>Set Up</a></li>
+                    <li><a id='section' href='section.php'>Section</a></li>
+                    <li><a id='sub-classes' href='section.php?page=sub_classes'>Subject Class</a></li>
+                </ul>
+            </li>";
+    $award_menu_item = "<li class='sub-menu'>
+                <a id='awards' href='award.php'>
+                    <i class='bi bi-award-fill'></i>
+                    <span>Awards</span>
+                </a>
+            </li>";
+}
 ?>
-<!DOCTYPE html>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
 <header class="header black-bg">
@@ -46,24 +67,13 @@ $school_year = $_SESSION['school_year'];
                     <span>Curriculum Management</span>
                 </a>
                 <ul class="sub">
-                    <li><a id="school-yr" href="schoolYear.php">School Year</a></li>
                     <li><a id="curriculum" href="curriculum.php">Curriculum</a></li>
                     <li><a id="program" href="program.php">Program/Strand</a></li>
                     <li><a id="subject" href="subject.php">Subject</a></li>
+                    <li><a id="school-yr" href="schoolYear.php">School Year</a></li>
                 </ul>
             </li>
-            <li id="enrollment" class="sub-menu">
-                <a href="javascript:;">
-                    <i class="fa fa-tasks"></i>
-                    <span>Enrollment Management</span>
-                </a>
-                <ul class="sub">
-                    <li><a id="enrollment-sub" href="enrollment.php">Enrollment</a></li>
-                    <li><a id="set-up" href="enrollment.php?page=setup">Set Up</a></li>
-                    <li><a id="section" href="section.php">Section</a></li>
-                    <li><a id="sub-classes" href="section.php?page=sub_classes">Subject Class</a></li>
-                </ul>
-            </li>
+            <?php echo $enroll_menu_item; ?>
             <li id="student" class="sub-menu">
                 <a href="javascript:;">
                     <i class="fa fa-book"></i>
@@ -80,12 +90,7 @@ $school_year = $_SESSION['school_year'];
                     <span>Faculty</span>
                 </a>
             </li>      
-            <li class="sub-menu">
-                <a id="awards" href="award.php">
-                    <i class="bi bi-award-fill"></i>
-                    <span>Awards</span>
-                </a>
-            </li>
+            <?php echo $award_menu_item; ?>
             <li class="sub-menu">
                 <a id='signatory' href="signatory.php">
                     <i class="fa fa-pencil-square-o"></i>
