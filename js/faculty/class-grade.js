@@ -152,7 +152,6 @@ $(function() {
             });        
             $('.grading-confirmation').modal('hide');
             $(".number").attr('readOnly',true);
-            $(".save").hide();
         } else {
             var select = document.getElementsByClassName('markings');
             select.forEach((element) => {

@@ -29,7 +29,7 @@ include_once("../inc/head.html"); ?>
                             require("../admin/enrollment/enrollmentForm.php");
                             // require("../admin/student/studentForm.php");
                             $bootstrapJS = '';
-                            $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
+                            $js = '<script type="text/javascript" src="../js/student/enrollment.js"></script>';
 
                             ?>
                         </div>

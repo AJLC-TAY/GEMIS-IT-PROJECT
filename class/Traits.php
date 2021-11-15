@@ -733,6 +733,7 @@ trait Enrollment
         # enrollment
         $school_info = [$_POST['track'],  $_POST['program']];
         [$track, $program] = $this->preprocessData($school_info);
+
         $this->prepared_query(
             "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code) "
                 . "VALUES (NOW(), 0, ?, ?, ?, ?, ?);",  // null for date_first_attended, and section code
@@ -747,7 +748,7 @@ trait Enrollment
         );
         echo "Add School info ended...<br>";
         # promotion
-        if ($_SESSION['user_type'] != 'ST' AND $_SESSION['promotion'] != 1){
+        
                 echo 'Adding promotion record...<br>';
                         $this->prepared_query(
                             "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
@@ -769,7 +770,6 @@ trait Enrollment
                             "issis" . "iiiii"
                         );
                         echo 'Added promotion record...<br>';
-        }
         
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
@@ -779,6 +779,100 @@ trait Enrollment
             $_SESSION['enrolled'] = TRUE;
             header("Location: finished.php");
         }
+    }
+
+    
+    /**
+     * Update db - editable fields
+     * Create new enrollment entity
+     */
+    public function enrollOldStudent(){
+
+        $studparams = [$_POST['age'], $_POST['religion'], $_POST['cp-no'],$_POST['lrn']];
+
+        $address = [
+            $_POST['house-no'], $_POST['street'], $_POST['barangay'],
+            $_POST['city-muni'], $_POST['province'], $_POST['zip-code']
+        ];
+
+        $father = $this->prepareParentData('f');
+        $mother = $this->prepareParentData('m');
+        $guardian = $this->prepareParentData('g');
+
+        $params = $this->preprocessData($studparams);
+        $address = $this->preprocessData($address);     
+
+        //UPDATE STUDENT INFO
+        $query = "UPDATE `student` SET `age`=?,`religion`=?,`cp_no`=? WHERE `LRN`=?;";
+
+        echo "Student info updated. <br>";
+
+        $student_id = $_SESSION['stud_id'];
+        $father[] = $student_id;
+        $mother[] = $student_id;
+        $guardian[] = $student_id;
+
+        // update parent info
+        $parent_q = "UPDATE `parent` SET `cp_no`=?,`occupation`=? WHERE `stud_id`=?";
+        // $f_query = "$general_q ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        // $m_query = "$general_q cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $g_query = "UPDATE `guardian` SET `guardian_first_name`=?,`guardian_middle_name`=?,`guardian_last_name`=?,`relationship`=?,`cp_no`=? WHERE `stud_id`=?; ";
+        $this->prepared_query($parent_q, $father, "isi");
+        $this->prepared_query($parent_q, $mother, "isi");
+        $this->prepared_query($g_query, $guardian, "ssssii");
+        echo "Parent info updated. <br>";
+
+        // update address info
+        $address[] = $student_id;
+        $a_query = "UPDATE `address` SET `home_no`=?,`street`=?,`barangay`=?,`mun_city`=?,`province`=?,`zip_code`=? WHERE `stud_id`=?;";
+        $this->prepared_query($a_query, $address, "ssssiii");
+
+        echo "Address info updated. <br>";
+        echo "$student_id <br>";
+
+        //create new enrollment entity
+
+        //retrieve latest existing enrollment detail
+        $result = $this->query("SELECT * FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
+        $previousDeets = [];
+        while ($row = mysqli_fetch_row($result)) {
+            $previousDeets[] = [
+                'first_attended' => $row['date_first_attended'],
+                'yr_lvl' => $row['enrolled_in'],
+                'sem' => $row['semester'],
+                'curr_code' => $row['curr_code'],
+                'section' => $row['section_code'],
+                'prog_code' => $row['prog_code'],
+            ];
+        }
+
+        $school_year = $_SESSION['sy_id'];
+        $school_info = [$_POST['track'],  $_POST['program']];
+        [$track, $program] = $this->preprocessData($school_info);
+        
+        $values = [$previousDeets['first_attended'],
+                $_POST['grade-level'],
+                $_POST['semester'],
+                $student_id,
+                $school_year, 
+                $track,
+                $_POST['program']];
+        
+        $params = "iiiisss";
+
+        if($previousDeets['sem'] == 1) {
+            $add = ", section_code";
+            $add_q = ", ?";
+            $params .="s";
+            $values[] = "{$previousDeets['section']}";
+        } else {
+            $add = "";
+            $add_q = "";
+        }
+        $this->prepared_query(
+            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
+                . "VALUES (NOW(), 1, ?, ?, ?, ?, ?, ?, ?, ? $add_q);", $values, $params);
+
     }
 
     public function getEnrollees()
@@ -1301,33 +1395,30 @@ trait Enrollment
         $address = $this->preprocessData($address);
 
         // Image validation
-        // $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
-        // $form_img = $this->validateImage($_FILES['image-form'], 8000000);
-        // $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
+        $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
+        $form_img = $this->validateImage($_FILES['image-form'], 8000000);
+        $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
 
-        // $img_list = [$psa_img, $form_img, $profile_img];
-        // foreach ($img_list as $i => $image) {
-        //     // add image to the parameters if valid
-        //     if ($image['status'] == 'valid') {
-        //         # Upload image
-        //         $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
-        //         $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
-        //         // for editing
-        //         //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-        //         //                    $current_img_path = $_POST["current_image_path"];
-        //         //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-        //         //                        unlink("../".$current_img_path);                                 // delete current image
-        //         //                    }
-        //         //                }
-        //         move_uploaded_file($image['file'], "../" . $fileDestination);
-        //         echo "Successfully uploaded image<br>";
-        //         $params[] = $fileDestination;
-        //     }
-        // }
-        $params[] = "test";
-        $params[] = "test";
-        $params[] = "test";
-
+        $img_list = [$psa_img, $form_img, $profile_img];
+        foreach ($img_list as $i => $image) {
+            // add image to the parameters if valid
+            if ($image['status'] == 'valid') {
+                # Upload image
+                $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
+                $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
+                // for editing
+                //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+                //                    $current_img_path = $_POST["current_image_path"];
+                //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+                //                        unlink("../".$current_img_path);                                 // delete current image
+                //                    }
+                //                }
+                move_uploaded_file($image['file'], "../" . $fileDestination);
+                echo "Successfully uploaded image<br>";
+                $params[] = $fileDestination;
+            }
+        }
+        
         // Values are valid; hence, create a user and add the created user id to the parameter
         $user_id = $this->createUser("ST");
         $params[] = $user_id;

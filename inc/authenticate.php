@@ -60,6 +60,7 @@ $con = $dbConfig->connect();
 
                         if ($u_type == 'ST'){
                             $_SESSION['promote'] = $u_row['promote'];
+                            $_SESSION['stud_id'] = $u_row['stud_id'];
                         }
 
                         # school year
