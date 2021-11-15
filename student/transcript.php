@@ -141,9 +141,7 @@ include_once("../inc/head.html"); ?>
                                         <h4><b>Transcript of Records</b></h4>
                                         <h3><?php echo $_SESSION['User'] ?></h3>
                                     </span>
-                                    <div class="mt-4">
-                                        <button onclick='generatePDF(`<?php echo $filename; ?>`)' class=" btn btn-primary"><i class="bi bi-download me-2"></i>Download</button>
-                                    </div>
+                                    
                                 </div>
                             </header>
                             <hr class='m-1'>
@@ -178,7 +176,6 @@ include_once("../inc/head.html"); ?>
                             // $date = date("F j, Y");
                             $trackStrand = $admin->getTrackStrand();
                             $attendance = $admin->getStudentAttendance(1);
-                            // echo json_encode($grades);
 
                             function prepareGradeRecordsHTML($grade)
                             {
@@ -232,8 +229,8 @@ include_once("../inc/head.html"); ?>
                                             <h5 class="text-center"><b>Transcript of Record</b></h5>
                                             <?php
 
-                                            renderSemesterGradeTable('1st Semester', $grades['1']);
-                                            renderSemesterGradeTable('2nd Semester', $grades['2']);
+                                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1']);
+                                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2']);
                                             ?>
                                             <br>
                                         </li>

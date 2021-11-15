@@ -31,7 +31,7 @@ $title =  "<div class='d-flex justify-content-between'>
     <h3 class='mb-0'>$sub_name</h3>
     <div class='buttons-con d-flex'>
         <button class='btn m-auto text-danger pt-1 px-1 archive-option'  id = '$sub_code'  > <i class='bi bi-archive me-1 ' ></i>Archive</button>
-        <a href='subject.php?sub_code=$sub_code&action=edit&prog_code=$prog_code' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
+        <a href='subject.php?sub_code=$sub_code&action=edit". ($sub_type !== 'specialized' ? '' : '&prog_code='.$prog_code) ."' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
     </div>
 </div>
 <hr class='mb-1'>";

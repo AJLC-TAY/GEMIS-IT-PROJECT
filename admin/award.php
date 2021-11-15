@@ -1,6 +1,9 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
+if (!isset($_SESSION['sy_id'])) {
+    header("Location: index.php");
+}
 ?>
 <title>Award | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>

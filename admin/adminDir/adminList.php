@@ -58,7 +58,7 @@ $user = $admin->getAdministrator($user_id);
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h5><b>OTHER ADMINS</b></h5>
          <span>
-            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'><i class="bi bi-plus me-2"></i>Add admin</a>
+            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'><i class="bi bi-plus-lg me-2"></i>Add admin</a>
          </span>
      </div>
      <div class="card w-100 h-auto bg-light">
@@ -166,7 +166,7 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary btn-sm" value="Change">
+                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
                 </div>
             </form>
         </div>

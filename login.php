@@ -1,11 +1,14 @@
 <?php
-
 include_once("class/config.php");
 include_once("inc/head.html");
 $con = (new dbConfig())->connect();
 $row_temp = mysqli_query($con, "SELECT can_enroll FROM schoolyear WHERE status = '1';");
-$sy = mysqli_fetch_row($row_temp);
-$enroll = $sy[0];
+if (mysqli_num_rows($row_temp) == 0) {
+    $enroll = 0;
+} else {
+    $sy = mysqli_fetch_row($row_temp);
+    $enroll = $sy[0];
+}
 ?>
 <title>Login | GEMIS</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +23,7 @@ $enroll = $sy[0];
         <div class="d-flex justify-content-center h-50">
             <div class="user_card">
                 <div class="d-flex justify-content-center">
-                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo"> </div>
+                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo" style="width: 100%; height: 100%;">  </div>
                 </div>
                 <?php if (isset($_GET['Empty'])) { ?>
                     <div class="alert-light text-danger text-center py-3"><?php echo $_GET['Empty'] ?></div>

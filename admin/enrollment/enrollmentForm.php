@@ -21,13 +21,7 @@ switch ($_SESSION['user_type']) {
         break;
 }
 
-if ($_SESSION['user_type'] == 'ST') {
-    if ($_SESSION['promote'] == 1) {
-        $readonly = 'readonly';
-        $disabled = 'disabled';
-    }
-    
-}
+
 
 
 $stud_id = '';
@@ -220,7 +214,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
         </div>
     </div>
 </header>
-<form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
+<form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="../admin/action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
             <div class="step mx-lg-5" data-target="#test-l-1">
@@ -536,7 +530,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <!-- STEP 3 -->
             <div id="test-l-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-                    <?php if ($_SESSION['user_type'] != 'ST') { ?>
+                    
                         <label class="col-form-label me-4">Balik Aral Student? </label>
                         <div class="d-flex">
                             <?php
@@ -593,7 +587,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
                             <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                         </div>
-                    <?php } ?>
+                    
                     <div class="row">
                         <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                         <div class='col-md-4'>
@@ -610,8 +604,6 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                     </select>
                                 </div>
                             </div>
-
-
 
                             <div class='col-md-3'>
                                 <label class="col-form-label">Strand</label>
@@ -640,7 +632,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <label class="col-form-label">Semester</label>
                             <div class="d-flex">
                                 <?php $sem = [1 => "first", 2 => "second"];
-                                $val = 2;
+                                $val = 1;
                                 foreach ($sem as $id => $value) {
                                     echo "<div class='form-check me-3'>
                                                 <input class='form-check-input' type='radio' name='semester' id='$id'  value='$id' " . (($val == $id) ? "checked" : "") . " required>

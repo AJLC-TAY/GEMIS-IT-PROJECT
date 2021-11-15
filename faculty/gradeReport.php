@@ -5,73 +5,8 @@ include_once("../inc/head.html");
 <title>Grade Report | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
-<link href='../css/report.css' rel='stylesheet'>
-<style>
-
-    /*Content*/
-    img {
-        height: 100px;
-        width: 100px;
-    }
-
-    td {
-        border: 0.5px solid #C5C5C5;
-    }
-
-    .fsize {
-        font-size: 15px;
-    }
-
-    .fsizes {
-        font-size: 12px;
-    }
-
-    .perLine {
-        line-height: 45px;
-    }
-
-    .parentLine {
-        display: flex;
-    }
-
-    .subLine {
-        min-width: 150px;
-        line-height: 45px;
-    }
-
-    .subLine2 {
-        min-width: 170px;
-    }
-
-    .subLine3 {
-        min-width: 350px;
-    }
-
-    .subLine4 {
-        min-width: 250px;
-    }
-
-    .ind {
-        text-indent: 10px;
-    }
-
-    .par {
-        text-indent: 50px;
-        text-align: justify;
-        font-size: 15px;
-        word-wrap: break-word;
-    }
-
-    .right {
-        float: right;
-    }
-
-    /*Footer*/
-    .signatory-con {
-        width: 50%;
-        display: table-column;
-    }
-</style>
+<link href="http://fonts.cdnfonts.com/css/bookman-old-style" rel="stylesheet">
+<link href='../css/gradeReport.css' rel='stylesheet'>
 
 </head>
 <body>
@@ -83,7 +18,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/adminSidebar.php'); ?>
+        <?php include_once('../inc/facultySidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -114,7 +49,7 @@ include_once("../inc/head.html");
     <script src="../js/common-custom.js"></script>
     <script>
         $(function() {
-            preload("#students");
+            preload("#advisory");
             hideSpinner();
         });
     </script>

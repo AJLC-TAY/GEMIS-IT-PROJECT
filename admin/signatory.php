@@ -57,7 +57,7 @@ $faculty = $admin->listFaculty();
                                                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                                                 </span>
                                                 <div>
-                                                    <button id="delete-signatory" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
+                                                    <button id="delete-signatory" class="btn btn-sm btn-outline-danger table-opt"><i class="bi bi-trash me-2"></i>Delete</button>
                                                 </div>
                                             </div>
                                             <tr>
@@ -100,6 +100,7 @@ $faculty = $admin->listFaculty();
                 <div class="modal-body">
                     <form id="signatory-form" method="POST">
                         <input type="hidden" name="action" value="">
+                        <input id="sig-id" type="hidden" name="sig-id" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="container">
                             <div class="row align-content-center needs-validation" novalidate>

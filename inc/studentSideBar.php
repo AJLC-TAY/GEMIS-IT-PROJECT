@@ -10,7 +10,7 @@
  $enrollment_item = '';
  if ($_SESSION['promote'] == 1 AND $_SESSION['enroll_status'] == 1) {
     $enrollment_item = " <li class='sub-menu'>"
-                ."<a id='enrollment' href='enrollment.php?action=edit'>"
+                ."<a id='enrollment' href='enrollment.php'>"
                     ."<i class='fa fa-tasks'></i>"
                     ."<span>Enrollment</span>"
                 ."</a>"

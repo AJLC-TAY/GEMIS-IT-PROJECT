@@ -74,7 +74,6 @@ $admin->resetPassword(3);
 // }
 
 $subject = $admin->getSubject();
-print_r($subject);
 // echo json_encode($tester['schedule']);
 // $res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
 // $sect_code = mysqli_fetch_row($res)[0];

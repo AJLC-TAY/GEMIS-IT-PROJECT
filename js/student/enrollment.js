@@ -47,10 +47,10 @@ $(function() {
     });
 
     /** Validate Form */
-    $(document).on("click", "#enrollment-form [type='submit']", function (e) {
-        console.log("submit clicked");
+    // $(document).on("click", "#enrollment-form [type='submit']", function (e) {
+    //     console.log("submit clicked");
         
-    });
+    // });
 
     
      /** Indigenous Group */
