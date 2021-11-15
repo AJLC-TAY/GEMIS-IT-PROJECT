@@ -1,70 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-
 body {
-<<<<<<< HEAD
-    background-color: #e7e7e7;
-    background-size: cover!important;
-    background-repeat: no-repeat!important;
-    font-family: 'Poppins', sans-serif;
-  }
-  html, body {
-    margin: 0;
-    height: 100%;
-  }
-  
-  .user_card {
-    height: 430px;
-    width: 400px;
-    margin-bottom: auto;
-    background: #fff;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 5px;
-  }
-  .login_name_wrapper {
-      height: 20%!important;
-      min-height: 100px;
-      margin-bottom: auto;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      color: #5dbb63;
-      font-size: 35px;
-      font-weight: bold;
-      text-transform: uppercase;
-  }
-  .login_logo_container {
-    position: absolute;
-    height: 37%;
-    width:42%;
-    top: -75px;
-    border-radius: 50%;
-    padding: 10px;
-    text-align: center;
-  }
-  .login_logo {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-  .form_container {
-    margin-top: 70px;
-  
-  }
-  .form_container_fp {
-    margin-top: 10px;
-  }
-=======
   background-color: #e7e7e7;
   background-size: cover !important;
   background-repeat: no-repeat !important;
@@ -75,7 +10,6 @@ body {
   margin: 0;
   height: 100%;
 }
->>>>>>> bd43d632bd88f2e75f10cfc6a30e236c78b82f35
 
 .container {
   width: 100%;
