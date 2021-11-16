@@ -21,6 +21,7 @@ $(function () {
       }
     }
   });
+
   // var codes = '<?php echo json_encode($currarray); ?>';
   // $.mockjax({
   //   url: "unique.action",
@@ -122,8 +123,8 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#nextButton").on('click', function(){
-  $("#enrollment-form").on("nextButton", function(event) {
+  $("#stepper").on('click', function(){
+  $("#enrollment-form").on("stepper", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -410,11 +411,6 @@ $(function () {
   //     }
   //   }
   // });
-})
-$('#add-modal').on('shown.bs.modal', function () {
-  $('#myInput').validate({
-
-  })
 })
   //submit done, unique rule left, for implementation
   $("#curriculum-form").on("submit", function(event) {
