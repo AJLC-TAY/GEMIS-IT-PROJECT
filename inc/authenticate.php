@@ -44,7 +44,7 @@ $con = $dbConfig->connect();
                         $_SESSION['id'] = $u_row['id'];
                         $_SESSION['user_id'] = $id_no;
 
-                        $_SESSION['user_type'] = $u_type;
+                        $_SESSION['user_type'] = trim($u_type);
 
                         # get roles if user type is faculty
                         if ($u_type == 'FA') {

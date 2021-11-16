@@ -84,7 +84,6 @@ if (!isset($_SESSION['sy_id'])) {
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <!-- BOOTSTRAP TABLE JS -->
     <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->

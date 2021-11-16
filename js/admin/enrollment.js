@@ -141,5 +141,13 @@ $(function() {
         }
     });
 
+    $(document).on("click", ".to-transferee-form", function() {
+        let strandCode = $("#program-select").val();
+        $.get(`getAction.php?data=schedule&code=${strandCode}`, function (data) {
+            console.log(data);
+
+        });
+    });
+
     hideSpinner();
 });

@@ -549,7 +549,6 @@ class Administration extends Dbconfig
 
 
 
-    // UPDATE ---> pacheeeeck - ben
     public function editGrades()
     {
         $stud_id = $_POST['stud_id'];
@@ -1186,7 +1185,6 @@ class Administration extends Dbconfig
 
     public function getProgram()
     {
-        echo $_GET['prog_code'];
         $result = $this->prepared_select("SELECT * FROM program WHERE prog_code=?;", [$_GET['prog_code']]);
         $row = mysqli_fetch_assoc($result);
         return new Program($row['prog_code'], $row['curr_code'], $row['description']);
@@ -1271,8 +1269,11 @@ class Administration extends Dbconfig
         echo json_encode($subjectList);
     }
 
-    public function getSubjectScheduleData($prog_code = NULL)
+    public function getSubjectScheduleData($prog_code = NULL, $is_JSON = NULL)
     {
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $sy_id = $_SESSION['sy_id'] ?? NULL;
         $result = NULL;
 
@@ -1301,6 +1302,11 @@ class Administration extends Dbconfig
         $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '$sy_id'  $prog_condition;");
         while ($row = mysqli_fetch_assoc($result)) {
             $subjectList['schedule'][$row['prog_code']]["data[" . $row['for_grd_level'] . "][" . $row['sub_semester'] . "][" . $row['sub_type'] . "][]"][] =  $row['sub_code'];
+        }
+
+        if ($is_JSON) {
+            echo json_encode($subjectList);
+            return;
         }
         return $subjectList;
     }

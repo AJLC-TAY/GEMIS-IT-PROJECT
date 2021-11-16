@@ -5,7 +5,6 @@ include_once("../inc/head.html");
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -21,7 +20,7 @@ include_once("../inc/head.html");
             <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="row ps-3">
+                        <div class="row mt ps-3">
                             <?php
                             if (isset($_GET['code'])){
                                 include_once("curriculum/curriculumView.php"); 

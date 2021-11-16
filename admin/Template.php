@@ -3,7 +3,6 @@ include_once("../inc/head.html"); ?>
 <title>Section | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -20,7 +19,6 @@ include_once("../inc/head.html"); ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-
                             <!-- TABLE TEMPLATE -->
                             <div id="toolbar" class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="fw-bold">NAME LIST</h5>
@@ -57,7 +55,6 @@ include_once("../inc/head.html"); ?>
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <!-- MODAL -->
     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -84,7 +81,5 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-
 </body>
-
 </html>

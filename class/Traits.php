@@ -75,7 +75,7 @@ trait School
 
         $queryOne = '';
         if (is_null($sy_id)) {
-            $queryOne = "SELECT * FROM subject";
+            $queryOne = "SELECT * FROM subject;";
         } else {
             $queryOne = (isset($_GET['prog_code']))
                 ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
@@ -153,17 +153,19 @@ trait UserSharedMethods
      */
     public function createUser(String $type, $is_default = FALSE): int
     {
+        $user_id = '';
         if ($is_default) {
             define("ID", "7264723646");
             define("PASSWORD", "AD7264723646");
+            $user_id = PASSWORD;
             $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('" . ID . "', NOW(), '$type', '" . PASSWORD . "');");
         } else {
-            $result = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
-            $PASSWORD = mysqli_fetch_row($result)[0];
-            $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
-            $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
+            $this->query("INSERT INTO user (date_last_modified, user_type) VALUES (NOW(), '$type');");
+            $user_id = $type.mysqli_insert_id($this->db);
+            $PASSWORD = password_hash($user_id, PASSWORD_DEFAULT);
+            $this->query("UPDATE user SET password = '$PASSWORD' WHERE id_no = '$user_id';");
         }
-        return mysqli_insert_id($this->db);  // Return User ID ex. 123456789
+        return $user_id;  // Return User ID ex. 123456789
     }
 
     /**

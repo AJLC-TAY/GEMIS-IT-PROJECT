@@ -2,176 +2,174 @@
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <body>
-<!--<form action="action.php" method="post">-->
-<!---->
-<!--    <input type="submit" name="validate" value="Submit">-->
-<!--    <input type="submit" name="reject" value="Accept">-->
-<!---->
-<!--</form>-->
-<!---->
-<!--<ul id="container"></ul>-->
-<!--<template id="test">-->
-<!--    <li data-id='%code%' class='tile card shadow-sm p-0 position-relative'>-->
-<!--        <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='curriculum.php?code=%code%'></a>-->
-<!--        <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>-->
-<!--            <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>-->
-<!--            <ul class='dropdown-menu' style='z-index: 99;'>-->
-<!--                <li><a class='dropdown-item' href='curriculum.php?code=%code%&state=edit'>Edit</a></li>-->
-<!--                <li><button data-name='%name%' class='archive-option dropdown-item' id='%code%'>Archive</button></li>-->
-<!--                <li><button data-name='%name%' class='delete-option dropdown-item' id='%code%'>Delete</button></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--        <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>-->
-<!--            <div class='tile-content'>-->
-<!--                <h4 class='card-title text-break'>%name%</h4>-->
-<!--                <p class='card-text text-break'>%desc%</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </li>-->
-<!--</template>-->
-<!---->
-<!--<div class="">-->
-<!--    <a href="enrollment/enrollmentReport.php" target="_blank" class="btn btn-sm btn-primary" id='export'>Export</a>-->
-<!--</div>-->
-<?php
-//$sy_id = 9;
-//$dir_path = "../uploads/student/$sy_id";
-//$cred_dir_path = "../uploads/credential/$sy_id";
-//if (!file_exists($dir_path)) {
-//    mkdir($dir_path);
-//}
-//if (!file_exists($cred_dir_path)) {
-//    mkdir($cred_dir_path);
-//}
-
-//unlink("../uploads/faculty/1633440070_615c5146b02472.52287926.jpg");
-
-include '../class/Administration.php';
-$admin = new Administration();
-$admin->resetPassword(3);
-//$result = $admin->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '120087';");
-//$row = mysqli_fetch_row($result);
-//print_r($row);
-//foreach([$row[0], $row[1], $row[2]] as $path) {
-//    $path = "../$path";
-//    echo $path;
-//    if (file_exists($path)) {
-//        echo "$path<br>";
-////        unlink($path);
-//    }
-//}
-// $tester = $admin->getSubjectScheduleData('TVL-E');
-// $data = [];
-// foreach($tester['schedule'] as $prog => $prog_data) {
-//     foreach($prog_data as $grade => $grade_data) {
-//         foreach($grade_data as $sem => $sem_data) {
-//             foreach($sem_data as $type => $codes) {
-//                 $data[$prog]["[$grade][$sem][$type][]"] = $codes;
-//             }
-//         }
-//     }
-//     // ['ABM']['11']['1']['core']
-// }
-
-$subject = $admin->getSubject();
-// echo json_encode($tester['schedule']);
-// $res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
-// $sect_code = mysqli_fetch_row($res)[0];
-// print_r($sect_code);
-// if (!$sect_code) {
-//     echo "test";
-// }
-
-// $admin->editAcademicDays();
-// echo json_encode($admin->getConductAward());
-//$_SESSION['sy_id'] = 13;
-//print_r($admin->getEnrollmentCurriculumOptions());
-//print_r($admin->get_sy_info(9));
-//session_start();
-//$_SESSION['sy_id'] = 9;
-//print_r($admin->listAllSubjectClasses());
-//$img = $admin->getFaculty(37)->get_id_photo();
-//print_r($img);
-//echo "<img src='../upload/student/$img'>";
-
-// print_r($admin->listSignatory());
-// $admin->addSection(11, 'ABM', 1, 'C', 29, 54 );
-//$admin->validateEnrollment(120089, 15, 1);  // 0 = pending 1 = accepted/ enrolled 2 cancelled
-// echo json_encode($admin->getInitSYData());
-// print_r($admin->listNotAdvisers());
-
-
-// echo "jtest";
-// echo json_encode($admin->createUser('ST'));
-//$admin->getEnrollmentReportData(true);
-//
-//$tracks = [];
-//$track_list = $_POST['tracks'];
-//foreach($track_list as $track) {
-//	$progs = $_POST["$track-programs"];
-//	foreach($progs as $prog) {
-//		$prog = [$prog => [$_POST["$prog-a-count"], $_POST["$prog-r-count"]]];
-//		$tracks[$track] = $prog;
-//	}
-//}
-
-
-
-
-    /**
-     * Trims each element of the array and make each null if empty.
-     * Returns a new array.
-     * @param   array   $params
-     * @return  array
-     */
-//    function preprocessData(array $params)
-//    {
-//        return array_map(function($e) {
-//            return isset($e);
-////            $e = trim($e);
-////            return  $e ?? NULL;
-//        }, $params);
-//    }
-//    $test = ['', 0, NULL, 'TeST'];
-//    print_r(Administration::preprocessData($test));
-
-?>
-
-<form action="action.php" id="image-form" enctype="multipart/form-data" method="POST" class="form-control">
-    <input type="hidden" name="action" value="validateImage">
-    <div class="d-flex">
-        <input type="file" name="image" accept="image/jpeg" class="form-control">
-        <input type="submit" class="form-control btn btn-success" form="image-form" value="Submit">
+<div class="card w-100 h-auto mt-4 p-4">
+    <h4 class="fw-bold">Transferee Assessment form</h4>
+    <div class="border p-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row justify-content-center align-content-center">
+                        <label for="school-last-attended" class="col-form-label col-md-3">School Last Attended</label>
+                        <div class="col-md-9">
+                            <textarea id="school-last-attended" name="trans-school" class="form-control form-control-sm" placeholder="Enter school name"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row justify-content-center align-content-center">
+                        <label for="school-last-attended" class="col-form-label col-md-3">Track</label>
+                        <div class="col-md-9">
+                            <input type="text" name="trans-track" class="form-control form-control-sm" placeholder="Enter track (ex. ACADEMIC)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row justify-content-center align-content-center">
+                        <label for="school-last-attended" class="col-form-label col-md-3">Semester</label>
+                        <div class="col-md-9">
+                            <input type="text" name="trans-semester" class="form-control form-control-sm" placeholder="Enter semester (ex. First)">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row justify-content-center align-content-center">
+                        <label for="school-last-attended" class="col-form-label col-md-3">School Year</label>
+                        <div class="col-md-9">
+                            <input type="text" name="trans-sy" class="form-control form-control-sm" placeholder="Enter school year (ex. 20XX - 20XX)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
-<?php include '../inc/footer.html'; ?>
-<script>
-    let template = $("#test")
-    let array = [{code: '1', name: 'test1', desc: 'desc'}, {code: '1', name: 'test1', desc: 'desc'}, {code: '1', name: 'test1', desc: 'desc'}]
-    console.log(template)
-    array.forEach(e => {
-        let clone = template.html()
-        clone.replace("%code%", e.code)
-        clone.replace("%name%", e.name)
-        clone.replace("%desc%", e.desc)
-  
-        $("#container").append(clone)
-    })
+    <div class="subject-list mt-3">
+        <h6>LIST OF SUBJECTS FOR <span id="chosen-subject"></span></h6>
+        <div class="container">
+            <table id="transfer-table" class="table table-sm table-bordered table-striped">
+                <thead class="text-center">
+                    <tr>
+                        <td colspan="2">GRADE 11</td>
+                        <td colspan="2">GRADE 12</td>
+                    </tr>
+                    <tr>
+                        <td>FIRST SEMESTER</td>
+                        <td>SECOND SEMESTER</td>
+                        <td>FIRST SEMESTER</td>
+                        <td>SECOND SEMESTER</td>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-    $(function() {
-        // $(document).on("click", "#export", function() {
-        //     $.post("enrollment/enrollmentReport.php")
-        // })
-    })
+<!--table cell template-->
+<template id="table-cell-template">
+    <td>
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    <input id="%ID%" type="checkbox" class="form-check-input" name="%ID%">
+                </div>
+                <label for="%ID%" class="form-check-label col-form-label col-10 py-0">
+                    %SUBJECTNAME%
+                </label>
+            </div>
+        </div>
+    </td>
+</template>
+<?php include_once ("../inc/footer.html"); ?>
+
+<script>
+    let data =   {
+        "data":
+            [
+                {
+                    "grade" : "11",
+                    "data" : [
+                        {
+                            "semester": "1",
+                            "subjects": [
+                                {"sub_code": "BSMATH", "sub_name": "Business Math"},
+                                {"sub_code": "BSMATH", "sub_name": "Business Math"}
+                            ],
+                            "count": "2"
+                        },
+                        {
+                            "semester": "2",
+                            "subjects": [
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
+                            ],
+                            "count" : "3"
+                        }
+                    ]
+                },
+                {
+                    "grade" : "12",
+                    "data" : [
+                        {
+                            "semester": "1",
+                            "subjects": [
+                                {"sub_code": "BSMATH", "sub_name": "Business Math"},
+                                {"sub_code": "BSMATH", "sub_name": "Business Math"}
+                            ],
+                            "count": "2"
+                        },
+                        {
+                            "semester": "2",
+                            "subjects": [
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
+                            ],
+                            "count" : "4"
+                        }
+                    ]
+                }
+            ]
+    }
+    let test = data['data'];
+    let template = $("#table-cell-template").html();
+    let html = '';
+
+    let elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem;
+    elevenFirSem = test[0].data[0].count;
+    elevenSecSem = test[0].data[1].count;
+    twelveFirSem = test[1].data[0].count;
+    twelveSecSem = test[1].data[1].count;
+
+
+    function renderCellHTML(sub) {
+        if (sub) {
+            return template.replaceAll("%ID%", sub.sub_code).replace("%SUBJECTNAME%", sub.sub_name);
+        }
+        return "<td></td>";
+    }
+
+    let count = Math.max(elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem);
+    for (let i = 0; i < count; i++) {
+        html += '<tr>';
+        let subjectElevenFir = test[0].data[0].subjects[i] ?? "";
+        let subjectElevenSec = test[0].data[1].subjects[i] ?? "";
+        let subjectTwelveFir = test[1].data[0].subjects[i] ?? "";
+        let subjectTwelveSec = test[1].data[1].subjects[i] ?? "";
+        console.log(subjectElevenFir)
+        html += renderCellHTML(subjectElevenFir);
+        html += renderCellHTML(subjectElevenSec);
+        html += renderCellHTML(subjectTwelveFir);
+        html += renderCellHTML(subjectTwelveSec);
+        html += '</tr>';
+    }
+    console.log(html);
+   $("#transfer-table tbody").html(html);
 </script>
 
-
-
 </body>
-<!-- <script>
-	let response = <?php //echo json_encode($response); ?>;
-    console.log(response.data)
-    console.log(response.archived)
-</script> -->
-
 </html>

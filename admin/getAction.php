@@ -1,32 +1,24 @@
 <?php
 require_once('../class/Administration.php');
-
 $admin = new Administration();
-
 if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
     $admin->listAdministratorsJSON();
 }
-
 if (isset($_GET['data']) && $_GET['data'] == 'grdAdvisor') {
     $admin->getClass();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'classGrades') {
     $admin->getClassGrades();
 }
-
-
 if (isset($_GET['data']) && $_GET['data'] == 'program') {
     $admin->listProgramsUnderCurrJSON('program');
 }
-
 if (isset($_GET['data']) && $_GET['data'] == 'subjects') {
     $admin->listSubjectsJSON();
 }
-
 if (isset($_GET['data']) && $_GET['data'] == 'faculty') {
     $admin->listFacultyJSON();
 }
-
 if (isset($_GET['data']) && $_GET['data'] == 'student') {
     $admin->listStudentJSON();
 }
@@ -82,6 +74,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'adminCount') {
 }
 if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
     $admin->getExcellenceAwardData();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
+    $admin->getSubjectScheduleData($_GET['code'], TRUE);
 }
 ?>
 

@@ -98,7 +98,7 @@ if ($action === 'add') {
     }
 
     $button = "<div class='btn-con'>"
-                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</button>"
+                ."<a href='#' role='button' class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</a>"
                 ."<input type='submit' form='add-subject-form' class='submit-btn btn btn-success form-control w-auto' value='Submit' />"
             ."</div>";
 
@@ -255,7 +255,7 @@ if ($action === 'edit') {
     <form id='add-subject-form' method='POST'>
         <?php echo $input_sub_with_prog; ?>
         <input type='hidden' name='action' value='<?php echo $action; ?>Subject'>
-        <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
+        <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3 p-3'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
             <div class='container'>
