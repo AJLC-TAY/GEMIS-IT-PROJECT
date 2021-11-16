@@ -50,11 +50,11 @@ $(function () {
         $('#track-archive-modal').modal('hide');
     });
 
-    $("#curriculum-form").submit(function(e) {
-        e.preventDefault();
-        $.post("action.php", $(this).serializeArray(), (data) => {
-            window.location.href = `curriculum.php?code=${JSON.parse(data)}`;
-        });
-    });
+    // $("#curriculum-form").submit(function(e) {
+    //     e.preventDefault();
+    //     $.post("action.php", $(this).serializeArray(), (data) => {
+    //         window.location.href = `curriculum.php?code=${JSON.parse(data)}`;
+    //     });
+    // });
     hideSpinner();
 });

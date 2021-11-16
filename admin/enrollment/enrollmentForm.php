@@ -302,7 +302,6 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <!-- BIRTH INFO -->
                         <div class="col-md-4">
@@ -399,7 +398,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
                             <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
-                            <button class="btn btn-success next">Next</button>
+                            <button id="enroll-form-1" class="btn btn-success next">Next</button>
                         </div>
                     </div>
                 </div>

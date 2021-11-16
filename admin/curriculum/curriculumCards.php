@@ -80,10 +80,10 @@ $admin = new Administration();
                     <p><small class='text-secondary'>Please complete the following: </small></p>
                     <div class="form-group">
                         <label for="curr-code">Code</label>
-                        <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A" required />
+                        <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A"/>
                         <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
                         <label for="curr-name">Name</label>
-                        <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic" required>
+                        <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic">
                         <label for="curr-desc">Short Description</label>
                         <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                     </div>
@@ -185,7 +185,7 @@ $admin = new Administration();
     let curricula = <?php $admin->listCurriculumJSON(); ?>;
 </script>
 <!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
+<!-- <script src="../js/validation/jquery.validate.min.js"></script> -->
+<!-- <script src="../js/validation/additional-methods.min.js"></script>
 <script src="../js/validation/validation.js"></script>
-<script type="module" src="../js/admin/curriculum-card.js"></script>
+<script type="module" src="../js/admin/curriculum-card.js"></script> -->

@@ -48,9 +48,9 @@ include_once("../inc/head.html");
 </body>
 <!-- VALIDATION -->
 <script src="../js/validation/jquery.validate.min.js"></script>
-    <script src="../js/validation/jquery.mockjax.js"></script>
-    <script src="../js/validation/additional-methods.min.js"></script>
-    <script src="../js/validation/validation.js"></script>
+<script src="../js/validation/jquery.mockjax.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 <script>
     var codes = '<?php echo json_encode($currarray); ?>';
     $.mockjax({

@@ -49,6 +49,7 @@ $(function() {
     /** Stepper */ 
     $(document).on("click", ".next", function(e) {
         e.preventDefault();
+        // validation function
         stepper.next();
     });
     

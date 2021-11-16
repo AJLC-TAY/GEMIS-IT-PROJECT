@@ -95,8 +95,15 @@ $(function () {
     }
   })
 
+  $("#enroll-form-1").on("click", function(e) {
+    e.preventDefault();
+    alert("alert");
+    // var stepper = new Stepper($('#stepper')[0]);
+    // stepper.next();
+  });
+
   //unique rule, submit done, for implementation 
-  $("#prog-form").on("submit", function(event) {
+  $(document).on("submit", "#prog-form", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -413,13 +420,13 @@ $(function () {
   // });
 })
   //submit done, unique rule left, for implementation
-  $("#curriculum-form").on("submit", function(event) {
+  $(document).on("submit","#curriculum-form", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
       code: {
         required: true,
-        remote: "unique.action"
+        //remote: "unique.action"
       },
       name: {
         required: true
@@ -428,14 +435,42 @@ $(function () {
     messages: {
       code: {
         required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>',
-        remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
+        //remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
       },
       name: {
         required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
-      },
-      submitHandler: function(form) { 
-        form.submit();
-        return false;  //This doesn't prevent the form from submitting.
       }
+    },
+    submitHandler: function(form) { 
+      // form.submit();
+      // $("#curriculum-form").submit(function(e) {
+      //     e.preventDefault();
+          // $.post("action.php", form.serializeArray(), (data) => {
+          //     window.location.href = `curriculum.php?code=${JSON.parse(data)}`;
+          // });
+      // });
+
+      // $('#curriculum-form').submit(function(e) {
+        // e.preventDefault();
+        showSpinner();
+        // var form = $(this);
+        // var formData = $(this).serialize();
+        var formData = form.serialize();
+        $.post("action.php", formData, function(data) {
+            form.trigger('reset');
+            addModal.modal('hide');
+            console.log("New data: \n");
+            console.log(data);
+            // reload(JSON.parse(data));
+            hideSpinner();
+            // $(".no-result-msg").hide();
+            showToast('success', 'Curriculum successfully added');
+        });
+        // .fail(function () {
+
+        // });
+    // });
+      console.log(form);
+      return false;  //This doesn't prevent the form from submitting.
     }
-  })
+  });
