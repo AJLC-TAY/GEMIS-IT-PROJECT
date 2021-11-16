@@ -5,7 +5,6 @@ include_once("../inc/head.html");
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -21,13 +20,13 @@ include_once("../inc/head.html");
             <section class="wrapper ps-4">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="row ps-3">
+                        <div class="row mt ps-3">
                             <?php
-                            if (isset($_GET['code'])){
-                                include_once("curriculum/curriculumView.php"); 
+                            if (isset($_GET['code'])) {
+                                include_once("curriculum/curriculumView.php");
                                 $jsFilePath = "../js/admin/program.js";
                             } else {
-                                include_once("curriculum/curriculumCards.php"); 
+                                include_once("curriculum/curriculumCards.php");
                                 $jsFilePath = "../js/admin/curriculum-card.js";
                             }
                             ?>
@@ -47,21 +46,24 @@ include_once("../inc/head.html");
     <!-- TOAST END -->
 </body>
 <!-- VALIDATION -->
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/jquery.mockjax.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 <script>
-    var forms = document.querySelectorAll('.needs-validation');
-
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
+    var codes = '<?php echo json_encode($currarray); ?>';
+    $.mockjax({
+        url: "unique.action",
+        response: function(settings) {
+        var code = settings.data.code,
+            this.responseText = "true";
+        if ($.inArray(code, codes) !== -1) {
+            this.responseText = "false";
+        }
+        },
+        responseTime: 500
     });
 </script>
-
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

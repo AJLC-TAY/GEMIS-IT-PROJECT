@@ -9,10 +9,9 @@ if ($_SESSION['user_type'] == 'AD') {
     $archived_btn = "<button type='button' class='view-archive btn btn-secondary'><i class='bi bi-eye me-2'></i>View Archived Enrollees</button>";
 
     $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm  my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
-                <button id='export-opt' class='table-opt btn btn-dark btn-sm  my-1' title='Export'><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
                 <button id='archive-opt' class='table-opt btn btn-secondary btn-sm my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
 
-    $sy_filter = "<li class='col-3 mb-3 me-2'>
+    $sy_filter = "<li class='mb-3'>
                         <div class='input-group input-group-sm'>
                             <label class='input-group-text ' for='sy'>School Year</label>
                             <select class='filter-item form-select mb-0' id='sy'>
@@ -22,6 +21,7 @@ if ($_SESSION['user_type'] == 'AD') {
                                 }
                 $sy_filter.= "</select>
                         </div>
+                       
                     </li>";
                                 
     
@@ -52,7 +52,7 @@ if ($_SESSION['user_type'] == 'AD') {
     <div class="card w-100 h-auto bg-light">
         <div class="row justify-content-between mb-3">
             <!-- SEARCH BAR -->
-            <div class="col-lg-4 row">
+            <div class="col-lg-5 row">
                 <div class="col-8">
                     <input id="search-input" type="search" class="form-control form-control-sm m-1" placeholder="Search something here">
                 </div>
@@ -60,7 +60,7 @@ if ($_SESSION['user_type'] == 'AD') {
                     <button class="btn btn-primary btn-sm m-1" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse"><i class="bi bi-funnel me-2"></i>Filter</button>
                 </div>
             </div>
-            <div class="col-lg-4" >
+            <div class="col-lg-3" >
                 <?php echo $table_opts; ?>
             </div>
             <div class="col-lg-4 row">

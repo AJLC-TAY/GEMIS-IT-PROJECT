@@ -98,7 +98,7 @@ if ($action === 'add') {
     }
 
     $button = "<div class='btn-con'>"
-                ."<button class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</button>"
+                ."<a href='#' role='button' class='submit-and-again-btn form-control btn btn-secondary me-2 w-auto'>Submit & Add another</a>"
                 ."<input type='submit' form='add-subject-form' class='submit-btn btn btn-success form-control w-auto' value='Submit' />"
             ."</div>";
 
@@ -238,7 +238,6 @@ if ($action === 'edit') {
     $old_program = implode("", $old_program);
 }
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -256,13 +255,14 @@ if ($action === 'edit') {
     <form id='add-subject-form' method='POST'>
         <?php echo $input_sub_with_prog; ?>
         <input type='hidden' name='action' value='<?php echo $action; ?>Subject'>
-        <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3'>
+        <div class='row card bg-light w-100 h-auto text-start mx-auto mt-3 p-3'>
             <h5 class='text-start p-0 fw-bold'>SUBJECT DETAILS</h5>
             <hr class='mt-1'>
             <div class='container'>
                 <div class='form-row row'>
                     <div class='form-group col-lg-4'>
                         <label for='subjectCode1'  class='col-sm-3 col-form-label'>Code</label>
+                        <input value='<?php echo $subject_code; ?>' name = 'current_sub_code' type="hidden">
                         <input value='<?php echo $subject_code; ?>' type='text' name = 'code' class='form-control' id='sub-code' placeholder='Enter unique subject code'>
                     </div>
                     <div class='form-group col-lg-3'>
@@ -272,14 +272,14 @@ if ($action === 'edit') {
                         <?php echo $prog_opt; ?>
                     </div>
                     <div class='form-group col-lg-5'>
-                        <label for='subjectName1' class='  col-form-label'>Name</label>
-                        <input value="<?php echo $subject_name; ?>" name='name' class='form-control' id='sub-name' maxlength='100' placeholder='Enter subject name (max of 100 characters)'>
+                        <label for='sub-name' class='  col-form-label'>Name</label>
+                        <textarea name='name' class='form-control' id='sub-name' maxlength='250' placeholder='Enter subject name (max of 250 characters)'><?php echo $subject_name; ?></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class='row card w-100 h-auto bg-light my-4 mx-auto'>
-            <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | COREQUISITE SUBJECTS (if applicable)</h5>
+            <h5 class='text-start mb-3 fw-bold'>PREREQUISITE | CO-REQUISITE SUBJECTS (if applicable)</h5>
             <div class='accordion' id='accordionPanelsStayOpenExample'>
                 <div class='accordion-item'>
                     <h2 class='accordion-header' id='panelsStayOpen-headingOne'>
@@ -349,6 +349,5 @@ if ($action === 'edit') {
                 </div>
             </div>
         </div>
-        
     </form>
     <div class='d-flex flex-row-reverse'><?php echo $button; ?></div>

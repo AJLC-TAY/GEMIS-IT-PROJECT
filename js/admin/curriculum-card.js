@@ -27,24 +27,24 @@ reload();
 
 // custom script
 $(function() {
-    $('#curriculum-form').submit(function(e) {
-        e.preventDefault();
-        showSpinner();
-        var form = $(this);
-        var formData = $(this).serialize();
-        $.post("action.php", formData, function(data) {
-            form.trigger('reset');
-            addModal.modal('hide');
-            console.log("New data: \n");
-            console.log(data);
-            reload(JSON.parse(data));
-            hideSpinner();
-            $(".no-result-msg").hide();
-            showToast('success', 'Curriculum successfully added');
-        }).fail(function () {
+    // $('#curriculum-form').submit(function(e) {
+    //     e.preventDefault();
+    //     showSpinner();
+    //     var form = $(this);
+    //     var formData = $(this).serialize();
+    //     $.post("action.php", formData, function(data) {
+    //         form.trigger('reset');
+    //         addModal.modal('hide');
+    //         console.log("New data: \n");
+    //         console.log(data);
+    //         reload(JSON.parse(data));
+    //         hideSpinner();
+    //         $(".no-result-msg").hide();
+    //         showToast('success', 'Curriculum successfully added');
+    //     }).fail(function () {
 
-        });
-    });
+    //     });
+    // });
     eventDelegations();
     hideSpinner();
 });

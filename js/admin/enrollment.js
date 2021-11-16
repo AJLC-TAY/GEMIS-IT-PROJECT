@@ -49,6 +49,7 @@ $(function() {
     /** Stepper */ 
     $(document).on("click", ".next", function(e) {
         e.preventDefault();
+        // validation function
         stepper.next();
     });
     
@@ -139,6 +140,14 @@ $(function() {
                 $("#track-select").val(track);
                 break;
         }
+    });
+
+    $(document).on("click", ".to-transferee-form", function() {
+        let strandCode = $("#program-select").val();
+        $.get(`getAction.php?data=schedule&code=${strandCode}`, function (data) {
+            console.log(data);
+
+        });
     });
 
     hideSpinner();

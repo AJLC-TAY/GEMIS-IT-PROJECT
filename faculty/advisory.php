@@ -14,7 +14,6 @@ $sub_class_opn = '';
 $adv_table_display = '';
 // $sub_table_display = '';
 
-
 $adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
     $adv_table_display = '';
@@ -205,7 +204,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>let code = <?php echo $advisory['section_code'];?>;</script>
+    <script>let code = "<?php echo $advisory['section_code'];?>";</script>
     <?php echo $jsFilePath; ?>;
 
 </body>

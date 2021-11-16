@@ -192,14 +192,12 @@ $(function() {
         e.preventDefault();
         showSpinner();
         let formData = $(this).serializeArray();
-        formData.push({ name: 'action', value: 'initializeSY' });
 
         showToast('dark', 'Initializing school year ...');
         // console.log(formData);
         $.post("action.php", formData, function(data) {
-            let sy_code = JSON.parse(data);
+            let url = JSON.parse(data);
             let message = 'Redirecting to the initialized school year';
-            let url = `schoolYear.php?id=${sy_code}`;
             console.log(url);
             if (enrollAfter) {
                 message = 'Redirecting to the enrollment setup page';
@@ -260,36 +258,36 @@ $(function() {
 
     function createNewMonthInputItem(monthDesc, days) {
         return `<li class='form-control-sm row'>
-                    <label class='col-form-label-sm col-4'>${monthDesc}</label>
+                    <label class='col-form-label-sm col-4 fw-bold'>${monthDesc}</label>
                     <div class='col-5'>
-                        <input value='${days}' type='number' name='newmonth[${monthDesc}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
+                        <input value='${days}' type='number' name='newmonth[${monthDesc}]' class='text-center number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
                     </div>
                     <div class='col-3 text-center'>
-                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove-new'>Remove</button>
-                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                        <button class='btn btn-sm btn-outline-danger edit-opt' data-type='remove'><i class='bi bi-dash-circle'></i></button>
+                        <button class='btn btn-sm btn-secondary edit-opt' data-type='undo' style='display: none;'>Undo</button>
                     </div>
                 </li>`;
     }
 
-    // $(document).on("click", ".edit-month-btn", function () {
-    //     let idRow, modal, row, monthsOfSY;
-    //     idRow = $(this).attr("data-id");
-    //     modal = $("#month-modal");
-    //     row = syTable.bootstrapTable('getRowByUniqueId', idRow);
-    //     monthsOfSY = row.acad_months;
+    $(document).on("click", ".edit-month-btn", function () {
+        let syID, idRow, modal, row, monthsOfSY;
+        syID = $(this).attr("data-id");
+        modal = $("#month-modal");
+        // row = syTable.bootstrapTable('getRowByUniqueId', idRow);
+        // monthsOfSY = row.acad_months;
+        //
+        // console.log(row);
+        // let monthsHTML = '';
+        // for (const monthID in monthsOfSY) {
+        //     let item = monthsOfSY[monthID];
+        //     let monthDesc = item['month'];
+        //     monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
+        // }
 
-    //     console.log(row);
-    //     let monthsHTML = '';
-    //     for (const monthID in monthsOfSY) {
-    //         let item = monthsOfSY[monthID];
-    //         let monthDesc = item['month'];
-    //         monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
-    //     }
 
-    //     $("#month-form").find("[name='sy-id']").val(row.id);
-    //     $("#month-list").html(monthsHTML);
-    //     modal.modal("show");
-    // });
+        $("#month-form").find("[name='sy-id']").val(syID);
+        modal.modal("show");
+    });
 
     $(document).on("click", ".edit-opt", function(e) {
         e.preventDefault();
@@ -320,12 +318,24 @@ $(function() {
 
     $(document).on("submit", "#month-form", function(e) {
         e.preventDefault();
-        console.log($(this).serializeArray());
         $.post("action.php", $(this).serializeArray(), function() {
-            syTable.bootstrapTable("refresh");
             $("#month-modal").modal("hide");
-            showToast("success", "Successfully updated");
+            location.reload();
         });
+    });
+
+    $(document).on("click", "input[name='schedule']", function() {
+        let isDisabled = false;
+        // let isDisabled = ($(this).val() !== 'copy');
+        if ($(this).val() === 'copy') {
+            $("input[name='initialize']").prop("disabled", isDisabled);
+            $("input[name='initAndSwitch']").prop("disabled", isDisabled);
+            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
+        } else {
+            $("input[name='initialize']").prop("disabled", !isDisabled);
+            $("input[name='initAndSwitch']").prop("disabled", !isDisabled);
+            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
+        }
     });
     hideSpinner();
 });

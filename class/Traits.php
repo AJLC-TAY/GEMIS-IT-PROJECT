@@ -55,7 +55,7 @@ trait School
     public function listPrograms($tbl)
     {
         $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
-        $result = mysqli_query($this->db, $query);
+        $result = $this->query($query);
         $programList = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $programList[] = new Program($row['prog_code'], $row['curr_code'], $row['description']);
@@ -68,18 +68,23 @@ trait School
         if (!isset($_SESSION)) {
             session_start();
         }
-        $sy_id = $_SESSION['sy_id'];
+        $sy_id = $_SESSION['sy_id'] ?? NULL;
         $subjectList = [];
 
         $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
 
-        $queryOne = (isset($_GET['prog_code']))
-            ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
-            // ? "SELECT * FROM $tbl WHERE sub_code 
-            //    IN (SELECT sub_code FROM $shared_sub
-            //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
-            //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
-            : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+        $queryOne = '';
+        if (is_null($sy_id)) {
+            $queryOne = "SELECT * FROM subject;";
+        } else {
+            $queryOne = (isset($_GET['prog_code']))
+                ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
+                // ? "SELECT * FROM $tbl WHERE sub_code
+                //    IN (SELECT sub_code FROM $shared_sub
+                //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
+                //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
+                : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+        }
 
         $resultOne = $this->query($queryOne);
 
@@ -148,17 +153,19 @@ trait UserSharedMethods
      */
     public function createUser(String $type, $is_default = FALSE): int
     {
+        $user_id = '';
         if ($is_default) {
             define("ID", "7264723646");
             define("PASSWORD", "AD7264723646");
+            $user_id = PASSWORD;
             $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('" . ID . "', NOW(), '$type', '" . PASSWORD . "');");
         } else {
-            $result = $this->query("SELECT CONCAT('$type', (COALESCE(MAX(id_no), 0) + 1)) FROM user;");
-            $PASSWORD = mysqli_fetch_row($result)[0];
-            $PASSWORD = password_hash($PASSWORD, PASSWORD_DEFAULT);
-            $this->query("INSERT INTO user (date_last_modified, user_type, password) VALUES (NOW(), '$type', '$PASSWORD');");
+            $this->query("INSERT INTO user (date_last_modified, user_type) VALUES (NOW(), '$type');");
+            $user_id = $type.mysqli_insert_id($this->db);
+            $PASSWORD = password_hash($user_id, PASSWORD_DEFAULT);
+            $this->query("UPDATE user SET password = '$PASSWORD' WHERE id_no = '$user_id';");
         }
-        return mysqli_insert_id($this->db);  // Return User ID ex. 123456789
+        return $user_id;  // Return User ID ex. 123456789
     }
 
     /**
@@ -733,21 +740,23 @@ trait Enrollment
         # enrollment
         $school_info = [$_POST['track'],  $_POST['program']];
         [$track, $program] = $this->preprocessData($school_info);
+
         $this->prepared_query(
-            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code) "
-                . "VALUES (NOW(), 0, ?, ?, ?, ?, ?);",  // null for date_first_attended, and section code
+            "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code, semester) "
+                . "VALUES (NOW(), 0, ?, ?, ?, ?, ?,?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
                 $school_year,  // should be replaced by the current school year
                 $track,
-                $_POST['program']
+                $_POST['program'],
+                $_POST['semester']
             ],
-            "iisss"
+            "iisssi"
         );
         echo "Add School info ended...<br>";
         # promotion
-        if ($_SESSION['user_type'] != 'ST' AND $_SESSION['promotion'] != 1){
+        
                 echo 'Adding promotion record...<br>';
                         $this->prepared_query(
                             "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
@@ -769,16 +778,129 @@ trait Enrollment
                             "issis" . "iiiii"
                         );
                         echo 'Added promotion record...<br>';
-        }
         
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
-        } else if($_SESSION['user_type'] == "ST" AND $_SESSION['promote'] == 1){
-            header("Location: student.php");
         } else {
             $_SESSION['enrolled'] = TRUE;
-            header("Location: finished.php");
+            header("Location: ../student/finished.php");
         }
+    }
+
+    public function lastestEnrollmentDetail(){
+        $student_id = $_SESSION['id'];
+        $result = $this->query("SELECT date_first_attended, enrolled_in, semester, curr_code, section_code, prog_code FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
+        $previousDeets = [];
+        while ($row = mysqli_fetch_row($result)) {
+            $previousDeets = [
+                'first_attended' => $row[0],
+                'yr_lvl' => $row[1],
+                'sem' => $row[2],
+                'curr_code' => $row[3],
+                'section' => $row[4],
+                'prog_code' => $row[5],
+            ];
+        }
+        return $previousDeets;
+    }
+    
+    /**
+     * Update db - editable fields
+     * Create new enrollment entity
+     */
+    public function enrollOldStudent(){
+
+        session_start();
+        $studparams = [$_POST['age'], $_POST['religion'], $_POST['cp-no'],$_POST['lrn']];
+
+        $address = [
+            $_POST['house-no'], $_POST['street'], $_POST['barangay'],
+            $_POST['city-muni'], $_POST['province'], $_POST['zip-code']
+        ];
+
+        $father = [$_POST['f-contactnumber'],$_POST['f-occupation']];
+        $mother = [$_POST['m-contactnumber'],$_POST['m-occupation']];
+        $guardian = $this->prepareParentData('g');
+
+        $params = $this->preprocessData($studparams);
+        $address = $this->preprocessData($address);     
+
+        //UPDATE STUDENT INFO
+        $query = "UPDATE `student` SET `age`=?,`religion`=?,`cp_no`=? WHERE `LRN`=?;";
+
+        echo "Student info updated. <br>";
+
+        $student_id = $_SESSION['id'];
+        $father[] = $student_id;
+        $mother[] = $student_id;
+        $guardian[] = $student_id;
+
+        // update parent info
+        $parent_q = "UPDATE `parent` SET `cp_no`=?,`occupation`=? WHERE `stud_id`=?";
+        // $f_query = "$general_q ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        // $m_query = "$general_q cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        $g_query = "UPDATE `guardian` SET `guardian_first_name`=?,`guardian_middle_name`=?,`guardian_last_name`=?,`relationship`=?,`cp_no`=? WHERE `stud_id`=?; ";
+        $this->prepared_query($parent_q, $father, "isi");
+        $this->prepared_query($parent_q, $mother, "isi");
+        $this->prepared_query($g_query, $guardian, "ssssii");
+        echo "Parent info updated. <br>";
+
+        // update address info
+        $address[] = $student_id;
+        $a_query = "UPDATE `address` SET `home_no`=?,`street`=?,`barangay`=?,`mun_city`=?,`province`=?,`zip_code`=? WHERE `stud_id`=?;";
+        $this->prepared_query($a_query, $address, "ssssiii");
+
+        echo "Address info updated. <br>";
+        echo "$student_id <br>";
+
+        //create new enrollment entity
+
+        $previousDeets = $this -> lastestEnrollmentDetail();
+
+        $school_year = $_SESSION['sy_id'];
+        $school_info = [$previousDeets['curr_code'],  $previousDeets['prog_code']];
+        [$track, $program] = $this->preprocessData($school_info);
+
+        if($previousDeets['sem'] == 2){
+            $lvl = 12;
+        } else {
+            $lvl = 11;
+        }
+
+        if($previousDeets['yr_lvl'] == 11 AND $previousDeets['sem'] == 2){
+            $sem = 1;
+        } else{
+            $sem = 2;
+        }
+
+        $values = [$previousDeets['first_attended'],
+                $lvl,
+                $sem,
+                $student_id,
+                $school_year, 
+                $track,
+                $program];
+        
+        $params = "iiiisss";
+
+        if($previousDeets['sem'] == 1) {
+            $add = ", section_code";
+            $add_q = ", ?";
+            $params .="s";
+            $values[] = "{$previousDeets['section']}";
+        } else {
+            $add = "";
+            $add_q = "";
+        }
+        $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
+        . "VALUES (NOW(), 1, ?, ?, ?, ?, ?, ?, ? $add_q);";
+
+        echo($query);
+        echo json_encode($values);
+        echo json_encode($params);
+        $this->prepared_query($query, $values, $params);
+        header("Location: ../student/student.php");
+
     }
 
     public function getEnrollees()
@@ -1301,33 +1423,30 @@ trait Enrollment
         $address = $this->preprocessData($address);
 
         // Image validation
-        // $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
-        // $form_img = $this->validateImage($_FILES['image-form'], 8000000);
-        // $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
+        $psa_img = $this->validateImage($_FILES['image-psa'], 8000000);
+        $form_img = $this->validateImage($_FILES['image-form'], 8000000);
+        $profile_img = $this->validateImage($_FILES['image-studentid'], 5242880);
 
-        // $img_list = [$psa_img, $form_img, $profile_img];
-        // foreach ($img_list as $i => $image) {
-        //     // add image to the parameters if valid
-        //     if ($image['status'] == 'valid') {
-        //         # Upload image
-        //         $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
-        //         $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
-        //         // for editing
-        //         //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-        //         //                    $current_img_path = $_POST["current_image_path"];
-        //         //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-        //         //                        unlink("../".$current_img_path);                                 // delete current image
-        //         //                    }
-        //         //                }
-        //         move_uploaded_file($image['file'], "../" . $fileDestination);
-        //         echo "Successfully uploaded image<br>";
-        //         $params[] = $fileDestination;
-        //     }
-        // }
-        $params[] = "test";
-        $params[] = "test";
-        $params[] = "test";
-
+        $img_list = [$psa_img, $form_img, $profile_img];
+        foreach ($img_list as $i => $image) {
+            // add image to the parameters if valid
+            if ($image['status'] == 'valid') {
+                # Upload image
+                $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
+                $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
+                // for editing
+                //                if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+                //                    $current_img_path = $_POST["current_image_path"];
+                //                    if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+                //                        unlink("../".$current_img_path);                                 // delete current image
+                //                    }
+                //                }
+                move_uploaded_file($image['file'], "../" . $fileDestination);
+                echo "Successfully uploaded image<br>";
+                $params[] = $fileDestination;
+            }
+        }
+        
         // Values are valid; hence, create a user and add the created user id to the parameter
         $user_id = $this->createUser("ST");
         $params[] = $user_id;
@@ -1688,6 +1807,7 @@ trait Grade
     public function getClass()
     {
         if (isset($_GET['section'])) {
+            
             $this->listAdvisoryStudents(true);
         }
         if (isset($_GET['sub_class_code'])) {
@@ -1698,6 +1818,7 @@ trait Grade
 
     public function listAdvisoryStudents($is_JSON = false)
     {
+
         function actions($report_id, $stud_id, $promote)
         {
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
@@ -1733,7 +1854,7 @@ trait Grade
         //             . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
         //             . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
         //             . "</div>
-        if (empty($_SESSION)) {
+        if (empty($_SESSION)) { 
             session_start();
         }
         $students = [];

@@ -22,7 +22,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteAdmin') {
 
 /******** SCHOOL YEAR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'initializeSY') {
-    $admin->initializeSY();
+    $admin->initializeSY(FALSE, TRUE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'initAndSchedule') {
+    $admin->initializeSY(TRUE, FALSE, 'schedule');
+}
+if (isset($_POST['action']) && $_POST['action'] === 'initAndSwitch') {
+    $admin->initializeSY(TRUE, FALSE, 'view');
 }
 if (isset($_POST['action']) && $_POST['action'] === 'editSY') {
     $admin->editSY();
@@ -34,7 +40,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'editAcademicDays') {
     $admin->editAcademicDays();
 }
 if (isset($_GET['action']) && $_GET['action'] === 'switchSY') {
-    $admin->switchSY();
+    $admin->switchSY(NULL, TRUE, 'view');
 }
 
 /******** ENROLLMENT ********/

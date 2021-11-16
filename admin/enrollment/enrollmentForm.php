@@ -21,13 +21,7 @@ switch ($_SESSION['user_type']) {
         break;
 }
 
-if ($_SESSION['user_type'] == 'ST') {
-    if ($_SESSION['promote'] == 1) {
-        $readonly = 'readonly';
-        $disabled = 'disabled';
-    }
-    
-}
+
 
 
 $stud_id = '';
@@ -220,7 +214,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
         </div>
     </div>
 </header>
-<form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="action.php" method="POST" novalidate>
+<form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="../admin/action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
             <div class="step mx-lg-5" data-target="#test-l-1">
@@ -421,24 +415,15 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Father</h5>
                         <div class='form-group col-md-3'>
                             <label for='f-lastname'>Last Name</label>
-                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value="<?php echo $father_last_name; ?> " <?php echo $readonly ?> placeholder='Last Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's first name
-                            </div>
+                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value = "<?php echo $father_last_name; ?>" placeholder='Last Name' required>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='f-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value="<?php echo $father_last_name; ?>" <?php echo $readonly ?> placeholder='First Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's first name
-                            </div>
+                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name' required>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='f-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value="<?php echo $father_first_name; ?>" <?php echo $readonly ?> placeholder='Middle Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's middle name
-                            </div>
+                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value = "<?php echo $father_first_name; ?>" placeholder='Middle Name' required>
                         </div>
                         <div class='form-group col-md-2'>
                             <label for='f-extensionname'>Extension Name</label>
@@ -460,24 +445,15 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Mother</h5>
                         <div class='form-group col-md-3'>
                             <label for='m-lastname'>Maiden Last Name</label>
-                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value="<?php echo $mother_last_name; ?>" placeholder='Last Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's maiden last name
-                            </div>
+                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value = "<?php echo $mother_last_name; ?>" placeholder='Last Name' required>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='m-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value="<?php echo $mother_first_name; ?>" placeholder='First Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's first name
-                            </div>
+                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value = "<?php echo $mother_first_name; ?>" placeholder='First Name' required>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='m-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value="<?php echo $mother_middle_name; ?>" placeholder='Middle Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's middle name
-                            </div>
+                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name' required>
                         </div>
                     </div>
                     <div class='form-row row'>
@@ -536,7 +512,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <!-- STEP 3 -->
             <div id="test-l-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-                    <?php if ($_SESSION['user_type'] != 'ST') { ?>
+                    
                         <label class="col-form-label me-4">Balik Aral Student? </label>
                         <div class="d-flex">
                             <?php
@@ -593,54 +569,51 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
                             <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                         </div>
-                    <?php } ?>
+                    
+                    <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                     <div class="row">
-                        <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                         <div class='col-md-4'>
-                            
                             <label class=" col-form-label">Track</label>
-                                <div class="input-group mb-3">
-                                    <select class="form-select" name="track" id="track-select">
-                                        <?php
-                                        $curriculum_list = $user->listCurriculum('curriculum');
-                                        foreach ($curriculum_list as $curriculum) {
-                                            echo "<option value='{$curriculum->get_cur_code()}'>{$curriculum->get_cur_name()}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-
-
-                            <div class='col-md-3'>
-                                <label class="col-form-label">Strand</label>
-                                <select class="form-select" name="program" id="program-select">
+                            <div class="input-group mb-3">
+                                <select class="form-select" name="track" id="track-select">
                                     <?php
-                                    $programs = $user->listPrograms('program');
-                                    foreach ($programs as $program) {
-                                        echo "<option value='{$program->get_prog_code()}'>{$program->get_prog_desc()}</option>";
+                                    $curriculum_list = $user->listCurriculum('curriculum');
+                                    foreach ($curriculum_list as $curriculum) {
+                                        echo "<option value='{$curriculum->get_cur_code()}'>{$curriculum->get_cur_name()}</option>";
                                     }
                                     ?>
                                 </select>
                             </div>
+                        </div>
 
-                            <div class='col-md-2'>
-                                <label for="grade-select" class="col-form-label">Grade Level</label>
-                                <select class="form-select" name="grade-level" id="grade-select">
-                                    <?php
-                                    $grade_level = ["11" => 11, "12" => 12];
-                                    foreach ($grade_level as $id => $value) {
-                                        echo "<option value='$id'>$value</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
+                        <div class='col-md-3'>
+                            <label class="col-form-label">Strand</label>
+                            <select class="form-select" name="program" id="program-select">
+                                <?php
+                                $programs = $user->listPrograms('program');
+                                foreach ($programs as $program) {
+                                    echo "<option value='{$program->get_prog_code()}'>{$program->get_prog_desc()}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class='col-md-2'>
+                            <label for="grade-select" class="col-form-label">Grade Level</label>
+                            <select class="form-select" name="grade-level" id="grade-select">
+                                <?php
+                                $grade_level = ["11" => 11, "12" => 12];
+                                foreach ($grade_level as $id => $value) {
+                                    echo "<option value='$id'>$value</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <label class="col-form-label">Semester</label>
                             <div class="d-flex">
                                 <?php $sem = [1 => "first", 2 => "second"];
-                                $val = 2;
+                                $val = 1;
                                 foreach ($sem as $id => $value) {
                                     echo "<div class='form-check me-3'>
                                                 <input class='form-check-input' type='radio' name='semester' id='$id'  value='$id' " . (($val == $id) ? "checked" : "") . " required>
@@ -653,17 +626,88 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                 ?>
                             </div>
                         </div>
-
-                        </div>
-                        <div class="d-flex flex-row-reverse mt-4">
-                            <input type="hidden" name="action" value="enroll">
-                            <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
-                            <a href="#" class="btn btn-secondary me-1 previous">Back</a>
-                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse mt-4">
+                        <a class="btn btn-primary me-1 next to-transferee-form">Next</a>
+                        <a class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
             </div>
-        </div>
+            <!-- STEP 4 -->
+            <div id="step-4" class="content">
+                <div class="card w-100 h-auto mt-4 p-4">
+                    <h4 class="fw-bold">Transferee Assessment Form</h4>
+                    <p class="text-danger ms-1"><i class="bi bi-info-circle me-2"></i>Answer part 4 if you're a grade 11 or 12 transferee.</p>
+                    <div class="border p-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row justify-content-center align-content-center">
+                                        <label for="school-last-attended" class="col-form-label col-lg-3">School Last Attended</label>
+                                        <div class="col-lg-9">
+                                            <textarea id="school-last-attended" name="trans-school" class="form-control form-control-sm" placeholder="Enter school name"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row justify-content-center align-content-center">
+                                        <label for="school-last-attended" class="col-form-label col-lg-3">Track</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" name="trans-track" class="form-control form-control-sm" placeholder="Enter track (ex. ACADEMIC)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row justify-content-center align-content-center">
+                                        <label for="school-last-attended" class="col-form-label col-lg-3">Semester</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" name="trans-semester" class="form-control form-control-sm" placeholder="Enter semester (ex. First)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row justify-content-center align-content-center">
+                                        <label for="school-last-attended" class="col-form-label col-lg-3">School Year</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" name="trans-sy" class="form-control form-control-sm" placeholder="Enter school year (ex. 20XX - 20XX)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subject-list mt-3">
+                        <h6>LIST OF SUBJECTS FOR <span id="chosen-subject"></span></h6>
+                        <div class="container">
+                            <table id="transfer-table" class="table table-sm table-bordered table-striped">
+                                <thead class="text-center">
+                                <tr>
+                                    <td colspan="2">GRADE 11</td>
+                                    <td colspan="2">GRADE 12</td>
+                                </tr>
+                                <tr>
+                                    <td>FIRST SEMESTER</td>
+                                    <td>SECOND SEMESTER</td>
+                                    <td>FIRST SEMESTER</td>
+                                    <td>SECOND SEMESTER</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row-reverse mt-4">
+                        <input type="hidden" name="action" value="enroll">
+                        <input class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
+                        <a class="btn btn-secondary me-1 previous">Back</a>
+                    </div>
+                </div>
+            </div>
+            <!-- STEP 4 END -->
+    </div>
         <!-- STEPPER END -->
 </form>
 <script>

@@ -25,24 +25,7 @@ $(function () {
         $("#curriculum-form .form-input").prop('disabled', false);
     });
 
-    // $('#cancel-btn').click(function(event) {
-    //     event.preventDefault();
-    //     $('[type=submit]').addClass('d-none');
-    //     $(this).addClass('d-none');
-    //     $('#edit-btn').removeClass('d-none');
-    //     let i = 0;
-    //     let inputs = $("#curriculum-form").find('.form-input');
-    //     if (tempData.length != 0) {
-    //         inputs.each(function() {
-    //             $(this).val(tempData[i]);
-    //             i++;
-    //         })
-    //     } 
-    //     inputs.prop('disabled', true);
-    //     tempData = [];
-    // })
-
-    $('#track-archive-btn').click(function(event){
+    $('#track-archive-btn').click(function(){
         var code = $(this).attr('id');
         let name = $(this).attr('data-name');
         let archiveModal = $('#track-archive-modal');
@@ -64,19 +47,14 @@ $(function () {
                 $table.bootstrapTable('refresh');
             });
         });
-
         $('#track-archive-modal').modal('hide');
-
     });
 
-    $("#curriculum-form").submit(function(e) {
-        e.preventDefault();
-        // console.log($(this).serializeArray());
-        $.post("action.php", $(this).serializeArray(), (data) => {
-            $(this).find("input, textarea").prop("disabled", true);
-            $("#edit-btn, .decide-con").toggleClass("d-none");
-            showToast("success", "Successfully updated curriculum");
-        });
-    });
+    // $("#curriculum-form").submit(function(e) {
+    //     e.preventDefault();
+    //     $.post("action.php", $(this).serializeArray(), (data) => {
+    //         window.location.href = `curriculum.php?code=${JSON.parse(data)}`;
+    //     });
+    // });
     hideSpinner();
 });

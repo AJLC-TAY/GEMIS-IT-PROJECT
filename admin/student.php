@@ -60,7 +60,10 @@ include_once("../inc/head.html");
     <script src='../assets/js/bootstrap.bundle.min.js'></script>
     <script type="text/javascript" src="../js/common-custom.js"></script>
     <?php echo $jsFilePath; ?>;
-    
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 </body>
 
 </html>

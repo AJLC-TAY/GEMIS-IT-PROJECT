@@ -9,7 +9,17 @@ let tableSetup = {
     height: 440,
     ...commonTableSetup
 };
-
+let promotionSetup = {
+    search: true,
+    searchSelector: "#search-input",
+    method: 'GET',
+    uniqueId: 'stud_id',
+    idField: 'stud_id',
+    height: 400,
+    url: `getAction.php?data=for-promotion&section=${code}`,
+    ...commonTableSetup
+};
+console.log(code);
 // let advisoryTable = {}, subClassTable = {};
 // try {
 //     advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
@@ -17,6 +27,7 @@ let tableSetup = {
 // } catch (e) {}
 
 let studentTable = $("#table").bootstrapTable(tableSetup);
+let forPromotionStudentTable = $("#for-promotion-table").bootstrapTable(promotionSetup);
 
 /** Changes the name of class in the card */
 function changeName(name) {
@@ -29,7 +40,8 @@ function changeName(name) {
  * @param {String} url       The url from which the data will be retrieved.
  * @returns {jQuery|*}       Bootstrap-table object.
  */
-function initializeTable(classType, url) {
+function initializeTable(id, url) {
+$(id).bootstrapTable(tableSetup);
     tableSetup.url = url;
     // if (classType === 'advisory') {
     //     return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
@@ -194,9 +206,39 @@ $(function () {
         $('#view-candidates-modal').modal('show');
     });
 
+    $(document).on("click", ".action", function(e) {
+        e.preventDefault();
+        let id, row, elementToToggle, type;
+        $(this).hide();
+
+        id = $(this).attr("data-id");
+        row = $(this).closest("tr");
+        let inputState = true;
+
+        switch($(this).attr("data-type")) {
+            case "remove":
+                type = "undo";
+                row.addClass("bg-light");
+                // forPromotionStudentTable.bootstrapTable("remove", {
+                //     field            : 'stud_id',
+                //     values           : id
+                // });
+                break;
+            case "undo":
+                type = "remove";
+                inputState = false;
+                row.removeClass("bg-light");
+                
+                break;
+        }
+        $(`.action[data-id='${id}'][data-type='${type}']`).show();
+        row.find("input").prop("disabled", inputState);
+        console.log($("#for-promotion-table").bootstrapTable("getRowByUniqueId", id));
+    });
+
     $(document).on("click", ".promote-btn", function (e) {
         //gets table
-        var oTable = document.getElementById('stud-table');
+        var oTable = document.getElementById('for-promotion-table');
 
         //gets rows of table
         var rowLength = oTable.rows.length;
@@ -211,6 +253,7 @@ $(function () {
 
             //get names of students
                 var ID = oCells.item(0).innerHTML;
+                console.log(oCells.item(3).innerHTML)
                 var record = {
                     'action': 'promote',
                     'stud_id': ID,

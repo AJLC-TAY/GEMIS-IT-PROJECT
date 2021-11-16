@@ -20,7 +20,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 }
 
 ?>
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -36,7 +35,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 </header>
 <!-- HEADER END -->
 <!-- FORM -->
-<div class="currcard container">
+<div class="container">
     <div class='card'>
         <div class="d-flex justify-content-between">
             <h4>Information</h4>

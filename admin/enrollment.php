@@ -1,6 +1,10 @@
 <?php
 require_once("sessionHandling.php");
-include_once("../inc/head.html"); ?>
+include_once("../inc/head.html");
+if (!isset($_SESSION['sy_id'])) {
+    header("Location: index.php");
+}
+?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
@@ -80,12 +84,14 @@ include_once("../inc/head.html"); ?>
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <!-- BOOTSTRAP TABLE JS -->
     <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <script>
         /** MOVED TO enrollment.js */
         // var forms = document.querySelectorAll('.needs-validation');

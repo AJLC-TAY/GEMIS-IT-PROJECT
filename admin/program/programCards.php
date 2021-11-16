@@ -12,8 +12,8 @@ $admin = new Administration() ?>
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">Programs</h3>
         <span>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
             <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
         </span>
     </div>
     <!-- SEARCH BAR -->
@@ -78,16 +78,11 @@ $admin = new Administration() ?>
                     <div class="form-group">
                         <label for="prog-code">Code</label>
                         <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
-                        <div class="invalid-feedback">
-                            Please enter program code
-                        </div>
-                        <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique program code</small></p>
+
                         <label for="prog-desc">Description</label>
                         <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
-                        <div class="invalid-feedback">
-                            Pleae enter program name
-                        </div>
-                        <p class="name-error-msg text-danger m-0 invisible"><small>Please provide a unique program description</small></p>
+
+
                         <label for="curr-code">Curriculum</label>
                         <select id="curr-code" class="select form-select" name="curr-code">
                             <option value="0" selected>-- Select curriculum --</option>

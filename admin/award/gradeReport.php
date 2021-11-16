@@ -1,6 +1,10 @@
 <?php
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
+const approve = 'WHITNEY A. DAWAYEN';
+const approve_pos = 'Secondary School Principal III';
+
+const adviser = 'ALVIN JOHN L. CUTAY';
 if ($user_type != 'ST') {
     // $teacherName = $_POST['teacher_name'];
     $teacherName = 'Kesley Bautista Trinidad';
@@ -27,7 +31,8 @@ $userProfile = $admin->getProfile("ST");
 $stud_id = $userProfile->get_stud_id();
 $lrn = $userProfile->get_lrn();
 $lastName = $userProfile->get_last_name();
-$firstName = $userProfile->get_first_name();
+//$firstName = $userProfile->get_first_name();
+$firstName = "Kimberlyn Faith";
 $midName = $userProfile->get_middle_name();
 $sex = $userProfile->get_sex();
 $age = $userProfile->get_age();
@@ -53,6 +58,7 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
                 $breadcrumb
                 <li class='breadcrumb-item active'>Grade Report</a></li>";
             }
+
             ?>
         </ol>
     </nav>
@@ -68,7 +74,7 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
         </span>
         <?php if ($user_type != 'ST') { ?>
             <div class="mt-4">
-                <button onclick='generatePDF(`<?php echo $filename; ?>`)' class=" btn btn-primary"><i class="bi bi-download me-2"></i>Download</button>
+                <button onclick='generatePDF(`<?php echo $filename; ?>`, `landscape`)' class=" btn btn-primary"><i class="bi bi-download me-2"></i>Download</button>
             </div>
         <?php } ?>
     </div>
@@ -76,7 +82,6 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
 <hr class='m-1'>
 <?php
 
-// echo json_encode($grades);
 
 function prepareGradeRecordsHTML($grade)
 {
@@ -96,18 +101,18 @@ function prepareGradeRecordsHTML($grade)
 function renderSemesterGradeTable($semester_desc, $grades)
 {
     $grd =  "
-        <h6><b>$semester_desc</b></h6>
-        <table class='table w-100 table-sm'>
+        <h6 class='fw-bolder mb-0' style='font-size: 14px;'>$semester_desc</h6>
+        <table class='table w-100 table-sm' style='font-size: 12px;'>
             <col style='width: 65%;'>
             <col style='width: 10%;'>
             <col style='width: 10%;'>
             <col style='width: 15%;'>
             
-            <thead class='text-center fw-bold'>
+            <thead class='text-center bg-light'>
                 <tr>
-                    <td rowspan='2' valign='middle' align='center'>Subjects</td>
-                    <td colspan='2' align='center'>Quarter</td>
-                    <td rowspan='2' valign='middle' align='center'>Semester Final Grade</td>
+                    <td rowspan='2' valign='middle' align='center'>SUBJECTS</td>
+                    <td colspan='2' align='center'>QUARTER</td>
+                    <td rowspan='2' valign='middle' align='center'>SEMESTER FINAL GRADE</td>
                 </tr>
                 <tr>
                     <td align='center'>1</td>
@@ -121,7 +126,7 @@ function renderSemesterGradeTable($semester_desc, $grades)
 
         prepareGradeRecordsHTML($grades['core'])
         . "<tr class='bg-light'>
-                    <td colspan='4'>Applied Subjects</td>
+                    <td colspan='4' class='fw-bold'>Applied Subjects</td>
                 </tr>" .
         prepareGradeRecordsHTML($grades['applied']);
 
@@ -132,7 +137,7 @@ function renderSemesterGradeTable($semester_desc, $grades)
         }
     } else {
         $grd .= "<tr class='bg-light'>
-                    <td colspan='4'>Specialized Subjects</td>
+                    <td colspan='4' class='fw-bold'>Specialized</td>
                     </tr>";
         if (array_key_exists('specialized', $grades)) {
             prepareGradeRecordsHTML($grades['specialized']);
@@ -149,8 +154,8 @@ function renderSemesterGradeTable($semester_desc, $grades)
     }
 
 
-    $grd .= "<tr class='bg-light fw-bold'>
-                <td colspan='3'>General Average for the Semester:</td>
+    $grd .= "<tr>
+                <td colspan='3' class='border-0 fst-italic text-end pe-3'>General Average for the Semester</td>
                     <td class='bg-white'></td>
                 </tr>
             </tbody>
@@ -193,308 +198,265 @@ $observed_values = $admin->listValuesReport();
 function otherinfo()
 {
     echo "
-<h5 class='text-center'><b>PARENT / GUARDIAN'S SIGNATURE</b></h5>
-        <div class='perLine text-center fsize'>1<sup>st</sup> Quarter ______________________________</div>
-        <div class='perLine text-center fsize'>2<sup>nd</sup> Quarter ______________________________</div>
-        <div class='perLine text-center fsize'>3<sup>rd</sup> Quarter ______________________________</div>
-        <div class='perLine text-center fsize'>4<sup>th</sup> Quarter ______________________________</div>
+        <div class='mx-auto' style='width: 85%;'>
+            <p class='text-center pt-5' style='font-size: 14px;'>PARENT / GUARDIAN'S SIGNATURE</p>
+            <div class='row justify-content-center mb-2' style='font-size: 16px;'>
+                <div class='col-5'  style='font-size: 12px !important;'>FIRST QUARTER:</div>
+                <div class='col-7 border-bottom border-dark'></div>
+            </div>
+            <div class='row justify-content-center mb-2'>
+                <div class='col-5'  style='font-size: 12px !important;'>SECOND QUARTER:</div>
+                <div class='col-7 border-bottom border-dark'></div>
+            </div>
+            <div class='row justify-content-center mb-2'>
+                <div class='col-5'  style='font-size: 12px !important;'>THIRD QUARTER:</div>
+                <div class='col-7 border-bottom border-dark'></div>
+            </div>
+            <div class='row justify-content-center'>
+                <div class='col-5'  style='font-size: 12px !important;'>FOURTH QUARTER:</div>
+                <div class='col-7 border-bottom border-dark'></div>
+            </div>
 
-        <br><br>
-        <h6 class='text-center'><b>CERTIFICATE OF TRANSFER</b></h6>
-        <br>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Admitted to Grade: </div>
-            <div class='subLine text-center'>________________</div>
-            <div class='subLine'>Section: </div>
-            <div class='subLine text-center'>________________</div>
+            <br><br>
+            <h6 class='text-center fw-bold' style='font-size: 16px;'>CERTIFICATE OF TRANSFER</h6>
+            <div class='row mb-1'>
+                <div class='col-3 ' style='font-size: 12px;'>Admitted to Grade: </div>
+                <div class='col-4 border-dark border-bottom'></div>
+                <div class='col-2 d-flex align-items-end' style='font-size: 12px;'><p class='mb-0'>Section:</p></div>
+                <div class='col-3 border-dark border-bottom'></div>
+            </div>
+            <div class='row mb-1'>
+                <div class='col-5 d-flex align-items-end text-center' style='font-size: 12px;'>Eligible for Admission to Grade:</div>
+                <div class='col-7 border-dark border-bottom'></div>
+            </div>
         </div>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Eligible for Admission to Grade: </div>
-            <div class='subLine'>________________</div>
+        <div class='mx-auto'>
+            <p class='mb-2' style='font-size: 14px;'>Approved:</p>
+            <div class='row mb-4'  style='font-size: 14px;' >
+                <div class='col-6' >   
+                    <div class='row ps-2 mb-0 fw-bold'>". approve ."</div>             
+                    <div class='row ps-2 mb-0'>". approve_pos ."</div>             
+                </div>
+                <div class='col-6 ' >
+                    <div class='container'>
+                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". adviser ."</div>             
+                        <div class='row mb-0 justify-content-center'>Adviser</div>             
+                    </div>
+                </div>
+            </div>
+            <h6 class='text-center fw-bolder'  style='font-size: 13px;'>CANCELLATION OF ELIGIBILITY TO TRANSFER</h6>
+            <div class='row mb-3 justify-content-center'>
+                <div class='col-3' style='font-size: 12px;'>Admitted in:</div>
+                <div class='col-6 border-dark border-bottom'></div>
+            </div>
+             <div class='row justify-content-center mb-4'>
+                <div class='col-3' style='font-size: 12px;'>Date:</div>
+                <div class='col-6 border-dark border-bottom'></div>
+            </div>
+             <div class='row justify-content-end pe-4'>
+                <div class='col-6'>
+                    <div class='row justify-content-center border-dark border-top' style='font-size: 14px;'>School</div>
+                </div>
+            </div>
         </div>
-        <br>
-        <div class='fsize left'><b> Approved: </b></div>
-        <br>
-        <div class='parentLine fsize text-center'>
-            <div class='subLine3'>___________________</div>
-            <div class='subLine3'>___________________</div>
-        </div>
-        <div class='parentLine fsize text-center'>
-            <div class='subLine3'>___________________</div>
-            <div class='subLine3'>Teacher</div>
-        </div>
-        <br><br><br>
-        <h6 class='text-center'><b>CANCELLATION OF ELIGIBILITY TO TRANSFER</b></h6>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Admitted in:</div>
-            <div class='subLine'>___________________</div>
-        </div>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Date:</div>
-            <div class='subLine'>___________________</div>
-        </div>";
+    </div>";
 }
 
 function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position)
 {
-
-
     echo "
-<li class='p-0 mb-0 mx-auto'>
-        <p>School Form 9 - SHS</p>
-        <div class='row p-0 mx-1'>
-            <div class='col-3 p-0'>
-                <img src='../assets/deped_logo.png' alt='DEPED Logo' title='DEPED Logo'>
+        <div class='col-6'>
+            <p style='font-size: 8px;'>School Form 9-SHS</p>
+            <div class='row p-0 mx-1 justify-content-center'>
+                <div class='col-3 p-0'  style='text-align: right'>
+                    <img src='../assets/deped_logo.png' alt='DEPED Logo' title='DEPED Logo'>
+                </div>
+                <div class='col-6 p-0 text-center'>
+                    <p style='font-size: 10px;'><span class='fw-bold'>Republic of the Philippines</span><br>Department of Education<br>
+                        Cordillera Administrative Region<br>Division of Baguio City
+                    </p>
+                </div>
+                <div class='col-3 p-0' style='text-align: left;'>
+                    <img src='../assets/school_logo.jpg' alt='PCNSH Logo' title='PCNSH Logo'>
+                </div>
             </div>
-            <div class='col-6 p-0 text-center'>
-                <p>
-                    Republic of the Philippines<br>
-                    Department of Education<br>
-                    Cordillera Administrative Region<br>
-                    Baguio City Schools Division<br>
-                    PINES CITY NATIONAL HIGH SCHOOL<br>
-                    [SENIOR HIGH SCHOOL - Lucban Campus]<br>
-                    Magsaysay Ave., Baguio City
-                </p>
+            <p class='text-center fw-bold mb-0' style='font-size: 12px;'>PINES CITY NATIONAL HIGH SCHOOL-SENIOR HIGH</p>
+            <p class='text-center mb-3' style='font-size: 10px;'>Lucban Campus, Camdas Magsaysay Avenue, Baguio City</p>
+            <p class='text-center fw-bold' style='font-size: 12px;'>LEARNER'S PROGRESS REPORT CARD</p>
+            <div class='container'>
+                <div class='row mt-4'  style='font-size: 12px;'>
+                    <div class='col-2 fw-bold'>Name: </div>
+                    <div class='col-10'>
+                        <div class='row border-bottom border-dark'>
+                           <div class='col-4 px-1 text-wrap'>$lastName</div>
+                           <div class='col-4 px-1 text-wrap'>$firstName</div>
+                           <div class='col-4 px-1 text-wrap'>$midName</div>
+                        </div>
+                    </div>
+                </div>
+               <div class='row mb-2'  style='font-size: 12px;' >
+                    <div class='col-2'></div>
+                    <div class='col-10'>
+                        <div class='row'>
+                           <div class='col-4 px-1'>(Last Name)</div>
+                           <div class='col-4 px-1'>(First Name)</div>
+                           <div class='col-4 px-1'>(Middle Name)</div>
+                        </div>
+                    </div>
+               </div>
+              <div class='row mb-2'  style='font-size: 12px;' >
+                  <div class='col-2 fw-bold'>Age:</div>
+                  <div class='col-3 border-bottom border-dark text-center'>$age</div>
+                  <div class='col-2'></div>
+                  <div class='col-2 fw-bold'>Gender:</div>
+                  <div class='col-3 border-bottom border-dark text-center'>$sex</div>
+              </div>
+              <div class='row mb-2'  style='font-size: 12px;' >
+                  <div class='col-2 fw-bold'>Grade:</div>
+                  <div class='col-3 border-bottom border-dark text-center'>$grade</div>
+                  <div class='col-2'></div>
+                  <div class='col-2 fw-bold'>Section:</div>
+                  <div class='col-3 border-bottom border-dark text-center'>$section</div>
+              </div>
+               <div class='row justify-content-end mb-3'  style='font-size: 12px;' >
+                  <div class='col-1'>LRN:</div>
+                  <div class='col-5 border-bottom border-dark text-center mx-3'>$lrn</div>
+              </div>
+               
+               <div class='row mb-3'  style='font-size: 12px;' >
+                  <div class='col-3 fw-bold'>School Year:</div>
+                  <div class='col-4 border-bottom border-dark text-center'>$school_year</div>
+              </div>
+                <div class='row mb-5'  style='font-size: 12px;' >
+                  <div class='col-3 fw-bold text-center d-flex align-items-end'>Track/<br>Strand:</div>
+                  <div class='col-9 border-bottom border-dark text-center'><p class='mb-0'>$trackStrand[0]</p></div>
+              </div>
+               <div class='row mb-3'  style='font-size: 14px;' >
+                  <p class='fst-italic mb-0' style = 'font-size: 10px;'>Dear Parent,</p>
+                    <p class='text-center fst-italic'>
+                        This report card shows the ability and progresses your child has made in the different learning areas as well the learning modality.
+                        The school welcomes you should you desire to know more about your child's progress.
+                    </p>
+              </div>
+              <div class='row mb-3 text-center'  style='font-size: 14px;' >
+                <div class='col-6' >   
+                    <div class='row ps-2 mb-0 fw-bold'>". approve ."</div>             
+                    <div class='row ps-2 mb-0' style='font-size: 12px;' >". approve_pos ."</div>             
+                </div>
+                <div class='col-6 ' >
+                    <div class='container'>
+                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". adviser ."</div>             
+                        <div class='row mb-0 justify-content-center'>CLASS ADVISER</div>             
+                    </div>
+                </div>
+                </div>
             </div>
-            <div class='col-3 p-0' style='text-align: right;'>
-                <img src='../assets/school_logo.jpg' alt='PCNSH Logo' title='PCNSH Logo'>
-            </div>
+    
+           
         </div>
-        <h5 class='text-center'><b>LEARNER'S PROGRESS REPORT CARD</b></h5>
-        <br><br><br>
-        <div class='parentLine fsize'>
-            <div class='subLine2'>Name: </div><br>
-            <div class='subLine2 ind'>$lastName</div><br>
-            <div class='subLine2 ind'>$firstName</div><br>
-            <div class='subLine2 ind'>$midName</div><br>
-        </div>
-        <div class='parentLine fsizes'>
-            <div class='subLine2 ind'> </div><br>
-            <div class='subLine2 ind'>(Last Name)</div>
-            <div class='subLine2 ind'>(First Name)</div>
-            <div class='subLine2 ind'>(Middle Name)</div>
-        </div>
-        <br>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Age: </div>
-            <div class='subLine'>$age</div>
-            <div class='subLine'>Gender: </div>
-            <div class='subLine'>$sex</div>
-        </div>
-        <div class='parentLine  fsize'>
-            <div class='subLine'>Grade: </div>
-            <div class='subLine'>$grade</div>
-            <div class='subLine'>Section: </div>
-            <div class='subLine'>$section</div>
-        </div>
-        <div class='perLine text-center fsize'>LRN: $lrn</div> 
-        <div class='parentLine fsize'>
-            <div class='subLine'>School Year: </div>
-            <div class='subLine'>$school_year</div>
-        </div>
-        <div class='parentLine fsize'>
-            <div class='subLine'>Track/Strand: </div>
-            <div class='subLine'>$trackStrand[0]</div>
-        </div>
-        <br>
-        <div class='parag'>
-            <h7 class='fsize'>Dear Parent,<br><br></h7>
-            <p class='par'>
-                This report card shows the ability and progress your child has made in the different learning areas as well as his/her core values.
-            </p>
-            <p class='par'>
-                The school welcomes you should you desire to know more about your child's progress.
-            </p>
-        </div>
-        <br><br><br>
-        <div class='fsize right'>
-            <div> $teacherName</div>
-            <div> Class Adviser </div>
-        </div>
-        <br><br><br>
-        <div class='fsize left'>
-            <div>$signatoryName</div>
-            <div> $position</div>
-        </div>
-  </li>  
+    </div>
+</li>
 ";
 }
 function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position)
 {
-    logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
-
     echo "
     <li class='p-0 mb-0 mx-auto'>
-        <h5 class='text-center'><b>REPORT ON ATTENDANCE</b></h5><br>
-        <table class='table-bordered table w-100'>
-            <col style='width: 25%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 7%;'>
-            <col style='width: 15%;'>
-
-            <thead class='text-center fw-bold'>
-                <tr>
-                    <td></td>";
-
-
-    foreach (array_keys($attendance['no_of_days']) as $month_key) {
-        echo '<td>' . ucwords(substr($month_key, 0, 3)) . '</td>';
-    }
-
-
-    echo "<td>Total</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class='text-center'>No. of school days</td>";
-    prepareStudentAttendanceHTML('no_of_days', $attendance);
-
-    echo "</tr>
-                <tr>
-                    <td class='text-center'>No. of present</td>";
-
-    prepareStudentAttendanceHTML('no_of_present', $attendance);
-
-    echo "</tr>
-                <tr>
-                    <td class='text-center'>No. of absent</td>";
-
-    prepareStudentAttendanceHTML('no_of_absent', $attendance);
-
-    echo "</tr>
-                <tr>
-                    <td class='text-center'>No. of tardy</td>";
-
-    prepareStudentAttendanceHTML('no_of_tardy', $attendance);
-
-    echo " </tr>
-            </tbody>
-        </table> ";
-
-    otherinfo();
+        <div class='row'>
+            <div class='col-6'>
+                <table class='w-100 mt-3' style='font-size: 12px; '>
+                <col style='width: 25%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 7%;'>
+                <col style='width: 15%;'>
+    
+                <thead class='text-center'>
+                    <tr class='months'>
+                        <td></td>";
+                foreach (array_keys($attendance['no_of_days']) as $month_key) {
+                    echo '<td style="font-size: 10px; padding: 0 2px 0 2px;">' . strtoupper(substr($month_key, 0, 3)) . '</td>';
+                }
+                echo "<td style='font-size: 10px; padding: 0 2px 0 2px;'>TOTAL</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class='text-center' style='font-size: 10px;'>No. of School days</td>";
+                        prepareStudentAttendanceHTML('no_of_days', $attendance);
+                echo "</tr>
+                    <tr>
+                        <td class='text-center' style='font-size: 10px;'>No. of Days Present</td>";
+                        prepareStudentAttendanceHTML('no_of_present', $attendance);
+                echo "</tr>
+                    <tr>
+                        <td class='text-center' style='font-size: 10px;'>No. of Days Absent</td>";
+                    prepareStudentAttendanceHTML('no_of_absent', $attendance);
+                echo "</tr>";
+            echo "</tbody></table>";
+            otherinfo();
+            logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
 }
 ?>
 
     <div class="d-flex justify-content-center">
         <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
             <ul class="template p-0 w-100">
-                <?php if ($user_type != "ST") {
+                <?php
+                if ($user_type != "ST") {
                     attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
-                } ?>
+                }
+                ?>
 
-<!--                </li>-->
-
-<!--                <hr class='m-0'>-->
                 <li class="p-0 mb-0 mx-auto">
-                    <h5 class="text-center"><b>Report on Learning Progress and Achievement</b></h5>
-                    <?php
-                    if ($user_type == "ST") {
-                        renderSemesterGradeTable('1st Semester', $grades[$curr_sem]);
-                    } else {
-                        renderSemesterGradeTable('1st Semester', $grades['1']);
-                        renderSemesterGradeTable('2nd Semester', $grades['2']);
-                    }
+                    <p class="fw-bolder mb-0" style="font-size: 14px;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</p>
+                    <div class="row">
+                        <?php
+                        if ($user_type == "ST") {
+                            $curr = $curr_sem == 1? 'FIRST': 'SECOND'; 
+                            renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem]);
+                        } else {
+                            echo "<div class='col-6'>";
+                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1']);
+                            echo "</div>";
+                            echo "<div class='col-6'>";
+                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2']);
+                            echo "</div>";
+                        }
 
-                    ?>
-                    <br>
-                </li>
-<!--                <hr class='m-0'>-->
-                <li class="p-0 mb-0 mx-auto">
-
-                    <h6 class="text-center"><b>Report on Learner's Observed Values</b></h6>
-                    <!--
-                <div class="d-flex justify-content-between">
-                    <p><b>AO</b> - Always Observed</p>
-                    <p><b>SO</b> - Sometimes Observed</p>
-                    <p><b>RO</b> - Rarely Observed</p>
-                    <p><b>NO</b> - Not Observed</p>
-                </div> -->
-
-                    <table class="table-bordered table w-100">
-                        <col style='width: 20%;'>
-                        <col style='width: 40%;'>
-                        <col style='width: 10%;'>
-                        <col style='width: 10%;'>
-                        <col style='width: 10%;'>
-                        <col style='width: 10%;'>
-
-                        <thead class='text-center fw-bold'>
-                            <tr>
-                                <td>Core Values</td>
-                                <td>Behavior Statements</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            // echo json_encode($observed_values);
-                            // echo "<tr>";
-                            foreach ($observed_values as $id => $values) { //id = MakaDiyos , values = [ 'sfdsdfsdfdsf => 1 => 'AO',2 => 'AO,],
-                                echo "<td rowspan='" . count($values) . "'><b>$id</b></td>";
-                                foreach ($values as $bh_staments => $bh_qtr) { // $bh_staments = sfdsdfsdfdsf
-                                    foreach ($bh_qtr as $bh_staments => $marking) {
-                                        echo "<td>$bh_staments</td>";
-
-                                        $first = $marking[0] = ""?$marking[0]:" ";
-                                        $second = $marking[1] = ""?$marking[1]:" ";;
-                                        $third = $marking[2] = ""?$marking[2]:" ";
-                                        $fourth = $marking[3] = ""?$marking[3]:" ";
-                                        echo "<td>$first</td>";
-                                        echo "<td>$second</td>";
-                                        echo "<td>$third</td>";
-                                        echo "<td>$fourth</td>";
-                                        echo "</tr>";
-                                    }
-                                }
-
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                    <div class="container">
-                        <h6><b>Observed Values</b></h6>
-                        <div class="row g-5">
-                            <div class="col-auto">LEGEND:</div>
-                            <div class="col-auto"><b>Marking</b>
-                                <p>AO<br>SO<br>RO<br>NO</p>
-                            </div>
-                            <div class="col-auto">
-                                <b>Non-numerical Rating</b>
-                                <p>Always Observed<br>Sometimes Observed<br>Rarely Observed<br>Not Observed</p>
-                            </div>
-                        </div>
-                        <h6><b>Learners Progress and Achievement</b></h6>
-                        <div class="row g-5">
-                            <div class="col-auto">
-                                <b>Descriptors</b>
-                                <p>Outstanding<br>Very Satisfactory<br>Satisfactory<br>Fairly Satisfactory<br>Did Not Meet Expectations</p>
-                            </div>
-                            <div class="col-auto">
-                                <b>Grade Scale</b>
-                                <p>90 - 100<br>85 - 89<br>80 - 84<br>75 - 79<br>Below 75</p>
-                            </div>
-                            <div class="col-auto">
-                                <b>Remarks</b>
-                                <p>Passed<br>Passed<br>Passed<br>Passed<br>Failed</p>
-                            </div>
-                        </div>
+                        ?>
                     </div>
                 </li>
+
+                <!-- Modality -->
+                <li class="p-0 mb-0 mx-auto" style="font-size: 14px;">
+                    <div class="row justify-content-between">
+                    <?php
+                    foreach([[1, 2], [3, 4]] as $qtrs) {
+                        echo "<div class='col-5'>"
+                            ."<table class='table' style='font-style: 12px;'>"
+                            ."<thead class='text-center'><tr><td colspan='2'>LEARNING MODALITY</td></tr>";
+                        echo "<tr>";
+                        foreach($qtrs as $qtr) {
+                            echo "<td>QUARTER $qtr</td>";
+                        }
+                        echo "</tr></thead>";
+                        echo "<tbody>";
+                        echo "<tr class='text-center'><td>MODULAR(PRINTED)</td><td>MODULAR(PRINTED)</td></tr>";
+                        echo "</tbody></table></div>";
+                    }
+                    ?>
+                    </div>
+                </li>
+
             </ul>
         </div>
     </div>
