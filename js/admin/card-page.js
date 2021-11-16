@@ -67,9 +67,8 @@ export const reload = (data = '') => {
         `   <div class='tile card shadow-sm p-0 position-relative'>
                 <a role='button' class='card-link add-btn btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;'></a>
                 <div class='card-body position-absolute d-flex justify-content-center align-items-center' style="height: auto; width: 100px; left: 50%; margin-left: -50px; top: 50%; margin-top: -50px;">
-                    <div
-                    <i class="bi bi-plus-circle-fill"></i><br>
-                    Add ${camelized}
+                    <div class="text-center">
+                        <i class="bi bi-plus-circle-fill fa-3x"></i><br>
                     </div>
                 </div>
             </div>`;
