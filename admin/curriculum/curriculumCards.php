@@ -1,7 +1,8 @@
 <?php
+include_once('../class/Administration.php');
 $admin = new Administration();
 ?>
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -13,8 +14,8 @@ $admin = new Administration();
     <div class="d-flex justify-content-between">
         <h3 class="fw-bold">Curriculum</h3>
         <span>
+            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
         </span>
     </div>
     <!-- SEARCH BAR -->
@@ -63,7 +64,7 @@ $admin = new Administration();
         <!-- TEMPLATE END -->
     </div>
 </div>
-
+<!-- ADD CURRICULUM MODAL -->
 <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addCurriculum" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

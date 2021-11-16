@@ -11,51 +11,9 @@ $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
 
 ?>
     <script src="../assets/js/html2pdf.bundle.min.js"></script>
-    <style>
-        .doc {
-            width: 8.5in !important;
-            height: auto;
-        }
-        .template {
-            width: 7.5in !important; 
-            font-family: Arial !important;
-            font-size: 13px !important;
-        }
-        .template li {
-            width: 100%;
-            height: 9.98in !important;
-            margin: 0.5in !important;
-        }
-
-        /*Header*/
-        .report-title {
-            text-align: center; margin-top: 40px; margin-bottom: 40px;
-        }
-
-        .title {
-            margin-bottom: 0;
-        }
-
-        .sub-title {
-            margin-top: 0;
-        }
-        /*Content*/
-        img {
-            height: 100px;
-            width: 100px;
-        }
-        td {
-            border: 0.5px solid #C5C5C5;
-        }
-
-        /*Footer*/
-        .signatory-con {
-            width: 50%; display: table-column;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/report.css">
 </head>
 <body>
-
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

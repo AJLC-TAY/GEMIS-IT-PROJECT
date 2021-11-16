@@ -4,7 +4,7 @@ include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -32,15 +32,9 @@ include_once("../inc/head.html"); ?>
                                     require("../admin/enrollment/enrollmentCredentials.php");
                                     $js = "<script type='module' src='../js/admin/enrollment.js'></script>";
                                 }
-
                                 if ($_GET['page'] === 'form') {
                                     require("../admin/enrollment/enrollmentForm.php");
                                     $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
-                                }
-
-                                if ($_GET['page'] === 'admission') {
-                                    require("enrollment/studentAdmission.php");
-                                    $js = "<script type='module' src='../js/faculty/studentAdmission.js'></script>";
                                 }
                             } else {
                                 require("enrollment/enDashBoard.php");
@@ -68,7 +62,6 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
     <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>

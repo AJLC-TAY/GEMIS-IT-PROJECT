@@ -5,7 +5,7 @@ $enroll_setup = "";
 if ($_SESSION['user_type'] === "AD") {
     $enroll_status = "<div class='toggle d-flex flex-row-reverse align-items-center'>
             <label class='switch ms-3'>
-                <input name='enrollment' type='checkbox' ". $_SESSION['enroll_status'] == 0 ? '' : 'checked' .">
+                <input name='enrollment' type='checkbox' " . $_SESSION['enroll_status'] == 0 ? '' : 'checked' . ">
                 <span class='slider round'></span>
             </label>
             Accept enrollees
@@ -33,10 +33,11 @@ if ($_SESSION['user_type'] === "AD") {
                                 </div>
                             </div>
                         </div>";
-    $enroll_setup = "<a href='enrollment.php?page=setup' class='btn btn-secondary button col me-3'><i class='bi bi-gear-wide-connected fa-5x'></i><br>Enrollment Setup</a>";
+    $enroll_setup = "<a href='enrollment.php?page=setup' class='btn btn-secondary button col me-3'><i class='bi bi-gear-wide-connected fa-3x'></i><br>Enrollment Setup</a>";
 }
 
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -57,31 +58,36 @@ if ($_SESSION['user_type'] === "AD") {
 <section class="row">
     <div class="d-inline-flex align-items-center">
         <!-- <div class="col-auto "> -->
-            <button class="me-3 btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
+        <button class="me-3 btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
         <!-- </div> -->
         <!-- <div class="col-auto"> -->
-            <div class="form-check form-switch">
-                <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
-                <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
-            </div>
+        <div class="form-check form-switch">
+            <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
+            <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
+        </div>
         <!-- </div>     -->
     </div>
     <div class="col-lg-4">
         <div class="card-box bg-warning">
             <div class="inner">
                 <h4>Pending</h4>
-                 <h2 id="pending"></h2>
+                <h2 id="pending"></h2>
             </div>
-            
+            <div class="icon">
+                <i class="bi bi-clock"></i>
+            </div>
         </div>
     </div>
     <div class="col-lg-4">
         <div class="card-box bg-default">
             <div class="inner">
                 <h4>Enrolled</h4>
-                 <h2 id='enrolled'></h2>
+                <h2 id='enrolled'></h2>
             </div>
-            
+            <div class="icon">
+                <i class="bi bi-clipboard-check"></i>
+            </div>
+
         </div>
     </div>
     <div class="col-lg-4">
@@ -89,19 +95,23 @@ if ($_SESSION['user_type'] === "AD") {
             <div class="inner">
                 <h4>Rejected</h4>
                 <h2 id="rejected"></h2>
+                <div class="icon">
+                    <i class="bi bi-clipboard-x"></i>
+                </div>
             </div>
         </div>
     </div>
 </section>
 <!-- QUICK ACTIONS -->
-<div class="card h-auto">
-    <h4>QUICK ACTIONS</h4>
-    <div class="col-lg-12">                       
-        <div class="row mt ps-3">
-            <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-5x"></i><br>View Enrollment List</a>
-            <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-5x"></i><br>Generate Report</a>
+<div class="card  shadow-sm mt-1">
+    <h5 class='mb-0 fw-bold ms-3 mt-2'>QUICK ACTIONS</h5>
+    <div class="col-lg-12 ms-2">
+        <div class="row">
+            <hr class="mt-1 mb-3">
+            <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-3x"></i><br>View Enrollment List</a>
+            <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-3x"></i><br>Generate Report</a>
             <?php echo $enroll_setup; ?>
-            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-5x"><br></i>Enrollment Form</a>      
+            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-3x"><br></i>Enrollment Form</a>
         </div>
     </div>
 </div>

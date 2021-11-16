@@ -16,7 +16,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 }
 ?>
 
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -31,7 +31,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     <h5><?php //echo $prog_curr_code;
         ?></h5>
     <!-- <hr> -->
-    <h2><?php echo $prog_name; ?></h2>
+    <h3><b><?php echo $prog_name; ?></b></h3>
     <h5><?php echo $prog_curr_code; ?></h5>
 </header>
 
@@ -87,16 +87,15 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 </div>
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="100" data-align="right" data-field='sub_code'>Code</th>
-                    <th scope='col' data-width="600" data-sortable="true" data-field="sub_name">Subject Name</th>
-                    <th scope='col' data-width="100" data-sortable="true" data-field="sub_type">Subject Type</th>
+                    <th scope='col' data-width="100" data-align="center" data-field='sub_code'>Code</th>
+                    <th scope='col' data-width="600" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
                     <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
         </table>
     </div>
 </div>
-
 
 <!-- Archive subject confirmation -->
 <div class="modal fade" id="subject-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

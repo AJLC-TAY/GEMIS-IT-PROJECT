@@ -1,10 +1,11 @@
 <?php
 require_once("sessionHandling.php");
+
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Size;
 
 //require_once("sessionHandling.php");
 include_once("../inc/head.html"); ?>
-<title>Grade Report | GEMIS</title>
+<title>Transcript of Record | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="../assets/js/html2pdf.bundle.min.js"></script>
 <style>
@@ -118,74 +119,82 @@ include_once("../inc/head.html"); ?>
         </div>
     </div>
     <!-- SPINNER END -->
-    <section id="container"></section>
-    <?php include_once('../inc/studentSideBar.php'); ?>
-    <!-- MAIN CONTENT START -->
-    <section id="main-content">
-        <section class="wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row mt ps-3">
-                        <!-- HEADER -->
-                        <header>
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                </ol>
-                            </nav>
-                            
-                        </header>
-                        <?php
-                        include "../class/Administration.php";
-                        $admin = new Administration();
-                         $report_id = 1;
-                        // $report_id = $_GET['report_id'];
-                        $stud_id = $_SESSION['id'];  // test
+    <section id="container">
+        <?php include_once('../inc/studentSideBar.php'); ?>
+        <!-- MAIN CONTENT START -->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row mt ps-3">
+                            <!-- HEADER -->
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active">Transcript of Records</li>
+                                    </ol>
+                                </nav>
+                                <div class="d-flex justify-content-between">
+                                    <span>
+                                        <h4><b>Transcript of Records</b></h4>
+                                        <h3><?php echo $_SESSION['User'] ?></h3>
+                                    </span>
+                                    
+                                </div>
+                            </header>
+                            <hr class='m-1'>
+                            <?php
+                            include "../class/Administration.php";
+                            $admin = new Administration();
+                            $report_id = 1;
+                            // $report_id = $_GET['report_id'];
+                            $stud_id = $_SESSION['id'];  // test
 
-                        // $stud_id = $_GET['id'];
-                        $filename = $stud_id . '_grade_report'; // 1111_grade_report
-                        $grades = $admin->listGrade();
-                        $userProfile = $admin->getProfile("ST");
-                        $stud_id = $userProfile->get_stud_id();
-                        $lrn = $userProfile->get_lrn();
-                        $lastName = $userProfile->get_last_name();
-                        $firstName = $userProfile->get_first_name();
-                        $midName = $userProfile->get_middle_name();
-                        $sex = $userProfile->get_sex();
-                        $age = $userProfile->get_age();
-                        $section = $userProfile->get_section(); 
-                        // $teacherName = $_POST['teacher_name'];
-                         $teacherName = 'Kesley Bautista Trinidad';
-                        $grade = 12;
-                        // $signatoryName = $_POST['signatory_name'];
-                        $signatoryName = 'Whitney Houston';
-                        $position = 'Secondary School Principal III';
-                        // $position = $_POST['position'];
-                        // $admittedIn = 'None';
-                        // $eligible = '12';
-                        // $date = date("F j, Y");
-                        $trackStrand = $admin->getTrackStrand();
-                        $attendance = $admin->getStudentAttendance(1);
-                        // echo json_encode($grades);
+                            // $stud_id = $_GET['id'];
+                            $filename = $stud_id . '_grade_report'; // 1111_grade_report
+                            $grades = $admin->listGrade();
+                            $userProfile = $admin->getProfile("ST");
+                            $stud_id = $userProfile->get_stud_id();
+                            $lrn = $userProfile->get_lrn();
+                            $lastName = $userProfile->get_last_name();
+                            $firstName = $userProfile->get_first_name();
+                            $midName = $userProfile->get_middle_name();
+                            $sex = $userProfile->get_sex();
+                            $age = $userProfile->get_age();
+                            $section = $userProfile->get_section();
+                            // $teacherName = $_POST['teacher_name'];
+                            $teacherName = 'Kesley Bautista Trinidad';
+                            $grade = 12;
+                            // $signatoryName = $_POST['signatory_name'];
+                            $signatoryName = 'Whitney Houston';
+                            $position = 'Secondary School Principal III';
+                            // $position = $_POST['position'];
+                            // $admittedIn = 'None';
+                            // $eligible = '12';
+                            // $date = date("F j, Y");
+                            $trackStrand = $admin->getTrackStrand();
+                            $attendance = $admin->getStudentAttendance(1);
 
-                        function prepareGradeRecordsHTML($grade)
-                        {
-                             $row = '';
-                             for ($x = 0; $x < sizeof($grade); $x++) {
-                                 
-                                $row .= "<tr>
+                            function prepareGradeRecordsHTML($grade)
+                            {
+                                $row = '';
+                                for ($x = 0; $x < sizeof($grade); $x++) {
+
+                                    $row .= "<tr>
                                         <td>{$grade[$x]['sub_name']}</td>
                                         
                                         <td align='center'>{$grade[$x]['grade_f']}</td>
                                         </tr>";
+                                }
 
-                               }
-                              
-                            return $row;
-                        }
+                                return $row;
+                            }
 
-                        function renderSemesterGradeTable($semester_desc, $grades)
-                        {
-                           $grd = "
+                            function renderSemesterGradeTable($semester_desc, $grades)
+                            {
+                                $grd = "
                                     <h6><b>$semester_desc</b></h6>
                                     <table class='table w-100 table-sm'>
                                         <col style='width: 65%;'>
@@ -201,45 +210,46 @@ include_once("../inc/head.html"); ?>
                                         </thead>
                                         <tbody>
                                             " .
-                                            prepareGradeRecordsHTML($grades['core']).  
-                                            prepareGradeRecordsHTML($grades['applied']);
+                                    prepareGradeRecordsHTML($grades['core']) .
+                                    prepareGradeRecordsHTML($grades['applied']);
 
-                                            if (array_key_exists('specialized',$grades)){
-                                                prepareGradeRecordsHTML($grades['specialized']);
-                                            }
-                                        $grd.= " </tbody>
+                                if (array_key_exists('specialized', $grades)) {
+                                    prepareGradeRecordsHTML($grades['specialized']);
+                                }
+                                $grd .= " </tbody>
                                     </table>";
 
-                                    echo $grd;
+                                echo $grd;
+                            }
+                            ?>
+                            <div class="d-flex justify-content-center">
+                                <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
+                                    <ul class="template p-3">
+                                        <li class="p-0 mb-0 mx-auto">
+                                            <h5 class="text-center"><b>Transcript of Record</b></h5>
+                                            <?php
 
-                        }
-                        ?>
-                        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
-                        <ul class="template p-0 w-100">
-                                <li class="p-0 mb-0 mx-auto">
-                                    <h5 class="text-center"><b>Transcript of Record</b></h5>
-                                    <?php
+                                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1']);
+                                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2']);
+                                            ?>
+                                            <br>
+                                        </li>
+                                    </ul>
+                                    <!-- <div class="html2pdf__page-break"><hr class='m-0'></div> -->
+                                </div>
+                            </div>
 
-                                    renderSemesterGradeTable('1st Semester', $grades['1']);
-                                    renderSemesterGradeTable('2nd Semester', $grades['2']);
-                                    ?>
-                                    <br>
-                                </li>
-                        </ul>
-                                <!-- <div class="html2pdf__page-break"><hr class='m-0'></div> -->
-                        </div>        
-                            
                         </div>
 
                     </div>
                 </div>
-            </div>
+                </div>
+            </section>
+            <!-- MAIN CONTENT END-->
+            <!-- FOOTER -->
+            <?php include_once("../inc/footer.html"); ?>
+            <!-- FOOTER END -->
         </section>
-        <!-- MAIN CONTENT END-->
-        <!-- FOOTER -->
-        <?php include_once("../inc/footer.html"); ?>
-        <!-- FOOTER END -->
-    </section>
     </section>
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
@@ -253,7 +263,7 @@ include_once("../inc/head.html"); ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
-        $(function () {
+        $(function() {
             preload("#transcript");
             hideSpinner();
         });

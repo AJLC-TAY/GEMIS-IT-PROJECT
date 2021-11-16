@@ -46,15 +46,41 @@
 
 //unlink("../uploads/faculty/1633440070_615c5146b02472.52287926.jpg");
 
-
 include '../class/Administration.php';
 $admin = new Administration();
-$res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
-$sect_code = mysqli_fetch_row($res)[0];
-print_r($sect_code);
-if (!$sect_code) {
-    echo "test";
-}
+$admin->resetPassword(3);
+//$result = $admin->query("SELECT form_137, id_picture, psa_birth_cert FROM student WHERE stud_id = '120087';");
+//$row = mysqli_fetch_row($result);
+//print_r($row);
+//foreach([$row[0], $row[1], $row[2]] as $path) {
+//    $path = "../$path";
+//    echo $path;
+//    if (file_exists($path)) {
+//        echo "$path<br>";
+////        unlink($path);
+//    }
+//}
+// $tester = $admin->getSubjectScheduleData('TVL-E');
+// $data = [];
+// foreach($tester['schedule'] as $prog => $prog_data) {
+//     foreach($prog_data as $grade => $grade_data) {
+//         foreach($grade_data as $sem => $sem_data) {
+//             foreach($sem_data as $type => $codes) {
+//                 $data[$prog]["[$grade][$sem][$type][]"] = $codes;
+//             }
+//         }
+//     }
+//     // ['ABM']['11']['1']['core']
+// }
+
+$subject = $admin->getSubject();
+// echo json_encode($tester['schedule']);
+// $res = $admin->query("SELECT section_code FROM enrollment WHERE stud_id='370160' AND sy_id='9';");
+// $sect_code = mysqli_fetch_row($res)[0];
+// print_r($sect_code);
+// if (!$sect_code) {
+//     echo "test";
+// }
 
 // $admin->editAcademicDays();
 // echo json_encode($admin->getConductAward());

@@ -108,7 +108,7 @@ include_once("../inc/head.html"); ?>
     }
 </style>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -145,7 +145,7 @@ include_once("../inc/head.html"); ?>
                                     break;
                             }
                         } else {
-                            require_once("../admin/award/awardCards.php");
+                            require_once("../admin/award/parameters.php");
                         }
                         ?>
                     </div>

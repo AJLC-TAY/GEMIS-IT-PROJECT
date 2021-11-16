@@ -64,7 +64,7 @@ if (is_null($guardian)) {
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 <script src="validate.js"></script>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER START -->
     <div class="spinner-con">
@@ -74,7 +74,7 @@ if (is_null($guardian)) {
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">

@@ -23,6 +23,7 @@ if (in_array('award_coor', $roles)) {
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
+<!DOCTYPE html>
 <header class="header black-bg">
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right"></div>
@@ -33,9 +34,9 @@ if (in_array('award_coor', $roles)) {
     <div class="top-menu">
         <ul class="nav pull-right top-menu mt-3">
             <li>
-                <h8 class="topbar fw-bold">Date | <?php echo date('F j, Y'); ?></h8>
+                <h8 class="topbar fw-bold"><?php echo date('F j, Y'); ?></h8>
             </li>
-            <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li>
+            <li><a class="topbar" href=""><i class="fa fa-user me-2"></i><?php echo $_SESSION['User']; ?> (Logged in as Faculty)</a></li>
             <li><a role="button" class="logout" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
@@ -46,32 +47,32 @@ if (in_array('award_coor', $roles)) {
     <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="centered">SY <?php echo $school_year ?></h5>
+            <h5 class="text-center">SY <?php echo $school_year ?></h5>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
                     <span>Home</span>
                 </a>
             </li>
-            <li class="sub-menu">
+            <li>
                 <a id='faculty' href="faculty.php">
                     <i class="bi bi-person-square"></i>
                     <span>Profile</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="students" href="students.php">
+            <li>
+                <a  id="advisory"  href="advisory.php">
                     <i class="fa fa-graduation-cap"></i>
-                    <span>Students</span>
+                    <span>Advisory Class</span>
                 </a>
             </li>
-            <li class="sub-menu">
-                <a id="grade" href="grade.php">
+            <li>
+                <a id="subject" href="subject.php">
                     <i class="bi bi-card-list"></i>
-                    <span>Grade</span>
+                    <span>Subject Class</span>
                 </a>
             </li>
-            <li class="sub-menu">
+            <li>
                 <a id="attendance" href="attendance.php">
                     <i class="bi bi-clipboard-check"></i>
                     <span>Attendance</span>
@@ -79,7 +80,7 @@ if (in_array('award_coor', $roles)) {
             </li>
             <?php echo $enrollment_item; ?>
             <?php echo $award_coor_item; ?>
-            <li class="sub-menu">
+            <li>
                 <a id='archived' href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
                     <span>Archived Classes</span>

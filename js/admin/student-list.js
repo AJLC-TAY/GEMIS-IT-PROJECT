@@ -1,3 +1,4 @@
+import {tableUserOptionsEventListener} from "./utilities.js";
 const tableSetup = {
     url: `getAction.php?data=student`,
     method: 'GET',
@@ -16,22 +17,15 @@ const tableSetup = {
 
 };
 
-
 let studentTable = $("#table").bootstrapTable(tableSetup);
-
+let selection = [];
 $(function () {
-    preload('#student');
+    preload('#student','#student-list');
 
-    /** Deactivate */
-    $("#deactivate-btn").click(() => $("#deactivate-form").submit());
+    /** Table options */
+    tableUserOptionsEventListener('ST');
+    /** Table options end */
 
-    $("#deactivate-form").submit(function (e) {
-        e.preventDefault();
-        let formData = $(this).serializeArray();
-        formData.push(...selection.map(e => { return { name: "user_id[]", value: `${e.student_id}` } }));
-        $.post("action.php");
-    })
-    /** Deactivate END */
 
     hideSpinner();
 });

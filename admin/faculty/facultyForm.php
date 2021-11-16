@@ -1,8 +1,7 @@
 <?php
-session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
-$subjects = $admin->listSubjects("subject");
+$subjects = $admin->listSubjects("subject", "sharedsubject");
 $departments = $admin->listDepartments();
 $action = $_GET['action'];
 
@@ -16,14 +15,22 @@ $sub_classes = [];
 
 // Content
 if ($action == 'add') {
-    $last_name = '';
-    $first_name = '';
-    $middle_name = '';
+    // $last_name = '';
+    // $first_name = '';
+    // $middle_name = '';
+    // $ext_name = '';
+    // $cp_no = '';
+    // $email = '';
+    // $age = '';
+    // $sex = "";
+    $last_name = 'Cutay';
+    $first_name = 'Alvin';
+    $middle_name = 'Loquis';
     $ext_name = '';
-    $cp_no = '';
-    $email = '';
-    $age = '';
-    $sex = "";
+    $cp_no = '090909090909';
+    $email = 'alvin@gmail.com';
+    $age = '22';
+    $sex = "m";
     $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
@@ -34,7 +41,6 @@ if ($action == 'add') {
         $department_option .= "<option value='$dep'>";
     }
     $department = "";
-    $edit_grades_checked = "";
     $enrollment_checked = "";
     $award_report_checked = "";
     $image = $PROFILE_PATH;
@@ -61,11 +67,8 @@ if ($action == 'add') {
     foreach ($departments as $dep) {
         $department_option .= "<option value='$dep'>";
     }
-    $edit_grades_checked = ($faculty->get_enable_edit_grd() == 0) ? "" : "checked";
     $enrollment_checked = ($faculty->get_enable_enroll() == 0) ? "" : "checked";
     $award_report_checked = ($faculty->get_award_coor() == 0) ? "" : "checked";
-    $id_photo = $faculty->get_id_photo();
-    $image = !is_null($id_photo) ? (file_exists("../$id_photo") ? "../".$id_photo : $PROFILE_PATH) : $PROFILE_PATH;
     $handled_subjects_list = $faculty->get_subjects();
     $handled_subjects = '';
     foreach ($handled_subjects_list as $sub) {
@@ -105,10 +108,6 @@ switch ($user_type) {
         $access_options = " <div class='form-group col-md-4'>"
             ."<label for='facultyAccess' class='mb-2'>Faculty Access</label>"
             ."<div class='form-check'>"
-                ."<input class='form-check-input' name='access[]' type='checkbox' value='editGrades' $edit_grades_checked>"
-                ."<label class='form-check-label'>Edit Grades</label>"
-            ."</div>"
-            ."<div class='form-check'>"
                 ."<input id='enrollment-in' class='form-check-input' name='access[]' type='checkbox' value='canEnroll' $enrollment_checked>"
                 ."<label for='enrollment-in' class='form-check-label'>Enrollment</label>"
             ."</div>"
@@ -127,7 +126,7 @@ switch ($user_type) {
         break;
 }
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -139,10 +138,10 @@ switch ($user_type) {
         </ol>
     </nav>
     <h3><?php echo $camel_action." ".$user_desc; ?></h3>
-    <h6 class='text-secondary'>Please complete the following:</h6>
+    <small class='text-secondary'>Please complete the following:</small>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' data-action="" class="needs-validation" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+<form id='faculty-form' data-action="" class="needs-validation mt-3" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
     <?php echo $teacher_id_input; ?>
     <input type='hidden' name='action' value='<?php echo $action; ?>'><input type='hidden' name='profile' value='faculty'>
     <div class='form-row row'>
@@ -199,23 +198,11 @@ switch ($user_type) {
         </div>
         <?php echo $dept_input; ?>
     </div>
-    <div class='form-row row'>
-        <div class='form-group col-md-4 d-flex flex-column'>
-            <label for='photo' class='form-label'>Faculty ID Photo</label>
-            <div class="image-preview-con">
-                <input type="hidden" name="current_image_path" value="<?php echo $image; ?>">
-                <img id='resultImg' src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle w-100 h-100 shadow border'' />
-                <div class=' edit-img-con text-center'>
-                <p role='button' class="edit-text opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
-            </div>
-        </div>
-        <input id='upload' class='form-control form-control-sm' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
-    </div>
     <?php echo $access_options; ?>
     <br>
     <!-- SUBJECT CLASS -->
     <?php if ($user_type == 'AD') { ?>
-    <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3'>
+    <div class='row card bg-light w-100 h-auto text-start mx-auto '>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>SUBJECT CLASS</h5>
             <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#sc-class-con' type='button' value='Assign'>-->
@@ -225,16 +212,17 @@ switch ($user_type) {
             <div class="d-flex justify-content-between mb-3">
                 <!-- SEARCH BAR - SUBJECT CLASS -->
                 <form>
-                    <div class="form-group d-flex flex-grow-1 me-3">
+                    <div class="form-group d-flex flex-grow-1 me-2 ms-2">
                         <input id="search-assigned-sc-input" type="search" class="form-control mb-0 me-1 form-control-sm" placeholder="Search subject here">
                         <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                     </div>
                 </form>
-                <span><button id='add-sc-option' class='btn btn-sm shadow'>Add subject class</button></span>
+                <span><button id='add-sc-option' class='btn btn-sm btn-success me-2'><i class="bi bi-plus me-2"></i>Add subject class</button></span>
+                <button class="unassign-selected-btn btn btn-sm btn-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
             </div>
             <table id='assigned-sc-table' class="table-striped table-sm">
                 <thead>
-                    <div class="d-flex jusitify-content-end mb-3"><button class="unassign-selected-btn btn btn-sm btn-danger">Unassign Selected</button></div>
+                    <div class="d-flex jusitify-content-end mb-3"></div>
                     <tr>
                         <th data-checkbox="true"></th>
                         <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
@@ -250,7 +238,7 @@ switch ($user_type) {
     </div>
     <!-- SUBJECT CLASS END -->
     <!-- ASSIGN SUBJECTS -->
-    <div class='collapse-table row card bg-light w-100 h-auto text-start mx-auto rounded-3 mt-4'>
+    <div class='row card bg-light w-100 h-auto text-start mx-auto mt-4'>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
             <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>-->
@@ -275,7 +263,7 @@ switch ($user_type) {
                         <th scope='col' data-width="200" data-align="center" data-field="sub_code">Code</th>
                         <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
-                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
                         <!-- <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th> -->
                     </tr>
                 </thead>

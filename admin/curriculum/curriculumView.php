@@ -1,5 +1,4 @@
 <?php
-include_once("../inc/head.html");
 include_once('../class/Administration.php');
 
 $admin = new Administration();
@@ -21,7 +20,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 }
 
 ?>
-
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -31,13 +30,13 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             <li class="breadcrumb-item active" aria-current="page"><?php echo $curr_name; ?></li>
         </ol>
     </nav>
-    <h2 class="fw-bold"><?php echo $curr_name; ?></h2>
+    <h3 class="fw-bold"><?php echo $curr_name; ?></h3>
     <hr class="my-2">
     <h6 class="fw-bold">Curriculum</h6>
 </header>
 <!-- HEADER END -->
 <!-- FORM -->
-<div class="currcard container">
+<div class="container">
     <div class='card'>
         <div class="d-flex justify-content-between">
             <h4>Information</h4>
@@ -140,7 +139,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="prog-form" action="">
+                <form id="prog-form" method="POST" action="action.php">
+                    <input type="hidden" name="action" id="action" value="addProgram" />
+                    <p><small class='text-secondary'>Please complete the following: </small></p>
                     <div class="form-group needs-validation" novalidate>
                         <label for="prog-code">Strand Code</label>
                         <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
@@ -154,7 +155,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             </div>
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary" data-link='addProg.php'>Add</button>
+                <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary">Add</button>
             </div>
         </div>
     </div>

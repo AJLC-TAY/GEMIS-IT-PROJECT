@@ -3,14 +3,26 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-
 $user_id = $_SESSION['id'];
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
 
+$edit = "disabled";
+$disable_when_edit = "";
+$none_when_edit = "";
+$display_when_edit = "d-none";
+
+if (isset($_GET['state']) && $_GET['state'] == 'edit') {
+    $edit = '';
+    $display_when_edit = "";
+    $disable_when_edit = "disabled";
+    $none_when_edit = "d-none";
+}
 ?>
+
 <title>Home | GEMIS</title>
 </head>
+<!DOCTYPE html>
 
 <body>
     <!-- SPINNER -->
@@ -21,7 +33,7 @@ $admin_user = $admin->getProfile('AD');
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper ps-4">
@@ -44,7 +56,7 @@ $admin_user = $admin->getProfile('AD');
                                                 <li>
                                                     <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
-                                                <li>School Year: <?php echo $_SESSION['school_year']; ?></li>
+                                                <li><?php echo (!empty($_SESSION['sy_id']) ? "School Year: ".$_SESSION['school_year'] : "")  ; ?></li>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -53,7 +65,41 @@ $admin_user = $admin->getProfile('AD');
                                     </div>
                                 </div>
                             </header>
-                            <div class="container mb-3">
+
+                            <div class='card'>
+                                <div class="d-flex justify-content-between">
+                                    <h5><b>SCHOOL YEAR</b></h5>
+                                    <div class="btn-con my-a">
+                                        <input type="hidden" name="action" value="">
+                                        <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class='bi bi-pencil-square me-2'></i>Edit</button>
+                                        <button class="btn btn-sm btn-primary">View</button>
+                                        <div class="decide-con <?php echo $display_when_edit; ?>">
+                                            <a id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</a>
+                                            <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mt-1">
+                                <section class="d-flex justify-content-center">
+                                    <div class="w-50">
+                                        <form id='' class="" action="action.php" method="POST">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label>Current Quarter</label>
+                                                    <input class='form-input form-control' value='First' readonly></input>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Current Semester</label>
+                                                    <input class='form-input form-control' value='First' readonly></input>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="container mb-3 mt-3">
                                 <!-- PEOPLE MANAGEMENT -->
                                 <section class="row">
                                     <h5 class="fw-bold">PEOPLE MANAGEMENT</h5>
@@ -111,7 +157,7 @@ $admin_user = $admin->getProfile('AD');
                             <!-- SCHOOL MANAGEMENT -->
                             <div class="container">
                                 <section class="row">
-                                    <h5 class="fw-bold">SCHOOL MANGEMENT</h5>
+                                    <h5 class="fw-bold">SCHOOL MANAGEMENT</h5>
                                     <section class="col-sm-6">
                                         <div class="card bg-white rounded shadow-sm mt-2">
                                             <!-- CURRICULUM -->
@@ -163,7 +209,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-file-text me-3" aria-hidden="true"></i>SUBJECT</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="student.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="subject.php" class="card-link">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -212,7 +258,7 @@ $admin_user = $admin->getProfile('AD');
                                                                         <h5 class="fw-bold mt-1"><i class="fa fa-list-ul me-3" aria-hidden="true"></i>SECTION</h5>
                                                                     </div>
                                                                     <div class="mt-1 col-sm-3">
-                                                                        <a href="#" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
+                                                                        <a href="section.php" class="card-link redirect-card">View <i class="fa fa-arrow-circle-right"></i></a>
                                                                     </div>
                                                                 </div>
                                                             </div>

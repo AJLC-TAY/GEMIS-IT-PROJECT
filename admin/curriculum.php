@@ -5,7 +5,7 @@ include_once("../inc/head.html");
 <title>Curriculum | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -15,7 +15,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--MAIN CONTENT -->
         <section id="main-content">
             <section class="wrapper ps-4">

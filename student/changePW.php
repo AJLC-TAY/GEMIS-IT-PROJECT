@@ -6,7 +6,7 @@ include_once('../inc/studentSideBar.php');
 <title>Change Password | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
 
     <section id="container">
@@ -49,7 +49,7 @@ include_once('../inc/studentSideBar.php');
                                 <div class="form-group row">
                                     <div class="d-flex justify-content-end">
                                         <input type='hidden' name='action' value=''>
-                                        <a href='admin.php' class='btn btn-outline-danger me-2'>Cancel</a>
+                                        <a href='student.php' class='btn btn-outline-danger me-2'>Cancel</a>
                                         <input type='submit' form='admin-form' class='btn btn-success' value='Save'>
                                     </div>
                                 </div>

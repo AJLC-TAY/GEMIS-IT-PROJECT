@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -108,3 +109,4 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">var type = 'values'</script>

@@ -1,11 +1,12 @@
 <?php
 require_once("sessionHandling.php");
-include_once("../inc/head.html"); ?>
+include_once("../inc/head.html"); 
+?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 
 <title>Home | GEMIS</title>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -39,12 +40,12 @@ include_once("../inc/head.html"); ?>
                                                     <h4> <?php echo $_SESSION['User']?></h4>
                                                 </li>
                                                 <li>
-                                                    <h5>Currently Enrolled in: First Semester, 2022-2023</h5>
+                                                    <h6>Currently Enrolled in: First Semester, 2022-2023</h6>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <img src="../assets/student.png" alt="Display image" style="width: 40%; display: block; margin-left: auto; float:right;">
+                                            <img src="../assets/student.png" alt="Display image" style="width: 35%; display: block; margin-left: auto; float:right;">
                                         </div>
                                     </div>
                                 </div>

@@ -1,19 +1,24 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
-include_once("../class/Administration.php");
-$admin = new Administration();
-$data = $admin->getAttendanceDays();
+include_once("../class/Faculty.php");
+$faculty = new FacultyModule();
+$data = $faculty->getAttendanceDays();
 $current_month = $data['current'];
 $months = $data['months'];
-$class = $_GET['section_code'];
-
-$url = "getAction.php?data=attendance&class=$class&month=$current_month";
+$class_data =  $faculty->getAdvisoryClass();
+$class = '';
+$class_name = '';
+if (!empty($class_data)) {
+    $class = $class_data['section_code'];
+    $class_name= $class_data['section_name'];
+}
+$url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
 ?>
 <title>Attendance | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -41,17 +46,37 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                             <div class="d-flex">
                                 <div class="col-auto">
                                     <p class="text-secondary m-0">
-                                        <medium>First Semester</medium>
+                                        <medium>Current: 
+                                            <?php
+                                            $sem = '';
+                                            switch ($_SESSION['current_semester']) {
+                                                case '1': 
+                                                    $sem = "First ";
+                                                    break;
+                                                case '2': 
+                                                    $sem = "Second ";
+                                                    break;
+                                                case '3': 
+                                                    $sem = "Third ";
+                                                    break;
+                                                case '4': 
+                                                    $sem = "Fourth ";
+                                                    break;
+                                            } 
+                                            echo $sem." Semester";
+                                            ?>
+                                        </medium>
                                     </p>
-                                    <h3 class="m-0 fw-bold">12 ABM A</h3>
-                                    <h5 class="m-0">Attendance</h5>
+                                    <?php 
+                                    
+                                    ?>
+                                    <h3><b><?php echo $class_name; ?></b> Attendance</h3>
                                 </div>
                             </div>
-                            <hr class="mt-3 mb-4">
                         </header>
                         <!-- HEADER END -->
                         <!-- ATTENDANCE TABLE -->
-                        <div class="container mt-1 ms-0">
+                        <div class="container mt-2 ms-0">
                             <div class="card w-100 h-auto bg-light">
                                 <form id="attendance-form" action="action.php" method="POST">
                                     <input type="hidden" name="action" value="changeAttendance">
@@ -74,7 +99,7 @@ $url = "getAction.php?data=attendance&class=$class&month=$current_month";
                                         </div> -->
 
                                         <div class="col-auto">
-                                            <button class="link btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
+                                            <button class="btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                             <div class="edit-options" style="display: none;">
                                                 <a href="attendance.php" role="button" class="btn btn-sm btn-outline-dark me-1 ms-2">Cancel</a>
                                                 <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">

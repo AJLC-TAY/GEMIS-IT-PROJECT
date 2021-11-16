@@ -5,7 +5,7 @@ include('../class/Administration.php'); ?>
 <title>Program | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -15,7 +15,7 @@ include('../class/Administration.php'); ?>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper ps-4">

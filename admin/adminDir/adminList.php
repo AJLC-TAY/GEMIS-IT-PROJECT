@@ -1,9 +1,10 @@
 <?php
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$user_id = $_SESSION['id'] = 2;
+$user_id = $_SESSION['id'];
 $user = $admin->getAdministrator($user_id);
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
  <header>
      <!-- BREADCRUMB -->
@@ -15,9 +16,6 @@ $user = $admin->getAdministrator($user_id);
      </nav>
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h3 class="fw-bold">Administrator</h3>
-<!--         <span>-->
-<!--            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'>Add admin</a>-->
-<!--         </span>-->
      </div>
  </header>
  <!-- HEADER END -->
@@ -26,10 +24,12 @@ $user = $admin->getAdministrator($user_id);
         <div class="col-auto">
             <h5><b>INFORMATION</b></h5>
         </div>
-        <div class="col-auto d-flex">
-            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+        <div class="col-auto d-flex">            
+            <button id="delete-account-btn" class="btn btn-outline-danger ms-2"><i class="bi bi-trash me-2"></i>Delete Account</button>
             <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
-            <button class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#confirmation-modal"><i class="bi bi-trash me-2"></i>Delete Account</button>
+            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+
+
         </div>
     </div>
     <div class="card w-100 h-auto bg-light">
@@ -37,16 +37,18 @@ $user = $admin->getAdministrator($user_id);
             <div class="col-md-6">
                 <h6><b>GENERAL INFORMATION</b></h6>
                 <ul class='list-group ms-3'>
-                    <li class='list-group-item'><b>ID:</b> <?php echo $user->admin_id; ?><br>
-                    <li class='list-group-item'><b>Name: </b> <?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
-                    <li class='list-group-item'><b>Age: </b> <?php echo $user->age; ?><br>
-                    <li class='list-group-item'><b>Sex: </b> <?php echo $user->sex; ?>
+                    <li class='list-group-item'><b>UID: </b><?php echo $user->admin_id; ?><br>
+                    <li class='list-group-item'><b>Name: </b><?php echo "{$user->last_name}, {$user->first_name} {$user->middle_name} {$user->ext_name}"; ?><br>
+                    <li class='list-group-item'><b>Age: </b><?php echo $user->age; ?><br>
+                    <li class='list-group-item'><b>Sex: </b><?php echo $user->sex; ?>
+                </ul>
             </div>
             <div class="col-md-6">
                 <h6 class="fw-bold">CONTACT INFORMATION</h6>
                 <ul class='list-group ms-3'>
                     <li class='list-group-item'><b>Cellphone No: </b><?php echo $user->cp_no; ?><br>
                     <li class='list-group-item'><b>Email: </b><?php echo $user->email; ?>
+                </ul>
             </div>
         </div>
     </div>
@@ -56,7 +58,7 @@ $user = $admin->getAdministrator($user_id);
      <div class="d-flex justify-content-between align-items-center mb-3">
          <h5><b>OTHER ADMINS</b></h5>
          <span>
-            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'><i class="bi bi-plus me-2"></i>Add admin</a>
+            <a href="admin.php?action=add" id="add-btn" class="btn btn-success" title='Add new admin member'><i class="bi bi-plus-lg me-2"></i>Add admin</a>
          </span>
      </div>
      <div class="card w-100 h-auto bg-light">
@@ -92,7 +94,7 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="delete-account-form" method="POST" action="deleteAccount.php">
+            <form id="delete-account-form" method="POST" action="action.php">
                 <div class="modal-body">
                     <p class="text-secondary"><small>Enter your password to confirm account deletion</small></p>
                     <div class="container">
@@ -102,8 +104,32 @@ $user = $admin->getAdministrator($user_id);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger" value="Delete">
+                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger btn-sm" value="Delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal fade" id="single-admin-confirm-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Warning</h4>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="change-pass-form" method="POST">
+                <div class="modal-body">
+                    <h6>You are the only administrator in the system, deleting this account will set the admin account to default.<br>
+                    Would you like to proceed?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn  btn-outline-secondary btn-sm">Proceed</button>
                 </div>
             </form>
         </div>
@@ -120,30 +146,27 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="change-pass-form" method="POST" action="deleteAccount.php">
+            <form id="change-pass-form" method="POST">
                 <div class="modal-body">
-                    <p class="text-secondary"><small>Please complete the following</small></small></p>
                     <div class="container">
                         <div class="form-group row">
-                            <!-- <label for="current-pass">Current password</label> -->
-                            <input id="current-pass" type="password" name="current-pass" class='form-control' placeholder="Current password" required>
+                            <input type="hidden" name="action" value="changePassword">
+                            <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
+                            <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password" required>
                         </div>
-                    </div>
-                    <p class="text-secondary"><small>Enter new password:</small></small></p>
-                    <div class="container">
                         <div class="form-group row mt-3">
-                            <!-- <label for="new-pass">New password</label> -->
-                            <input id="new-pass" type="password" name="new-pass" class='form-control' placeholder="New password" required>
+                            <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
+                            <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password" required>
                         </div>
                         <div class="form-group row">
                             <!-- <label for="reenter-new-pass">Re-enter new password</label> -->
-                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control' placeholder="Re-enter new password" required>
+                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-primary" value="Change">
+                    <button class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
                 </div>
             </form>
         </div>

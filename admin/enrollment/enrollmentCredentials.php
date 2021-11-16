@@ -21,9 +21,12 @@ if ($valid_status === "Pending") {
         $form_display = '';
 }
 
-$image = $id_picture ?? "../assets/profile.png";
+const PROFILE_PATH = "../assets/profile.png";
+$image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFILE_PATH) : PROFILE_PATH;
+$psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : "../uploads/credential/9/psa.jpg") : "../uploads/credential/9/psa.jpg";
+$form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
 ?>
-
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -87,68 +90,55 @@ $image = $id_picture ?? "../assets/profile.png";
                         </div>
                         <!-- PROFILE PICTURE END -->
                         <!-- DOCUMENT DETAILS -->
-                        <div class="col-xl-8 ps-5">
+                        <div class="col-xl-8 ps-5 container">
                             <div class="row">
                                 <h5><b>Documents</b></h5>
                             </div>
-                            <div class="row me-3">
-                                <div class="col-sm-3">
+                            <div class="ps-3 row me-3">
+                                    <div class="col-md-4 card">
+                                        <div class="thumbnail">
+                                            <div class="caption">
+                                                <p class="fw-bold text-center">PSA DOCUMENT</p>
+                                            </div>
+                                            <img id="psa" src="<?php echo $psaPreview; ?>" class="img-responsive" alt="PSA document" style="width:100%">
+                                            <!-- </a> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 card ms-4">
+                                        <div class="thumbnail">
+                                            <div class="caption">
+                                                <p class="fw-bold text-center">FORM 137</p>
+                                            </div>
+                                            <img id="form137" src="<?php echo $form137Preview; ?>" class="img-responsive" alt="Form 137" style="width:100%">
+                                        </div>
+                                    </div>
+                                <!-- <div class="col-sm-3">
                                     <h6>FORM 138</h6>
                                 </div>
                                 <div class="col-sm-9">
                                     <a href="#" id="pop">
-                                        <img id="imageresource" src="<?php echo $form_137; ?>" style="width: 50%; height: auto;">
+                                        <img id="imageresource" src="<?php //echo $form_137; ?>" style="width: 50%; height: auto;">
                                     </a>
 
-                                    <!-- Creates the bootstrap modal where the image will appear -->
-                                    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">Image preview</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <img src="<?php echo $form_137; ?>" id="imagepreview" style="width: 400px; height: 264px;" >
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="my-4">
+                                   
+                                </div> -->
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-sm-3">
+                            <!-- <div class="row mt-3">
+                                <div class="row">
+                                
+                                </div> -->
+                                <!-- <div class="col-sm-3">
                                     <h6>PSA Birth Certificate</h6>
                                 </div>
                                 
                                 <div class="col-sm-9">
                                     <a href="#" id="pop">
-                                        <img id="imageresource" src="<?php echo $birth_cert; ?>" style="width: 50%; height: auto;">
+                                        <img id="imageresource" src="<?php // echo $birth_cert; ?>" style="width: 50%; height: auto;">
                                     </a>
 
-                                    <!-- Creates the bootstrap modal where the image will appear -->
-                                    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">Image preview</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <img src="<?php echo $birth_cert;?>" id="imagepreview" style="width: 400px; height: 264px;" >
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                   
+                                </div> -->
+                            <!-- </div> -->
                         </div>
                     </div>
                     <div class="modal fade" id="select-section-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
@@ -177,3 +167,55 @@ $image = $id_picture ?? "../assets/profile.png";
         </div>
     </div>
 </div>
+
+<!-- MODAL FIRST -->
+ <!-- Creates the bootstrap modal where the image will appear -->
+ <!-- <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+            </div>
+            <div class="modal-body">
+                <img src="<?php echo $form_137; ?>" id="imagepreview" style="width: 400px; height: 264px;" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+ <!-- Creates the bootstrap modal where the image will appear -->
+ <div class="modal fade" id="psaPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">PSA Preview</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="img01">
+                        <img  src ="<?php echo $psaPreview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="137Preview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modal-title">
+                            <h4 class="mb-0">137 Preview</h4>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="img01">
+                        <img  src ="<?php echo $form137Preview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
+                    </div>
+                </div>
+            </div>
+        </div>

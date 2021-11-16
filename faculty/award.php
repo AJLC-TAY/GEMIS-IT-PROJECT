@@ -16,7 +16,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <title>Award | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -121,7 +121,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         //     include_once("award/awardView.php");
                         //     $jsFilePath = "../js/admin/award.js";
                         // } else {
-                        //     include_once("award/awardCards.php");
+                        //     include_once("award/parameters.php");
                         //     $jsFilePath = "../js/admin/award.js";
                         // }
                         ?>

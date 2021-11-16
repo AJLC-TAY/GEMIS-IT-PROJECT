@@ -1,29 +1,29 @@
-import {commonTableSetup, toggleEnrollment} from "./utilities.js";
+import { commonTableSetup, toggleEnrollment } from "./utilities.js";
 
 preload("#enrollment", "#set-up");
 
 /** Faculty privilege table method */
 
 const defaultSetup = {
-    method:             'GET',
-    search:             true,
+    method: 'GET',
+    search: true,
     ...commonTableSetup
 };
 
 let facultyTS = {...defaultSetup,
-    url:                'getAction.php?data=faculty-privilege',
-    uniqueId:           'teacher_id',
-    idField:            'teacher_id',
-    height:             425,
-    searchSelector:     "#faculty-search-input",
+    url: 'getAction.php?data=faculty-privilege',
+    uniqueId: 'teacher_id',
+    idField: 'teacher_id',
+    height: 425,
+    searchSelector: "#faculty-search-input",
 };
 
 let sectionTS = {...defaultSetup,
-    url:                'getAction.php?data=section&current=true',
-    uniqueId:           'code',
-    idField:            'code',
-    height:             300,
-    searchSelector:     "#section-search-input",
+    url: 'getAction.php?data=section&current=true',
+    uniqueId: 'code',
+    idField: 'code',
+    height: 300,
+    searchSelector: "#section-search-input",
 };
 
 let facultyTable = $("#faculty-table").bootstrapTable(facultyTS);
@@ -36,23 +36,23 @@ facultyTable.bootstrapTable('refreshOptions', {
 });
 
 /** Toggles the privilege of a selected faculty */
-function togglePrivilege (teacherID, canEnroll) {
+function togglePrivilege(teacherID, canEnroll) {
     facultyTable.bootstrapTable("showLoading");
     let formData, msg;
-    formData= new FormData();
+    formData = new FormData();
     formData.append('teacher-id[]', teacherID);
-    formData.append('action', 'changeEnrollPriv' );
+    formData.append('action', 'changeEnrollPriv');
     formData.append('can-enroll', canEnroll);
     msg = "Faculty can " + (canEnroll == 1 ? "now" : "no longer") + " enroll students";
     $.ajax({
-        url:    "action.php",
+        url: "action.php",
         method: "POST",
-        data:   formData,
+        data: formData,
         processData: false,
         contentType: false,
         success: () => {
             facultyTable.bootstrapTable('refresh')
-            setTimeout(function () {
+            setTimeout(function() {
                 facultyTable.bootstrapTable("hideLoading")
             }, 3000)
             showToast("success", msg)
@@ -64,7 +64,7 @@ function togglePrivilege (teacherID, canEnroll) {
 window.togglePrivilege = togglePrivilege;
 var stepper = new Stepper($('#stepper')[0]);
 
-$(function () {
+$(function() {
     /** Toggles enrollment privilege of selected on or multiple faculties */
     $(document).on('click', '.enroll-priv-btn', function(e) {
         e.preventDefault();
@@ -87,30 +87,30 @@ $(function () {
         msg = "Selected faculty can " + (value == 1 ? "now" : "no longer") + " enroll students";
 
         $.ajax({
-            url:         "action.php",
-            method:      "POST",
-            data:        formData,
+            url: "action.php",
+            method: "POST",
+            data: formData,
             processData: false,
             contentType: false,
-            success:     () => {
-                            facultyTable.bootstrapTable('refresh')
-                            setTimeout(function () {
-                                facultyTable.bootstrapTable("hideLoading")
-                            }, 700)
-                            showToast("success", msg)
-                         }
+            success: () => {
+                facultyTable.bootstrapTable('refresh')
+                setTimeout(function() {
+                    facultyTable.bootstrapTable("hideLoading")
+                }, 700)
+                showToast("success", msg)
+            }
         });
     });
 
     /** Clear button of the faculty table */
-    $(document).on('click', '#f-table-clear-btn', function (e) {
+    $(document).on('click', '#f-table-clear-btn', function(e) {
         facultyTable.bootstrapTable('resetSearch');
         $('#faculty-search-input').focus().select();
         $('ul[aria-labelledby="faculty-filter"] li a.active').click();
     });
 
     /** Filter button of the faculty table */
-    $(document).on('click', '.filter-item', function (e) {
+    $(document).on('click', '.filter-item', function(e) {
         e.preventDefault();
         facultyTable.bootstrapTable('showLoading');
         // Add active state to the button and remove active state from other options
@@ -123,33 +123,38 @@ $(function () {
         else facultyTable.bootstrapTable('refresh');
 
         facultyTable.bootstrapTable('filterBy', filterData)
-                    .bootstrapTable('hideLoading');
+            .bootstrapTable('hideLoading');
     });
 
     /** Resets the view of the tables so as to fix their layout when shown or rendered */
-    $(document).on("click", ".stepper-btn", function () {
+    $(document).on("click", ".stepper-btn", function() {
         facultyTable.bootstrapTable('resetView');
         sectionTable.bootstrapTable('resetView');
     });
 
     /** Summarizes the allowed teacher to enroll and sections for the enrollment */
-    $(document).on("click", "#to-step-3", function () {
+    $(document).on("click", "#to-step-2", function() {
         let facultyCount = 0;
+        console.log(facultyTable.bootstrapTable('getData'));
         let faculty = facultyTable.bootstrapTable('getData').map(e => {
-            if (e.status === 1) {
-                facultyCount ++;
+            if (e.status == 1) {
+                facultyCount++;
+                // console.log(e.teacher_id);
+                console.log(e);
                 return `<a class="list-group-item list-group-item-action" target='_blank' href="faculty.php?id=${e.teacher_id}">T. ${e.name}</a>`;
             }
         });
-        let sections = sectionTable.bootstrapTable('getData').map(e => {
-            return `<a class="list-group-item list-group-item-action" target='_blank' href="section.php?sec_code=${e.code}">${e.name}</a>`;
-        });
+        // console.log(faculty);
+        // let sections = sectionTable.bootstrapTable('getData').map(e => {
+        //     return `<a class="list-group-item list-group-item-action" target='_blank' href="section.php?sec_code=${e.code}">${e.name}</a>`;
+        // });
+
 
         $("#faculty-count").html(facultyCount);
-        $("#section-count").html(sections.length);
+        // $("#section-count").html(sections.length);
 
         $("#faculty-list").html(faculty.join(''));
-        $("#section-list").html(sections.join(''));
+        // $("#section-list").html(sections.join(''));
     });
 
     $(document).on("click", "[form='section-form']", (e) => {
@@ -159,7 +164,7 @@ $(function () {
 
     $(document).on("submit", "#section-form", function(e) {
         e.preventDefault();
-        $.post("action.php", $(this).serializeArray(), function () {
+        $.post("action.php", $(this).serializeArray(), function() {
             sectionTable.bootstrapTable('refresh');
             showToast('success', 'Section successfully added');
         });
@@ -168,12 +173,13 @@ $(function () {
     /** Changes the enrollment status of the current school year */
     toggleEnrollment();
 
-    /** Stepper */ 
+    /** Stepper */
     $(document).on("click", ".next", () => {
         stepper.next();
     });
     $(document).on("click", ".previous", () => {
         stepper.previous();
+        facultyTable.bootstrapTable('resetView');
     });
 
     /** Remove section from enrollment setup */

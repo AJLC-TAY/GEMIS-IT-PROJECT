@@ -1,8 +1,6 @@
 /** SUBJECT TABLE LIST */
 import {commonTableSetup} from "./utilities.js";
 
-let onPostBodyOfTable = () => {};
-
 const tableSetup = {
   url: 'getAction.php?data=subjects',
   method: 'GET',
@@ -34,7 +32,126 @@ let prepareArchiveHTML = archivedData => {
 preload('#curr-management', '#subject');
 
 let addAgain = false;
+let progSelect;
+
+/** Program select from subject schedule page */
+try {
+  progSelect = $("#program-select").select2({
+    theme: "bootstrap-5",
+    width: 500
+  });
+} catch (e) {}
+
+function resetSchedTable() {
+  $(".subject-select").val([]).change();
+}
+
+function changeSchedTable(firstStrand) {
+  resetSchedTable();
+  try {
+
+    prepareSchedOptions(firstStrand, 'applied');
+    prepareSchedOptions(firstStrand, 'core');
+    prepareSchedOptions(firstStrand, 'specialized');
+
+    $(".subject-select").select2({
+      theme: "bootstrap-5",
+      width: null,
+    });
+    Object.entries(schedule[firstStrand]).forEach(item => {
+      let id = item[0];
+      $(`[name='${id}']`).val(item[1]).change();
+    });
+
+
+  } catch (e) {}
+}
+
+function getSubjectsByProgram(list, program) {
+  console.log("get subjects by pr");
+  let temp = [];
+  list.forEach(element => {
+    if (element.program == program) {
+      temp.push(element);
+    }
+  });
+  return temp;
+}
+
+function renderSubOptToHtml(list, type) {
+  console.log("render html /n");
+
+  let html = '';
+  const semester = [1, 2];
+  const grade = [11, 12];
+  list.forEach(e => {
+    html += `<option value='${e.code}'>${e.name}</option>`;
+  });
+
+  console.log(html);
+  grade.forEach(e => {
+    semester.forEach(s => {
+      $(`[name='data[${e}][${s}][${type}][]']`).html(html);
+    });
+  });
+}
+
+function prepareSchedOptions(firstStrand, type) {
+  console.log("prepare sched options /n");
+  try {
+    // filter subject options by subject type
+    let opt = schedOptions[type];
+    // filter subject options by program
+    let finalOpt = getSubjectsByProgram(opt, firstStrand);
+    renderSubOptToHtml(finalOpt, type);
+  } catch (e) {}
+}
+
 $(function () {
+  /** Subject Schedule */
+  try {
+    console.log("schedule", schedule);
+    console.log("options", schedule);
+    let firstStrand = progSelect.val();
+   
+  
+    if (firstStrand.length > 0) {
+      changeSchedTable(firstStrand);
+    }
+
+    $(document).on("change", "#program-select", function () {
+      changeSchedTable($(this).val());
+    });
+
+    $(document).on("submit", "#schedule-form", function (e) {
+      e.preventDefault();
+      let formData = $(this).serializeArray();
+      formData.push({name: "action", value: "saveSchedule" });
+      formData.push({name: "program", value: progSelect.val() });
+      $.post("action.php", formData, function(data) {
+        $("#program-select").prop("disabled", false);
+        $(".edit-sched-btn").show();
+        $(".edit-opt-con").addClass("d-none");
+        $(".subject-select").prop("disabled", true);
+        let newData = JSON.parse(data);
+        let prog = newData['program'];
+        delete schedule[prog];
+        schedule[prog] = newData['new'][prog];
+        
+        // schedule[newData['program']] = newData['new'][prog];
+      });
+    });
+
+    $(document).on("click", ".edit-sched-btn", function() {
+      $(this).hide();
+      $("#program-select").prop("disabled", true);
+      $(".edit-opt-con").removeClass("d-none");
+      $(".subject-select").prop("disabled", false);
+    });
+  } catch (e) {}
+  /** Subject Schedule End */
+
+
   $('#sub-type').change(function () {
     let options = $('#app-spec-options');
     let type = $(this).val();
@@ -57,15 +174,12 @@ $(function () {
     $('#add-subject-form').submit();
   });
 
-  $('.submit-btn').click(() => {
-    $('#add-subject-form').submit();
-  });
-
   $('#add-subject-form').submit(function (e) {
     e.preventDefault();
     showSpinner();
     var form = $(this);
     var formData = form.serializeArray();
+    console.log(formData)
 
     // initialize requisites array
     var prereq = [];
@@ -103,15 +217,16 @@ $(function () {
     saveRequisiteCodes('CO[]', coreq);
 
     $.post('action.php', formData, function (data) {
-      hideSpinner(500);
+      hideSpinner();
       if (addAgain) {
         $('#add-subject-form').trigger('reset');
         $('#app-spec-options').addClass('d-none');
         $('#sub-code').attr('autofocus');
         addAgain = false;
+        // hideSpinner();
+
         return showToast('success', 'Subject successfully added!');
       }
-      console.log(data);
       data = JSON.parse(data);
       window.location.href = `subject.php?${data.redirect}`;
     });

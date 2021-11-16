@@ -6,17 +6,7 @@ include_once("../inc/head.html");
 <title>Archived Classes | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-
-<header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Archived Classes</a></li>
-        </ol>
-    </nav>
-</header>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <!--<div id="main-spinner-con" class="spinner-con">
@@ -33,6 +23,15 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active">Archived Classes</a></li>
+                                    </ol>
+                                </nav>
+                            </header>
                             <div class="d-flex justify-content-between">
                                 <h3 class="fw-bold">Archived Classes</h3>
                             </div>

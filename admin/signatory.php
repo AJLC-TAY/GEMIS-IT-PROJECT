@@ -9,11 +9,12 @@ $faculty = $admin->listFaculty();
 
 
 ?>
-<title>Admin | GEMIS</title>
+<title>Signatory | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 
 <body>
+<!DOCTYPE html>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
@@ -22,7 +23,7 @@ $faculty = $admin->listFaculty();
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -64,7 +65,7 @@ $faculty = $admin->listFaculty();
                                                 <th scope='col' data-width="100" data-align="center" data-field="sign_id">Sign ID</th>
                                                 <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="years">Years</th>
                                                 <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                                <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="position">Position</th>
+                                                <th scope='col' data-width="200" data-halign="center" data-align="center" data-sortable="true" data-field="position">Position</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>
                                             </tr>
                                         </thead>
@@ -99,6 +100,7 @@ $faculty = $admin->listFaculty();
                 <div class="modal-body">
                     <form id="signatory-form" method="POST">
                         <input type="hidden" name="action" value="">
+                        <input id="sig-id" type="hidden" name="sig-id" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="container">
                             <div class="row align-content-center needs-validation" novalidate>
@@ -162,47 +164,21 @@ $faculty = $admin->listFaculty();
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="modal-view" aria-hidden="true">
+    <div class="modal fade" id="confirmation-modal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">View Signatory Details</h4>
+                        <h4 class="mb-0">Confirmation Message</h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex flex-column">
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="id-no-view">ID No</label>
-                            <div class="col-8">
-                                <input id="id-no-view" type="text" class="form-control form-control-sm mb-0" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="name-view">Name</label>
-                            <div class="col-8">
-                                <input id="name-view" class="form-control form-control-sm mb-0" type="text" value="" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="position-view">Position</label>
-                            <div class="col-8">
-                                <input id="position-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class='col-form-label col-4'for="years-view">Years</label>
-                            <div class="col-8">
-                                <input id="years-view" class="form-control form-control-sm mb-0" type="text" name="" readonly>
-                            </div>
-                        </div>
-                    </div>
+                    Delete selected signatory?
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
-                    <button data-action='Edit' data-bs-toggle="modal" data-bs-target="#modal-form" class="show-modal edit-btn btn btn-primary btn-sm">Edit</button>
+                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button id="delete-signatory-confirm" class="edit-btn btn btn-danger btn-sm">Delete</button>
                 </div>
             </div>
         </div>

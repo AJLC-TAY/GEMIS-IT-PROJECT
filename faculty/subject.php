@@ -9,7 +9,7 @@ $id = $_SESSION['id'];
 $sy_id = $_SESSION['sy_id'];
 // echo($sy_id);
 $teacher_id = (int) $_SESSION['id'];
-$advisory = $faculty->getAdvisoryClass($sy_id);
+// $advisory = $faculty->getAdvisoryClass($sy_id);
 $sub_classes = $faculty->getHandled_sub_classes($id);
 $adv_opn = '';
 $sub_class_opn = '';
@@ -17,24 +17,24 @@ $sub_class_opn = '';
 $adv_table_display = 'd-none';
 $sub_table_display = '';
 
-$schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
-$sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
-$grading = $schoolYearInfo['grading'] == '1' ? 'First' : 'Second';
-$qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
+// $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
+$sem = $_SESSION['current_semester'] == '1' ? 'First' : 'Second';
+$grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
+$qtrs = $_SESSION['current_semester'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
-$adv_count_is_empty = !(is_null($advisory));
-if ($adv_count_is_empty) {
-    $adv_table_display = '';
-    // $sub_table_display = 'd-none';
-    $section_code = $advisory['section_code'];
-    $section_name = $advisory['section_name'];
+// $adv_count_is_empty = !(is_null($advisory));
+// if ($adv_count_is_empty) {
+//     $adv_table_display = '';
+//     // $sub_table_display = 'd-none';
+//     $section_code = $advisory['section_code'];
+//     $section_name = $advisory['section_name'];
 
-    $adv_opn = "<optgroup label='Advisory Class'>"
-        . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
-        . "data-url='getAction.php?data=student&section={$section_code}' "
-        . "data-name='$section_name'>$section_name</option>"
-        . "</optgroup>";
-}
+//     $adv_opn = "<optgroup label='Advisory Class'>"
+//         . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
+//         . "data-url='getAction.php?data=student&section={$section_code}' "
+//         . "data-name='$section_name'>$section_name</option>"
+//         . "</optgroup>";
+// }
 
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
@@ -43,10 +43,10 @@ if (count($sub_classes) != 0) {
         $section_name = $sub_class->get_section_name();
         $sub_code = $sub_class->get_sub_code();
         $sub_name = $sub_class->get_sub_name();
-        $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
+        $sub_class_opn .= "<option value='$sub_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&class_code={$section_code}' "
-            . "data-name='$section_name'>$section_name [$sub_code]</option>";
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_class_code={$section_code}' "
+            . "data-name='$sub_code'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";
 } else {
@@ -58,10 +58,10 @@ if (count($sub_classes) != 0) {
 
 ?>
 
-<title>Grade | GEMIS</title>
+<title>Subject Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -84,7 +84,7 @@ if (count($sub_classes) != 0) {
                                 <!-- <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                        <li class="breadcrumb-item active">Grade</li>
+                                        <li class="breadcrumb-item active">Subjecct Class</li>
                                     </ol>
                                 </nav>
                                 <div class="d-flex justify-content-between mb-3">
@@ -95,13 +95,13 @@ if (count($sub_classes) != 0) {
                             <!-- </header> -->
                             <!-- STUDENTS TABLE -->
                             <?php
-                            if (isset($_GET['values_grade'])){
-                                include_once("grade/valuesGrade.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
-                            } else {
+                            // if (isset($_GET['values_grade'])){
+                            //     include_once("grade/valuesGrade.php"); 
+                            //     $jsFilePath = "<script type='text/javascript' src='../js/student/values-grade.js'></script>";
+                            // } else {
                                 include_once("grade/gradeStudents.php"); 
                                 $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
-                            }
+                            // }
                             ?>
                             
                         </div>
@@ -118,7 +118,7 @@ if (count($sub_classes) != 0) {
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title">
-                        <h4 class="mb-0">Are you sure you want to <span id='label'></span>?</h4>
+                        <h4 class="mb-0"><span id='stmt'></span><span id='label'></span></h4>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -147,7 +147,7 @@ if (count($sub_classes) != 0) {
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
-        var currentGrading = '<?php echo $grading; ?>';
+        var currentGrading = '<?php echo $grading; ?>'
     </script>
     <script type='module' src='../js/faculty/class-grade.js'></script>
     <?php echo $jsFilePath; ?>;

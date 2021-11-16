@@ -1,17 +1,17 @@
-import {commonTableSetup} from "./utilities.js";
+import { commonTableSetup } from "./utilities.js";
 
 let tableSetup, table, assignMultiple, selections;
 tableSetup = {
     ...commonTableSetup,
-    pageSize:           "25",
-    pageList:           "[25, 50, 75, All]",
-    url:                'getAction.php?data=all-sub-classes',
-    idField:            'sub_class_code',
-    uniqueId:           'sub_class_code',
-    height:             '800',
-    method:             'GET',
-    search:             true,
-    searchSelector:     '#search-input',
+    pageSize: "25",
+    pageList: "[25, 50, 75, All]",
+    url: 'getAction.php?data=all-sub-classes',
+    idField: 'sub_class_code',
+    uniqueId: 'sub_class_code',
+    height: '800',
+    method: 'GET',
+    search: true,
+    searchSelector: '#search-input',
 };
 
 table = $("#table").bootstrapTable(tableSetup);
@@ -23,7 +23,7 @@ selections = [];
  * If current ID is provided, exclude it from the selection.
  * @param {String} currentID Faculty ID of the current subject teacher.
  */
-function reloadOptions (currentID = null) {
+function reloadOptions(currentID = null) {
     let options;
     if (currentID != null) {
         options = facultyOptions.map(e => {
@@ -34,7 +34,7 @@ function reloadOptions (currentID = null) {
             return `<option value="${e.teacher_id}">${e.name}</option>`;
         });
     }
-    options =  "<option value='*'>-- Select faculty here --</option>" + options.join('');
+    options = "<option value='*'>-- Select faculty here --</option>" + options.join('');
 
     $("#faculty-select").html(options).select2({
         theme: "bootstrap-5",
@@ -44,7 +44,10 @@ function reloadOptions (currentID = null) {
 }
 
 $(function() {
-    reloadOptions();
+    preload("#enrollment", "#sub-classes");
+    try {
+        reloadOptions();
+    } catch(e) {}
 
     /** Event listener when multiple assign button is clicked */
     $(document).on("click", '#multiple-assign-opt', function() {
@@ -143,6 +146,5 @@ $(function() {
             }
         });
     });
-
     hideSpinner();
 });

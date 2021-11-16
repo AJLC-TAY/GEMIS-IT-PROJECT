@@ -16,7 +16,7 @@ $admin = new Administration();
 </div>
 <!-- SPINNER END -->
 <section id="container">
-    <?php include_once('../inc/admin/sidebar.php'); ?>
+    <?php include_once('../inc/admin/adminSidebar.php'); ?>
     <!-- MAIN CONTENT START -->
     <section id="main-content">
         <section class="wrapper ps-4">

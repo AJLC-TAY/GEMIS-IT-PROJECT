@@ -6,7 +6,7 @@ include_once("../inc/head.html");
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -16,7 +16,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">

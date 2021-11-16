@@ -5,7 +5,7 @@ include_once("../inc/head.html");
 <title>Student | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -15,7 +15,7 @@ include_once("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -23,18 +23,22 @@ include_once("../inc/head.html");
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
+                            $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                             if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
+                            } else if (isset($_GET['action']) && $_GET['action'] == 'export') {
+                                include_once("student/export.php");
                             } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
                                 include_once("student/studentTransfer.php"); 
                                 $jsFilePath = "<script type='module' src='../js/admin/transfer-student.js'></script>";
                             }else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
-                            } else {
+                            }else if (isset($_GET['page'])){
+                                include_once("student/gradeRectification.php");
+                                $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
+                            }else {
                                 include_once("student/studentList.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student-list.js'></script>";
+                                $jsFilePath = "<script type='module' src='../js/admin/student-list.js'></script>";
                             }
                         ?>
                         </div>
@@ -51,7 +55,6 @@ include_once("../inc/head.html");
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
-
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>

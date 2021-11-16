@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -10,7 +11,8 @@
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Subject</h3>
         <div>
-            <button type="button" class="view-archive btn btn-secondary" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
+            <button type="button" class="view-archive btn btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
+            <a href="subject.php?page=schedule" role="button" class="btn btn-secondary">Schedule</a>
             <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
         </div>
     </div>
@@ -27,7 +29,7 @@
                         <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                     </span>
                     <div>
-                        <button class="btn btn-primary btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
+                        <!-- <button class="btn btn-primary btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button> -->
                         <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
                     </div>
                 </div>

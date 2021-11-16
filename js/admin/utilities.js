@@ -1,10 +1,10 @@
 export let commonTableSetup = {
-    maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
-    pageSize:           10,
-    pagination:         true,
-    pageList:           "[10, 25, 50, All]",
-    paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-    clickToSelect:      true,
+    maintainMetaDat: true, // set true to preserve the selected row even when the current table is empty
+    pageSize: 10,
+    pagination: true,
+    pageList: "[10, 25, 50, All]",
+    paginationParts: ["pageInfoShort", "pageSize", "pageList"],
+    clickToSelect: true,
     loadingTemplate
 }
 export const clearButtonTableEvent = () => {
@@ -16,13 +16,13 @@ export const clearButtonTableEvent = () => {
 
 /** Assign Subject to Faculty Methods */
 export const implementAssignSubjectMethods = (assignedSub, subTable) => {
-    let assigned = assignedSub;      // list of assigned subjects
-    let subjectTable = subTable;     // the table where the data of assigned subjects will be rendered
+    let assigned = assignedSub; // list of assigned subjects
+    let subjectTable = subTable; // the table where the data of assigned subjects will be rendered
 
     $(document).on("click", ".edit-as-btn, #edit-as-btn", function() {
         // show
         console.log(assigned);
-        subjectTable.bootstrapTable('checkBy', {field: 'sub_code', values: assigned})
+        subjectTable.bootstrapTable('checkBy', { field: 'sub_code', values: assigned })
     });
 
     // uncheck all records if cancel button is clicked
@@ -36,8 +36,8 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
         let form = $(this);
         let formData = form.serializeArray();
         let selection = subjectTable.bootstrapTable("getSelections");
-        let newSubCodes = selection.map(e => {return e.sub_code});
-        let newSubjects = newSubCodes.map(value => {return {name: "subjects[]", value}});
+        let newSubCodes = selection.map(e => { return e.sub_code });
+        let newSubjects = newSubCodes.map(value => { return { name: "subjects[]", value } });
         formData.push(...newSubjects);
         $.post("action.php", formData, function() {
             assigned = newSubCodes;
@@ -46,8 +46,7 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
             if (assigned.length === 0) {
                 emptyMsg.removeClass("d-none");
                 emptySubjectCon();
-            }
-            else {
+            } else {
                 emptyMsg.addClass("d-none");
                 emptySubjectCon();
                 selection.forEach(e => {
@@ -80,14 +79,14 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
     $("#add-sc-modal").on("show.bs.modal", function() {
         showSpinner();
         $(SCID).bootstrapTable('uncheckAll');
-        setTimeout( () => {
+        setTimeout(() => {
             $(SCID).bootstrapTable('resetView');
             hideSpinner();
         }, 1000);
     });
 
     /** Filter button of the Subject Class table */
-    $(document).on('click', '.filter-item', function (e) {
+    $(document).on('click', '.filter-item', function(e) {
         e.preventDefault();
         let subClassTable = $(SCID);
         subClassTable.bootstrapTable('showLoading');
@@ -103,7 +102,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         else subClassTable.bootstrapTable('refresh');
 
         subClassTable.bootstrapTable('filterBy', filterData)
-                     .bootstrapTable('hideLoading');
+            .bootstrapTable('hideLoading');
     })
 
     /** Moves the list of selected data from the specified origin table to the table destination*/
@@ -127,7 +126,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         $(destination).bootstrapTable('prepend', selected);
     };
 
-    $(document).on("submit", "#sc-form", function (e) {
+    $(document).on("submit", "#sc-form", function(e) {
         e.preventDefault();
         showSpinner();
 
@@ -160,7 +159,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         return formData;
     };
 
-    $(document).on("click", ".unassign-btn", function (e) {
+    $(document).on("click", ".unassign-btn", function(e) {
         e.preventDefault();
         let asSCTable = $(ASSIGNEDSCID);
         asSCTable.bootstrapTable('showLoading');
@@ -175,7 +174,7 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
                 url: "action.php",
                 data: formData,
                 cache: false,
-                contentType: false,  // sending form data object will create error if content type and process data is not set to false
+                contentType: false, // sending form data object will create error if content type and process data is not set to false
                 processData: false,
                 method: 'POST'
             });
@@ -206,12 +205,12 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
             url: "action.php",
             data: formData,
             cache: false,
-            contentType: false,  // sending form data object will create error if content type and process data is not set to false
+            contentType: false, // sending form data object will create error if content type and process data is not set to false
             processData: false,
             method: 'POST',
-            success: function (data) {
+            success: function(data) {
                 scCodes.forEach(e => moveData(e, ASSIGNEDSCID, SCID))
-                // $(SCID).bootstrapTable()
+                    // $(SCID).bootstrapTable()
             }
         });
         hideSpinner(ASSIGNEDSCID, true);
@@ -269,7 +268,7 @@ export const listSearchEventBinder = (searchInputID, itemSelector, spinnerSelect
             hideSpinner(spinnerSelector);
             if (!match.includes(true)) {
                 noResultMsg.show();
-            } 
+            }
         }, 400);
     });
 };
@@ -290,5 +289,72 @@ export const toggleEnrollment = () => {
         $.post("action.php", formData, function(data) {
             hideSpinner();
         });
+    });
+}
+
+export const tableUserOptionsEventListener = (userType) => {
+    let selection = [];
+    let filter = (userType === 'ST' ? "stud_id": (userType === 'FA' ? 'teacher_id' : 'admin_id'));
+    let userDesc = (userType === 'ST' ? 'student' : 'faculty');
+
+    $(document).on("click", ".submit", function () {
+        let type = $(this).attr("data-type");
+        if (type === 'export') {
+            return;
+        }
+        let formData = $(this).serializeArray();
+        formData.push({name: 'action', value: $(this).attr('data-type')});
+        formData.push({name: 'user_type', value: userType});
+        formData.push(...selection.map(e => { return { name: "id[]", value: `${e[filter]}` } }));
+        console.log(formData)
+        $.post("action.php", formData, function () {
+            $("#table").bootstrapTable("refresh");
+            $("#confirmation-modal").modal("hide");
+            if (type === 'reset') {
+                showToast('success', "Password/s successfully put to default");
+            }
+        });
+    });
+
+    $(document).on("click", ".submit[data-type='export']", function () {
+        $("#export-form").submit();
+    });
+
+    $(document).on("click", ".table-opt", function() {
+        selection = $("#table").bootstrapTable("getSelections");
+        if (selection.length === 0 ) {
+            return showToast('danger', `Please select a ${userDesc} first`);
+        }
+        switch($(this).attr('data-type')) {
+            case 'export':
+                var modal = $("#confirmation-modal");
+                modal.find(".message").html(`Export ${userDesc} information of the selected ${userDesc}/s?`);
+                modal.find(".submit").removeClass('btn-primary btn-danger').addClass('btn-success')
+                    .attr('data-type', 'export').html("Generate Document");
+                let html = '';
+                selection.forEach(e => {
+                    html += `<input type="hidden" name="id[]" value="${e[filter]}">`;
+                });
+                $("#export-form").html(html);
+                modal.modal('show');
+                break;
+            case 'activate':
+                $(".submit").attr('data-type', 'activate').click();
+                break;
+            case 'deactivate':
+                var modal = $("#confirmation-modal");
+                modal.find(".message").html(`<b>Deactivate student</b><br><small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>`);
+                modal.find(".submit").removeClass('btn-primary btn-success').addClass('btn-danger')
+                    .attr('data-type', 'deactivate').html("Deactivate");
+                modal.modal('show');
+                break;
+            case 'reset':
+                var modal = $("#confirmation-modal");
+                modal.find(".message").html(`<b>Reset password</b><br><small>The default password will be the combination of user type and their User ID No. Eg. ${userType}XXXXXXXXX</small>`);
+                modal.find(".submit").removeClass('btn-danger btn-success').addClass('btn-secondary')
+                    .attr('data-type', 'reset').html("Reset Password");
+                modal.modal('show');
+                break;
+        }
     });
 }

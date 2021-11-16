@@ -13,14 +13,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
 if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
     $admin->addAdministrator();
 }
-
 if (isset($_POST['action']) && $_POST['action'] === 'editAdministrator') {
     $admin->editAdministrator();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'deleteAdmin') {
+    $admin->deleteAdmin();
 }
 
 /******** SCHOOL YEAR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'initializeSY') {
-    $admin->initializeSY();
+    $admin->initializeSY(FALSE, TRUE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'initAndSchedule') {
+    $admin->initializeSY(TRUE, FALSE, 'schedule');
+}
+if (isset($_POST['action']) && $_POST['action'] === 'initAndSwitch') {
+    $admin->initializeSY(TRUE, FALSE, 'view');
 }
 if (isset($_POST['action']) && $_POST['action'] === 'editSY') {
     $admin->editSY();
@@ -31,6 +39,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editEnrollStatus') {
 if (isset($_POST['action']) && $_POST['action'] === 'editAcademicDays') {
     $admin->editAcademicDays();
 }
+if (isset($_GET['action']) && $_GET['action'] === 'switchSY') {
+    $admin->switchSY(NULL, TRUE, 'view');
+}
 
 /******** ENROLLMENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'enroll') {
@@ -39,10 +50,22 @@ if (isset($_POST['action']) && $_POST['action'] === 'enroll') {
 if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {
     $admin->validateEnrollment();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'deleteStudent') {
+    $admin->deleteStudent();
+}
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {
-    $admin->deactivate();
+    $admin->toggleAccountStatus(FALSE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'activate') {
+    $admin->toggleAccountStatus(TRUE);
+}
+if (isset($_POST['action']) && $_POST['action'] === 'reset') {
+    $admin->resetMultiplePassword();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'changePassword') {
+    $admin->changePassword();
 }
 
 /******** CURRICULUM ********/
@@ -120,9 +143,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteSubject') {
 }
 
 
-
 if (isset($_POST['action']) && $_POST['action'] === 'getSubjectJSON') {
     $admin->listSubjectsJSON();
+}
+
+if (isset($_POST['action']) && $_POST['action'] === 'listFacultySubjects') {
+    $admin->listFacultySubjects();
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'getAllSubjectJSON') {
@@ -133,8 +159,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'getArchiveSubjectJSON') {
     $admin->listAllSub('archived_subject');
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'updateSubject') {
+if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
     $admin->updateSubject();
+}
+if (isset($_POST['action']) && $_POST['action'] === 'saveSchedule') {
+    $admin->saveSchedule();
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveSubject') {
@@ -163,7 +192,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'editDepartment') {
     $admin->updateFacultyDepartment();
 }
 
-if (isset($_POST['action']) && $_POST['action'] === 'editSubject') {
+if (isset($_POST['action']) && $_POST['action'] === 'editSubjectFaculty') {
     $admin->updateFacultySubjects($_POST['teacher_id']);
 }
 
@@ -204,6 +233,12 @@ if (isset($_POST['action']) && $_POST['action'] === 'assignSubClasses') {
 }
 if (isset($_POST['action']) && $_POST['action'] === 'unassignSubClasses') {
     $admin->unassignSubClasses();
+}
+if (isset($_POST['action']) && ($_POST['action'] === 'addStudentInSection' || $_POST['action'] === 'transferStudentInSection')) {
+    $admin->addStudentInSection();
+}
+if (isset($_POST['action']) &&  $_POST['action'] === 'editSubjectSection') {
+    $admin->editSubjectSection();
 }
 
 

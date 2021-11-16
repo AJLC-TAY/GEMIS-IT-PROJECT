@@ -5,7 +5,7 @@ include_once ("../inc/head.html");
 ?>
     <title>PCNHS GEMIS</title>
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -15,14 +15,16 @@ include_once ("../inc/head.html");
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper">
                 <div class="col-lg-12">
                     <div class="row mt ps-3">
                         <?php 
-                            if (isset($_GET['action'])) {
+                            if (isset($_GET['page']) && $_GET['page'] === 'schedule') {
+                                include("subject/subjectSchedule.php");
+                            } else if (isset($_GET['action'])) {
                                 include("subject/subjectForm.php");
                             } 
                             else if (isset($_GET['sub_code'])){
@@ -79,10 +81,8 @@ include_once ("../inc/head.html");
     <!-- JQUERY FOR BOOTSTRAP TABLE -->"
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
-    <script type='text/javascript' src="../js/common-custom.js"></script>
+    <script src="../js/common-custom.js"></script>
     <script type='module' src="../js/admin/subject.js"></script>
-    <!-- <script type='text/javascript' src="../js/admin/subject.js"></script> -->
-    <!-- <script type="module" src="../js/admin/subjectlist.js"></script> -->
 </body>
 
 </html>

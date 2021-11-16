@@ -5,7 +5,6 @@ include_once("../inc/head.html");
 
 <title>Home | GEMIS</title>
 </head>
-
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -42,7 +41,7 @@ include_once("../inc/head.html");
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <img src="../assets/faculty.png" alt="Display image" style="width: 50%; display: block; margin-left: auto; float:right;">
+                                            <img src="../assets/faculty.png" alt="Display image" style="width: 40%; display: block; margin-left: auto; float:right;">
                                         </div>
                                     </div>
                                 </div>
@@ -55,7 +54,7 @@ include_once("../inc/head.html");
                                         <div class="card-box bg-forest h-75">
                                             <div class="inner">
                                                 <h3>200</h3>
-                                                <h5> Total Students</h5>
+                                                <h5>Total Students</h5>
                                             </div>
                                             <div class="icon">
                                                 <i class="fa fa-graduation-cap" aria-hidden="true"></i>

@@ -1,25 +1,26 @@
-import {commonTableSetup, listSearchEventBinder} from "./utilities.js";
+import { commonTableSetup, listSearchEventBinder } from "./utilities.js";
 
 preload('#curr-management', '#school-yr');
 
 const tableSetup = {
-    url:                'getAction.php?data=school_year',
-    method:             'GET',
-    uniqueId:           'id',
-    idField:            'id',
-    height:             425,
-    search:             true,
-    searchSelector:     '#search-input',
+    url: 'getAction.php?data=school_year',
+    method: 'GET',
+    uniqueId: 'id',
+    idField: 'id',
+    height: 425,
+    search: true,
+    searchSelector: '#search-input',
     ...commonTableSetup
 };
 
 const MONTHS = ["January", "February", "March", "April", "May", "June",
-"July", "August", "September", "October", "November", "December"];
+    "July", "August", "September", "October", "November", "December"
+];
 
 var syTable = $("#table").bootstrapTable(tableSetup);
 var enrollAfter = false;
 try {
-    var stepper =  new Stepper($('#school-year-stepper')[0]);
+    var stepper = new Stepper($('#school-year-stepper')[0]);
 } catch (e) {}
 
 /**
@@ -68,11 +69,11 @@ $(function() {
         syTable.bootstrapTable("showLoading");
         let element, row, id;
         element = $(this);
-        id = element.attr("data-id");                       // store the id of the row
-        element.toggle(false);                      // hide edit button
-        element.siblings(".edit-options").toggle(true);         // show the edit options div, which contains the cancel and save buttons
-        row = element.closest("tr");                        // get the row
-        $(".edit-btn").prop("disabled", true);              // disable other edit buttons
+        id = element.attr("data-id"); // store the id of the row
+        element.toggle(false); // hide edit button
+        element.siblings(".edit-options").toggle(true); // show the edit options div, which contains the cancel and save buttons
+        row = element.closest("tr"); // get the row
+        $(".edit-btn").prop("disabled", true); // disable other edit buttons
 
         setCurrentValuesToInput(id, row, "select");
         syTable.bootstrapTable("hideLoading");
@@ -84,10 +85,10 @@ $(function() {
         element = $(this);
         id = element.attr("data-id");
         row = element.closest("tr");
-        $(".edit-btn").prop("disabled", false);              // enable all edit button
+        $(".edit-btn").prop("disabled", false); // enable all edit button
 
         setCurrentValuesToInput(id, row);
-        editOptions = element.closest(".edit-options");      // hide the edit options
+        editOptions = element.closest(".edit-options"); // hide the edit options
         editOptions.toggle(false);
         editOptions.prev(".edit-btn").toggle(true);
         syTable.bootstrapTable("hideLoading");
@@ -121,8 +122,8 @@ $(function() {
                 // current_grd_val: newGradeVal,
                 current_qtr_val: newQtrVal,
                 current_sem_val: newSemVal
-            }}
-        );
+            }
+        });
 
         let grade, quarter, semester, inputsToDisplay;
         // find select inputs get their labels and set them to the input html tags
@@ -135,7 +136,7 @@ $(function() {
         inputsToDisplay.eq(0).val(quarter);
         inputsToDisplay.eq(1).val(semester);
 
-        $(".edit-btn").prop("disabled", false);         // enable all edit buttons
+        $(".edit-btn").prop("disabled", false); // enable all edit buttons
         syTable.bootstrapTable("hideLoading");
         showToast('success', 'Successfully updated!');
     });
@@ -165,10 +166,10 @@ $(function() {
     $(document).on("click", ".checkbox-all", function() {
         $($(this).attr("data-target-list")).find("input").prop("checked", $(this).is(":checked"));
     });
-    
+
 
     const toggleListElement = (selector, bool) => {
-        $(`[data-track-id='${selector}']`).prop("disabled", !bool );
+        $(`[data-track-id='${selector}']`).prop("disabled", !bool);
     }
     $(document).on("click", "#track-checkbox-all", function() {
         let isChecked = $(this).is(":checked");
@@ -176,12 +177,12 @@ $(function() {
         let tracks = $(list).find('label');
         console.log("tracks", tracks);
         tracks.each(function() {
-         
+
             toggleListElement($(this).find('input').val(), isChecked)
         })
     });
 
-    $(document).on('click',  "input[name='initAndEnroll']", function(e) {
+    $(document).on('click', "input[name='initAndEnroll']", function(e) {
         e.preventDefault();
         enrollAfter = true;
         $("#school-year-form").submit();
@@ -191,20 +192,18 @@ $(function() {
         e.preventDefault();
         showSpinner();
         let formData = $(this).serializeArray();
-        formData.push({name: 'action', value: 'initializeSY'});
 
         showToast('dark', 'Initializing school year ...');
         // console.log(formData);
         $.post("action.php", formData, function(data) {
-            let sy_code = JSON.parse(data);
+            let url = JSON.parse(data);
             let message = 'Redirecting to the initialized school year';
-            let url = `schoolYear.php?id=${sy_code}`;
             console.log(url);
             if (enrollAfter) {
                 message = 'Redirecting to the enrollment setup page';
                 url = 'enrollment.php?page=setup';
             }
-            showToast('dark', message, {delay: 3000});
+            showToast('dark', message, { delay: 3000 });
             location.replace(url);
         });
     });
@@ -214,9 +213,9 @@ $(function() {
         // $(`[data-track-id='${selector}']`).closest('label').toggle($(this).is(":checked"));
         let isChecked = $(this).is(":checked");
         toggleListElement(selector, isChecked);
-    })
+    });
 
-    /** Stepper */ 
+    /** Stepper */
     $(document).on("click", ".next", () => {
         stepper.next();
     });
@@ -230,7 +229,7 @@ $(function() {
     listSearchEventBinder("#search-spap-subjects", "#spap-list label", "#spap-spinner", "#spap-empty-msg");
 
     /** Clear buttons */
-    $(document).on("click", ".clear-btn", function () {
+    $(document).on("click", ".clear-btn", function() {
         let target = $(this).attr('data-target');
         let spinnerSelector = `${target}-spinner`;
         showSpinner(spinnerSelector);
@@ -244,68 +243,70 @@ $(function() {
     });
 
     /** Month */
-    function createMonthListItem(monthID, monthDesc, days) {
-        return `<li class='form-control-sm row'>
-                    <label for='${monthID}' class='col-form-label-sm col-4'>${monthDesc}</label>
-                    <div class='col-5'>
-                        <input value='${days}' id='${monthID}' type='number' name='month[${monthID}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
-                    </div>
-                    <div class='col-3 text-center'>
-                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
-                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
-                    </div>
-                </li>`;
-    }
+    // function createMonthListItem(monthID, monthDesc, days) {
+    //     return `<li class='form-control-sm row'>
+    //                 <label for='${monthID}' class='col-form-label-sm col-4'>${monthDesc}</label>
+    //                 <div class='col-5'>
+    //                     <input value='${days}' id='${monthID}' type='number' name='month[${monthID}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
+    //                 </div>
+    //                 <div class='col-3 text-center'>
+    //                     <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
+    //                     <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+    //                 </div>
+    //             </li>`;
+    // }
 
     function createNewMonthInputItem(monthDesc, days) {
         return `<li class='form-control-sm row'>
-                    <label class='col-form-label-sm col-4'>${monthDesc}</label>
+                    <label class='col-form-label-sm col-4 fw-bold'>${monthDesc}</label>
                     <div class='col-5'>
-                        <input value='${days}' type='number' name='newmonth[${monthDesc}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
+                        <input value='${days}' type='number' name='newmonth[${monthDesc}]' class='text-center number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
                     </div>
                     <div class='col-3 text-center'>
-                        <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
-                        <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
+                        <button class='btn btn-sm btn-outline-danger edit-opt' data-type='remove'><i class='bi bi-dash-circle'></i></button>
+                        <button class='btn btn-sm btn-secondary edit-opt' data-type='undo' style='display: none;'>Undo</button>
                     </div>
                 </li>`;
     }
 
     $(document).on("click", ".edit-month-btn", function () {
-        let idRow, modal, row, monthsOfSY, syID;
-        idRow = $(this).attr("data-id");
+        let syID, idRow, modal, row, monthsOfSY;
+        syID = $(this).attr("data-id");
         modal = $("#month-modal");
-        row = syTable.bootstrapTable('getRowByUniqueId', idRow);
-        monthsOfSY = row.acad_months;
+        // row = syTable.bootstrapTable('getRowByUniqueId', idRow);
+        // monthsOfSY = row.acad_months;
+        //
+        // console.log(row);
+        // let monthsHTML = '';
+        // for (const monthID in monthsOfSY) {
+        //     let item = monthsOfSY[monthID];
+        //     let monthDesc = item['month'];
+        //     monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
+        // }
 
-        console.log(row);
-        let monthsHTML = '';
-        for (const monthID in monthsOfSY) {
-            let item = monthsOfSY[monthID];
-            let monthDesc = item['month'];
-            monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
-        }
 
-        $("#month-form").find("[name='sy-id']").val(row.id);
-        $("#month-list").html(monthsHTML);
+        $("#month-form").find("[name='sy-id']").val(syID);
         modal.modal("show");
     });
 
     $(document).on("click", ".edit-opt", function(e) {
         e.preventDefault();
         let button = $(this);
-      
 
         let toggle;
-        switch(button.attr("data-type")) {
+        switch (button.attr("data-type")) {
             case "add":
-                let lastMonth  = $("#month-list li").last().find("label").text();  // get month name of the last li
-                let index = MONTHS.indexOf(lastMonth) + 1;                         // get the next index month
-                let newMonth  = MONTHS[(index === 11) ? 0 : index];
+                let lastMonth = $("#month-list li").last().find("label").text(); // get month name of the last li
+                let index = MONTHS.indexOf(lastMonth) + 1; // get the next index month
+                let newMonth = MONTHS[(index === 11) ? 0 : index];
                 $("#month-list").append(createNewMonthInputItem(newMonth, 20));
                 return;
             case "remove":
                 toggle = true;
                 break;
+            case "remove-new":
+                $(this).closest("li").remove();
+                return;
             case "undo":
                 toggle = false;
                 break;
@@ -315,14 +316,26 @@ $(function() {
         button.closest("li").find("input").prop('disabled', toggle);
     });
 
-    $(document).on("submit", "#month-form", function (e) {
+    $(document).on("submit", "#month-form", function(e) {
         e.preventDefault();
-        console.log($(this).serializeArray());
-        $.post("action.php", $(this).serializeArray(), function () {
-            syTable.bootstrapTable("refresh");
+        $.post("action.php", $(this).serializeArray(), function() {
             $("#month-modal").modal("hide");
-            showToast("success", "Successfully updated");
+            location.reload();
         });
+    });
+
+    $(document).on("click", "input[name='schedule']", function() {
+        let isDisabled = false;
+        // let isDisabled = ($(this).val() !== 'copy');
+        if ($(this).val() === 'copy') {
+            $("input[name='initialize']").prop("disabled", isDisabled);
+            $("input[name='initAndSwitch']").prop("disabled", isDisabled);
+            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
+        } else {
+            $("input[name='initialize']").prop("disabled", !isDisabled);
+            $("input[name='initAndSwitch']").prop("disabled", !isDisabled);
+            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
+        }
     });
     hideSpinner();
 });

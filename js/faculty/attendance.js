@@ -1,11 +1,11 @@
-import {commonTableSetup} from "../admin/utilities.js";
+import { commonTableSetup } from "../admin/utilities.js";
 
 let tableSetup = {
     ...commonTableSetup,
-    search:         true,
+    search: true,
     searchSelector: "#search-input",
-    uniqueId:       "stud_id",
-    fieldId:        "stud_id",
+    uniqueId: "stud_id",
+    fieldId: "stud_id",
     // height:         800
 };
 let table = $("#table").bootstrapTable(tableSetup);
@@ -21,7 +21,7 @@ function toggleDisableMonthSelector(bool) {
  * */
 function saveRow(row) {
     let formData = new FormData();
-    $.each(row.find(".number"), function (i, val) {
+    $.each(row.find(".number"), function(i, val) {
         formData.append(val.getAttribute('name'), val.value);
         val.setAttribute("readonly", true);
     });
@@ -33,8 +33,7 @@ function saveRow(row) {
         processData: false,
         contentType: false,
         data: formData,
-        success: data => {
-        }
+        success: data => {}
     });
     showToast("success", "Successfully saved");
 }
@@ -45,7 +44,7 @@ function saveRow(row) {
  * */
 function cancelEditRow(row) {
     // return original values to input & set them to readonly
-    $.each(row.find(".number"), function (i, val) {
+    $.each(row.find(".number"), function(i, val) {
         val.value = tempChanges[i];
         val.setAttribute("readonly", true);
     });
@@ -55,7 +54,7 @@ function cancelEditRow(row) {
  * @param {Object} row tr object
  * */
 function editRow(row) {
-    row.find(".number").each(function () {
+    row.find(".number").each(function() {
         let e = $(this);
         tempChanges.push(e.val());
         e.removeAttr("readonly");
@@ -78,7 +77,7 @@ function exitEditMode(row) {
     hideSpinner();
 }
 
-$(function () {
+$(function() {
     preload("#attendance");
 
     $(document).on("click", ".edit-btn", function(e) {
@@ -130,7 +129,7 @@ $(function () {
         showSpinner();
         let row = $(this).closest("tr");
         let action = $(this).attr("data-type");
-        switch(action) {
+        switch (action) {
             case "edit":
                 // hide specific btn
                 $(this).toggle(false);
@@ -215,9 +214,9 @@ $(function () {
 
     /** Event handler if month selector is changed */
 
-    $(document).on("change", "select[name='month']", function (e) {
+    $(document).on("change", "select[name='month']", function(e) {
         e.preventDefault();
-        table.bootstrapTable("refresh", {url: `getAction.php?data=attendance&class=${currentClass}&month=${$("select[name='month']").val()}` })
+        table.bootstrapTable("refresh", { url: `getAction.php?data=class_attendance&class=${currentClass}&month=${$("select[name='month']").val()}` })
     });
     hideSpinner();
 });

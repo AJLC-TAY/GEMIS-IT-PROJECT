@@ -1,29 +1,18 @@
 <?php
 require_once("sessionHandling.php");
-// session_start();
-// $_SESSION['user_type'] = 'FA';
-// $_SESSION['id'] = 1;
-// $_SESSION['sy_id'] = 9;
-// $_SESSION['sy_desc'] = '2021 - 2022';
-// $_SESSION['enrollment'] = 0;
-// $_SESSION['name'] = "Penaflor, Mariel";
-
 include("../inc/head.html");
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
-//$advisory = [];
 $sub_classes = [];
-// $advisory = $faculty->getAdvisoryClass(9);
-// $sub_classes = $faculty->getHandled_sub_classes(1);
 $advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
 $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
+// $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
 $adv_opn = '';
 $sub_class_opn = '';
 
 // $adv_table_display = 'd-none';
 $adv_table_display = '';
 // $sub_table_display = '';
-
 
 $adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
@@ -47,7 +36,7 @@ if (!(is_null($sub_classes))) {
         $sub_code = $sub_class->get_sub_code();
         $sub_class_opn .= "<option value='$section_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=student&sub_class_code={$section_code}' "
+            . "data-url='getAction.php?data=student&sub_code={$sub_code}' "
             . "data-name='$section_name'>$section_name [$sub_code]</option>";
     }
     $sub_class_opn .= "</optgroup>";
@@ -58,13 +47,16 @@ if (!(is_null($sub_classes))) {
         // $sub_table_display = 'd-none';
     }
 }
-
+$schoolYearInfo = $faculty->getSchoolYearInfo($_SESSION['sy_id']);
+$sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
+$grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
+$qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 ?>
 
-<title>Students | GEMIS</title>
+<title>Advisory Class | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-
+<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -81,55 +73,20 @@ if (!(is_null($sub_classes))) {
                 <div class="row">
                     <div class="row mt ps-3">
                         <!-- HEADER -->
-                        <header>
-                            <!-- BREADCRUMB -->
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                                    <li class="breadcrumb-item active">Students</li>
-                                </ol>
-                            </nav>
-                            <div class="row align-content-center">
-                                <div class="col-auto">
-                                    <h3 class="fw-bold">Classes</h3>
-                                </div>
-                            </div>
-                        </header>
-                        <!-- HEADER END -->
-                        <!-- STUDENTS TABLE -->
-                        <div class="container mt-1 ms-0">
-                            <div class="card h-auto bg-light" style="min-height: 70vh !important;">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <!-- SEARCH BAR -->
-                                    <div class="flex-grow-1 me-3">
-                                        <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                                    </div>
-                                    <div class="col-auto" style="min-width: 250px !important;">
-                                    <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
-                                        <?php
-                                        echo $adv_opn;
-                                        echo $sub_class_opn;
-                                        ?>
-                                    </select>
-                                </div>
-
-                                </div>
-                                <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
-                                    <thead class='thead-dark'>
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
-                                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="sex">Sex</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
-                                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                                            <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
+                        <?php
+                        if (isset($_GET['page']) && $_GET['page'] == 'values_grade' ) {
+                            include_once("grade/valuesGrade.php");
+                            $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
+                        }
+//                        else
+//                            if(isset($_GET['page']) && $_GET['page'] === 'report_card'){
+//                            include_once("../admin/gradeReport.php");
+//                        }
+                            else {
+                            include_once("grade/gradeAdvisory.php");
+                            $jsFilePath = "<script type='module' src='../js/faculty/students.js'></script> ";
+                        }
+                        ?>
                         <!-- MODAL -->
                         <div id="deactivate-modal" class="modal fade" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -150,6 +107,47 @@ if (!(is_null($sub_classes))) {
                                             <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                                             <input type="submit" form="deactivate-form" class="submit btn btn-danger" value="Deactivate">
                                         </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="" class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h4 class="mb-0"><span id='stmt'></span><span id='label'></span></h4>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p id="modal-msg"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn close-btn btn-success" id="confirm">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="" class="modal fade promotion-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h4 class="mb-0">CONFIRMATION</span></h4>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <p id="modal-msg">You won't be able to undo this action once the student is promoted.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn close-btn btn-success" id="promote">Promote</button>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +204,9 @@ if (!(is_null($sub_classes))) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script type='module' src='../js/faculty/students.js'></script>
+    <script>let code = "<?php echo $advisory['section_code'];?>";</script>
+    <?php echo $jsFilePath; ?>;
+
 </body>
 
 </html>

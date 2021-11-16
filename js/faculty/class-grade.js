@@ -35,25 +35,27 @@ function setTableData (classType, url) {
  */
  function toggleGradesColumn(classType) {
 
-    if (classType === 'advisory'){
-        classGradeTable.bootstrapTable('showColumn', ['action_2']);
+    if (classType == 'advisory'){
+        classGradeTable.bootstrapTable('showColumn', ['grd_f','action_2']);
         classGradeTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
     } else {
         classGradeTable.bootstrapTable('showColumn', ['grd_1', 'grd_2']);
-        classGradeTable.bootstrapTable('hideColumn', ['action_2']);
+        classGradeTable.bootstrapTable('hideColumn', ['action_2',]);
     }
     
 };
 
+
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
+var stat = document.getElementById("label").innerText == "submit?"? "1": "0";
 
 $(function() {
     
     
     preload('#grade');
-
+    
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
@@ -64,6 +66,8 @@ $(function() {
     if (firstClass != null) {
         let classTmp = firstClass.attr("data-name") || "No class assigned yet";
         code = firstClass.val();
+        console.log(code);
+
         let classType = firstClass.attr("data-class-type");
         classGradeTable.bootstrapTable("refresh", {url: firstClass.attr("data-url")});
         toggleGradesColumn(classType)
@@ -76,8 +80,8 @@ $(function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
         url = selected.attr("data-url");
-        code = selected.val();
-        sectionName = selected.attr("data-name");
+        console.log(code);
+        code = selected.attr("data-name");
         classType = selected.attr("data-class-type");
         console.log(classType);
         toggleGradesColumn(classType);
@@ -89,7 +93,9 @@ $(function() {
     })
 
     $(document).on("click", ".submit", () => {
-        document.getElementById("label").innerText="submit";
+        stat = "1";
+        document.getElementById("stmt").innerText="Are you sure you want to ";
+        document.getElementById("label").innerText="submit?";
         document.getElementById("modal-msg").innerText=submitMsg;
         document.getElementById("confirm").innerText="Submit";
         $(".grading-confirmation").modal("toggle");
@@ -97,45 +103,78 @@ $(function() {
     });
 
     $(document).on("click", ".save", () => {
-        document.getElementById("label").innerText="save";
-        document.getElementById("modal-msg").innerText=saveMsg;
+        console.log("from class-grade.js save clicked");
+        if (typeof user!== 'undefined'){
+            document.getElementById("label").innerText="CONFIRMATION";
+            stat = "1";
+            document.getElementById("modal-msg").innerText="Are you sure you want to save?";
+        } else {
+            document.getElementById("stmt").innerText="Are you sure you want to ";
+            document.getElementById("label").innerText="save?";
+            document.getElementById("modal-msg").innerText=saveMsg;
+        }
+        
         document.getElementById("confirm").innerText="Save";
         $(".grading-confirmation").modal("toggle");
     });
 
     $(document).on("click", "#confirm", function(e)  {
-        var stat = document.getElementById("label").innerText == "submit"? "1": "0";
         this.attr
         console.log(stat);
 
         // let studGrades = new FormData();
-        var studGrades = $("#grades").serializeArray();        
-        studGrades.forEach(element => {
-            
-            var recordInfo = element['name'].split("/")
-            if(recordInfo[2] == 'general_average'){
-                var grades = {'id' : recordInfo[0],
-                               'rep_id' : recordInfo[1],
-                               'gen_ave' : element['value'],
-                               'action' : 'gradeAdvisory',
-                               'stat': stat};
-            } else {
-                var grades  = {'id' : recordInfo[0],
-                                'grading' : recordInfo[1],
-                                'grade': element['value'],
-                                'code' : code,
-                                'stat': stat,
-                                'action' : 'gradeClass'};
-            }
-            $.post("action.php", grades, function(data) {	
-                console.log(grades);
-                classGradeTable.bootstrapTable("refresh")
+        if (type == 'grades'){
+            var studGrades = $("#grades").serializeArray();        
+            studGrades.forEach(element => {
                 
-            });
+                var recordInfo = element['name'].split("/")
+                if(recordInfo[2] == 'general_average'){
+                    var grades = {'id' : recordInfo[0],
+                                'rep_id' : recordInfo[1],
+                                'gen_ave' : element['value'],
+                                'action' : 'gradeAdvisory',
+                                'stat': stat};
+                } else {
+                    var grades  = {'id' : recordInfo[0],
+                                    'grading' : recordInfo[1],
+                                    'grade': element['value'],
+                                    'code' : code,
+                                    'stat': stat,
+                                    'action' : 'gradeClass'};
+                }
+                $.post("../faculty/action.php", grades, function(data) {	
+                    // console.log(grades);
+                    console.log(grades)
+                    classGradeTable.bootstrapTable("refresh")
+                    
+                });
 
-        });        
-        $('.grading-confirmation').modal('hide');
-        $(".number").attr('readOnly',true);
+            });        
+            $('.grading-confirmation').modal('hide');
+            $(".number").attr('readOnly',true);
+        } else {
+            var select = document.getElementsByClassName('markings');
+            select.forEach((element) => {
+                var value = element.options[element.selectedIndex].value;
+                var recordInfo = value.split("/")
+                var values = {'id' : recordInfo[0],
+                                'val_id' : recordInfo[1],
+                                'qtr' : recordInfo[2],
+                                'rep_id' : recordInfo[4],
+                                'mark' : recordInfo[3],
+                                'stat': stat,
+                            'action' : 'gradeValues'};
+                            // console.log(values);
+                            $.post("action.php", values, function(data) {	
+                                // console.log(grades);
+                                console.log(data)                                
+                            });
+            
+                
+            }); // en
+            $('.grading-confirmation').modal('hide');
+            location.reload(true);
+        }
         
         // $(".grade").addClass('hidden');
     });
@@ -144,9 +183,18 @@ $(function() {
         var action = "export";
         $.post("action.php", action , function(data) {	
             console.log(data);
-            
         });
     });
 
+    
+    $(document).on("keyup", ".Second", function() {
+        let row = $(this).closest("tr");
+        let inputs = row.find("input"); 
+        var final = (parseInt(inputs.eq(0).val()) + parseInt(inputs.eq(1).val())) / 2;
+        inputs.eq(2).val(Math.round(final) == "NaN" ?"":Math.round(final));
+    })
+
+   
+    
     hideSpinner();
 });

@@ -31,7 +31,7 @@ $con = $dbConfig->connect();
                             $destination = "../faculty/index.php";
                             break;
                         case "ST":
-                            $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no FROM student WHERE id_no = '$id_no';";
+                            $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no, promote FROM student JOIN enrollment using (stud_id) WHERE id_no = '$id_no';";
                             $destination = "../student/index.php";
                             break;
                     }
@@ -42,7 +42,8 @@ $con = $dbConfig->connect();
                         $_SESSION['User'] = $u_row['name'];
                         
                         $_SESSION['id'] = $u_row['id'];
-                        
+                        $_SESSION['user_id'] = $id_no;
+
                         $_SESSION['user_type'] = $u_type;
 
                         # get roles if user type is faculty
@@ -55,19 +56,22 @@ $con = $dbConfig->connect();
                                 $roles[] = 'can_enroll';
                             }
                             $_SESSION['roles'] = $roles;
+                        } 
+
+                        if ($u_type == 'ST'){
+                            $_SESSION['promote'] = $u_row['promote'];
                         }
 
                         # school year
-                        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear ORDER BY sy_id DESC LIMIT 1;";
+                        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear WHERE status = '1';";
                         
                         $sy_res = mysqli_query($con, $qry_sy);
                         $sy_row = mysqli_fetch_assoc($sy_res);
                         $_SESSION['school_year'] = $sy_row['sy'];
-                        // $_SESSION['sy_id'] = $sy_row['sy_id'];
-                        $_SESSION['sy_id'] = 9;
+                        $_SESSION['sy_id'] = $sy_row['sy_id'];
                         $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
                         $_SESSION['current_semester'] = $sy_row['current_semester']; ;
-                        $_SESSION['current_quarter'] = $sy_row['can_enroll'];
+                        $_SESSION['current_quarter'] = $sy_row['current_quarter'];
                         header("location: $destination");
                     }
                 }

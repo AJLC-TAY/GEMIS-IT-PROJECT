@@ -7,8 +7,13 @@ $js = "<script type='module' src='../js/admin/faculty-list.js'></script>";
 $action = "";
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
-    $page_path = "faculty/facultyForm.php";
-    $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    if ($action != 'export') {
+        $page_path = "faculty/facultyForm.php";
+        $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
+    } else {
+        $page_path = "faculty/export.php";
+//        $js = "<script type='module' src='../js/admin/faculty.js'></script>";
+    }
 } else if (isset($_GET['id'])) {
     $action = "profile";
     $page_path = "faculty/facultyProfile.php";
@@ -28,7 +33,7 @@ if (isset($_GET['action'])) {
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/admin/sidebar.php'); ?>
+        <?php include_once('../inc/adminSidebar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <section class="wrapper">
@@ -52,7 +57,7 @@ if (isset($_GET['action'])) {
     <!-- TOAST END -->
     <!--ADD SUBJECT CLASS MODAL-->
     <div id="add-sc-modal" class="modal fade">
-        <div class="modal-dialog modal-xl modal-dialog-centered ">
+        <div class="modal-dialog modal-xl modal-fullscreen modal-dialog-centered ">
             <div class="modal-content" style="height: auto;">
                 <div class="modal-header">
                     <div class="modal-title">
@@ -89,11 +94,11 @@ if (isset($_GET['action'])) {
                         <tr>
                             <th data-checkbox="true"></th>
                             <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
-                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="teacher_id">Teacher</th>
-                            <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
+                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="teacher">Teacher</th>
+                            <th scope='col' data-width="150" data-align="center" data-field="sub_class_code">SC Code</th>
                             <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                             <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
-                            <th scope='col' data-width="300" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                            <th scope='col' data-width="250" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                             <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
                         </tr>
                         </thead>
@@ -106,8 +111,8 @@ if (isset($_GET['action'])) {
                     <form id="sc-form" method="POST" action="action.php" data-page="<?php echo $action; ?>">
                         <input type="hidden" name="teacher_id" value="" />
                         <input type="hidden" name="action" value="assignSubClasses">
-                        <button id='cancel-as-btn' class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                        <input type="submit" form="sc-form" id='assigned-sc-btn' class="submit btn btn-success" value="Assign">
+                        <button id='cancel-as-btn' class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <input type="submit" form="sc-form" id='assigned-sc-btn' class="btn btn-success btn-sm" value="Assign">
                     </form>
                 </div>
             </div>

@@ -74,8 +74,8 @@ $(function() {
             if (!addAnother) {
                 $("#modal-form").modal("hide");
                 addAnother = false;
-            };
-            showToast("success", "Signatory successfully added");
+            }
+            // showToast("success", "Signatory successfully added");
         });
     });
     $(document).on("click", ".table-opt", function(e) {
@@ -96,19 +96,21 @@ $(function() {
         modal.find(".modal-footer .edit-btn").attr("data-id", id);
         hideSpinner();
     });
-    hideSpinner();
 
-    $('#delete-signatory').click(function(e){
+    $('#delete-signatory-confirm').click(function(e){
+        e.preventDefault();
         var $table = $("#table");
         var action = 'deleteSignatory';
 
         let selected = $table.bootstrapTable('getSelections');
-        console.log(selected);
-        selected.forEach(element => { 
+        selected.forEach(element => {
             var id = element.sign_id;
-            $.post("action.php", {id,action}, function(data) {	
+            $.post("action.php", {id,action}, function(data) {
                 $table.bootstrapTable('refresh');
+                $("#confirmation-modal").modal("hide");
             });
         });
-    })
+    });
+
+    hideSpinner();
 });
