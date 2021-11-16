@@ -48,9 +48,23 @@ include_once("../inc/head.html");
 </body>
 <!-- VALIDATION -->
 <script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
-
+    <script src="../js/validation/jquery.mockjax.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
+<script>
+    var codes = '<?php echo json_encode($currarray); ?>';
+    $.mockjax({
+        url: "unique.action",
+        response: function(settings) {
+        var code = settings.data.code,
+            this.responseText = "true";
+        if ($.inArray(code, codes) !== -1) {
+            this.responseText = "false";
+        }
+        },
+        responseTime: 500
+    });
+</script>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

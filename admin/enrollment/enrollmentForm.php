@@ -389,7 +389,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
                             <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
-                            <button class="btn btn-secondary next">Next</button>
+                            <button class="btn btn-secondary next" id="nextButton">Next</button>
                         </div>
                     </div>
                 </div>

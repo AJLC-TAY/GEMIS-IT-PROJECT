@@ -21,18 +21,18 @@ $(function () {
       }
     }
   });
-  var codes = '<?php echo json_encode($currarray); ?>';
-  $.mockjax({
-    url: "unique.action",
-    response: function(settings) {
-      var code = settings.data.code,
-        this.responseText = "true";
-      if ($.inArray(code, codes) !== -1) {
-        this.responseText = "false";
-      }
-    },
-    responseTime: 500
-  });
+  // var codes = '<?php echo json_encode($currarray); ?>';
+  // $.mockjax({
+  //   url: "unique.action",
+  //   response: function(settings) {
+  //     var code = settings.data.code,
+  //       this.responseText = "true";
+  //     if ($.inArray(code, codes) !== -1) {
+  //       this.responseText = "false";
+  //     }
+  //   },
+  //   responseTime: 500
+  // });
   $.validator.addMethod('strongPassword', function (value, element) {
     return this.optional(element)
       || value.length >= 6
@@ -122,7 +122,8 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#enrollment-form").on("submit", function(event) {
+  $("#nextButton").on('click', function(){
+  $("#enrollment-form").on("nextButton", function(event) {
     event.preventDefault();
   }).validate({
     rules: {
@@ -205,7 +206,7 @@ $(function () {
       form.submit();
       return false;  //This doesn't prevent the form from submitting.
     }
-  })
+  })})
   //unique rule, submit done, for implementation and testing
   $("#section-form").on("submit", function(event) {
     event.preventDefault();
@@ -231,54 +232,22 @@ $(function () {
     event.preventDefault();
   }).validate({
     rules: {
-      birthdate: {
+      'prog-code': {
         required: true,
       },
-      lastname:{
+      'prog-name':{
         required: true,
         lettersonly: true
       },
-      firstname:{
+      'prog-desc':{
         required: true,
         lettersonly: true
-      },
-      middlename:{
-        required: true,
-        lettersonly: true
-      },
-      email:{
-        required: true,
-        email: true
-      },
-      age:{
-        required: true,
-        max: 99
       }
     },
     messages: {
-      birthdate: {
-        required: '<p class="text-danger user-select-none">Please select birthdate!</p>'
+      'prog-code': {
+        required: '<p class="text-danger user-select-none">Please enter code!</p>'
       },
-      lastname:{
-        required:'<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
-      },
-      firstname:{
-        required:'<p class="text-danger user-select-none">Please enter first name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
-      },
-      middlename:{
-        required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>'
-      },
-      email:{
-        required:'<p class="text-danger user-select-none">Please enter email!</p>',
-        email: '<p class="text-danger user-select-none">Please enter valid email!</p>'
-      },
-      age:{
-        required:'<p class="text-danger user-select-none">Please enter age!</p>',
-        max: '<p class="text-danger user-select-none">Please enter up to two digits only!</p>'
-      }
     },
     submitHandler: function(form) { 
       form.submit();

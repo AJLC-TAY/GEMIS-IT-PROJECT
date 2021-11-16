@@ -1,5 +1,5 @@
 <?php
-require_once("sessionHandling.php");
+session_start();
 include_once("../inc/head.html");
 ?>
 <title>Admin | GEMIS</title>
@@ -124,8 +124,7 @@ include_once("../inc/head.html");
     <script src="../js/validation/jquery.validate.min.js"></script>
     <script src="../js/validation/jquery.mockjax.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
-    <script src="../js/validation/validation.js"></script>
-    <!--CUSTOM JS-->
+    <script src="../js/validation/validation.js"></script>    <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/admin.js"></script>
 
