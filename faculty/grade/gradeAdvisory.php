@@ -1,16 +1,16 @@
 <header>
-<!-- BREADCRUMB -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-        <li class="breadcrumb-item active">Advisory</li>
-    </ol>
-</nav>
-<div class="row align-content-center">
-    <div class="col-auto">
-        <h3 class="fw-bold"><?php echo $advisory['section_name']?></h3>
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+            <li class="breadcrumb-item active">Advisory</li>
+        </ol>
+    </nav>
+    <div class="row align-content-center">
+        <div class="col-auto">
+            <h3 class="fw-bold"><?php echo $advisory['section_name'] ?></h3>
+        </div>
     </div>
-</div>
 </header>
 <!-- HEADER END -->
 <!-- STUDENTS TABLE -->
@@ -31,7 +31,7 @@
                 </select>
             </div>
             <div>
-            <button type="button" class="btn btn-primary ms-2 multi-promote"></i>Promote Students</button>
+                <button type="button" class="btn btn-primary ms-2 multi-promote"></i>Promote Students</button>
             </div>
             <div>
                 <?php echo ($_SESSION['current_quarter'] == 4 ? '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>' : ""); ?>
@@ -41,7 +41,6 @@
         <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
             <thead class='thead-dark'>
                 <tr>
-                    <th data-checkbox="true"></th>
                     <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                     <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
@@ -64,24 +63,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="overflow-auto" style="height: 50vh;">
-                <table class="table table-striped table-sm" id = 'stud-table'>
+                <!-- <div class="overflow-auto" style="height: 50vh;">
+                    <table class="table table-striped table-sm" id = 'stud-table'>
                     <tr class ='text-center'><th>ID</th>
                         <th>Student Name</th>
                         <th>Average</th>
                         <th>Action</th></tr>
-                <?php $students = $faculty->listStudentsForPromotion($advisory['section_code']);
-                    foreach ($students as $student){ 
-                        // $name = ${student['name']}
-                        echo "<tr class ='text-center'><td>{$student['stud_id']}</td> 
-                                  <td>{$student['name']}</td> 
-                                  <td>{$student['gen_ave']} </td>
-                     <td><button data-name='' class='unarchive-option btn link' id=''>Remove</button></td></tr>";
-                      } 
-                ?>
-                    
-                </table>
-                </div>
+                <?php
+                // $students = $faculty -> listStudentsForPromotion();
+                // foreach ($students as $student){ 
+                //     // $name = ${student['name']}
+                //     echo "<tr class ='text-center'><td>{$student['stud_id']}</td> 
+                //               <td>{$student['name']}</td> 
+                //               <td>{$student['gen_ave']} </td>
+                //  <td><button data-name='' class='unarchive-option btn link' id=''>Remove</button></td></tr>";
+                //   } 
+                ?> -->
+
+                    <!-- </table> -->
+                    <table id="for-promotion-table" class="table-striped table-sm">
+                    <thead class='thead-dark'>
+                        <tr>
+                            <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>
+                            <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="gen_ave">Gen Ave</th>
+                            <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
+                        </tr>
+                    </thead>
+                    </table>
+                <!-- </div> -->
             </div>
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>

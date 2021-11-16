@@ -89,6 +89,9 @@ if (!isset($_SESSION['sy_id'])) {
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <script>
         /** MOVED TO enrollment.js */
         // var forms = document.querySelectorAll('.needs-validation');

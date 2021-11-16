@@ -36,7 +36,7 @@ class FacultyModule extends Dbconfig
         }
     }
 
-   
+
 
     public function listSubjectClass($is_JSON = false)
     {
@@ -145,15 +145,42 @@ class FacultyModule extends Dbconfig
         ];
     }
 
-    public function listStudentsForPromotion($section_code){
-        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-        JOIN enrollment USING (stud_id)JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74;");
+    public function listStudentsForPromotion()
+    {
+        $section_code = $_GET['section'];
+        // echo('mariel');
+        //condition: dapat >74 ung final grade per subject ni student
+        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
         while ($row = mysqli_fetch_assoc($result)) {
-            $students[] = [ 'stud_id' => $row['stud_id'],
-                            'name' => $row['name'],
-                            'gen_ave' => $row['general_average']];
+            $students[] = [
+                'stud_id' => $row['stud_id'],
+                'name' => $row['name'],
+                'gen_ave' => $row['general_average'],
+                'action' => "<div class='d-flex justify-content-center'>
+                <button data-id='{$row['stud_id']}' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
+                <button data-id='{$row['stud_id']}' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
+            </div>"
+            ];
         }
-        return $students;
+        echo json_encode($students);
+    }
+
+    public function studentsForPromotion()
+    {
+        // $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id)JOIN gradereport USING(stud_id) WHERE section_code='ABM11' AND general_average > 74;");
+        // while ($row = mysqli_fetch_assoc($result)) {
+        //     $students[] = [
+        //         'stud_id' => $row['stud_id'],
+        //         'name' => $row['name'],
+        //         'gen_ave' => $row['general_average']
+        //     ];
+        // }
+        $students[] = [
+            'stud_id' => 'ows',
+            'name' => 'wushuhwuhs',
+            'gen_ave' => 'test'
+        ];
+        echo json_encode($students);
     }
     public function listValuesReport()
     {
@@ -176,7 +203,7 @@ class FacultyModule extends Dbconfig
                 $markings = $this->query("SELECT value_name, status, value_id, report_id, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
                 while ($marks = mysqli_fetch_assoc($markings)) {
                     if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
-                        if ($x < $qtr || $marks['status'] == 1){
+                        if ($x < $qtr || $marks['status'] == 1) {
                             $list = $marks['marking'];
                         } else {
                             $list = "<select class='markings' name='markings' class='select2 px-0 form-select form-select-sm' required>";
@@ -187,10 +214,9 @@ class FacultyModule extends Dbconfig
                                     $list .= "<option value='{$stud_id}/{$marks['value_id']}/{$x}/{$markas}/{$marks['report_id']}'>$markas</option>";
                                 }
                             }
-                            
                         }
                         $marking[$val['bhvr_statement']][] =  $list;
-                            $list = '';
+                        $list = '';
                     }
                 }
             }
@@ -215,7 +241,7 @@ class FacultyModule extends Dbconfig
         $value_id = $_POST['val_id'];
         $report_id = $_POST['rep_id'];
         $qtr = $_POST['qtr'];
-        echo("mark: $mark stat: $status stud id: $stud_id value_id: $value_id report_id: $report_id qtr: $qtr");
+        echo ("mark: $mark stat: $status stud id: $stud_id value_id: $value_id report_id: $report_id qtr: $qtr");
         $this->prepared_query(
             "UPDATE `observedvalues` SET `marking`=?, `status`=? WHERE `value_id`=? AND `stud_id`=? AND `report_id`=? AND `quarter`=? ;",
             [$mark, $status, $value_id, $stud_id, $report_id, $qtr],
@@ -250,7 +276,7 @@ class FacultyModule extends Dbconfig
 
         $gen_ave = $gen_ave != "" ? $gen_ave : NULL;
 
-        echo("stud id:$stud_id rep_id: $report_id gen_ave: $gen_ave stat: $stat"  );
+        echo ("stud id:$stud_id rep_id: $report_id gen_ave: $gen_ave stat: $stat");
 
         $this->prepared_query(
             "UPDATE `gradereport` SET `general_average` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",

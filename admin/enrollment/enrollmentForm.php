@@ -187,6 +187,7 @@ if (isset($_GET['action'])) {
 
 $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 ?>
+<!DOCTYPE html>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->
@@ -216,37 +217,29 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 <form id="enrollment-form" class="needs-validation" enctype="multipart/form-data" action="../admin/action.php" method="POST" novalidate>
     <div id="stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-75 mx-auto">
-            <div class="step mx-lg-4" data-target="#step-1">
+            <div class="step mx-lg-5" data-target="#test-l-1">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-lg-4" data-target="#step-2">
+            <div class="step mx-lg-5" data-target="#test-l-2">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-lg-4" data-target="#step-3">
+            <div class="step mx-lg-5" data-target="#test-l-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
                 </button>
             </div>
-            <div class="line"></div>
-            <div class="step mx-lg-4" data-target="#step-4">
-                <button type="button" class="btn step-trigger">
-                    <span class="bs-stepper-label">Part</span>
-                    <span class="bs-stepper-circle">4</span>
-                </button>
-            </div>
         </div>
         <div class="bs-stepper-content">
-            <!-- STEP 1 END -->
-            <div id="step-1" class="content">
+            <div id="test-l-1" class="content">
                 <div class="card body w-100 h-auto p-4">
                     <!-- STEP 1 -->
                     <h4 class="fw-bold">Student Information</h4>
@@ -353,6 +346,8 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <input class="form-control" name="group-name" type="text" value="<?php echo $indigenous_group; ?>" <?php echo $readonly ?>>
                         </div>
                     </div>
+
+
                     <!-- MOTHER TONGUE & RELIGION -->
                     <div class="row">
                         <div class="col-md-6">
@@ -404,14 +399,14 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
                             <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
-                            <button class="btn btn-primary next">Next</button>
+                            <button class="btn btn-success next">Next</button>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- STEP 1 END -->
             <!-- STEP 2 -->
-            <div id="step-2" class="content">
+            <div id="test-l-2" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
                     <h4 class="fw-bold"> Parent | Guardian's Information</h4>
 
@@ -420,24 +415,15 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Father</h5>
                         <div class='form-group col-md-3'>
                             <label for='f-lastname'>Last Name</label>
-                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value="<?php echo $father_last_name; ?> " <?php echo $readonly ?> placeholder='Last Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's first name
-                            </div>
+                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value = "<?php echo $father_last_name; ?>" placeholder='Last Name' required>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='f-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value="<?php echo $father_last_name; ?>" <?php echo $readonly ?> placeholder='First Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's first name
-                            </div>
+                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name' required>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='f-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value="<?php echo $father_first_name; ?>" <?php echo $readonly ?> placeholder='Middle Name'>
-                            <div class="invalid-feedback">
-                                Please enter father's middle name
-                            </div>
+                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value = "<?php echo $father_first_name; ?>" placeholder='Middle Name' required>
                         </div>
                         <div class='form-group col-md-2'>
                             <label for='f-extensionname'>Extension Name</label>
@@ -459,24 +445,15 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Mother</h5>
                         <div class='form-group col-md-3'>
                             <label for='m-lastname'>Maiden Last Name</label>
-                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value="<?php echo $mother_last_name; ?>" placeholder='Last Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's maiden last name
-                            </div>
+                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value = "<?php echo $mother_last_name; ?>" placeholder='Last Name' required>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='m-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value="<?php echo $mother_first_name; ?>" placeholder='First Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's first name
-                            </div>
+                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value = "<?php echo $mother_first_name; ?>" placeholder='First Name' required>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='m-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value="<?php echo $mother_middle_name; ?>" placeholder='Middle Name' <?php echo $readonly ?>>
-                            <div class="invalid-feedback">
-                                Please enter mother's middle name
-                            </div>
+                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name' required>
                         </div>
                     </div>
                     <div class='form-row row'>
@@ -526,15 +503,16 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
 
                     <div class="d-flex flex-row-reverse mt-4">
-                        <a href="#" class="btn btn-primary next">Next</a>
+                        <a href="#" class="btn btn-success next">Next</a>
                         <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
             </div>
             <!-- STEP 2 END -->
             <!-- STEP 3 -->
-            <div id="step-3" class="content">
+            <div id="test-l-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
+                    
                         <label class="col-form-label me-4">Balik Aral Student? </label>
                         <div class="d-flex">
                             <?php

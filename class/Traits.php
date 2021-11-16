@@ -893,7 +893,7 @@ trait Enrollment
             $add_q = "";
         }
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
-        . "VALUES (NOW(), 1, ?, ?, ?, ?, ?, ?, ?, ? $add_q);";
+        . "VALUES (NOW(), 1, ?, ?, ?, ?, ?, ?, ? $add_q);";
 
         echo($query);
         echo json_encode($values);
@@ -1807,6 +1807,7 @@ trait Grade
     public function getClass()
     {
         if (isset($_GET['section'])) {
+            
             $this->listAdvisoryStudents(true);
         }
         if (isset($_GET['sub_class_code'])) {
@@ -1817,6 +1818,7 @@ trait Grade
 
     public function listAdvisoryStudents($is_JSON = false)
     {
+
         function actions($report_id, $stud_id, $promote)
         {
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
