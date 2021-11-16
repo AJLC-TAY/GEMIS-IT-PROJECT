@@ -597,7 +597,7 @@ trait FacultySharedMethods
         $section_condition = '';
 
         if (!is_null($teacher_id)) {
-            $section_condition = "GROUP BY section_code";
+            $section_condition = "GROUP BY se.section_code";
             $teacher_id = "sc.teacher_id='$teacher_id' AND ";
         } else {
             $teacher_id = '';
@@ -609,7 +609,7 @@ trait FacultySharedMethods
                 JOIN sysub syb USING(sub_sy_id)
                 JOIN subject s ON s.sub_code=syb.sub_code
                 JOIN sharedsubject sh ON sh.sub_code=s.sub_code
-                WHERE $teacher_id for_grd_level != 0 $section_condition AND syb.sy_id = {$_SESSION['sy_id']}";
+                WHERE $teacher_id for_grd_level != 0 AND syb.sy_id = {$_SESSION['sy_id']}";
 
         $result = $this->query($query);
         $handled_sub_classes = array();
@@ -1583,18 +1583,26 @@ trait Grade
         $sy_id = $_GET['sy_id'];
 //        $sub_code = $_GET['sub_code'];
         $sub_class_code = $_GET['sub_class_code'];
+        $section_code = $_GET['section_code'];
         $qtr = $_SESSION['current_quarter'];
 
-
-
-        $res = $this->query("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
-        FROM student 
-        JOIN classgrade USING(stud_id) 
-        JOIN subject USING(sub_code) 
+        $res = $this->query("SELECT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        FROM classgrade 
+        JOIN student USING(stud_id) 
+        JOIN enrollment e USING(stud_id)
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
-        WHERE $addOn sc.sub_class_code = '$sub_class_code' 
-        AND sy_id=$sy_id;");
+        WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code'
+        AND e.sy_id=$sy_id;");
+        
+        // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        // FROM student 
+        // JOIN classgrade USING(stud_id) 
+        // JOIN subject USING(sub_code) 
+        // JOIN sysub USING(sub_code) 
+        // JOIN subjectclass sc USING(sub_sy_id)
+        // WHERE $addOn sc.sub_class_code = '$sub_class_code' 
+        // AND sy_id=$sy_id;");
 
         $class_grades = [];
 

@@ -39,13 +39,14 @@ $qtrs = $_SESSION['current_semester'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 if (count($sub_classes) != 0) {
     $sub_class_opn .= "<optgroup label='Subject Class'>";
     foreach ($sub_classes as $sub_class) {
-        $section_code = $sub_class->get_sub_class_code();
+        $sub_class_code = $sub_class->get_sub_class_code();
+        $section_code = $sub_class->get_section_code();
         $section_name = $sub_class->get_section_name();
         $sub_code = $sub_class->get_sub_code();
         $sub_name = $sub_class->get_sub_name();
         $sub_class_opn .= "<option value='$sub_code' title='$sub_code' "
             . "data-class-type='sub-class' "
-            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_class_code={$section_code}' "
+            . "data-url='getAction.php?data=classGrades&sy_id={$sy_id}&id={$teacher_id}&sub_class_code={$sub_class_code}&section_code={$section_code}' "
             . "data-name='$sub_code'>$section_name [$sub_name]</option>";
     }
     $sub_class_opn .= "</optgroup>";
