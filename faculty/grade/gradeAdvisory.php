@@ -102,3 +102,6 @@
         </div>
     </div>
 </div>
+<script>
+    var code = '<?php echo $advisory['section_code'];?>';
+</script>

@@ -856,16 +856,24 @@ trait Enrollment
         $student_id = $_SESSION['id'];
         $result = $this->query("SELECT date_first_attended, enrolled_in, semester, curr_code, section_code, prog_code FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
         $previousDeets = [];
-        while ($row = mysqli_fetch_row($result)) {
-            $previousDeets = [
-                'first_attended' => $row[0],
-                'yr_lvl' => $row[1],
-                'sem' => $row[2],
-                'curr_code' => $row[3],
-                'section' => $row[4],
-                'prog_code' => $row[5],
-            ];
-        }
+        // while ($row = mysqli_fetch_row($result)) {
+        //     $previousDeets = [
+        //         'first_attended' => $row[0],
+        //         'yr_lvl' => $row[1],
+        //         'sem' => $row[2],
+        //         'curr_code' => $row[3],
+        //         'section' => $row[4],
+        //         'prog_code' => $row[5],
+        //     ];
+        // }
+        $previousDeets = [
+                    'first_attended' => mysqli_fetch_row($result)[0],
+                    'yr_lvl' => mysqli_fetch_row($result)[1],
+                    'sem' => mysqli_fetch_row($result)[2],
+                    'curr_code' => mysqli_fetch_row($result)[3],
+                    'section' => mysqli_fetch_row($result)[4],
+                    'prog_code' => mysqli_fetch_row($result)[5],
+                ];
         return $previousDeets;
     }
     
@@ -923,7 +931,8 @@ trait Enrollment
         //create new enrollment entity
 
         $previousDeets = $this->lastestEnrollmentDetail();
-
+        echo('previous details <br>');
+        echo json_encode($previousDeets);
         $school_year = $_SESSION['sy_id'];
         $school_info = [$previousDeets['curr_code'],  $previousDeets['prog_code']];
         [$track, $program] = $this->preprocessData($school_info);
@@ -939,11 +948,10 @@ trait Enrollment
         } else{
             $sem = 2;
         }
-
-        $dt = $previousDeets['first_attended'];
-        $date = $dt->format('Y-m-d');
-
-        $values = [$date,
+        
+        $date = $previousDeets['first_attended'];
+        
+        $values = [
                 $lvl,
                 $sem,
                 $student_id,
@@ -951,7 +959,7 @@ trait Enrollment
                 $track,
                 $program];
         
-        $params = "iiiisss";
+        $params = "iiisss";
 
         if($previousDeets['sem'] == 1) {
             $add = ", section_code";
@@ -963,17 +971,17 @@ trait Enrollment
             $add_q = "";
         }
 
-        
 
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
-        . "VALUES (CURDATE(), 1, STR_TO_DATE(?,'%Y-%M-%D'), ?, ?, ?, ?, ?, ? $add_q);";
+        . "VALUES (CURDATE(), 1, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
 
         echo($query);
         echo json_encode($values);
         echo json_encode($params);
         $this->prepared_query($query, $values, $params);
-        $this->initializeGrades($student_id, $current_sy);
-        // header("Location: ../student/student.php");
+        $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
+        $rep_id = $this->initializeGrades($student_id, $current_sy, $semester);
+        header("Location: ../student/student.php");
     }
 
     public function getEnrollees()
@@ -1559,8 +1567,9 @@ trait Enrollment
 
         while ($row = mysqli_fetch_assoc($values)) {
             foreach ([1, 2, 3, 4] as $quarter) {
-                $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?);", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii');
-                echo("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (${$row['value_id']}, $quarter, $report_id, $stud_id); <br>");
+                $query = "INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES ('{$row['value_id']}',$quarter, $report_id, $stud_id);";
+                $this->query($query);
+                echo($query . "<br>");
             }
         }
 
@@ -1638,14 +1647,14 @@ trait Grade
         $section_code = $_GET['section_code'];
         $qtr = $_SESSION['current_quarter'];
 
-        $res = $this->query("SELECT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        $res = $this->query("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         FROM classgrade 
         JOIN student USING(stud_id) 
         JOIN enrollment e USING(stud_id)
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code'
-        AND e.sy_id=$sy_id;");
+        AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']};");
         
         // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         // FROM student 
@@ -1919,8 +1928,8 @@ trait Grade
         }
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' ORDER BY sex, last_name;");
+        $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id
@@ -1934,25 +1943,25 @@ trait Grade
             $editable = $editable2 = '';
 
             if ($_SESSION['user_type'] != 'AD') {
-                if ($temp[1] == 1) {
+                // if ($temp[1] == 1) {
                     $editable = 'readonly';
-                }
+                // }
             }
 
             if (4 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD') {
+                $editable2 = 'readonly';
+            } else if (2 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD'){
                 $editable = 'readonly';
             }
 
-            if (2 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD'){
-                $editable2 = 'readonly';
-            }
+           
 
             $students[] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$gen_ave}'>",
-                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'] )
