@@ -40,10 +40,8 @@ $con = $dbConfig->connect();
                         session_start();
                         # user
                         $_SESSION['User'] = $u_row['name'];
-                        
                         $_SESSION['id'] = $u_row['id'];
                         $_SESSION['user_id'] = $id_no;
-
                         $_SESSION['user_type'] = trim($u_type);
 
                         # get roles if user type is faculty

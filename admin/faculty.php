@@ -125,8 +125,10 @@ if (isset($_GET['action'])) {
 
     <!-- VALIDATION -->
     <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/jquery.mockjax.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
     <script src="../js/validation/validation.js"></script>
+
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>

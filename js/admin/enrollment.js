@@ -2,6 +2,19 @@ try {
     var stepper = new Stepper($('#stepper')[0])
 } catch (e) {}
 
+function submitValidationForm(status) {
+    showSpinner();
+    let formData = $("#validate-form").serialize() + `&${status}=true`;
+    $.post("action.php", formData, function() {
+        $(".edit-opt").hide();
+        $("#valid-change-btn").closest(".badge").show();
+        $("#valid-change-btn").show();
+        $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
+        $("#confirmation-modal").modal("hide");
+        hideSpinner();
+    });
+}
+
 $(function() {
     preload("#enrollment", "#enrollment-sub");
 
@@ -59,18 +72,8 @@ $(function() {
     });
 
     /** Validate Form */
-    $(document).on("click", "#validate-form [type='submit']", function (e) {
-        e.preventDefault();
-        showSpinner();
-        let status = $(this).attr("name");
-        let formData = $("#validate-form").serialize() + `&${status}=true`;
-        $.post("action.php", formData, function() {
-            $(".edit-opt").hide();
-            $("#valid-change-btn").closest(".badge").show();
-            $("#valid-change-btn").show();
-            $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
-            hideSpinner();
-        });
+    $(document).on("click", ".validate", function (e) {
+        submitValidationForm($(this).attr("data-name"));
     });
 
     $(document).on("click", ".action", function () {
@@ -81,10 +84,12 @@ $(function() {
                 break;
             case "cancel":
                 $(".edit-opt").hide();
-                $("#valid-change-btn").closest(".badge").show();
+                $("#valid-change-btn").show();
                 break;
         }
     });
+
+
 
     /** Credential Page */
     // $(document).on("click", "#pop",  function() {
@@ -144,10 +149,50 @@ $(function() {
 
     $(document).on("click", ".to-transferee-form", function() {
         let strandCode = $("#program-select").val();
-        $.get(`getAction.php?data=schedule&code=${strandCode}`, function (data) {
-            console.log(data);
+        $("#chosen-strand").html($("#program-select option:selected").text().toUpperCase());
+        $.get(`getAction.php?data=schedule&code=${strandCode}`, function (scheduleData) {
+            let subData = JSON.parse(scheduleData).data;
+            // console.log(subData)
+            let template = $("#table-cell-template").html();
+            let html = '';
+
+            let elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem;
+            elevenFirSem = subData[0].data.subjects.length;
+            elevenSecSem = subData[1].data.subjects.length;
+            twelveFirSem = subData[2].data.subjects.length;
+            twelveSecSem = subData[3].data.subjects.length;
+
+
+            function renderCellHTML(sub) {
+                if (sub) {
+                    return template.replaceAll("%ID%", sub.sub_code).replace("%SUBJECTNAME%", sub.sub_name);
+                }
+                return "<td></td>";
+            }
+
+            let count = Math.max(elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem);
+            for (let i = 0; i < count; i++) {
+                html += '<tr>';
+                let subjectElevenFir = subData[0].data.subjects[i] ?? "";
+                let subjectElevenSec = subData[1].data.subjects[i] ?? "";
+                let subjectTwelveFir = subData[2].data.subjects[i] ?? "";
+                let subjectTwelveSec = subData[3].data.subjects[i] ?? "";
+                html += renderCellHTML(subjectElevenFir);
+                html += renderCellHTML(subjectElevenSec);
+                html += renderCellHTML(subjectTwelveFir);
+                html += renderCellHTML(subjectTwelveSec);
+                html += '</tr>';
+            }
+            console.log(html);
+            $("#transfer-table tbody").html(html);
 
         });
+    });
+
+    $(document).on("click", "[name='transferee']", function() {
+        let disabled  = !($(this).val() == "yes");
+        $(".trans-detail input, textarea").prop("disabled", disabled);
+        $("#transfer-table input").prop("disabled", disabled);
     });
 
     hideSpinner();

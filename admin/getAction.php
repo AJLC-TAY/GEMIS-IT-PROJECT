@@ -76,7 +76,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
     $admin->getExcellenceAwardData();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
-    $admin->getSubjectScheduleData($_GET['code'], TRUE);
+    $admin->getSubjectSchedule();
 }
 ?>
 

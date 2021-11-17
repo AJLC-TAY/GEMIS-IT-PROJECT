@@ -6,11 +6,12 @@ class dbConfig {
     protected $dbName;
     protected $port;
     public function __construct() {
-        $this -> serverName = '127.0.0.1';
+        $this -> serverName = 'localhost';
         $this -> userName = 'root';
-        $this -> password = 'root';
-        $this -> dbName = 'gemis';
-        $this -> port = 8889;
+        $this -> password = '';
+//        $this -> dbName = 'gemis';
+        $this -> dbName = 'gemistest';
+        $this -> port = 3306;
     }
 
     public function connect() {

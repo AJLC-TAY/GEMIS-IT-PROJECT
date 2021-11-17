@@ -1,8 +1,12 @@
 <?php include "../inc/head.html"; ?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<body>
+<form action="action.php" method="post">
 <div class="card w-100 h-auto mt-4 p-4">
+    <?php include("../class/Administration.php");
+    $admin = new Administration();
+//    $admin->getSubjectSchedule();
+    ?>
     <h4 class="fw-bold">Transferee Assessment form</h4>
     <div class="border p-3">
         <div class="container">
@@ -66,6 +70,8 @@
         </div>
     </div>
 </div>
+    <input type="submit" value="Submit">
+</form>
 
 <!--table cell template-->
 <template id="table-cell-template">
@@ -73,7 +79,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-2">
-                    <input id="%ID%" type="checkbox" class="form-check-input" name="%ID%">
+                    <input id="%ID%" type="checkbox" class="form-check-input" name="subjects[]" value="%ID%">
                 </div>
                 <label for="%ID%" class="form-check-label col-form-label col-10 py-0">
                     %SUBJECTNAME%
@@ -85,65 +91,69 @@
 <?php include_once ("../inc/footer.html"); ?>
 
 <script>
-    let data =   {
-        "data":
-            [
-                {
-                    "grade" : "11",
-                    "data" : [
-                        {
-                            "semester": "1",
-                            "subjects": [
-                                {"sub_code": "BSMATH", "sub_name": "Business Math"},
-                                {"sub_code": "BSMATH", "sub_name": "Business Math"}
-                            ],
-                            "count": "2"
-                        },
-                        {
-                            "semester": "2",
-                            "subjects": [
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
-                            ],
-                            "count" : "3"
-                        }
-                    ]
-                },
-                {
-                    "grade" : "12",
-                    "data" : [
-                        {
-                            "semester": "1",
-                            "subjects": [
-                                {"sub_code": "BSMATH", "sub_name": "Business Math"},
-                                {"sub_code": "BSMATH", "sub_name": "Business Math"}
-                            ],
-                            "count": "2"
-                        },
-                        {
-                            "semester": "2",
-                            "subjects": [
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
-                                {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
-                            ],
-                            "count" : "4"
-                        }
-                    ]
-                }
-            ]
-    }
-    let test = data['data'];
+    // let data =   {
+    //     "data":
+    //         [
+    //             {
+    //                 "grade" : "11",
+    //                 "data" : [
+    //                     {
+    //                         "semester": "1",
+    //                         "subjects": [
+    //                             {"sub_code": "BSMATH", "sub_name": "Business Math"},
+    //                             {"sub_code": "BSMATH", "sub_name": "Business Math"}
+    //                         ],
+    //                         "count": "2"
+    //                     },
+    //                     {
+    //                         "semester": "2",
+    //                         "subjects": [
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
+    //                         ],
+    //                         "count" : "3"
+    //                     }
+    //                 ]
+    //             },
+    //             {
+    //                 "grade" : "12",
+    //                 "data" : [
+    //                     {
+    //                         "semester": "1",
+    //                         "subjects": [
+    //                             {"sub_code": "BSMATH", "sub_name": "Business Math"},
+    //                             {"sub_code": "BSMATH", "sub_name": "Business Math"}
+    //                         ],
+    //                         "count": "2"
+    //                     },
+    //                     {
+    //                         "semester": "2",
+    //                         "subjects": [
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"},
+    //                             {"sub_code": "BSMATH" , "sub_name" : "Business Math"}
+    //                         ],
+    //                         "count" : "4"
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    // }
+
+    let scheduleData = <?php $admin->getSubjectSchedule(); ?>;
+    let test = scheduleData.data;
+    // console.log(test)
     let template = $("#table-cell-template").html();
     let html = '';
 
     let elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem;
-    elevenFirSem = test[0].data[0].count;
-    elevenSecSem = test[0].data[1].count;
-    twelveFirSem = test[1].data[0].count;
-    twelveSecSem = test[1].data[1].count;
+    console.log(test[1]);
+    elevenFirSem = test[0].data.subjects.length;
+    elevenSecSem = test[1].data.subjects.length;
+    twelveFirSem = test[2].data.subjects.length;
+    twelveSecSem = test[3].data.subjects.length;
 
 
     function renderCellHTML(sub) {
@@ -156,10 +166,10 @@
     let count = Math.max(elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem);
     for (let i = 0; i < count; i++) {
         html += '<tr>';
-        let subjectElevenFir = test[0].data[0].subjects[i] ?? "";
-        let subjectElevenSec = test[0].data[1].subjects[i] ?? "";
-        let subjectTwelveFir = test[1].data[0].subjects[i] ?? "";
-        let subjectTwelveSec = test[1].data[1].subjects[i] ?? "";
+        let subjectElevenFir = test[0].data.subjects[i] ?? "";
+        let subjectElevenSec = test[1].data.subjects[i] ?? "";
+        let subjectTwelveFir = test[2].data.subjects[i] ?? "";
+        let subjectTwelveSec = test[3].data.subjects[i] ?? "";
         console.log(subjectElevenFir)
         html += renderCellHTML(subjectElevenFir);
         html += renderCellHTML(subjectElevenSec);

@@ -54,6 +54,8 @@ $psaPreview = !is_null($id_picture) ? (file_exists($psa_birth_cert) ? $psa_birth
 
 $form137Preview = !is_null($id_picture) ? (file_exists($form137) ? $form137 : PREVIEW_PATH) : PREVIEW_PATH;
 $user_type = $_SESSION['user_type'];
+
+$grades = $userProfile->get_grades();
 switch ($user_type) {
     case 'AD':
         $breadcrumb = "<li class='breadcrumb-item'><a href='student.php' target='_self'>Student</a></li>";
@@ -63,13 +65,38 @@ switch ($user_type) {
         $breadcrumb = '';
         break;
 }
+const ACTIVE = "show active";
+$tab_one_active = ACTIVE;
+$tab_two_active = "";
+$tab_three_active = "";
+$is_tab_one = "active";
+$is_tab_two = "";
+$is_tab_three = "";
+if (isset($_GET['tab'])) {
+    switch ($_GET['tab']) {
+        case "docs":
+            $tab_one_active = "";
+            $is_tab_one = "";
+            $tab_two_active = ACTIVE;
+            $is_tab_two = "active";
+            break;
+        case "grades":
+            $tab_one_active = "";
+            $is_tab_one = "";
+            $tab_three_active = ACTIVE;
+            $is_tab_three = "active";
+            break;
+        default:
+            $tab_one_active = ACTIVE;
+            $is_tab_one = "active";
+    }
+}
 ?>
 
 <title>Student Information | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </link>
 </head>
-<!DOCTYPE html>
 <header>
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
@@ -151,14 +178,15 @@ switch ($user_type) {
         <div class="">
             <nav id="myTab">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-link active" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">General Information</a>
-                    <a class="nav-link" id="nav-docu-tab" data-bs-toggle="tab" data-bs-target="#docu" type="button" role="tab" aria-controls="docu" aria-selected="false">Documents</a>
+                    <a class="nav-link <?php echo $is_tab_one; ?>" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">General Information</a>
+                    <a class="nav-link <?php echo $is_tab_two; ?>" id="nav-docu-tab" data-bs-toggle="tab" data-bs-target="#docu" type="button" role="tab" aria-controls="docu" aria-selected="false">Documents</a>
+                    <a class="nav-link <?php echo $is_tab_three; ?>" id="nav-grades-tab" data-bs-toggle="tab" data-bs-target="#grades" type="button" role="tab" aria-controls="grades" aria-selected="false">Grades</a>
                 </div>
             </nav>
         </div>
         <div class="tab-content" id="myTabContent">
             <!-- GENERAL INFORMATION -->
-            <div class="tab-pane fade bg-white p-4 show active" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade bg-white p-4 <?php echo $tab_one_active; ?>" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
                 <div class="row w-100 h-auto text-start mx-auto">
                     <!-- <h5>GENERAL INFORMATION</h5> -->
                     <!-- <hr> -->
@@ -242,7 +270,7 @@ switch ($user_type) {
             </div>
         </div>
         <!-- DOCUMENTS TAB -->
-        <div class="tab-pane fade bg-white p-4" id="docu" role="tabpanel" aria-labelledby="docu-tab">
+        <div class="tab-pane fade bg-white p-4 <?php echo $tab_two_active; ?>" id="docu" role="tabpanel" aria-labelledby="docu-tab">
             <div class="row w-100 h-auto text-start mx-auto">
                 <div class="row p-0">
                     <div class="row">
@@ -268,6 +296,98 @@ switch ($user_type) {
                 </div>
             </div>
         </div>
+        <!-- GRADES TAB -->
+        <div class="tab-pane fade bg-white p-4 <?php echo $tab_three_active; ?>" id="grades" role="tabpanel" aria-labelledby="docu-tab">
+            <div class="container px-1 text-start">
+                <div class="row p-0">
+                    <h5>Subject checklist</h5>
+                    <div class="current-con">
+                        <?php
+                        function echoSubjects($grades, $status, $sub_type)
+                        {
+                            if (isset($grades[$status][$sub_type])) {
+                                echo "<tr><td colspan='5' class='bg-light fw-bold'>". ucwords($sub_type). " subjects</td></tr>";
+                                foreach($grades[$status][$sub_type] as $sub_grd) {
+                                    $sub_grd_id = (int) $sub_grd['grade_id'];
+                                    echo "<tr>
+                                            <td class='ps-3'>{$sub_grd['name']}</td>
+                                            <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][first]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['first']}' disabled></td>
+                                            <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][second]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['second']}' disabled></td>
+                                            <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
+                                            <td  align='center'>
+                                                <div class='d-flex justify-content-center'>
+                                                    <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-secondary' data-action='edit'><i class='bi bi-pencil-square'></i></button>
+                                                    <div class='edit-options d-flex d-none'>
+                                                        <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-dark me-1' data-action='cancel'>Cancel</button>
+                                                        <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-success' data-action='save'>Save</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                    </tr>";
+                                }
+                            }
+                        }
+                        ?>
+                        <table class="table table-sm table-bordered grade-table">
+                            <col width="55%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
+                            <thead align="center">
+                                <tr>
+                                    <td rowspan="2">Subject Code</td>
+                                    <td colspan="2">Grading</td>
+                                    <td rowspan="2">Final Grade</td>
+                                    <td rowspan="2">Action</td>
+                                </tr>
+                                <tr>
+                                    <td>First</td>
+                                    <td>Second</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php echoSubjects($grades, 'current', 'core'); ?>
+                            <?php echoSubjects($grades, 'current', 'applied'); ?>
+                            <?php echoSubjects($grades, 'current', 'specialized'); ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="row p-0">
+                    <h5>Already taken subjects</h5>
+                    <div class="advanced-con">
+                        <table class="table table-sm table-bordered grade-table">
+                            <col width="55%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
+                            <thead align="center">
+                                <tr>
+                                    <td rowspan="2">Subject Code</td>
+                                    <td colspan="2">Grading</td>
+                                    <td rowspan="2">Final Grade</td>
+                                    <td rowspan="2">Action</td>
+
+                                </tr>
+                                <tr>
+                                    <td>First</td>
+                                    <td>Second</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php echoSubjects($grades, 'advanced', 'core'); ?>
+                                <?php echoSubjects($grades, 'advanced', 'applied'); ?>
+                                <?php echoSubjects($grades, 'advanced', 'specialized'); ?>
+                            </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="modal fade" id="imgPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

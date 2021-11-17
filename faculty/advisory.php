@@ -4,20 +4,16 @@ include("../inc/head.html");
 require_once("../class/Faculty.php");
 $faculty = new FacultyModule();
 $sub_classes = [];
-$advisory = $faculty->getAdvisoryClass($_SESSION['sy_id']);
-$sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
-// $sub_classes = $faculty->getHandled_sub_classes($_SESSION['id']);
+$sy_id = $_SESSION['sy_id'];
+$advisory = $faculty->getAdvisoryClass($sy_id);
+$sub_classes = $faculty->getHandled_sub_classes($sy_id);
 $adv_opn = '';
 $sub_class_opn = '';
-
-// $adv_table_display = 'd-none';
 $adv_table_display = '';
-// $sub_table_display = '';
 
 $adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
     $adv_table_display = '';
-    // $sub_table_display = 'd-none';
     $section_code = $advisory['section_code'];
     $section_name = $advisory['section_name'];
 
@@ -44,10 +40,9 @@ if (!(is_null($sub_classes))) {
     if ($adv_count_is_empty) {
         # no advisory nor subject class at this point
         $adv_table_display = '';
-        // $sub_table_display = 'd-none';
     }
 }
-$schoolYearInfo = $faculty->getSchoolYearInfo($_SESSION['sy_id']);
+$schoolYearInfo = $faculty->getSchoolYearInfo($sy_id);
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
@@ -204,7 +199,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>let code = "<?php echo $advisory['section_code'];?>";</script>
+    <script>let code = "<?php echo json_encode($advisory['section_code'] ?? NULL);?>";</script>
     <?php echo $jsFilePath; ?>;
 
 </body>

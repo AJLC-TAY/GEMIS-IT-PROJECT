@@ -8,7 +8,7 @@
     </nav>
     <div class="row align-content-center">
         <div class="col-auto">
-            <h3 class="fw-bold"><?php echo $advisory['section_name'] ?></h3>
+            <h3 class="fw-bold"><?php echo $advisory['section_name'] ?? 'No Advisory Class'  ?></h3>
         </div>
     </div>
 </header>
