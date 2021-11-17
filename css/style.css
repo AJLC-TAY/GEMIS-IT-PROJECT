@@ -132,8 +132,6 @@ ul.top-menu>li>.logout {
 }
 
 
-
-
 #sidebar .sub-menu>.sub li:last-child {
     padding-bottom: 1px;
 }
@@ -142,7 +140,7 @@ ul.top-menu>li>.logout {
 /* MAIN CONTENT CONFIGURATION */
 
 #main-content {
-    margin-left: 16%;
+    margin-left: 14%;
     margin-right: 2%;
 }
 

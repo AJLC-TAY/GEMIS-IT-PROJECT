@@ -393,7 +393,6 @@ class Administration extends Dbconfig
                 case "view":
                     echo json_encode("schoolYear.php?id=$sy_id");
                     break;
-
             }
         }
     }
@@ -1269,7 +1268,7 @@ class Administration extends Dbconfig
         echo json_encode($subjectList);
     }
 
-    public function getSubjectScheduleData($prog_code = NULL, $is_JSON = NULL)
+    public function getSubjectScheduleData($prog_code = NULL)
     {
         if (empty($_SESSION)) {
             session_start();
@@ -1304,10 +1303,10 @@ class Administration extends Dbconfig
             $subjectList['schedule'][$row['prog_code']]["data[" . $row['for_grd_level'] . "][" . $row['sub_semester'] . "][" . $row['sub_type'] . "][]"][] =  $row['sub_code'];
         }
 
-        if ($is_JSON) {
-            echo json_encode($subjectList);
-            return;
-        }
+//        if ($is_JSON) {
+//            echo json_encode($subjectList);
+//            return;
+//        }
         return $subjectList;
     }
 
@@ -2239,8 +2238,8 @@ class Administration extends Dbconfig
 
         $query = "SELECT * from student s "
             . "JOIN enrollment e ON e.stud_id = s.stud_id "
-            . "JOIN user u ON u.id_no = s.id_no "
-            . (isset($_GET['section']) ? "WHERE e.section_code='{$_GET['section']}';" : ""); # WHERE s.id_no IN (SELECT id_no FROM user WHERE is_active=1);
+            . "JOIN user u ON u.id_no = s.id_no WHERE e.valid_stud_data = '1' "
+            . (isset($_GET['section']) ? "AND e.section_code='{$_GET['section']}';" : ""); # WHERE s.id_no IN (SELECT id_no FROM user WHERE is_active=1);
         $result = $this->query($query);
         $studentList = array();
 

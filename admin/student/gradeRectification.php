@@ -4,7 +4,7 @@ $faculty = new FacultyModule();
 $id = $_SESSION['id'];
 $sy_id = $_SESSION['sy_id'];
 $teacher_id = (int) $_SESSION['id'];
-$advisory = $faculty->listSectionOption();//dapat my sy
+$advisory = $faculty->listSectionOption() ?? NULL;
 // echo json_encode($advisory);
 // echo ("grade Rectification");
 $sub_classes = $faculty->getHandled_sub_classes();

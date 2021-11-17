@@ -78,21 +78,6 @@ let subjectTable = $("#subject-table").bootstrapTable(asTableSetup);
 $(function () {
     preload('#faculty');
 
-    /** Handling image upload */
-    const readURL = input => {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#resultImg').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
-
-    $("#upload").change(function(){
-        readURL(this);
-    });
-
     try {
         /** Assign Subject to Faculty Methods */
         asMethods(assigned, subjectTable);
@@ -100,38 +85,35 @@ $(function () {
         scMethods(ASSIGNEDSCID, SCID);
     } catch (e) {}
 
-    $(document).on("submit", "#faculty-form", function (e) {
-        e.preventDefault();
-        // var action = $(this).attr('data-action');
-        var formData = new FormData($(this)[0]);
-
-        try {
-            $(ASSIGNEDSCID).bootstrapTable("getData")
-                           .forEach(e => {
-                               formData.append("asgn-sub-class[]",  e.sub_class_code);
-                           });
-
-            subjectTable.bootstrapTable("getSelections")
-                               .forEach(e => {
-                                   formData.append("subjects[]", e.sub_code);
-                               });
-        } catch (e) {}
-
-        // formData.append("profile", "faculty");
-        // formData.append("action", action);
-
-        $.ajax({
-            url: "action.php",
-            method: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: data => {
-                let response = JSON.parse(data);
-                window.location.replace(`faculty.php?id=${response.teacher_id}`);
-            }
-        });
-    });
+    // $(document).on("submit", "#faculty-form", function (e) {
+    //     e.preventDefault();
+    //     // var action = $(this).attr('data-action');
+    //     var formData = new FormData($(this)[0]);
+    //
+    //     try {
+    //         $("#assigned-sc-table").bootstrapTable("getData")
+    //                        .forEach(e => {
+    //                            formData.append("asgn-sub-class[]",  e.sub_class_code);
+    //                        });
+    //
+    //         $("#subject-table").bootstrapTable("getSelections")
+    //                            .forEach(e => {
+    //                                formData.append("subjects[]", e.sub_code);
+    //                            });
+    //     } catch (e) {}
+    //
+    //     $.ajax({
+    //         url: "action.php",
+    //         method: "POST",
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         success: data => {
+    //             let response = JSON.parse(data);
+    //             window.location.replace(`faculty.php?id=${response.teacher_id}`);
+    //         }
+    //     });
+    // });
 
     $(".edit-text").click(()=> $("#upload").click());
     hideSpinner();

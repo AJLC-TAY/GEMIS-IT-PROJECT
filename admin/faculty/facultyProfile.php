@@ -78,8 +78,8 @@ $advisory = ($advisory_class) ? "<div class='col-auto'><a href='section.php?sec_
 $birthdate = $school_user->get_birthdate();
 $birthdate = date("F j, Y", strtotime($birthdate));
 $name = $school_user->get_name();
+$uid = $school_user->get_user_no();
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -122,6 +122,8 @@ $name = $school_user->get_name();
                         <div class="row">
                             <div class="col-lg-6">
                                 <dl class="row">
+                                    <dt class='col-md-3'>UID</dt>
+                                    <dd class='col-md-9'><?php echo $uid; ?></dd>
                                     <dt class='col-md-3'>Name</dt>
                                     <dd class='col-md-9'><?php echo $name; ?></dd>
                                     <dt class='col-md-3'>Gender</dt>

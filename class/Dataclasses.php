@@ -326,7 +326,7 @@ class Faculty implements JsonSerializable
     {
         return $this->teacher_id;
     }
-    public function get_teacher_user_no()
+    public function get_user_no()
     {
         return $this->teacher_user_no;
     }
@@ -1684,6 +1684,16 @@ class StudentAward extends Award implements JsonSerializable
             return $this->program;
         }
 
+        public function set_grades($grades)
+        {
+            $this->grades = $grades;
+        }
+
+        public function get_grades()
+        {
+            return $this->grades;
+        }
+
         public function jsonSerialize(){
         return [
             'stud_id' => $this->stud_id,
@@ -1724,7 +1734,21 @@ class StudentAward extends Award implements JsonSerializable
             $this->date_of_enroll = $date_of_enroll;
             $this->enrolled_in = $enrolled_in;
             $this->curr_code = $curr_code;
-            $this->status = $status;
+            $color_badge = '';
+            switch ($status) {
+                case "1":
+                    $color_badge = "success";
+                    $status = "Enrolled";
+                    break;
+                case "2":
+                    $color_badge = "danger";
+                    $status = "Rejected";
+                    break;
+                default:
+                    $color_badge = "warning";
+                    $status = "Pending";
+            }
+            $this->status = "<div class='d-flex justify-content-center'><span class='badge me-2'><div class='bg-$color_badge rounded-circle' style='width: 10px; height: 10px;'></div></span><span>$status</span></div>";
             $this->section = $section;
         }
         public function jsonSerialize()

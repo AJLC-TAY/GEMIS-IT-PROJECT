@@ -22,9 +22,10 @@ if ($valid_status === "Pending") {
 }
 
 const PROFILE_PATH = "../assets/profile.png";
+const NO_PREVIEW_PATH = "../assets/no_preview.jpg";
 $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFILE_PATH) : PROFILE_PATH;
-$psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : "../uploads/credential/9/psa.jpg") : "../uploads/credential/9/psa.jpg";
-$form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : "../uploads/credential/9/form137.jpg") : "../uploads/credential/9/form137.jpg";
+$psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : NO_PREVIEW_PATH) : NO_PREVIEW_PATH;
+$form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : NO_PREVIEW_PATH) : NO_PREVIEW_PATH;
 ?>
 <!DOCTYPE html>
 <!-- HEADER -->
@@ -84,8 +85,18 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                             <form id="validate-form" class='edit-opt' action="action.php" method="post" <?php echo $form_display; ?>>
                                 <input type="hidden" name='stud_id' value='<?php echo $stud_id; ?>'>
                                 <input type="hidden" name='action' value='validateEnrollment'>
-                                <input type="submit" class='btn btn-success mb-2 w-100' name='accept' title='Enroll student' value='Accept Enrollee'>
-                                <input type="submit" class='btn btn-secondary mb-2 w-100' name='reject' title='Decline Enrollee' value='Decline Enrollee'>
+                                <div class="col-auto">
+                                    <button type="button" class='btn btn-success mb-2 w-100 validate' data-name='accept' title='Enroll student'>Accept Enrollee</button>
+                                </div>
+                                <button type="button" class='btn btn-secondary mb-2 w-100' data-bs-toggle="modal" data-bs-target="#confirmation-modal" title='Decline Enrollee'>Decline Enrollee</button>
+                                <div class="container">
+                                    <dl class="row">
+                                        <dt class="col-3">Accept</dt>
+                                        <dd class="col-9">Accepting student will initialize their grades and attendances to zero.</dd>
+                                        <dt class="col-3">Decline</dt>
+                                        <dd class="col-9">Declining student will not reflect during the creation of section. Any initialized grades will be deleted.</dd>
+                                    </dl>
+                                </div>
                             </form>
                         </div>
                         <!-- PROFILE PICTURE END -->
@@ -141,23 +152,21 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                             <!-- </div> -->
                         </div>
                     </div>
-                    <div class="modal fade" id="select-section-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
+                    <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <div class="modal-title">
-                                        <h4 class="mb-0">Select Section</h4>
+                                        <h4 class="mb-0">Confirmation</h4>
                                     </div>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="overflow-auto" style="height: 50vh;">
-                                        <ul class="list-group sec-list">
-                                        </ul>
-                                    </div>
+                                    Declining this enrollment request will delete this student's initialized grades.
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
+                                    <button class="close btn btn-dark close-btn validate"  data-name='reject'>Decline</button>
+                                    <button class="close btn btn-success close-btn" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>

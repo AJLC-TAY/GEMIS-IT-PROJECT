@@ -126,7 +126,6 @@ switch ($user_type) {
         break;
 }
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -141,7 +140,7 @@ switch ($user_type) {
     <small class='text-secondary'>Please complete the following:</small>
 </header>
 <!-- CONTENT  -->
-<form id='faculty-form' data-action="" class="needs-validation mt-3" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
+<form id='faculty-form' class="needs-validation mt-3" method='POST' action='action.php' enctype='multipart/form-data' novalidate>
     <?php echo $teacher_id_input; ?>
     <input type='hidden' name='action' value='<?php echo $action; ?>'><input type='hidden' name='profile' value='faculty'>
     <div class='form-row row'>
@@ -296,12 +295,6 @@ switch ($user_type) {
         }, false);
     });
 </script>
-
-<!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-    <script src="../js/validation/jquery.mockjax.js"></script>
-    <script src="../js/validation/additional-methods.min.js"></script>
-    <script src="../js/validation/validation.js"></script>
 
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;

@@ -8,7 +8,7 @@
     </nav>
     <div class="row align-content-center">
         <div class="col-auto">
-            <h3 class="fw-bold"><?php echo $advisory['section_name'] ?></h3>
+            <h3 class="fw-bold"><?php echo $advisory['section_name'] ?? 'No Advisory Class'  ?></h3>
         </div>
     </div>
 </header>
@@ -46,7 +46,8 @@
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
                     <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">1st Sem Gen Ave</th>
+                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="2grd_f">2nd Sem Gen Ave</th>
                     <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>

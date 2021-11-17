@@ -361,8 +361,32 @@ $(function () {
         required: '<p class="text-danger user-select-none">Please enter age!</p>'
       }
     },
-    submitHandler: function(form) { 
-      form.submit();
+    submitHandler: function(form) {
+      let formData = new FormData(form);
+      try {
+        $("#assigned-sc-table").bootstrapTable("getData")
+            .forEach(e => {
+              formData.append("asgn-sub-class[]",  e.sub_class_code);
+            });
+
+        $("#subject-table").bootstrapTable("getSelections")
+            .forEach(e => {
+              formData.append("subjects[]", e.sub_code);
+            });
+      } catch (e) {}
+
+      $.ajax({
+        url: "action.php",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: data => {
+          let response = JSON.parse(data);
+          console.log(response)
+          window.location.replace(`faculty.php?id=${response.teacher_id}`);
+        }
+      });
       return false;  //This doesn't prevent the form from submitting.
     }
   })
