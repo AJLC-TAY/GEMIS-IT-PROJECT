@@ -352,7 +352,7 @@ trait UserSharedMethods
 
         $grades = [];
         $result = $this->query("SELECT grade_id, s.sub_code,sub_name, sub_type, first_grading, second_grading, final_grade, transferee_id FROM classgrade cg LEFT JOIN transferee_subject ts on cg.sub_code = ts.sub_code
-                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id';");
+                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id' ORDER BY sub_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
@@ -990,7 +990,7 @@ trait Enrollment
         $limit = $_GET['limit'];
         $offset = $_GET['offset'];
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-            . "e.date_of_enroll, e.enrolled_in, e.curr_code, e.valid_stud_data AS status, e.section_code FROM enrollment AS e "
+            . "e.date_of_enroll, e.enrolled_in, e.prog_code, e.valid_stud_data AS status, e.section_code FROM enrollment AS e "
             . "JOIN student AS s USING (stud_id) "
             . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id "
             . "WHERE e.sy_id = {$_SESSION['sy_id']} ";
@@ -1085,7 +1085,7 @@ trait Enrollment
                 $row['name'],
                 $row['date_of_enroll'],
                 $row['enrolled_in'],
-                $row['curr_code'],
+                $row['prog_code'],
                 $row['status'],
                 $row['stud_id'],
                 $row['section_code']
@@ -1405,10 +1405,8 @@ trait Enrollment
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';");
 
         # step 1.3
-        $this->initializeGrades($stud_id, $current_sy);
-
-
-
+        $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
+        $this->initializeGrades($stud_id, $current_sy, $semester);
     }
 
     function prepareParentData($type): array
@@ -1515,10 +1513,10 @@ trait Enrollment
         return $student_id;
     }
 
-    public function initializeGrades($stud_id, $sy_id)
+    public function initializeGrades($stud_id, $sy_id, $semester)
     {
         # get grade level and program
-        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester = ". in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2"  . ";"));
+        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester ='$semester';"));
         $grade_level = $enroll_detail['grade_level'];
         $program = $enroll_detail['prog_code'];
 
@@ -1539,9 +1537,17 @@ trait Enrollment
                                 AND for_grd_level = '$grade_level'
                                 AND (prog_code = '$program' OR sub_type = 'core')
                                 GROUP BY s.sub_code;");
+        echo "SELECT s.sub_code FROM subject s
+                                JOIN sysub sy USING (sub_code)
+                                LEFT JOIN sharedsubject ss ON s.sub_code = ss.sub_code
+                                WHERE sy.sy_id = '$sy_id'
+                                AND for_grd_level = '$grade_level'
+                                AND (prog_code = '$program' OR sub_type = 'core')
+                                GROUP BY s.sub_code;";
 
         while ($row = mysqli_fetch_row($result)) {
             $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');");
+            echo "INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');";
         }
         # 4. Initialize array of default observed value ids
         $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");

@@ -164,7 +164,7 @@ if ($_SESSION['user_type'] == 'AD') {
                     <th scope='col' data-width="235" data-halign="center" data-align="center" data-sortable="true" data-field="name">Name</th>
                     <th scope='col' data-width="85" data-align="center" data-sortable="true" data-field="enroll-date">Enrollment Date</th>
                     <th scope='col' data-width="50" data-align="center" data-sortable="true" data-field="grade-level">Level</th>
-                    <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="curriculum">Curriculum</th>
+                    <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="strand">Strand</th>
                     <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="section">Section</th>
                     <th scope='col' data-width="75" data-align="center" data-sortable="true" data-field="status">Status</th>
                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>

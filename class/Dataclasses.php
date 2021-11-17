@@ -1724,7 +1724,7 @@ class StudentAward extends Award implements JsonSerializable
 
         public function __construct (
             $SY, $LRN, $name, $date_of_enroll,
-            $enrolled_in, $curr_code, $status, 
+            $enrolled_in, $prog_code, $status,
             $stud_id, $section
         ) {
             $this->stud_id = $stud_id;
@@ -1733,7 +1733,7 @@ class StudentAward extends Award implements JsonSerializable
             $this->name = $name;
             $this->date_of_enroll = $date_of_enroll;
             $this->enrolled_in = $enrolled_in;
-            $this->curr_code = $curr_code;
+            $this->prog_code = $prog_code;
             $color_badge = '';
             switch ($status) {
                 case "1":
@@ -1759,7 +1759,7 @@ class StudentAward extends Award implements JsonSerializable
                 "name"        => $this->name,
                 "enroll-date" => $this->date_of_enroll,
                 "grade-level" => $this->enrolled_in,
-                "curriculum"  => $this->curr_code,
+                "strand"      => $this->prog_code,
                 "status"      => $this->status,
                 "section"     => $this->section,
                 "stud_id"     => $this->stud_id,

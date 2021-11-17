@@ -271,6 +271,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){
 if (isset($_POST['action']) && $_POST['action'] === 'newPassword'){
     $admin->newPassword();
 }
+if (isset($_POST['action']) && $_POST['action'] === 'editSubjectGrade'){
+    $admin->editSubjectGrade();
+}
+
+
 
 /******** SIGNATORY ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addSignatory'){
