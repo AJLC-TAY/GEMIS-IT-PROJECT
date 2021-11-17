@@ -1402,69 +1402,12 @@ trait Enrollment
             $this->query("DELETE FROM gradereport WHERE stud_id = '$stud_id';");
             return;
         }
-
-        # query to join all school year table : SELECT sy.sy_id, syc_id, syc.curr_code, sycs_id, sycs.prog_code FROM schoolyear AS sy JOIN sycurriculum AS syc USING(sy_id) JOIN sycurrstrand AS sycs USING (syc_id);
-        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$current_sy';"));
-        $grade_level = $enroll_detail['grade_level'];
-        $prog_code = $enroll_detail['prog_code'];
-
-        // # get school_year_curr_strand_id
-        // $sycs = mysqli_fetch_row($this->query("SELECT sycs_id FROM schoolyear 
-        //                                        JOIN sycurriculum USING(sy_id) 
-        //                                        JOIN sycurrstrand USING (syc_id) 
-        //                                        WHERE prog_code='$prog_code' AND sy_id='$current_sy';"))[0];
-        // $section_result = $this->query("SELECT * FROM section JOIN sectionprog USING (section_code) 
-        //                                 WHERE sycs_id = '$sycs' AND grd_level = '$grade_level' 
-        //                                 ORDER BY stud_no DESC;");
-        // $sections = []; // 11 - A to 11 - D
-        // $avail_section = []; // 11 - D, 11 - E
-        // while($row = mysqli_fetch_array($section_result)) {
-        //     $stud_no = $row['stud_no'];
-        //     $stud_max_no = $row['stud_no_max'];
-        //     $section = new Section (
-        //         $row['section_code'],
-        //         $row['sy_id'],
-        //         $row['section_name'],
-        //         $row['grd_level'],
-        //         $stud_max_no,
-        //         $stud_no,
-        //         $row['teacher_id']
-        //     );
-        //     $sections[] = $section;
-        //     if ($stud_no < $stud_max_no) { // 0 <div 50
-        //         $avail_section[] = $section;
-        //     }
-        // }    
-
-        // $selected_section_code = 0;
-        # if no available section, create new section
-        // if (count($avail_section) === 0) {
-        //     echo "Adding new section ... <br>";
-        //     $alphabet = range('A', 'Z'); // "A, B, C, "
-        //     $letter = $alphabet[count($sections)];
-        //     // echo "$letter <br>";
-        //     echo "$grade_level, $prog_code, $stud_no, $letter, $current_sy, $sycs <br>";
-        //     $selected_section_code = $this->addSection($grade_level, $prog_code, 1, $letter, $current_sy, $sycs);
-        // } else {
-        //     # select the very first available section // 11-D
-        //     $selected_section = $avail_section[0];
-        //     $selected_section_code = $selected_section->get_code();
-        //     # update section student no.
-        //     $new_stud_no = $selected_section->increase_stud_no(1); // current stud 2 + 1 = 3
-        //     $this->query("UPDATE section SET stud_no = '$new_stud_no' WHERE section_code = '$selected_section_code';");
-        // }
-        // $this->query("UPDATE enrollment SET valid_stud_data='$is_valid', section_code='$selected_section_code' WHERE stud_id='$stud_id';");
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';");
 
         # step 1.3
-        $report_id = $this->initializeGrades($stud_id, $current_sy, $grade_level, $prog_code);
+        $this->initializeGrades($stud_id, $current_sy);
 
-        # step 1.4
-        $attend_data = $this->getAttendanceDays();
-        $attend_months = $attend_data['months'];
-        foreach ($attend_months as $id => $val) {
-            $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
-        }
+
 
     }
 
@@ -1572,8 +1515,14 @@ trait Enrollment
         return $student_id;
     }
 
-    public function initializeGrades($stud_id, $sy_id, $grade_level, $program)
+    public function initializeGrades($stud_id, $sy_id)
     {
+        # get grade level and program
+        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester = ". in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2"  . ";"));
+        $grade_level = $enroll_detail['grade_level'];
+        $program = $enroll_detail['prog_code'];
+
+
         echo "Start initializing grade .. <br>";
         # 1. initialize gradereport
         $this->prepared_query("INSERT INTO gradereport (stud_id, sy_id) VALUES (?, ?);", [$stud_id, $sy_id], 'ii');
@@ -1589,7 +1538,7 @@ trait Enrollment
                                 WHERE sy.sy_id = '$sy_id'
                                 AND for_grd_level = '$grade_level'
                                 AND (prog_code = '$program' OR sub_type = 'core')
-                                GROUP BY s.sub_code");
+                                GROUP BY s.sub_code;");
 
         while ($row = mysqli_fetch_row($result)) {
             $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');");
@@ -1605,6 +1554,13 @@ trait Enrollment
             }
         }
         echo "End initializing grade: $report_id<br>";
+
+        # step 5 initialize attendance days
+        $attend_data = $this->getAttendanceDays();
+        $attend_months = $attend_data['months'];
+        foreach ($attend_months as $id => $val) {
+            $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
+        }
         return $report_id;
     }
 

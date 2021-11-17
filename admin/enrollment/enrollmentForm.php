@@ -624,8 +624,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                                 <label class='form-check-label' for='$id'>
                                                 $value
                                                 </label>
-                                            </div>
-                                            <input  class='hidden' name = 'semester' type='text' value=''>";
+                                            </div>";
                                 }
                                 ?>
                             </div>
