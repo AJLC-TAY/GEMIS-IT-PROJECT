@@ -735,23 +735,7 @@ trait FacultySharedMethods
         }
     }
 
-    public function getAttendanceDays()
-    {
-        $current_month = date("F"); // ex. January
-        $sy_id = $_SESSION['sy_id'];
-        // $sy_id = 13;
-        $result = $this->query("SELECT acad_days_id AS id, month, no_of_days FROM academicdays WHERE sy_id = '$sy_id' ORDER BY acad_days_id;");
-        $months = [];
-        while ($row = mysqli_fetch_row($result)) {
-            $mnth = $row[0];
-            $mnth_desc = $row[1];
-            if ($current_month == $mnth_desc) {
-                $current_month = $mnth;
-            }
-            $months[$mnth] = [$mnth_desc, $row[2]];
-        }
-        return ['current' => $current_month, 'months' => $months];
-    }
+
 
     public function listAdvisoryClasses($is_JSON = FALSE)
     {
@@ -908,10 +892,12 @@ trait Enrollment
 
         //UPDATE STUDENT INFO
         $query = "UPDATE `student` SET `age`=?,`religion`=?,`cp_no`=? WHERE `LRN`=?;";
+        $this->prepared_query($query, $studparams, "isii");
 
         echo "Student info updated. <br>";
 
         $student_id = $_SESSION['id'];
+        $current_sy = $_SESSION['sy_id'];
         $father[] = $student_id;
         $mother[] = $student_id;
         $guardian[] = $student_id;
@@ -936,7 +922,7 @@ trait Enrollment
 
         //create new enrollment entity
 
-        $previousDeets = $this -> lastestEnrollmentDetail();
+        $previousDeets = $this->lastestEnrollmentDetail();
 
         $school_year = $_SESSION['sy_id'];
         $school_info = [$previousDeets['curr_code'],  $previousDeets['prog_code']];
@@ -974,14 +960,14 @@ trait Enrollment
             $add_q = "";
         }
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
-        . "VALUES (NOW(), 1, ?, ?, ?, ?, ?, ?, ? $add_q);";
+        . "VALUES (CURDATE(), 1, STR_TO_DATE(?,'%Y-%M-%D'), ?, ?, ?, ?, ?, ? $add_q);";
 
         echo($query);
         echo json_encode($values);
         echo json_encode($params);
         $this->prepared_query($query, $values, $params);
-        header("Location: ../student/student.php");
-
+        $this->initializeGrades($student_id, $current_sy);
+        // header("Location: ../student/student.php");
     }
 
     public function getEnrollees()
@@ -1085,7 +1071,7 @@ trait Enrollment
                 $row['name'],
                 $row['date_of_enroll'],
                 $row['enrolled_in'],
-                $row['prog_code'],
+                $row['curr_code'],
                 $row['status'],
                 $row['stud_id'],
                 $row['section_code']
@@ -1512,6 +1498,23 @@ trait Enrollment
 
         return $student_id;
     }
+    public function getAttendanceDays()
+    {
+        $current_month = date("F"); // ex. January
+        $sy_id = $_SESSION['sy_id'];
+        // $sy_id = 13;
+        $result = $this->query("SELECT acad_days_id AS id, month, no_of_days FROM academicdays WHERE sy_id = '$sy_id' ORDER BY acad_days_id;");
+        $months = [];
+        while ($row = mysqli_fetch_row($result)) {
+            $mnth = $row[0];
+            $mnth_desc = $row[1];
+            if ($current_month == $mnth_desc) {
+                $current_month = $mnth;
+            }
+            $months[$mnth] = [$mnth_desc, $row[2]];
+        }
+        return ['current' => $current_month, 'months' => $months];
+    }
 
     public function initializeGrades($stud_id, $sy_id, $semester)
     {
@@ -1537,36 +1540,36 @@ trait Enrollment
                                 AND for_grd_level = '$grade_level'
                                 AND (prog_code = '$program' OR sub_type = 'core')
                                 GROUP BY s.sub_code;");
-        echo "SELECT s.sub_code FROM subject s
-                                JOIN sysub sy USING (sub_code)
-                                LEFT JOIN sharedsubject ss ON s.sub_code = ss.sub_code
-                                WHERE sy.sy_id = '$sy_id'
-                                AND for_grd_level = '$grade_level'
-                                AND (prog_code = '$program' OR sub_type = 'core')
-                                GROUP BY s.sub_code;";
 
         while ($row = mysqli_fetch_row($result)) {
             $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');");
-            echo "INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');";
         }
         # 4. Initialize array of default observed value ids
         $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");
 
         # 4.a For each value_id, 
-        # for each quarter, create an observedvalue.                     
+        # for each quarter, create an observedvalue.
+        echo("initialize observe values <br>");
+
         while ($row = mysqli_fetch_assoc($values)) {
             foreach ([1, 2, 3, 4] as $quarter) {
                 $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?);", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii');
+                echo("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (${$row['value_id']}, $quarter, $report_id, $stud_id); <br>");
             }
         }
+
         echo "End initializing grade: $report_id<br>";
 
         # step 5 initialize attendance days
         $attend_data = $this->getAttendanceDays();
         $attend_months = $attend_data['months'];
+        echo ("initialize attendance <br>");
+
         foreach ($attend_months as $id => $val) {
             $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
+            echo ("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id); <br>");
         }
+
         return $report_id;
     }
 

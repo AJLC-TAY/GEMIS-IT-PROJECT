@@ -208,7 +208,7 @@ if (isset($_GET['tab'])) {
                                 $birthdate = date("F j, Y", strtotime($birthdate));
                                 $name = $userProfile->get_name();
                                 echo 
-                                "<dl class='row mb-3'>
+                                "<dl class='row mb-3 ms-2'>
                                             <dt class='col-md-3'>Name: </dt>
                                             <dd class='col-md-9'> $name </dd>
                                             <dt class='col-md-3'>Gender: </dt>
@@ -232,7 +232,7 @@ if (isset($_GET['tab'])) {
                             <div class="row mt-3">
                                 <h6><b>Contact Information</b></h6>
                                 <?php echo 
-                                    "<dl class='row mb-3'>
+                                    "<dl class='row mb-3 ms-2'>
                                         <dt class='col-md-3'>Home Address: </dt>
                                         <dd class='col-md-9'> $add </dd>
                                         <dt class='col-md-3'>Cellphone No.: </dt>
@@ -251,7 +251,7 @@ if (isset($_GET['tab'])) {
                                         $occupation = ${$parent . '_occupation'};
                                         $no = ${$parent . '_cp_no'};
                                         echo "
-                                        <dl class='row mb-3'>
+                                        <dl class='row mb-3 ms-2'>
                                             <dt class='col-md-3'>". ucwords($parent) ."'s Name: </dt>
                                             <dd class='col-md-9'> $name </dd>
                                             <dt class='col-md-3'>Occupation: </dt>
@@ -263,7 +263,7 @@ if (isset($_GET['tab'])) {
                                 }
                                 if ($guardian != NULL) {
                                     echo "<h6 class='mt-3'>Guardian/s</h6>
-                                        <dl class='row mb-3'>
+                                        <dl class='row mb-3 ms-2'>
                                             <dt class='col-md-3'>Guardian's Name: </dt>
                                             <dd class='col-md-9'> $guardian_name </dd>
                                             <dt class='col-md-3'>Relationship: </dt>
