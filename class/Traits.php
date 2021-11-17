@@ -940,7 +940,10 @@ trait Enrollment
             $sem = 2;
         }
 
-        $values = [$previousDeets['first_attended'],
+        $dt = $previousDeets['first_attended'];
+        $date = $dt->format('Y-m-d');
+
+        $values = [$date,
                 $lvl,
                 $sem,
                 $student_id,
@@ -959,6 +962,9 @@ trait Enrollment
             $add = "";
             $add_q = "";
         }
+
+        
+
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
         . "VALUES (CURDATE(), 1, STR_TO_DATE(?,'%Y-%M-%D'), ?, ?, ?, ?, ?, ? $add_q);";
 
