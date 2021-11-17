@@ -352,7 +352,7 @@ trait UserSharedMethods
 
         $grades = [];
         $result = $this->query("SELECT grade_id, s.sub_code,sub_name, sub_type, first_grading, second_grading, final_grade, transferee_id FROM classgrade cg LEFT JOIN transferee_subject ts on cg.sub_code = ts.sub_code
-                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id';");
+                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id' ORDER BY sub_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
@@ -735,7 +735,7 @@ trait FacultySharedMethods
         }
     }
 
-   
+
 
     public function listAdvisoryClasses($is_JSON = FALSE)
     {
@@ -982,7 +982,7 @@ trait Enrollment
         $limit = $_GET['limit'];
         $offset = $_GET['offset'];
         $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
-            . "e.date_of_enroll, e.enrolled_in, e.curr_code, e.valid_stud_data AS status, e.section_code FROM enrollment AS e "
+            . "e.date_of_enroll, e.enrolled_in, e.prog_code, e.valid_stud_data AS status, e.section_code FROM enrollment AS e "
             . "JOIN student AS s USING (stud_id) "
             . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id "
             . "WHERE e.sy_id = {$_SESSION['sy_id']} ";
@@ -1077,7 +1077,7 @@ trait Enrollment
                 $row['name'],
                 $row['date_of_enroll'],
                 $row['enrolled_in'],
-                $row['curr_code'],
+                $row['prog_code'],
                 $row['status'],
                 $row['stud_id'],
                 $row['section_code']
@@ -1397,10 +1397,8 @@ trait Enrollment
         $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';");
 
         # step 1.3
-        $this->initializeGrades($stud_id, $current_sy);
-
-
-
+        $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
+        $this->initializeGrades($stud_id, $current_sy, $semester);
     }
 
     function prepareParentData($type): array
@@ -1524,20 +1522,16 @@ trait Enrollment
         return ['current' => $current_month, 'months' => $months];
     }
 
-    public function initializeGrades($stud_id, $sy_id)
+    public function initializeGrades($stud_id, $sy_id, $semester)
     {
         # get grade level and program
-        $sem = in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2";
-        // $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester = ". in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2"  . ";"));
-       $query = "SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester = '$sem';";
-        $enroll_detail = mysqli_fetch_assoc($this->query($query));
-
+        $enroll_detail = mysqli_fetch_assoc($this->query("SELECT sy_id, enrolled_in AS grade_level, prog_code FROM enrollment WHERE sy_id='$sy_id' AND stud_id = '$stud_id' AND semester ='$semester';"));
         $grade_level = $enroll_detail['grade_level'];
         $program = $enroll_detail['prog_code'];
 
 
         echo "Start initializing grade .. <br>";
-        # 1. initialize gradereport 
+        # 1. initialize gradereport
         $this->prepared_query("INSERT INTO gradereport (stud_id, sy_id) VALUES (?, ?);", [$stud_id, $sy_id], 'ii');
 
         # 2. Retrieve report_id of student
@@ -1560,16 +1554,16 @@ trait Enrollment
         $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");
 
         # 4.a For each value_id, 
-        # for each quarter, create an observedvalue. 
+        # for each quarter, create an observedvalue.
         echo("initialize observe values <br>");
-                    
+
         while ($row = mysqli_fetch_assoc($values)) {
             foreach ([1, 2, 3, 4] as $quarter) {
                 $this->prepared_query("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (?,?,?,?);", [$row['value_id'], $quarter, $report_id, $stud_id], 'siii');
                 echo("INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES (${$row['value_id']}, $quarter, $report_id, $stud_id); <br>");
             }
         }
-       
+
         echo "End initializing grade: $report_id<br>";
 
         # step 5 initialize attendance days
@@ -1581,7 +1575,7 @@ trait Enrollment
             $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
             echo ("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id); <br>");
         }
-        
+
         return $report_id;
     }
 

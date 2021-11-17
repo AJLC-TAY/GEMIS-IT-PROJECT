@@ -27,13 +27,12 @@ $image = !is_null($id_picture) ? (file_exists($id_picture) ? $id_picture : PROFI
 $psaPreview = !is_null($id_picture) ? (file_exists($birth_cert) ? $birth_cert : NO_PREVIEW_PATH) : NO_PREVIEW_PATH;
 $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : NO_PREVIEW_PATH) : NO_PREVIEW_PATH;
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
-            <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
             <li class="breadcrumb-item"><a href="enrollment.php">Enrollment</a></li>
             <li class="breadcrumb-item"><a href="enrollment.php?page=enrollees">Enrollees</a></li>
             <li class="breadcrumb-item active">Credential</li>

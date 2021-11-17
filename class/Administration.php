@@ -2725,6 +2725,23 @@ class Administration extends Dbconfig
         header("Location: student.php?id=$stud_id");
     }
 
+    public function editSubjectGrade()
+    {
+        $new_data = $_POST['grade'];
+        foreach($new_data as $grade_id => $new_grade) {
+            # update grade
+            $params = [
+                $new_grade['first'],
+                $new_grade['second'],
+                $new_grade['final'],
+                $grade_id
+            ];
+            $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, status = 1 WHERE grade_id = ?;", $params, "iiii");
+        }
+        # write log
+
+    }
+
     public function listAvailableSection()
     {
         $stud_id = $_GET['id'];
