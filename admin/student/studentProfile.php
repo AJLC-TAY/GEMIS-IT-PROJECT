@@ -194,46 +194,70 @@ switch ($user_type) {
                                 $birthdate = $userProfile->get_birthdate();
                                 $birthdate = date("F j, Y", strtotime($birthdate));
                                 $name = $userProfile->get_name();
-                                echo "<ul class='list-group ms-3'>
-                                <li class='list-group-item'>Name: $name<br>
-                                <li class='list-group-item'>Gender: {$userProfile->get_sex()}<br>
-                                <li class='list-group-item'>Age: {$userProfile->get_age()}<br>
-                                <li class='list-group-item'>Birthdate: {$birthdate}<br>
-                                <li class='list-group-item'>Birth Place: $birth_place<br>
-                                <li class='list-group-item'>Indeginous Group: $indigenous_group<br>
-                                <li class='list-group-item'>Mother Tongue: $mother_tongue<br>
-                                <li class='list-group-item'>Religion: $religion</ul>";
+                                echo 
+                                "<dl class='row mb-3'>
+                                            <dt class='col-md-3'>Name: </dt>
+                                            <dd class='col-md-9'> $name </dd>
+                                            <dt class='col-md-3'>Gender: </dt>
+                                            <dd class='col-md-9'> {$userProfile->get_sex()} </dd>
+                                            <dt class='col-md-3'>Age: </dt>
+                                            <dd class='col-md-9'> {$userProfile->get_age()} </dd>
+                                            <dt class='col-md-3'>Birthdate: </dt>
+                                            <dd class='col-md-9'> {$birthdate} </dd>
+                                            <dt class='col-md-3'>Birth Place: </dt>
+                                            <dd class='col-md-9'> $birth_place </dd>
+                                            <dt class='col-md-3'>Indeginous Group: </dt>
+                                            <dd class='col-md-9'> $indigenous_group </dd>
+                                            <dt class='col-md-3'>Mother Tongue: </dt>
+                                            <dd class='col-md-9'> $mother_tongue </dd>
+                                            <dt class='col-md-3'>Religion: </dt>
+                                            <dd class='col-md-9'> $religion </dd>
+
+                                </dl>";
                                 ?>
                             </div>
                             <div class="row mt-3">
                                 <h6><b>Contact Information</b></h6>
-                                <?php echo "<ul class='list-group ms-3'>
-                                        <li class='list-group-item'>Home Address: $add<br>
-                                        <li class='list-group-item'>Cellphone No.: $cp_no</ul"; ?>
+                                <?php echo 
+                                    "<dl class='row mb-3'>
+                                        <dt class='col-md-3'>Home Address: </dt>
+                                        <dd class='col-md-9'> $add </dd>
+                                        <dt class='col-md-3'>Cellphone No.: </dt>
+                                        <dd class='col-md-9'> $cp_no </dd>
+                                        
+                                    </dl>"; ?>
                             </div>
 
                             <div class="row mt-3">
                                 <h6><b>Contact Persons</b></h6>
                                 <?php if ($parents != NULL) {
-                                    echo "<h6>PARENT/S</h6>
-                                        <ul class='list-group ms-3'>";
+                                    echo "<h6>Parent/s</h6>";
                                     foreach ($parents as $par) {
                                         $parent = $par['sex'] == 'f' ? 'mother' : 'father';
                                         $name = ${$parent . '_name'};
                                         $occupation = ${$parent . '_occupation'};
                                         $no = ${$parent . '_cp_no'};
-                                        echo "<li class='list-group-item'>". ucwords($parent) ."'s Name: $name </li>
-                                                 <li class='list-group-item'>Occupation: $occupation</li>
-                                                 <li class='list-group-item'>Contact Number: $no</li>";
+                                        echo "
+                                        <dl class='row mb-3'>
+                                            <dt class='col-md-3'>". ucwords($parent) ."'s Name: </dt>
+                                            <dd class='col-md-9'> $name </dd>
+                                            <dt class='col-md-3'>Occupation: </dt>
+                                            <dd class='col-md-9'> $occupation </dd>
+                                            <dt class='col-md-3'>Contact Number: </dt>
+                                            <dd class='col-md-9'> $no </dd>
+                                        </dl>";
                                     }
-                                    echo "</ul>";
                                 }
                                 if ($guardian != NULL) {
-                                    echo "<h6 class='mt-3'>GUARDIAN/S</h6>
-                                        <ul class='list-group ms-3'>
-                                            <li class='list-group-item'>Guardian's Name: $guardian_name</li>
-                                            <li class='list-group-item'>Relationship: $guardian_relationship</li>
-                                            <li class='list-group-item'>Contact Number: $guardian_cp_no</li></ul>";
+                                    echo "<h6 class='mt-3'>Guardian/s</h6>
+                                        <dl class='row mb-3'>
+                                            <dt class='col-md-3'>Guardian's Name: </dt>
+                                            <dd class='col-md-9'> $guardian_name </dd>
+                                            <dt class='col-md-3'>Relationship: </dt>
+                                            <dd class='col-md-9'> $guardian_relationship </dd>
+                                            <dt class='col-md-3'>Contact Number: </dt>
+                                            <dd class='col-md-9'> $guardian_cp_no </dd>
+                                        </dl>";
                                 } ?>
                             </div>
                         </div>
