@@ -1071,7 +1071,7 @@ trait Enrollment
                 $row['name'],
                 $row['date_of_enroll'],
                 $row['enrolled_in'],
-                $row['curr_code'],
+                $row['prog_code'],
                 $row['status'],
                 $row['stud_id'],
                 $row['section_code']
