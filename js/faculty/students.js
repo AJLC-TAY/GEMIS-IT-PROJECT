@@ -223,10 +223,12 @@ $(function () {
                 //     field            : 'stud_id',
                 //     values           : id
                 // });
+                $("#".id).val('disabled');
                 break;
             case "undo":
                 type = "remove";
                 inputState = false;
+                $("#".id).val('enable');
                 row.removeClass("bg-light");
                 
                 break;
@@ -253,18 +255,23 @@ $(function () {
 
             //get names of students
                 var ID = oCells.item(0).innerHTML;
-                console.log(oCells.item(3).innerHTML)
-                var record = {
-                    'action': 'promote',
-                    'stud_id': ID,
-                    'promote': 1
-                };
-        
-                $.post("action.php", record, function (data) {
-                    console.log(data);
-                    studentTable.bootstrapTable("refresh");
-        
-                });
+
+                if(!oCells.item(1).innerHTML.includes("disabled")){
+                    var record = {
+                            'action': 'promote',
+                            'stud_id': ID,
+                            'promote': 1
+                        };
+                
+                        $.post("action.php", record, function (data) {
+                            console.log(data);
+                            studentTable.bootstrapTable("refresh");
+                            forPromotionStudentTable.bootstrapTable("refresh")
+
+                
+                        });
+                }
+                
                 $('#view-candidates-modal').modal('hide');
             
         }

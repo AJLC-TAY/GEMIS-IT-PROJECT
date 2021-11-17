@@ -150,11 +150,11 @@ class FacultyModule extends Dbconfig
         $section_code = $_GET['section'];
         // echo('mariel');
         //condition: dapat >74 ung final grade per subject ni student
-        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
+        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
         while ($row = mysqli_fetch_assoc($result)) {
             $students[] = [
                 'stud_id' => $row['stud_id'],
-                'name' => $row['name'],
+                'name' => "{$row['name']} <input type ='hidden' id='{$row['stud_id']}' value='enable'>",
                 'gen_ave' => $row['general_average'],
                 'action' => "<div class='d-flex justify-content-center'>
                 <button data-id='{$row['stud_id']}' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
@@ -165,23 +165,6 @@ class FacultyModule extends Dbconfig
         echo json_encode($students);
     }
 
-    public function studentsForPromotion()
-    {
-        // $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id)JOIN gradereport USING(stud_id) WHERE section_code='ABM11' AND general_average > 74;");
-        // while ($row = mysqli_fetch_assoc($result)) {
-        //     $students[] = [
-        //         'stud_id' => $row['stud_id'],
-        //         'name' => $row['name'],
-        //         'gen_ave' => $row['general_average']
-        //     ];
-        // }
-        $students[] = [
-            'stud_id' => 'ows',
-            'name' => 'wushuhwuhs',
-            'gen_ave' => 'test'
-        ];
-        echo json_encode($students);
-    }
     public function listValuesReport()
     {
 

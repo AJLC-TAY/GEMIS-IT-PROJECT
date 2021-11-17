@@ -1608,13 +1608,13 @@ trait Grade
 
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
-                if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
+                if (($qtr == '1' && $grd['status'] == 1) || ($qtr == '2' && $grd['status'] == 1) || ($qtr == '3' && $grd['status'] == 1) || ($qtr == '4' && $grd['status'] == 1) ) {
                     $first = $second_final =  'readonly';
                     //                    $second_final = 'readonly';
-                } else if ($qtr == '2') {
+                } else if ($qtr == '2' || $qtr == '4') {
                     $first = 'readonly';
                     $second_final = '';
-                } else if ($qtr == '1') {
+                } else if ($qtr == '1' || $qtr == '3') {
                     $second_final = 'readonly';
                     $first = '';
                 } else {
@@ -1879,7 +1879,7 @@ trait Grade
                 $report_id = $temp[0];
                 $gen_ave = $temp[2];
             }
-            $editable = '';
+            $editable = $editable2 = '';
 
             if ($_SESSION['user_type'] != 'AD') {
                 if ($temp[1] == 1) {
@@ -1891,11 +1891,16 @@ trait Grade
                 $editable = 'readonly';
             }
 
+            if (2 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD'){
+                $editable2 = 'readonly';
+            }
+
             $students[] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$gen_ave}'>",
+                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'] )

@@ -19,7 +19,7 @@ $sub_table_display = '';
 
 // $schoolYearInfo = $faculty->getSchoolYearInfo(9); //to be removed pag maayos ung sa session
 $sem = $_SESSION['current_semester'] == '1' ? 'First' : 'Second';
-$grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
+$grading = $_SESSION['current_quarter'] == '1' ? 'First' : ($_SESSION['current_quarter'] == '2' ? 'Second': ($_SESSION['current_quarter'] == '3' ? 'Third': 'Fourth'));
 $qtrs = $_SESSION['current_semester'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
 
 // $adv_count_is_empty = !(is_null($advisory));
