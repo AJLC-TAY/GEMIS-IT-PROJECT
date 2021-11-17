@@ -34,7 +34,7 @@
                 <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
                                             <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
                 <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
-                <button type="button" class="btn btn-success ms-1 submit">Submit</button>
+                
             </div>
         </div>
 
@@ -53,6 +53,9 @@
                 </thead>
             </table>
         </form>
+        <div class="d-flex flex-row-reverse mb-1 mt-4">
+            <button type="button" class="btn btn-success ms-1 submit">Submit</button>
+        </div>    
     </div>
 </div>
 <script type="text/javascript">var type = 'grades'</script>

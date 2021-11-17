@@ -56,7 +56,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 <li>
                                                     <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
-                                                <li><?php echo (!empty($_SESSION['sy_id']) ? "School Year: ".$_SESSION['school_year'] : "")  ; ?></li>
+                                                <li><?php echo (!empty($_SESSION['sy_id']) ? "School Year: " . $_SESSION['school_year'] : ""); ?></li>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -64,40 +64,41 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         </div>
                                     </div>
                                 </div>
-                            </header>
 
-                            <div class='card'>
-                                <div class="d-flex justify-content-between">
-                                    <h5><b>SCHOOL YEAR</b></h5>
-                                    <div class="btn-con my-a">
-                                        <input type="hidden" name="action" value="">
-                                        <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class='bi bi-pencil-square me-2'></i>Edit</button>
-                                        <button class="btn btn-sm btn-primary">View</button>
-                                        <div class="decide-con <?php echo $display_when_edit; ?>">
-                                            <a id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</a>
-                                            <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
+                                <div class='card mt-4'>
+                                    <div class="d-flex justify-content-between">
+                                        <h5><b>SCHOOL YEAR</b></h5>
+                                        <div class="btn-con my-a">
+                                            <input type="hidden" name="action" value="">
+                                            <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class='bi bi-pencil-square me-2'></i>Edit</button>
+                                            <button class="btn btn-sm btn-primary">View</button>
+                                            <div class="decide-con <?php echo $display_when_edit; ?>">
+                                                <a id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</a>
+                                                <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <hr class="mt-1">
+                                    <section class="d-flex justify-content-center">
+                                        <div class="w-50">
+                                            <form id='' class="" action="action.php" method="POST">
+                                                <div class="form-group row">
+                                                    <div class="col-md-6">
+                                                        <label>Current Quarter</label>
+                                                        <input class='form-input form-control' value='First' readonly></input>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Current Semester</label>
+                                                        <input class='form-input form-control' value='First' readonly></input>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </section>
                                 </div>
 
-                                <hr class="mt-1">
-                                <section class="d-flex justify-content-center">
-                                    <div class="w-50">
-                                        <form id='' class="" action="action.php" method="POST">
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label>Current Quarter</label>
-                                                    <input class='form-input form-control' value='First' readonly></input>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label>Current Semester</label>
-                                                    <input class='form-input form-control' value='First' readonly></input>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </section>
-                            </div>
+                            </header>
 
                             <div class="container mb-3 mt-3">
                                 <!-- PEOPLE MANAGEMENT -->
