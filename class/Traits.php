@@ -656,7 +656,7 @@ trait FacultySharedMethods
         $section_condition = '';
 
         if (!is_null($teacher_id)) {
-            $section_condition = "GROUP BY section_code";
+            $section_condition = "GROUP BY se.section_code";
             $teacher_id = "sc.teacher_id='$teacher_id' AND ";
         } else {
             $teacher_id = '';
@@ -668,7 +668,7 @@ trait FacultySharedMethods
                 JOIN sysub syb USING(sub_sy_id)
                 JOIN subject s ON s.sub_code=syb.sub_code
                 JOIN sharedsubject sh ON sh.sub_code=s.sub_code
-                WHERE $teacher_id for_grd_level != 0 $section_condition AND syb.sy_id = {$_SESSION['sy_id']}";
+                WHERE $teacher_id for_grd_level != 0 AND syb.sy_id = {$_SESSION['sy_id']}";
 
         $result = $this->query($query);
         $handled_sub_classes = array();
@@ -1664,30 +1664,38 @@ trait Grade
         $sy_id = $_GET['sy_id'];
 //        $sub_code = $_GET['sub_code'];
         $sub_class_code = $_GET['sub_class_code'];
+        $section_code = $_GET['section_code'];
         $qtr = $_SESSION['current_quarter'];
 
-
-
-        $res = $this->query("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
-        FROM student 
-        JOIN classgrade USING(stud_id) 
-        JOIN subject USING(sub_code) 
+        $res = $this->query("SELECT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        FROM classgrade 
+        JOIN student USING(stud_id) 
+        JOIN enrollment e USING(stud_id)
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
-        WHERE $addOn sc.sub_class_code = '$sub_class_code' 
-        AND sy_id=$sy_id;");
+        WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code'
+        AND e.sy_id=$sy_id;");
+        
+        // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
+        // FROM student 
+        // JOIN classgrade USING(stud_id) 
+        // JOIN subject USING(sub_code) 
+        // JOIN sysub USING(sub_code) 
+        // JOIN subjectclass sc USING(sub_sy_id)
+        // WHERE $addOn sc.sub_class_code = '$sub_class_code' 
+        // AND sy_id=$sy_id;");
 
         $class_grades = [];
 
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
-                if (($qtr == '1' && $grd['status'] == 1) || $qtr == '2' && $grd['status'] == 1) {
+                if (($qtr == '1' && $grd['status'] == 1) || ($qtr == '2' && $grd['status'] == 1) || ($qtr == '3' && $grd['status'] == 1) || ($qtr == '4' && $grd['status'] == 1) ) {
                     $first = $second_final =  'readonly';
                     //                    $second_final = 'readonly';
-                } else if ($qtr == '2') {
+                } else if ($qtr == '2' || $qtr == '4') {
                     $first = 'readonly';
                     $second_final = '';
-                } else if ($qtr == '1') {
+                } else if ($qtr == '1' || $qtr == '3') {
                     $second_final = 'readonly';
                     $first = '';
                 } else {
@@ -1952,7 +1960,7 @@ trait Grade
                 $report_id = $temp[0];
                 $gen_ave = $temp[2];
             }
-            $editable = '';
+            $editable = $editable2 = '';
 
             if ($_SESSION['user_type'] != 'AD') {
                 if ($temp[1] == 1) {
@@ -1964,11 +1972,16 @@ trait Grade
                 $editable = 'readonly';
             }
 
+            if (2 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD'){
+                $editable2 = 'readonly';
+            }
+
             $students[] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
+                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$gen_ave}'>",
+                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'] )

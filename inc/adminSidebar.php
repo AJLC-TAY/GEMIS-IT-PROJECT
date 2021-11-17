@@ -30,7 +30,7 @@ if (isset($_SESSION['sy_id'])) {
         <div class="fa fa-bars tooltips" data-placement="right"></div>
     </div>
     <!-- LOGO START -->
-    <a href="index.php" class="logo"><b>PCNHS<span> GEMIS</span></b></a>
+    <a href="index.php" class="logo"><b>PCNHS-SHS<span> GEMIS</span></b></a>
     <!-- LOGO END -->
     <div class="top-menu">
         <ul class="nav pull-right top-menu mt-3">
