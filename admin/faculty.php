@@ -10,9 +10,6 @@ if (isset($_GET['action'])) {
     if ($action != 'export') {
         $page_path = "faculty/facultyForm.php";
         $js = "<script type='module' src='../js/admin/faculty-form.js'></script>";
-    } else {
-        $page_path = "faculty/export.php";
-//        $js = "<script type='module' src='../js/admin/faculty.js'></script>";
     }
 } else if (isset($_GET['id'])) {
     $action = "profile";
@@ -91,16 +88,16 @@ if (isset($_GET['action'])) {
 
                     <table id="sc-table" data-page="<?php echo $page; ?>" class="table-sm">
                         <thead class='thead-dark'>
-                        <tr>
-                            <th data-checkbox="true"></th>
-                            <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
-                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="teacher">Teacher</th>
-                            <th scope='col' data-width="150" data-align="center" data-field="sub_class_code">SC Code</th>
-                            <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
-                            <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
-                            <th scope='col' data-width="250" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                            <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                        </tr>
+                            <tr>
+                                <th data-checkbox="true"></th>
+                                <th scope='col' data-width="100" data-align="center" data-field="statusImg">Status</th>
+                                <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="teacher">Teacher</th>
+                                <th scope='col' data-width="150" data-align="center" data-field="sub_class_code">SC Code</th>
+                                <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
+                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
+                                <th scope='col' data-width="250" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
+                                <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
+                            </tr>
                         </thead>
                         <tbody>
 

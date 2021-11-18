@@ -208,7 +208,9 @@ trait UserSharedMethods
 
     public function enterLog($action)
     {
-        session_start();
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $date_time = date('Y-m-d H:i:s');
         $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', '$action', '$date_time' );");
     }
@@ -369,8 +371,14 @@ trait UserSharedMethods
         );
 
         $grades = [];
-        $result = $this->query("SELECT grade_id, s.sub_code,sub_name, sub_type, first_grading, second_grading, final_grade, transferee_id FROM classgrade cg LEFT JOIN transferee_subject ts on cg.sub_code = ts.sub_code
-                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id' ORDER BY sub_name;");
+        $result = $this->query("SELECT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
+                                    FROM classgrade cg
+                                    LEFT JOIN transferee_subject ts USING (sub_code)
+                                    LEFT JOIN transferee t USING (transferee_id)
+                                    JOIN subject s on cg.sub_code = s.sub_code
+                                    WHERE cg.stud_id = '$stud_id'
+                                    AND (ts.transferee_id IS NULL OR ts.transferee_id IN (SELECT transferee_id FROM transferee WHERE t.stud_id = '$stud_id'))
+                                    ORDER BY sub_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
@@ -682,13 +690,12 @@ trait FacultySharedMethods
             $teacher_id = '';
         }
 
-        $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type, sh.for_grd_level, sh.sub_semester, se.section_name, syb.sy_id
+        $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type,  se.grd_level,
+                se.section_name, se.sy_id
                 FROM subjectclass sc
                 JOIN section se USING(section_code)
-                JOIN sysub syb USING(sub_sy_id)
-                JOIN subject s ON s.sub_code=syb.sub_code
-                JOIN sharedsubject sh ON sh.sub_code=s.sub_code
-                WHERE $teacher_id for_grd_level != 0 AND syb.sy_id = {$_SESSION['sy_id']}";
+                JOIN subject s ON s.sub_code=sc.sub_code
+                WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']}; ";
 
         $result = $this->query($query);
         $handled_sub_classes = array();
@@ -697,14 +704,13 @@ trait FacultySharedMethods
             $handled_sub_classes[] = new SubjectClass(
                 $sc_row['sub_code'],
                 $sc_row['sub_name'],
-                $sc_row['for_grd_level'],
-                $sc_row['sub_semester'],
+                $sc_row['grd_level'],
                 $sc_row['sub_type'],
                 $sc_row['sub_class_code'],
                 $sc_row['section_code'],
                 $sc_row['section_name'],
                 $sc_row['sy_id'],
-                $teacher_id
+//                $teacher_id
             );
         }
         return $handled_sub_classes;
@@ -713,7 +719,7 @@ trait FacultySharedMethods
     public function listAttendance($is_JSON = FALSE)
     {
         $attendance = [];
-        $result = $this->query("SELECT stud_id, attendance_id, CONCAT(last_name,', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) 
+        $result = $this->query("SELECT stud_id, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
                                 AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
                                 JOIN enrollment e USING (stud_id)
                                 JOIN attendance a USING (stud_id) 
@@ -1012,7 +1018,7 @@ trait Enrollment
         session_start();
         $limit = $_GET['limit'];
         $offset = $_GET['offset'];
-        $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+        $query = "SELECT CONCAT(sy.start_year, ' - ', sy.end_year) AS SY, e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',COALESCE(s.middle_name, ''),' ',COALESCE(s.ext_name, '')) AS name, "
             . "e.date_of_enroll, e.enrolled_in, e.prog_code, e.valid_stud_data AS status, e.section_code FROM enrollment AS e "
             . "JOIN student AS s USING (stud_id) "
             . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id "
@@ -1126,7 +1132,7 @@ trait Enrollment
         session_start();
         $sy_id = $_SESSION['sy_id'];
         $enrolled = [];
-        $query = "SELECT e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',s.middle_name,' ',COALESCE(s.ext_name, '')) AS name, "
+        $query = "SELECT e.stud_id, LRN, CONCAT(s.last_name,', ', s.first_name,' ',COALESCE(s.middle_name, ''),' ',COALESCE(s.ext_name, '')) AS name, "
             . "e.enrolled_in AS grade, e.prog_code AS program, e.section_code AS section FROM enrollment e "
             . "JOIN student AS s USING (stud_id) "
             . "JOIN schoolyear AS sy ON e.sy_id=sy.sy_id WHERE e.valid_stud_data = 1 AND e.sy_id = '$sy_id' AND e.section_code IS NULL;";
@@ -1731,7 +1737,7 @@ trait Grade
         $high_max = $_GET['high_max'];
         $with_min = $_GET['with_min'];
         $with_max = $_GET['with_max'];
-        $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',middle_name,' ', COALESCE(ext_name,'')) AS name, sex, "
+        $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name,'')) AS name, sex, "
             . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= '$with_min' AND general_average <= '$with_max') THEN 'with' "
             . "WHEN (general_average >= '$high_min' AND general_average <= '{$high_max}') THEN 'high' WHEN (general_average >= '{$highest_min}' AND general_average <= '{$highest_max}') "
             . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= '{$with_min}' "

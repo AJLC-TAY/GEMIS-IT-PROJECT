@@ -38,11 +38,13 @@ if ($_SESSION['user_type'] == 'AD') {
             <li class="breadcrumb-item active" aria-current="page">Enrollees</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between mb-3">
-        <h3 class="fw-bold">Enrollees</h3>
-        <div>
+    <div class="row justify-content-between mb-3">
+        <div class="col-md-5">
+            <h3 class="fw-bold">Enrollees</h3>
+        </div>
+        <div class="col-md-7">
             <?php echo $archived_btn; ?>
-            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success" title='Enroll a student' target="_blank"><i class="bi bi-plus me-2"></i>Enroll</a>
+            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll</a>
         </div>
     </div>
 </header>
@@ -77,14 +79,14 @@ if ($_SESSION['user_type'] == 'AD') {
         </div>
         <!--FILTER-->
         <div class="collapse" id="filterCollapse">
-            <div class="card">
-                <ul id="" class="row flex-wrap">
+            <div class="border p-3 mb-3 rounded-3">
+                <ul id="" class="row flex-wrap ps-0">
                     <?php echo $sy_filter; ?>
                     <!--TRACK FILTER-->
-                    <li class="col-4 mb-3 me-2">
+                    <li class="col-3 mb-3">
                         <div class="input-group input-group-sm">
                             <label class="input-group-text " for="tracks">Track</label>
-                            <select class="form-select mb-0 filter-item " id="tracks">
+                            <select class="form-select mb-0 filter-item" id="tracks">
                                 <option value="*" selected>All</option>
                                 <?php
                                 foreach ($filters['tracks'] as $id => $value) {
@@ -95,7 +97,7 @@ if ($_SESSION['user_type'] == 'AD') {
                         </div>
                     </li>
                     <!--STRAND FILTER-->
-                    <li class="col-4 mb-3 me-2">
+                    <li class="col-3 mb-3">
                         <div class="input-group input-group-sm">
                             <label class="input-group-text " for="strands">Strand</label>
                             <select class="form-select mb-0 filter-item " id="strands">
@@ -109,7 +111,7 @@ if ($_SESSION['user_type'] == 'AD') {
                         </div>
                     </li>
                     <!--YEAR LEVEL FILTER-->
-                    <li class="col-md-3 me-2">
+                    <li class="col-md-3">
                         <div class="input-group input-group-sm ">
                             <label class="input-group-text " for="year-level">Year Level</label>
                             <select class="form-select mb-0 filter-item " id="year-level">
@@ -123,7 +125,7 @@ if ($_SESSION['user_type'] == 'AD') {
                         </div>
                     </li>
                     <!--STATUS FILTER-->
-                    <li class="col-3 me-2">
+                    <li class="col-3">
                         <div class="input-group input-group-sm ">
                             <label class="input-group-text " for="status">Status</label>
                             <select class="form-select mb-0 filter-item " id="status">
@@ -147,7 +149,7 @@ if ($_SESSION['user_type'] == 'AD') {
                     <!--                            </div>-->
                     <!--                        </div>-->
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="reset-filter-btn btn btn-outline-danger btn-sm me-5"><i class="bi bi-x-circle me-2"></i>Reset All</button>
+                        <button type="button" class="reset-filter-btn btn btn-outline-danger btn-sm"><i class="bi bi-x-circle me-2"></i>Reset All</button>
                     </div>
                 </ul>
             </div>

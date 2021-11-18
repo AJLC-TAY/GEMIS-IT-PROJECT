@@ -15,7 +15,7 @@ var gradesTemp = [];
 let formData = [];
 
 $(function() {
-    preload('#student', '#student-list');
+    preload('#student');
 
     const readURL = (input, destination) => {
         if (input.files && input.files[0]) {

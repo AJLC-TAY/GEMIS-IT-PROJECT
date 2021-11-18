@@ -1,17 +1,22 @@
 <?php
-include("../class/Administration.php");
-$admin = new Administration();
-$result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest' 
-                        WHEN award_code = 'ae1_highHonors' THEN 'High'
-                        WHEN award_code = 'ae1_withHonors' THEN 'With' END AS info, 
-                        min_gwa AS min, max_gwa AS max
-                        FROM academicexcellence;");
-$param = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
-}
+//include("../class/Administration.php");
+//$admin = new Administration();
+//$result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest'
+//                        WHEN award_code = 'ae1_highHonors' THEN 'High'
+//                        WHEN award_code = 'ae1_withHonors' THEN 'With' END AS info,
+//                        min_gwa AS min, max_gwa AS max
+//                        FROM academicexcellence;");
+//$param = [];
+//while ($row = mysqli_fetch_assoc($result)) {
+//    $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
+//}
+
+$param = [
+        "Highest" => ['min' => "98", 'max' => "100"],
+        "High" => ['min' => "95", 'max' => "97"],
+        "With" => ['min' => "90", 'max' => "94"],
+];
 ?>
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -60,7 +65,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>
                                 <td align='center' class='align-middle'>$info Honor</td>";
                                 foreach ($range as $val) {
-                                    echo "<td><input required value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'></td>";
+                                    echo "<td><input required value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end mb-1' placeholder='Enter Value'></td>";
                                 }
                             echo "</tr>";
                         }
@@ -70,68 +75,93 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </form>
             </div>
         </div>
-        <div class="col-lg-4 mb-4">
-            <div class="card p-3 h-100 d-flex-column justify-content-between">
-                <h5>Conduct Award</h5>
-                <form id="conduct-form" action="award.php?type=conduct" method="post">
-                    <input type="hidden" name="action" value="report">
-                    <input type="hidden" name="type" value="conduct">
-                    <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>
-                    <button type="submit" form="conduct-form" class="btn-sm btn btn-dark w-100"><i class="bi bi-funnel me-2"></i>Generate</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-md-4">
-            <div class="card p-3 mb-4">
+            <div class="row card p-3">
                 <h5>Perfect Attendance</h5>
                 <form id="attendance-form" action="award.php?type=attendance" method="post">
                     <input type="hidden" name="action" value="report">
                     <input type="hidden" name="type" value="attendance">
                     <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3"><i class="bi bi-funnel me-2"></i>Generate</button>
                 </form>
+                <hr class="my-4">
+                <h5>Research</h5>
+                <form id="research-form" action="award.php?type=research" method="post">
+                    <input type="hidden" name="action" value="report">
+                    <input type="hidden" name="type" value="research">
+                    <div class="row">
+                        <div class="col-6">Lowest Grade</div>
+                        <div class="col-4">
+                            <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" form="research-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+<!--        <div class="col-lg-4 mb-4">-->
+<!--            <div class="card p-3 h-100 d-flex-column justify-content-between">-->
+<!--                <h5>Conduct Award</h5>-->
+<!--                <form id="conduct-form" action="award.php?type=conduct" method="post">-->
+<!--                    <input type="hidden" name="action" value="report">-->
+<!--                    <input type="hidden" name="type" value="conduct">-->
+<!--                    <p>They must have obtained a rating of at least 75% “Always Observed” (AO) at the end of the school year (with at least 21 out of 28 AO rating in the report card). </p>-->
+<!--                    <button type="submit" form="conduct-form" class="btn-sm btn btn-dark w-100"><i class="bi bi-funnel me-2"></i>Generate</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
 
-        <div class="col-md-8">
-            <div class="card p-3 mb-4">
-                <div class="d-flex justify-content-between align-content-center px-0">
-                    <h5 class="mb-0">Other Awards</h5>
-                </div>
-                <table class="table table-sm table-hover table-bordered mt-3">
-                    <thead class="text-center">
-                    <th>Awards for</th>
-                    <th>Minimum Grade</th>
-                    <th>Action</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Research</td>
-                        <td>
-                            <form id="research-form" action="award.php?type=research" method="post">
-                                <input type="hidden" name="action" value="report">
-                                <input type="hidden" name="type" value="research">
-                                <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
-                            </form>
-                        </td>
-                        <td class="text-center"><button type="submit" form="research-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td>Work Immersion Senior High</td>
-                        <td>
-                            <form id="immersion-form" action="award.php?type=immersion" method="post">
-                                <input type="hidden" name="action" value="report">
-                                <input type="hidden" name="type" value="immersion">
-                                <input value='90' name='immersion' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
-                            </form>
-                        </td>
-                        <td class="text-center"><button type="submit" form="immersion-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="row">
+<!--        <div class="col-md-4">-->
+<!--            <div class="card p-3 mb-4">-->
+<!--                <h5>Perfect Attendance</h5>-->
+<!--                <form id="attendance-form" action="award.php?type=attendance" method="post">-->
+<!--                    <input type="hidden" name="action" value="report">-->
+<!--                    <input type="hidden" name="type" value="attendance">-->
+<!--                    <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3"><i class="bi bi-funnel me-2"></i>Generate</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="col-md-8">-->
+<!--            <div class="card p-3 mb-4">-->
+<!--                <div class="d-flex justify-content-between align-content-center px-0">-->
+<!--                    <h5 class="mb-0">Other Awards</h5>-->
+<!--                </div>-->
+<!--                <table class="table table-sm table-hover table-bordered mt-3">-->
+<!--                    <thead class="text-center">-->
+<!--                    <th>Awards for</th>-->
+<!--                    <th>Minimum Grade</th>-->
+<!--                    <th>Action</th>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr>-->
+<!--                        <td>Research</td>-->
+<!--                        <td>-->
+<!--                            <form id="research-form" action="award.php?type=research" method="post">-->
+<!--                                <input type="hidden" name="action" value="report">-->
+<!--                                <input type="hidden" name="type" value="research">-->
+<!--                                <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>-->
+<!--                            </form>-->
+<!--                        </td>-->
+<!--                        <td class="text-center"><button type="submit" form="research-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Work Immersion Senior High</td>-->
+<!--                        <td>-->
+<!--                            <form id="immersion-form" action="award.php?type=immersion" method="post">-->
+<!--                                <input type="hidden" name="action" value="report">-->
+<!--                                <input type="hidden" name="type" value="immersion">-->
+<!--                                <input value='90' name='immersion' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>-->
+<!--                            </form>-->
+<!--                        </td>-->
+<!--                        <td class="text-center"><button type="submit" form="immersion-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </div>

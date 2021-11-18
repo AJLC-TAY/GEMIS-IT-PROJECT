@@ -1,5 +1,6 @@
 <?php
 $school_year = $_SESSION['school_year'];
+$current_quarter = $_SESSION['current_quarter'];
 $roles = $_SESSION['roles'];
 
 $enrollment_item = '';
@@ -47,7 +48,14 @@ if (in_array('award_coor', $roles)) {
     <div id="sidebar" class="nav-collapse">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="text-center">SY <?php echo $school_year ?></h5>
+            <?php
+            if (empty($school_year)) {
+                echo "<h5 class='text-center'>No initialized SY</h5>";
+            } else {
+                echo "<h5 class='text-center'>SY $school_year</h5>";
+                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
+            }
+            ?>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>

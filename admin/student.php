@@ -31,12 +31,9 @@ include_once("../inc/head.html");
                             } else if (isset($_GET['action']) && $_GET['action'] == 'transfer'){
                                 include_once("student/studentTransfer.php"); 
                                 $jsFilePath = "<script type='module' src='../js/admin/transfer-student.js'></script>";
-                            }else if (isset($_GET['id'])){
+                            } else if (isset($_GET['id'])){
                                 include_once("student/studentProfile.php"); 
-                            }else if (isset($_GET['page'])){
-                                include_once("student/gradeRectification.php");
-                                $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
-                            }else {
+                            } else {
                                 include_once("student/studentList.php"); 
                                 $jsFilePath = "<script type='module' src='../js/admin/student-list.js'></script>";
                             }
@@ -59,11 +56,11 @@ include_once("../inc/head.html");
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <script src='../assets/js/bootstrap.bundle.min.js'></script>
     <script type="text/javascript" src="../js/common-custom.js"></script>
-    <?php echo $jsFilePath; ?>;
     <!-- VALIDATION -->
     <script src="../js/validation/jquery.validate.min.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
     <script src="../js/validation/validation.js"></script>
+    <?php echo $jsFilePath; ?>;
 </body>
 
 </html>

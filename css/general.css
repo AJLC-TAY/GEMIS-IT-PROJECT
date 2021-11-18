@@ -175,6 +175,6 @@ td .form-select {
 
 @media screen and (max-width: 600px) {
     .ms-5 {
-        margin-left: 0px!important;
+        margin-left: 0px !important;
     }
 }
