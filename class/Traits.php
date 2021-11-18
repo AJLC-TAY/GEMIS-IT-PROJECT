@@ -203,6 +203,13 @@ trait UserSharedMethods
         return $user_id;  // Return User ID ex. 123456789
     }
 
+    public function enterLog($action)
+    {
+        session_start();
+        $date_time = date('Y-m-d H:i:s');
+        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', '$action', '$date_time' );");
+    }
+
     /**
      * Returns the user Object of the specified user type.
      * @param String $type  Values could either be AD, FA, and ST for administrators, faculty, and student, respectively.
@@ -439,9 +446,11 @@ trait FacultySharedMethods
 
         if ($action == 'add' and $user_type === 'AD') {
             $statusMsg = $this->addFaculty($params, $types);
+            $this->enterLog("Add Faculty");
         }
         if ($action == 'edit') {
             $statusMsg = $this->editFaculty($params, $types, $user_type);
+            $this->enterLog("Edit Faculty");
         }
 
         echo $statusMsg;
@@ -856,6 +865,7 @@ trait Enrollment
         $student_id = $_SESSION['id'];
         $result = $this->query("SELECT date_first_attended, enrolled_in, semester, curr_code, section_code, prog_code FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
         $previousDeets = [];
+        
         // while ($row = mysqli_fetch_row($result)) {
         //     $previousDeets = [
         //         'first_attended' => $row[0],
@@ -866,14 +876,16 @@ trait Enrollment
         //         'prog_code' => $row[5],
         //     ];
         // }
+        $data = mysqli_fetch_row($result);
         $previousDeets = [
-                    'first_attended' => mysqli_fetch_row($result)[0],
-                    'yr_lvl' => mysqli_fetch_row($result)[1],
-                    'sem' => mysqli_fetch_row($result)[2],
-                    'curr_code' => mysqli_fetch_row($result)[3],
-                    'section' => mysqli_fetch_row($result)[4],
-                    'prog_code' => mysqli_fetch_row($result)[5],
+                    'first_attended' => $data[0],
+                    'yr_lvl' => $data[1],
+                    'sem' => $data[2],
+                    'curr_code' => $data[3],
+                    'section' => $data[4],
+                    'prog_code' => $data[5],
                 ];
+        
         return $previousDeets;
     }
     
