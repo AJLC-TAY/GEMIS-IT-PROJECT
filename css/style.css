@@ -115,7 +115,9 @@ ul.top-menu>li>.logout {
     width: 210px;
     height: 100%;
     position: fixed;
+    z-index: 1001;
     background: #2f323a;
+    transition: 0.2s;
 }
 
 #sidebar h5 {
@@ -127,9 +129,9 @@ ul.top-menu>li>.logout {
     position: relative;
 }
 
-#sidebar .sub-menu>.sub li {
+/* #sidebar .sub-menu>.sub li {
     padding-left: 35px;
-}
+} */
 
 
 #sidebar .sub-menu>.sub li:last-child {
@@ -155,6 +157,7 @@ ul.top-menu>li>.logout {
     left: 0;
     right: 0;
     z-index: 1002;
+
 }
 
 .black-bg {
@@ -192,14 +195,6 @@ a.logo:focus {
 
 a.logo span {
     color: #5dbb63;
-}
-
-.form-control {
-    margin-bottom: .15in;
-}
-
-.form-select {
-    margin-bottom: .15in;
 }
 
 .breadcrumb {
@@ -251,21 +246,21 @@ ul.top-menu>li>a:focus {
     color: #5dbb63;
 }
 
-.sidebar-closed>#sidebar>ul {
+/* .sidebar-closed>#sidebar>ul {
     display: none;
-}
+} */
 
-.sidebar-closed #main-content {
+/* .sidebar-closed #main-content {
     margin-left: 0px;
-}
+} */
 
-.sidebar-closed #sidebar {
+/* .sidebar-closed #sidebar {
     margin-left: -180px;
-}
+} */
 
-.nav-collapse.collapse {
+/* .nav-collapse.collapse {
     display: inline;
-}
+} */
 
 ul.sidebar-menu,
 ul.sidebar-menu li ul.sub {
@@ -283,7 +278,7 @@ ul.sidebar-menu {
 
 #sidebar>ul>li.active>ul.sub,
 #sidebar>ul>li>ul.sub>li>a {
-    display: block;
+    display: relative;
 }
 
 ul.sidebar-menu li ul.sub li {
@@ -376,7 +371,7 @@ ul.sidebar-menu li a.active i {
 /*Custom*/
 
 .active-sub {
-    border-bottom: 1px dashed white;
+    border-bottom: 2px groove #5dbb63;
 }
 
 .alert-con {
@@ -656,11 +651,19 @@ input:checked+.slider:before {
 
 @media only screen and (max-width: 480px) {
     html {
-    font-size: 12px;
+        font-size: 12px;
+    }
+
+    #main-content {
+        margin-left: 0%;
+    }
+
+    .header {
+        position: fixed;
     }
 }
 
-@media screen and (max-width: 510px) {
+@media screen and (max-width: 660px) {
     .logo {
         display: none;
     }
@@ -674,13 +677,31 @@ input:checked+.slider:before {
         width: 5px;
     }
 
+    #main-content {
+        margin-left: 0%;
+    }
+
+
 }
 
 @media screen and (max-width: 700px) {
     #sidebar {
       width: 100%;
       height: auto;
-      position: relative;
+      position: fixed;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .topbar { 
+        display: none;
+    }
+
+
+    #main-content {
+        margin-left: 0%;
     }
 }
 
@@ -688,5 +709,9 @@ input:checked+.slider:before {
     #sidebar a {
       text-align: center;
       float: none;
+    }
+
+    #main-content {
+        margin-left: 0%;
     }
   }
