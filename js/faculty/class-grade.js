@@ -1,4 +1,4 @@
-import {commonTableSetup} from "../admin/utilities.js";
+import {commonTableSetup, averageSubjectGradesEvent} from "../admin/utilities.js";
 
 let tableSetup = {
     search:             true,
@@ -187,12 +187,7 @@ $(function() {
     });
 
     
-    $(document).on("keyup", ".Second", function() {
-        let row = $(this).closest("tr");
-        let inputs = row.find("input"); 
-        var final = (parseInt(inputs.eq(0).val()) + parseInt(inputs.eq(1).val())) / 2;
-        inputs.eq(2).val(Math.round(final) == "NaN" ?"":Math.round(final));
-    })
+    averageSubjectGradesEvent();
 
    
     

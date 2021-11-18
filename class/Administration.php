@@ -2737,9 +2737,13 @@ class Administration extends Dbconfig
                 $grade_id
             ];
             $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, status = 1 WHERE grade_id = ?;", $params, "iiii");
-        }
-        # write log
+            # write log
+            [$stud_id, $sub_code] = mysqli_fetch_row($this->query("SELECT stud_id, sub_code FROM classgrade WHERE grade_id = '$grade_id';"));
+            $action = "Edited subject grade (Student ID: $stud_id and Subject code: $sub_code).";
+            $this->enterLog($action);
 
+            echo json_encode($grade_id);
+        }
     }
 
     public function listAvailableSection()
