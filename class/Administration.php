@@ -690,10 +690,11 @@ class Administration extends Dbconfig
 
     public function editSY()
     {
-        $sy_id = $_POST['sy_id'];
+        session_start();
+        $sy_id = $_POST['sy_id'] ?? $_SESSION['sy_id'];
         $quarter = $_POST['quarter'];
-        $semester = $_POST['semester'];
-        $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $semester, $sy_id], "iii");
+        $this->prepared_query("UPDATE schoolyear SET current_quarter=? WHERE sy_id=?", [$quarter, $sy_id], "ii");
+        echo json_encode("School is currently at ". ($quarter == 1 ? "First" : ($quarter == 2 ? "Second" : ($quarter == 3 ? "Third" : "Fourth"))). " Quarter");
     }
 
     public function editAcademicDays()
@@ -1797,8 +1798,7 @@ class Administration extends Dbconfig
 
     public function listFaculty()
     {
-//        $result = $this->query("SELECT * FROM faculty WHERE teacher_user_no = ANY(SELECT id_no from user WHERE is_active=1 AND user_type = 'FA');");
-        $result = $this->query("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no  WHERE is_active=1;");
+        $result = $this->query("SELECT * FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no;");
         $facultyList = array();
 
         while ($row = mysqli_fetch_assoc($result)) {

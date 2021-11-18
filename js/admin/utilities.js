@@ -317,7 +317,9 @@ export const tableUserOptionsEventListener = (userType) => {
     });
 
     $(document).on("click", ".submit[data-type='export']", function () {
-        $("#export-form").submit();
+        // $("#confirmation-modal").find("#export-form").submit();
+        $("#export-form")[0].submit();
+
     });
 
     $(document).on("click", ".table-opt", function() {
@@ -343,7 +345,7 @@ export const tableUserOptionsEventListener = (userType) => {
                 break;
             case 'deactivate':
                 var modal = $("#confirmation-modal");
-                modal.find(".message").html(`<b>Deactivate student</b><br><small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>`);
+                modal.find(".message").html(`<b>Deactivate ${userDesc}</b><br><small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>`);
                 modal.find(".submit").removeClass('btn-primary btn-success').addClass('btn-danger')
                     .attr('data-type', 'deactivate').html("Deactivate");
                 modal.modal('show');

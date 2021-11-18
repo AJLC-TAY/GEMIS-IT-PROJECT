@@ -155,7 +155,7 @@ switch ($user_type) {
         </div>
         <div class='form-group col-md-4'>
             <label for='middlename'>Middle Name</label>
-            <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+            <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name'>
         </div>
     </div>
     <div class='form-row row'>
@@ -275,9 +275,9 @@ switch ($user_type) {
     <!-- ASSIGN SUBJECTS END -->
     <?php } ?>
 
-    <div class='back-btn d-flex justify-content-end'>
+    <div class='d-flex justify-content-end mt-3'>
         <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
-        <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success btn-space save-btn'>
+        <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success'>
     </div>
 </form>
 <!-- VALIDATION -->

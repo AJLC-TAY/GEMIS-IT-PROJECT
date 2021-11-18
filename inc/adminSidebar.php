@@ -2,6 +2,7 @@
 $school_year = $_SESSION['school_year'];
 $enroll_menu_item = '';
 $award_menu_item = '';
+$current_quarter = $_SESSION['current_quarter'];
 if (isset($_SESSION['sy_id'])) {
     $enroll_menu_item = "<li id='enrollment' class='sub-menu'>
                 <a href='javascript:;'>
@@ -48,7 +49,14 @@ if (isset($_SESSION['sy_id'])) {
     <div id="sidebar" class="nav-collapse ">
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
-            <h5 class="text-center"><?php echo (empty($school_year) ? "No initialized SY" : 'SY '.$school_year); ?></h5>
+            <?php
+            if (empty($school_year)) {
+                echo "<h5 class='text-center'>No initialized SY</h5>";
+            } else {
+                echo "<h5 class='text-center'>SY $school_year</h5>";
+                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
+            }
+            ?>
             <li class="mt">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
@@ -75,14 +83,10 @@ if (isset($_SESSION['sy_id'])) {
             </li>
             <?php echo $enroll_menu_item; ?>
             <li id="student" class="sub-menu">
-                <a href="javascript:;">
+                <a  href="student.php">
                     <i class="fa fa-book"></i>
                     <span>Student</span>
                 </a>
-                <ul class="sub">
-                    <li><a id="student-list" href="student.php">Student List</a></li>
-                    <li><a id="grade-rect" href="student.php?page=grade_rectification">Grade Rectification</a></li>
-                </ul>
             </li>
             <li class="sub-menu">
                 <a id="faculty" href="faculty.php">

@@ -315,7 +315,19 @@ class Faculty implements JsonSerializable
         $this->enable_enroll = $enable_enroll;
         $this->subjects = $subjects;
         $this->handled_sub_classes = [];
-        $this->is_active = $is_active == '1' ? 'Active' : 'Deactivated';
+        $color_badge = "danger";
+        $status = 'Deactivated';
+        if ($is_active == 1) {
+            $color_badge = "success";
+            $status = 'Active';
+        }
+        $this->is_active = "<div class='container px-1'>
+                    <div class='row justify-content-center'>
+                        <div class='col-3 pe-1 pt-1'><span class='badge'><div class='bg-$color_badge rounded-circle my-auto' style='width: 10px; height: 10px;'></div></span></div>
+                        <div class='col-9 ps-1'>$status</div>
+                    </div>";
+
+        ;
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
@@ -456,7 +468,7 @@ class Faculty implements JsonSerializable
 class SubjectClass extends Subject implements JsonSerializable
 {
     private $sub_class_code;
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher)
     {
         parent::__construct($sub_code, $sub_name, $sub_type);
         $this->sub_class_code = $sub_class_code;
@@ -467,7 +479,7 @@ class SubjectClass extends Subject implements JsonSerializable
         $this->school_yr = $school_yr;
         $this->sub_name = $sub_name;
         $this->grd_level = $for_grd_level;
-        $this->semester = $sub_semester;
+//        $this->semester = $sub_semester;
         $color_badge = "success";
         $availability = "available";
         if ($teacher) {
@@ -529,7 +541,7 @@ class SubjectClass extends Subject implements JsonSerializable
             'sy_id' => $this->school_yr,
             'status' => $this->status,
             'grd_level'=> $this->grd_level,
-            'semester'=> $this->semester,
+//            'semester'=> $this->semester,
             
             'statusImg' => $this->statusImg
         ]);

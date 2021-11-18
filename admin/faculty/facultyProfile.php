@@ -298,9 +298,7 @@ $uid = $school_user->get_user_no();
                         <!-- SUBJECT CLASS HEADER -->
                         <div class="d-flex justify-content-between mb-3">
                             <div class="my-auto ">
-                                <h5 class='m-0 fw-bold'>SUBJECT CLASS
-                                    <!-- <span class="badge"><button id='adviser-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button></span> -->
-                                </h5>
+                                <h5 class='m-0 fw-bold'>SUBJECT CLASS</h5>
                             </div>
                             <div id="adviser-decide-con" class='d-none my-auto'>
                                 <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1 btn-sm'>Cancel</button>

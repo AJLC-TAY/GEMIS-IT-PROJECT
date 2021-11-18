@@ -4,6 +4,8 @@ include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
 $user_id = $_SESSION['id'];
+$current_quarter = $_SESSION['current_quarter'];
+
 $admin_user = $admin->getProfile('AD');
 [$admins, $faculties, $students, $signatories] = $admin->getUserCounts();
 
@@ -56,7 +58,20 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 <li>
                                                     <h4><?php echo $admin_user->name; ?></h4>
                                                 </li>
-                                                <li><?php echo (!empty($_SESSION['sy_id']) ? "School Year: " . $_SESSION['school_year'] : ""); ?></li>
+                                                <?php
+                                                if (!empty($_SESSION['sy_id'])) {
+                                                    echo "<li>School Year {$_SESSION['school_year']}</li>";
+                                                    echo " <li>
+                                                    <div class='row align-content-center mt-3'>
+                                                        <div class='col-4'><label for='current-quarter' class='mb-0 mx-auto'>Current Quarter</label></div>
+                                                        <div class='col-8'><select name='quarter' class='form-select-sm form-select mb-0' id='current-quarter' value='$current_quarter'>";
+                                                        foreach([1, 2, 3, 4] as $qtr) {
+                                                            echo "<option value='$qtr' ". ($qtr == $current_quarter ? "selected" : "")." >". ($qtr == 1 ? "First" : ($qtr == 2 ? "Second" : ($qtr == 3 ? "Third" : "Fourth"))). " Quarter </option>";
+                                                        }
+                                                    echo "</select></div>
+                                                        </li>";
+                                                }
+                                               ?>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -64,40 +79,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class='card mt-4'>
-                                    <div class="d-flex justify-content-between">
-                                        <h5><b>SCHOOL YEAR</b></h5>
-                                        <div class="btn-con my-a">
-                                            <input type="hidden" name="action" value="">
-                                            <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class='bi bi-pencil-square me-2'></i>Edit</button>
-                                            <button class="btn btn-sm btn-primary">View</button>
-                                            <div class="decide-con <?php echo $display_when_edit; ?>">
-                                                <a id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</a>
-                                                <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <hr class="mt-1">
-                                    <section class="d-flex justify-content-center">
-                                        <div class="w-50">
-                                            <form id='' class="" action="action.php" method="POST">
-                                                <div class="form-group row">
-                                                    <div class="col-md-6">
-                                                        <label>Current Quarter</label>
-                                                        <input class='form-input form-control' value='First' readonly></input>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Current Semester</label>
-                                                        <input class='form-input form-control' value='First' readonly></input>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </section>
-                                </div>
-
                             </header>
 
                             <div class="container mb-3 mt-3">
@@ -281,13 +262,56 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </section>
         <!--main content end-->
     </section>
+    <div class="modal fade" id="change-quarter-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Transition to <span id="quarter"></span> quarter?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button id="quarter-submit" data-bs-dismiss="modal" class="btn btn-sm btn-success" >Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TOAST -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
+        <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
+    </div>
+    <!-- TOAST END -->
+
 </body>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="text/javascript">
+    function changeQuarter(quarter) {
+        let formData = [
+            {name: "action", value: "editSY"},
+            {name: "quarter", value: quarter},
+        ];
+        $.post("action.php", formData, function (data) {
+            $("#change-quarter-confirmation-modal").modal("hide");
+            location.reload();
+        });
+    }
+
     $(function() {
-        preload("#home")
-        hideSpinner()
+        preload("#home");
+        $(document).on("change", "#current-quarter", function() {
+            let value = $(this).find("option:selected").val();
+            let modal = $("#change-quarter-confirmation-modal");
+            modal.find("#quarter").html((value == 1) ? "First": (value == 2 ? "Second" : (value == 3 ? "Third" : "Fourth")));
+            modal.find("#quarter-submit").attr("onclick", `changeQuarter(${value})`);
+            modal.modal("show");
+        });
+        hideSpinner();
     })
 </script>
 

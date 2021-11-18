@@ -328,10 +328,10 @@ $(function () {
         required: true,
         lettersonly: true
       },
-      middlename:{
-        required: true,
-        lettersonly: true
-      },
+      // middlename:{
+      //   required: true,
+      //   lettersonly: true
+      // },
       email: {
         required: true,
         email: true
@@ -349,10 +349,10 @@ $(function () {
         required:'<p class="text-danger user-select-none">Please enter first name!</p>',
         lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
       },
-      middlename:{
-        required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
-        lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
-      },
+      // middlename:{
+      //   required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
+      //   lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
+      // },
       email:{
         required:'<p class="text-danger user-select-none">Please enter email!</p>',
         email:'<p class="text-danger user-select-none">Please enter a valid email!</p>'
@@ -383,7 +383,6 @@ $(function () {
         contentType: false,
         success: data => {
           let response = JSON.parse(data);
-          console.log(response)
           window.location.replace(`faculty.php?id=${response.teacher_id}`);
         }
       });
