@@ -54,7 +54,7 @@ $filters =  $user->getEnrollFilters();
                 <div class="form-row row">
                     <label for="grade-level" class="col-lg-4 col-form-label">Grade Level</label>
                     <div class="col-lg-8">
-                        <select id="grade-level" class='form-select filter-form' name='grade-level'>
+                        <select id="grade-level" class='form-select' name='grade-level'>
                             <?php
                             $grade_level_list = ["11" => "11", "12" => "12"];
                             foreach ($grade_level_list as $id => $value) {
@@ -110,7 +110,18 @@ $filters =  $user->getEnrollFilters();
                                 }
                                 ?>
                             </select>
-                        </div>
+                            <label class="input-group-text " for="tracks">Grade Level</label>
+                            <select id="grade-level-filter" class='form-select mb-0 filter-form' name='grade-lvl-filter'>
+                            <option value="*" selected>All</option>
+                            <?php
+                            $grade_level_list = ["11" => "11", "12" => "12"];
+                            foreach ($grade_level_list as $id => $value) {
+                                echo "<option value='$id'>$value</option>";
+                            }
+                            ?>
+                        </select>
+                        
+                        
                     </div>
                 </div>
             </div>

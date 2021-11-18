@@ -220,15 +220,16 @@ $(function() {
         console.log(value);
         switch ($(this).attr("name")) {
             case 'program':
-                otherFilter = $("[name='grade-level']").val();
+                otherFilter = $("[name='grade-lvl-filter']").val();
                 filters = (value == '*') ? { "grade": otherFilter } : { "strand": value, "grade": otherFilter };
-                console.log(otherFilter);
                 break;
-            case 'grade-level':
+            case 'grade-lvl-filter':
                 otherFilter = $("[name='program']").val()
                 filters = { "strand": otherFilter, "grade": value };
                 break;
         }
+        console.log(filters);
+
         tb.bootstrapTable("filterBy", filters);
         console.log(value);
         hideSpinner();
