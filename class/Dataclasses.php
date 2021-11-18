@@ -468,7 +468,7 @@ class Faculty implements JsonSerializable
 class SubjectClass extends Subject implements JsonSerializable
 {
     private $sub_class_code;
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher = NULL)
     {
         parent::__construct($sub_code, $sub_name, $sub_type);
         $this->sub_class_code = $sub_class_code;
@@ -528,9 +528,8 @@ class SubjectClass extends Subject implements JsonSerializable
     public function jsonSerialize()
     {
         $jsonSerialize = parent::jsonSerialize();
-        $jsonSerialize['action'] = "<div class='d-flex'>"
-                                      ."<button data-sc-code='{$this->sub_class_code}' class='unassign-btn btn btn-sm btn-danger shadow me-1'>Unassign</button>"
-                                      ."<button data-sc-code='{$this->sub_class_code}' class='transfer-btn btn btn-sm shadow'>Transfer</button>"
+        $jsonSerialize['action'] = "<div class='d-flex justify-content-center'>"
+                                      ."<button data-sc-code='{$this->sub_class_code}' class='unassign-btn btn btn-sm btn-danger shadow me-1' title='Unassign'><i class='bi bi-person-dash'></i></button>"
                                   ."</div>";
         return array_merge($jsonSerialize, [
             'sub_class_code' => $this->sub_class_code,

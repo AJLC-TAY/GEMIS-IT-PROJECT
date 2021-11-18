@@ -208,7 +208,9 @@ trait UserSharedMethods
 
     public function enterLog($action)
     {
-        session_start();
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $date_time = date('Y-m-d H:i:s');
         $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', '$action', '$date_time' );");
     }
@@ -361,8 +363,14 @@ trait UserSharedMethods
         );
 
         $grades = [];
-        $result = $this->query("SELECT grade_id, s.sub_code,sub_name, sub_type, first_grading, second_grading, final_grade, transferee_id FROM classgrade cg LEFT JOIN transferee_subject ts on cg.sub_code = ts.sub_code
-                                        JOIN subject s on cg.sub_code = s.sub_code WHERE cg.stud_id = '$stud_id' ORDER BY sub_name;");
+        $result = $this->query("SELECT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
+                                    FROM classgrade cg
+                                    LEFT JOIN transferee_subject ts USING (sub_code)
+                                    LEFT JOIN transferee t USING (transferee_id)
+                                    JOIN subject s on cg.sub_code = s.sub_code
+                                    WHERE cg.stud_id = '$stud_id'
+                                    AND (ts.transferee_id IS NULL OR ts.transferee_id IN (SELECT transferee_id FROM transferee WHERE t.stud_id = '$stud_id'))
+                                    ORDER BY sub_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
@@ -694,7 +702,7 @@ trait FacultySharedMethods
                 $sc_row['section_code'],
                 $sc_row['section_name'],
                 $sc_row['sy_id'],
-                $teacher_id
+//                $teacher_id
             );
         }
         return $handled_sub_classes;

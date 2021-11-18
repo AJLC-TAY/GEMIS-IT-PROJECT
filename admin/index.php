@@ -312,7 +312,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             modal.modal("show");
         });
         hideSpinner();
-    })
+    });
 </script>
 
 </html>

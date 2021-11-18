@@ -27,13 +27,13 @@ $faculty_list = $admin->listNotAdvisers();
 <!-- SCHOOL YEAR TABLE -->
 <div class="container mt-1">
     <div class="card w-100 h-auto bg-light">
-        <div class="d-flex justify-content-between mb-3">
+        <div class="row justify-content-between mb-3">
             <!-- SEARCH BAR -->
-            <span class="flex-grow-1 me-3 ">
-                <input id="search-input" type="search" class="form-control form-control-sm m-0" placeholder="Search something here">
-            </span>
-            <div class="button-con my-auto">
-                <button class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
+            <div class="col-md-6 ">
+                <input id="search-input" type="search" class="form-control form-control-sm m-0 mb-1" placeholder="Search something here">
+            </div>
+            <div class="button-con col-md-6">
+                <button class="btn btn-secondary btn-sm me-1"><i class="bi bi-archive me-2"></i>Archive</button>
                 <button class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-up-left me-2"></i>Export</button>
             </div>
         </div>

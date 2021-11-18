@@ -96,7 +96,7 @@ if (isset($_GET['action'])) {
                                 <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="section_name">Section Name</th>
                                 <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="section_code">Section Code</th>
                                 <th scope='col' data-width="250" data-halign="center"  data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                                <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
+                                <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="grd_level">Grade Level</th>
                             </tr>
                         </thead>
                         <tbody>

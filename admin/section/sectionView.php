@@ -26,6 +26,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $none_when_edit = $NONE;
 }
 ?>
+<script>
+    let activeFacultyList = <?php echo json_encode($admin->listFaculty()); ?>;
+</script>
 
 <!-- HEADER -->
 <header>
@@ -37,13 +40,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             <li class="breadcrumb-item active" aria-current="page"><?php echo $sect_name; ?></li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between">
-        <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
-        <span>
-            <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class me-1' title='Subject classes'><i class='bi bi-pencil-square me-1'></i>Subject Class</button>
-            <button type="button" class="btn btn-secondary me-1"><i class="bi bi-archive me-2"></i>Archive Section</button>
-            <a href="section.php?sec_code=<?php echo $sect_code; ?>&action=export" class="btn btn-primary" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</a>
-        </span>
+    <div class="row justify-content-between">
+        <div class="col-md-5">
+            <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
+        </div>
+        <div class="col-md-7">
+            <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class m-1' title='Subject classes'><i class='bi bi-pencil-square me-2'></i>Subject Class</button>
+            <button type="button" class="btn btn-secondary m-1"><i class="bi bi-archive me-1"></i>Archive Section</button>
+            <a href="section.php?sec_code=<?php echo $sect_code; ?>&action=export" class="btn btn-primary m-1" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</a>
+        </div>
     </div>
     <hr class="my-2">
     <h4 class="fw-bold">Section</h4>
@@ -101,13 +106,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                             <div class="row align-content-center">
                                 <label for="sect-name" class="col-form-label col-sm-4 text-secondary fw-bold">Section Name</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" name="sect-name" id="sect-name" value="<?php echo $sect_name; ?>" <?php echo $state; ?> />
+                                    <input class="form-control form-control-sm" name="sect-name" id="sect-name" value="<?php echo $sect_name; ?>" <?php echo $state; ?> />
                                 </div>
                             </div>
                             <div class="row align-content-center">
                                 <label for="sect-max-no" class="col-form-label col-sm-4 text-secondary fw-bold">Max Student No.</label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" name="max-no" id="sect-max-no" value="<?php echo $sect_max_no; ?>" <?php echo $state; ?> />
+                                    <input class="form-control form-control-sm" name="max-no" id="sect-max-no" value="<?php echo $sect_max_no; ?>" <?php echo $state; ?> />
                                 </div>
                             </div>
                             <div class="row align-content-center">

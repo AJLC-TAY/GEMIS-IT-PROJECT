@@ -1,7 +1,7 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-$excellence = $_POST['excellence'];
+$excellence = $_POST['excellence'] ?? NULL;
 $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
 $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
@@ -71,33 +71,37 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($excellence as $track => $val) { // K12A => []
-                            # get tracks rowspan
-                            $track_row_span = 0;
-                            foreach ($val as $prog_code => $prog_data) {
+                        if (!is_null($excellence)) {
+                            foreach ($excellence as $track => $val) { // K12A => []
+                                # get tracks rowspan
+                                $track_row_span = 0;
+                                foreach ($val as $prog_code => $prog_data) {
 
-                                $track_row_span += count($prog_data['students']);
-                            }
-                            echo "<tr><td rowspan='$track_row_span'>$track</td>";
-                            $first_prog = array_key_first($val);
-                            foreach ($val as $prog_code => $prog_data) {
-                                if ($prog_code != $first_prog) {
-                                    echo "<tr>";
+                                    $track_row_span += count($prog_data['students']);
                                 }
-                                echo "<td rowspan='" . count($prog_data['students']) . "'>$prog_code</td>";
-                                $stud_list = $prog_data['students'];
-                                foreach ($stud_list as $id => $record) {
-                                    $first_rec  = array_key_first($stud_list);
-                                    if ($first_rec != $id) {
+                                echo "<tr><td rowspan='$track_row_span'>$track</td>";
+                                $first_prog = array_key_first($val);
+                                foreach ($val as $prog_code => $prog_data) {
+                                    if ($prog_code != $first_prog) {
                                         echo "<tr>";
                                     }
-                                    echo "<td class='text-start'>{$record['name']}</td>"
-                                        . "<td>{$record['remark']}</td>"
-                                        . "<td>{$record['sex']}</td>"
-                                        . "<td>{$record['ga']}</td>";
-                                    echo "</tr>";
+                                    echo "<td rowspan='" . count($prog_data['students']) . "'>$prog_code</td>";
+                                    $stud_list = $prog_data['students'];
+                                    foreach ($stud_list as $id => $record) {
+                                        $first_rec = array_key_first($stud_list);
+                                        if ($first_rec != $id) {
+                                            echo "<tr>";
+                                        }
+                                        echo "<td class='text-start'>{$record['name']}</td>"
+                                            . "<td>{$record['remark']}</td>"
+                                            . "<td>{$record['sex']}</td>"
+                                            . "<td>{$record['ga']}</td>";
+                                        echo "</tr>";
+                                    }
                                 }
                             }
+                        } else {
+                            echo "<tr><td colspan='6' class='text-center'>No Awardee</td></tr>";
                         }
                         ?>
                     </tbody>
