@@ -29,6 +29,13 @@ trait QueryMethods
 
 trait School
 {
+    public function enterLog($action)
+    {
+        session_start();
+        $date_time = date('Y-m-d H:i:s');
+        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', '$action', '$date_time' );");
+    }
+
     public function listDepartments()
     {
         $result = $this->query("SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");

@@ -320,8 +320,8 @@ if (isset($_GET['tab'])) {
                                         $sub_grd_id = (int) $sub_grd['grade_id'];
                                         echo "<tr>
                                                 <td class='ps-3'>{$sub_grd['name']}</td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][first]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['first']}' disabled></td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][second]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['second']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][first]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['first']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][second]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['second']}' disabled></td>
                                                 <td align='center'><input type='number' min='60' max='100' name='grade[".$sub_grd_id."][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
                                                 <td  align='center'>
                                                     <div class='d-flex justify-content-center'>
@@ -391,6 +391,24 @@ if (isset($_GET['tab'])) {
                                     <?php echoSubjects($grades, 'advanced', 'specialized'); ?>
                                 </tbody>
                         </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="confirmation-edit-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <h4 class="mb-0">Confirmation</h4>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            Saving this changes will not allow subject teachers from editing the student grade. Proceed?
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
+                            <button class="submit-edit-button btn btn-sm btn-success" data-bs-dismiss="modal">Save Changes</button>
                         </div>
                     </div>
                 </div>

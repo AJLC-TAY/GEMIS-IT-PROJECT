@@ -1,3 +1,5 @@
+import {averageSubjectGradesEvent} from "./utilities.js";
+
 let prepareSectionHTML = section => {
     let html = '';
     section.forEach(element => {
@@ -10,6 +12,8 @@ let prepareSectionHTML = section => {
 var message = 'Are you sure you want to transfer the student?';
 var stud_id;
 var gradesTemp = [];
+let formData = [];
+
 $(function() {
     preload('#student', '#student-list');
 
@@ -86,6 +90,7 @@ $(function() {
 
 
     $(document).on("click", ".grade-table .action", function () {
+        showSpinner();
         let gradeID = $(this).attr("data-grade-id");
         let row = $(this).closest("tr");
         let inputs = row.find("input");
@@ -100,17 +105,16 @@ $(function() {
                 gradesTemp.push({'gid' : gradeID, 'data' : [inputOne.val(), inputTwo.val(), inputFin.val()]});
                 $(this).addClass('d-none');
                 $(this).siblings(".edit-options").removeClass("d-none");
+                hideSpinner();
                 return;
             case "save":
-                let formData = [];
                 inputs.each(function() {
                     formData.push({'name': $(this).attr('name'), 'value': $(this).val()});
                 });
                 formData.push({'name': 'action', 'value': 'editSubjectGrade'});
-                $.post("action.php", formData, function() {
-                    showToast('success', 'Subject successfully edited')
-                });
-                break;
+                $("#confirmation-edit-modal").modal('show');
+                hideSpinner();
+                return;
             case "cancel":
                 let gradeData;
                 gradesTemp = gradesTemp.filter(e => {
@@ -120,7 +124,6 @@ $(function() {
                     return e.gid != gradeID;
                 });
 
-                console.log(gradeData);
                 inputOne.val(gradeData.data[0]);
                 inputTwo.val(gradeData.data[1]);
                 inputFin.val(gradeData.data[2]);
@@ -131,6 +134,21 @@ $(function() {
         editOptions.addClass('d-none');
         editOptions.siblings("button").removeClass("d-none");
         inputs.prop("disabled", true);
+        hideSpinner();
     });
+
+
+    $(document).on("click", ".submit-edit-button", function() {
+        $.post("action.php", formData, function(data) {
+            formData = [];
+            let gradeID = JSON.parse(data);
+            $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
+            $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
+            $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
+            showToast('success', 'Subject grade successfully edited')
+        });
+    });
+    /** Call automatic average */
+    averageSubjectGradesEvent();
     hideSpinner();
 });

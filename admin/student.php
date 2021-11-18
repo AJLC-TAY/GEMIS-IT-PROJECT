@@ -23,7 +23,7 @@ include_once("../inc/head.html");
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
-                            $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
+                            $jsFilePath = "<script type='module' src='../js/admin/student.js'></script>";
                             if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
                             } else if (isset($_GET['action']) && $_GET['action'] == 'export') {
