@@ -446,11 +446,11 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
                             <div class="modal-body">
-                                Saving this changes will not allow subject teachers from editing the student grade. Proceed?
+                                Saving this changes will not allow <span id = "teacher"> </span> from editing the student's <span id="type"></span>. Proceed?
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
-                                <button class="submit-edit-button btn btn-sm btn-success" data-bs-dismiss="modal">Save Changes</button>
+                                <button class="submit-edit-button btn btn-sm btn-success" data-type = "" data-bs-dismiss="modal">Save Changes</button>
                             </div>
                         </div>
                     </div>
