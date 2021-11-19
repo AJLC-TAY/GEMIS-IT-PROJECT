@@ -718,8 +718,9 @@ trait FacultySharedMethods
 
     public function listAttendance($is_JSON = FALSE)
     {
+        $addon = '';
         $attendance = [];
-        $result = $this->query("SELECT stud_id, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
+        $result = $this->query("SELECT stud_id, promote, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
                                 AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
                                 JOIN enrollment e USING (stud_id)
                                 JOIN attendance a USING (stud_id) 
@@ -727,6 +728,7 @@ trait FacultySharedMethods
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
+            $addon = $row['promot'] == 0?:'readonly';
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],

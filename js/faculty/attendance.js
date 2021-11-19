@@ -13,7 +13,8 @@ let tempChanges = [];
 var submitMsg = "Submitted attendance records are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved attendance records are editable within the duration of the current quarter.";
 var stat = document.getElementById("label").innerText == "submit?" ? "1" : "0";
-
+var msg = document.getElementById("label").innerText;
+var row = '';
 function toggleDisableMonthSelector(bool) {
     $("select[name='month']").prop("disabled", bool);
 }
@@ -23,6 +24,7 @@ function toggleDisableMonthSelector(bool) {
  * @param {Object} row tr object
  * */
 function saveRow(row) {
+    console.log("entered save row");
     let formData = new FormData();
     $.each(row.find(".number"), function (i, val) {
         formData.append(val.getAttribute('name'), val.value);
@@ -40,7 +42,7 @@ function saveRow(row) {
         success: data => { }
     });
     $(".attendancerect-confirmation").modal("hide");
-    showToast("success", "Successfully saved");
+    showToast("success", "Successful!");
 }
 
 /**
@@ -127,51 +129,51 @@ $(function () {
         hideSpinner();
     });
 
-    // $(document).on("submit", "#attendance-form", function (e) {
-    //     e.preventDefault();
-    //     showSpinner();
-    //     let formData = new FormData($(this)[0]);
-    //     $.ajax({
-    //         url: "action.php",
-    //         method: "POST",
-    //         contentType: false,
-    //         processData: false,
-    //         data: formData,
-    //         success: () => {
-    //             // show main edit button & hide main edit options
-    //             $(".edit-btn").toggle(true);
-    //             $(".edit-options").toggle(false);
-    //             // Make specific edit buttons editable & inputs to readonly
-    //             $(".edit-spec-btn").prop("disabled", false);
-    //             $(".number").prop("readonly", true);
-    //             // empty temporary changes
-    //             tempChanges = [];
-    //             // enable month selector
-    //             toggleDisableMonthSelector(false);
+    $(document).on("submit", "#attendance-form", function (e) {
+        e.preventDefault();
+        showSpinner();
+        let formData = new FormData($(this)[0]);
+        $.ajax({
+            url: "action.php",
+            method: "POST",
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: () => {
+                // show main edit button & hide main edit options
+                $(".edit-btn").toggle(true);
+                $(".edit-options").toggle(false);
+                // Make specific edit buttons editable & inputs to readonly
+                $(".edit-spec-btn").prop("disabled", false);
+                $(".number").prop("readonly", true);
+                // empty temporary changes
+                tempChanges = [];
+                // enable month selector
+                toggleDisableMonthSelector(false);
 
-    //             hideSpinner();
-    //             showToast("success", "Successfully saved");
-    //         }
-    //     });
-    // });
+                hideSpinner();
+                showToast("success", "Successfully saved");
+            }
+        });
+    });
 
     $(document).on("click", ".submit-btn", () => {
-        submitConfirmation();
+        submitConfirmation(row);
 
     });
 
     $(document).on("click", ".save-btn", () => {
-        saveConfirmation();
+        saveConfirmation(row);
     });
 
     $(document).on("click", "#confirm", () => {
-        saveRow();
+        saveRow(row);
     });
 
     $(document).on("click", ".action", function (e) {
         e.preventDefault();
         showSpinner();
-        let row = $(this).closest("tr");
+        row = $(this).closest("tr");
         let action = $(this).attr("data-type");
         switch (action) {
             case "edit":
@@ -185,11 +187,11 @@ $(function () {
                 hideSpinner();
                 return;
             case "save":
-                saveConfirmation();
-                saveRow(row);
+                saveConfirmation(row);
+                // saveRow(row);
                 break;
             case "submit":
-                submitConfirmation();
+                submitConfirmation(row);
                 break;
             case "cancel":
                 cancelEditRow(row);
