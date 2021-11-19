@@ -241,6 +241,7 @@ trait UserSharedMethods
     /**
      * Returns Student with the specified student ID.
      * 1.   Get Student Personal Information
+     * 2.   Get Student Student Enrollment Details
      * 2.   Get Student Parent Information
      * 3.   Get Student Guardian Information 
      * 4.   Get Student enrollment Status
@@ -257,7 +258,11 @@ trait UserSharedMethods
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
-        // Step 2
+        // Step 2 
+        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
+        $enrollmentInfo = mysqli_fetch_row($result);
+
+        // Step 3
         $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
         $parent = array();
         while ($parentInfo = mysqli_fetch_assoc($result)) {
@@ -275,7 +280,7 @@ trait UserSharedMethods
             );
         };
 
-        // Step 3
+        // Step 4
         $result = $this->prepared_select("SELECT * FROM guardian WHERE stud_id=?;", [$id], "i");
         $guardian = array();
 
@@ -291,7 +296,7 @@ trait UserSharedMethods
             ]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
         };
 
-        // Step 4
+        // Step 5
         $stat = '';
         $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;", [$id], "i");
         while ($res = mysqli_fetch_row($status)) {
@@ -332,7 +337,7 @@ trait UserSharedMethods
         $active_status = $personalInfo['is_active'];
 
 
-        //Step 5
+        //Step 6
         $stud_id = trim($personalInfo['stud_id']);
         $student = new Student(
             $stud_id,
@@ -360,7 +365,10 @@ trait UserSharedMethods
             $guardian,
             is_null($personalInfo['form_137']) ? NULL : $personalInfo['form_137'],
             $stat,
-            $active_status
+            $active_status,
+            NULL,
+            $enrollmentInfo[1],
+            $enrollmentInfo[2],
         );
 
         $grades = [];
@@ -711,8 +719,9 @@ trait FacultySharedMethods
 
     public function listAttendance($is_JSON = FALSE)
     {
+        $addon = '';
         $attendance = [];
-        $result = $this->query("SELECT stud_id, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
+        $result = $this->query("SELECT stud_id, promote, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
                                 AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
                                 JOIN enrollment e USING (stud_id)
                                 JOIN attendance a USING (stud_id) 
@@ -720,6 +729,7 @@ trait FacultySharedMethods
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
+            $addon = $row['promot'] == 0?:'readonly';
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],
@@ -730,7 +740,8 @@ trait FacultySharedMethods
                                    <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
-                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
+                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>
+                                       <button data-type='submit' class='action btn btn-sm btn-success'>Submit</button>                                
                                     </div>
                                 </div>"
             ];
@@ -747,7 +758,7 @@ trait FacultySharedMethods
     {
         foreach ($_POST['data'] as $id => $value) { // $id = report_id
             $this->prepared_query(
-                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE attendance_id = ?;",
+                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=?, status = {$_POST['stat']} WHERE attendance_id = ?;",
                 [$value['present'], $value['absent'], $value['tardy'], $id],
                 "iiii"
             );
@@ -805,7 +816,7 @@ trait Enrollment
 
         $this->prepared_query(
             "INSERT INTO enrollment (date_of_enroll, valid_stud_data, enrolled_in, stud_id, sy_id, curr_code, prog_code, semester) "
-                . "VALUES (NOW(), 0, ?, ?, ?, ?, ?,?);",  // null for date_first_attended, and section code
+                . "VALUES (CURRENT_TIMESTAMP, 0, ?, ?, ?, ?, ?,?);",  // null for date_first_attended, and section code
             [
                 $_POST['grade-level'],
                 $student_id,
@@ -995,7 +1006,7 @@ trait Enrollment
 
 
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
-        . "VALUES (CURDATE(), 1, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
+        . "VALUES (CURRENT_TIMESTAMP, 1, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
 
         echo($query);
         echo json_encode($values);
@@ -1675,7 +1686,7 @@ trait Grade
         JOIN enrollment e USING(stud_id)
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
-        WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code'
+        WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
         AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']};");
         
         // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
@@ -1986,8 +1997,8 @@ trait Grade
         }
         $students = [];
         $section_code = $_GET['section'];
-        $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ',COALESCE(middle_name, ''), ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} ORDER BY sex, last_name;");
+        $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id

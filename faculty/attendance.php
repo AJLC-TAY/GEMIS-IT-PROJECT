@@ -11,7 +11,7 @@ $class = '';
 $class_name = '';
 if (!empty($class_data)) {
     $class = $class_data['section_code'];
-    $class_name= $class_data['section_name'];
+    $class_name = $class_data['section_name'];
 }
 $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
 ?>
@@ -19,6 +19,7 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
 <!DOCTYPE html>
+
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -46,29 +47,29 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
                             <div class="d-flex">
                                 <div class="col-auto">
                                     <p class="text-secondary m-0">
-                                        <medium>Current: 
+                                        <medium>Current:
                                             <?php
                                             $sem = '';
                                             switch ($_SESSION['current_semester']) {
-                                                case '1': 
+                                                case '1':
                                                     $sem = "First ";
                                                     break;
-                                                case '2': 
+                                                case '2':
                                                     $sem = "Second ";
                                                     break;
-                                                case '3': 
+                                                case '3':
                                                     $sem = "Third ";
                                                     break;
-                                                case '4': 
+                                                case '4':
                                                     $sem = "Fourth ";
                                                     break;
-                                            } 
-                                            echo $sem." Semester";
+                                            }
+                                            echo $sem . " Semester";
                                             ?>
                                         </medium>
                                     </p>
-                                    <?php 
-                                    
+                                    <?php
+
                                     ?>
                                     <h3><b><?php echo $class_name; ?></b> Attendance</h3>
                                 </div>
@@ -102,7 +103,10 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
                                             <button class="btn btn-secondary btn-sm edit-btn ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                                             <div class="edit-options" style="display: none;">
                                                 <a href="attendance.php" role="button" class="btn btn-sm btn-outline-dark me-1 ms-2">Cancel</a>
-                                                <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">
+                                                <!-- <input type='submit' class="btn btn-sm btn-success save-btn" value="Save">
+                                                <input type='submit' class="btn btn-sm btn-success submit-btn" value="Submit"> -->
+                                                <button class='save-btn btn btn-sm btn-success'>Save</button>
+                                                <button class='submit-btn btn btn-sm btn-success'>Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -130,6 +134,29 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
             <!-- FOOTER END -->
         </section>
     </section>
+    <!-- Confirmation Modal -->
+    <div id="" class="modal fade attendancerect-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0"><span id='stmt'></span><span id='label'></span></h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <p id="modal-msg"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn close-btn btn-success" id="confirm">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation Modal END -->
+
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>

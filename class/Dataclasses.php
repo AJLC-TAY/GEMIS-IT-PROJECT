@@ -1516,13 +1516,15 @@ class StudentAward extends Award implements JsonSerializable
         private $guardians;
         private $form137;
         private $status;
+        private $strand;
+        private $yrLvl;
 
 
         
             public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
                                         $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
                                         $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, 
-                                        $section_code, $section, $parents, $guardians, $form137, $status, $is_active, $program = NULL)
+                                        $section_code, $section, $parents, $guardians, $form137, $status, $is_active, $program = NULL, $strand = NULL, $yrLvl = NULL)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1558,6 +1560,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->status = $status;
             $this->is_active = ($is_active == 1) ? "Active" : "Deactivated";
             $this->program = $program;
+            $this->strand = $strand;
+            $this->yrLvl = $yrLvl;
         }
 
         public function get_stud_id()
@@ -1689,6 +1693,14 @@ class StudentAward extends Award implements JsonSerializable
         public function get_active_status()
         {
             return $this->is_active;
+        }
+        public function get_strand()
+        {
+            return $this->strand;
+        }
+        public function get_yrlvl()
+        {
+            return $this->yrLvl;
         }
         public function get_program()
         {

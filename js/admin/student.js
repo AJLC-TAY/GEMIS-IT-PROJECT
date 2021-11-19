@@ -1,4 +1,13 @@
-import {averageSubjectGradesEvent} from "./utilities.js";
+import {averageSubjectGradesEvent, commonTableSetup} from "./utilities.js";
+let tableSetup = {
+    ...commonTableSetup,
+    search: true,
+    searchSelector: "#search-input",
+    uniqueId: "month",
+    fieldId: "month",
+    // height:         800
+};
+let table = $("#table").bootstrapTable(tableSetup);
 
 let prepareSectionHTML = section => {
     let html = '';
@@ -13,6 +22,71 @@ var message = 'Are you sure you want to transfer the student?';
 var stud_id;
 var gradesTemp = [];
 let formData = [];
+let tempChanges = [];
+
+/**
+ * Submits new attendance value and make row inputs to readonly.
+ * @param {Object} row tr object
+ * */
+ function saveRow(row) {
+    let formData = new FormData();
+    $.each(row.find(".number"), function(i, val) {
+        formData.append(val.getAttribute('name'), val.value);
+        val.setAttribute("readonly", true);
+    });
+    formData.append('action', "changeAttendance");
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + " - " + pair[1]);
+      }
+    // formData.append('month', $("[name='month']").val());
+    $.ajax({
+        url: "action.php",
+        method: "POST",
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: data => {}
+    });
+    showToast("success", "Successfully saved");
+}
+
+/**
+ * Returns the original values temporarily stored in the row inputs and make them not editable
+ * @param {Object} row tr object
+ * */
+function cancelEditRow(row) {
+    // return original values to input & set them to readonly
+    $.each(row.find(".number"), function(i, val) {
+        val.value = tempChanges[i];
+        val.setAttribute("readonly", true);
+    });
+}
+/**
+ * Make row inputs editable and store their values temporarily.
+ * @param {Object} row tr object
+ * */
+function editRow(row) {
+    row.find(".number").each(function() {
+        let e = $(this);
+        tempChanges.push(e.val());
+        e.removeAttr("readonly");
+    });
+}
+/**
+ * Hides the specific edit options and shows edit button of the given row.
+ * It also empties the temp change array and enables the month selector.
+ * @param {Object} row tr object
+ * */
+function exitEditMode(row) {
+    // hide specific edit options
+    row.find(".edit-spec-options").toggle(false);
+    // show specific edit btn
+    row.find(".action[data-type='edit']").toggle(true);
+    // empty the temporary array
+    tempChanges = [];
+    // enable month selector
+    hideSpinner();
+}
 
 $(function() {
     preload('#student');
@@ -147,6 +221,32 @@ $(function() {
             $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
             showToast('success', 'Subject grade successfully edited')
         });
+    });
+
+    $(document).on("click", ".action", function(e) {
+        e.preventDefault();
+        showSpinner();
+        let row = $(this).closest("tr");
+        let action = $(this).attr("data-type");
+        switch (action) {
+            case "edit":
+                // hide specific btn
+                $(this).toggle(false);
+                // disable month selector
+                // toggleDisableMonthSelector(true);
+                editRow(row);
+                // show specific edit options
+                row.find('.edit-spec-options').toggle(true);
+                hideSpinner();
+                return;
+            case "save":
+                saveRow(row);
+                break;
+            case "cancel":
+                cancelEditRow(row);
+                break;
+        }
+        exitEditMode(row);
     });
     /** Call automatic average */
     averageSubjectGradesEvent();
