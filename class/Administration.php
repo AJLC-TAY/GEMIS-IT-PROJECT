@@ -247,14 +247,13 @@ class Administration extends Dbconfig
         $end_yr = $_POST['end-year'];
         $enrollment = 0;
         $current_quarter = 1;
-        $current_semester = 1;
 
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
-            . "VALUES (?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, can_enroll) "
+            . "VALUES (?, ?, ?, ?);";
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -369,13 +368,12 @@ class Administration extends Dbconfig
             $this->query("UPDATE `schoolyear` SET `status` = '0' WHERE `schoolyear`.`sy_id` = '$current_sy';");
         }
         $this->query("UPDATE `schoolyear` SET `status` = '1' WHERE `schoolyear`.`sy_id` = '$sy_id';");
-        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear WHERE status = '1';";
+        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, can_enroll FROM schoolyear WHERE status = '1';";
         $sy_res = $this->query($qry_sy);
         $sy_row = mysqli_fetch_assoc($sy_res);
         $_SESSION['school_year'] = $sy_row['sy'];
         $_SESSION['sy_id'] = $sy_row['sy_id'];
-        $_SESSION['enroll_status'] = $sy_row['can_enroll'];;
-        $_SESSION['current_semester'] = $sy_row['current_semester'];;
+        $_SESSION['enroll_status'] = $sy_row['can_enroll'];
         $_SESSION['current_quarter'] = $sy_row['can_enroll'];
         return $sy_id;
     }
@@ -613,7 +611,6 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $sy_id = $row['sy_id'];
             $quarter = $row['current_quarter'];
-            $semester = $row['current_semester'];
             $enrollment = $row['can_enroll'];
 
             // // grade options
@@ -632,15 +629,6 @@ class Administration extends Dbconfig
                 $quarter_opt .= "<option value='$id'>$value</option>";
             }
             $quarter_opt .= "</select>";
-
-            // semester options
-            $sem_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='semester' type='text' data-key='$semester' value='{$semester_list[$semester]}' readonly><select data-id='$sy_id' name='semester' class='form-select d-none'>";
-            foreach ($semester_list as $id => $value) {
-                // $sem_opt .= "<option value='$id' ". (($id == $semester) ? "selected" : "") .">$value</option>";
-                $sem_opt .= "<option value='$id'>$value</option>";
-            }
-            $sem_opt .= "</select>";
-
 
             $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
                 . "<div class='edit-options' style='display: none;'>"
@@ -662,8 +650,6 @@ class Administration extends Dbconfig
                 'sy_year'         => $row['start_year'] . " - " . $row['end_year'],
                 'current_qtr_val' => $quarter,
                 'current_qtr'     => $quarter_opt,
-                'current_sem_val' => $semester,
-                'current_sem'     => $sem_opt,
                 'enrollment_val'  => $enrollment,
                 'enrollment'      => $enroll_opt,
                 'action' => $actions_btn
@@ -683,7 +669,6 @@ class Administration extends Dbconfig
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
             'current_qtr' => $row['current_quarter'],
-            'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
         ];
     }
@@ -1069,7 +1054,6 @@ class Administration extends Dbconfig
             echo 'applied';
             # enrollment status of current school year; hence, update session value
             $sy_id = $_SESSION['sy_id'];
-            // unset($_SESSION['enroll_status']);
             $_SESSION['enroll_status'] = $can_enroll;
             echo $can_enroll;
         }
@@ -2282,10 +2266,12 @@ class Administration extends Dbconfig
         // session_start();
         $sy_id = $_GET['sy_id'];
         $grade = $_GET['grade'];
+        $section = $_GET['section'];
         $student_list = [];
         $result = $this->query("SELECT LRN, stud_id, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name, '')) AS name,
                                  section_code, section_name, enrolled_in AS grade, prog_code FROM student JOIN enrollment e USING (stud_id) 
-                                LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade';");
+                                    JOIN user USING (id_no)
+                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade' AND section_code != '$section' AND  valid_stud_data = '1' AND is_active = '1';");
         while ($row = mysqli_fetch_assoc($result)) {
             $student_list[] = [
                 'lrn'           => $row['LRN'],

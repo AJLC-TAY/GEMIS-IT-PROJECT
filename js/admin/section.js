@@ -259,7 +259,7 @@ $(function() {
         let syID = $(this).attr("data-sy-id");
         let gradeLevel = $(this).attr("data-grade-level");
         let tableSetup = {
-            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}`,
+            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}&section=${sectionCode}`,
             maintainMetaDat: true,
             clickToSelect: true,
             method: "GET",

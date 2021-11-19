@@ -35,7 +35,7 @@ if (!isset($_SESSION['sy_id'])) {
                                     require_once ("award/conduct.php");
                                     break;
                                 case "pa":
-                                    require_once ("award/perfectAttendance.php");
+                                    require_once ("award/preAttendance.php");
                                     break;
                                 case "re":
                                 case "im":

@@ -129,9 +129,9 @@ ul.top-menu>li>.logout {
     position: relative;
 }
 
-/* #sidebar .sub-menu>.sub li {
+#sidebar .sub-menu>.sub li {
     padding-left: 35px;
-} */
+}
 
 
 #sidebar .sub-menu>.sub li:last-child {

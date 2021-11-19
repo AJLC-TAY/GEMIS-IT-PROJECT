@@ -169,8 +169,6 @@ $(function() {
                                 // console.log(grades);
                                 console.log(data)                                
                             });
-            
-                
             }); // en
             $('.grading-confirmation').modal('hide');
             location.reload(true);
@@ -185,7 +183,6 @@ $(function() {
             console.log(data);
         });
     });
-
     
     averageSubjectGradesEvent();
 

@@ -32,9 +32,7 @@
                      <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                      <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field="sy_year">School Year</th>
-<!--                     <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="grd_level">Grade Level</th>-->
                      <th scope='col' data-width="100" data-align="left" data-field="current_qtr">Current Quarter</th>
-                     <th scope='col' data-width="100" data-align="center" data-field="current_sem">Current Semester</th>
                      <th scope='col' data-width="250" data-align="center" data-field="action">Action</th>
                      <th scope='col' data-width="150" data-align="center" data-field="enrollment">Enrollment Status</th>
                  </tr>

@@ -22,7 +22,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty') {
 if (isset($_GET['data']) && $_GET['data'] == 'student') {
     $admin->listStudentJSON();
 }
-if (isset($_GET['data']) && $_GET['data'] == 'students') {
+if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for transfering or adding
     $admin->listStudents(TRUE);
 }
 if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
@@ -74,6 +74,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'adminCount') {
 }
 if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
     $admin->getExcellenceAwardData();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'perfectAttendance') {
+    $admin->getPerfectAttendance();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
     $admin->getSubjectSchedule();

@@ -42,9 +42,9 @@ if ($_SESSION['user_type'] == 'AD') {
         <div class="col-md-5">
             <h3 class="fw-bold">Enrollees</h3>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 d-flex justify-content-end">
             <?php echo $archived_btn; ?>
-            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll</a>
+            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success ms-1" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll</a>
         </div>
     </div>
 </header>

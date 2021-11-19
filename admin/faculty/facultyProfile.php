@@ -339,9 +339,11 @@ $uid = $school_user->get_user_no();
                 <div class='row w-100 h-auto text-start mx-auto mt-3 '>
                     <div class="d-flex justify-content-between p-0">
                         <h5 class="my-auto fw-bold">ASSIGNED SUBJECTS</h5>
-                        <div class='edit-con my-auto'>
-                            <a role="button" id='edit-as-btn' data-action='Edit handled subject' class='edit-as-btn btn link btn-sm' data-bs-toggle="modal" data-bs-target="#as-modal"><i class='bi bi-pencil-square me-2'></i> Edit</a>
-                        </div>
+                        <?php if ($user_type == "AD") { ?>
+                            <div class='edit-con my-auto'>
+                                <a role="button" id='edit-as-btn' data-action='Edit handled subject' class='edit-as-btn btn link btn-sm' data-bs-toggle="modal" data-bs-target="#as-modal"><i class='bi bi-pencil-square me-2'></i> Edit</a>
+                            </div>
+                        <?php } ?>
                         <!-- <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='View'> -->
                     </div>
 
@@ -354,12 +356,10 @@ $uid = $school_user->get_user_no();
                             $subjects = $school->listSubjects('subject', 'sharedsubject');
                             $assigned_sub = $school_user->get_subjects();
                             echo "<div id='empty-as-msg' class='list-group-item " . (count($assigned_sub) > 0 ? "d-none" : "") . "' aria-current='true'>"
-                                . "<div class='d-flex w-100'>"
-                                . "<div class='mx-auto p-3 d-flex flex-column justify-content-center'>"
-                                . "<h6>No assigned subject</h6>"
-                                . "<button class='edit-as-btn btn btn-success btn-sm w-auto' data-action='Assign subject' data-bs-toggle='modal' data-bs-target='#as-modal'>Assign</button>"
-                                . "</div>"
-                                . "</div>"
+                                . "<div class='d-flex w-100'><div class='mx-auto p-3 d-flex flex-column justify-content-center'><h6>No assigned subject</h6>";
+                            echo $user_type == 'AD' ? "<button class='edit-as-btn btn btn-success btn-sm w-auto' data-action='Assign subject' data-bs-toggle='modal' data-bs-target='#as-modal'>Assign</button>"
+                                : "";
+                            echo "</div></div>"
                                 . "</div>";
 
                             foreach ($assigned_sub as $subject) {
