@@ -162,7 +162,6 @@ $(function() {
             twelveFirSem = subData[2].data.subjects.length;
             twelveSecSem = subData[3].data.subjects.length;
 
-
             function renderCellHTML(sub) {
                 if (sub) {
                     return template.replaceAll("%ID%", sub.sub_code).replace("%SUBJECTNAME%", sub.sub_name);

@@ -17,12 +17,12 @@
 
 <div class="container mt-1 ms-0">
     <div class="card h-auto bg-light" style="min-height: 70vh !important;">
-        <div class="d-flex justify-content-between mb-3">
+        <div class="row">
             <!-- SEARCH BAR -->
-            <div class="flex-grow-1 me-3">
+            <div class="col-lg-3 mb-2">
                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
             </div>
-            <div class="col-auto" style="min-width: 250px !important;">
+            <div class="col-lg-3 mb-2" >
                 <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
                     <?php
                     echo $adv_opn;
@@ -30,12 +30,17 @@
                     ?>
                 </select>
             </div>
-            <div>
-                <button type="button" class="btn btn-primary ms-2 multi-promote"></i>Promote Students</button>
+            <div class="col-lg-3 d-flex-inline mb-2">
+                <button type="button" class="btn btn-secondary mb-1 calculate" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
+                <button type="button" class="btn btn-primary mb-1 multi-promote"></i>Promote</button>
             </div>
-            <div>
-                <?php echo ($_SESSION['current_quarter'] == 4 ? '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>' : ""); ?>
-            </div>
+            <?php
+            if ($_SESSION['current_quarter'] == 4) {
+                echo '<div class="col-lg-3 mb-2">';
+                echo '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>';
+                echo '</div>';
+            }
+            ?>
         </div>
 
         <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
@@ -97,11 +102,10 @@
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
                 <button class="btn btn-primary promote-btn" data-bs-dismiss="modal">Promote</button>
-
             </div>
         </div>
     </div>
 </div>
 <script>
-    var code = '<?php echo $advisory['section_code'];?>';
+    var code = '<?php echo json_encode($advisory['section_code']); ?>';
 </script>

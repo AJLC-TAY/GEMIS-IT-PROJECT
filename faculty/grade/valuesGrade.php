@@ -69,7 +69,7 @@
                 // echo json_encode($observed_values);
                 // echo "<tr>";
 
-                $observed_values = $faculty->listValuesReport();
+                $observed_values = $student->listValuesReport();
 
                 foreach ($observed_values as $id => $values) { //id = MakaDiyos , values = [ 'sfdsdfsdfdsf => 1 => 'AO',2 => 'AO,],
                     echo "<td rowspan='" . count($values) . "'><b>$id</b></td>";

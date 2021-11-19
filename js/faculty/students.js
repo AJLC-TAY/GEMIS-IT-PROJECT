@@ -278,6 +278,18 @@ $(function () {
     });
 
 
+    $(document).on("click", ".calculate", function () {
+        let formData = [
+            {name: 'action', value: 'calculateGeneralAverage'},
+            {name: 'section_code', value: $(this).attr("data-code")}
+        ];
+        $.post("action.php", formData, function (data) {
+            data = JSON.parse(data);
+            data.forEach(e => {
+                $(`input[name*='/${e.report_id}/${e.semester}']`).val(e.general_ave);
+            });
+        });
+    });
 
     hideSpinner();
 });

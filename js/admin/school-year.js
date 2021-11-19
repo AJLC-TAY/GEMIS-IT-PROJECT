@@ -47,20 +47,14 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
 
     if (inputs == "input") {
         const SELECTOR = `select[data-id=${id}]`;
-        // let grd = $(`${SELECTOR} [value=${grade}]`).text();
         let qtr = $(`${SELECTOR} [value=${quarter}]`).text();
-        let sem = $(`${SELECTOR} [value=${semester}]`).text();
 
         const INPUT = `input[data-id=${id}]`;
-        // $(`${INPUT} [data-name=grade-level]`).val(grd);
         $(`${INPUT} [data-name=quarter]`).val(qtr);
-        $(`${INPUT} [data-name=semester]`).val(sem);
         return;
     }
 
-    // inputsToDisplay.eq(0).val(grade);
     inputsToDisplay.eq(0).val(quarter);
-    inputsToDisplay.eq(1).val(semester);
 };
 
 
@@ -110,31 +104,23 @@ $(function() {
         $.post("action.php", formData);
 
         let newGradeVal, newQtrVal, newSemVal;
-        // newGradeVal = selectInputs.eq(0).val(); // .eq() is like getting the element through its index
         newQtrVal = selectInputs.eq(0).val();
-        newSemVal = selectInputs.eq(1).val();
 
         // update the current values in the record of bootstrap table with
         // the given row ID, and row values
         $("#table").bootstrapTable('updateByUniqueId', {
             id,
             row: {
-                // current_grd_val: newGradeVal,
                 current_qtr_val: newQtrVal,
-                current_sem_val: newSemVal
             }
         });
 
         let grade, quarter, semester, inputsToDisplay;
         // find select inputs get their labels and set them to the input html tags
-        // grade = selectInputs.eq(0).find(`[value='${newGradeVal}']`).text();
         quarter = selectInputs.eq(0).find(`[value='${newQtrVal}']`).text();
-        semester = selectInputs.eq(1).find(`[value='${newSemVal}']`).text();
 
         inputsToDisplay = $(`input[class*='form-control'][data-id='${id}']`);
-        // inputsToDisplay.eq(0).val(grade);
         inputsToDisplay.eq(0).val(quarter);
-        inputsToDisplay.eq(1).val(semester);
 
         $(".edit-btn").prop("disabled", false); // enable all edit buttons
         syTable.bootstrapTable("hideLoading");
@@ -155,7 +141,6 @@ $(function() {
             $(this).attr("title", "Turn on enrollment");
             statusE.html("Ended");
         }
-        console.log(formData);
         $.post("action.php", formData, function() {
             syTable.bootstrapTable("refresh");
             syTable.bootstrapTable("hideLoading");
@@ -175,9 +160,7 @@ $(function() {
         let isChecked = $(this).is(":checked");
         let list = $(this).attr("data-target-list");
         let tracks = $(list).find('label');
-        console.log("tracks", tracks);
         tracks.each(function() {
-
             toggleListElement($(this).find('input').val(), isChecked)
         })
     });
@@ -194,7 +177,6 @@ $(function() {
         let formData = $(this).serializeArray();
 
         showToast('dark', 'Initializing school year ...');
-        // console.log(formData);
         $.post("action.php", formData, function(data) {
             let url = JSON.parse(data);
             let message = 'Redirecting to the initialized school year';
@@ -210,7 +192,6 @@ $(function() {
 
     $(document).on("change", ".track-checkbox", function() {
         let selector = $(this).val();
-        // $(`[data-track-id='${selector}']`).closest('label').toggle($(this).is(":checked"));
         let isChecked = $(this).is(":checked");
         toggleListElement(selector, isChecked);
     });
