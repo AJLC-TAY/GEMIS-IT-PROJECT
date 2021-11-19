@@ -345,5 +345,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteSignatory'){
     $admin->enterLog("Delete Signatory");
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'changeAttendance'){ 
+    $admin->changeAttendance();
+}
+
 
 ?>

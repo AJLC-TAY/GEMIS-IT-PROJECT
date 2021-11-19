@@ -10,6 +10,9 @@ let tableSetup = {
 };
 let table = $("#table").bootstrapTable(tableSetup);
 let tempChanges = [];
+var submitMsg = "Submitted attendance records are final and are not editable. For necessary changes, contact the admin.";
+var saveMsg = "Saved attendance records are editable within the duration of the current quarter.";
+var stat = document.getElementById("label").innerText == "submit?" ? "1" : "0";
 
 function toggleDisableMonthSelector(bool) {
     $("select[name='month']").prop("disabled", bool);
@@ -21,11 +24,12 @@ function toggleDisableMonthSelector(bool) {
  * */
 function saveRow(row) {
     let formData = new FormData();
-    $.each(row.find(".number"), function(i, val) {
+    $.each(row.find(".number"), function (i, val) {
         formData.append(val.getAttribute('name'), val.value);
         val.setAttribute("readonly", true);
     });
     formData.append('action', "changeAttendance");
+    formData.append('stat', stat);
     // formData.append('month', $("[name='month']").val());
     $.ajax({
         url: "action.php",
@@ -33,8 +37,9 @@ function saveRow(row) {
         processData: false,
         contentType: false,
         data: formData,
-        success: data => {}
+        success: data => { }
     });
+    $(".attendancerect-confirmation").modal("hide");
     showToast("success", "Successfully saved");
 }
 
@@ -44,7 +49,7 @@ function saveRow(row) {
  * */
 function cancelEditRow(row) {
     // return original values to input & set them to readonly
-    $.each(row.find(".number"), function(i, val) {
+    $.each(row.find(".number"), function (i, val) {
         val.value = tempChanges[i];
         val.setAttribute("readonly", true);
     });
@@ -54,7 +59,7 @@ function cancelEditRow(row) {
  * @param {Object} row tr object
  * */
 function editRow(row) {
-    row.find(".number").each(function() {
+    row.find(".number").each(function () {
         let e = $(this);
         tempChanges.push(e.val());
         e.removeAttr("readonly");
@@ -77,10 +82,36 @@ function exitEditMode(row) {
     hideSpinner();
 }
 
-$(function() {
+function saveConfirmation() {
+    console.log("from faculty/attendance.js save clicked");
+        if (typeof user !== 'undefined') {
+            document.getElementById("label").innerText = "CONFIRMATION";
+            stat = "1";
+            document.getElementById("modal-msg").innerText = "Are you sure you want to save?";
+        } else {
+            document.getElementById("stmt").innerText = "Are you sure you want to ";
+            document.getElementById("label").innerText = "save?";
+            document.getElementById("modal-msg").innerText = saveMsg;
+        }
+
+        document.getElementById("confirm").innerText = "Save";
+        $(".attendancerect-confirmation").modal("toggle");
+}
+
+function submitConfirmation() {
+    stat = "1";
+    console.log("from faculty/attendance.js submit clicked");
+    document.getElementById("stmt").innerText = "Are you sure you want to ";
+    document.getElementById("label").innerText = "submit?";
+    document.getElementById("modal-msg").innerText = submitMsg;
+    document.getElementById("confirm").innerText = "Submit";
+    $(".attendancerect-confirmation").modal("toggle");
+}
+
+$(function () {
     preload("#attendance");
 
-    $(document).on("click", ".edit-btn", function(e) {
+    $(document).on("click", ".edit-btn", function (e) {
         e.preventDefault();
         showSpinner();
         // hide main edit button & show main edit options
@@ -96,35 +127,48 @@ $(function() {
         hideSpinner();
     });
 
-    $(document).on("submit", "#attendance-form", function(e) {
-        e.preventDefault();
-        showSpinner();
-        let formData = new FormData($(this)[0]);
-        $.ajax({
-            url: "action.php",
-            method: "POST",
-            contentType: false,
-            processData: false,
-            data: formData,
-            success: () => {
-                // show main edit button & hide main edit options
-                $(".edit-btn").toggle(true);
-                $(".edit-options").toggle(false);
-                // Make specific edit buttons editable & inputs to readonly
-                $(".edit-spec-btn").prop("disabled", false);
-                $(".number").prop("readonly", true);
-                // empty temporary changes
-                tempChanges = [];
-                // enable month selector
-                toggleDisableMonthSelector(false);
+    // $(document).on("submit", "#attendance-form", function (e) {
+    //     e.preventDefault();
+    //     showSpinner();
+    //     let formData = new FormData($(this)[0]);
+    //     $.ajax({
+    //         url: "action.php",
+    //         method: "POST",
+    //         contentType: false,
+    //         processData: false,
+    //         data: formData,
+    //         success: () => {
+    //             // show main edit button & hide main edit options
+    //             $(".edit-btn").toggle(true);
+    //             $(".edit-options").toggle(false);
+    //             // Make specific edit buttons editable & inputs to readonly
+    //             $(".edit-spec-btn").prop("disabled", false);
+    //             $(".number").prop("readonly", true);
+    //             // empty temporary changes
+    //             tempChanges = [];
+    //             // enable month selector
+    //             toggleDisableMonthSelector(false);
 
-                hideSpinner();
-                showToast("success", "Successfully saved");
-            }
-        });
+    //             hideSpinner();
+    //             showToast("success", "Successfully saved");
+    //         }
+    //     });
+    // });
+
+    $(document).on("click", ".submit-btn", () => {
+        submitConfirmation();
+
     });
 
-    $(document).on("click", ".action", function(e) {
+    $(document).on("click", ".save-btn", () => {
+        saveConfirmation();
+    });
+
+    $(document).on("click", "#confirm", () => {
+        saveRow();
+    });
+
+    $(document).on("click", ".action", function (e) {
         e.preventDefault();
         showSpinner();
         let row = $(this).closest("tr");
@@ -141,7 +185,11 @@ $(function() {
                 hideSpinner();
                 return;
             case "save":
+                saveConfirmation();
                 saveRow(row);
+                break;
+            case "submit":
+                submitConfirmation();
                 break;
             case "cancel":
                 cancelEditRow(row);
@@ -214,7 +262,7 @@ $(function() {
 
     /** Event handler if month selector is changed */
 
-    $(document).on("change", "select[name='month']", function(e) {
+    $(document).on("change", "select[name='month']", function (e) {
         e.preventDefault();
         table.bootstrapTable("refresh", { url: `getAction.php?data=class_attendance&class=${currentClass}&month=${$("select[name='month']").val()}` })
     });

@@ -78,5 +78,10 @@ if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
 if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
     $admin->getSubjectSchedule();
 }
+
+if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
+    $admin->getStudentAttendanceJSON();
+}
+
 ?>
 

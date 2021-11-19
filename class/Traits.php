@@ -737,7 +737,8 @@ trait FacultySharedMethods
                                    <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
-                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
+                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>
+                                       <button data-type='submit' class='action btn btn-sm btn-success'>Submit</button>                                
                                     </div>
                                 </div>"
             ];
@@ -754,7 +755,7 @@ trait FacultySharedMethods
     {
         foreach ($_POST['data'] as $id => $value) { // $id = report_id
             $this->prepared_query(
-                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=? WHERE attendance_id = ?;",
+                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=?, status = {$_POST['stat']} WHERE attendance_id = ?;",
                 [$value['present'], $value['absent'], $value['tardy'], $id],
                 "iiii"
             );

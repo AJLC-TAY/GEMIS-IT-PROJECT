@@ -75,6 +75,8 @@ $tab_three_active = "";
 $is_tab_one = "active";
 $is_tab_two = "";
 $is_tab_three = "";
+$tab_four_active = "";
+$is_four_three = "";
 if (isset($_GET['tab'])) {
     switch ($_GET['tab']) {
         case "docs":
@@ -89,11 +91,18 @@ if (isset($_GET['tab'])) {
             $tab_three_active = ACTIVE;
             $is_tab_three = "active";
             break;
+        case "attendance":
+            $tab_one_active = "";
+            $is_tab_one = "";
+            $tab_four_active = ACTIVE;
+            $is_four_three = "active";
+            break;
         default:
             $tab_one_active = ACTIVE;
             $is_tab_one = "active";
     }
 }
+$url = "getAction.php?data=attendance&id={$stud_id}";
 ?>
 <header>
     <nav aria-label='breadcrumb'>
@@ -170,6 +179,7 @@ if (isset($_GET['tab'])) {
                 <a class="nav-link <?php echo $is_tab_two; ?>" id="nav-docu-tab" data-bs-toggle="tab" data-bs-target="#docu" type="button" role="tab" aria-controls="docu" aria-selected="false">Documents</a>
                 <?php if ($user_type == 'AD') { ?>
                     <a class="nav-link <?php echo $is_tab_three; ?>" id="nav-grades-tab" data-bs-toggle="tab" data-bs-target="#grades" type="button" role="tab" aria-controls="grades" aria-selected="false">Grades</a>
+                    <a class="nav-link <?php echo $is_tab_four; ?>" id="nav-attendance-tab" data-bs-toggle="tab" data-bs-target="#attendance" type="button" role="tab" aria-controls="attendance" aria-selected="false">Attendance</a>
                 <?php } ?>
             </div>
         </nav>
@@ -407,6 +417,26 @@ if (isset($_GET['tab'])) {
                         </div>
                     </div>
                 </div>
+                <!-- Attendance Tab -->
+                <div class="tab-pane fade bg-white p-4 <?php echo $tab_three_active; ?>" id="attendance" role="tabpanel" aria-labelledby="docu-tab">
+                <div class="container mt-2 ms-0">
+                            <div class="card w-100 h-auto bg-light">
+                                <form id="attendance-form" >
+                                    <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
+                                        <thead class='thead-dark'>
+                                            <tr>
+                                                <th scope='col' data-width="100" data-align="center" data-field="month" title="month">Month</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present">Present</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent">Absent</th>
+                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy">Tardy</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                </div>
                 <div class="modal fade" id="confirmation-edit-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -426,6 +456,7 @@ if (isset($_GET['tab'])) {
                     </div>
                 </div>
             <?php } ?>
+
         </div>
 
         <div class="modal fade" id="imgPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

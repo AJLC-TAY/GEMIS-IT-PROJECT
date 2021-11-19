@@ -2997,6 +2997,35 @@ class Administration extends Dbconfig
         }
     }
 
+    public function getStudentAttendanceJSON(){
+        session_start();
+        $id = $_GET['id'];
+        $sy = $_SESSION['sy_id'];
+
+        $result = $this->query("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
+        WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
+        // echo ("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
+        // WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $attend_id = $row['attendance_id'];
+            $attendance[] = [
+                'month' =>$row['month'],
+                'present' => "<input name='data[{$attend_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_present']}'>",
+                'absent'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_absent']}'>",
+                'tardy'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_tardy']}'>",
+                'action'    => "<div class='d-flex justify-content-center'>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
+                                   <div class='edit-spec-options' style='display: none;'>
+                                       <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
+                                       <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                
+                                    </div>
+                                </div>"
+            ];
+        }
+
+        echo json_encode($attendance);
+    }
+
 
 
     public function importSubjectGradesToCSV()
