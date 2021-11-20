@@ -34,7 +34,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </div>
     </div>
     <!-- SPINNER END -->
-    <section id="container">
+    <section id="container-fluid">
         <?php include_once('../inc/adminSidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
@@ -65,13 +65,13 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                     <div class='row align-content-center mt-3'>
                                                         <div class='col-4 mt-1'><label for='current-quarter' class='mb-0 mx-auto'>Current Quarter</label></div>
                                                         <div class='col-8' style='width:40%;'><select name='quarter' class='form-select-sm form-select mb-0' id='current-quarter' value='$current_quarter'>";
-                                                        foreach([1, 2, 3, 4] as $qtr) {
-                                                            echo "<option value='$qtr' ". ($qtr == $current_quarter ? "selected" : "")." >". ($qtr == 1 ? "First" : ($qtr == 2 ? "Second" : ($qtr == 3 ? "Third" : "Fourth"))). " Quarter </option>";
-                                                        }
+                                                    foreach ([1, 2, 3, 4] as $qtr) {
+                                                        echo "<option value='$qtr' " . ($qtr == $current_quarter ? "selected" : "") . " >" . ($qtr == 1 ? "First" : ($qtr == 2 ? "Second" : ($qtr == 3 ? "Third" : "Fourth"))) . " Quarter </option>";
+                                                    }
                                                     echo "</select></div>
                                                         </li>";
                                                 }
-                                               ?>
+                                                ?>
                                             </ul>
                                         </div>
                                         <div class="form-group col-md-6">
@@ -81,7 +81,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                 </div>
                             </header>
 
-                            <div class="container mb-3 mt-3">
+                            <div class="container-fluid mb-3 mt-3">
                                 <!-- PEOPLE MANAGEMENT -->
                                 <section class="row">
                                     <h5 class="fw-bold">PEOPLE MANAGEMENT</h5>
@@ -137,10 +137,10 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             </div>
                             <!-- PEOPLE MANAGEMENT END -->
                             <!-- SCHOOL MANAGEMENT -->
-                            <div class="container">
-                                <section class="row">
+                            <div class="container-fluid">
+                                <div class="row">
                                     <h5 class="fw-bold">SCHOOL MANAGEMENT</h5>
-                                    <section class="col-sm-6">
+                                    <div class="col-lg-6">
                                         <div class="card bg-white rounded shadow-sm mt-2">
                                             <!-- CURRICULUM -->
                                             <section class="mb-2">
@@ -200,9 +200,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 </div>
                                             </section>
                                         </div>
-                                    </section>
+                                    </div>
 
-                                    <section class="col-md-6">
+                                    <div class="col-lg-6">
                                         <div class="card bg-pastel shadow-sm mt-2">
                                             <section class="mb-3">
                                                 <h6 class='mb-0 fw-bold ms-3 mt-2'>ENROLLMENT</h6>
@@ -249,8 +249,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 </div>
                                             </section>
                                         </div>
-                                    </section>
-                                </section>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -276,7 +277,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <button id="quarter-submit" data-bs-dismiss="modal" class="btn btn-sm btn-success" >Confirm</button>
+                    <button id="quarter-submit" data-bs-dismiss="modal" class="btn btn-sm btn-success">Confirm</button>
                 </div>
             </div>
         </div>
@@ -292,11 +293,16 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="text/javascript">
     function changeQuarter(quarter) {
-        let formData = [
-            {name: "action", value: "editSY"},
-            {name: "quarter", value: quarter},
+        let formData = [{
+                name: "action",
+                value: "editSY"
+            },
+            {
+                name: "quarter",
+                value: quarter
+            },
         ];
-        $.post("action.php", formData, function (data) {
+        $.post("action.php", formData, function(data) {
             $("#change-quarter-confirmation-modal").modal("hide");
             location.reload();
         });
@@ -307,7 +313,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         $(document).on("change", "#current-quarter", function() {
             let value = $(this).find("option:selected").val();
             let modal = $("#change-quarter-confirmation-modal");
-            modal.find("#quarter").html((value == 1) ? "First": (value == 2 ? "Second" : (value == 3 ? "Third" : "Fourth")));
+            modal.find("#quarter").html((value == 1) ? "First" : (value == 2 ? "Second" : (value == 3 ? "Third" : "Fourth")));
             modal.find("#quarter-submit").attr("onclick", `changeQuarter(${value})`);
             modal.modal("show");
         });
