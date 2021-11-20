@@ -190,15 +190,15 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 <div class="row w-100 h-auto text-start mx-auto">
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
-                        <div class="col-xl-3">
+                        <div class="col-xl-4">
                             <?php echo "<img src='../$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
                             <br>
-                            <?php echo "<dl class='row mb-2 ms-3'>
-                                    <dt class='col-md-9'>User ID: </dt>
+                            <?php echo "<dl class='row mb-2 ms-1'>
+                                    <dt class='col-md-3'>User ID: </dt>
                                     <dd class='col-md-9'> $user_id_no </dd>
-                                    <dt class='col-md-9'>Strand: </dt>
+                                    <dt class='col-md-3'>Strand: </dt>
                                     <dd class='col-md-9'> $strand </dd>
-                                    <dt class='col-md-9'>Grade Level: </dt>
+                                    <dt class='col-md-5'>Grade Level: </dt>
                                     <dd class='col-md-9'>$yrlvl</dd>
                             </dl>" ?>
                             
@@ -213,7 +213,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     echo $edit_btn;
                                 }
                             } else {
-                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
+                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-75' title='Change Password'>CHANGE PASSWORD</a>";
                             } ?>
 
                         </div>
