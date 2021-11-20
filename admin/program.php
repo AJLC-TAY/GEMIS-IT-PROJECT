@@ -47,27 +47,14 @@ include('../class/Administration.php'); ?>
         </div>
         <!-- TOAST END -->
 </body>
+<!-- VALIDATION -->
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/jquery.mockjax.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
-<script>
-    var forms = document.querySelectorAll('.needs-validation');
-
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-    });
-</script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script type="module" src="<?php echo $jsFilePath; ?>"></script>
 </html>

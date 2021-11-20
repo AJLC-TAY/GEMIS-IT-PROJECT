@@ -1061,6 +1061,28 @@ class Administration extends Dbconfig
         // header("Location: enrollment.php");
     }
     /*** Curriculum Methods */
+    public function checkCodeUnique()
+    {
+        $type = $_GET['type'];
+        $table_condition = "$type";
+        $code = '';
+        switch ($type) {
+            case "curriculum":
+                $code = $_POST['code'];
+                $table_condition .= " WHERE curr_code = '$code';";
+                break;
+            case "program":
+                $code = $_POST['prog-code'];
+                $table_condition .= " WHERE prog_code = '$code';";
+                break;
+            case "subject":
+                $table_condition .= " WHERE sub_code = '$code';";
+                break;
+        }
+        $row = mysqli_fetch_row($this->query("SELECT CASE WHEN COUNT(*) > 0 THEN 'false' ELSE 'true' END AS is_unique FROM $table_condition; "))[0];
+        echo $row;
+    }
+
     public function listCurriculumJSON()
     {
         echo json_encode([
@@ -1083,19 +1105,8 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $name = $_POST['name'];
         $desc = $_POST['curriculum-desc'];
-        // start of validation
-        $result = $this->query("SELECT * FROM curriculum WHERE curr_code = '$code';");
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-                die('Curriculum already exists');
-            } else {
-                # curriculum is valid
-                $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
-                $this->listCurriculumJSON();
-            }
-        } else {
-            die('Error: ' . mysqli_error($this->db));
-        }
+        $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
+        $this->listCurriculumJSON();
     }
 
     public function deleteCurriculum()
@@ -1179,7 +1190,7 @@ class Administration extends Dbconfig
     {
         session_start();
         $sy_id = $_SESSION['sy_id'] ?? NULL;
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $currCode = $_POST['curr-code'];
         $description = $_POST['desc'];
         // start of validation
@@ -1213,7 +1224,7 @@ class Administration extends Dbconfig
 
     public function updateProgram()
     {
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $prog_description = $_POST['name'];
         $old_code = $_POST['current_code'];
 

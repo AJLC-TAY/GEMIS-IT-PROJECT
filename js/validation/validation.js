@@ -1,5 +1,3 @@
-
-
 $(function () {
   $.validator.setDefaults({
     errorClass: 'help-block',
@@ -93,7 +91,9 @@ $(function () {
       form.submit();
       return false;  //This doesn't prevent the form from submitting.
     }
-  })
+  });
+
+
 
   $("#enroll-form-1").on("click", function(e) {
     e.preventDefault();
@@ -103,32 +103,32 @@ $(function () {
   });
 
   //unique rule, submit done, for implementation 
-  $(document).on("submit", "#prog-form", function(event) {
-    event.preventDefault();
-  }).validate({
-    rules: {
-      code: {
-        required: true,
-        // unique
-      },
-      desc: {
-        required: true
-      }
-    },
-    messages: {
-      code: {
-        required: '<p class="text-danger user-select-none">Please enter program code!</p>'
-      },
-      desc: {
-        required: '<p class="text-danger user-select-none">Please enter program name!</p>',
-        remote: $.validator.format("{0} is already associated with an account.")
-      }
-    },
-    submitHandler: function(form) { 
-      form.submit();
-      return false;  //This doesn't prevent the form from submitting.
-    }
-  })
+  // $(document).on("submit", "#prog-form", function(event) {
+  //   event.preventDefault();
+  // }).validate({
+  //   rules: {
+  //     code: {
+  //       required: true,
+  //       // unique
+  //     },
+  //     desc: {
+  //       required: true
+  //     }
+  //   },
+  //   messages: {
+  //     code: {
+  //       required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+  //     },
+  //     desc: {
+  //       required: '<p class="text-danger user-select-none">Please enter program name!</p>',
+  //       remote: $.validator.format("{0} is already associated with an account.")
+  //     }
+  //   },
+  //   submitHandler: function(form) {
+  //     form.submit();
+  //     return false;  //This doesn't prevent the form from submitting.
+  //   }
+  // })
   //submit done, for implementation
   $("#stepper").on('click', function(){
   $("#enrollment-form").on("stepper", function(event) {
@@ -236,32 +236,32 @@ $(function () {
     }
   })
   //submit done, for implementation
-  $("#program-form").on("submit", function(event) {
-    event.preventDefault();
-  }).validate({
-    rules: {
-      'prog-code': {
-        required: true,
-      },
-      'prog-name':{
-        required: true,
-        lettersonly: true
-      },
-      'prog-desc':{
-        required: true,
-        lettersonly: true
-      }
-    },
-    messages: {
-      'prog-code': {
-        required: '<p class="text-danger user-select-none">Please enter code!</p>'
-      },
-    },
-    submitHandler: function(form) { 
-      form.submit();
-      return false;  //This doesn't prevent the form from submitting.
-    }
-  })
+  // $("#program-form").on("submit", function(event) {
+  //   event.preventDefault();
+  // }).validate({
+  //   rules: {
+  //     'prog-code': {
+  //       required: true,
+  //     },
+  //     'prog-name':{
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'prog-desc':{
+  //       required: true,
+  //       lettersonly: true
+  //     }
+  //   },
+  //   messages: {
+  //     'prog-code': {
+  //       required: '<p class="text-danger user-select-none">Please enter code!</p>'
+  //     },
+  //   },
+  //   submitHandler: function(form) {
+  //     form.submit();
+  //     return false;  //This doesn't prevent the form from submitting.
+  //   }
+  // })
   // unique rule, submit done, for implementation
   $("#enroll-report-form").on("submit", function(event) {
     event.preventDefault();
@@ -442,58 +442,3 @@ $(function () {
   //   }
   // });
 })
-  //submit done, unique rule left, for implementation
-  $(document).on("submit","#curriculum-form", function(event) {
-    event.preventDefault();
-  }).validate({
-    rules: {
-      code: {
-        required: true,
-        //remote: "unique.action"
-      },
-      name: {
-        required: true
-      }
-    },
-    messages: {
-      code: {
-        required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>',
-        //remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
-      },
-      name: {
-        required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
-      }
-    },
-    submitHandler: function(form) { 
-      // form.submit();
-      // $("#curriculum-form").submit(function(e) {
-      //     e.preventDefault();
-          // $.post("action.php", form.serializeArray(), (data) => {
-          //     window.location.href = `curriculum.php?code=${JSON.parse(data)}`;
-          // });
-      // });
-
-      // $('#curriculum-form').submit(function(e) {
-        // e.preventDefault();
-        showSpinner();
-        // var form = $(this);
-        // var formData = $(this).serialize();
-        var formData = form.serialize();
-        $.post("action.php", formData, function(data) {
-            form.trigger('reset');
-            addModal.modal('hide');
-            console.log("New data: \n");
-            console.log(data);
-            // reload(JSON.parse(data));
-            hideSpinner();
-            // $(".no-result-msg").hide();
-            showToast('success', 'Curriculum successfully added');
-        });
-        // .fail(function () {
-
-        // });
-    // });
-      console.log(form);
-      return false;  //This doesn't prevent the form from submitting.
-    }
-  });

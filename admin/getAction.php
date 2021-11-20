@@ -1,6 +1,9 @@
 <?php
 require_once('../class/Administration.php');
 $admin = new Administration();
+if (isset($_GET['data']) && $_GET['data'] == 'checkCodeUnique') {
+    $admin->checkCodeUnique();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'administrators') {
     $admin->listAdministratorsJSON();
 }

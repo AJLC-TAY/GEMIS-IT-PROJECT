@@ -1,4 +1,4 @@
-let mainMenuItem, mainSubMenuItem, spinner;
+var mainMenuItem, mainSubMenuItem, spinner;
 
 /** Display active menu item */
 function preload(menuItem, subMenuItem = null) {
@@ -81,3 +81,7 @@ function generatePDF(filename, orientation='portrait') {
     };
     html2pdf().from(template).set(opt).save();
 }
+
+$.validator.addMethod("noSpace", function(value, element) {
+    return value.indexOf(" ") < 0 && value != "";
+}, "Code should not have a space");
