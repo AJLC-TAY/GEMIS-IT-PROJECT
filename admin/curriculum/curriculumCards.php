@@ -11,12 +11,18 @@ $admin = new Administration();
             <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between">
-        <h3 class="fw-bold">Curriculum</h3>
-        <span>
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
-        </span>
+    <div class="row justify-content-between">
+        <div class="col-md-6">
+            <h3 class="fw-bold">Curriculum</h3>
+        </div>
+        <div class="col-md-6 d-flex justify-content-lg-end">
+            <div class="col-auto">
+                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
+            </div>
+        </div>
     </div>
     <!-- SEARCH BAR -->
     <form action="">
@@ -80,18 +86,21 @@ $admin = new Administration();
                     <p><small class='text-secondary'>Please complete the following: </small></p>
                     <div class="form-group">
                         <label for="curr-code">Code</label>
-                        <input id="curr-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. K12A"/>
-                        <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique curriculum code</small></p>
+                        <input id="curr-code" type="text" name="code" class='form-control form-control-sm mb-2' placeholder="Enter unique code here. ex. K12A"/>
+                    </div>
+                    <div class="form-group">
                         <label for="curr-name">Name</label>
-                        <input id="curr-name" type="text" name="name" class='form-control' placeholder="ex. K12 Academic">
+                        <input id="curr-name" type="text" name="name" class='form-control form-control-sm mb-2' placeholder="ex. ACADEMIC">
+                    </div>
+                    <div class="form-group">
                         <label for="curr-desc">Short Description</label>
-                        <textarea name="curriculum-desc" class='form-control' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
+                        <textarea name="curriculum-desc" class='form-control form-control-sm' maxlength="250" placeholder="ex. K-12 Basic Education Academic Track"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <input type="submit" form="curriculum-form" class="submit btn btn-primary" value="Add" />
+                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button form="curriculum-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-2"></i>Add</button>
             </div>
         </div>
     </div>

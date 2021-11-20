@@ -53,7 +53,7 @@ if (mysqli_num_rows($row_temp) == 0) {
                         </div>
 
                         <div class="d-flex justify-content-center mt-3 login_container">
-                            <input type="submit" name="loginBtn" class="btn login_btn" value="Login"></input>
+                            <input type="submit" name="loginBtn" class="btn login_btn" value="Login">
                         </div>
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">

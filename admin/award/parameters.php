@@ -78,7 +78,7 @@ $param = [
         <div class="col-md-4">
             <div class="row card p-3">
                 <h5>Perfect Attendance</h5>
-                <form id="attendance-form" action="award.php?type=attendance" method="post">
+                <form id="attendance-form" action="award.php?type=pa" method="post">
                     <input type="hidden" name="action" value="report">
                     <input type="hidden" name="type" value="attendance">
                     <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3"><i class="bi bi-funnel me-2"></i>Generate</button>

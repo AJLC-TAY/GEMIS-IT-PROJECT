@@ -5,7 +5,6 @@
 <div class="card w-100 h-auto mt-4 p-4">
     <?php include("../class/Administration.php");
     $admin = new Administration();
-//    $admin->getSubjectSchedule();
     ?>
     <h4 class="fw-bold">Transferee Assessment form</h4>
     <div class="border p-3">

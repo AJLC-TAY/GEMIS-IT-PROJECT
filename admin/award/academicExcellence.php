@@ -5,7 +5,8 @@ $excellence = $_POST['excellence'] ?? NULL;
 $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
 $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
-$position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");$date_desc = date("F j, Y");
+$position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");
+$date_desc = date("F j, Y");
 
 ?>
 <!-- HEADER -->

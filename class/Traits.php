@@ -212,7 +212,8 @@ trait UserSharedMethods
             session_start();
         }
         $date_time = date('Y-m-d H:i:s');
-        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', '$action', '$date_time' );");
+        $id = $_SESSION['user_id'] ?? 0;
+        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('$id', '{$_SESSION['user_type']}', '$action', '$date_time' );");
     }
 
     /**
@@ -720,7 +721,7 @@ trait FacultySharedMethods
     {
         $addon = '';
         $attendance = [];
-        $result = $this->query("SELECT stud_id, promote, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
+        $result = $this->query("SELECT stud_id, status, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
                                 AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
                                 JOIN enrollment e USING (stud_id)
                                 JOIN attendance a USING (stud_id) 
@@ -728,7 +729,7 @@ trait FacultySharedMethods
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
-            $addon = $row['promot'] == 0?:'readonly';
+            $addon = $row['status'] == 0?:"disabled";
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],
@@ -736,7 +737,7 @@ trait FacultySharedMethods
                 'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
                 'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
-                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit' $addon>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
                                        <button data-type='save' class='action btn btn-sm btn-success'>Save</button>
@@ -1789,38 +1790,52 @@ trait Grade
 
     public function getAwardDataFromSubject()
     {
-        $grd_param = 90;
-        $sub_code = 'OCC1';
-        $sy_id = 9;
+        session_start();
+        $grd_param = $_POST['filter'];
+        $sub_code = $_POST['sub_code'];
+        $sy_id = $_SESSION['sy_id'];
         $data = [];
-        $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, sub_code, enrolled_in AS grd
+        $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, enrolled_in AS grd
                     FROM gradereport gr JOIN student s ON gr.stud_id = s.stud_id 
                     LEFT JOIN enrollment e ON  e.stud_id = s.stud_id 
                     JOIN classgrade cg ON cg.report_id = gr.report_id 
-                    JOIN subjectclass sc ON sc.sub_class_code = cg.sub_class_code 
-                    JOIN sysub sys ON sys.sub_sy_id = sc.sub_sy_id
-                    WHERE final_grade >= '$grd_param'  AND sys.sub_code = '$sub_code' AND e.sy_id = '$sy_id' 
+                    WHERE final_grade >= '$grd_param'  AND cg.sub_code = '$sub_code' AND e.sy_id = '$sy_id' 
                     ORDER BY program DESC, final_grade DESC;";
         $result = $this->query($query);
         while ($row = mysqli_fetch_assoc($result)) {
-            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'fg' => $row['final_grade'], 'sex' => ucwords($row['sex'])];
+//            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'fg' => $row['final_grade'], 'sex' => ucwords($row['sex'])];
+            $stud_id = $row['stud_id'];
+            $program = $row['program'];
+            $grade = $row['final_grade'];
+            $lrn = $row['LRN'];
+            $sex = ucwords($row['sex']);
+            $name = $row['name'];
+            $data[] = [
+                'id' => $stud_id,
+                'name' => $name . "<input type='hidden' name='data[$grade][$program][students][$stud_id][name]' value='$name'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][lrn]' value='$lrn'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][program]' value='$program'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][sex]' value='$sex'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][grade]' value='$grade'>",
+                'program' => $program,
+                'fg' => $grade,
+                'sex' => $sex,
+                'action' => "<div class='d-flex justify-content-center'>
+                                <button data-id='$stud_id' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
+                                <button data-id='$stud_id' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
+                            </div>"
+            ];
         }
 
-        // foreach($data as $grd_level => $prog_rec) {
-        //     foreach($prog_rec as $prog => $prog_list) {
-        //         $data[$grd_level][$prog]['size'] = count($prog_list['students']);
-        //     }
-        // }    
-        return $data;
+        echo json_encode($data);
     }
 
     public function getPerfectAttendance()
     {
-        // $sy_id = $_GET['sy_id'] ?? $_SESSION['sy_id'];
-        $sy_id = 9;
+        $sy_id = $_GET['sy_id'] ?? $_SESSION['sy_id'];
         $data = [];
-        $query = "SELECT stud_id, LRN, name, sex, program, grd FROM (SELECT s.stud_id, LRN, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''), COALESCE(ext_name,'')) AS name, 
-                    sex, SUM(no_of_present) AS total_attend, SUM(no_of_days) AS total_days, prog_code AS program, enrolled_in AS grd
+        $query = "SELECT stud_id, LRN, name, sex, program, grd FROM (SELECT s.stud_id, LRN, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ',COALESCE(ext_name,'')) AS name, 
+                    s.sex, SUM(no_of_present) AS total_attend, SUM(no_of_days) AS total_days, prog_code AS program, enrolled_in AS grd
                     FROM attendance JOIN gradereport gr USING (report_id)
                     JOIN student s ON s.stud_id = gr.stud_id
                     JOIN enrollment e ON e.stud_id = s.stud_id
@@ -1828,9 +1843,31 @@ trait Grade
                     WHERE gr.sy_id = '$sy_id' GROUP BY s.stud_id) AS attend WHERE attend.total_attend = attend.total_days;";
         $result = $this->query($query);
         while ($row = mysqli_fetch_assoc($result)) {
-            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'lrn' => $row['LRN'], 'sex' => ucwords($row['sex'])];
+            $stud_id = $row['stud_id'];
+            $program = $row['program'];
+            $grade = $row['grd'];
+            $lrn = $row['LRN'];
+            $sex = ucwords($row['sex']);
+            $name = $row['name'];
+            $data[] = [
+                'id' => $stud_id,
+                'lrn' => $lrn,
+                'name' => $name . "<input type='hidden' name='data[$grade][$program][students][$stud_id][name]' value='$name'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][lrn]' value='$lrn'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][program]' value='$program'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][sex]' value='$sex'>
+                            <input type='hidden' name='data[$grade][$program][students][$stud_id][grade]' value='$grade'>",
+                'program' => $program,
+                'grade' => $grade,
+                'sex' => $sex,
+                'action' => "<div class='d-flex justify-content-center'>
+                                <button data-id='$stud_id' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
+                                <button data-id='$stud_id' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
+                            </div>"
+            ];
+
         }
-        return $data;
+        echo json_encode($data);
     }
 
     public function getConductAward()
@@ -1965,12 +2002,13 @@ trait Grade
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
             # get report id
-            $row_temp = $this->query("SELECT `report_id`, `status`, `general_average` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
+            $row_temp = $this->query("SELECT `report_id`, `status`, `first_gen_ave`, `second_gen_ave` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
 
             $temp = mysqli_fetch_row($row_temp);
             if ($temp != NULL) {
                 $report_id = $temp[0];
-                $gen_ave = $temp[2];
+                $first_gen_ave = $temp[2];
+                $second_gen_ave = $temp[3];
             }
             $editable = $editable2 = '';
 
@@ -1992,8 +2030,8 @@ trait Grade
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$gen_ave}'>",
-                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$gen_ave}'>",
+                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/first/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
+                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'] )

@@ -27,6 +27,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'gradeAdvisory')) {
 if ((isset($_POST['action']) && $_POST['action'] == 'gradeValues')) {
     $faculty->updateValueGrades();
 }
+if ((isset($_POST['action']) && $_POST['action'] == 'calculateGeneralAverage')) {
+    $faculty->calculateGenAveBySection();
+}
 
 /** ENROLLMENT */
 if (isset($_POST['action']) && $_POST['action'] === 'validateEnrollment') {

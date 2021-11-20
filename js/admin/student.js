@@ -20,35 +20,12 @@ let prepareSectionHTML = section => {
 };
 var message = 'Are you sure you want to transfer the student?';
 var stud_id;
+let row = '';
 var gradesTemp = [];
 let formData = [];
 let tempChanges = [];
 
-/**
- * Submits new attendance value and make row inputs to readonly.
- * @param {Object} row tr object
- * */
- function saveRow(row) {
-    let formData = new FormData();
-    $.each(row.find(".number"), function(i, val) {
-        formData.append(val.getAttribute('name'), val.value);
-        val.setAttribute("readonly", true);
-    });
-    formData.append('action', "changeAttendance");
-    for (var pair of formData.entries()) {
-        console.log(pair[0] + " - " + pair[1]);
-      }
-    // formData.append('month', $("[name='month']").val());
-    $.ajax({
-        url: "action.php",
-        method: "POST",
-        processData: false,
-        contentType: false,
-        data: formData,
-        success: data => {}
-    });
-    showToast("success", "Successfully saved");
-}
+
 
 /**
  * Returns the original values temporarily stored in the row inputs and make them not editable
@@ -186,6 +163,9 @@ $(function() {
                     formData.push({'name': $(this).attr('name'), 'value': $(this).val()});
                 });
                 formData.push({'name': 'action', 'value': 'editSubjectGrade'});
+                document.getElementById("teacher").innerText = "subject teachers";
+                document.getElementById("type").innerText = "grades";
+                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type','grades');
                 $("#confirmation-edit-modal").modal('show');
                 hideSpinner();
                 return;
@@ -213,20 +193,28 @@ $(function() {
 
 
     $(document).on("click", ".submit-edit-button", function() {
-        $.post("action.php", formData, function(data) {
-            formData = [];
-            let gradeID = JSON.parse(data);
-            $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
-            $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
-            $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
-            showToast('success', 'Subject grade successfully edited')
-        });
+        switch($(this).attr('data-type')) {
+            case 'grades':
+                $.post("action.php", formData, function(data) {
+                    formData = [];
+                    let gradeID = JSON.parse(data);
+                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
+                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
+                    $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
+                    showToast('success', 'Subject grade successfully edited')
+                });
+              break;
+            case 'attendance':
+                saveRow(row);
+              break;
+          }
+        
     });
 
     $(document).on("click", ".action", function(e) {
         e.preventDefault();
         showSpinner();
-        let row = $(this).closest("tr");
+        row = $(this).closest("tr");
         let action = $(this).attr("data-type");
         switch (action) {
             case "edit":
@@ -240,7 +228,10 @@ $(function() {
                 hideSpinner();
                 return;
             case "save":
-                saveRow(row);
+                document.getElementById("teacher").innerText = "advisers";
+                document.getElementById("type").innerText = "attendance";
+                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type','attendance');
+                $("#confirmation-edit-modal").modal('show');
                 break;
             case "cancel":
                 cancelEditRow(row);
@@ -248,6 +239,33 @@ $(function() {
         }
         exitEditMode(row);
     });
+    /**
+ * Submits new attendance value and make row inputs to readonly.
+ * @param {Object} row tr object
+ * */
+ function saveRow(row) {
+    let formData = new FormData();
+    $.each(row.find(".number"), function(i, val) {
+        formData.append(val.getAttribute('name'), val.value);
+        val.setAttribute("readonly", true);
+    });
+    formData.append('action', "changeAttendance");
+    formData.append('stat', "1");
+
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + " - " + pair[1]);
+      }
+    // formData.append('month', $("[name='month']").val());
+    $.ajax({
+        url: "action.php",
+        method: "POST",
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: data => {}
+    });
+    showToast("success", "Successfully saved");
+}
     /** Call automatic average */
     averageSubjectGradesEvent();
     hideSpinner();

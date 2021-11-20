@@ -247,14 +247,13 @@ class Administration extends Dbconfig
         $end_yr = $_POST['end-year'];
         $enrollment = 0;
         $current_quarter = 1;
-        $current_semester = 1;
 
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
-            . "VALUES (?, ?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, can_enroll) "
+            . "VALUES (?, ?, ?, ?);";
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $enrollment], "iiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -293,15 +292,21 @@ class Administration extends Dbconfig
         # Step 3
         // insert subjects offered in the sysub
         ## Core subjects
-        $core_subjects = $_POST['subjects']['core'];
-        foreach ($core_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+        $core_subjects = [];
+        if (isset($_POST['subjects']['core'])) {
+            $core_subjects = $_POST['subjects']['core'];
+            foreach ($core_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+            }
         }
 
         ## Specialized and Applied subjects
-        $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
-        foreach ($spap_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+        $spap_subjects = [];
+        if (isset($_POST['subjects']['spap'])) {
+            $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
+            foreach ($spap_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+            }
         }
 
         if ( isset($_POST['schedule']) && $_POST['schedule'] === 'copy') {
@@ -369,13 +374,12 @@ class Administration extends Dbconfig
             $this->query("UPDATE `schoolyear` SET `status` = '0' WHERE `schoolyear`.`sy_id` = '$current_sy';");
         }
         $this->query("UPDATE `schoolyear` SET `status` = '1' WHERE `schoolyear`.`sy_id` = '$sy_id';");
-        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, current_semester, can_enroll FROM schoolyear WHERE status = '1';";
+        $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, can_enroll FROM schoolyear WHERE status = '1';";
         $sy_res = $this->query($qry_sy);
         $sy_row = mysqli_fetch_assoc($sy_res);
         $_SESSION['school_year'] = $sy_row['sy'];
         $_SESSION['sy_id'] = $sy_row['sy_id'];
-        $_SESSION['enroll_status'] = $sy_row['can_enroll'];;
-        $_SESSION['current_semester'] = $sy_row['current_semester'];;
+        $_SESSION['enroll_status'] = $sy_row['can_enroll'];
         $_SESSION['current_quarter'] = $sy_row['can_enroll'];
         return $sy_id;
     }
@@ -613,7 +617,6 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $sy_id = $row['sy_id'];
             $quarter = $row['current_quarter'];
-            $semester = $row['current_semester'];
             $enrollment = $row['can_enroll'];
 
             // // grade options
@@ -632,15 +635,6 @@ class Administration extends Dbconfig
                 $quarter_opt .= "<option value='$id'>$value</option>";
             }
             $quarter_opt .= "</select>";
-
-            // semester options
-            $sem_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='semester' type='text' data-key='$semester' value='{$semester_list[$semester]}' readonly><select data-id='$sy_id' name='semester' class='form-select d-none'>";
-            foreach ($semester_list as $id => $value) {
-                // $sem_opt .= "<option value='$id' ". (($id == $semester) ? "selected" : "") .">$value</option>";
-                $sem_opt .= "<option value='$id'>$value</option>";
-            }
-            $sem_opt .= "</select>";
-
 
             $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
                 . "<div class='edit-options' style='display: none;'>"
@@ -662,8 +656,6 @@ class Administration extends Dbconfig
                 'sy_year'         => $row['start_year'] . " - " . $row['end_year'],
                 'current_qtr_val' => $quarter,
                 'current_qtr'     => $quarter_opt,
-                'current_sem_val' => $semester,
-                'current_sem'     => $sem_opt,
                 'enrollment_val'  => $enrollment,
                 'enrollment'      => $enroll_opt,
                 'action' => $actions_btn
@@ -683,7 +675,6 @@ class Administration extends Dbconfig
             's_year' => $row['start_year'],
             'e_year' => $row['end_year'],
             'current_qtr' => $row['current_quarter'],
-            'current_sem' => $row['current_semester'],
             'enrollment' => $row['can_enroll']
         ];
     }
@@ -1069,7 +1060,6 @@ class Administration extends Dbconfig
             echo 'applied';
             # enrollment status of current school year; hence, update session value
             $sy_id = $_SESSION['sy_id'];
-            // unset($_SESSION['enroll_status']);
             $_SESSION['enroll_status'] = $can_enroll;
             echo $can_enroll;
         }
@@ -1077,6 +1067,28 @@ class Administration extends Dbconfig
         // header("Location: enrollment.php");
     }
     /*** Curriculum Methods */
+    public function checkCodeUnique()
+    {
+        $type = $_GET['type'];
+        $table_condition = "$type";
+        $code = '';
+        switch ($type) {
+            case "curriculum":
+                $code = $_POST['code'];
+                $table_condition .= " WHERE curr_code = '$code';";
+                break;
+            case "program":
+                $code = $_POST['prog-code'];
+                $table_condition .= " WHERE prog_code = '$code';";
+                break;
+            case "subject":
+                $table_condition .= " WHERE sub_code = '$code';";
+                break;
+        }
+        $row = mysqli_fetch_row($this->query("SELECT CASE WHEN COUNT(*) > 0 THEN 'false' ELSE 'true' END AS is_unique FROM $table_condition; "))[0];
+        echo $row;
+    }
+
     public function listCurriculumJSON()
     {
         echo json_encode([
@@ -1099,19 +1111,8 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $name = $_POST['name'];
         $desc = $_POST['curriculum-desc'];
-        // start of validation
-        $result = $this->query("SELECT * FROM curriculum WHERE curr_code = '$code';");
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-                die('Curriculum already exists');
-            } else {
-                # curriculum is valid
-                $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
-                $this->listCurriculumJSON();
-            }
-        } else {
-            die('Error: ' . mysqli_error($this->db));
-        }
+        $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
+        $this->listCurriculumJSON();
     }
 
     public function deleteCurriculum()
@@ -1195,7 +1196,7 @@ class Administration extends Dbconfig
     {
         session_start();
         $sy_id = $_SESSION['sy_id'] ?? NULL;
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $currCode = $_POST['curr-code'];
         $description = $_POST['desc'];
         // start of validation
@@ -1229,7 +1230,7 @@ class Administration extends Dbconfig
 
     public function updateProgram()
     {
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $prog_description = $_POST['name'];
         $old_code = $_POST['current_code'];
 
@@ -2282,10 +2283,12 @@ class Administration extends Dbconfig
         // session_start();
         $sy_id = $_GET['sy_id'];
         $grade = $_GET['grade'];
+        $section = $_GET['section'];
         $student_list = [];
         $result = $this->query("SELECT LRN, stud_id, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name, '')) AS name,
                                  section_code, section_name, enrolled_in AS grade, prog_code FROM student JOIN enrollment e USING (stud_id) 
-                                LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade';");
+                                    JOIN user USING (id_no)
+                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade' AND section_code != '$section' AND  valid_stud_data = '1' AND is_active = '1';");
         while ($row = mysqli_fetch_assoc($result)) {
             $student_list[] = [
                 'lrn'           => $row['LRN'],
@@ -3014,7 +3017,7 @@ class Administration extends Dbconfig
                 'absent'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_absent']}'>",
                 'tardy'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
-                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'><i class='bi bi-pencil-square'></i></button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
                                        <button data-type='save' class='action btn btn-sm btn-success'>Save</button>                                

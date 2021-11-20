@@ -301,8 +301,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                                 <label class='form-check-label' for='$id'>
                                                 $value
                                                 </label>
-                                            </div>
-                                            <input  class='hidden' name = 'sex' type='text' value=''>";
+                                            </div>";
                                 }
                                 ?>
                             </div>
@@ -329,7 +328,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
 
                     <div class="row mt-5">
-                        <!-- INDEGINOUS INFO -->
+                        <!-- INDIGENOUS INFO -->
                         <div class="col-md-4">
                             <label class="col-form-label me-4">Belonging to any Indeginous Group? </label>
                             <input class="hidden" type="text" name='group' value="">

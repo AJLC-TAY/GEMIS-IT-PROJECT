@@ -44,10 +44,10 @@
                     <tr>
                         <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                         <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">Final Grade</th>
-                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="action_2">Action</th>
+                        <th scope='col' data-width="100" data-align="center" contenteditable="true" data-field="grd_1"><?php echo $qtrs[0]; ?> Quarter</th>
+                        <th scope='col' data-width="100" data-align="center" data-field="grd_2"><?php echo $qtrs[1]; ?> Quarter</th>
+                        <th scope='col' data-width="100" data-align="center" data-field="grd_f">Final Grade</th>
+                        <th scope='col' data-width="100" data-align="center" data-field="action_2">Action</th>
 
                     </tr>
                 </thead>

@@ -10,7 +10,7 @@ class dbConfig {
         $this -> userName = 'root';
         $this -> password = '';
       $this -> dbName = 'gemis';
-        // $this -> dbName = 'gemistest';
+//         $this -> dbName = 'gemistest';
         $this -> port = 3306;
     }
 
