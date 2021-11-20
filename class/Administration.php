@@ -253,7 +253,7 @@ class Administration extends Dbconfig
         # Step 1
         $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, can_enroll) "
             . "VALUES (?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiii");
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $enrollment], "iiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -292,15 +292,21 @@ class Administration extends Dbconfig
         # Step 3
         // insert subjects offered in the sysub
         ## Core subjects
-        $core_subjects = $_POST['subjects']['core'];
-        foreach ($core_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+        $core_subjects = [];
+        if (isset($_POST['subjects']['core'])) {
+            $core_subjects = $_POST['subjects']['core'];
+            foreach ($core_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+            }
         }
 
         ## Specialized and Applied subjects
-        $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
-        foreach ($spap_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+        $spap_subjects = [];
+        if (isset($_POST['subjects']['spap'])) {
+            $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
+            foreach ($spap_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+            }
         }
 
         if ( isset($_POST['schedule']) && $_POST['schedule'] === 'copy') {

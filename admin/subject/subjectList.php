@@ -12,7 +12,7 @@
         <div class="col-md-4">
             <h3 class="fw-bold">Subject</h3>
         </div>
-        <div class="col-md-8 d-flex flex-wrap">
+        <div class="col-md-8 d-flex justify-content-lg-end">
             <div class="col-auto">
                 <button type="button" class="view-archive btn btn-outline-dark m-1" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
             </div>

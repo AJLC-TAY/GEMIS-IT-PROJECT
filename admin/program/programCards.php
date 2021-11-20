@@ -12,7 +12,7 @@ $admin = new Administration() ?>
         <div class="col-md-4">
             <h3 class="fw-bold">Programs</h3>
         </div>
-        <div class="col-md-8 d-flex">
+        <div class="col-md-8  d-flex justify-content-lg-end">
             <div class="col-auto">
                 <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived</button>
             </div>

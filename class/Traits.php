@@ -87,6 +87,7 @@ trait School
                 //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
                 //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
                 : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+            echo $queryOne;
         }
 
         $resultOne = $this->query($queryOne);
