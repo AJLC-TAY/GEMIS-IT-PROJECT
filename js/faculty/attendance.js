@@ -42,6 +42,7 @@ function saveRow(row) {
         success: data => { }
     });
     $(".attendancerect-confirmation").modal("hide");
+    table.bootstrapTable("refresh");
     showToast("success", "Successful!");
 }
 

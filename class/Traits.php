@@ -721,7 +721,7 @@ trait FacultySharedMethods
     {
         $addon = '';
         $attendance = [];
-        $result = $this->query("SELECT stud_id, promote, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
+        $result = $this->query("SELECT stud_id, status, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
                                 AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
                                 JOIN enrollment e USING (stud_id)
                                 JOIN attendance a USING (stud_id) 
@@ -729,7 +729,7 @@ trait FacultySharedMethods
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
-            $addon = $row['promot'] == 0?:'readonly';
+            $addon = $row['status'] == 0?:"disabled";
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],
@@ -737,7 +737,7 @@ trait FacultySharedMethods
                 'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
                 'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
-                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit'>Edit</button>
+                                   <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit' $addon>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
                                        <button data-type='cancel' class='action btn btn-sm btn-dark me-1 mb-1'>Cancel</a>
                                        <button data-type='save' class='action btn btn-sm btn-success'>Save</button>
