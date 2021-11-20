@@ -75,6 +75,7 @@ $tab_three_active = "";
 $is_tab_one = "active";
 $is_tab_two = "";
 $is_tab_three = "";
+$is_tab_four = "";
 $tab_four_active = "";
 $is_four_three = "";
 if (isset($_GET['tab'])) {

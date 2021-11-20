@@ -172,6 +172,54 @@ class Administration extends Dbconfig
         echo json_encode($this->listAdministrators());
     }
     /*** School Year Methods */
+    public function getSystemLogs()
+    {
+      session_start();
+      $limit = $_GET['limit'];
+      $offset = $_GET['offset'];
+//      $query = "SELECT * FROM historylogs WHERE sy_id = {$_SESSION['sy_id']} ";
+      $query = "SELECT * FROM historylogs ";
+
+
+      $search_query = "";
+      if (strlen(trim($_GET['search'])) > 0) {
+          $text = $_GET['search'];
+          $search_query .= " WHERE (log_Id LIKE \"%$text%\"";
+          $search_query .= " OR id_no LIKE \"%$text%\"";
+          $search_query .= " OR user_type LIKE \"%$text%\"";
+          $search_query .= " OR action LIKE \"%$text%\"";
+          $search_query .= " OR datetime LIKE \"%$text%\")";
+      }
+
+
+      $query .= $search_query;
+    if (isset($_GET['sort'])) {
+        $query .= " ORDER BY datetime ";
+    }
+      $result = $this->query($query);
+      $num_rows_not_filtered = $result->num_rows;
+
+      $query .= " LIMIT $limit";
+      $query .= " OFFSET $offset";
+    //         echo $query;
+      $result = $this->query($query);
+      $records = array();
+
+      while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+          $records[] = [
+              'log_id' => $row['log_id'],
+              'id_no' => $row['id_no'],
+              'user_type' => $row['user_type'],
+              'action' => $row['action'],
+              'datetime' => $row['datetime']
+          ];
+      }
+      $output = new stdClass();
+      $output->total = $num_rows_not_filtered;
+      $output->totalNotFiltered = $num_rows_not_filtered;
+      $output->rows = $records;
+      echo json_encode($output);
+    }
     public function getInitSYData()
     {
         # curriculum

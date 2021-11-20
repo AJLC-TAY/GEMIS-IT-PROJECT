@@ -101,6 +101,12 @@ if (isset($_SESSION['sy_id'])) {
                     <span>Signatory Management</span>
                 </a>
             </li>
+            <li class="sub-menu">
+                <a id='system-logs' href="systemLogs.php">
+                    <i class="fa fa-list"></i>
+                    <span>System Logs</span>
+                </a>
+            </li>
         </ul>
         <!-- SIDEBAR MENU END -->
     </div>

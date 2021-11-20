@@ -221,7 +221,6 @@ switch ($user_type) {
             </div>
             <table id='assigned-sc-table' class="table-striped table-sm">
                 <thead>
-                    <div class="d-flex jusitify-content-end mb-3"></div>
                     <tr>
                         <th data-checkbox="true"></th>
                         <th scope='col' data-width="200" data-align="center" data-field="sub_class_code">SC Code</th>
@@ -232,6 +231,7 @@ switch ($user_type) {
                         <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -245,18 +245,17 @@ switch ($user_type) {
         <!--        <div id='assign-subj-table' class='collapse'>-->
         <div id='assign-subj-table'>
             <p class='text-secondary'><small>Check subjects to be assigned to the faculty. Uncheck to unassign.</small></p>
-
+            <div class="d-flex justify-content-between mb-3">
+                <!-- SEARCH BAR - SUBJECTS -->
+                <form action="">
+                    <div class="d-flex">
+                        <input id="search-sub-input" type="search" class="form-control form-control-sm me-3" placeholder="Search subject here">
+                        <input data-target-table="#subject-table" type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear">
+                    </div>
+                </form>
+            </div>
             <table id="subject-table" class="table-sm">
                 <thead class='thead-dark'>
-                    <div class="d-flex justify-content-between mb-1">
-                        <!-- SEARCH BAR - SUBJECTS -->
-                        <form action="">
-                            <span class="flex-grow-1 me-3">
-                                <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
-                            </span>
-                            <span><input data-target-table="#subject-table" type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm' value="Clear"></span>
-                        </form>
-                    </div>
                     <tr>
                         <th data-checkbox="true"></th>
                         <th scope='col' data-width="200" data-align="center" data-field="sub_code">Code</th>
@@ -266,9 +265,7 @@ switch ($user_type) {
                         <!-- <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th> -->
                     </tr>
                 </thead>
-                <tbody>
-
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
