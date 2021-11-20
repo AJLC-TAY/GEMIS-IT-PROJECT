@@ -8,6 +8,7 @@ $prog_curr_code = $program->get_curr_code();
 $state = "disabled";
 $edit_btn_state = "";
 $display = "d-none";
+$edit_btn_display = '';
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = '';
     $edit_btn_state = "disabled";
