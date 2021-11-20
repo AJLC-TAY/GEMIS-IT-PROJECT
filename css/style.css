@@ -558,6 +558,11 @@ input:checked+.slider:before {
     -webkit-transition: 1s;
 }
 
+.card-box:hover .en-icon i {
+    transition: 1s;
+    -webkit-transition: 1s;
+}
+
 .card-box .inner {
     padding: 5px 10px 0 10px;
 }
@@ -576,6 +581,16 @@ input:checked+.slider:before {
 }
 
 .card-box .icon {
+    position: absolute;
+    top: auto;
+    bottom: 5px;
+    right: 5px;
+    z-index: 0;
+    font-size: 72px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.card-box .en-icon {
     position: absolute;
     top: auto;
     bottom: 5px;
