@@ -3,7 +3,7 @@ $school_year = $_SESSION['school_year'];
 $enroll_menu_item = '';
 $award_menu_item = '';
 if (isset($_SESSION['sy_id'])) {
-    $enroll_menu_item = "<li id='enrollment' class='sub-menu'>
+    $enroll_menu_item = "<li id='enrollment' class='sub-menu mx-0'>
                 <a href='javascript:;'>
                     <i class='fa fa-tasks'></i>
                     <span>Enrollment Management</span>
@@ -15,7 +15,7 @@ if (isset($_SESSION['sy_id'])) {
                     <li><a id='sub-classes' href='section.php?page=sub_classes'>Subject Class</a></li>
                 </ul>
             </li>";
-    $award_menu_item = "<li class='sub-menu'>
+    $award_menu_item = "<li class='sub-menu mx-0'>
                 <a id='awards' href='award.php'>
                     <i class='bi bi-award-fill'></i>
                     <span>Awards</span>
@@ -49,19 +49,19 @@ if (isset($_SESSION['sy_id'])) {
         <!-- SIDEBAR MENU START -->
         <ul class="sidebar-menu" id="nav-accordion">
             <h5 class="text-center"><?php echo (empty($school_year) ? "No initialized SY" : 'SY '.$school_year); ?></h5>
-            <li class="mt">
+            <li class="mt mx-0">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
                     <span>Home</span>
                 </a>
             </li>
-            <li class="sub-menu">
+            <li class="sub-menu mx-0">
                 <a id="admin" href="admin.php">
                     <i class="fa fa-user"></i>
                     <span>Admin</span>
                 </a>
             </li>
-            <li id="curr-management" class="sub-menu">
+            <li id="curr-management" class="sub-menu mx-0">
                 <a href="javascript:;">
                     <i class="fa fa-book"></i>
                     <span>Curriculum Management</span>
@@ -74,7 +74,7 @@ if (isset($_SESSION['sy_id'])) {
                 </ul>
             </li>
             <?php echo $enroll_menu_item; ?>
-            <li id="student" class="sub-menu">
+            <li id="student" class="sub-menu mx-0">
                 <a href="javascript:;">
                     <i class="fa fa-book"></i>
                     <span>Student</span>
@@ -84,14 +84,14 @@ if (isset($_SESSION['sy_id'])) {
                     <li><a id="grade-rect" href="student.php?page=grade_rectification">Grade Rectification</a></li>
                 </ul>
             </li>
-            <li class="sub-menu">
+            <li class="sub-menu mx-0">
                 <a id="faculty" href="faculty.php">
                     <i class="fa fa-users"></i>
                     <span>Faculty</span>
                 </a>
             </li>      
             <?php echo $award_menu_item; ?>
-            <li class="sub-menu">
+            <li class="sub-menu mx-0">
                 <a id='signatory' href="signatory.php">
                     <i class="fa fa-pencil-square-o"></i>
                     <span>Signatory Management</span>
