@@ -63,6 +63,8 @@ $url = "getAction.php?data=perfectAttendance&sy_id={$_SESSION['sy_id']}";
                             <input name='date' type='date' class='form-control form-control-sm mb-0 me-3' value ='<?php echo $date; ?>'>
                         </div>
                         <div class="row align-items-center mb-3">
+                            <input type="hidden" name="signatory">
+                            <input type="hidden" name="position">
                             <label class="form-label px-0">Signatory</label>
                             <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
                                 <option>Search user</option>

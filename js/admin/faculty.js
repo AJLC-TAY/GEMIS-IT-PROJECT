@@ -83,6 +83,7 @@ let scTableSetup = {...setupWithPagination,
 };
 
 let advisoryTableSetup = {
+    url: "getAction.php?data=sectionHandled",
     uniqueId: "section_code",
     idField: "section_code",
     height: 300,

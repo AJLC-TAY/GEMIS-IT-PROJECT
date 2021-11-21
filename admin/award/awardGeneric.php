@@ -1,9 +1,9 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-$data = $admin->getAwardDataFromSubject();
+$data = $_POST['data'] ?? NULL;
 $school_year = $_SESSION['school_year'];
-$filename = "Academic_Excellence_$school_year";
+$filename = "other_award_$school_year";
 $date_desc = date("F j, Y");
 $signatory_desc = $_POST['signatory'] ?? $_SESSION['User'];
 $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award Coordinator" : "Administrator");
@@ -15,13 +15,13 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
             <li class="breadcrumb-item"><a href="awardReport.php">Awards</a></li>
-            <li class="breadcrumb-item active">Award for Research</li>
+            <li class="breadcrumb-item active">Other Awards</li>
         </ol>
     </nav>
     <div class="d-flex justify-content-between">
         <span>
             <small class="fw-bold">Preview</small>
-            <h3><b>Award for Research</b></h3>
+            <h3><b>Other Awards</b></h3>
             <p class='text-secondary'><?php echo $school_year; ?></p>
         </span>
         <div class="mt-4">
@@ -55,33 +55,37 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                     </div>
                 </div>
 
-                <h6 class="text-center m-0"><b>AWARD FOR RESEARCH</b></h6>
+                <h6 class="text-center m-0"><b><?php echo $_POST['report-title']; ?></b></h6>
                 <h6 class="text-center m-0"><small>SY <?php echo $school_year; ?></small></h6>
 
                 <?php
-                foreach ($data as $grd_level => $val) {
-                    foreach ($val as $prog_code => $prog_data) {
-                        echo "<table class='table-bordered table w-100 table-sm text-center my-3'>"
-                            . "<thead class='text-center'>
-                            <tr>
-                                <th colspan='3'>$prog_code $grd_level</th>
-                            </tr>
-                            <tr>
-                                <th>Student Name</th>
-                                <th>Sex</th>
-                                <th>Grade</th>
-                            </tr>
-                        </thead>";
-                        echo "<tbody>";
-                        foreach ($prog_data['students'] as $record) {
-                            echo "<tr>
-                            <td class='text-start ps-3'>{$record['name']}</td>
-                            <td>{$record['sex']}</td>
-                            <td class='fw-bold'>{$record['fg']}</td>
-                        </tr>";
+                if (!is_null($data)) {
+                    foreach ($data as $grd_level => $val) {
+                        foreach ($val as $prog_code => $prog_data) {
+                            echo "<table class='table-bordered table w-100 table-sm text-center my-3'>"
+                                . "<thead class='text-center'>
+                                <tr>
+                                    <th colspan='3'>$prog_code $grd_level</th>
+                                </tr>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Sex</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>";
+                            echo "<tbody>";
+                            foreach ($prog_data['students'] as $record) {
+                                echo "<tr>
+                                    <td class='text-start ps-3'>{$record['name']}</td>
+                                    <td>{$record['sex']}</td>
+                                    <td class='fw-bold'>{$record['fg']}</td>
+                                </tr>";
+                            }
+                            echo "</tbody></table>";
                         }
-                        echo "</tbody></table>";
                     }
+                } else {
+                    echo "<h4 class='my-5 text-center'>No awardee</h4>";
                 }
                 ?>
                 <div class="row">

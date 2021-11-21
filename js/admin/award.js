@@ -26,6 +26,11 @@ let selection = [];
 function checkAll() {
     $("#ae-table").bootstrapTable('onPost');
 }
+const changeSignatory = () => {
+    let selectedSignatory = $("#id-no-select option:selected");
+    $("[name='signatory']").val(selectedSignatory.attr("data-name"));
+    $("[name='position']").val(selectedSignatory.attr("data-position"));
+}
 $(function () {
     preload('#awards');
 
@@ -34,7 +39,14 @@ $(function () {
             theme: "bootstrap-5",
             width: null
         });
+        /** Populate signatory forms */
+        changeSignatory();
+
+        $(document).on("change", " #id-no-select", function() {
+            changeSignatory()
+        });
     } catch (e) {}
+
 
     try {
         // $("#ae-table").bootstrapTable('hideColumn', "input");

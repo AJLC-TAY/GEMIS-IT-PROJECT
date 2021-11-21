@@ -44,7 +44,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <div class="col-md-5">
             <h2 class="fw-bold"><?php echo $sect_name; ?></h2>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 d-flex justify-content-lg-end">
             <button data-code='<?php echo $sect_code; ?>' class='btn btn-dark edit-sub-class m-1' title='Subject classes'><i class='bi bi-pencil-square me-2'></i>Subject Class</button>
             <button type="button" class="btn btn-secondary m-1"><i class="bi bi-archive me-1"></i>Archive Section</button>
             <a href="section.php?sec_code=<?php echo $sect_code; ?>&action=export" class="btn btn-primary m-1" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</a>
@@ -170,22 +170,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         <span><button id="add-student" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>" class="btn btn-success btn"><i class="bi bi-plus bi-plus-lg me-2"></i>Add Student</button></span>
     </div>
     <div class="card w-100 h-auto bg-light">
+        <form action="">
+            <div class="d-flex justify-content-between mb-3">
+                <!-- SEARCH BAR -->
+                <span class="flex-grow-1 me-2">
+                    <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
+                </span>
+                <span class="me-2"><button type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
+                <div>
+                    <button id="transfer-btn" class="btn btn-secondary btn-sm" data-section="<?php echo $sect_code; ?>" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>"  title='Transfer student to another section'><i class="bi bi-arrow-left-right me-2"></i>Transfer student</button>
+                </div>
+            </div>
+        </form>
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
-                <div class="d-flex justify-content-between mb-3">
-                    <!-- SEARCH BAR -->
-                    <span class="flex-grow-1 me-2">
-                        <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                    </span>
-                    <div>
-                        <button id="transfer-btn" class="btn btn-secondary btn-sm" data-section="<?php echo $sect_code; ?>" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>"  title='Transfer student to another section'><i class="bi bi-arrow-left-right me-2"></i>Transfer student</button>
-                    </div>
-                </div>
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
-                    <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                    <th scope='col' data-width="500" data-align="center" data-sortable="true" data-field="program">Strand</th>
+                    <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
+                    <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="program">Strand</th>
                     <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
@@ -193,54 +196,35 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     </div>
 </div>
 <!-- STUDENT TABLE END -->
-<!-- SUBJECT CHECK LIST -->
-<!-- <div class="container mt-5">
+<!-- ADVISER HISTORY -->
+<div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h6 class='m-0 fw-bold'>Subject Checklist</h6>
-        </span> -->
-        <!-- <span><button class="btn btn-success btn-sm">Add Student</button></span> -->
-    <!-- </div>
-    <div class="card w-100 h-auto bg-light">
-        <div class="list-group mb-3">
-            <?php
-                // foreach($program_list as $prog) {
-                //     $prog_code = $prog->get_prog_code();
-                //     echo "<label class='list-group-item'>
-                //         <input name='program[]' data-grade-level='$sect_grd_level' class='form-check-input me-2' type='checkbox' value='$prog_code'>
-                //         $prog_code - Grade $sect_grd_level Subjects
-                //     </label>";
-                // }
-            ?>
-        </div>
-        <div>
-            <a id="add-subject-btn" class="link btn w-auto mx-auto" data-bs-toggle='collapse' href='#subject-table-con'><small>Add specific subject</small></a>
-        </div>
-        <div id='subject-table-con' class='collapse mt-3'>
-            <table id="subject-table" class="table-striped table-sm">
-                <thead class='thead-dark'>
-                    <div class="d-flex justify-content-between mb-1"> -->
-                        <!-- SEARCH BAR -->
-                        <!-- <span class="flex-grow-1 me-3">
-                            <input id="search-sub-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
-                        </span>
-                        <span><button class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
-                    </div>
-                    <tr>
-                        <th data-checkbox="true"></th>
-                        <th scope='col' data-width="200" data-align="center" data-field="sub_code">Code</th>
-                        <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
-                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
-                        <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                    </tr>
-                </thead>
-                <tbody>
-    
-                </tbody>
-            </table>
-        </div>
+            <h6 class='m-0 fw-bold'>Adviser History</h6>
+        </span>
     </div>
-</div> -->
+    <div class="card w-100 h-auto bg-light">
+        <form action="">
+            <div class="d-flex justify-content-between mb-3">
+                <!-- SEARCH BAR -->
+                <span class="flex-grow-1 me-3">
+                    <input id="search-adviser-input" type="search" class="form-control form-control-sm" placeholder="Search subject here">
+                </span>
+                <span><button type="reset" class='clear-table-btn btn btn-dark btn-sm shadow-sm'>Clear</button></span>
+            </div>
+        </form>
+        <table data-toggle='table' data-search='true' data-search-selector='#search-adviser-input' data-url="getAction.php?data=sectionAdviserHistory&section_code=<?php echo $sect_code; ?>" id="adviser-table" class="table-striped table-sm">
+            <thead class='thead-dark'>
+                <tr>
+                    <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="date_assignment">Date time of Assignment</th>
+                    <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="faculty">Faculty</th>
+                    <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="semester">Semester</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
 <!-- STUDENT TABLE END -->
 <!-- MODAL -->
 <div class="modal fade" id="transfer-modal" tabindex="-1" aria-labelledby="modal transferStudent" aria-hidden="true">

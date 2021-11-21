@@ -51,12 +51,17 @@ if (isset($_GET['action'])) {
     </div>
     <!-- TOAST END -->
 
+
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 </body>
 
 </html>

@@ -34,23 +34,26 @@ if (mysqli_num_rows($row_temp) == 0) {
                 <?php  } ?>
                 <div class="d-flex justify-content-center form_container">
                     <form action="inc/authenticate.php" method="post" style="width: 320px">
+                        <label for="userID" class="form-label text-secondary"><small>UID</small></label>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" width="16"  fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                    </svg></span>
-                            </div>
-                            <input type="text" name="UName" class="form-control input_user" placeholder="Enter User ID" value="30201012">
+<!--                            <div class="input-group-prepend">-->
+<!--                                <span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" width="16"  fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">-->
+<!--                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />-->
+<!--                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />-->
+<!--                                    </svg></span>-->
+<!--                            </div>-->
+                            <input id="userID" type="text" name="UName" class="form-control input_user" placeholder="Enter User ID" value="30201012">
                         </div>
+                        <label for="password" class="form-label text-secondary"><small>Password</small></label>
                         <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" width="16"  fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                                        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                    </svg></span>
-                            </div>
-                            <input type="password" name="Password" class="form-control input_pass" placeholder="Enter Password" value="FELICIANO12">
+<!--                            <div class="input-group-prepend">-->
+<!--                                <span class="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg" width="16"  fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">-->
+<!--                                        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />-->
+<!--                                    </svg></span>-->
+<!--                            </div>-->
+                            <input id="password" type="password" name="Password" class="form-control input_pass" placeholder="Enter Password" value="FELICIANO12">
                         </div>
+
 
                         <div class="d-flex justify-content-center mt-3 login_container">
                             <input type="submit" name="loginBtn" class="btn login_btn" value="Login">

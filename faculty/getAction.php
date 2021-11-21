@@ -23,5 +23,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'for-promotion') {
 if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
     $faculty->getSubjectSchedule();
 }
-
+if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
+    $faculty->listEnrollmentData(TRUE);
+}
 ?>

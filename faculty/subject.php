@@ -7,7 +7,7 @@ $faculty = new FacultyModule();
 $id = $_SESSION['id'];
 $sy_id = $_SESSION['sy_id'];
 $teacher_id = (int) $_SESSION['id'];
-$sub_classes = $faculty->getHandled_sub_classes($id);
+$sub_classes = $faculty->get_handled_sub_classes($id);
 $adv_opn = '';
 $sub_class_opn = '';
 $adv_table_display = 'd-none';
@@ -128,7 +128,6 @@ if (count($sub_classes) != 0) {
     <script>
         var currentGrading = '<?php echo $grading; ?>'
     </script>
-    <script type='module' src='../js/faculty/class-grade.js'></script>
     <?php echo $jsFilePath; ?>;
 </body>
 

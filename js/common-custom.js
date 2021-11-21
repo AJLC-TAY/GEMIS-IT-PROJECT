@@ -9,8 +9,9 @@ function preload(menuItem, subMenuItem = null) {
         return $(menuItem).click();
     }
     mainMenuItem = $(`${menuItem} a:first`);
-    mainSubMenuItem = $(`${subMenuItem}`);
     mainMenuItem.addClass('active');
+    mainMenuItem.click();
+    mainSubMenuItem = $(subMenuItem);
     mainSubMenuItem.addClass('active-sub');
 }
 

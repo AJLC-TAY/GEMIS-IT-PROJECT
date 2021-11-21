@@ -57,7 +57,7 @@ if (isset($_SESSION['sy_id'])) {
                 echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
             }
             ?>
-            <li class="mt">
+            <li class="mx-0">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
                     <span>Home</span>
@@ -82,7 +82,7 @@ if (isset($_SESSION['sy_id'])) {
                 </ul>
             </li>
             <?php echo $enroll_menu_item; ?>
-            <li id="student" class="sub-menu">
+            <li id="student" class="sub-menu mx-0">
                 <a  href="student.php">
                     <i class="fa fa-book"></i>
                     <span>Student</span>
@@ -101,7 +101,7 @@ if (isset($_SESSION['sy_id'])) {
                     <span>Signatory Management</span>
                 </a>
             </li>
-            <li class="sub-menu">
+            <li class="sub-menu mx-0">
                 <a id='system-logs' href="systemLogs.php">
                     <i class="fa fa-list"></i>
                     <span>System Logs</span>

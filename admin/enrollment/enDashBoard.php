@@ -2,7 +2,9 @@
 $enroll_status = "";
 $deactivate_modal = "";
 $enroll_setup = "";
-if ($_SESSION['user_type'] === "AD") {
+$enroll_report = "";
+if ($_SESSION['user_type'] == "AD") {
+    $enroll_report = "<a href='enrollment.php?page=generateReport' class='btn btn-secondary button col me-3'><i class='bi bi-file-earmark-text-fill fa-3x'></i><br>Generate Report</a>";
     $enroll_status = "<div class='toggle d-flex flex-row-reverse align-items-center'>
             <label class='switch ms-3'>
                 <input name='enrollment' type='checkbox' " . $_SESSION['enroll_status'] == 0 ? '' : 'checked' . ">
@@ -35,9 +37,7 @@ if ($_SESSION['user_type'] === "AD") {
                         </div>";
     $enroll_setup = "<a href='enrollment.php?page=setup' class='btn btn-secondary button col me-3'><i class='bi bi-gear-wide-connected fa-3x'></i><br>Enrollment Setup</a>";
 }
-
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -47,56 +47,66 @@ if ($_SESSION['user_type'] === "AD") {
             <li class="breadcrumb-item active">Enrollment</li>
         </ol>
     </nav>
+
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Enrollment</h3>
-        <form id="enroll-form" action="action.php" method="post">
-            <input type="hidden" name="action" value="editEnrollStatus">
-            <?php echo $enroll_status; ?>
-        </form>
+        <?php if ($_SESSION['user_type'] == 'AD') { ?>
+        <div class='d-flex'>
+            <div class='form-check form-switch'>
+                <input name='enrollment' type='checkbox' class='form-check-input mt-2 me-3' <?php echo $_SESSION['enroll_status'] == 0 ? '' : 'checked' ; ?>>
+                <label for='auto-refresh' class='form-check-label'><h5 class="mb-0">Accept Enrollees</h5></label>
+            </div>
+        </div>
+        <?php } ?>
     </div>
 </header>
-<section class="row">
-    <div class="d-inline-flex align-items-center">
-        <!-- <div class="col-auto "> -->
-        <button class="me-3 btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
-        <!-- </div> -->
-        <!-- <div class="col-auto"> -->
-        <div class="form-check form-switch">
-            <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
-            <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
-        </div>
-        <!-- </div>     -->
-    </div>
-    <div class="col-lg-4">
-        <div class="card-box bg-warning">
-            <div class="inner">
-                <h4>Pending</h4>
-                <h2 id="pending"></h2>
-            </div>
-            <div class="en-icon">
-                <i class="bi bi-clock"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card-box bg-default">
-            <div class="inner">
-                <h4>Enrolled</h4>
-                <h2 id='enrolled'></h2>
-            </div>
-            <div class="en-icon">
-                <i class="bi bi-clipboard-check"></i>
-            </div>
 
+<section class="border border-2 p-2 pt-3 mb-3">
+    <div class="container">
+        <div class="row justify-content-end">
+             <div class="col-auto">
+                <button class="btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
+             </div>
+             <div class="col-auto pt-2">
+                <div class="form-check form-switch">
+                    <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
+                    <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
+                </div>
+             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="card-box bg-danger">
-            <div class="inner">
-                <h4>Rejected</h4>
-                <h2 id="rejected"></h2>
-                <div class="en-icon">
-                    <i class="bi bi-clipboard-x"></i>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card-box bg-warning">
+                    <div class="inner">
+                        <h4>Pending</h4>
+                        <h2 id="pending"></h2>
+                    </div>
+                    <div class="en-icon">
+                        <i class="bi bi-clock"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-box bg-default">
+                    <div class="inner">
+                        <h4>Enrolled</h4>
+                        <h2 id='enrolled'></h2>
+                    </div>
+                    <div class="en-icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card-box bg-danger">
+                    <div class="inner">
+                        <h4>Rejected</h4>
+                        <h2 id="rejected"></h2>
+                        <div class="en-icon">
+                            <i class="bi bi-clipboard-x"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,8 +119,10 @@ if ($_SESSION['user_type'] === "AD") {
     <div class="col-lg-12 ms-2">
         <div class="row">
             <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-3x"></i><br>View Enrollment List</a>
-            <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-3x"></i><br>Generate Report</a>
-            <?php echo $enroll_setup; ?>
+            <?php
+            echo $enroll_report;
+            echo $enroll_setup;
+            ?>
             <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-3x"><br></i>Enrollment Form</a>
         </div>
     </div>

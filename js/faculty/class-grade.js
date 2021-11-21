@@ -53,9 +53,7 @@ var saveMsg = "Saved grades are editable within the duration of the current quar
 var stat = document.getElementById("label").innerText == "submit?"? "1": "0";
 
 $(function() {
-    
-    
-    preload('#grade');
+    preload('#subject');
     
     $("#classes").select2({
         theme: "bootstrap-5",

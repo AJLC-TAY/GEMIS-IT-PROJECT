@@ -73,7 +73,7 @@ class FacultyModule extends Dbconfig
     public function getClasses()
     {
         $advisory = $this->getAdvisoryClass($_SESSION['sy_id']);
-        $subjects = $this->getHandled_sub_classes($_SESSION['id']);
+        $subjects = $this->get_handled_sub_classes($_SESSION['id']);
 
         return ['advisory' => $advisory, 'sub_class' => $subjects];
     }

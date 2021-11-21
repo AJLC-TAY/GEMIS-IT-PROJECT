@@ -6,7 +6,8 @@ $filename = "Other_awards_$school_year";
 $date_desc = date("F j, Y");
 $date = strftime('%Y-%m-%d', strtotime(date("F j, Y")));
 $signatory_list = $admin->listSignatory();
-$url = "getAction.php?data=otherAwards";
+$url = "getAction.php?data=otherAwards&sub_code={$_POST['sub_code']}&filter={$_POST['filter']}";
+$report_title = $_POST['sub_code'];
 ?>
 
 <!-- HEADER -->
@@ -21,13 +22,13 @@ $url = "getAction.php?data=otherAwards";
     </nav>
     <div class="d-flex justify-content-between">
         <span>
-            <h3><b><?php echo $_POST['report-title'] ?></b></h3>
+            <h3><b>Other Award</b></h3>
             <p class='text-secondary'><?php echo $school_year; ?></p>
         </span>
     </div>
 </header>
 <div class="container">
-    <form id='subject-award-form' method='POST' action='awardReport.php?type=re'>
+    <form id='subject-award-form' method='POST' action='awardReport.php?type=ga'>
         <div class="row">
             <div class="col-lg-8">
                 <div class="card bg-white p-3 mb-3" style="min-height: 490px;">
@@ -52,7 +53,7 @@ $url = "getAction.php?data=otherAwards";
                         <!-- GENERAL REPORT INFO  -->
                         <div class="row align-items-center mt-3 mb-3">
                             <label class="form-label px-0">Report Title</label>
-                            <input name='report-title' class='form-control form-control-sm mb-0 me-3' value ='<?php echo $_POST['report-title']; ?> Award'>
+                            <input name='report-title' class='form-control form-control-sm mb-0 me-3' value ='AWARD FOR <?php echo $report_title; ?>'>
                         </div>
                         <div class="row align-items-center mb-3">
                             <label class="form-label px-0">School Year</label>
@@ -64,6 +65,8 @@ $url = "getAction.php?data=otherAwards";
                         </div>
                         <div class="row align-items-center mb-3">
                             <label class="form-label px-0">Signatory</label>
+                            <input type="hidden" name="signatory">
+                            <input type="hidden" name="position">
                             <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
                                 <option>Search user</option>
                                 <?php
@@ -75,7 +78,7 @@ $url = "getAction.php?data=otherAwards";
                             </select>
                         </div>
                         <div class="row align-items-center mb-3">
-                            <button type="submit" form="perfect-attendance-form" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-text me-2"></i>Generate</button>
+                            <button type="submit" form="subject-award-form" class="btn btn-sm btn-success"><i class="bi bi-file-earmark-text me-2"></i>Generate</button>
                         </div>
                     </div>
                 </div>

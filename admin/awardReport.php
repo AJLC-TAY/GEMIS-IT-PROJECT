@@ -33,8 +33,7 @@ include_once("../inc/head.html"); ?>
                                 case 'ca': # ca for conduct award
                                     require_once("award/conduct.php");
                                     break;
-                                case "re":
-                                case "im":
+                                case "ga":
                                     require_once ("award/awardGeneric.php");
                                     break;
                             }

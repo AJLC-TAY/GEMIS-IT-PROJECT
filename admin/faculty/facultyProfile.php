@@ -79,6 +79,7 @@ $birthdate = $school_user->get_birthdate();
 $birthdate = date("F j, Y", strtotime($birthdate));
 $name = $school_user->get_name();
 $uid = $school_user->get_user_no();
+$handledSection = $school_user->get_handled_section();
 ?>
 <!-- HEADER -->
 <header>
@@ -570,6 +571,7 @@ $assigned_sub_classes = $school_user->get_handled_sub_classes();
     let roles = <?php echo json_encode($roles); ?>;
     let deptExist = <?php echo json_encode($dept_exist); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;
+    let handledSection = <?php echo json_encode($handledSection); ?>;
     let assigned = <?php echo json_encode($assigned_sub); ?>;
     let subjectClasses = <?php echo json_encode($sub_classes); ?>;
     let assignedSubClasses = <?php echo json_encode($assigned_sub_classes); ?>;

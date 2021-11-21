@@ -445,7 +445,7 @@ trait FacultySharedMethods
         $email = trim($_POST['email']);
 
         // School information
-        $department = trim($_POST['department']) ?: NULL;
+        $department = $_POST['department'] ?? NULL;
 
         $params = [
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
@@ -459,7 +459,7 @@ trait FacultySharedMethods
                 $types .= "iiss"; // data types of the current parameters
                 break;
             case "FA":
-                $params = array_merge($params + [$cp_no]);
+                $params = array_merge($params, [$cp_no]);
                 $types .= "s";
                 break;
         }
@@ -533,7 +533,8 @@ trait FacultySharedMethods
 
         // Step 3
         $teacher_id = $row['teacher_id'];
-        $handled_sub_classes = $this->getHandled_sub_classes($teacher_id);
+        $handled_sub_classes = $this->get_handled_sub_classes($teacher_id);
+        $handled_section = $this->get_handled_sections($teacher_id);
         // Step 4
         $faculty = new Faculty(
             $row['teacher_user_no'],
@@ -555,6 +556,7 @@ trait FacultySharedMethods
         );
 
         $faculty->set_handled_sub_classes($handled_sub_classes);
+        $faculty->set_handled_section($handled_section);
         return $faculty;
     }
 
@@ -677,7 +679,7 @@ trait FacultySharedMethods
      * @param mixed $teacher_id
      * @return array
      */
-    public function getHandled_sub_classes($teacher_id = NULL): array
+    public function get_handled_sub_classes($teacher_id = NULL): array
     {
         if(empty($_SESSION)) {
             session_start();
@@ -716,6 +718,12 @@ trait FacultySharedMethods
             );
         }
         return $handled_sub_classes;
+    }
+
+    public function get_handled_sections ()
+    {
+        $data = [];
+        $result = $this->query("SELECT * FROM ");
     }
 
     public function listAttendance($is_JSON = FALSE)
@@ -1749,12 +1757,13 @@ trait Grade
         $high_max = $_GET['high_max'];
         $with_min = $_GET['with_min'];
         $with_max = $_GET['with_max'];
+        $gen_ave = $_GET['semester'] == 1 ? "first_gen_ave" : "second_gen_ave";
         $query = "SELECT report_id, stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name,'')) AS name, sex, "
-            . "curr_code AS curriculum, prog_code AS program, general_average, CASE WHEN (general_average >= '$with_min' AND general_average <= '$with_max') THEN 'with' "
-            . "WHEN (general_average >= '$high_min' AND general_average <= '{$high_max}') THEN 'high' WHEN (general_average >= '{$highest_min}' AND general_average <= '{$highest_max}') "
-            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE general_average >= '{$with_min}' "
+            . "curr_code AS curriculum, prog_code AS program, $gen_ave AS ga, CASE WHEN ($gen_ave >= '$with_min' AND $gen_ave <= '$with_max') THEN 'with' "
+            . "WHEN ($gen_ave >= '$high_min' AND $gen_ave <= '$high_max') THEN 'high' WHEN ($gen_ave >= '$highest_min' AND $gen_ave  <= '$highest_max') "
+            . "THEN 'highest' END AS remark FROM gradereport JOIN student USING (stud_id) LEFT JOIN enrollment e USING (stud_id) WHERE $gen_ave  >= '$with_min' "
             . "AND enrolled_in = '$grade' AND e.sy_id = '$sy_id' "
-            . "ORDER BY program DESC, general_average DESC;";
+            . "ORDER BY program DESC, $gen_ave  DESC;";
         $result = $this->query($query);
         $excellence = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1762,7 +1771,7 @@ trait Grade
             $name = $row['name'];
             $curriculum = $row['curriculum'];
             $program = $row['program'];
-            $ga = $row['general_average'];
+            $ga = $row['ga'];
             $remark = ucwords($row['remark'] . ' Honors');
             $sex = ucwords($row['sex']);
             $excellence[] = [
@@ -1799,11 +1808,11 @@ trait Grade
     public function getAwardDataFromSubject()
     {
         session_start();
-        $grd_param = $_POST['filter'];
-        $sub_code = $_POST['sub_code'];
+        $grd_param = $_GET['filter'];
+        $sub_code = $_GET['sub_code'];
         $sy_id = $_SESSION['sy_id'];
         $data = [];
-        $query = "SELECT gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, enrolled_in AS grd
+        $query = "SELECT LRN, gr.report_id, gr.stud_id, CONCAT(last_name,', ',first_name,' ',COALESCE(LEFT(middle_name,1),''),' ', COALESCE(ext_name,'')) AS name, sex, prog_code AS program, final_grade, enrolled_in AS grd
                     FROM gradereport gr JOIN student s ON gr.stud_id = s.stud_id 
                     LEFT JOIN enrollment e ON  e.stud_id = s.stud_id 
                     JOIN classgrade cg ON cg.report_id = gr.report_id 
@@ -1811,20 +1820,21 @@ trait Grade
                     ORDER BY program DESC, final_grade DESC;";
         $result = $this->query($query);
         while ($row = mysqli_fetch_assoc($result)) {
-//            $data[$row['grd']][$row['program']]['students'][] = ['id' => $row['stud_id'], 'name' => $row['name'], 'fg' => $row['final_grade'], 'sex' => ucwords($row['sex'])];
             $stud_id = $row['stud_id'];
             $program = $row['program'];
             $grade = $row['final_grade'];
+            $grade_level = $row['grd'];
             $lrn = $row['LRN'];
             $sex = ucwords($row['sex']);
             $name = $row['name'];
             $data[] = [
-                'id' => $stud_id,
-                'name' => $name . "<input type='hidden' name='data[$grade][$program][students][$stud_id][name]' value='$name'>
-                            <input type='hidden' name='data[$grade][$program][students][$stud_id][lrn]' value='$lrn'>
-                            <input type='hidden' name='data[$grade][$program][students][$stud_id][program]' value='$program'>
-                            <input type='hidden' name='data[$grade][$program][students][$stud_id][sex]' value='$sex'>
-                            <input type='hidden' name='data[$grade][$program][students][$stud_id][grade]' value='$grade'>",
+                'lrn' => $lrn,
+                'name' => $name . "<input type='hidden' name='data[$grade_level][$program][students][$stud_id][name]' value='$name'>
+                            <input type='hidden' name='data[$grade_level][$program][students][$stud_id][lrn]' value='$lrn'>
+                            <input type='hidden' name='data[$grade_level][$program][students][$stud_id][program]' value='$program'>
+                            <input type='hidden' name='data[$grade_level][$program][students][$stud_id][sex]' value='$sex'>
+                            <input type='hidden' name='data[$grade_level][$program][students][$stud_id][grade]' value='$grade_level'>,
+                            <input type='hidden' name='data[$grade_level][$program][students][$stud_id][fg]' value='$grade'>",
                 'program' => $program,
                 'fg' => $grade,
                 'sex' => $sex,
