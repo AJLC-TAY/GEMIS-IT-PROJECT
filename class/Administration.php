@@ -172,6 +172,54 @@ class Administration extends Dbconfig
         echo json_encode($this->listAdministrators());
     }
     /*** School Year Methods */
+    public function getSystemLogs()
+    {
+      session_start();
+      $limit = $_GET['limit'];
+      $offset = $_GET['offset'];
+//      $query = "SELECT * FROM historylogs WHERE sy_id = {$_SESSION['sy_id']} ";
+      $query = "SELECT * FROM historylogs ";
+
+
+      $search_query = "";
+      if (strlen(trim($_GET['search'])) > 0) {
+          $text = $_GET['search'];
+          $search_query .= " WHERE (log_Id LIKE \"%$text%\"";
+          $search_query .= " OR id_no LIKE \"%$text%\"";
+          $search_query .= " OR user_type LIKE \"%$text%\"";
+          $search_query .= " OR action LIKE \"%$text%\"";
+          $search_query .= " OR datetime LIKE \"%$text%\")";
+      }
+
+
+      $query .= $search_query;
+    if (isset($_GET['sort'])) {
+        $query .= " ORDER BY datetime ";
+    }
+      $result = $this->query($query);
+      $num_rows_not_filtered = $result->num_rows;
+
+      $query .= " LIMIT $limit";
+      $query .= " OFFSET $offset";
+    //         echo $query;
+      $result = $this->query($query);
+      $records = array();
+
+      while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+          $records[] = [
+              'log_id' => $row['log_id'],
+              'id_no' => $row['id_no'],
+              'user_type' => $row['user_type'],
+              'action' => $row['action'],
+              'datetime' => $row['datetime']
+          ];
+      }
+      $output = new stdClass();
+      $output->total = $num_rows_not_filtered;
+      $output->totalNotFiltered = $num_rows_not_filtered;
+      $output->rows = $records;
+      echo json_encode($output);
+    }
     public function getInitSYData()
     {
         # curriculum
@@ -253,7 +301,7 @@ class Administration extends Dbconfig
         # Step 1
         $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, can_enroll) "
             . "VALUES (?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiii");
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $enrollment], "iiii");
 
         $sy_id = mysqli_insert_id($this->db);
 
@@ -292,15 +340,21 @@ class Administration extends Dbconfig
         # Step 3
         // insert subjects offered in the sysub
         ## Core subjects
-        $core_subjects = $_POST['subjects']['core'];
-        foreach ($core_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+        $core_subjects = [];
+        if (isset($_POST['subjects']['core'])) {
+            $core_subjects = $_POST['subjects']['core'];
+            foreach ($core_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'core');
+            }
         }
 
         ## Specialized and Applied subjects
-        $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
-        foreach ($spap_subjects as $sub_code) {
-            $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+        $spap_subjects = [];
+        if (isset($_POST['subjects']['spap'])) {
+            $spap_subjects = $_POST['subjects']['spap']; // spap (specialized + applied)
+            foreach ($spap_subjects as $sub_code) {
+                $this->addSubjectSchoolYear($sy_id, $sub_code, 'applied');
+            }
         }
 
         if ( isset($_POST['schedule']) && $_POST['schedule'] === 'copy') {
@@ -1061,6 +1115,28 @@ class Administration extends Dbconfig
         // header("Location: enrollment.php");
     }
     /*** Curriculum Methods */
+    public function checkCodeUnique()
+    {
+        $type = $_GET['type'];
+        $table_condition = "$type";
+        $code = '';
+        switch ($type) {
+            case "curriculum":
+                $code = $_POST['code'];
+                $table_condition .= " WHERE curr_code = '$code';";
+                break;
+            case "program":
+                $code = $_POST['prog-code'];
+                $table_condition .= " WHERE prog_code = '$code';";
+                break;
+            case "subject":
+                $table_condition .= " WHERE sub_code = '$code';";
+                break;
+        }
+        $row = mysqli_fetch_row($this->query("SELECT CASE WHEN COUNT(*) > 0 THEN 'false' ELSE 'true' END AS is_unique FROM $table_condition; "))[0];
+        echo $row;
+    }
+
     public function listCurriculumJSON()
     {
         echo json_encode([
@@ -1083,19 +1159,8 @@ class Administration extends Dbconfig
         $code = $_POST['code'];
         $name = $_POST['name'];
         $desc = $_POST['curriculum-desc'];
-        // start of validation
-        $result = $this->query("SELECT * FROM curriculum WHERE curr_code = '$code';");
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-                die('Curriculum already exists');
-            } else {
-                # curriculum is valid
-                $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
-                $this->listCurriculumJSON();
-            }
-        } else {
-            die('Error: ' . mysqli_error($this->db));
-        }
+        $this->prepared_query("INSERT INTO curriculum (curr_code, curr_name, curr_desc) VALUES (?, ?, ?)", [$code, $name, $desc]);
+        $this->listCurriculumJSON();
     }
 
     public function deleteCurriculum()
@@ -1179,7 +1244,7 @@ class Administration extends Dbconfig
     {
         session_start();
         $sy_id = $_SESSION['sy_id'] ?? NULL;
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $currCode = $_POST['curr-code'];
         $description = $_POST['desc'];
         // start of validation
@@ -1213,7 +1278,7 @@ class Administration extends Dbconfig
 
     public function updateProgram()
     {
-        $code = $_POST['code'];
+        $code = $_POST['prog-code'];
         $prog_description = $_POST['name'];
         $old_code = $_POST['current_code'];
 

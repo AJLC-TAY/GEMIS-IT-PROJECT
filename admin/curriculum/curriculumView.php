@@ -138,23 +138,26 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="prog-form" method="POST" action="action.php">
+                <form id="program-form" method="POST" action="action.php">
                     <input type="hidden" name="action" id="action" value="addProgram" />
                     <p><small class='text-secondary'>Please complete the following: </small></p>
-                    <div class="form-group needs-validation" novalidate>
+                    <div class="form-group  mb-2 needs-validation" novalidate>
                         <label for="prog-code">Strand Code</label>
-                        <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. STEM" required>
-                        <p class="unique-error-msg text-danger m-0 invisible"><small>Please provide a unique strand code</small></p>
+                        <input id="prog-code" type="text" name="prog-code" class='form-control  form-control-sm' placeholder="Enter unique code here. ex. STEM" required>
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="prog-name">Strand Name</label>
-                        <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                        <input id="prog-name" type="text" name="desc" class='form-control form-control-sm' placeholder="ex. Science, Technology, Engineering, and Math" required>
+                    </div>
+                    <div class="form-group mb-2">
                         <label for="prog-curr">Curriculum</label>
-                        <input type="text" class='form-control' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
+                        <input type="text" class='form-control form-control-sm' name="curr-code" value="<?php echo ($curr_code); ?>" readonly>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button type="submit" name="submit-prog" form="prog-form" class="submit btn btn-primary">Add</button>
+                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" name="submit-prog" form="program-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-2"></i>Add</button>
             </div>
         </div>
     </div>
@@ -163,5 +166,3 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 <script type="text/javascript">
     var code = <?php echo json_encode($curr_code); ?>;
 </script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="../js/admin/curriculum.js"></script>

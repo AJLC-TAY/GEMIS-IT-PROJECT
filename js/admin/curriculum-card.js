@@ -24,27 +24,62 @@ let prepareArchiveHTML = archivedData => {
 };
 setup('curriculum', curricula, prepareHTML, prepareArchiveHTML);
 reload();
-
 // custom script
 $(function() {
-    // $('#curriculum-form').submit(function(e) {
-    //     e.preventDefault();
-    //     showSpinner();
-    //     var form = $(this);
-    //     var formData = $(this).serialize();
-    //     $.post("action.php", formData, function(data) {
-    //         form.trigger('reset');
-    //         addModal.modal('hide');
-    //         console.log("New data: \n");
-    //         console.log(data);
-    //         reload(JSON.parse(data));
-    //         hideSpinner();
-    //         $(".no-result-msg").hide();
-    //         showToast('success', 'Curriculum successfully added');
-    //     }).fail(function () {
+    /** Track Form */
+    $("#curriculum-form").validate({
+        rules: {
+            code: {
+                alphanumeric: true,
+                noSpace: true,
+                required: true,
+                remote: {
+                    url: "getAction.php?data=checkCodeUnique&type=curriculum",
+                    type: "post",
+                    data: {
+                        code: function() {
+                            return $("[name='code']").val();
+                        }
+                    }
+                }
+            },
+            name: {
+                required: true
+            }
+        },
+        messages: {
+            code: {
+                alphanumeric: '<p class="text-danger user-select-none">Letters, numbers, and underscores only please</p>',
+                noSpace: '<p class="text-danger user-select-none">Code should not have a space!</p>',
+                required: '<p class="text-danger user-select-none">Please enter curriculum code!</p>',
+                remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
+            },
+            name: {
+                required: '<p class="text-danger user-select-none">Please enter curriculum name!</p>'
+            }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: "action.php",
+                type: "post",
+                processData: false,
+                contentType: false,
+                data: new FormData(form),
+                success: function (data) {
+                    $(form).trigger('reset');
+                    addModal.modal('hide');
+                    console.log("New data: \n");
+                    console.log(data);
+                    reload(JSON.parse(data));
+                    hideSpinner();
+                    $(".no-result-msg").hide();
+                    showToast('success', 'Curriculum successfully added');
+                }
+            });
+            return false;  //This doesn't prevent the form from submitting.
+        }
+    });
 
-    //     });
-    // });
     eventDelegations();
     hideSpinner();
 });

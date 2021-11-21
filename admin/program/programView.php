@@ -1,4 +1,4 @@
-<?php include_once("../inc/head.html");
+<?php
 require_once('../class/Administration.php');
 $admin = new Administration();
 $program = $admin->getProgram();
@@ -8,6 +8,7 @@ $prog_curr_code = $program->get_curr_code();
 $state = "disabled";
 $edit_btn_state = "";
 $display = "d-none";
+$edit_btn_display = '';
 if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     $state = '';
     $edit_btn_state = "disabled";
@@ -56,7 +57,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
                 <div class="col-xl-10 col-lg-9">
                     <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
-                    <?php echo "<input class='form-input form-control' type='text' name='code' value='$prog_code' $state required> 
+                    <?php echo "<input class='form-input form-control' type='text' name='prog-code' value='$prog_code' $state required> 
                                                 <div class='invalid-feedback'>
                                                     Please enter current code
                                                 </div>"; ?>

@@ -5,6 +5,7 @@ include_once("../inc/head.html");
 
 <title>Home | GEMIS</title>
 </head>
+
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -13,7 +14,7 @@ include_once("../inc/head.html");
         </div>
     </div>
     <!-- SPINNER END -->
-    <section id="container">
+    <section id="container-fluid">
         <?php include_once('../inc/facultySidebar.php'); ?>
         <!--main content start-->
         <section id="main-content">
@@ -46,7 +47,7 @@ include_once("../inc/head.html");
                                     </div>
                                 </div>
                             </header>
-                            <div class="container mb-2">
+                            <div class="container-fluid mb-2">
                                 <!-- OVERVIEW -->
                                 <section class="row">
                                     <h4 class="fw-bold">OVERVIEW</h4>
@@ -90,7 +91,7 @@ include_once("../inc/head.html");
                             </div>
                             <!-- CLASSES -->
                             <div class="container mb-3">
-                                <section class="row">
+                                <div class="row">
                                     <h5 class="fw-bold">ASSIGNED CLASSES</h5>
                                     <div class="col-lg-4">
                                         <div class="card-box bg-default">
@@ -122,7 +123,7 @@ include_once("../inc/head.html");
                                             <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                </section>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -135,7 +136,7 @@ include_once("../inc/head.html");
     </section>
     <script src="../js/common-custom.js"></script>
     <script>
-        $(function () {
+        $(function() {
             preload("#home");
             hideSpinner();
         });
