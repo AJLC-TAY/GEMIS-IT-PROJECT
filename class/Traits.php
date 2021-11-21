@@ -729,13 +729,13 @@ trait FacultySharedMethods
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
-            $addon = $row['status'] == 0?:"disabled";
+            $addon = $row['status'] == 0?"final":"disabled";
             $attendance[] = [
                 'stud_id' => $row['stud_id'],
                 'name'    => $row['name'],
-                'present_e' => "<input name='data[{$attend_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['present']}'>",
-                'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['absent']}'>",
-                'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['tardy']}'>",
+                'present_e' => "<input name='data[{$attend_id}][present]' class='form-control form-control-sm text-center mb-0 number $addon' readonly value='{$row['present']}'>",
+                'absent_e'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number $addon' readonly value='{$row['absent']}'>",
+                'tardy_e'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number $addon' readonly value='{$row['tardy']}'>",
                 'action'    => "<div class='d-flex justify-content-center'>
                                    <button class='btn btn-sm btn-secondary edit-spec-btn action' data-type='edit' $addon>Edit</button>
                                    <div class='edit-spec-options' style='display: none;'>
@@ -757,10 +757,15 @@ trait FacultySharedMethods
     public function changeAttendance()
     {
         foreach ($_POST['data'] as $id => $value) { // $id = report_id
+        //        print_r($result);
+        //        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+         $stat =  mysqli_fetch_row($this->query("SELECT status FROM attendance WHERE attendance_id = $id;"))[0];
+
+         $stat = $stat == 1?$stat:$_POST['stat'];
             $this->prepared_query(
-                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=?, status = {$_POST['stat']} WHERE attendance_id = ?;",
-                [$value['present'], $value['absent'], $value['tardy'], $id],
-                "iiii"
+                "UPDATE attendance SET no_of_present=?, no_of_absent=?, no_of_tardy=?, status = ? WHERE attendance_id = ?;",
+                [$value['present'], $value['absent'], $value['tardy'], $stat, $id],
+                "iiiii"
             );
         }
     }

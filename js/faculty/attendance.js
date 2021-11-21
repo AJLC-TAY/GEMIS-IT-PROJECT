@@ -46,6 +46,38 @@ function saveRow(row) {
     showToast("success", "Successful!");
 }
 
+function saveAll(){
+    // e.preventDefault();
+        showSpinner();
+        let formData = new FormData($("#attendance-form")[0]);
+        formData.append('stat', stat);            
+        console.log(...formData);
+        $.ajax({
+            url: "action.php",
+            method: "POST",
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: () => {
+                
+                // show main edit button & hide main edit options
+                $(".edit-btn").toggle(true);
+                $(".edit-options").toggle(false);
+                // Make specific edit buttons editable & inputs to readonly
+                $(".edit-spec-btn").prop("disabled", false);
+                $(".number").prop("readonly", true);
+                // empty temporary changes
+                tempChanges = [];
+                // enable month selector
+                toggleDisableMonthSelector(false);
+                $(".attendancerect-confirmation").modal("hide");
+                table.bootstrapTable("refresh");
+                hideSpinner();
+                showToast("success", "Successfully saved");
+            }
+        });
+}
+
 /**
  * Returns the original values temporarily stored in the row inputs and make them not editable
  * @param {Object} row tr object
@@ -89,12 +121,13 @@ function saveConfirmation() {
     console.log("from faculty/attendance.js save clicked");
         if (typeof user !== 'undefined') {
             document.getElementById("label").innerText = "CONFIRMATION";
-            stat = "1";
+            stat = "0";
             document.getElementById("modal-msg").innerText = "Are you sure you want to save?";
         } else {
             document.getElementById("stmt").innerText = "Are you sure you want to ";
             document.getElementById("label").innerText = "save?";
             document.getElementById("modal-msg").innerText = saveMsg;
+            stat = "0";
         }
 
         document.getElementById("confirm").innerText = "Save";
@@ -119,14 +152,20 @@ $(function () {
         showSpinner();
         // hide main edit button & show main edit options
         $(this).toggle(false);
+        document.getElementById("rectification-type").innerText = "multiple";
         $(".edit-options").toggle(true);
+        console.log("entered edit button");
+
         // make all inputs editable
-        $(".number").removeAttr("readonly");
+        $(".final").removeAttr("readonly");
+        console.log("read only removed");
+
         // disabled month selector
         toggleDisableMonthSelector(true);
         // disabled specified edit buttons and options
         $('.edit-spec-btn').toggle(true).prop("disabled", true);
         $('.edit-spec-options').toggle(false);
+        console.log("entered edit button");
         hideSpinner();
     });
 
@@ -168,7 +207,12 @@ $(function () {
     });
 
     $(document).on("click", "#confirm", () => {
-        saveRow(row);
+        if(document.getElementById('rectification-type').innerText == 'multiple'){
+            saveAll();
+        } else{
+            saveRow(row);
+        }
+        
     });
 
     $(document).on("click", ".action", function (e) {

@@ -138,6 +138,7 @@ $url = "getAction.php?data=class_attendance&class=$class&month=$current_month";
     <div id="" class="modal fade attendancerect-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
+                <p class='hidden' id='rectification-type'></p>
                 <div class="modal-header">
                     <div class="modal-title">
                         <h4 class="mb-0"><span id='stmt'></span><span id='label'></span></h4>
