@@ -5,7 +5,7 @@ $roles = $_SESSION['roles'];
 
 $enrollment_item = '';
 if (in_array('can_enroll', $roles)) {
-    $enrollment_item = " <li class='sub-menu'>"
+    $enrollment_item = " <li class='mx-0'>"
                 ."<a id='enrollment' href='enrollment.php'>"
                     ."<i class='fa fa-tasks'></i>"
                     ."<span>Enrollment</span>"
@@ -14,8 +14,8 @@ if (in_array('can_enroll', $roles)) {
 }
 $award_coor_item = '';
 if (in_array('award_coor', $roles)) {
-    $award_coor_item = " <li class='sub-menu'>"
-                ."<a id='awards' href='awards.php'>"
+    $award_coor_item = " <li class='mx-0'>"
+                ."<a id='awards' href='award.php'>"
                     ."<i class='bi bi-award-fill'></i>"
                     ."<span>Awards</span>"
                 ."</a>"
@@ -24,7 +24,6 @@ if (in_array('award_coor', $roles)) {
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
-<!DOCTYPE html>
 <header class="header black-bg">
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right"></div>
@@ -56,42 +55,44 @@ if (in_array('award_coor', $roles)) {
                 echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
             }
             ?>
-            <li class="mt">
+            <li class="mt mx-0">
                 <a id="home" href="index.php">
                     <i class="fa fa-home"></i>
                     <span>Home</span>
                 </a>
             </li>
-            <li>
+            <li class="mx-0">
                 <a id='faculty' href="faculty.php">
                     <i class="bi bi-person-square"></i>
                     <span>Profile</span>
                 </a>
             </li>
-            <li>
+            <li class="mx-0">
                 <a  id="advisory"  href="advisory.php">
                     <i class="fa fa-graduation-cap"></i>
                     <span>Advisory Class</span>
                 </a>
             </li>
-            <li>
+            <li class="mx-0">
                 <a id="subject" href="subject.php">
                     <i class="bi bi-card-list"></i>
                     <span>Subject Class</span>
                 </a>
             </li>
-            <li>
+            <li class="mx-0">
                 <a id="attendance" href="attendance.php">
                     <i class="bi bi-clipboard-check"></i>
                     <span>Attendance</span>
                 </a>
             </li>
-            <?php echo $enrollment_item; ?>
-            <?php echo $award_coor_item; ?>
-            <li>
+            <?php
+            echo $enrollment_item;
+            echo $award_coor_item;
+            ?>
+            <li class="mx-0">
                 <a id='archived' href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
-                    <span>Archived Classes</span>
+                    <span>Previous Classes</span>
                 </a>
             </li>
         </ul>

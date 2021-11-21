@@ -37,8 +37,8 @@ include_once("../inc/head.html"); ?>
                                     $js = '<script type="text/javascript" src="../js/admin/enrollment.js"></script>';
                                 }
                             } else {
-                                require("enrollment/enDashBoard.php");
-                                $js = "<script src='../js/faculty/enrollment.js'></script>";
+                                require("../admin/enrollment/enDashBoard.php");
+                                $js = "<script type='module' src='../js/admin/enrollment-dash.js'></script>";
                             }
                             ?>
                         </div>
@@ -65,6 +65,9 @@ include_once("../inc/head.html"); ?>
     <?php echo $js; ?>
     <!-- VALIDATION -->
     <script>
+        $(function() {
+            preload("#enrollment");
+        })
         var forms = document.querySelectorAll('.needs-validation');
         Array.prototype.slice.call(forms).forEach(function(form) {
             form.addEventListener('submit', function(event) {

@@ -328,10 +328,6 @@ $(function () {
         required: true,
         lettersonly: true
       },
-      // middlename:{
-      //   required: true,
-      //   lettersonly: true
-      // },
       email: {
         required: true,
         email: true
@@ -349,10 +345,6 @@ $(function () {
         required:'<p class="text-danger user-select-none">Please enter first name!</p>',
         lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
       },
-      // middlename:{
-      //   required:'<p class="text-danger user-select-none">Please enter middle name!</p>',
-      //   lettersonly:'<p class="text-danger user-select-none">Please enter letters only!</p>'
-      // },
       email:{
         required:'<p class="text-danger user-select-none">Please enter email!</p>',
         email:'<p class="text-danger user-select-none">Please enter a valid email!</p>'
@@ -388,7 +380,7 @@ $(function () {
       });
       return false;  //This doesn't prevent the form from submitting.
     }
-  })
+  });
   //submit done, for implementation
   $("#student-form").on("submit", function(event) {
     event.preventDefault();

@@ -445,7 +445,7 @@ trait FacultySharedMethods
         $email = trim($_POST['email']);
 
         // School information
-        $department = trim($_POST['department']) ?: NULL;
+        $department = $_POST['department'] ?? NULL;
 
         $params = [
             $lastname, $firstname, $middlename, $extname, $birthdate, $age, $sex, $email
@@ -459,7 +459,7 @@ trait FacultySharedMethods
                 $types .= "iiss"; // data types of the current parameters
                 break;
             case "FA":
-                $params = array_merge($params + [$cp_no]);
+                $params = array_merge($params, [$cp_no]);
                 $types .= "s";
                 break;
         }
@@ -533,7 +533,8 @@ trait FacultySharedMethods
 
         // Step 3
         $teacher_id = $row['teacher_id'];
-        $handled_sub_classes = $this->getHandled_sub_classes($teacher_id);
+        $handled_sub_classes = $this->get_handled_sub_classes($teacher_id);
+        $handled_section = $this->get_handled_sections($teacher_id);
         // Step 4
         $faculty = new Faculty(
             $row['teacher_user_no'],
@@ -555,6 +556,7 @@ trait FacultySharedMethods
         );
 
         $faculty->set_handled_sub_classes($handled_sub_classes);
+        $faculty->set_handled_section($handled_section);
         return $faculty;
     }
 
@@ -677,7 +679,7 @@ trait FacultySharedMethods
      * @param mixed $teacher_id
      * @return array
      */
-    public function getHandled_sub_classes($teacher_id = NULL): array
+    public function get_handled_sub_classes($teacher_id = NULL): array
     {
         if(empty($_SESSION)) {
             session_start();
@@ -715,6 +717,12 @@ trait FacultySharedMethods
             );
         }
         return $handled_sub_classes;
+    }
+
+    public function get_handled_sections ()
+    {
+        $data = [];
+        $result = $this->query("SELECT * FROM ");
     }
 
     public function listAttendance($is_JSON = FALSE)
