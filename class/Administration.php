@@ -191,17 +191,18 @@ class Administration extends Dbconfig
           $search_query .= " OR datetime LIKE \"%$text%\")";
       }
 
-
       $query .= $search_query;
-    if (isset($_GET['sort'])) {
-        $query .= " ORDER BY datetime ";
-    }
+        if (isset($_GET['sort'])) {
+            $query .= " ORDER BY {$_GET['sort']} {$_GET['order']} ";
+        } else {
+            $query .= " ORDER BY datetime DESC";
+        }
       $result = $this->query($query);
       $num_rows_not_filtered = $result->num_rows;
 
       $query .= " LIMIT $limit";
       $query .= " OFFSET $offset";
-    //         echo $query;
+//             echo $query;
       $result = $this->query($query);
       $records = array();
 
@@ -886,6 +887,19 @@ class Administration extends Dbconfig
         echo json_encode($this->listSection($sy_id, $grade_level, $section));
     }
 
+    public function enterAdviserLog($adviser, $section) {
+        $result = $this->query("SELECT teacher_id FROM section WHERE section_code='$section';");
+        if (!is_null($adviser)) {
+            if (mysqli_fetch_row($result)[0] != $adviser) {
+                $this->enterLog((mysqli_num_rows($result) > 0 ? "Updated" : "Assigned"). " adviser of section ID: $section.");
+                $semester = in_array($_SESSION['current_quarter'], [1, 2]) ? "1" : "2";
+                $this->query("INSERT INTO historysection VALUES ('$adviser', '$section', NOW(), '$semester');");
+            }
+        } else {
+            $this->enterLog("Unassigned adviser of section ID: $section.");
+        }
+    }
+
     public function editSection()
     {
         $name = trim($_POST['sect-name']) ?: NULL;
@@ -893,6 +907,7 @@ class Administration extends Dbconfig
         $adviser = $_POST['adviser'] ?: NULL;
         $section = $_POST['section'];
 
+        $this->enterAdviserLog($adviser, $section);
         $this->prepared_query(
             "UPDATE section SET section_name=?, stud_no_max=?, teacher_id=? WHERE section_code=?;",
             [$name, $max_no, $adviser, $section],
@@ -1081,13 +1096,26 @@ class Administration extends Dbconfig
                 }
             }
         }
-
         echo json_encode([
             "programs"      => $programs,
             "recommended"   => $recommended,
-            "currentSubTeacher" => $sub_class_faculty,
+            "currentSubTeacher" => $sub_class_faculty
         ]);
+    }
 
+    public function listSectionAdvisersHistory () {
+        # history advisers
+        $result = $this->query("SELECT CONCAT ('T. ',last_name,', ',first_name,' ',COALESCE(LEFT(middle_name, 1), ''),' ',COALESCE(ext_name,'')) AS teacher, date_assignment, 
+            CASE WHEN semester = 1 THEN 'First' ELSE 'Second' END as semester  FROM `historysection` JOIN faculty USING (teacher_id) WHERE section_code = '{$_GET['section_code']}' ORDER BY date_assignment DESC");
+        $list = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $list[] = [
+                'faculty' => $row['teacher'],
+                'date_assignment' => date_format(date_create($row['date_assignment']), "d F Y, h:i:s A"),
+                'semester' => $row['semester']
+            ];
+        }
+        echo json_encode($list);
     }
 
     public function listSectionStudentJSON()

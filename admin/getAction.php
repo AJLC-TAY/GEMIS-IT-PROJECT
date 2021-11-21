@@ -59,6 +59,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
 if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
     $admin->listFullSectionJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'sectionAdviserHistory') {
+    $admin->listSectionAdvisersHistory();
+}
 
 if (isset($_GET['data']) && $_GET['data'] == 'enrollFilters') {
    $admin->getEnrollFilters();
@@ -78,15 +81,20 @@ if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
 if (isset($_GET['data']) && $_GET['data'] == 'adminCount') {
     $admin->checkAdministratorCount();
 }
+/** AWARDS */
 if (isset($_GET['data']) && $_GET['data'] == 'academicExcellence') {
     $admin->getExcellenceAwardData();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'perfectAttendance') {
     $admin->getPerfectAttendance();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'otherAwards') {
+    $admin->getAwardDataFromSubject();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
     $admin->getSubjectSchedule();
 }
+/** AWARDS END */
 
 if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
     $admin->getStudentAttendanceJSON();

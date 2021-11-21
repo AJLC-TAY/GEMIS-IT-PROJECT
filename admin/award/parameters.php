@@ -1,6 +1,11 @@
 <?php
-//include("../class/Administration.php");
-//$admin = new Administration();
+include("../class/Administration.php");
+$admin = new Administration();
+$result = $admin->query("SELECT sub_code, sub_name FROM sysub JOIN subject USING (sub_code) WHERE sy_id = '{$_SESSION['sy_id']}';");
+$subjects = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $subjects[$row['sub_code']] = $row['sub_name'];
+}
 //$result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest'
 //                        WHEN award_code = 'ae1_highHonors' THEN 'High'
 //                        WHEN award_code = 'ae1_withHonors' THEN 'With' END AS info,
@@ -16,6 +21,8 @@ $param = [
         "High" => ['min' => "95", 'max' => "97"],
         "With" => ['min' => "90", 'max' => "94"],
 ];
+
+//$subjects = $admin->getCurrentSubjects();
 ?>
 <header>
     <!-- BREADCRUMB -->
@@ -34,13 +41,20 @@ $param = [
         <div class="col-lg-8 mb-4">
             <div class="card pt-3 px-3 pb-2">
                 <form id="acad-parameter-form" action="award.php?type=ae" method="post">
-                    <div class="d-flex justify-content-between align-content-center px-0">
-                        <div class="col-auto">
-                            <h5 class="mb-0">Academic Excellence</h5>
+                    <div class="row justify-content-between align-content-center px-0">
+                        <div class="col-md-auto my-1">
+                            <h6 class="mb-0 fw-bold">Academic Excellence</h6>
                         </div>
-                        <div class="row">
-                            <div class="col-auto">
-                                <select required class="form-select form-select-sm mb-0 me-3" name="grade" id="grade">
+                        <div class="col-md-auto d-flex justify-content-lg-end my-1">
+                            <div class="col-auto me-3">
+                                <select required class="form-select form-select-sm mb-0" name="semester" id="semester">
+                                    <option disabled selected value="">Semester</option>
+                                    <option value="1">First</option>
+                                    <option value="2">Second</option>
+                                </select>
+                            </div>
+                            <div class="col-auto me-3">
+                                <select required class="form-select form-select-sm mb-0" name="grade" id="grade">
                                     <option disabled selected value="">Grade Level</option>
                                     <option value="11">11</option>
                                     <option value="12">12</option>
@@ -83,15 +97,28 @@ $param = [
                     <input type="hidden" name="type" value="attendance">
                     <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3"><i class="bi bi-funnel me-2"></i>Generate</button>
                 </form>
-                <hr class="my-4">
-                <h5>Research</h5>
-                <form id="research-form" action="award.php?type=research" method="post">
+                <hr class="my-2">
+                <form id="research-form" action="award.php?type=re" method="post">
+                    <div class="row mb-3">
+                        <div class="col-auto">
+                            <h5>Other awards</h5>
+                        </div>
+                        <div class="col-auto">
+                            <select name="sub_code" class="form-select form-select-sm" id="subject">
+                                <?php
+                                foreach($subjects as $sub_code => $sub_name) {
+                                    echo "<option value='$sub_code'>$sub_name</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                     <input type="hidden" name="action" value="report">
                     <input type="hidden" name="type" value="research">
                     <div class="row">
                         <div class="col-6">Lowest Grade</div>
                         <div class="col-4">
-                            <input value='90' name='award-for-research' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
+                            <input required value='90' name='filter' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
                         </div>
                         <div class="col-2">
                             <button type="submit" form="research-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button>

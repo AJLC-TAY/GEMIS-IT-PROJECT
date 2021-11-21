@@ -1,7 +1,6 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-//$data = $admin->getPerfectAttendance();
 $data = $_POST['data'];
 $school_year = $_SESSION['school_year'];
 $filename = "Perfect_Attendance_$school_year";
@@ -57,33 +56,34 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
             <h6 class="text-center m-0"><b><?php echo $_POST['report-title']; ?></b></h6>
             <h6 class="text-center m-0"><small>SY <?php echo $school_year; ?></small></h6>
             <?php 
-            if (empty($data)) {
-                echo "<h4 class='my-5 text-center'>No students have perfect attendance</h4>";
-            }
-            foreach($data as $grd_level => $val) {
-                foreach($val as $prog_code => $prog_data) {
-                    echo "<table class='table-bordered table w-100 table-sm text-center my-3'>"
-                        ."<thead class='text-center'>
-                            <tr>
-                                <th colspan='3'>$prog_code $grd_level</th>
-                            </tr>
-                            <tr>
-                                <th>LRN</th>
-                                <th>Student Name</th>
-                                <th>Sex</th>
-                            </tr>
-                        </thead>";
-                    echo "<tbody>";
-                    foreach ($prog_data['students'] as $record) {
-                        echo "<tr>
-                            <td>{$record['lrn']}</td>
-                            <td class='text-start ps-3'>{$record['name']}</td>
-                            <td>{$record['sex']}</td>
-                        </tr>";
+            if (!is_null($data)) {
+                foreach ($data as $grd_level => $val) {
+                    foreach ($val as $prog_code => $prog_data) {
+                        echo "<table class='table-bordered table w-100 table-sm text-center my-3'>"
+                            . "<thead class='text-center'>
+                                <tr>
+                                    <th colspan='3'>$prog_code $grd_level</th>
+                                </tr>
+                                <tr>
+                                    <th>LRN</th>
+                                    <th>Student Name</th>
+                                    <th>Sex</th>
+                                </tr>
+                            </thead>";
+                        echo "<tbody>";
+                        foreach ($prog_data['students'] as $record) {
+                            echo "<tr>
+                                <td>{$record['lrn']}</td>
+                                <td class='text-start ps-3'>{$record['name']}</td>
+                                <td>{$record['sex']}</td>
+                            </tr>";
+                        }
+                        echo "</tbody></table>";
+
                     }
-                    echo "</tbody></table>";
-                    
                 }
+            } else {
+                echo "<h4 class='my-5 text-center'>No students have perfect attendance</h4>";
             }
             ?>
             <div class="row">

@@ -11,7 +11,7 @@ $high = $_POST['High-honor'];
 $with = $_POST['With-honor'];
 $grade = $_POST['grade'];
 $signatory_list = $admin->listSignatory();
-$url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&grade=$grade".
+$url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&semester={$_POST['semester']}&grade=$grade".
         "&highest_min={$highest[0]}&highest_max={$highest[1]}&high_min={$high[0]}&high_max={$high[1]}&with_min={$with[0]}&with_max={$with[1]}";
 ?>
 
@@ -76,12 +76,14 @@ $url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&grade=$
                         </div>
                         <div class="row align-items-center mb-3">
                             <label class="form-label px-0">Signatory</label>
+                            <input type="hidden" name="signatory">
+                            <input type="hidden" name="position">
                             <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>
-                                <option>Search user</option>
+                                <option selected>Search user</option>
                                 <?php
                                 foreach($signatory_list as $element) {
                                     // echo "<option ". ($element['id'] == $_SESSION['id'] ? "selected" : "") ." class='signatory' data-name='{$element['name']}' data-position='{$element['position']}' value='{$element['id']}'>{$element['name']} - {$element['position']}</option>";
-                                    echo "<option ". ($element->sign_id == 1 ? "selected" : "") ." class='signatory' data-name='{$element->name}' data-position='{$element->position}' value='{$element->sign_id}'>{$element->name} - {$element->position}</option>";
+                                    echo "<option ". ($element->sign_id == $_SESSION['id']  ? "selected" : "") ." class='signatory' data-name='{$element->name}' data-position='{$element->position}' value='{$element->sign_id}'>{$element->name} - {$element->position}</option>";
                                 }
                                 ?>
                             </select>

@@ -39,7 +39,7 @@ if (!isset($_SESSION['sy_id'])) {
                                     break;
                                 case "re":
                                 case "im":
-                                    require_once ("award/awardGeneric.php");
+                                    require_once ("award/preSubjectAward.php");
                                     break;
                             }
                         } else {
