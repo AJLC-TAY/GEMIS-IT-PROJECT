@@ -54,15 +54,9 @@ export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
 };
 
 export const reload = (data = '') => {
-    console.log("from reload");
     if (data) {
         dataList = data;
     }
-    // showSpinner()
-    // getArchiveAction = `getArchived${camelized}JSON`
-    console.log("Action: ", action);
-    // $.post('action.php', {action}, (response) => {
-    // dataList = JSON.parse(response)
     let addBtn =
         `   <div class='tile card shadow-sm p-0 position-relative'>
                 <a role='button' class='card-link add-btn btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;'></a>
@@ -72,12 +66,8 @@ export const reload = (data = '') => {
                     </div>
                 </div>
             </div>`;
-    console.log(dataList.data);
-    console.log(dataList.archived);
     $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn);
     $('.arch-list').html(prepareHTMLofArchive(dataList.archived));
-    // })
-    // hideSpinner()
 }
 
 

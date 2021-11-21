@@ -174,63 +174,153 @@ $(function () {
     $('#add-subject-form').submit();
   });
 
-  $('#add-subject-form').submit(function (e) {
-    e.preventDefault();
-    showSpinner();
-    var form = $(this);
-    var formData = form.serializeArray();
-    console.log(formData)
-
-    // initialize requisites array
-    var prereq = [];
-    var coreq = [];
-
-    // remove radio buttons from the formdata and store them from the respective requisite arrays
-    formData = formData.filter(function (item) {
-      let value = item.value;
-      if (item.name.includes('radio-')) {
-        if (value.includes('PRE-')) {
-          prereq.push(value);
-        } else if (value.includes('CO-')) {
-          coreq.push(value);
+  $("#add-subject-form").validate({
+    rules: {
+      code: {
+        alphanumeric: true,
+        noSpace: true,
+        required: true,
+        remote: {
+          url: "getAction.php?data=checkCodeUnique&type=subject",
+          type: "post",
+          data: {
+            code: function() {
+              return $("[name='code']").val();
+            }
+          }
         }
-        return false;
+      },
+      name: {
+        required: true
       }
-      return true;
-    });
+    },
+    messages: {
+      code: {
+        alphanumeric: '<p class="text-danger user-select-none">Letters, numbers, and underscores only please</p>',
+        noSpace: '<p class="text-danger user-select-none">Code should not have a space!</p>',
+        required: '<p class="text-danger user-select-none">Please enter subject code!</p>',
+        remote: '<p class="text-danger user-select-none">Code is already taken, please enter another code.</p>'
+      },
+      name: {
+        required: '<p class="text-danger user-select-none">Please enter subject description!</p>'
+      }
+    },
+    submitHandler: function(form) {
+      showSpinner();
+      var form = $("#add-subject-form");
+      var formData = form.serializeArray();
+      console.log(formData)
 
-    /**
-     * Stores all subject code under one requisite to the form data.
-     * @param {String}  requisite   Requisite identifier, 'pre' or 'co'.
-     * @param {Array}   codeList    Raw subject code list.
-     */
-    var saveRequisiteCodes = (requisite, codeList) => {
-      if (codeList.length === 0) return; // return if list of codes is empty
+      // initialize requisites array
+      var prereq = [];
+      var coreq = [];
 
-      codeList.forEach(code => {
-        code = code.substring(code.indexOf('-') + 1);
-        formData.push({ name: requisite, value: code }); // store subject code value; from PRE-ABM to ABM
+      // remove radio buttons from the formdata and store them from the respective requisite arrays
+      formData = formData.filter(function (item) {
+        let value = item.value;
+        if (item.name.includes('radio-')) {
+          if (value.includes('PRE-')) {
+            prereq.push(value);
+          } else if (value.includes('CO-')) {
+            coreq.push(value);
+          }
+          return false;
+        }
+        return true;
       });
-    };
 
-    saveRequisiteCodes('PRE[]', prereq);
-    saveRequisiteCodes('CO[]', coreq);
+      /**
+       * Stores all subject code under one requisite to the form data.
+       * @param {String}  requisite   Requisite identifier, 'pre' or 'co'.
+       * @param {Array}   codeList    Raw subject code list.
+       */
+      var saveRequisiteCodes = (requisite, codeList) => {
+        if (codeList.length === 0) return; // return if list of codes is empty
 
-    $.post('action.php', formData, function (data) {
-      hideSpinner();
-      if (addAgain) {
-        $('#add-subject-form').trigger('reset');
-        $('#app-spec-options').addClass('d-none');
-        $('#sub-code').attr('autofocus');
-        addAgain = false;
-        // hideSpinner();
+        codeList.forEach(code => {
+          code = code.substring(code.indexOf('-') + 1);
+          formData.push({ name: requisite, value: code }); // store subject code value; from PRE-ABM to ABM
+        });
+      };
 
-        return showToast('success', 'Subject successfully added!');
-      }
-      data = JSON.parse(data);
-      window.location.href = `subject.php?${data.redirect}`;
-    });
+      saveRequisiteCodes('PRE[]', prereq);
+      saveRequisiteCodes('CO[]', coreq);
+
+      $.post('action.php', formData, function (data) {
+        hideSpinner();
+        if (addAgain) {
+          $('#add-subject-form').trigger('reset');
+          $('#app-spec-options').addClass('d-none');
+          $('#sub-code').attr('autofocus');
+          addAgain = false;
+          // hideSpinner();
+
+          return showToast('success', 'Subject successfully added!');
+        }
+        data = JSON.parse(data);
+        window.location.href = `subject.php?${data.redirect}`;
+      });
+      return false;  //This doesn't prevent the form from submitting.
+    }
   });
+  //
+  // $('#add-subject-form').submit(function (e) {
+  //   e.preventDefault();
+  //   showSpinner();
+  //   var form = $(this);
+  //   var formData = form.serializeArray();
+  //   console.log(formData)
+  //
+  //   // initialize requisites array
+  //   var prereq = [];
+  //   var coreq = [];
+  //
+  //   // remove radio buttons from the formdata and store them from the respective requisite arrays
+  //   formData = formData.filter(function (item) {
+  //     let value = item.value;
+  //     if (item.name.includes('radio-')) {
+  //       if (value.includes('PRE-')) {
+  //         prereq.push(value);
+  //       } else if (value.includes('CO-')) {
+  //         coreq.push(value);
+  //       }
+  //       return false;
+  //     }
+  //     return true;
+  //   });
+  //
+  //   /**
+  //    * Stores all subject code under one requisite to the form data.
+  //    * @param {String}  requisite   Requisite identifier, 'pre' or 'co'.
+  //    * @param {Array}   codeList    Raw subject code list.
+  //    */
+  //   var saveRequisiteCodes = (requisite, codeList) => {
+  //     if (codeList.length === 0) return; // return if list of codes is empty
+  //
+  //     codeList.forEach(code => {
+  //       code = code.substring(code.indexOf('-') + 1);
+  //       formData.push({ name: requisite, value: code }); // store subject code value; from PRE-ABM to ABM
+  //     });
+  //   };
+  //
+  //   saveRequisiteCodes('PRE[]', prereq);
+  //   saveRequisiteCodes('CO[]', coreq);
+  //
+  //   $.post('action.php', formData, function (data) {
+  //     hideSpinner();
+  //     if (addAgain) {
+  //       $('#add-subject-form').trigger('reset');
+  //       $('#app-spec-options').addClass('d-none');
+  //       $('#sub-code').attr('autofocus');
+  //       addAgain = false;
+  //       // hideSpinner();
+  //
+  //       return showToast('success', 'Subject successfully added!');
+  //     }
+  //     data = JSON.parse(data);
+  //     window.location.href = `subject.php?${data.redirect}`;
+  //   });
+  // });
 
   $(document).on('click', '#edit-btn', function (e) {
     let editBtn = $('#edit-btn');

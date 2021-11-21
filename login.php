@@ -53,18 +53,18 @@ if (mysqli_num_rows($row_temp) == 0) {
                         </div>
 
                         <div class="d-flex justify-content-center mt-3 login_container">
-                            <input type="submit" name="loginBtn" class="btn login_btn" value="Login"></input>
+                            <input type="submit" name="loginBtn" class="btn login_btn" value="Login">
                         </div>
                         <div class="mt-4">
                             <div class="d-flex justify-content-center links">
-                                <a href="passwordReset/forgotPassword.php">Forgot your password?</a>
+                                <a href="passwordReset/forgotPassword.php" style="color:darkgrey; font-size:small;">Forgot your password?</a>
                                 <br>
                             </div>
                             <div class="mt-5 d-flex justify-content-center ">
                                 <?php if ($enroll == 1) { ?>
                                     <!-- <div class="d-flex justify-content-end mt-5"> -->
                                     <small class='text-secondary'>New student? </small>
-                                    <small><a href="student/enrollment_form.php" class="link"> Enroll Now!</a></small>
+                                    <small><a href="student/enrollment_form.php" class="link ms-1" style="color: #5dbb63;"> Enroll Now!</a></small>
                                     <!-- <div class="col-auto"> -->
                                     <!-- </div> -->
                                     <!-- </div> -->

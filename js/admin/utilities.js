@@ -317,7 +317,9 @@ export const tableUserOptionsEventListener = (userType) => {
     });
 
     $(document).on("click", ".submit[data-type='export']", function () {
-        $("#export-form").submit();
+        // $("#confirmation-modal").find("#export-form").submit();
+        $("#export-form")[0].submit();
+
     });
 
     $(document).on("click", ".table-opt", function() {
@@ -343,7 +345,7 @@ export const tableUserOptionsEventListener = (userType) => {
                 break;
             case 'deactivate':
                 var modal = $("#confirmation-modal");
-                modal.find(".message").html(`<b>Deactivate student</b><br><small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>`);
+                modal.find(".message").html(`<b>Deactivate ${userDesc}</b><br><small>Deactivating user will result in unavailability of all the user's data in the GEMIS. </small>`);
                 modal.find(".submit").removeClass('btn-primary btn-success').addClass('btn-danger')
                     .attr('data-type', 'deactivate').html("Deactivate");
                 modal.modal('show');
@@ -356,5 +358,13 @@ export const tableUserOptionsEventListener = (userType) => {
                 modal.modal('show');
                 break;
         }
+    });
+}
+export const averageSubjectGradesEvent = () => {
+    $(document).on("keyup", ".Second", function () {
+        let row = $(this).closest("tr");
+        let inputs = row.find("input");
+        var final = (parseInt(inputs.eq(0).val()) + parseInt(inputs.eq(1).val())) / 2;
+        inputs.eq(2).val(Math.round(final) == "NaN" ? "" : Math.round(final));
     });
 }

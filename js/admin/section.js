@@ -220,15 +220,16 @@ $(function() {
         console.log(value);
         switch ($(this).attr("name")) {
             case 'program':
-                otherFilter = $("[name='grade-level']").val();
+                otherFilter = $("[name='grade-lvl-filter']").val();
                 filters = (value == '*') ? { "grade": otherFilter } : { "strand": value, "grade": otherFilter };
-                console.log(otherFilter);
                 break;
-            case 'grade-level':
+            case 'grade-lvl-filter':
                 otherFilter = $("[name='program']").val()
                 filters = { "strand": otherFilter, "grade": value };
                 break;
         }
+        console.log(filters);
+
         tb.bootstrapTable("filterBy", filters);
         console.log(value);
         hideSpinner();
@@ -258,7 +259,7 @@ $(function() {
         let syID = $(this).attr("data-sy-id");
         let gradeLevel = $(this).attr("data-grade-level");
         let tableSetup = {
-            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}`,
+            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}&section=${sectionCode}`,
             maintainMetaDat: true,
             clickToSelect: true,
             method: "GET",
@@ -407,12 +408,11 @@ $(function() {
         // section data
         try {
             row = $("#table").bootstrapTable('getRowByUniqueId', sectionCode );
-            console.log(row)
             $("#section-name-modal").html(row.name);
             $("#stud-no").html(row.stud_no);
             $(".grd-level").html(row.grd_level);
         } catch (e) {
-            $("#section-name").html(currentSectName);
+            $("#section-name-modal").html(currentSectName);
             $("#stud-no").html(currentSectNo);
             $(".grd-level").html(currentSectLevel);
         }
@@ -516,6 +516,7 @@ $(function() {
         e.preventDefault();
         $.post("action.php", $(this).serializeArray(), function () {
             $("#sub-class-modal").modal("hide");
+            showToast('success', "Successfully updated subject class")
         });
     });
 

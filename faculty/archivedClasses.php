@@ -6,7 +6,6 @@ include_once("../inc/head.html");
 <title>Archived Classes | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <!--<div id="main-spinner-con" class="spinner-con">
@@ -43,7 +42,6 @@ include_once("../inc/head.html");
                                 </span>
                             </div>
                             <!--FILTER-->
-
                             <div class="content">
                                 <!-- NO RESULTS MESSAGE -->
                                 <div class="no-result-msg-con w-100 d-flex justify-content-center">
@@ -74,7 +72,6 @@ include_once("../inc/head.html");
                                         </div>
                                     </template>
                                     <!-- TEMPLATE END -->
-
                                 </div>
                             </div>
                         </div>
@@ -87,7 +84,6 @@ include_once("../inc/head.html");
         </section>
     </section>
     <!-- MAIN CONTENT END -->
-
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>

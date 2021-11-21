@@ -1,7 +1,8 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-$data = $admin->getPerfectAttendance();
+//$data = $admin->getPerfectAttendance();
+$data = $_POST['data'];
 $school_year = $_SESSION['school_year'];
 $filename = "Perfect_Attendance_$school_year";
 $date_desc = date("F j, Y");
@@ -53,7 +54,7 @@ $position_desc = $_POST['position'] ?? ($_SESSION['user_type'] == 'FA' ? "Award 
                 </div>
             </div>
 
-            <h6 class="text-center m-0"><b>Perfect Attendance</b></h6>
+            <h6 class="text-center m-0"><b><?php echo $_POST['report-title']; ?></b></h6>
             <h6 class="text-center m-0"><small>SY <?php echo $school_year; ?></small></h6>
             <?php 
             if (empty($data)) {

@@ -1,6 +1,5 @@
 <?php
 $admin = new Administration() ?>
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -9,12 +8,18 @@ $admin = new Administration() ?>
             <li class="breadcrumb-item active" aria-current="page">Programs</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between">
-        <h3 class="fw-bold">Programs</h3>
-        <span>
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived</button>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
-        </span>
+    <div class="row justify-content-between">
+        <div class="col-md-4">
+            <h3 class="fw-bold">Programs</h3>
+        </div>
+        <div class="col-md-8  d-flex justify-content-lg-end">
+            <div class="col-auto">
+                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived</button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
+            </div>
+        </div>
     </div>
     <!-- SEARCH BAR -->
     <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
@@ -75,17 +80,20 @@ $admin = new Administration() ?>
                 <form id="program-form" class="needs-validation" method="post" novalidate>
                     <input type="hidden" name="action" id="action" value="addProgram" />
                     <p><small class='text-secondary'>Please complete the following: </small></p>
-                    <div class="form-group">
+                    <div class="form-group mb-2">
                         <label for="prog-code">Code</label>
-                        <input id="prog-code" type="text" name="code" class='form-control' placeholder="Enter unique code here. ex. ABM" required>
+                        <input id="prog-code" type="text" name="prog-code" class='form-control form-control-sm' placeholder="Enter unique code here. ex. ABM">
+                    </div>
 
+                    <div class="form-group mb-2">
                         <label for="prog-desc">Description</label>
-                        <input id="prog-name" type="text" name="desc" class='form-control' placeholder="ex. Accountancy, Business, and Management" required>
+                        <input id="prog-name" type="text" name="desc" class='form-control form-control-sm' placeholder="ex. Accountancy, Business, and Management">
+                    </div>
 
-
+                    <div class="form-group">
                         <label for="curr-code">Curriculum</label>
-                        <select id="curr-code" class="select form-select" name="curr-code">
-                            <option value="0" selected>-- Select curriculum --</option>
+                        <select id="curr-code" class="select form-select form-select-sm" name="curr-code">
+                            <option selected disabled>-- Select curriculum --</option>
                             <?php $currList = $admin->listCurriculum('curriculum');
                             foreach ($currList as  $cur) {
                                 $curr_code = $cur->get_cur_code();
@@ -98,8 +106,8 @@ $admin = new Administration() ?>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <input type="submit" form="program-form" class="submit btn btn-primary" value="Add" />
+                <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                <button form="program-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-1"></i>Add</button>
             </div>
         </div>
         </form>
@@ -187,8 +195,8 @@ $admin = new Administration() ?>
                 <p class="modal-msg"></p>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-danger close-btn delete-btn">Delete</button>
+                <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger close-btn delete-btn btn-sm">Delete</button>
             </div>
         </div>
     </div>

@@ -533,8 +533,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                                                         <label for="grade-select" class="col-form-label">Grade Level</label>
                                                         <select class="form-select" name="grade-level" id="grade-select" disabled ="true">
                                                             <?php
-                                                            echo json_encode($enrollmentData);
-                                                            if($enrollmentData['sem'] == 2){
+                                                            if($enrollmentData['sem'] == 2 OR $enrollmentData['yr_lvl'] == 12){
                                                                 $lvl = 12;
                                                             } else {
                                                                 $lvl = 11;
@@ -548,7 +547,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                                                             <?php 
                                                             if($enrollmentData['yr_lvl'] == 11 AND $enrollmentData['sem'] == 2){
                                                                 $val = 1;
-                                                            } else{
+                                                            } elseif ($enrollmentData['yr_lvl'] == 12 AND $enrollmentData['sem'] == 1){
                                                                 $val = 2;
                                                             }
                                                             $sem = [1 => "first", 2 => "second"];

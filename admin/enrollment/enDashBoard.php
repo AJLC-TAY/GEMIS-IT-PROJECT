@@ -73,7 +73,7 @@ if ($_SESSION['user_type'] === "AD") {
                 <h4>Pending</h4>
                 <h2 id="pending"></h2>
             </div>
-            <div class="icon">
+            <div class="en-icon">
                 <i class="bi bi-clock"></i>
             </div>
         </div>
@@ -84,7 +84,7 @@ if ($_SESSION['user_type'] === "AD") {
                 <h4>Enrolled</h4>
                 <h2 id='enrolled'></h2>
             </div>
-            <div class="icon">
+            <div class="en-icon">
                 <i class="bi bi-clipboard-check"></i>
             </div>
 
@@ -95,7 +95,7 @@ if ($_SESSION['user_type'] === "AD") {
             <div class="inner">
                 <h4>Rejected</h4>
                 <h2 id="rejected"></h2>
-                <div class="icon">
+                <div class="en-icon">
                     <i class="bi bi-clipboard-x"></i>
                 </div>
             </div>
@@ -103,11 +103,11 @@ if ($_SESSION['user_type'] === "AD") {
     </div>
 </section>
 <!-- QUICK ACTIONS -->
-<div class="card  shadow-sm mt-1">
+<div class="card shadow-sm mt-1">
     <h5 class='mb-0 fw-bold ms-3 mt-2'>QUICK ACTIONS</h5>
+    <hr class="mt-1 mb-3">
     <div class="col-lg-12 ms-2">
         <div class="row">
-            <hr class="mt-1 mb-3">
             <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-3x"></i><br>View Enrollment List</a>
             <a href='enrollment.php?page=generateReport' class="btn btn-secondary button col me-3"><i class="bi bi-file-earmark-text-fill fa-3x"></i><br>Generate Report</a>
             <?php echo $enroll_setup; ?>

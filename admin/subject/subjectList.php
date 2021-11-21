@@ -8,12 +8,20 @@
             <li class="breadcrumb-item active" aria-current="page">Subject</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between mb-3">
-        <h3 class="fw-bold">Subject</h3>
-        <div>
-            <button type="button" class="view-archive btn btn-outline-secondary ms-2" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
-            <a href="subject.php?page=schedule" role="button" class="btn btn-secondary">Schedule</a>
-            <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
+    <div class="row justify-content-between mb-3">
+        <div class="col-md-4">
+            <h3 class="fw-bold">Subject</h3>
+        </div>
+        <div class="col-md-8 d-flex justify-content-lg-end">
+            <div class="col-auto">
+                <button type="button" class="view-archive btn btn-outline-dark m-1" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
+            </div>
+            <div class="col-auto">
+                <a href="subject.php?page=schedule" role="button" class="btn btn-secondary m-1">Schedule</a>
+            </div>
+            <div class="col-auto">
+                <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog m-1" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
+            </div>
         </div>
     </div>
 </header>

@@ -1,13 +1,11 @@
 <?php 
 require_once("sessionHandling.php");
-
 include_once("../inc/head.html"); 
 include_once('../inc/studentSideBar.php');
 ?>
 <title>Student | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -25,10 +23,8 @@ include_once('../inc/studentSideBar.php');
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
                         <?php 
-                            
-                                include_once("../admin/student/studentProfile.php"); 
-                                $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
-                            
+                            include_once("../admin/student/studentProfile.php");
+                            $jsFilePath = "<script type='text/javascript' src='../js/admin/student.js'></script>";
                         ?>
                         </div>
                     </div>

@@ -294,4 +294,34 @@ class FacultyModule extends Dbconfig
         }
         fclose($output);
     }
+
+    public function calculateGenAveBySection()
+    {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
+        $semester = in_array($_SESSION['current_quarter'], [1, 2]) ? "1" : "2";
+        $section_code = $_POST['section_code'];
+        $result = $this->query("SELECT prog_code, enrolled_in, report_id FROM enrollment e JOIN gradereport g on e.stud_id = g.stud_id WHERE section_code = '$section_code';");
+        $general_average_data = [];
+        # section code
+        if (mysqli_num_rows($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                # calculate
+                $result_ga = $this->query("SELECT cg.report_id, ROUND(AVG(final_grade)) AS general_average FROM classgrade cg
+                                             JOIN gradereport g on cg.report_id = g.report_id
+                                             JOIN enrollment e on cg.stud_id = e.stud_id
+                                             WHERE e.section_code = '$section_code' AND g.report_id = '{$row['report_id']}'
+                                             AND sub_code IN (SELECT DISTINCT sub_code FROM sharedsubject
+                                                              WHERE for_grd_level = '{$row['enrolled_in']}' AND prog_code = '{$row['prog_code']}'
+                                             AND sub_semester = '$semester' AND sy_id = '$sy_id') GROUP BY cg.report_id;");
+                $result_ga_row = mysqli_fetch_row($result_ga);
+                $general_average_data[] = [
+                    'report_id' => $result_ga_row[0],
+                    'general_ave' => $result_ga_row[1],
+                    'semester'  => in_array($_SESSION['current_quarter'], [1,2]) ? "first" : "second"
+                ];
+            }
+        }
+        echo json_encode($general_average_data);
+    }
 }

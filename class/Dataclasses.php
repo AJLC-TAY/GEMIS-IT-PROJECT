@@ -315,7 +315,19 @@ class Faculty implements JsonSerializable
         $this->enable_enroll = $enable_enroll;
         $this->subjects = $subjects;
         $this->handled_sub_classes = [];
-        $this->is_active = $is_active == '1' ? 'Active' : 'Deactivated';
+        $color_badge = "danger";
+        $status = 'Deactivated';
+        if ($is_active == 1) {
+            $color_badge = "success";
+            $status = 'Active';
+        }
+        $this->is_active = "<div class='container px-1'>
+                    <div class='row justify-content-center'>
+                        <div class='col-3 pe-1 pt-1'><span class='badge'><div class='bg-$color_badge rounded-circle my-auto' style='width: 10px; height: 10px;'></div></span></div>
+                        <div class='col-9 ps-1'>$status</div>
+                    </div>";
+
+        ;
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
@@ -456,7 +468,7 @@ class Faculty implements JsonSerializable
 class SubjectClass extends Subject implements JsonSerializable
 {
     private $sub_class_code;
-    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_semester, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher)
+    public function __construct($sub_code, $sub_name, $for_grd_level, $sub_type, $sub_class_code, $section_code, $section_name, $school_yr, $teacher = NULL)
     {
         parent::__construct($sub_code, $sub_name, $sub_type);
         $this->sub_class_code = $sub_class_code;
@@ -467,7 +479,7 @@ class SubjectClass extends Subject implements JsonSerializable
         $this->school_yr = $school_yr;
         $this->sub_name = $sub_name;
         $this->grd_level = $for_grd_level;
-        $this->semester = $sub_semester;
+//        $this->semester = $sub_semester;
         $color_badge = "success";
         $availability = "available";
         if ($teacher) {
@@ -516,9 +528,8 @@ class SubjectClass extends Subject implements JsonSerializable
     public function jsonSerialize()
     {
         $jsonSerialize = parent::jsonSerialize();
-        $jsonSerialize['action'] = "<div class='d-flex'>"
-                                      ."<button data-sc-code='{$this->sub_class_code}' class='unassign-btn btn btn-sm btn-danger shadow me-1'>Unassign</button>"
-                                      ."<button data-sc-code='{$this->sub_class_code}' class='transfer-btn btn btn-sm shadow'>Transfer</button>"
+        $jsonSerialize['action'] = "<div class='d-flex justify-content-center'>"
+                                      ."<button data-sc-code='{$this->sub_class_code}' class='unassign-btn btn btn-sm btn-danger shadow me-1' title='Unassign'><i class='bi bi-person-dash'></i></button>"
                                   ."</div>";
         return array_merge($jsonSerialize, [
             'sub_class_code' => $this->sub_class_code,
@@ -529,7 +540,7 @@ class SubjectClass extends Subject implements JsonSerializable
             'sy_id' => $this->school_yr,
             'status' => $this->status,
             'grd_level'=> $this->grd_level,
-            'semester'=> $this->semester,
+//            'semester'=> $this->semester,
             
             'statusImg' => $this->statusImg
         ]);
@@ -1505,13 +1516,15 @@ class StudentAward extends Award implements JsonSerializable
         private $guardians;
         private $form137;
         private $status;
+        private $strand;
+        private $yrLvl;
 
 
         
             public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
                                         $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
                                         $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture, 
-                                        $section_code, $section, $parents, $guardians, $form137, $status, $is_active, $program = NULL)
+                                        $section_code, $section, $parents, $guardians, $form137, $status, $is_active, $program = NULL, $strand = NULL, $yrLvl = NULL)
             {
             $this->stud_id = $stud_id;
             $this->id_no = $id_no;
@@ -1547,6 +1560,8 @@ class StudentAward extends Award implements JsonSerializable
             $this->status = $status;
             $this->is_active = ($is_active == 1) ? "Active" : "Deactivated";
             $this->program = $program;
+            $this->strand = $strand;
+            $this->yrLvl = $yrLvl;
         }
 
         public function get_stud_id()
@@ -1678,6 +1693,14 @@ class StudentAward extends Award implements JsonSerializable
         public function get_active_status()
         {
             return $this->is_active;
+        }
+        public function get_strand()
+        {
+            return $this->strand;
+        }
+        public function get_yrlvl()
+        {
+            return $this->yrLvl;
         }
         public function get_program()
         {

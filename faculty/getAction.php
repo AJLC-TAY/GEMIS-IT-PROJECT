@@ -20,5 +20,8 @@ if (isset($_GET['data']) && $_GET['data'] == 'student-award-selection') {
 if (isset($_GET['data']) && $_GET['data'] == 'for-promotion') {
     $faculty->listStudentsForPromotion();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
+    $faculty->getSubjectSchedule();
+}
 
 ?>
