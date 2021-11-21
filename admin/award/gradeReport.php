@@ -1,49 +1,51 @@
 <?php
+include "../class/Administration.php";
+$admin = new Administration();
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
+$sy_id = $_SESSION['sy_id'];
 const approve = 'WHITNEY A. DAWAYEN';
 const approve_pos = 'Secondary School Principal III';
-
-const adviser = 'ALVIN JOHN L. CUTAY';
+$teacherName = '';
+$school_year = '';
 if ($user_type != 'ST') {
     // $teacherName = $_POST['teacher_name'];
-    $teacherName = 'Kesley Bautista Trinidad';
+    $teacherName = strtoupper($_SESSION['User']);
     $grade = 12;
     // $signatoryName = $_POST['signatory_name'];
     $signatoryName = 'Whitney Houston';
     $position = 'Secondary School Principal III';
     // $position = $_POST['position'];
-    $school_year = '9';
+    $school_year = mysqli_fetch_row($admin->query("SELECT CONCAT(start_year, ' - ', end_year) FROM schoolyear WHERE sy_id = '$sy_id';"))[0];
     $breadcrumb = '';
 }
-include "../class/Administration.php";
-$admin = new Administration();
-$report_id = 1;
-// $report_id = $_GET['report_id'];
-$stud_id = '110001';  // test
 
-// $stud_id = $_GET['id'];
+//$report_id = 37;
 
-
-$grades = $admin->listGrade();
+$stud_id = $_GET['id'];
 
 $userProfile = $admin->getProfile("ST");
 $stud_id = $userProfile->get_stud_id();
 $lrn = $userProfile->get_lrn();
 $lastName = $userProfile->get_last_name();
-//$firstName = $userProfile->get_first_name();
-$firstName = "Kimberlyn Faith";
+$firstName = $userProfile->get_first_name();
 $midName = $userProfile->get_middle_name();
 $sex = $userProfile->get_sex();
 $age = $userProfile->get_age();
 $section = $userProfile->get_section();
+$grade_level = $userProfile->get_yrlvl();
 
+$strand = mysqli_fetch_row($admin->query("SELECT prog_code FROM enrollment WHERE stud_id = '$stud_id' AND sy_id = '$sy_id';"))[0];
+//$grades = $admin->listGrade($stud_id);
+$report_id = mysqli_fetch_row($admin->query("SELECT report_id FROM gradereport WHERE stud_id =  '$stud_id' AND sy_id='{$_SESSION['sy_id']}';"))[0];
+$grades = $admin->listStudentGradesForReport($report_id, $grade_level, $strand);
+$general_averages = $admin->getGeneralAverages($report_id);
 // $admittedIn = 'None';
 // $eligible = '12';
 // $date = date("F j, Y");
-$trackStrand = $admin->getTrackStrand();
-$attendance = $admin->getStudentAttendance(1);
-$filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report'; // 1111_grade_report
+$trackStrand = $admin->getTrackStrand($stud_id);
+$attendance = $admin->getStudentAttendance($report_id);
+$filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report';
 ?>
 <!-- HEADER -->
 <header>
@@ -58,7 +60,6 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
                 $breadcrumb
                 <li class='breadcrumb-item active'>Grade Report</a></li>";
             }
-
             ?>
         </ol>
     </nav>
@@ -81,24 +82,21 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
 </header>
 <hr class='m-1'>
 <?php
-
-
 function prepareGradeRecordsHTML($grade)
 {
     $row = '';
-    for ($x = 0; $x < sizeof($grade); $x++) {
+    foreach($grade as $gradeInfo) {
         $row .= "<tr>
-            <td>{$grade[$x]['sub_name']}</td>
-            <td align='center'>{$grade[$x]['grade_1']}</td>
-            <td align='center'>{$grade[$x]['grade_2']}</td>
-            <td align='center'>{$grade[$x]['grade_f']}</td>
+            <td>{$gradeInfo['sub_name']}</td>
+            <td align='center'>{$gradeInfo['grade_1']}</td>
+            <td align='center'>{$gradeInfo['grade_2']}</td>
+            <td align='center'>{$gradeInfo['grade_f']}</td>
             </tr>";
     }
-
     return $row;
 }
 
-function renderSemesterGradeTable($semester_desc, $grades)
+function renderSemesterGradeTable($semester_desc, $grades, $general_average)
 {
     $grd =  "
         <h6 class='fw-bolder mb-0' style='font-size: 14px;'>$semester_desc</h6>
@@ -119,44 +117,48 @@ function renderSemesterGradeTable($semester_desc, $grades)
                     <td align='center'>2</td>
                 </tr>
             </thead>
-            <tbody>
-                <tr class='bg-light'>
+            <tbody>"
+        . (isset($grades['core']) ?
+            "<tr class='bg-light'>
                     <td colspan='4'>Core Subjects</td>
                 </tr>" .
-
-        prepareGradeRecordsHTML($grades['core'])
-        . "<tr class='bg-light'>
+        prepareGradeRecordsHTML($grades['core']) : "")
+        . (isset($grades['applied']) ? "<tr class='bg-light'>
                     <td colspan='4' class='fw-bold'>Applied Subjects</td>
-                </tr>" .
-        prepareGradeRecordsHTML($grades['applied']);
-
-
-    if ($_SESSION['user_type'] == 'ST') {
-        if (array_key_exists('specialized', $grades)) {
-            prepareGradeRecordsHTML($grades['specialized']);
-        }
-    } else {
-        $grd .= "<tr class='bg-light'>
+                </tr>" . prepareGradeRecordsHTML($grades['applied']) : "")
+        . (isset($grades['specialized']) ?   "<tr class='bg-light'>
                     <td colspan='4' class='fw-bold'>Specialized</td>
-                    </tr>";
-        if (array_key_exists('specialized', $grades)) {
-            prepareGradeRecordsHTML($grades['specialized']);
-        } else {
-            for ($x = 0; $x < 5; $x++) {
-                $grd .= "<tr height=26>
-                                    <td> </td>
-                                    <td align='center'> </td>
-                                    <td align='center'> </td>
-                                    <td align='center'> </td>
-                                    </tr>";
-            }
-        }
-    }
+                    </tr>" . prepareGradeRecordsHTML($grades['specialized']) : "" );
 
+
+//    if ($_SESSION['user_type'] == 'ST') {
+
+//    } else {
+
+//        if (array_key_exists('specialized', $grades)) {
+//            prepareGradeRecordsHTML($grades['specialized']);
+//        }
+//        else {
+//            for ($x = 0; $x < 5; $x++) {
+//                $grd .= "<tr height=26>
+//                                    <td> </td>
+//                                    <td align='center'> </td>
+//                                    <td align='center'> </td>
+//                                    <td align='center'> </td>
+//                                    </tr>";
+//            }
+//        }
+//    }
+//    if (array_key_exists('specialized', $grades)) {
+//        $grd .= "<tr class='bg-light'>
+//                    <td colspan='4' class='fw-bold'>Specialized</td>
+//                    </tr>";
+//        prepareGradeRecordsHTML($grades['specialized']);
+//    }
 
     $grd .= "<tr>
                 <td colspan='3' class='border-0 fst-italic text-end pe-3'>General Average for the Semester</td>
-                    <td class='bg-white'></td>
+                    <td class='bg-white text-center'>$general_average</td>
                 </tr>
             </tbody>
         </table>";
@@ -195,11 +197,11 @@ $observed_values_desc = [
 
 $observed_values = $admin->listValuesReport();
 // print_r($attendance);
-function otherinfo()
+function otherinfo($teacher_name)
 {
     echo "
         <div class='mx-auto' style='width: 85%;'>
-            <p class='text-center pt-5' style='font-size: 14px;'>PARENT / GUARDIAN'S SIGNATURE</p>
+            <p class='text-center pt-4' style='font-size: 14px;'>PARENT / GUARDIAN'S SIGNATURE</p>
             <div class='row justify-content-center mb-2' style='font-size: 16px;'>
                 <div class='col-5'  style='font-size: 12px !important;'>FIRST QUARTER:</div>
                 <div class='col-7 border-bottom border-dark'></div>
@@ -239,7 +241,7 @@ function otherinfo()
                 </div>
                 <div class='col-6 ' >
                     <div class='container'>
-                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". adviser ."</div>             
+                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". $teacher_name ."</div>             
                         <div class='row mb-0 justify-content-center'>Adviser</div>             
                     </div>
                 </div>
@@ -327,7 +329,7 @@ function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $s
                   <div class='col-3 fw-bold'>School Year:</div>
                   <div class='col-4 border-bottom border-dark text-center'>$school_year</div>
               </div>
-                <div class='row mb-5'  style='font-size: 12px;' >
+                <div class='row mb-4'  style='font-size: 12px;' >
                   <div class='col-3 fw-bold text-center d-flex align-items-end'>Track/<br>Strand:</div>
                   <div class='col-9 border-bottom border-dark text-center'><p class='mb-0'>$trackStrand[0]</p></div>
               </div>
@@ -344,10 +346,8 @@ function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $s
                     <div class='row ps-2 mb-0' style='font-size: 12px;' >". approve_pos ."</div>             
                 </div>
                 <div class='col-6 ' >
-                    <div class='container'>
-                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". adviser ."</div>             
+                        <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". $teacherName ."</div>             
                         <div class='row mb-0 justify-content-center'>CLASS ADVISER</div>             
-                    </div>
                 </div>
                 </div>
             </div>
@@ -402,7 +402,7 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                     prepareStudentAttendanceHTML('no_of_absent', $attendance);
                 echo "</tr>";
             echo "</tbody></table>";
-            otherinfo();
+            otherinfo($teacherName);
             logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
 }
 ?>
@@ -422,13 +422,13 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                         <?php
                         if ($user_type == "ST") {
                             $curr = $curr_sem == 1? 'FIRST': 'SECOND'; 
-                            renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem]);
+                            renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem], $general_averages[$curr_sem - 1]);
                         } else {
                             echo "<div class='col-6'>";
-                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1']);
+                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1'], $general_averages[0]);
                             echo "</div>";
                             echo "<div class='col-6'>";
-                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2']);
+                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2'],  $general_averages[1]);
                             echo "</div>";
                         }
 

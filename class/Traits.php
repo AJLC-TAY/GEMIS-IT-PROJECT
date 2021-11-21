@@ -722,7 +722,8 @@ trait FacultySharedMethods
     public function get_handled_sections ()
     {
         $data = [];
-        $result = $this->query("SELECT * FROM ");
+//        $result = $this->query("SELECT * FROM ");
+        return $data;
     }
 
     public function listAttendance($is_JSON = FALSE)
@@ -863,30 +864,8 @@ trait Enrollment
             "issis" . "iiiii"
         );
         echo 'Added promotion record...<br>';
+        $this->transferee_assessment($student_id);
 
-        # transferee
-        if (isset($_POST['transferee']) && $_POST['transferee'] == 'yes') {
-            # insert transferee record
-            $params = [
-              $student_id,
-              $_POST['trans-school'],
-              $_POST['trans-track'],
-              $_POST['trans-semester'],
-              $_POST['trans-sy']
-            ];
-
-            print_r($params);
-
-            $this->prepared_query("INSERT INTO transferee (stud_id, last_school_attended, track, semester, school_year) VALUES (?, ?, ?, ?, ?);", $params, "issss");
-            $trans_id = mysqli_insert_id($this->db);
-            # insert selected subject
-            if (isset($_POST['subjects'])) {
-                foreach($_POST['subjects'] as $sub_code) {
-                    $this->query("INSERT INTO transferee_subject VALUES ('$trans_id', '$sub_code');");
-                }
-
-            }
-        }
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
         } else {
@@ -1647,12 +1626,37 @@ trait Enrollment
         }
         return $data;
     }
+
+    /**
+     * @param $student_id
+     */
+    public function transferee_assessment($student_id): void
+    {
+        if (isset($_POST['transferee']) && $_POST['transferee'] == 'yes') {
+            # insert transferee record
+            $params = [
+                $student_id,
+                $_POST['trans-school'],
+                $_POST['trans-track'],
+                $_POST['trans-semester'],
+                $_POST['trans-sy']
+            ];
+
+            $this->prepared_query("INSERT INTO transferee (stud_id, last_school_attended, track, semester, school_year) VALUES (?, ?, ?, ?, ?);", $params, "issss");
+            $trans_id = mysqli_insert_id($this->db);
+            # insert selected subject
+            if (isset($_POST['subjects'])) {
+                foreach ($_POST['subjects'] as $sub_code) {
+                    $this->query("INSERT INTO transferee_subject VALUES ('$trans_id', '$sub_code');");
+                }
+            }
+        }
+    }
 }
 
 
 trait Grade
 {
-
     public function getGrade()
     {
         $stud_id = 120089;
@@ -1674,6 +1678,34 @@ trait Grade
         }
 
         return $grades;
+    }
+
+    public function listStudentGradesForReport($report_id, $grade_level, $strand)
+    {
+        $data = [];
+        $sy_id = mysqli_fetch_row($this->query("SELECT sy_id FROM gradereport WHERE report_id = '$report_id';"))[0];
+        $semesters = [1, 2];
+        foreach ($semesters as $semester) {
+            $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, final_grade FROM classgrade
+                                            JOIN subject USING (sub_code) WHERE report_id = '$report_id'
+                                            AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
+                                            WHERE sy_id = '$sy_id' AND sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
+            while ($row = mysqli_fetch_assoc($result)) {
+                $data[$semester][$row['sub_type']][] = [
+                    'sub_name' => $row['sub_name'],
+                    'grade_1'  => $row['first_grading'],
+                    'grade_2'  => $row['second_grading'],
+                    'grade_f'  => $row['final_grade'],
+                ];
+            }
+        }
+        return $data;
+    }
+
+    public function getGeneralAverages($report_id)
+    {
+        $general_averages = mysqli_fetch_row($this->query("SELECT first_gen_ave, second_gen_ave FROM gradereport WHERE report_id = '$report_id';"));
+        return [$general_averages[0] ?: "", $general_averages[1] ?: ""];
     }
 
     public function getClassGrades()

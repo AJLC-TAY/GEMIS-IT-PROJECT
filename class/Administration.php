@@ -420,7 +420,7 @@ class Administration extends Dbconfig
         $sy_id = $_GET['id'] ?? $sy_id;
         $current_sy = $_SESSION['sy_id'] ?? NULL;
         if (!is_null($current_sy)) {
-            $this->query("UPDATE `schoolyear` SET `status` = '0' WHERE `schoolyear`.`sy_id` = '$current_sy';");
+            $this->query("UPDATE `schoolyear` SET `status` = '0', can_enroll='0' WHERE `schoolyear`.`sy_id` = '$current_sy';");
         }
         $this->query("UPDATE `schoolyear` SET `status` = '1' WHERE `schoolyear`.`sy_id` = '$sy_id';");
         $qry_sy = "SELECT sy_id, CONCAT(start_year,' - ', end_year) AS sy , current_quarter, can_enroll FROM schoolyear WHERE status = '1';";
@@ -449,8 +449,6 @@ class Administration extends Dbconfig
             }
         }
     }
-
-
 
     public function listGrade()
     {
@@ -2364,7 +2362,7 @@ class Administration extends Dbconfig
         $result = $this->query("SELECT LRN, stud_id, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name, '')) AS name,
                                  section_code, section_name, enrolled_in AS grade, prog_code FROM student JOIN enrollment e USING (stud_id) 
                                     JOIN user USING (id_no)
-                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade' AND section_code != '$section' AND  valid_stud_data = '1' AND is_active = '1';");
+                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade' AND (section_code != '$section' OR section_code IS NULL) AND  valid_stud_data = '1' AND is_active = '1';");
         while ($row = mysqli_fetch_assoc($result)) {
             $student_list[] = [
                 'lrn'           => $row['LRN'],
@@ -3178,9 +3176,8 @@ class Administration extends Dbconfig
         return $attendance;
     }
 
-    public function getTrackStrand()
+    public function getTrackStrand($stud_id)
     {
-        $stud_id = 110001;
         $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,': ', p.description) FROM enrollment e JOIN curriculum c USING(curr_code) JOIN program p on c.curr_code = p.curr_code where stud_id=?;", [$stud_id], "i"));
         return $trackStrand;
     }

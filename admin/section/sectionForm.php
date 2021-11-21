@@ -48,7 +48,7 @@ $filters =  $user->getEnrollFilters();
                 <div class="form-row row">
                     <label for="section-name" class="col-lg-4 col-form-label">Section Name</label>
                     <div class="col-lg-8">
-                        <input id='section-name' name="section-name" class='form-control' maxlength="50" placeholder="Enter section name"></input>
+                        <input id='section-name' name="section-name" class='form-control' maxlength="250" placeholder="Enter section name">
                     </div>
                 </div>
                 <div class="form-row row">
