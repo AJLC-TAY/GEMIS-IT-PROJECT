@@ -236,6 +236,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <span class="bs-stepper-circle">3</span>
                 </button>
             </div>
+            <?php if($_SESSION['user_type'] != 'ST') {?>
             <div class="line"></div>
             <div class="step mx-lg-4" data-target="#step-4">
                 <button type="button" class="btn step-trigger">
@@ -243,6 +244,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <span class="bs-stepper-circle">4</span>
                 </button>
             </div>
+            <?php } ?>
         </div>
         <div class="bs-stepper-content">
             <div id="step-1" class="content">
@@ -629,13 +631,22 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </div>
                         </div>
                     </div>
+                    <?php if($_SESSION['user_type'] != 'ST') {?>
                     <div class="d-flex flex-row-reverse mt-4">
                         <a class="btn btn-primary next to-transferee-form">Next</a>
                         <a class="btn btn-secondary me-1 previous">Back</a>
                     </div>
+                    <?php } else {?>
+                        <div class="d-flex flex-row-reverse mt-4">
+                        <input type="hidden" name="action" value="enroll">
+                        <input id="enroll-submit" class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
+                        <a class="btn btn-secondary me-1 previous">Back</a>
+                    </div>
+                    <?php }?>
                 </div>
             </div>
             <!-- STEP 4 -->
+            <?php if($_SESSION['user_type'] != 'ST') {?>
             <div id="step-4" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
                     <div class="d-flex mb-3 align-content-center">
@@ -715,6 +726,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </table>
                         </div>
                     </div>
+                    
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input id="enroll-submit" class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
@@ -722,6 +734,8 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
                 </div>
             </div>
+            <?php } ?>
+            
             <!-- STEP 4 END -->
     </div>
         <!-- STEPPER END -->

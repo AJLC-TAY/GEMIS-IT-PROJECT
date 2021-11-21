@@ -199,6 +199,8 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>let code = "<?php echo json_encode($advisory['section_code'] ?? NULL);?>";</script>
+    <script> let qtr = "<?php echo ("{$_SESSION['current_quarter']}");?>";</script>
+
     <?php echo $jsFilePath; ?>;
 
 </body>

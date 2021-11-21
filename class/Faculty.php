@@ -147,15 +147,17 @@ class FacultyModule extends Dbconfig
 
     public function listStudentsForPromotion()
     {
+        session_start();
         $section_code = $_GET['section'];
-        // echo('mariel');
-        //condition: dapat >74 ung final grade per subject ni student
-        $result = $this->query("SELECT stud_id, general_average, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code='$section_code' AND general_average > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
+
+        $ave = $_SESSION['current_semester']=='1'?'first_gen_ave':'second_gen_ave';
+        $result = $this->query("SELECT stud_id, $ave, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code=$section_code AND $ave > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
+    //    echo("SELECT stud_id, $ave, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code=$section_code AND $ave > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
         while ($row = mysqli_fetch_assoc($result)) {
             $students[] = [
                 'stud_id' => $row['stud_id'],
                 'name' => "{$row['name']} <input type ='hidden' id='{$row['stud_id']}' value='enable'>",
-                'gen_ave' => $row['general_average'],
+                'gen_ave' => $row[$ave],
                 'action' => "<div class='d-flex justify-content-center'>
                 <button data-id='{$row['stud_id']}' data-type='undo' class='btn btn-sm btn-primary action' title='Undo' style='display: none;'><i class='bi bi-arrow-return-left'></i></button>
                 <button data-id='{$row['stud_id']}' data-type='remove' class='btn btn-sm btn-danger action' title='Remove student'><i class='bi bi-trash'></i></button>
@@ -165,17 +167,16 @@ class FacultyModule extends Dbconfig
         echo json_encode($students);
     }
 
-    public function listValuesReport()
+    public function listValuesReport($stud_id)
     {
 
         $marka = ['AO', 'SO', 'RO', 'NO'];
-        $qtr = '2'; //session
+        $qtr = $_SESSION['current_quarter']; //session
 
         $values = [];
         $values_desc = [];
         $marking = [];
-        $stud_id = 110001; //$_GET['id'];
-        $sy_id = 9;
+        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT value_name, bhvr_statement FROM `values`"); // query for behavior_stament tapos ung value name  //note: need nung ticks kasi baka iba mainterpret ng sql na values, hindi jay table
 
 
@@ -185,6 +186,7 @@ class FacultyModule extends Dbconfig
             for ($x = 1; $x <= $qtr; $x++) {
                 $markings = $this->query("SELECT value_name, status, value_id, report_id, bhvr_statement, marking FROM `observedvalues` JOIN `values` USING (value_id) WHERE stud_id = $stud_id AND quarter = $x");
                 while ($marks = mysqli_fetch_assoc($markings)) {
+                    // echo("entered");
                     if ($marks['bhvr_statement'] == $val['bhvr_statement'] and $marks['value_name'] == $val['value_name']) {
                         if ($x < $qtr || $marks['status'] == 1) {
                             $list = $marks['marking'];
@@ -202,6 +204,14 @@ class FacultyModule extends Dbconfig
                         $list = '';
                     }
                 }
+                
+                // foreach ($marka as $markas) {
+                //     if ($markas == 'SO') {
+                //         $list .= "<option value='{$stud_id}//{$x}/{$markas}/' selected>$markas</option>";
+                //     } else {
+                //         $list .= "<option value='{$stud_id}//{$x}/{$markas}/'>$markas</option>";
+                //     }
+                // }
             }
 
             if (sizeof($marking) != 4) {

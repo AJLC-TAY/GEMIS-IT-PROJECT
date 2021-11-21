@@ -7,7 +7,8 @@ let tableSetup = {
     uniqueId:           'lrn',
     idField:            'lrn',
     height:             440,
-    ...commonTableSetup
+    ...commonTableSetup,
+    pagination: false
 };
 
 
@@ -169,9 +170,10 @@ $(function() {
                                 // console.log(grades);
                                 console.log(data)                                
                             });
+                            console.log(values);
             }); // en
-            $('.grading-confirmation').modal('hide');
-            location.reload(true);
+            // $('.grading-confirmation').modal('hide');
+            // location.reload(true);
         }
         
         // $(".grade").addClass('hidden');

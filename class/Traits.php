@@ -694,9 +694,10 @@ trait FacultySharedMethods
         $query = "SELECT DISTINCT sc.sub_class_code, sc.section_code, sc.teacher_id, s.sub_code, s.sub_name, s.sub_type,  se.grd_level,
                 se.section_name, se.sy_id
                 FROM subjectclass sc
+                JOIN sharedsubject ss USING (sub_code)
                 JOIN section se USING(section_code)
                 JOIN subject s ON s.sub_code=sc.sub_code
-                WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']}; ";
+                WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']} AND ss.sub_semester = {$_SESSION['current_semester']} ";
 
         $result = $this->query($query);
         $handled_sub_classes = array();
@@ -767,6 +768,8 @@ trait FacultySharedMethods
                 [$value['present'], $value['absent'], $value['tardy'], $stat, $id],
                 "iiiii"
             );
+
+            $this->enterLog("Edited Student Attendance (Attendance ID: $id)");
         }
     }
 
@@ -1013,9 +1016,9 @@ trait Enrollment
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
         . "VALUES (CURRENT_TIMESTAMP, 1, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
 
-        echo($query);
-        echo json_encode($values);
-        echo json_encode($params);
+        // echo($query);
+        // echo json_encode($values);
+        // echo json_encode($params);
         $this->prepared_query($query, $values, $params);
         $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
         $rep_id = $this->initializeGrades($student_id, $current_sy, $semester);
@@ -1607,7 +1610,7 @@ trait Enrollment
             foreach ([1, 2, 3, 4] as $quarter) {
                 $query = "INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES ('{$row['value_id']}',$quarter, $report_id, $stud_id);";
                 $this->query($query);
-                echo($query . "<br>");
+                // echo($query . "<br>");
             }
         }
 
@@ -1620,7 +1623,7 @@ trait Enrollment
 
         foreach ($attend_months as $id => $val) {
             $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
-            echo ("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id); <br>");
+            // echo ("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id); <br>");
         }
 
         return $report_id;
@@ -1962,8 +1965,14 @@ trait Grade
     public function listAdvisoryStudents($is_JSON = false)
     {
 
-        function actions($report_id, $stud_id, $promote)
+        function actions($report_id, $stud_id, $promote, $qtr, $lvl)
         {
+
+            if($qtr == 4 AND $lvl == 12){
+                $class = 'hidden';
+            } else {
+                $class = '';
+            }
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
             <div class='dropdown'>
@@ -1987,7 +1996,7 @@ trait Grade
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1'>promote</button></div>";
+          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
           return $action;
 
         }
@@ -2002,13 +2011,21 @@ trait Grade
         }
         $students = [];
         $section_code = $_GET['section'];
+        $qtr = mysqli_fetch_row($this->query("SELECT current_quarter FROM `schoolyear` Where `sy_id`='{$_SESSION['sy_id']}';"))[0];
+
+
         $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
+                                // echo("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+                                // JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
+
+            $lvl = mysqli_fetch_row($this->query("SELECT enrolled_in FROM enrollment Where stud_id='$stud_id';"))[0];
+
             # get report id
             $row_temp = $this->query("SELECT `report_id`, `status`, `first_gen_ave`, `second_gen_ave` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
-
+// echo("SELECT `report_id`, `status`, `first_gen_ave`, `second_gen_ave` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
             $temp = mysqli_fetch_row($row_temp);
             if ($temp != NULL) {
                 $report_id = $temp[0];
@@ -2039,7 +2056,7 @@ trait Grade
                 '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
-                'action' =>  actions($report_id, $stud_id,$row['promote'] )
+                'action' =>  actions($report_id, $stud_id,$row['promote'],$qtr,$lvl)
             ];
         }
         if ($is_JSON) {
