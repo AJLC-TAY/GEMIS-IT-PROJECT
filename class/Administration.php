@@ -726,6 +726,7 @@ class Administration extends Dbconfig
         ];
     }
 
+    
     public function editSY()
     {
         session_start();

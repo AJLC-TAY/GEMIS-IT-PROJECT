@@ -400,6 +400,16 @@ trait UserSharedMethods
         return $student;
     }
 
+    public function getTransfereeNames(){
+        $transferees = $this->query("SELECT stud_id, transferee_id, CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM student LEFT JOIN transferee USING(stud_id) ;");
+            while ($row = mysqli_fetch_assoc($transferees)) {
+                $transfereeNames[] = ["name" => $row['name'],
+                                    "stud_id" => $row['stud_id'],
+                                    "transferee_id" =>$row['transfee_id']];
+            }
+            return($transfereeNames);
+    }
+
     public function changePassword()
     {
         session_start();
@@ -847,9 +857,9 @@ trait Enrollment
         echo "Add School info ended...<br>";
 
         # promotion
-        echo 'Adding promotion record...<br>';
+        echo 'Adding transferee record...<br>';
         $this->prepared_query(
-            "INSERT INTO promotion (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
+            "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
                 . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $_POST['school-id-no'] ?: NULL,
@@ -866,8 +876,13 @@ trait Enrollment
             ],
             "issis" . "iiiii"
         );
+        $trans_id = mysqli_insert_id($this->db);
         echo 'Added promotion record...<br>';
-        $this->transferee_assessment($student_id);
+
+        if($_POST['balik'] == 1 OR isset($_POST['transferee']) && $_POST['transferee'] == 'yes'){
+            $this->transferee_assessment($student_id,$trans_id );
+        }
+        
 
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
@@ -1633,27 +1648,26 @@ trait Enrollment
     /**
      * @param $student_id
      */
-    public function transferee_assessment($student_id): void
+    public function transferee_assessment($student_id,$trans_id): void
     {
-        if (isset($_POST['transferee']) && $_POST['transferee'] == 'yes') {
+            $student_id = $student_id??$_POST['stud-id'];
+            $trans_id = $trans_id??$_POST['stud-id'];
             # insert transferee record
             $params = [
-                $student_id,
                 $_POST['trans-school'],
                 $_POST['trans-track'],
                 $_POST['trans-semester'],
-                $_POST['trans-sy']
+                $_POST['trans-sy'],
+                $student_id,
             ];
 
-            $this->prepared_query("INSERT INTO transferee (stud_id, last_school_attended, track, semester, school_year) VALUES (?, ?, ?, ?, ?);", $params, "issss");
-            $trans_id = mysqli_insert_id($this->db);
+            $this->prepared_query("UPDATE transferee SET school_name = ?, track = ?, semester = ?, last_school_yr_comp = ? WHERE stud_id = ?;", $params, "ssssi");
             # insert selected subject
             if (isset($_POST['subjects'])) {
                 foreach ($_POST['subjects'] as $sub_code) {
                     $this->query("INSERT INTO transferee_subject VALUES ('$trans_id', '$sub_code');");
                 }
             }
-        }
     }
 }
 
