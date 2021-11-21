@@ -6,8 +6,9 @@ let tableSetup = {
     method: 'GET',
     uniqueId: 'lrn',
     idField: 'lrn',
-    height: 440,
-    ...commonTableSetup
+    height: 800,
+    ...commonTableSetup,
+    pagination: false
 };
 let promotionSetup = {
     search: true,
@@ -17,7 +18,8 @@ let promotionSetup = {
     idField: 'stud_id',
     height: 400,
     url: `getAction.php?data=for-promotion&section=${code}`,
-    ...commonTableSetup
+    ...commonTableSetup,
+    pagination: false
 };
 console.log(code);
 // let advisoryTable = {}, subClassTable = {};
@@ -92,6 +94,8 @@ var saveMsg = "Saved grades are editable within the duration of the current quar
 var studID = '';
 $(function () {
     preload('#advisory');
+
+    
 
     $("#classes").select2({
         theme: "bootstrap-5",
@@ -291,5 +295,19 @@ $(function () {
         });
     });
 
+    $(document).on("shown.bs.modal", "#view-candidates-modal", function () {
+        forPromotionStudentTable.bootstrapTable("resetView");
+    });
+
+
+    // if(qtr == 4 ){
+    //     $(".multi-promote").attr("class","hidden");
+    // }
+
+
+    // var list = document.getElementsByClassName("promote-name");
+    // for (var n = 0; n < list.length; ++n) {
+    //     list[n].innerText = "test";
+    // }
     hideSpinner();
 });

@@ -6,6 +6,8 @@ let tableSetup = {
     searchSelector: "#search-input",
     uniqueId: "stud_id",
     fieldId: "stud_id",
+    ...commonTableSetup,
+    pagination: false
     // height:         800
 };
 let table = $("#table").bootstrapTable(tableSetup);
