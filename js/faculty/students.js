@@ -167,6 +167,7 @@ $(function () {
             var grades = {
                 'id': recordInfo[0],
                 'rep_id': recordInfo[1],
+                'sem': recordInfo[2],
                 'gen_ave': element['value'],
                 'action': 'gradeAdvisory',
                 'stat': stat

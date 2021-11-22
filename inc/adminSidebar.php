@@ -26,6 +26,7 @@ if (isset($_SESSION['sy_id'])) {
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <header class="header black-bg">
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right"></div>

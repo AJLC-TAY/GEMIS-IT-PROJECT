@@ -2,7 +2,7 @@
 $school_year = $_SESSION['school_year'];
 $current_quarter = $_SESSION['current_quarter'];
  $enrollment_item = '';
-if ($_SESSION['promote'] == 1 AND $_SESSION['enroll_status'] == 1) {
+if ($_SESSION['promote'] != 0 AND $_SESSION['enroll_status'] == 1) {
     $enrollment_item = " <li class='sub-menu'>"
             ."<a id='enrollment' href='enrollment.php'>"
                 ."<i class='fa fa-tasks'></i>"
@@ -13,6 +13,7 @@ if ($_SESSION['promote'] == 1 AND $_SESSION['enroll_status'] == 1) {
 ?>
 <!--TOP BAR CONTENT & NOTIFICATIONS-->
 <!-- HEADER START -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <header class="header black-bg">
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right"></div>

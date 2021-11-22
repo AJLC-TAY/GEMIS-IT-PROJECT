@@ -857,36 +857,34 @@ trait Enrollment
         echo "Add School info ended...<br>";
 
         # promotion
-        echo 'Adding transferee record...<br>';
         $last_sy_attended = '';
         if (isset($_POST['last-sy'])) {
             $last_sy_attended = $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1];
         }
-        $this->prepared_query(
-            "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
-                . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $_POST['school-id-no'] ?? NULL,
-                $_POST['school-name'] ?? NULL,
-                $_POST['school-address'] ?? NULL,
-                $_POST['last-grade-level'] ?? NULL,
-                $last_sy_attended,
-
-                $_POST['balik'],
-                $_POST['grade-level'] ?? NULL,
-                $_POST['general-average'] ?? NULL,
-                $_POST['semester'] ?? 1,
-                $student_id
-            ],
-            "issis" . "iiiii"
-        );
-        $trans_id = mysqli_insert_id($this->db);
-        echo 'Added promotion record...<br>';
-
+        echo 'Adding transferee record...<br>';
         if($_POST['balik'] == 1 OR isset($_POST['transferee']) && $_POST['transferee'] == 'yes'){
+            $this->prepared_query(
+                "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
+                    . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [
+                    $_POST['school-id-no'] ?? NULL,
+                    $_POST['school-name'] ?? NULL,
+                    $_POST['school-address'] ?? NULL,
+                    $_POST['last-grade-level'] ?? NULL,
+                    $last_sy_attended,
+
+                    $_POST['balik'],
+                    $_POST['grade-level'] ?? NULL,
+                    $_POST['general-average'] ?? NULL,
+                    $_POST['semester'] ?? 1,
+                    $student_id
+                ],
+                "issis" . "iiiii"
+            );
+            $trans_id = mysqli_insert_id($this->db);
+            echo 'Added promotion record...<br>';
             $this->transferee_assessment($student_id,$trans_id );
         }
-        
 
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
@@ -898,7 +896,7 @@ trait Enrollment
 
     public function lastestEnrollmentDetail(){
         $student_id = $_SESSION['id'];
-        $result = $this->query("SELECT date_first_attended, enrolled_in, semester, curr_code, section_code, prog_code FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
+        $result = $this->query("SELECT date_first_attended, enrolled_in, semester, curr_code, section_code, prog_code, sy_id FROM enrollment WHERE stud_id = $student_id ORDER BY date_of_enroll desc");
         $previousDeets = [];
         
         // while ($row = mysqli_fetch_row($result)) {
@@ -919,6 +917,7 @@ trait Enrollment
                     'curr_code' => $data[3],
                     'section' => $data[4],
                     'prog_code' => $data[5],
+                    'sy_id' => $data[6]
                 ];
         
         return $previousDeets;
@@ -1704,7 +1703,7 @@ trait Enrollment
             # insert selected subject
             if (isset($_POST['subjects'])) {
                 foreach ($_POST['subjects'] as $sub_code) {
-                    $this->query("INSERT INTO transferee_subject VALUES ('$trans_id', '$sub_code');");
+                    $this->query("INSERT INTO transfereesubject VALUES ('$trans_id', '$sub_code');");
                 }
             }
     }
@@ -1788,7 +1787,15 @@ trait Grade
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
-        AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']};");
+        AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']}");
+        // echo ("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade
+        // FROM classgrade
+        // JOIN student USING(stud_id)
+        // JOIN enrollment e USING(stud_id)
+        // JOIN sysub USING(sub_code)
+        // JOIN subjectclass sc USING(sub_sy_id)
+        // WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
+        // AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']}");
         
         // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         // FROM student 
@@ -2062,11 +2069,16 @@ trait Grade
 
         function actions($report_id, $stud_id, $promote, $qtr, $lvl)
         {
+            $class = '';
 
             if($qtr == 4 AND $lvl == 12){
                 $class = 'hidden';
-            } else {
+            }
+
+            if ($_SESSION['current_quarter'] == 2 OR $_SESSION['current_quarter'] == 4 ){
                 $class = '';
+            } else {
+                $class = 'hidden';
             }
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
@@ -2110,7 +2122,7 @@ trait Grade
 
 
         $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
+                                JOIN enrollment USING (stud_id) WHERE  enrollment.semester = {$_SESSION['current_semester']} AND section_code='$section_code' ORDER BY sex, last_name;");
                                 // echo("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 // JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
@@ -2127,28 +2139,27 @@ trait Grade
                 $first_gen_ave = $temp[2];
                 $second_gen_ave = $temp[3];
             }
-            $editable = $editable2 = '';
+            $editable = $editable2 = 'readonly';
 
-            if ($_SESSION['user_type'] != 'AD') {
+            if ($_SESSION['user_type'] == 'AD') {
                 // if ($temp[1] == 1) {
-                    $editable = 'readonly';
+                    $editable = '';
                 // }
             }
 
-            if (4 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD') {
-                $editable2 = 'readonly';
-            } else if (2 != $_SESSION['current_quarter'] and $_SESSION['user_type'] != 'AD'){
-                $editable = 'readonly';
+            if (4 == $_SESSION['current_quarter'] and $_SESSION['user_type'] == 'AD') {
+                $editable2 = '';
+            } else if (2 == $_SESSION['current_quarter'] and $_SESSION['user_type'] == 'AD'){
+                $editable = '';
             }
 
-           
 
             $students[] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/first/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
-                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second/general_average' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
+                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/first_gen_ave' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
+                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second_gen_ave' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 1 ? 'Promoted' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'],$qtr,$lvl)
@@ -2163,9 +2174,9 @@ trait Grade
 
     public function promoteStudent()
     {
-        $promote = $_POST['promote'];
+        $promote = ($_SESSION['current_quarter'] == 4?2:($_SESSION['current_quarter'] == 2?1:0));
         $stud_id = $_POST['stud_id'];
-       
-        $this->query("UPDATE `enrollment` SET `promote`= $promote WHERE stud_id = $stud_id;");
+
+        $this->query("UPDATE `enrollment` SET `promote`= $promote, `semester` = 2 WHERE stud_id = $stud_id;");
     }
 }

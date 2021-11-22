@@ -80,7 +80,11 @@ $enrollmentData = $user->lastestEnrollmentDetail();
         <?php include_once('../inc/studentSideBar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
+            <?php if($enrollmentData['sy_id'] == $_SESSION['sy_id']){
+                include_once("enrolled.php");
+            } else {?> 
             <section class="wrapper">
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
@@ -92,15 +96,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                                 </nav>
                                 <div class="container px-4 text-center">
                                     <div class="d-flex justify-content-center">
-                                        <div class="w-auto mx-5">
-                                            <!-- <div class="row">
-                    <div class="col-4">
-                        <img src="../assets/logoSc.png" alt="PCNHS Logo" style="width: 50px; height: auto;">
-                    </div>
-                    <div class="col-8">
-                        <p><small>Pines City National High School <br> Baguio City</small></p>
-                    </div>
-                </div> -->
+                                        <div class="w-auto mx-5">                    
                                             <p class="mb-0"><small>Pines City National High School</small></p>
                                             <h3 class="mb-0">Enrollment Form</h3>
                                             <p><small>Senior High <i class="bi bi-dot"></i> SY <?php echo $_SESSION['school_year']; ?><br>Baguio City</small></p>
@@ -583,6 +579,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                     </div>
                 </div>
             </section>
+            <?php }?>
             <!-- MAIN CONTENT END-->
             <!-- FOOTER -->
             <?php include_once("../inc/footer.html"); ?>
@@ -596,7 +593,6 @@ $enrollmentData = $user->lastestEnrollmentDetail();
     <!-- TOAST END -->
 
     <!-- BOOTSTRAP TABLE JS -->
-    <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
