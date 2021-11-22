@@ -11,40 +11,38 @@ $admin = new Administration();
             <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
         </ol>
     </nav>
-    <div class="row justify-content-between">
-        <div class="col-md-6">
+    <div class="d-flex justify-content-between row">
+        <div class="col-auto mt-2">
             <h3 class="fw-bold">Curriculum</h3>
         </div>
-        <div class="col-md-6 d-flex justify-content-lg-end">
-            <div class="col-auto">
-                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
-            </div>
-            <div class="col-auto">
-                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
-            </div>
+        <div class="col-auto">
+            <button type="button" class="view-archive btn btn-secondary mt-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
+            <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
         </div>
     </div>
+</header>
+<div class="container">
     <!-- SEARCH BAR -->
     <form action="">
         <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
     </form>
-</header>
-<div class="content">
-    <!-- NO RESULTS MESSAGE -->
-    <div class="no-result-msg-con w-100 d-flex justify-content-center">
-        <p class="no-result-msg" style="display: none; margin-top: 20vh;">No results found</p>
-    </div>
-    <!-- SUB SPINNER -->
-    <div id="curriculum-spinner" class="sub-spinner" style="display: none; height: 60vh;">
-        <div class="spinner-con h-100 position-relative">
-            <div class="spinner-border position-absolute top-0 start-0 bottom-0 end-0 m-auto" style="margin: auto !important;" role="status">
-                <span class="visually-hidden">Loading...</span>
+    <div class="content">
+        <!-- NO RESULTS MESSAGE -->
+        <div class="no-result-msg-con w-100 d-flex justify-content-center">
+            <p class="no-result-msg" style="display: none; margin-top: 20vh;">No results found</p>
+        </div>
+        <!-- SUB SPINNER -->
+        <div id="curriculum-spinner" class="sub-spinner" style="display: none; height: 60vh;">
+            <div class="spinner-con h-100 position-relative">
+                <div class="spinner-border position-absolute top-0 start-0 bottom-0 end-0 m-auto" style="margin: auto !important;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
         </div>
     </div>
     <!--CARDS-->
-    <div class="ms-4 me-3">
-        <ul data-page="curriculum" class="cards-con d-flex flex-wrap container mt-4 h-auto" style="min-height: 75vh;">
+    <div class="">
+        <ul data-page="curriculum" class="cards-con d-flex justify-content-center flex-wrap mt-4 me-5 h-auto" style="min-height: 60vh;">
 
         </ul>
         <!-- TEMPLATE -->
@@ -86,7 +84,7 @@ $admin = new Administration();
                     <p><small class='text-secondary'>Please complete the following: </small></p>
                     <div class="form-group">
                         <label for="curr-code">Code</label>
-                        <input id="curr-code" type="text" name="code" class='form-control form-control-sm mb-2' placeholder="Enter unique code here. ex. K12A"/>
+                        <input id="curr-code" type="text" name="code" class='form-control form-control-sm mb-2' placeholder="Enter unique code here. ex. K12A" />
                     </div>
                     <div class="form-group">
                         <label for="curr-name">Name</label>
