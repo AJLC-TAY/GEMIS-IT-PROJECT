@@ -691,6 +691,7 @@ trait FacultySharedMethods
      */
     public function get_handled_sub_classes($teacher_id = NULL): array
     {
+
         if(empty($_SESSION)) {
             session_start();
         }
@@ -709,8 +710,9 @@ trait FacultySharedMethods
                 JOIN sharedsubject ss USING (sub_code)
                 JOIN section se USING(section_code)
                 JOIN subject s ON s.sub_code=sc.sub_code
-                WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']} AND ss.sub_semester = {$_SESSION['current_semester']} ";
+                WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']} AND ss.sub_semester = '{$_SESSION['current_semester']}' ";
 
+// echo($query);
         $result = $this->query($query);
         $handled_sub_classes = array();
 
@@ -1023,7 +1025,7 @@ trait Enrollment
         $this->prepared_query($query, $values, $params);
         $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
         $rep_id = $this->initializeGrades($student_id, $current_sy, $semester);
-        header("Location: ../student/student.php");
+        header("Location: enrolled");
     }
 
     public function getEnrollees()
@@ -2098,9 +2100,8 @@ trait Grade
           </div>
           </div>";
 
-          if ()
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 1 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
+          $action .= $promote == 2 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
           return $action;
 
         }
@@ -2171,6 +2172,7 @@ trait Grade
 
     public function promoteStudent()
     {
+        session_start();
         $promote = ($_SESSION['current_quarter'] == 4?2:($_SESSION['current_quarter'] == 2?1:0));
         $stud_id = $_POST['stud_id'];
 
