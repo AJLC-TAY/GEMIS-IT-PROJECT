@@ -1260,28 +1260,36 @@ trait Enrollment
 
     public function getEnrollmentReportData($is_json = false)
     {
-        $school_year = 9;
-        $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT c.curr_code, curr_desc, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment e
+                                      JOIN curriculum c ON c.curr_code = e.curr_code JOIN program USING (prog_code) WHERE sy_id='$sy_id' GROUP BY prog_code, valid_stud_data;");
         $data = [];
-
-        $track = "";
         while ($row = mysqli_fetch_assoc($result)) {
             $track = $row['curr_code'];
             $program = $row['prog_code'];
-            $count =  $row['count'];
             $index = $row['valid_stud_data'] == 1 ? 1 : 0;
-            if (count($data) === 0) {
-                $program_array[$index] = $count;
-                $data[$track] = [$program => $program_array];
-            } else {
-                if ($this->in_multi_array($track, $data)) {
-                    $data[$track][$program][] = $count;
-                } else {
-                    $program_array = [$count];
-                    $data[$track] = [$program => $program_array];
-                }
-            }
+
+            $data[$track]['description'] = $row['curr_desc'];
+            $data[$track]['strands'][$program]['counts'][$index] = $row['count'];
+
+
+//            if (count($data) === 0) {
+//                $program_array[$index] = $count;
+//                $data[$track] = [$program => $program_array];
+//            } else {
+//                if ($this->in_multi_array($track, $data)) {
+//                    $data[$track][$program][] = $count;
+//                } else {
+//                    $program_array = [$count];
+//                    $data[$track] = [$program => $program_array];
+//                }
+//            }
         }
+
+//        foreach ($programs as $track_code => $prog_data) {
+//
+//        }
+//
 
         if ($is_json) {
             echo json_encode($data);

@@ -2,7 +2,7 @@
 require "../class/Administration.php";
 $admin = new Administration();
 $tracks = $admin->getEnrollmentReportData();
-$school_year = "2021 - 2022";
+$school_year = $_SESSION['school_year'];
 $signatory = $_SESSION['User'];
 $position = $_SESSION['user_type'] == 'FA' ? "Faculty" : "Admin";
 $date = strftime('%Y-%m-%d', strtotime(date("F j, Y")));
@@ -37,13 +37,14 @@ $programs = [];
 
                     foreach($tracks as $track_id => $track_value) {
                         $track_names[] = $track_id;
-
                         echo "<table class='table  table-sm mx-auto' style='width: 90%;'>";
-                        echo "<thead class='t>
+
+                        echo "<col width='40%'><col width='30%'><col width='30%'>
+                    <thead>
                     <tr>
                         <th colspan='5'>
                             <h5>$track_id</h5>
-                        
+                            <p>${track_value['description']}</p>
                         </th>
                     </tr>
                     <tr class='text-center'>
@@ -51,19 +52,18 @@ $programs = [];
                         <th>Accepted</th>
                         <th>Rejected</th>
                     </tr>
-                </thead>";
-                        echo "<tbody>";
+                </thead><tbody>";
 
                         $accepted_count_list = [];
                         $rejected_count_list = [];
 
                         echo "<tr>";
-                        foreach($track_value as $tv_id => $tv_value) {
-                            echo "<td>$tv_id</td>";
-                            $rejected = $rejected_grand_total[] = $rejected_count_list[] = $tv_value[0] ?? 0;
-                            $accepted = $accepted_grand_total[] = $accepted_count_list[] = $tv_value[1] ?? 0;
-                            echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][1]' class='form-control form-control-sm mb-0 me-3' value ='$accepted' ></td>";
-                            echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][0]' class='form-control form-control-sm mb-0 me-3' value ='$rejected' ></td>";
+                        foreach($track_value['strands'] as $tv_id => $tv_value) {
+                            echo "<td class='text-center p-2'>$tv_id</td>";
+                            $rejected = $rejected_grand_total[] = $rejected_count_list[] = $tv_value['counts'][0] ?? 0;
+                            $accepted = $accepted_grand_total[] = $accepted_count_list[] = $tv_value['counts'][1] ?? 0;
+                            echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][1]' class='form-control text-center form-control-sm mb-0 me-3' value ='$accepted' ></td>";
+                            echo "<td class='py-2'><input name='tracks[$track_id][$tv_id][0]' class='form-control text-center form-control-sm mb-0 me-3' value ='$rejected' ></td>";
                             // Accepted sub total column
                             if ($tv_id == array_key_last($track_value)) { 			// if the element is the last key, calculate total
                                 echo "</tr>";

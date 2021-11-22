@@ -1,8 +1,9 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
-
-var stepper, enrollValidator, form;
-form =  $("#enrollment-form");
-stepper = new Stepper($('#stepper')[0]);
+try {
+  var stepper, enrollValidator, form;
+  form =  $("#enrollment-form");
+  stepper = new Stepper($('#stepper')[0]);
+} catch (e) {}
 
 $(function () {
   $.validator.setDefaults({
