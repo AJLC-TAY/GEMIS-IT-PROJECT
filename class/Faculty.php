@@ -263,17 +263,19 @@ class FacultyModule extends Dbconfig
 
     public function gradeAdvisory()
     {
+        session_start();
         $stud_id = $_POST['id'];
         $report_id = $_POST['rep_id'];
         $gen_ave = $_POST['gen_ave'];
+        $sem = $_POST['sem'];
         $stat = (int) $_POST['stat'];
 
         $gen_ave = $gen_ave != "" ? $gen_ave : NULL;
 
         echo ("stud id:$stud_id rep_id: $report_id gen_ave: $gen_ave stat: $stat");
-
+        
         $this->prepared_query(
-            "UPDATE `gradereport` SET `general_average` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
+            "UPDATE `gradereport` SET `$sem` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
             [$gen_ave, $stat, $stud_id, $report_id],
             "iiii"
         );
