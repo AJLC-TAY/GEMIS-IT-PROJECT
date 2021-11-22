@@ -2112,7 +2112,7 @@ trait Grade
 
 
         $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
-                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
+                                JOIN enrollment USING (stud_id) WHERE section_code='$section_code' ORDER BY sex, last_name;");
                                 // echo("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 // JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
