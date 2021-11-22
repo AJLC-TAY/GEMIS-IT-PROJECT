@@ -30,17 +30,23 @@
                     ?>
                 </select>
             </div>
+            <?php  $class = "hidden";
+             if ($_SESSION['current_quarter'] == 2 OR $_SESSION['current_quarter'] == 4) {
+                $class = "";
+                
+            } ?>  
             <div class="col-lg-3 d-flex-inline mb-2">
                 <button type="button" class="btn btn-secondary mb-1 calculate" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
-                <button type="button" class="btn btn-primary mb-1 multi-promote"></i>Promote</button>
+                <button type="button" class="btn btn-primary mb-1 multi-promote <?php echo $class?>"></i>Promote</button>
             </div>
-            <?php
-            if ($_SESSION['current_quarter'] == 4) {
+            <?php 
+             if ($_SESSION['current_quarter'] == 2 OR $_SESSION['current_quarter'] == 4) {
+                $class = "";
                 echo '<div class="col-lg-3 mb-2">';
                 echo '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>';
                 echo '</div>';
-            }
-            ?>
+            } ?> 
+            
         </div>
 
         <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
