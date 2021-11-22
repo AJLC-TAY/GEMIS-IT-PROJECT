@@ -40,6 +40,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'promote') {
     $faculty->promoteStudent();
 }
 
+if (isset($_POST['action']) && $_POST['action'] === 'assessTransferee') {
+    $faculty->assessTransferee();
+}
+
 // if ((isset($_POST['action']) && $_POST['action'] == 'export')) {
 //     $faculty->exportSubjectGradesToCSV();
 // }

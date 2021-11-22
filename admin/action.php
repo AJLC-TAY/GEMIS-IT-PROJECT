@@ -66,6 +66,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteStudent') {
     $admin->deleteStudent();
     $admin->enterLog("Delete Student");
 }
+if (isset($_POST['action']) && $_POST['action'] === 'assessTransferee') {
+    $admin->assessTransferee();
+}
 
 /******** USER ********/
 if (isset($_POST['action']) && $_POST['action'] === 'deactivate') {

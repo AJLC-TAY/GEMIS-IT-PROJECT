@@ -24,7 +24,10 @@ include_once("../inc/head.html");
                         <div class="row mt ps-3">
                         <?php 
                             $jsFilePath = "<script type='module' src='../js/admin/student.js'></script>";
-                            if (isset($_GET['action']) && $_GET['action'] == 'edit') {
+                            if (isset($_GET['action']) && $_GET['action'] == 'assesTransferee') {
+                                include_once("student/transfereeForm.php");
+                                $jsFilePath = "<script src='../js/admin/transferee.js'></script>";
+                            } else if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                 include_once("student/studentForm.php");
                             } else if (isset($_GET['action']) && $_GET['action'] == 'export') {
                                 include_once("student/export.php");

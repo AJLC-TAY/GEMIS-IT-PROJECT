@@ -332,7 +332,17 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 <div class="tab-pane fade bg-white p-4 <?php echo $tab_three_active; ?>" id="grades" role="tabpanel" aria-labelledby="docu-tab">
                     <div class="container px-1 text-start">
                         <div class="row p-0">
-                            <h5>Subject checklist</h5>
+                            <div class="container">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <h5>Subject checklist</h5>
+                                    </div>
+                                    <div class="col-6 d-flex justify-content-lg-end">
+                                        <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id."&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
+                                    </div>
+
+                                </div>
+                            </div>
                             <div class="current-con">
                                 <?php
                                 function echoSubjects($grades, $status, $sub_type)

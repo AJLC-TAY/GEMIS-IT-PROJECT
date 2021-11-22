@@ -100,5 +100,10 @@ if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
     $admin->getStudentAttendanceJSON();
 }
 
+
+/** TRANSFEREE  */
+if (isset($_GET['data']) && $_GET['data'] == 'transfereesubject') {
+    $admin->getTransfereeSubject();
+}
 ?>
 

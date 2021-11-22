@@ -374,7 +374,7 @@ trait UserSharedMethods
         $grades = [];
         $result = $this->query("SELECT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
                                     FROM classgrade cg
-                                    LEFT JOIN transferee_subject ts USING (sub_code)
+                                    LEFT JOIN transfereesubject ts USING (sub_code)
                                     LEFT JOIN transferee t USING (transferee_id)
                                     JOIN subject s on cg.sub_code = s.sub_code
                                     WHERE cg.stud_id = '$stud_id'
@@ -1193,6 +1193,41 @@ trait Enrollment
         }
 
         return $filter;
+    }
+
+    public function assessTransferee()
+    {
+        $stud_id = $_POST['stud-id'];
+        $transferee_id = $_POST['transferee-id'];
+        $track = $_POST['trans-track'];
+        $semester = $_POST['trans-semester'];
+        $sy = $_POST['trans-sy'];
+        $school = $_POST['trans-school'];
+        $prog_code = $_POST['prog-code'];
+        # update transferee table
+        $this->prepared_query("UPDATE transferee SET track = ?, semester = ?, last_school_yr_comp = ?, school_name = ? WHERE transferee_id = ?;",
+            [$track, $semester, $sy, $school, $transferee_id], 'sissi');
+        # save subjects
+        # current subjects
+        $current_subjects = [];
+        $result = $this->query("SELECT sub_code FROM transfereesubject WHERE transferee_id = '$transferee_id';");
+        while ($row = mysqli_fetch_row($result)) {
+            $current_subjects[] = $row[0];
+        }
+
+        # new set of subjects
+        $subjects = $_POST['subjects'];
+
+        # subjects to delete
+        $to_delete_subjects = array_diff($current_subjects, $subjects);
+        $this->query("DELETE FROM transfereesubject WHERE transferee_id = '$transferee_id' AND sub_code IN ('". implode("'.'", $to_delete_subjects) ."');");
+        $to_add_subjects = array_diff($subjects, $current_subjects);
+        foreach($to_add_subjects as $to_add) {
+            $this->query("INSERT INTO transfereesubject (transferee_id, sub_code) VALUES ('$transferee_id', '$to_add');");
+        }
+
+        # record subject schedule
+        $this->saveTransfereeSchedule($stud_id, $transferee_id, $prog_code);
     }
 
 

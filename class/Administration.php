@@ -1346,7 +1346,7 @@ class Administration extends Dbconfig
         echo json_encode($subjectList);
     }
 
-    public function getSubjectScheduleData($prog_code = NULL)
+    public function getSubjectScheduleData($prog_code = NULL, $is_for_tranferee = FALSE, $transferee_id = NULL)
     {
         if (empty($_SESSION)) {
             session_start();
@@ -1362,7 +1362,7 @@ class Administration extends Dbconfig
         } else {
             # sy id exists
             $result = $this->query("SELECT DISTINCT sub_code, sub_name, sub_type, prog_code FROM sysub JOIN subject USING (sub_code) 
-                                            JOIN sharedsubject USING (sub_code) WHERE sysub.sy_id='$sy_id';");
+                                        JOIN sharedsubject USING (sub_code) WHERE sysub.sy_id='$sy_id';");
         }
 
         $subjectList = array();
@@ -1376,9 +1376,16 @@ class Administration extends Dbconfig
         }
 
         $subjectList['schedule'] = [];
-        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '$sy_id'  $prog_condition;");
-        while ($row = mysqli_fetch_assoc($result)) {
-            $subjectList['schedule'][$row['prog_code']]["data[" . $row['for_grd_level'] . "][" . $row['sub_semester'] . "][" . $row['sub_type'] . "][]"][] =  $row['sub_code'];
+        if ($is_for_tranferee) {
+            $result = $this->query("SELECT * FROM transfereeschedule JOIN subject USING (sub_code) 
+                                             WHERE transferee_id='$transferee_id';");
+        } else {
+            $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '$sy_id'  $prog_condition;");
+        }
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $subjectList['schedule'][$row['prog_code']]["data[" . $row['for_grd_level'] . "][" . $row['sub_semester'] . "][" . $row['sub_type'] . "][]"][] =  $row['sub_code'];
+            }
         }
 
 //        if ($is_JSON) {
@@ -1803,6 +1810,8 @@ class Administration extends Dbconfig
                 }
             }
         }
+
+
         // foreach($_POST['data'] as $grd => $values) {
         //     foreach($values as $sem => $sem_val) {
         //         foreach($sem_val as $type => $codes) {
@@ -1840,6 +1849,65 @@ class Administration extends Dbconfig
         //     }
         // }
         echo json_encode(["program" => $prog_code, "new" => $this->getSubjectScheduleData($prog_code)['schedule']]);
+    }
+
+    public function saveTransfereeSchedule($stud_id, $transferee_id, $prog_code)
+    {
+        session_start();
+        $sy_id = $_SESSION['sy_id'] ?? NULL;
+//        $prog_code = $_POST['program'];
+        $grd_levels = [11, 12];
+        $semesters = [1, 2];
+        $types = ['core', 'specialized', 'applied'];
+        $sy_condition = (is_null($sy_id) ? "IS NULL" : "= '$sy_id'");
+        foreach ($grd_levels as $grd) {
+            foreach ($semesters as $sem) {
+                foreach ($types as $type) {
+                    $codes = $_POST['data'][$grd][$sem][$type] ?? [];
+
+                    $result = $this->query("SELECT sub_code FROM transfereeschedule JOIN subject USING (sub_code) WHERE sub_type='$type' 
+                        AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');");
+
+                    echo "SELECT sub_code FROM transfereeschedule JOIN subject USING (sub_code) WHERE sub_type='$type' 
+                        AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');";
+                    $current = [];
+                    while ($row = mysqli_fetch_row($result)) {
+                        $current[] = $row[0];
+                    }
+
+                    # Delete
+                    $delete = array_diff($current, $codes);
+                    foreach ($delete as $sub_del) {
+                        $this->query("DELETE FROM transfereeschedule WHERE transferee_id = '$transferee_id' AND sub_code = '$sub_del' AND prog_code = '$prog_code' AND for_grd_level = '$grd' AND sub_semester = '$sem' AND sy_id $sy_condition;");
+                    }
+                    # Add
+                    $add = array_diff($codes, $current);
+                    foreach ($add as $sub_add) {
+                        $this->query("INSERT INTO transfereeschedule (transferee_id, sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$transferee_id','$sub_add', '$prog_code', '$grd', '$sem', " . (is_null($sy_id) ? "NULL" : "'$sy_id'") . ");");
+                    }
+
+                    # update
+                    $update = array_intersect($codes, $current);
+                    foreach ($update as $sub_upd) {
+                        echo "UPDATE transfereeschedule SET for_grd_level='$grd', sub_semester='$sem' WHERE transferee_id = '$transferee_id' AND sub_code='$sub_upd' AND prog_code='$prog_code' AND sy_id $sy_condition";
+                        $this->query("UPDATE sharedsubject SET for_grd_level='$grd', sub_semester='$sem' WHERE sub_code='$sub_upd' AND prog_code='$prog_code' AND sy_id $sy_condition;");
+                    }
+                }
+            }
+        }
+        header("Location: student.php?id=$stud_id");
+    }
+
+    public function getTransfereeSubject()
+    {
+        $data = [];
+        $result = $this->query("SELECT sub_code FROM transfereesubject WHERE transferee_id = '{$_GET['transferee_id']}';");
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_row($result)) {
+                $data[] = $row[0];
+            }
+        }
+        echo json_encode($data);
     }
     /** Faculty Methods */
 
