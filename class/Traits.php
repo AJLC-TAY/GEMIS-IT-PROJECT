@@ -858,20 +858,24 @@ trait Enrollment
 
         # promotion
         echo 'Adding transferee record...<br>';
+        $last_sy_attended = '';
+        if (isset($_POST['last-sy'])) {
+            $last_sy_attended = $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1];
+        }
         $this->prepared_query(
             "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
                 . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
-                $_POST['school-id-no'] ?: NULL,
-                $_POST['school-name'],
-                $_POST['school-address'],
-                $_POST['last-grade-level'],
-                $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1],
+                $_POST['school-id-no'] ?? NULL,
+                $_POST['school-name'] ?? NULL,
+                $_POST['school-address'] ?? NULL,
+                $_POST['last-grade-level'] ?? NULL,
+                $last_sy_attended,
 
                 $_POST['balik'],
-                $_POST['grade-level'],
-                $_POST['general-average'],
-                $_POST['semester'] ?? 1, # default is 1
+                $_POST['grade-level'] ?? NULL,
+                $_POST['general-average'] ?? NULL,
+                $_POST['semester'] ?? 1,
                 $student_id
             ],
             "issis" . "iiiii"

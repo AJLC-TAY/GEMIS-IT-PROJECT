@@ -109,7 +109,6 @@ $(function() {
         let preview = $('#imgPreview');
         img = document.getElementById("psaPreview");
         img.src = this.src;
-        //  this.src;
         preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
@@ -122,13 +121,6 @@ $(function() {
         preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
-
-    // $(document).on("click", "#reset-btn", function() {
-    //     let modal = $("#confirmation-modal");
-    //     modal.find(".message").html("Reset password of this student?");
-    //     $("#reset-form").html(`<input type="hidden" name="id[]" value="${$(this).attr("data-id")}">`);
-    //     modal.modal("show");
-    // });
 
     $(document).on("submit", "#reset-form", function(e) {
         e.preventDefault();

@@ -23,15 +23,15 @@ $stud_id = '110001';  // test
 
 $grades = $admin->listGrade();
 
-$userProfile = $admin->getProfile("ST");
-$stud_id = $userProfile->get_stud_id();
-$lrn = $userProfile->get_lrn();
-$lastName = $userProfile->get_last_name();
-$firstName = $userProfile->get_first_name();
-$midName = $userProfile->get_middle_name();
-$sex = $userProfile->get_sex();
-$age = $userProfile->get_age();
-$section = $userProfile->get_section();
+$student = $admin->getProfile("ST");
+$stud_id = $student->get_stud_id();
+$lrn = $student->get_lrn();
+$lastName = $student->get_last_name();
+$firstName = $student->get_first_name();
+$midName = $student->get_middle_name();
+$sex = $student->get_sex();
+$age = $student->get_age();
+$section = $student->get_section();
 
 // $admittedIn = 'None';
 // $eligible = '12';
