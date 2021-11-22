@@ -17,12 +17,12 @@
 
 <div class="container mt-1 ms-0">
     <div class="card h-auto bg-light" style="min-height: 70vh !important;">
-        <div class="row">
+        <div class="d-flex justify-content-between mb-3">
             <!-- SEARCH BAR -->
+            <span class="flex-grow-1 me-2">
+                <input id="search-input" type="search" class="form-control " placeholder="Search something here">
+            </span>
             <div class="col-lg-3 mb-2">
-                <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-            </div>
-            <div class="col-lg-3 mb-2" >
                 <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
                     <?php
                     echo $adv_opn;
@@ -30,23 +30,23 @@
                     ?>
                 </select>
             </div>
-            <?php  $class = "hidden";
-             if ($_SESSION['current_quarter'] == 2 OR $_SESSION['current_quarter'] == 4) {
+            <?php $class = "hidden";
+            if ($_SESSION['current_quarter'] == 2 or $_SESSION['current_quarter'] == 4) {
                 $class = "";
-                
-            } ?>  
-            <div class="col-lg-3 d-flex-inline mb-2">
-                <button type="button" class="btn btn-secondary mb-1 calculate" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
-                <button type="button" class="btn btn-primary mb-1 multi-promote <?php echo $class?>"></i>Promote</button>
+            } ?>
+            <div class="d-flex-inline mb-2 ">
+                <button type="button" class="btn btn-outline-dark ms-2 calculate" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
+                <button type="button" class="btn btn-secondary multi-promote <?php echo $class ?>"></i>Promote</button>
             </div>
-            <?php 
-             if ($_SESSION['current_quarter'] == 2 OR $_SESSION['current_quarter'] == 4) {
+            <?php
+            if ($_SESSION['current_quarter'] == 2 or $_SESSION['current_quarter'] == 4) {
                 $class = "";
-                echo '<div class="col-lg-3 mb-2">';
-                echo '<button type="button" class="btn btn-success ms-2 save"></i>Save</button><button type="button" class="btn btn-success submit">Submit</button>';
+                echo '<div class="d-flex-inline justify-content-end">';
+                echo '<button type="button" class="btn btn-primary ms-1 save"></i>Save</button>
+                <button type="button" class="btn btn-success submit">Submit</button>';
                 echo '</div>';
-            } ?> 
-            
+            } ?>
+
         </div>
 
         <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
@@ -92,8 +92,8 @@
                 //   } 
                 ?> -->
 
-                    <!-- </table> -->
-                    <table id="for-promotion-table" class="table-striped table-sm">
+                <!-- </table> -->
+                <table id="for-promotion-table" class="table-striped table-sm">
                     <thead class='thead-dark'>
                         <tr>
                             <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>
@@ -102,7 +102,7 @@
                             <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
                         </tr>
                     </thead>
-                    </table>
+                </table>
                 <!-- </div> -->
             </div>
             <div class="modal-footer">
