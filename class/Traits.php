@@ -1698,7 +1698,7 @@ trait Enrollment
             # insert selected subject
             if (isset($_POST['subjects'])) {
                 foreach ($_POST['subjects'] as $sub_code) {
-                    $this->query("INSERT INTO transferee_subject VALUES ('$trans_id', '$sub_code');");
+                    $this->query("INSERT INTO transfereesubject VALUES ('$trans_id', '$sub_code');");
                 }
             }
     }
@@ -1782,7 +1782,7 @@ trait Grade
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
-        AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']};");
+        AND e.sy_id=$sy_id");
         // echo ("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         // FROM classgrade 
         // JOIN student USING(stud_id) 
