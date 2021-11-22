@@ -12,6 +12,45 @@ $birth_cert = $student->get_psa_birth_cert();
 $form_137 = $student->get_form137();
 $valid_status = $student->get_status();
 
+$strand = $student->get_strand();
+$yrlvl = $student->get_yrLvl();
+$age = $student->get_age();
+$birthdate = $student->get_birthdate();
+$birthdate = date("F j, Y", strtotime($birthdate));
+$birth_place = $student->get_birth_place();
+$indigenous_group = $student->get_indigenous_group();
+$mother_tongue = $student->get_mother_tongue();
+$religion = $student->get_religion();
+$address = $student->get_address();
+$add = $address['address'];
+$cp_no = $student->get_cp_no();
+$psa_birth_cert = $student->get_psa_birth_cert();
+$belong_to_ipcc = $student->get_belong_to_ipcc();
+$id_picture = $student->get_id_picture();
+$section = $student->get_section();
+
+$parents = $student->get_parents();
+$guardian = $student->get_guardians();
+$grades = $student->get_grades();
+
+if (is_null($parents)) {
+    $parents = NULL;
+} else {
+    foreach ($parents as $par) {
+        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
+        ${$parent . '_name'} = $par['name'];
+        ${$parent . '_occupation'} = $par['occupation'];
+        ${$parent . '_cp_no'} = $par['cp_no'];
+    }
+}
+
+if (is_null($guardian)) {
+    $guardian = NULL;
+} else {
+    $guardian_name = $guardian['name'];
+    $guardian_cp_no = $guardian['cp_no'];
+    $guardian_relationship = $guardian['relationship'];
+}
 
 const HIDE = "style='display: none;'";
 $change_btn_display = '';
@@ -47,16 +86,15 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
         <div class="">
             <nav id="myTab">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-link active" id="nav-gen-info-tab" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">Credentials</a>
+                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#credential" type="button" role="tab" aria-controls="credential" aria-selected="true">Credentials</a>
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#gen-info" type="button" role="tab" aria-controls="gen-info" aria-selected="true">Information</a>
                 </div>
             </nav>
         </div>
         <div class="tab-content" id="myTabContent">
             <!-- DOCUMENTS -->
-            <div class="tab-pane fade bg-white p-4 show active" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade bg-white p-4 show active" id="credential" role="tabpanel" aria-labelledby="home-tab">
                 <div class="w-100 h-auto text-start mx-auto">
-                    <!-- <h5>DOCUMENTS</h5> -->
-                    <!-- <hr> -->
                     <div class="row g-3 p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-4 mx-0">
@@ -122,33 +160,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                             <img id="form137" src="<?php echo $form137Preview; ?>" class="img-responsive" alt="Form 137" style="width:100%">
                                         </div>
                                     </div>
-                                <!-- <div class="col-sm-3">
-                                    <h6>FORM 138</h6>
-                                </div>
-                                <div class="col-sm-9">
-                                    <a href="#" id="pop">
-                                        <img id="imageresource" src="<?php //echo $form_137; ?>" style="width: 50%; height: auto;">
-                                    </a>
-
-                                   
-                                </div> -->
                             </div>
-                            <!-- <div class="row mt-3">
-                                <div class="row">
-                                
-                                </div> -->
-                                <!-- <div class="col-sm-3">
-                                    <h6>PSA Birth Certificate</h6>
-                                </div>
-                                
-                                <div class="col-sm-9">
-                                    <a href="#" id="pop">
-                                        <img id="imageresource" src="<?php // echo $birth_cert; ?>" style="width: 50%; height: auto;">
-                                    </a>
-
-                                   
-                                </div> -->
-                            <!-- </div> -->
                         </div>
                     </div>
                     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal selectSection" aria-hidden="true">
@@ -172,28 +184,110 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                     </div>
                 </div>
             </div>
+            <!-- GENERAL INFORMATION -->
+            <div class="tab-pane fade bg-white p-4" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
+                <div class="row w-100 h-auto text-start mx-auto">
+                    <div class="row p-0">
+                        <!-- PROFILE PICTURE -->
+                        <div class="col-xl-4">
+                            <?php echo "<img src='../$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
+                            <br>
+                            <?php echo "<dl class='row mb-2 ms-1'>
+                                    <dt class='col-md-4'>User ID: </dt>
+                                    <dd class='col-md-8'> $user_id_no </dd>
+                                    <dt class='col-md-4'>Strand: </dt>
+                                    <dd class='col-md-8'> $strand </dd>
+                                    <dt class='col-md-4'>Year Level: </dt>
+                                    <dd class='col-md-8'>$yrlvl</dd>
+                            </dl>" ?>
+                        </div>
+                        <?php $admin->listValuesReport() ?>
+
+                        <!-- PROFILE PICTURE END -->
+                        <!-- INFORMATION DETAILS -->
+                        <div class="col-xl-7 ms-5">
+                            <div class="row">
+                                <h6><b>General Information</b></h6>
+                                <?php
+                                $birthdate = $student->get_birthdate();
+                                $birthdate = date("F j, Y", strtotime($birthdate));
+                                $name = $student->get_name();
+                                echo
+                                "<dl class='row mb-3 ms-2 border border-1 p-2'>
+                                            <dt class='col-md-4'>Student LRN</dt>
+                                            <dd class='col-md-8'>$lrn</dd>
+                                            <dt class='col-md-4'>Name</dt>
+                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>Gender </dt>
+                                            <dd class='col-md-8'> {$student->get_sex()} </dd>
+                                            <dt class='col-md-4'>Age</dt>
+                                            <dd class='col-md-8'> {$student->get_age()} </dd>
+                                            <dt class='col-md-4'>Birthdate</dt>
+                                            <dd class='col-md-8'> {$birthdate} </dd>
+                                            <dt class='col-md-4'>Birth Place</dt>
+                                            <dd class='col-md-8'> $birth_place </dd>
+                                            <dt class='col-md-4'>Indeginous Group </dt>
+                                            <dd class='col-md-8'> $indigenous_group </dd>
+                                            <dt class='col-md-4'>Mother Tongue</dt>
+                                            <dd class='col-md-8'> $mother_tongue </dd>
+                                            <dt class='col-md-4'>Religion </dt>
+                                            <dd class='col-md-8'> $religion </dd>
+
+                                </dl>";
+                                ?>
+                            </div>
+                            <div class="row mt-3">
+                                <h6><b>Contact Information</b></h6>
+                                <?php echo
+                                "<dl class='row mb-3 ms-2'>
+                                        <dt class='col-md-4'>Home Address </dt>
+                                        <dd class='col-md-8'> $add </dd>
+                                        <dt class='col-md-4'>Cellphone No. </dt>
+                                        <dd class='col-md-8'> $cp_no </dd>
+                                        
+                                    </dl>"; ?>
+                                <hr>
+                            </div>
+
+                            <div class="row mt-3">
+                                <h6><b>Contact Persons</b></h6>
+                                <?php if ($parents != NULL) {
+                                    echo "<h6>Parent/s</h6>";
+                                    foreach ($parents as $par) {
+                                        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
+                                        $name = ${$parent . '_name'};
+                                        $occupation = ${$parent . '_occupation'};
+                                        $no = ${$parent . '_cp_no'};
+                                        echo "
+                                        <dl class='row mb-3 ms-2'>
+                                            <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
+                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>Occupation </dt>
+                                            <dd class='col-md-8'> $occupation </dd>
+                                            <dt class='col-md-4'>Contact Number </dt>
+                                            <dd class='col-md-8'> $no </dd>
+                                        </dl>";
+                                    }
+                                }
+                                if ($guardian != NULL) {
+                                    echo "<hr><h6 class='mt-3'>Guardian/s</h6>
+                                        <dl class='row mb-3 ms-2'>
+                                            <dt class='col-md-4'>Guardian's Name</dt>
+                                            <dd class='col-md-8'> $guardian_name </dd>
+                                            <dt class='col-md-4'>Relationship</dt>
+                                            <dd class='col-md-8'> $guardian_relationship </dd>
+                                            <dt class='col-md-4'>Contact Number</dt>
+                                            <dd class='col-md-8'> $guardian_cp_no </dd>
+                                        </dl>";
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<!-- MODAL FIRST -->
- <!-- Creates the bootstrap modal where the image will appear -->
- <!-- <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
-            </div>
-            <div class="modal-body">
-                <img src="<?php echo $form_137; ?>" id="imagepreview" style="width: 400px; height: 264px;" >
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div> -->
 
  <!-- Creates the bootstrap modal where the image will appear -->
  <div class="modal fade" id="psaPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

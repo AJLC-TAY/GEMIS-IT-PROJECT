@@ -37,6 +37,10 @@ include_once("../inc/head.html");
     <?php include_once("../inc/footer.html"); ?>
     <script src="../js/common-custom.js"></script>
     <script src="../js/admin/enrollment.js"></script>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 </body>
 
 </html>

@@ -60,25 +60,28 @@ include_once("../inc/head.html"); ?>
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
     <script src="../assets/js/bootstrap-table-auto-refresh.min.js"></script>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <?php echo $js; ?>
-    <!-- VALIDATION -->
     <script>
         $(function() {
             preload("#enrollment");
-        })
-        var forms = document.querySelectorAll('.needs-validation');
-        Array.prototype.slice.call(forms).forEach(function(form) {
-            form.addEventListener('submit', function(event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation();
-                }
-
-                form.classList.add('was-validated');
-            }, false);
         });
+        // var forms = document.querySelectorAll('.needs-validation');
+        // Array.prototype.slice.call(forms).forEach(function(form) {
+        //     form.addEventListener('submit', function(event) {
+        //         if (!form.checkValidity()) {
+        //             event.preventDefault()
+        //             event.stopPropagation();
+        //         }
+        //
+        //         form.classList.add('was-validated');
+        //     }, false);
+        // });
     </script>
 </body>
 

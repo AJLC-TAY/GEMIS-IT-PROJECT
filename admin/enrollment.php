@@ -88,25 +88,11 @@ if (!isset($_SESSION['sy_id'])) {
     <?php echo $bootstrapJS; ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+    <?php echo $js; ?>
     <!-- VALIDATION -->
     <script src="../js/validation/jquery.validate.min.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
     <script src="../js/validation/validation.js"></script>
-    <script>
-        /** MOVED TO enrollment.js */
-        // var forms = document.querySelectorAll('.needs-validation');
-        // Array.prototype.slice.call(forms).forEach(function(form) {
-        //     form.addEventListener('submit', function(event) {
-        //         if (!form.checkValidity()) {
-        //             event.preventDefault()
-        //             event.stopPropagation();
-        //         }
-
-        //         form.classList.add('was-validated');
-        //     }, false);
-        // });
-    </script>
-    <?php echo $js; ?>
 </body>
 
 </html>

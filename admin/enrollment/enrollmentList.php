@@ -1,6 +1,5 @@
 <?php
 require("../class/Administration.php");
-//$admin = new Administration();
 $filters =  (new Administration())->getEnrollFilters();
 $archived_btn = '';
 $table_opts = '';
@@ -23,11 +22,8 @@ if ($_SESSION['user_type'] == 'AD') {
                         </div>
                        
                     </li>";
-                                
-    
 }
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -138,16 +134,6 @@ if ($_SESSION['user_type'] == 'AD') {
                             </select>
                         </div>
                     </li>
-                    <!--AUTO REFRESH SWITCH-->
-                    <!--                            <div class="col-auto  mb-2 me-0 ms-3 ">-->
-                    <!--                                <div class="input-group input-group-sm ">-->
-                    <!--                                    <div class="form-check form-switch">-->
-                    <!--                                        <input class="form-check-input auto-refresh" name="auto-refresh" type="checkbox" id="auto-refresh-table" checked>-->
-                    <!--                                        <label class="form-check-label" for="auto-refresh-table">Auto Refresh Table</label>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
                     <div class="d-flex justify-content-end">
                         <button type="button" class="reset-filter-btn btn btn-outline-danger btn-sm"><i class="bi bi-x-circle me-2"></i>Reset All</button>
                     </div>
@@ -178,24 +164,24 @@ if ($_SESSION['user_type'] == 'AD') {
 <!-- ENROLLMENT TABLE END-->
 <div class="modal fade" id="delete-student-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <form id="delete-form" method="POST">
-            <input type="hidden" name="action" value="deleteStudent">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Delete Confirmation</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">Delete Confirmation</h4>
                 </div>
-                <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="delete-form" method="POST">
+                    <input type="hidden" name="action" value="deleteStudent">
                     Delete <span id="student-count"></span> selected student/s?
                     <ul id="student-selected" class="list-group mt-3 overflow-auto" style="max-height: 300px"></ul>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" form="delete-form" class="submit btn btn-success btn-sm" value="Delete"/>
-                </div>
+                </form>
             </div>
-        </form>
+            <div class="modal-footer">
+                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" form="delete-form" class="submit btn btn-success btn-sm" value="Delete"/>
+            </div>
+        </div>
     </div>
 </div>
