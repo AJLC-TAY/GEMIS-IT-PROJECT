@@ -140,8 +140,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                             <div class="container-fluid">
                                 <div class="row">
                                     <h5 class="fw-bold">SCHOOL MANAGEMENT</h5>
-                                    <div class="col-lg-6">
-                                        <div class="card bg-white rounded shadow-sm mt-2">
+                                    <div class="col-lg-6 mt-2">
+                                        <div class="card bg-white rounded shadow-sm mt-2 h-100">
                                             <!-- CURRICULUM -->
                                             <section class="mb-2">
                                                 <h6 class='mb-0 fw-bold ms-3 mt-2'>CURRICULUM</h6>
@@ -202,8 +202,8 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        <div class="card bg-pastel shadow-sm mt-2">
+                                    <div class="col-lg-6 mt-2">
+                                        <div class="card bg-pastel shadow-sm mt-2 h-100">
                                             <section class="mb-3">
                                                 <h6 class='mb-0 fw-bold ms-3 mt-2'>ENROLLMENT</h6>
                                                 <hr class="mt-1 mb-3">
@@ -233,7 +233,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="inner mb-4">
+                                                        <div class="inner">
                                                             <div class="card-btn bg-white mx-4 mb-2" style="height: 81%;">
                                                                 <div class="inner row">
                                                                     <div class="ms-4 col-sm-8">

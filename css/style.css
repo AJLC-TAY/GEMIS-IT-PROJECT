@@ -664,69 +664,41 @@ input:checked+.slider:before {
 
 /* Media Queries*/
 
-@media only screen and (max-width: 480px) {
+@media screen and (max-width: 900px) {
     html {
         font-size: 12px;
-    }
-
-    #main-content {
-        margin-left: 0%;
     }
 
     .header {
         position: fixed;
     }
-}
-
-@media screen and (max-width: 660px) {
-    .logo {
-        display: none;
-    }
 
     .topbar { 
         display: none;
     }
 
-    .logout {
-        height: 5px;
-        width: 5px;
-    }
-
-    #main-content {
-        margin-left: 0%;
-    }
-
-
-}
-
-@media screen and (max-width: 700px) {
     #sidebar {
-      width: 100%;
-      height: auto;
-      position: fixed;
-    }
-
-    .logo {
-        display: none;
-    }
-
-    .topbar { 
-        display: none;
-    }
-
+        width: 100%;
+        height: auto;
+        float: none;
+        position: fixed;
+      }
 
     #main-content {
         margin-left: 0%;
+    }
+
+    .btn-options {
+        display: block;
+        float: left;
+
     }
 }
 
 @media screen and (max-width: 400px) {
-    #sidebar a {
-      text-align: center;
-      float: none;
+    .logo {
+        display: none;
+
     }
 
-    #main-content {
-        margin-left: 0%;
-    }
-  }
+}

@@ -859,31 +859,35 @@ trait Enrollment
         echo "Add School info ended...<br>";
 
         # promotion
+        $last_sy_attended = '';
+        if (isset($_POST['last-sy'])) {
+            $last_sy_attended = $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1];
+        }
         echo 'Adding transferee record...<br>';
         if($_POST['balik'] == 1 OR isset($_POST['transferee']) && $_POST['transferee'] == 'yes'){
             $this->prepared_query(
-            "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
-                . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $_POST['school-id-no'] ?: NULL,
-                $_POST['school-name'],
-                $_POST['school-address'],
-                $_POST['last-grade-level'],
-                $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1],
+                "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
+                    . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [
+                    $_POST['school-id-no'] ?? NULL,
+                    $_POST['school-name'] ?? NULL,
+                    $_POST['school-address'] ?? NULL,
+                    $_POST['last-grade-level'] ?? NULL,
+                    $last_sy_attended,
 
-                $_POST['balik'],
-                $_POST['grade-level'],
-                $_POST['general-average'],
-                $_POST['semester'] ?? 1, # default is 1
-                $student_id
-            ],
-            "issis" . "iiiii"
-        );
-        $trans_id = mysqli_insert_id($this->db);
-        echo 'Added promotion record...<br>';
-        $this->transferee_assessment($student_id,$trans_id );
+                    $_POST['balik'],
+                    $_POST['grade-level'] ?? NULL,
+                    $_POST['general-average'] ?? NULL,
+                    $_POST['semester'] ?? 1,
+                    $student_id
+                ],
+                "issis" . "iiiii"
+            );
+            $trans_id = mysqli_insert_id($this->db);
+            echo 'Added promotion record...<br>';
+            $this->transferee_assessment($student_id,$trans_id );
         }
-        
+
         if ($_SESSION['user_type'] != "ST") {
             header("Location: ./enrollment.php?page=enrollees");
         } else {
@@ -1258,28 +1262,36 @@ trait Enrollment
 
     public function getEnrollmentReportData($is_json = false)
     {
-        $school_year = 9;
-        $result = $this->query("SELECT curr_code, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment WHERE sy_id='$school_year' GROUP BY prog_code, valid_stud_data;");
+        $sy_id = $_SESSION['sy_id'];
+        $result = $this->query("SELECT c.curr_code, curr_desc, prog_code, valid_stud_data, COUNT(stud_id) AS 'count' FROM enrollment e
+                                      JOIN curriculum c ON c.curr_code = e.curr_code JOIN program USING (prog_code) WHERE sy_id='$sy_id' GROUP BY prog_code, valid_stud_data;");
         $data = [];
-
-        $track = "";
         while ($row = mysqli_fetch_assoc($result)) {
             $track = $row['curr_code'];
             $program = $row['prog_code'];
-            $count =  $row['count'];
             $index = $row['valid_stud_data'] == 1 ? 1 : 0;
-            if (count($data) === 0) {
-                $program_array[$index] = $count;
-                $data[$track] = [$program => $program_array];
-            } else {
-                if ($this->in_multi_array($track, $data)) {
-                    $data[$track][$program][] = $count;
-                } else {
-                    $program_array = [$count];
-                    $data[$track] = [$program => $program_array];
-                }
-            }
+
+            $data[$track]['description'] = $row['curr_desc'];
+            $data[$track]['strands'][$program]['counts'][$index] = $row['count'];
+
+
+//            if (count($data) === 0) {
+//                $program_array[$index] = $count;
+//                $data[$track] = [$program => $program_array];
+//            } else {
+//                if ($this->in_multi_array($track, $data)) {
+//                    $data[$track][$program][] = $count;
+//                } else {
+//                    $program_array = [$count];
+//                    $data[$track] = [$program => $program_array];
+//                }
+//            }
         }
+
+//        foreach ($programs as $track_code => $prog_data) {
+//
+//        }
+//
 
         if ($is_json) {
             echo json_encode($data);
@@ -1786,11 +1798,11 @@ trait Grade
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
         AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']}");
-        // echo ("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
-        // FROM classgrade 
-        // JOIN student USING(stud_id) 
+        // echo ("SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade
+        // FROM classgrade
+        // JOIN student USING(stud_id)
         // JOIN enrollment e USING(stud_id)
-        // JOIN sysub USING(sub_code) 
+        // JOIN sysub USING(sub_code)
         // JOIN subjectclass sc USING(sub_sy_id)
         // WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
         // AND e.sy_id=$sy_id AND semester = {$_SESSION['current_semester']}");
@@ -2151,7 +2163,7 @@ trait Grade
                 $editable = '';
             }
 
-           
+
             $students[] = [
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],

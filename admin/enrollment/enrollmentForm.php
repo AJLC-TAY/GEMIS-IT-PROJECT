@@ -26,102 +26,107 @@ switch ($_SESSION['user_type']) {
 
 $stud_id = '';
 $user_id_no = '';
-//$lrn = '';
-//$lname = '';
-//$fname = '';
-//$mname = '';
-//$extname = '';
-//$sex = '';
-//$age = '';
-//$birthdate = '';
-//$birth_place = '';
-//$indigenous_group = '';
-//$mother_tongue = '';
-//$religion = '';
-//
-//$house_no = '';
-//$street = '';
-//$barangay = '';
-//$city = '';
-//$province = '';
-//$zip = '';
-//
-//$cp_no = '';
-//$psa_birth_cert = '';
-//$belong_to_ipcc = '';
-//$id_picture = '';
-//$section = '';
-//
-//$parents = ['mother', 'father'];
-//foreach ($parents as $par) {
-//    ${$par . '_first_name'} = '';
-//    ${$par . '_last_name'} = '';
-//    ${$par . '_middle_name'} = '';
-//    ${$par . '_ext_name'} = '';
-//    ${$par . '_occupation'} = '';
-//    ${$par . '_cp_no'} = '';
-//}
-//
-//$guardian_first_name = '';
-//$guardian_last_name = '';
-//$guardian_middle_name = '';
-//$guardian_cp_no = '';
-//$guardian_relationship = '';
-//$last_grd_level = '';
-//$last_sy = '';
-//$gen_ave = '';
-//$school_name = '';
-//$school_id_no = '';
-//$school_address = '';
-
-$lrn = rand(1, 1000000);
-$lname = 'Rizal';
-$fname = 'Jose';
-$mname = 'Test';
-$extname = 'III';
+$lrn = '';
+$lname = '';
+$fname = '';
+$mname = '';
+$extname = '';
 $sex = '';
-$age = '21';
+$age = '';
 $birthdate = '';
-$birth_place = 'Baguio City';
-$indigenous_group = 'Test';
-$mother_tongue = 'Kankanaey';
-$religion = 'Roman Catholic';
+$birth_place = '';
+$indigenous_group = '';
+$mother_tongue = '';
+$religion = '';
 
-$house_no = '123';
-$street = 'Street';
-$barangay = 'Bakakeng';
-$city = 'Baguio City';
-$province = 'Benguet';
-$zip = '2600';
+$house_no = '';
+$street = '';
+$barangay = '';
+$city = '';
+$province = '';
+$zip = '';
 
-$cp_no = '09090990090';
-$psa_birth_cert = '923871';
+$cp_no = '';
+$psa_birth_cert = '';
 $belong_to_ipcc = '';
 $id_picture = '';
 $section = '';
 
 $parents = ['mother', 'father'];
 foreach ($parents as $par) {
-    ${$par . '_first_name'} = 'Ricardo';
-    ${$par . '_last_name'} = 'Jose';
-    ${$par . '_middle_name'} = 'L';
-    ${$par . '_ext_name'} = 'Dr.';
-    ${$par . '_occupation'} = 'Chef';
-    ${$par . '_cp_no'} = '0903423423';
+    ${$par . '_first_name'} = '';
+    ${$par . '_last_name'} = '';
+    ${$par . '_middle_name'} = '';
+    ${$par . '_ext_name'} = '';
+    ${$par . '_occupation'} = '';
+    ${$par . '_cp_no'} = '';
 }
 
-$guardian_first_name = 'Cela';
-$guardian_last_name = 'Rizal';
-$guardian_middle_name = 'Me';
-$guardian_cp_no = '234978';
-$guardian_relationship = 'Siblings';
+$guardian_first_name = '';
+$guardian_last_name = '';
+$guardian_middle_name = '';
+$guardian_cp_no = '';
+$guardian_relationship = '';
+$last_grd_level = '';
+$last_sy = '';
+$gen_ave = '';
+$school_name = '';
+$school_id_no = '';
+$school_address = '';
+//
+//$lrn = rand(1, 1000000);
+//$lname = 'Rizal';
+//$fname = 'Jose';
+//$mname = 'Test';
+//$extname = 'III';
+//$sex = '';
+//$age = '21';
+//$birthdate = '';
+//$birth_place = 'Baguio City';
+//$indigenous_group = 'Test';
+//$mother_tongue = 'Kankanaey';
+//$religion = 'Roman Catholic';
+//
+//$house_no = '123';
+//$street = 'Street';
+//$barangay = 'Bakakeng';
+//$city = 'Baguio City';
+//$province = 'Benguet';
+//$zip = '2600';
+//
+//$cp_no = '09090990090';
+//$psa_birth_cert = '923871';
+$belong_to_ipcc = '';
+$id_picture = '';
+$section = '';
 
-$last_grd_level = '10';
-$last_sy = '2021';
-$gen_ave = '90';
-$school_name = 'SECF';
-$school_id_no = '123';
-$school_address = 'La Trinidad';
+$parents = ['mother', 'father'];
+foreach ($parents as $par) {
+    ${$par . '_first_name'} = '';
+    ${$par . '_last_name'} = '';
+    ${$par . '_middle_name'} = '';
+    ${$par . '_ext_name'} = '';
+    ${$par . '_occupation'} = '';
+    ${$par . '_cp_no'} = '';
+}
+
+$guardian_first_name = '';
+$guardian_last_name = '';
+$guardian_middle_name = '';
+$guardian_cp_no = '';
+$guardian_relationship = '';
+//$guardian_first_name = 'Cela';
+//$guardian_last_name = 'Rizal';
+//$guardian_middle_name = 'Me';
+//$guardian_cp_no = '234978';
+//$guardian_relationship = 'Siblings';
+
+$last_grd_level = '';
+$last_sy = '';
+$gen_ave = '';
+$school_name = '';
+$school_id_no = '';
+$school_address = '';
 
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -198,14 +203,6 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
     <div class="container px-4 text-center">
         <div class="d-flex justify-content-center">
             <div class="w-auto mx-5">
-                <!-- <div class="row">
-                    <div class="col-4">
-                        <img src="../assets/logoSc.png" alt="PCNHS Logo" style="width: 50px; height: auto;">
-                    </div>
-                    <div class="col-8">
-                        <p><small>Pines City National High School <br> Baguio City</small></p>
-                    </div>
-                </div> -->
                 <p class="mb-0"><small>Pines City National High School</small></p>
                 <h3 class="mb-0">Enrollment Form</h3>
                 <p><small>Senior High <i class="bi bi-dot"></i> SY <?php echo $_SESSION['school_year']; ?><br>Baguio City</small></p>
@@ -247,36 +244,35 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <?php } ?>
         </div>
         <div class="bs-stepper-content">
-            <div id="step-1" class="content">
+            <div id="step-1" class="content" role="form">
                 <div class="card body w-100 h-auto p-4">
                     <!-- STEP 1 -->
                     <h4 class="fw-bold">Student Information</h4>
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <label for="psa" class="col-form-label">PSA Birth Certificate</label>
-                            <!-- image heree -->
-                            <input id="psa" class="form-control" name="psa" type="text" <?php echo $readonly ?> value="<?php echo $psa_birth_cert; ?>" required>
+                            <label for="psa" class="col-form-label">PSA Birth Certificate No</label>
+                            <input id="psa" class="form-control" name="psa" placeholder="Enter no. here (optional)" type="text" <?php echo $readonly ?> value="<?php echo $psa_birth_cert; ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="lrn" class="col-form-label">Learner's Reference Number</label>
-                            <input id="lrn" class="form-control" name="lrn" type="number" value="<?php echo $lrn; ?>" <?php echo $readonly ?> required />
+                            <input id="lrn" placeholder="Enter LRN here" class="form-control" name="lrn" type="number" value="<?php echo $lrn; ?>" <?php echo $readonly ?> required />
                         </div>
                     </div>
                     <!-- NAME -->
                     <div class="row mt-3">
                         <div class="col-md-4">
                             <label class="col-form-label">Last Name</label>
-                            <input class="form-control" name="last-name" type="text" value="<?php echo $lname; ?>" <?php echo $readonly ?> required />
+                            <input placeholder="Enter last name here" class="form-control" name="last-name" type="text" value="<?php echo $lname; ?>" <?php echo $readonly ?> required />
                         </div>
 
                         <div class='col-md-5'>
                             <label class="col-form-label">First Name</label>
-                            <input class="form-control" name="first-name" type="text" value="<?php echo $fname; ?>" <?php echo $readonly ?> required />
+                            <input placeholder="Enter first name here" class="form-control" name="first-name" type="text" value="<?php echo $fname; ?>" <?php echo $readonly ?> required />
                         </div>
 
                         <div class='col-md-3'>
                             <label class="col-form-label">Middle Name</label>
-                            <input class="form-control" name="middle-name" type="text" value="<?php echo $mname; ?>" <?php echo $readonly ?>>
+                            <input placeholder="Enter middle name here" class="form-control" name="middle-name" type="text" value="<?php echo $mname; ?>" <?php echo $readonly ?>>
                         </div>
                     </div>
 
@@ -284,17 +280,16 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="row">
                         <div class='col-md-4'>
                             <label class="col-form-label">Extension Name (if applicable)</label>
-                            <input class="form-control" name="ext-name" type="text" value="<?php echo $extname; ?>" <?php echo $readonly ?> />
+                            <input placeholder="Enter extension name here" class="form-control" name="ext-name" type="text" value="<?php echo $extname; ?>" <?php echo $readonly ?> />
                         </div>
                         <!-- CONTACT NO -->
                         <div class='col-md-4'>
                             <label class="col-form-label">Contact Number</label>
-                            <input class="form-control number" name="cp-no" type="text" value="<?php echo $cp_no; ?>">
+                            <input placeholder="Enter cp no here (ex 09XXXXXXXXX)" class="form-control number" name="cp-no" type="text" value="<?php echo $cp_no; ?>">
                         </div>
                         <!-- SEX -->
                         <div class="col-md-4">
                             <label class="col-form-label">Sex</label>
-
                             <div class="d-flex">
                                 <?php $sexOpt = ["m" => "Male", "f" => "Female"];
                                 foreach ($sexOpt as $id => $value) {
@@ -307,6 +302,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                 }
                                 ?>
                             </div>
+                            <div class="d-flex" id="sex-error-con"></div>
                         </div>
                     </div>
 
@@ -314,55 +310,53 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <!-- BIRTH INFO -->
                         <div class="col-md-4">
                             <label class="col-form-label">Birthdate</label>
-                            <div class='input-group date' id='datepicker'>
+<!--                            <div class='input-group date' id='datepicker'>-->
                                 <input type='date' name="birthdate" class="form-control" value="<?php echo $birthdate; ?>" <?php echo $readonly ?> />
-                            </div>
+<!--                            </div>-->
                         </div>
                         <div class='col-md-5'>
                             <label class="col-form-label">Birth Place</label>
-                            <input class="form-control" name="birth-place" type="text" value="<?php echo $birth_place; ?>" <?php echo $readonly ?> />
+                            <input placeholder="Enter birth place here" class="form-control" name="birth-place" type="text" value="<?php echo $birth_place; ?>" <?php echo $readonly ?> />
                         </div>
                         <!-- AGE -->
                         <div class='col-md-3'>
                             <label class="col-form-label">Age</label>
-                            <input class="form-control number" name="age" type="text" value="<?php echo $age; ?>" required>
+                            <input placeholder="Enter age here" class="form-control number" name="age" type="text" value="<?php echo $age; ?>" required>
                         </div>
                     </div>
 
                     <div class="row mt-5">
                         <!-- INDIGENOUS INFO -->
                         <div class="col-md-4">
-                            <label class="col-form-label me-4">Belonging to any Indeginous Group? </label>
-                            <input class="hidden" type="text" name='group' value="">
+                            <label class="col-form-label me-4">Belonging to any Indigenous Group? </label>
                             <div class="d-flex">
                                 <?php
                                 echo "<div class='form-check me-4'>
-                                                <input class='form-check-input i-group-opt' type='radio' $disabled name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
-                                                <label class='form-check-label' for='yes'> Yes </label>
+                                            <input class='form-check-input i-group-opt' type='radio' $disabled name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                            <label class='form-check-label' for='yes'> Yes </label>
                                         </div>
                                         <div class='form-check'>
-                                                <input class='form-check-input i-group-opt' type='radio' $disabled name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                             <input class='form-check-input i-group-opt' type='radio' name='group' $disabled id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
-                                                <label class='form-check-label' for='no'> No </label>
+                                            <label class='form-check-label' for='no'> No </label>
                                         </div>";
                                 ?>
                             </div>
                         </div>
                         <div class='col-md-8'>
                             <label class="col-form-label text-start">If yes, please specify</label>
-                            <input class="form-control" name="group-name" type="text" value="<?php echo $indigenous_group; ?>" <?php echo $readonly ?>>
+                            <input placeholder="Enter indigenous group here" class="form-control" name="group-name" type="text" value="<?php echo $indigenous_group; ?>" <?php echo $readonly ?> disabled>
                         </div>
                     </div>
                     <!-- MOTHER TONGUE & RELIGION -->
                     <div class="row">
                         <div class="col-md-6">
                             <label class="col-form-label">Mother Tongue</label>
-                            <input class="form-control" name="mother-tongue" type="text" value="<?php echo $mother_tongue; ?>" <?php echo $readonly ?>>
+                            <input placeholder="Enter mother tongue here" class="form-control" name="mother-tongue" type="text" value="<?php echo $mother_tongue; ?>" <?php echo $readonly ?>>
                         </div>
 
                         <div class="col-md-6">
                             <label class="col-form-label">Religion</label>
-                            <input class="form-control" name="religion" type="text" value="<?php echo $religion; ?>">
+                            <input placeholder="Enter religion here" class="form-control" name="religion" type="text" value="<?php echo $religion; ?>">
                         </div>
                     </div>
 
@@ -371,40 +365,39 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Address</h5>
                         <div class="col-md-2">
                             <label class="col-form-label">House No.</label>
-                            <input class="form-control" name="house-no" type="text" value="<?php echo $house_no; ?>">
+                            <input placeholder="House no." class="form-control" name="house-no" type="text" value="<?php echo $house_no; ?>">
                         </div>
 
                         <div class="col-md-4">
                             <label class="col-form-label">Street</label>
-                            <input class="form-control" name="street" type="text" value="<?php echo $street; ?>">
+                            <input placeholder="Street" class="form-control" name="street" type="text" value="<?php echo $street; ?>">
                         </div>
 
                         <div class="col-md-6">
                             <label class="col-form-label">Barangay</label>
-                            <input class="form-control" name="barangay" type="text" value="<?php echo $barangay; ?>" required>
+                            <input placeholder="Barangay" class="form-control" name="barangay" type="text" value="<?php echo $barangay; ?>" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
                             <label class="col-form-label">City/Municipality</label>
-                            <input class="form-control" name="city-muni" type="text" value="<?php echo $city; ?>" required>
+                            <input placeholder="Municipality" class="form-control" name="city-muni" type="text" value="<?php echo $city; ?>" required>
                         </div>
 
                         <div class="col-md-4">
                             <label class="col-form-label">Province</label>
-                            <input class="form-control" name="province" type="text" value="<?php echo $province; ?>" required>
+                            <input placeholder="Province" class="form-control" name="province" type="text" value="<?php echo $province; ?>" required>
                         </div>
 
                         <div class="col-md-2">
                             <label class="col-form-label">Zip Code</label>
-                            <input class="form-control number" name="zip-code" type="text" value="<?php echo $zip; ?>">
+                            <input placeholder="Zip code" class="form-control number" name="zip-code" type="text" value="<?php echo $zip; ?>">
                         </div>
                     </div>
                     <div class="row justify-content-end mt-3">
                         <div class="col-auto">
-                            <!-- <a href="javascript: next();" class="btn btn-secondary stepper-btn">Next</a> -->
-                            <button class="btn btn-primary next">Next</button>
+                            <button id="enroll-part-1" class="btn btn-primary next">Next</button>
                         </div>
                     </div>
                 </div>
@@ -414,9 +407,10 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <div id="step-2" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
                     <h4 class="fw-bold"> Parent | Guardian's Information</h4>
+                    <p class="text-secondary"><small><i class="bi bi-info-circle me-2"></i>Enter N/A for fields that are not applicable</small></p>
 
                     <!-- FATHER -->
-                    <div class='form-row row mt-3'>
+                    <div class='form-row row mt-3 mb-2'>
                         <h5>Father</h5>
                         <div class='form-group col-md-3'>
                             <label for='f-lastname'>Last Name</label>
@@ -435,7 +429,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <input type='text' class='form-control' id='f-extensionname' name='f-extensionname' value="<?php echo $father_ext_name; ?>" <?php echo $readonly ?> placeholder='Ext. Name'>
                         </div>
                     </div>
-                    <div class='form-row row'>
+                    <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='f-contactnumber'>Contact Number</label>
                             <input type='text' class='form-control' id='f-contactnumber' name='f-contactnumber' value="<?php echo $father_cp_no; ?>" placeholder='Contact Number'>
@@ -446,7 +440,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         </div>
                     </div>
                     <!-- MOTHER -->
-                    <div class='form-row row mt-3'>
+                    <div class='form-row row mt-3 mb-2'>
                         <h5>Mother</h5>
                         <div class='form-group col-md-3'>
                             <label for='m-lastname'>Maiden Last Name</label>
@@ -461,7 +455,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name' required>
                         </div>
                     </div>
-                    <div class='form-row row'>
+                    <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='m-contactnumber'>Contact Number</label>
                             <input type='text' class='form-control' id='m-contactnumber' name='m-contactnumber' value="<?php echo $mother_cp_no; ?>" placeholder='Contact Number'>
@@ -472,7 +466,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         </div>
                     </div>
                     <!-- GUARDIAN -->
-                    <div class='form-row row mt-3'>
+                    <div class='form-row row mt-3 mb-2'>
                         <h5>Guardian</h5>
                         <div class='form-group col-md-3'>
                             <label for='g-lastname'>Last Name</label>
@@ -496,7 +490,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </div>
                         </div>
                     </div>
-                    <div class='form-row row'>
+                    <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='g-contactnumber'>Contact Number</label>
                             <input type='text' class='form-control' id='g-contactnumber' name='g-contactnumber' value="<?php echo $guardian_cp_no; ?>" placeholder='Contact Number'>
@@ -508,7 +502,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
 
                     <div class="d-flex flex-row-reverse mt-4">
-                        <a href="#" class="btn btn-primary next">Next</a>
+                        <button id="enroll-part-2" class="btn btn-primary next">Next</button>
                         <a href="#" class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                 </div>
@@ -517,24 +511,24 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <!-- STEP 3 -->
             <div id="step-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-                    
                         <label class="col-form-label me-4">Balik Aral Student? </label>
                         <div class="d-flex">
                             <?php
                             echo "<div class='form-check me-4'>"
-                                . "<input class='form-check-input' type='radio' name='balik' id='yes' value='Yes' " . (!is_null($indigenous_group) ? "checked" : "") . ">"
-                                . "<label class='form-check-label' for='yes'> Yes </label>"
+                                . "<input class='form-check-input' type='radio' name='balik' id='yes-balik' value='Yes' " . (!is_null($indigenous_group) ? "checked" : "") . ">"
+                                . "<label class='form-check-label' for='yes-balik'> Yes </label>"
                                 . "</div>"
                                 . "<div class='form-check'>"
-                                . "<input class='form-check-input' type='radio' name='balik' id='no' value='No' " . (is_null($indigenous_group) ? "checked" : "") . ">"
-                                . "<label class='form-check-label' for='no'> No </label>"
+                                . "<input class='form-check-input' type='radio' name='balik' id='no-balik' value='No' " . (is_null($indigenous_group) ? "checked" : "") . ">"
+                                . "<label class='form-check-label' for='no-balik'> No </label>"
                                 . "</div>";
                             ?>
                         </div>
+                    <div class="container border p-3 mb-3 balik-con">
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <label for="last-grade-level" class="col-form-label">Last Grade Level Completed</label>
-                                <input id="last-grade-level" class="form-control" name="last-grade-level" type="number" value="<?php echo $last_grd_level; ?>">
+                                <input  placeholder="Enter last grade level" id="last-grade-level" class="form-control" name="last-grade-level" type="number" value="<?php echo $last_grd_level; ?>">
                             </div>
                             <div class="col-md-4">
                                 <label for="last-sy" class="col-form-label">Last School Year Completed</label>
@@ -545,36 +539,39 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </div>
                             <div class="col-md-4">
                                 <label for="general-average" class="col-form-label">General Average</label>
-                                <input id="general-average" class="form-control" name="general-average" type="number" value="<?php echo $gen_ave; ?>">
+                                <input placeholder="Enter general average" id="general-average" class="form-control" name="general-average" type="number" value="<?php echo $gen_ave; ?>">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-9">
                                 <label for="school-name" class="col-form-label">School Name</label>
-                                <input id="school-name" class="form-control" name="school-name" type="text" value="<?php echo $school_name; ?>">
+                                <textarea placeholder="Enter name of last school here" id="school-name" class="form-control" name="school-name" type="text"><?php echo $school_name; ?></textarea>
                             </div>
                             <div class="col-md-3">
                                 <label for="school-id-no" class="col-form-label">School ID Number</label>
-                                <input id="school-id-no" class="form-control" name="school-id-no" type="number" value="<?php echo $school_id_no; ?>">
+                                <input placeholder="Enter ID of last school here" id="school-id-no" class="form-control" name="school-id-no" type="number" value="<?php echo $school_id_no; ?>">
                             </div>
                         </div>
                         <div class="col-md-12">
                             <label for="school-address" class="col-form-label">School Address</label>
-                            <input id="school-address" class="form-control" name="school-address" type="text" value="<?php echo $school_address; ?>">
+                            <textarea placeholder="Enter address of last school here" id="school-address" class="form-control" name="school-address" type="text"><?php echo $school_address; ?></textarea>
                         </div>
-                        <div class='form-group col-md-5 d-flex flex-column'>
-                            <label for='image-studentid' class='form-label'>Student ID Photo</label>
-                            <input class='form-control form-control-sm' id='image-studentid' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
-                        </div>
-                        <div class='form-group col-md-5 d-flex flex-column'>
-                            <label for='image-form' class='form-label'>Student Form 137</label>
-                            <input class='form-control form-control-sm' id='image-form' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
-                        </div>
-                        <div class='form-group col-md-5 d-flex flex-column'>
-                            <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
-                            <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
-                        </div>
-                    
+                    </div>
+
+                    <div class='form-group col-md-5 d-flex flex-column mb-2'>
+                        <label for='image-studentid' class='form-label'>Student ID Photo</label>
+                        <input class='form-control form-control-sm' id='image-studentid' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
+                    </div>
+                    <div class='form-group col-md-5 d-flex flex-column mb-2'>
+                        <label for='image-form' class='form-label'>Student Form 137</label>
+                        <input class='form-control form-control-sm' id='image-form' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
+                    </div>
+                    <div class='form-group col-md-5 d-flex flex-column mb-3'>
+                        <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
+                        <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
+                    </div>
+
+
                     <p class="text-secondary"><small>Please enter the information <?php echo $_SESSION["user_type"] != 'ST' ? 'that the student' : 'you'; ?> will be enrolling this school year.</small></p>
                     <div class="row">
                         <div class='col-md-4'>
@@ -617,7 +614,8 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <div class="col-md-3">
                             <label class="col-form-label">Semester</label>
                             <div class="d-flex">
-                                <?php $sem = [1 => "first", 2 => "second"];
+                                <?php
+                                $sem = [1 => "first", 2 => "second"];
                                 $val = 1;
                                 foreach ($sem as $id => $value) {
                                     echo "<div class='form-check me-3'>
@@ -633,11 +631,11 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     </div>
                     <?php if($_SESSION['user_type'] != 'ST') {?>
                     <div class="d-flex flex-row-reverse mt-4">
-                        <a class="btn btn-primary next to-transferee-form">Next</a>
+                        <button  id="enroll-part-3" class="btn btn-primary next to-transferee-form">Next</button>
                         <a class="btn btn-secondary me-1 previous">Back</a>
                     </div>
                     <?php } else {?>
-                        <div class="d-flex flex-row-reverse mt-4">
+                    <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input id="enroll-submit" class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
                         <a class="btn btn-secondary me-1 previous">Back</a>
@@ -649,19 +647,6 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <?php if($_SESSION['user_type'] != 'ST') {?>
             <div id="step-4" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-                    <div class="d-flex mb-3 align-content-center">
-                        <h6 class="my-auto me-4">Are you a grade 11 or 12 transferee?</h6>
-                        <input type="radio" class="btn-check" value="yes" name="transferee" id="option1" autocomplete="off">
-                        <label class="btn btn-outline-primary me-1" for="option1">Yes</label>
-
-                        <input onclick="$(`#enroll-submit`).focus()" type="radio" class="btn-check btn-sm" value="no" name="transferee" id="option2" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="option2">No</label>
-                    </div>
-                    <hr>
-<!--                    <div class="form-check mb-3">-->
-<!--                        <input type="checkbox" class="form-check-input" id="trans-checkbox">-->
-<!--                        <label for="trans-checkbox">Are you a grade 11 or 12 transferee?</label>-->
-<!--                    </div>-->
                     <h4>Transferee Assessment Form</h4>
                     <p class="text-secondary ms-1"><small><i class="bi bi-info-circle me-2"></i>Answer part 4 if you're a grade 11 or 12 transferee.</small></p>
                     <div class="trans-detail border p-3">

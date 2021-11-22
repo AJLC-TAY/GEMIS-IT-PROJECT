@@ -2003,7 +2003,7 @@ class Administration extends Dbconfig
             SELECT COALESCE(COUNT(teacher_id), 0) FROM faculty
         ) as teachers,
         (
-            SELECT COALESCE(COUNT(stud_id), 0) FROM student JOIN enrollment USING (stud_id) WHERE sy_id = '{$_SESSION['sy_id']}'
+            SELECT COALESCE(COUNT(stud_id), 0) FROM enrollment e JOIN student  USING (stud_id) WHERE sy_id = '{$_SESSION['sy_id']}' AND e.valid_stud_data = '1'
         ) as students, 
         (
            SELECT COALESCE(COUNT(sign_id), 0) FROM signatory

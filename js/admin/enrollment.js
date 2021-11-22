@@ -1,7 +1,7 @@
 try {
     var stepper = new Stepper($('#stepper')[0])
 } catch (e) {}
-
+var balikAral = false;
 function submitValidationForm(status) {
     showSpinner();
     let formData = $("#validate-form").serialize() + `&${status}=true`;
@@ -59,18 +59,6 @@ $(function() {
         $("input[name='position']").val(selected.attr("data-position"));
     });
 
-    /** Stepper */ 
-    $(document).on("click", ".next", function(e) {
-        e.preventDefault();
-        // validation function
-        stepper.next();
-    });
-    
-    $(document).on("click", ".previous", function(e) {
-        e.preventDefault();
-        stepper.previous();
-    });
-
     /** Validate Form */
     $(document).on("click", ".validate", function (e) {
         submitValidationForm($(this).attr("data-name"));
@@ -88,15 +76,6 @@ $(function() {
                 break;
         }
     });
-
-
-
-    /** Credential Page */
-    // $(document).on("click", "#pop",  function() {
-    //     $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
-    //     $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-    // });
-
 
     $("#psa").click(function(){
         let preview = $('#psaPreview');
@@ -184,14 +163,17 @@ $(function() {
             }
             console.log(html);
             $("#transfer-table tbody").html(html);
+            $("#transfer-table .form-check-input").prop("disabled", !balikAral);
 
         });
     });
 
-    $(document).on("click", "[name='transferee']", function() {
-        let disabled  = !($(this).val() == "yes");
+    $(document).on("click", "[name='balik']", function() {
+        balikAral = $(this).val() == "yes";
+        let disabled  = !(balikAral);
         $(".trans-detail input, textarea").prop("disabled", disabled);
-        $("#transfer-table input").prop("disabled", disabled);
+        $("#transfer-table .form-check-input").prop("disabled", disabled);
+        $(".balik-con input").prop("disabled", disabled);
     });
 
     hideSpinner();

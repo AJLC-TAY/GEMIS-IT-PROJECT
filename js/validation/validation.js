@@ -1,3 +1,10 @@
+const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
+try {
+  var stepper, enrollValidator, form;
+  form =  $("#enrollment-form");
+  stepper = new Stepper($('#stepper')[0]);
+} catch (e) {}
+
 $(function () {
   $.validator.setDefaults({
     errorClass: 'help-block',
@@ -94,127 +101,259 @@ $(function () {
   });
 
 
+  //
+  // $("#lrn").rules("add", {
+  //   required: true,
+  //   messages: {
+  //     required: "<p class='text-danger'><small>Please provide your LRN</small></p>"
+  //   }
+  // })
 
-  $("#enroll-form-1").on("click", function(e) {
+  $(document).on("click", "#enroll-part-1", function(e) {
     e.preventDefault();
-    alert("alert");
-    // var stepper = new Stepper($('#stepper')[0]);
-    // stepper.next();
+
+    enrollValidator = form.validate({
+      rules: {
+        lrn: { required: true },
+        "last-name": { required: true },
+        "first-name": { required: true },
+        "cp-no": { required: true, maxlength: 11 , minlength: 11},
+        sex: { required: true },
+        birthdate: { required: true },
+        "birth-place": { required: true },
+        age: { required: true },
+        group: { required: true },
+        "group-name": { required: true },
+        "mother-tongue": { required: true },
+        "house-no": { required: true },
+        street: { required: true },
+        barangay: { required: true },
+        "city-muni": { required: true },
+        province: { required: true },
+        "zip-code": { required: true }
+      },
+      errorPlacement: function (error, element) {
+        if (element.attr("name") == "sex") {
+          error.appendTo("#sex-error-con");
+        } else {
+          error.insertAfter(element)
+        }
+      },
+      messages: {
+        lrn: { required: "<p class='text-danger'><small>Please provide your LRN</small></p>" },
+        "last-name": { required: "<p class='text-danger'><small>Please provide your last name</small></p>" },
+        "first-name": { required: "<p class='text-danger'><small>Please provide your first name</small></p>" },
+        "cp-no": {
+          required: "<p class='text-danger'><small>Please provide your contact number</small></p>",
+          maxlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>",
+          minlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>"
+        },
+        sex: { required: "<p class='text-danger'><small>This is a required field</small></p>" },
+        birthdate: { required: "<p class='text-danger'><small>Please provide your birthdate</small></p>" },
+        "birth-place": { required: "<p class='text-danger'><small>Please provide your birth place</small></p>" },
+        age: { required: "<p class='text-danger'><small>Please provide your age</small></p>" },
+        group: { required: "<p class='text-danger'><small>Please provide your indigenous group</small></p>" },
+        "group-name": { required: "<p class='text-danger'><small>Please provide group name</small></p>" },
+        "mother-tongue": { required: "<p class='text-danger'><small>Please provide your mother tongue</small></p>" },
+        "house-no": { required:  REQUIRED },
+        street: { required: REQUIRED },
+        barangay: { required: REQUIRED },
+        "city-muni": { required: REQUIRED },
+        province: { required: REQUIRED },
+        "zip-code": { required: REQUIRED }
+      },
+    });
+    if (form.valid()) {
+      stepper.next();
+      enrollValidator.destroy();
+    }
   });
 
-  //unique rule, submit done, for implementation 
-  // $(document).on("submit", "#prog-form", function(event) {
+  $(document).on("click", "#enroll-part-2", function(e) {
+    e.preventDefault();
+    form.validate({
+      rules: {
+        "f-lastname": { required: true  , lettersonly: true},
+        "m-lastname": { required: true  , lettersonly: true},
+        "g-lastname": { required: true  , lettersonly: true},
+        "f-firstname": { required: true , lettersonly: true },
+        "m-firstname": { required: true , lettersonly: true },
+        "g-firstname": { required: true , lettersonly: true },
+        "f-middlename": { required: true },
+        "m-middlename": { required: true },
+        "g-middlename": { required: true },
+        "f-occupation": { required: true },
+        "m-occupation": { required: true },
+        "g-occupation": { required: true },
+        "f-contactnumber": { required: true },
+        "m-contactnumber": { required: true },
+        "g-contactnumber": { required: true },
+        "g-relationship": { required: true }
+      },
+      messages: {
+        "f-lastname": { required:  REQUIRED },
+        "m-lastname": { required: REQUIRED },
+        "g-lastname": { required: REQUIRED },
+        "f-firstname": { required: REQUIRED },
+        "m-firstname": { required: REQUIRED },
+        "g-firstname": { required: REQUIRED },
+        "f-middlename": { required: REQUIRED },
+        "m-middlename": { required: REQUIRED },
+        "g-middlename": { required: REQUIRED },
+        "f-occupation": { required: REQUIRED },
+        "m-occupation": { required: REQUIRED },
+        "g-occupation": { required: REQUIRED },
+        "f-contactnumber": { required: REQUIRED },
+        "m-contactnumber": { required: REQUIRED },
+        "g-contactnumber": { required: REQUIRED },
+        "g-relationship": { required: REQUIRED }
+      }
+    });
+    if (form.valid()) {
+      stepper.next();
+    }
+  });
+  $(document).on("click", "#enroll-part-3", function(e) {
+    e.preventDefault();
+    form.validate({
+      rules: {
+        "f-lastname": { required: true },
+        "m-lastname": { required: true },
+        "g-lastname": { required: true },
+        "f-firstname": { required: true },
+        "m-firstname": { required: true },
+        "g-firstname": { required: true },
+        "f-middlename": { required: true },
+        "m-middlename": { required: true },
+        "g-middlename": { required: true },
+        "f-occupation": { required: true },
+        "m-occupation": { required: true },
+        "g-occupation": { required: true },
+        "f-extensionname": { required: true },
+        "f-contactnumber": { required: true },
+        "m-contactnumber": { required: true },
+        "g-contactnumber": { required: true },
+        "g-relationship": { required: true }
+      },
+      messages: {
+        "f-lastname": { required: REQUIRED },
+        "m-lastname": { required: REQUIRED },
+        "g-lastname": { required: REQUIRED },
+        "f-firstname": { required: REQUIRED },
+        "m-firstname": { required: REQUIRED },
+        "g-firstname": { required: REQUIRED },
+        "f-middlename": { required: REQUIRED },
+        "m-middlename": { required: REQUIRED },
+        "g-middlename": { required: REQUIRED },
+        "f-occupation": { required: REQUIRED },
+        "m-occupation": { required: REQUIRED },
+        "g-occupation": { required: REQUIRED },
+        "f-extensionname": { required: REQUIRED },
+        "f-contactnumber": { required: REQUIRED },
+        "m-contactnumber": { required: REQUIRED },
+        "g-contactnumber": { required: REQUIRED },
+        "g-relationship": { required: REQUIRED }
+      }
+    });
+    if (form.valid()) {
+      stepper.next();
+    }
+  });
+
+  $(document).on("click", ".previous", function(e) {
+    e.preventDefault();
+    stepper.previous();
+    enrollValidator.destroy();
+  });
+
+
+  //submit done, for implementation
+  // $("#stepper").on('click', function(){
+  // $("#enrollment-form").on("stepper", function(event) {
   //   event.preventDefault();
   // }).validate({
   //   rules: {
-  //     code: {
+  //     'f-lastname': {
   //       required: true,
-  //       // unique
+  //       lettersonly: true
   //     },
-  //     desc: {
-  //       required: true
+  //     'f-firstname': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'f-middlename': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'm-lastname': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'm-firstname': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'm-middlename': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'g-lastname': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'g-firstname': {
+  //       required: true,
+  //       lettersonly: true
+  //     },
+  //     'g-middlename': {
+  //       required: true,
+  //       lettersonly: true
   //     }
   //   },
   //   messages: {
-  //     code: {
-  //       required: '<p class="text-danger user-select-none">Please enter program code!</p>'
+  //     'f-lastname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter father's last name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
   //     },
-  //     desc: {
-  //       required: '<p class="text-danger user-select-none">Please enter program name!</p>',
-  //       remote: $.validator.format("{0} is already associated with an account.")
+  //     'f-firstname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter father's first name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'f-middlename': {
+  //       required: "<p class='text-danger user-select-none'>Please enter father's middle name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'm-lastname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter mother's last name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'm-firstname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter mother's first name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'm-middlename': {
+  //       required: "<p class='text-danger user-select-none'>Please enter mother's middle name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'g-lastname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'g-firstname': {
+  //       required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
+  //     },
+  //     'g-middlename': {
+  //       required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
+  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
   //     }
   //   },
   //   submitHandler: function(form) {
   //     form.submit();
   //     return false;  //This doesn't prevent the form from submitting.
   //   }
-  // })
-  //submit done, for implementation
-  $("#stepper").on('click', function(){
-  $("#enrollment-form").on("stepper", function(event) {
-    event.preventDefault();
-  }).validate({
-    rules: {
-      'f-lastname': {
-        required: true,
-        lettersonly: true
-      },
-      'f-firstname': {
-        required: true,
-        lettersonly: true
-      },
-      'f-middlename': {
-        required: true,
-        lettersonly: true
-      },
-      'm-lastname': {
-        required: true,
-        lettersonly: true
-      },
-      'm-firstname': {
-        required: true,
-        lettersonly: true
-      },
-      'm-middlename': {
-        required: true,
-        lettersonly: true
-      },
-      'g-lastname': {
-        required: true,
-        lettersonly: true
-      },
-      'g-firstname': {
-        required: true,
-        lettersonly: true
-      },
-      'g-middlename': {
-        required: true,
-        lettersonly: true
-      }
-    },
-    messages: {
-      'f-lastname': {
-        required: "<p class='text-danger user-select-none'>Please enter father's last name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'f-firstname': {
-        required: "<p class='text-danger user-select-none'>Please enter father's first name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'f-middlename': {
-        required: "<p class='text-danger user-select-none'>Please enter father's middle name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'm-lastname': {
-        required: "<p class='text-danger user-select-none'>Please enter mother's last name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'm-firstname': {
-        required: "<p class='text-danger user-select-none'>Please enter mother's first name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'm-middlename': {
-        required: "<p class='text-danger user-select-none'>Please enter mother's middle name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'g-lastname': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'g-firstname': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      },
-      'g-middlename': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
-        lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-      }
-    },
-    submitHandler: function(form) { 
-      form.submit();
-      return false;  //This doesn't prevent the form from submitting.
-    }
-  })})
+  // })})
+
   //unique rule, submit done, for implementation and testing
   $("#section-form").on("submit", function(event) {
     event.preventDefault();

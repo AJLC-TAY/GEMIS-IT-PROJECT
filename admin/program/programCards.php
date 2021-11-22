@@ -14,7 +14,7 @@ $admin = new Administration() ?>
         </div>
         <div class="col-md-8  d-flex justify-content-lg-end">
             <div class="col-auto">
-                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived</button>
+                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived Program</button>
             </div>
             <div class="col-auto">
                 <button type="button" class="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Program</button>
@@ -25,7 +25,7 @@ $admin = new Administration() ?>
     <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
 </header>
 
-<div class="content">
+<div class="container">
     <!-- NO RESULTS MESSAGE -->
     <div class="w-100 d-flex justify-content-center">
         <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>
@@ -38,8 +38,8 @@ $admin = new Administration() ?>
             </div>
         </div>
     </div>
-    <div class="container ms-4 me-3">
-        <ul data-page="program" class="cards-con d-flex flex-wrap mt-2 h-auto" style="min-height: 60vh;">
+    <div class=" ">
+        <ul data-page="program" class="cards-con flex-wrap mt-3 d-flex justify-content-center me-5 h-auto" style="min-height: 60vh;">
         </ul>
             <!-- TEMPLATE -->
             <template id="card-template">

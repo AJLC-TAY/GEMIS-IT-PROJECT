@@ -4,23 +4,23 @@ include_once("../inc/head.html");
 session_start();
 require_once("../class/Administration.php");
 $admin = new Administration();
-$userProfile = $admin->getProfile("ST");
-$stud_id = $userProfile->get_stud_id();
-$user_id_no = $userProfile->get_id_no();
-$lrn = $userProfile->get_lrn();
-$lname = $userProfile->get_last_name();
-$fname = $userProfile->get_first_name();
-$mname = $userProfile->get_middle_name();
-$extname = $userProfile->get_ext_name();
-$sex = $userProfile->get_sex();
-$age = $userProfile->get_age();
-$birthdate = $userProfile->get_birthdate();
-$birth_place = $userProfile->get_birth_place();
-$indigenous_group = $userProfile->get_indigenous_group();
-$mother_tongue = $userProfile->get_mother_tongue();
-$religion = $userProfile->get_religion();
+$student = $admin->getProfile("ST");
+$stud_id = $student->get_stud_id();
+$user_id_no = $student->get_id_no();
+$lrn = $student->get_lrn();
+$lname = $student->get_last_name();
+$fname = $student->get_first_name();
+$mname = $student->get_middle_name();
+$extname = $student->get_ext_name();
+$sex = $student->get_sex();
+$age = $student->get_age();
+$birthdate = $student->get_birthdate();
+$birth_place = $student->get_birth_place();
+$indigenous_group = $student->get_indigenous_group();
+$mother_tongue = $student->get_mother_tongue();
+$religion = $student->get_religion();
 
-$address = $userProfile->get_address();
+$address = $student->get_address();
 $house_no = $address['home_no'];
 $street = $address['street'];
 $barangay = $address['barangay'];
@@ -28,13 +28,13 @@ $city = $address['mun_city'];
 $province = $address['province'];
 $zip = $address['zipcode'];
 
-$cp_no = $userProfile->get_cp_no();
-$psa_birth_cert = $userProfile->get_psa_birth_cert();
-$belong_to_ipcc = $userProfile->get_belong_to_ipcc();
-$id_picture = $userProfile->get_id_picture();
-$section = $userProfile->get_section();
+$cp_no = $student->get_cp_no();
+$psa_birth_cert = $student->get_psa_birth_cert();
+$belong_to_ipcc = $student->get_belong_to_ipcc();
+$id_picture = $student->get_id_picture();
+$section = $student->get_section();
 
-$parents = $userProfile->get_parents();
+$parents = $student->get_parents();
 if (is_null($parents)) {
     $parents = NULL;
 } else {
@@ -49,7 +49,7 @@ if (is_null($parents)) {
     }
 }
 
-$guardian = $userProfile->get_guardians();
+$guardian = $student->get_guardians();
 if (is_null($guardian)) {
     $guardian = NULL;
 } else {

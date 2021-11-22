@@ -195,12 +195,12 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             <?php echo "<img src='../$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
                             <br>
                             <?php echo "<dl class='row mb-2 ms-1'>
-                                    <dt class='col-md-3'>User ID: </dt>
-                                    <dd class='col-md-9'> $user_id_no </dd>
-                                    <dt class='col-md-3'>Strand: </dt>
-                                    <dd class='col-md-9'> $strand </dd>
-                                    <dt class='col-md-5'>Grade Level: </dt>
-                                    <dd class='col-md-9'>$yrlvl</dd>
+                                    <dt class='col-md-4'>User ID: </dt>
+                                    <dd class='col-md-8'> $user_id_no </dd>
+                                    <dt class='col-md-4'>Strand: </dt>
+                                    <dd class='col-md-8'> $strand </dd>
+                                    <dt class='col-md-4'>Year Level: </dt>
+                                    <dd class='col-md-8'>$yrlvl</dd>
                             </dl>" ?>
                             
                             <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
@@ -230,25 +230,25 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 $birthdate = date("F j, Y", strtotime($birthdate));
                                 $name = $userProfile->get_name();
                                 echo
-                                "<dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-3'>Student LRN: </dt>
-                                            <dd class='col-md-9'>$lrn</dd>
-                                            <dt class='col-md-3'>Name: </dt>
-                                            <dd class='col-md-9'> $name </dd>
-                                            <dt class='col-md-3'>Gender: </dt>
-                                            <dd class='col-md-9'> {$userProfile->get_sex()} </dd>
-                                            <dt class='col-md-3'>Age: </dt>
-                                            <dd class='col-md-9'> {$userProfile->get_age()} </dd>
-                                            <dt class='col-md-3'>Birthdate: </dt>
-                                            <dd class='col-md-9'> {$birthdate} </dd>
-                                            <dt class='col-md-3'>Birth Place: </dt>
-                                            <dd class='col-md-9'> $birth_place </dd>
-                                            <dt class='col-md-3'>Indeginous Group: </dt>
-                                            <dd class='col-md-9'> $indigenous_group </dd>
-                                            <dt class='col-md-3'>Mother Tongue: </dt>
-                                            <dd class='col-md-9'> $mother_tongue </dd>
-                                            <dt class='col-md-3'>Religion: </dt>
-                                            <dd class='col-md-9'> $religion </dd>
+                                "<dl class='row mb-3 ms-2 border border-1 p-2'>
+                                            <dt class='col-md-4'>Student LRN</dt>
+                                            <dd class='col-md-8'>$lrn</dd>
+                                            <dt class='col-md-4'>Name</dt>
+                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>Gender </dt>
+                                            <dd class='col-md-8'>$sex</dd>
+                                            <dt class='col-md-4'>Age</dt>
+                                            <dd class='col-md-8'>$age</dd>
+                                            <dt class='col-md-4'>Birthdate</dt>
+                                            <dd class='col-md-8'> {$birthdate} </dd>
+                                            <dt class='col-md-4'>Birth Place</dt>
+                                            <dd class='col-md-8'> $birth_place </dd>
+                                            <dt class='col-md-4'>Indeginous Group </dt>
+                                            <dd class='col-md-8'> $indigenous_group </dd>
+                                            <dt class='col-md-4'>Mother Tongue</dt>
+                                            <dd class='col-md-8'> $mother_tongue </dd>
+                                            <dt class='col-md-4'>Religion </dt>
+                                            <dd class='col-md-8'> $religion </dd>
 
                                 </dl>";
                                 ?>
@@ -257,12 +257,13 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 <h6><b>Contact Information</b></h6>
                                 <?php echo
                                 "<dl class='row mb-3 ms-2'>
-                                        <dt class='col-md-3'>Home Address: </dt>
-                                        <dd class='col-md-9'> $add </dd>
-                                        <dt class='col-md-3'>Cellphone No.: </dt>
-                                        <dd class='col-md-9'> $cp_no </dd>
+                                        <dt class='col-md-4'>Home Address </dt>
+                                        <dd class='col-md-8'> $add </dd>
+                                        <dt class='col-md-4'>Cellphone No. </dt>
+                                        <dd class='col-md-8'> $cp_no </dd>
                                         
                                     </dl>"; ?>
+                                <hr>
                             </div>
 
                             <div class="row mt-3">
@@ -276,24 +277,24 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                         $no = ${$parent . '_cp_no'};
                                         echo "
                                         <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-3'>" . ucwords($parent) . "'s Name: </dt>
-                                            <dd class='col-md-9'> $name </dd>
-                                            <dt class='col-md-3'>Occupation: </dt>
-                                            <dd class='col-md-9'> $occupation </dd>
-                                            <dt class='col-md-3'>Contact Number: </dt>
-                                            <dd class='col-md-9'> $no </dd>
+                                            <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
+                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>Occupation </dt>
+                                            <dd class='col-md-8'> $occupation </dd>
+                                            <dt class='col-md-4'>Contact Number </dt>
+                                            <dd class='col-md-8'> $no </dd>
                                         </dl>";
                                     }
                                 }
                                 if ($guardian != NULL) {
-                                    echo "<h6 class='mt-3'>Guardian/s</h6>
+                                    echo "<hr><h6 class='mt-3'>Guardian/s</h6>
                                         <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-3'>Guardian's Name: </dt>
-                                            <dd class='col-md-9'> $guardian_name </dd>
-                                            <dt class='col-md-3'>Relationship: </dt>
-                                            <dd class='col-md-9'> $guardian_relationship </dd>
-                                            <dt class='col-md-3'>Contact Number: </dt>
-                                            <dd class='col-md-9'> $guardian_cp_no </dd>
+                                            <dt class='col-md-4'>Guardian's Name</dt>
+                                            <dd class='col-md-8'> $guardian_name </dd>
+                                            <dt class='col-md-4'>Relationship</dt>
+                                            <dd class='col-md-8'> $guardian_relationship </dd>
+                                            <dt class='col-md-4'>Contact Number</dt>
+                                            <dd class='col-md-8'> $guardian_cp_no </dd>
                                         </dl>";
                                 } ?>
                             </div>
@@ -432,22 +433,22 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 <!-- Attendance Tab -->
                 <div class="tab-pane fade bg-white p-4 <?php echo $tab_three_active; ?>" id="attendance" role="tabpanel" aria-labelledby="docu-tab">
                 <div class="container mt-2 ms-0">
-                            <div class="card w-100 h-auto bg-light">
-                                <form id="attendance-form" >
-                                    <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
-                                        <thead class='thead-dark'>
-                                            <tr>
-                                                <th scope='col' data-width="100" data-align="center" data-field="month" title="month">Month</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="present">Present</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="absent">Absent</th>
-                                                <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="tardy">Tardy</th>
-                                                <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </form>
-                            </div>
-                        </div>
+                    <div class="w-100 h-auto">
+                        <form id="attendance-form" >
+                            <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
+                                <thead class='thead-dark'>
+                                    <tr>
+                                        <th scope='col' data-width="100" data-align="center" data-field="month" title="month">Month</th>
+                                        <th scope='col' data-width="100" data-align="center" data-field="present">Present</th>
+                                        <th scope='col' data-width="100" data-align="center" data-field="absent">Absent</th>
+                                        <th scope='col' data-width="100" data-align="center" data-field="tardy">Tardy</th>
+                                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
                 </div>
                 <div class="modal fade" id="confirmation-edit-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
