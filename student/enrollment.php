@@ -533,7 +533,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                                                         <label for="grade-select" class="col-form-label">Grade Level</label>
                                                         <select class="form-select" name="grade-level" id="grade-select" disabled ="true">
                                                             <?php
-                                                            if($enrollmentData['sem'] == 2 OR $enrollmentData['yr_lvl'] == 12){
+                                                            if((int)$enrollmentData['sem'] == 2 OR (int)$enrollmentData['yr_lvl'] == 12){
                                                                 $lvl = 12;
                                                             } else {
                                                                 $lvl = 11;
@@ -545,9 +545,13 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                                                         <label class="col-form-label">Semester</label>
                                                         <div class="d-flex">
                                                             <?php 
-                                                            if($enrollmentData['yr_lvl'] == 11 AND $enrollmentData['sem'] == 2){
+                                                            // echo json_encode($enrollmentData);
+                        
+                                                            if((int)$enrollmentData['yr_lvl'] == 11 AND (int)$enrollmentData['sem'] == 2){
                                                                 $val = 1;
-                                                            } elseif ($enrollmentData['yr_lvl'] == 12 AND $enrollmentData['sem'] == 1){
+                                                            } elseif ((int)$enrollmentData['yr_lvl'] == 12 AND (int)$enrollmentData['sem'] == 1){
+                                                                $val = 2;
+                                                            } elseif ((int)$enrollmentData['yr_lvl'] == 11 AND (int)$enrollmentData['sem'] == 1){
                                                                 $val = 2;
                                                             }
                                                             $sem = [1 => "first", 2 => "second"];
