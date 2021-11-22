@@ -3,6 +3,7 @@
 require_once("../class/Administration.php");
 $admin = new Administration();
 $user_type = $_SESSION['user_type'];
+// print_r($admin->getTransfereeNames());
 
 $link = "student.php";
 $userProfile = $admin->getProfile("ST");

@@ -327,7 +327,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'newPassword'){
 }
 if (isset($_POST['action']) && $_POST['action'] === 'editSubjectGrade'){
     $admin->editSubjectGrade();
-    $admin->enterLog("Edit Subject Grade");
+    // $admin->enterLog("Edit Subject Grade");
 }
 
 
