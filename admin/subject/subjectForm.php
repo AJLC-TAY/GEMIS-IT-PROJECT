@@ -41,7 +41,7 @@ $prog_opt = "";
 $input_sub_with_prog = '';
 
 // subject data
-$title = "<h3>Add Subject</h3><p class='text-secondary'><small>Please complete the following:</small></p>";
+$title = "<h3><b>Add Subject</b></h3><p class='text-secondary'><small>Please complete the following:</small></p>";
 $subject_code = '';
 $subject_name = '';
 $semester_opt = '';
@@ -79,7 +79,7 @@ if ($action === 'add') {
             <td scope='col'>$sub_type</td>
             <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
             <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
-            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
+            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-outline-danger' title='Clear'><i class='bi bi-dash-circle'></i></button></td>
         </tr>";
     }
 
@@ -93,7 +93,7 @@ if ($action === 'add') {
             <td scope='col'>$sub_type</td>
             <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
             <td scope='col' class='text-center'><input class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
-            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
+            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-outline-danger' title='Clear'><i class='bi bi-dash-circle'></i></button></td>
         </tr>";
     }
 
@@ -160,7 +160,7 @@ if ($action === 'edit') {
                             <td scope='col'>$sub_type</td>
                             <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code'></td>
                             <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code'></td>
-                            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
+                            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-outline-danger' title='Clear'><i class='bi bi-dash-circle'></i></button></td>
                         </tr>";
     }
 
@@ -178,7 +178,7 @@ if ($action === 'edit') {
                             <td scope='col'>$sub_type</td>
                             <td scope='col' class='text-center'><input ". (in_array($sub_code, $prereq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='PRE-$sub_code' $grade_level_state></td>
                             <td scope='col' class='text-center'><input ". (in_array($sub_code, $coreq) ? 'checked' : '') ." class='form-check-input' type='radio' name='radio-$sub_code' value='CO-$sub_code' $grade_level_state></td>
-                            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-light' title='Clear'><i class='bi bi-x-circle'></i></button></td>
+                            <td scope='col' class='text-center'><button class='spec-clear-btn btn btn-sm rounded-pill btn-outline-danger' title='Clear'><i class='bi bi-dash-circle'></i></button></td>
                         </tr>";
     }
 
@@ -292,7 +292,7 @@ if ($action === 'edit') {
                             <div id='grade11-table'>
                                 <div class='d-flex justify-content-between align-items-center mb-2'>
                                     <h6>Subjects</h6>
-                                    <span><button data-desc='11' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear Table</button></span>
+                                    <span><button data-desc='11' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear</button></span>
                                 </div>
                                 <div class='requisite-table overflow-auto'>
                                     <table class='table table-bordered table-hover table-striped'>
@@ -325,7 +325,7 @@ if ($action === 'edit') {
                             <div id='grade12-table'>
                                 <div class='d-flex justify-content-between align-items-center mb-2'>
                                     <h6>Subjects</h6>
-                                    <span><button data-desc='12' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear Table</button></span>
+                                    <span><button data-desc='12' class='clear-table-btn float-right btn btn-outline-secondary btn-sm'><i class='bi bi-x me-2'></i>Clear</button></span>
                                 </div>
                             
                                 <div class='requisite-table overflow-auto'>

@@ -678,10 +678,10 @@ input:checked+.slider:before {
     }
 
     #sidebar {
-        width: 100%;
+        /* width: 100%; */
         height: auto;
         float: none;
-        position: fixed;
+        /* position: fixed; */
       }
 
     #main-content {
