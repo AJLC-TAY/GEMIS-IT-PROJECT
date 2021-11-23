@@ -2248,7 +2248,6 @@ class Administration extends Dbconfig
 
             if (mysqli_num_rows($result) == 0) {
                 foreach ($subjects as $sub) {
-                    echo "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');";
                     $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');");
                 }
                 return;

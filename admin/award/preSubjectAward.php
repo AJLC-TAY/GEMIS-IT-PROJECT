@@ -28,7 +28,7 @@ $report_title = $_POST['sub_code'];
     </div>
 </header>
 <div class="container">
-    <form id='subject-award-form' method='POST' action='awardReport.php?type=ga'>
+    <form id='subject-award-form' class="report-form" method='POST' action='awardReport.php?type=ga'>
         <div class="row">
             <div class="col-lg-8">
                 <div class="card bg-white p-3 mb-3" style="min-height: 490px;">

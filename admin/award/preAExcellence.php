@@ -6,9 +6,9 @@ $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
 $date_desc = date("F j, Y");
 $date = strftime('%Y-%m-%d', strtotime(date("F j, Y")));
-$highest = $_POST['Highest-honor'];
-$high = $_POST['High-honor'];
-$with = $_POST['With-honor'];
+$highest = [$_POST['Highest-honor-min'], $_POST['Highest-honor-max']];
+$high =  [$_POST['High-honor-min'], $_POST['High-honor-max']];
+$with =  [$_POST['With-honor-min'], $_POST['With-honor-max']];
 $grade = $_POST['grade'];
 $signatory_list = $admin->listSignatory();
 $url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&semester={$_POST['semester']}&grade=$grade".
@@ -33,7 +33,7 @@ $url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&semeste
     </div>
 </header>
 <div class="container">
-    <form id='academic-excellence-form' method='POST' action='awardReport.php?type=ae&grade=<?php echo $grade; ?>'>
+    <form id='academic-excellence-form' class="report-form" method='POST' action='awardReport.php?type=ae&grade=<?php echo $grade; ?>'>
         <div class="row">
             <div class="col-lg-8">
                 <div class="card bg-white p-3 mb-3" style="min-height: 490px;">

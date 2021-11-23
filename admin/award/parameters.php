@@ -6,15 +6,6 @@ $subjects = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $subjects[$row['sub_code']] = $row['sub_name'];
 }
-//$result = $admin->query("SELECT CASE WHEN award_code = 'ae1_highestHonors' THEN 'Highest'
-//                        WHEN award_code = 'ae1_highHonors' THEN 'High'
-//                        WHEN award_code = 'ae1_withHonors' THEN 'With' END AS info,
-//                        min_gwa AS min, max_gwa AS max
-//                        FROM academicexcellence;");
-//$param = [];
-//while ($row = mysqli_fetch_assoc($result)) {
-//    $param[$row['info']] = ['min' => $row['min'], 'max' => $row['max']];
-//}
 
 $param = [
         "Highest" => ['min' => "98", 'max' => "100"],
@@ -78,8 +69,8 @@ $param = [
                         foreach ($param as $info => $range) {
                             echo "<tr>
                                 <td align='center' class='align-middle'>$info Honor</td>";
-                                foreach ($range as $val) {
-                                    echo "<td><input required value='$val' name='$info-honor[]' type='text' class='form-control form-control-sm number text-end mb-1' placeholder='Enter Value'></td>";
+                                foreach ($range as $i => $val) {
+                                    echo "<td><input required value='$val' name='$info-honor-$i' type='text' class='form-control form-control-sm number text-end mb-1' placeholder='Enter Value'></td>";
                                 }
                             echo "</tr>";
                         }
@@ -98,7 +89,7 @@ $param = [
                     <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3"><i class="bi bi-funnel me-2"></i>Generate</button>
                 </form>
                 <hr class="my-2">
-                <form id="research-form" action="award.php?type=re" method="post">
+                <form id="other-award-form" action="award.php?type=re" method="post">
                     <div class="row mb-3">
                         <div class="col-auto">
                             <h5>Other awards</h5>
@@ -121,7 +112,7 @@ $param = [
                             <input required value='90' name='filter' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
                         </div>
                         <div class="col-2">
-                            <button type="submit" form="research-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button>
+                            <button type="submit" form="other-award-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button>
                         </div>
                     </div>
                 </form>

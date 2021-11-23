@@ -27,7 +27,7 @@ $programs = [];
 <!-- HEADER END -->
 <!-- <form id='enroll-report-form' method='POST' action='test.php'> -->
 <div class="container mt-4">
-    <form id='enroll-report-form' method='POST' action='enrollment.php?page=report&type=pdf'>
+    <form id='enroll-report-form' class="report-form" method='POST' action='enrollment.php?page=report&type=pdf'>
         <div class="row">
             <div class="col-lg-7">
                 <div class="card p-4 bg-white mb-3" >

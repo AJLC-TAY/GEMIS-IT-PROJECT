@@ -1427,8 +1427,10 @@ trait Enrollment
             [$section_code, $section_name, $grade_level, $max_no, $count, $adviser, $sy_id],
             "ssiiiii"
         );
-        foreach ($_POST['students'] as $stud) {
-            $this->query("UPDATE enrollment SET section_code = '$section_code' WHERE stud_id = '$stud' AND sy_id = '$sy_id';");
+        if (isset($_POST['students'])) {
+            foreach ($_POST['students'] as $stud) {
+                $this->query("UPDATE enrollment SET section_code = '$section_code' WHERE stud_id = '$stud' AND sy_id = '$sy_id';");
+            }
         }
 
         echo json_encode($section_code);
