@@ -578,8 +578,9 @@ class Signatory implements JsonSerializable
         $this->acad_degree = $acad_degree;
         $this->position = ucwords($position);
         $this->action = "<div class='d-flex justify-content-center'>"
-                ."<button data-id='{$sign_id}' data-bs-toggle='modal' data-bs-target='#modal-view'  class='view-btn btn btn-sm btn-primary'><i class='bi bi-eye'></i></button>"
-                ."<button data-id='{$sign_id}' data-action='Edit' data-bs-toggle='modal' data-bs-target='#modal-form' class='btn btn-sm btn-secondary me-1 show-modal ms-1'><i class='bi bi-pencil-square'></i></button>"
+                ."<button data-id='{$sign_id}' class='view-btn btn btn-sm btn-primary'><i class='bi bi-eye'></i></button>"
+                ."<button data-id='{$sign_id}' data-action='Edit' class='btn btn-sm btn-secondary me-1 show-modal ms-1'><i class='bi bi-pencil-square'></i></button>"
+                ."<button data-id='{$sign_id}' data-action='Delete' class='show-modal btn btn-sm btn-danger'><i class='bi bi-trash'></i></button>"
             ."</div>";
     }
 

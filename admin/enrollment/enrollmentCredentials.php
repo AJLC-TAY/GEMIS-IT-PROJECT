@@ -149,7 +149,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                                 <select name="strand" id="strand" class="form-select" <?php echo $is_disabled; ?>>
                                                     <?php
                                                     $programs = $admin->listPrograms('program');
-                                                    $trackStrand = $admin->getTrackStrand($stud_id);
+                                                    $trackStrand = $admin->getTrackStrand($stud_id)[0];
                                                     foreach ($programs as $program) {
                                                         $prog_code = $program->get_prog_code();
                                                         echo "<option value='{$prog_code}' ". ($prog_code == $trackStrand ? "selected" : "") ." >{$program->get_prog_desc()}</option>";
@@ -166,11 +166,11 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
 
                                     <div class="row mb-4 justify-content-center">
                                         <div class="col-6">
-                                            <input required type="radio" class="btn-check" name="valid" id="option1" autocomplete="off" checked value="accept">
+                                            <input required type="radio" class="btn-check" name="valid" id="option1" autocomplete="off" <?php echo ($valid_status == 'Enrolled' ? "checked" : ""); ?> value="accept">
                                             <label class="btn btn-outline-primary w-100" for="option1">Accept Enrollee</label>
                                         </div>
                                         <div class="col-6">
-                                            <input required type="radio" class="btn-check" name="valid" id="option2" autocomplete="off" value="reject">
+                                            <input required type="radio" class="btn-check" name="valid" id="option2" autocomplete="off" <?php echo ($valid_status == 'Rejected' ? "checked" : ""); ?> value="reject">
                                             <label class="btn btn-outline-danger w-100" for="option2">Decline Enrollee</label>
                                         </div>
                                     </div>
@@ -232,7 +232,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                     Declining this enrollment request will delete this student's initialized grades.
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="close btn btn-dark close-btn validate"  data-name='reject'>Decline</button>
+                                    <button class="close btn btn-dark close-btn validateReject"  data-name='reject'>Decline</button>
                                     <button class="close btn btn-success close-btn" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>

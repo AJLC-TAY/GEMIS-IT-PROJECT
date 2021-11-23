@@ -42,7 +42,7 @@ $faculty = $admin->listFaculty();
                                 <div class="d-flex justify-content-between mb-3">
                                     <h3 class="fw-bold">Signatory List</h3>
                                     <div>
-                                        <button data-action="Add" class="btn btn-success show-modal" data-bs-toggle="modal" data-bs-target="#modal-form"><i class="bi bi-plus me-2"></i>Add Signatory</button>
+                                        <button data-action="Add" class="btn btn-success show-modal" data-bs-toggle="modal" data-bs-target="#modal-form"><i class="bi bi-plus-lg me-2"></i>Add Signatory</button>
                                     </div>
                                 </div>
                             </header>
@@ -103,40 +103,37 @@ $faculty = $admin->listFaculty();
                         <input id="sig-id" type="hidden" name="sig-id" value="">
                         <p class="text-secondary"><small>Please complete the following</small></p>
                         <div class="container">
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="last-name">Last Name</label>
                                 <div class="col-7">
                                     <input id="last-name" name="last-name" type="text" class="form-control-sm form-control" placeholder="Last Name">
                                 </div>
                             </div>
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="first-name">First Name</label>
                                 <div class="col-7">
                                     <input id="first-name" name="first-name" type="text" class="form-control-sm form-control" placeholder="First Name">
                                 </div>
                             </div>
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="middle-name">Middle Name</label>
                                 <div class="col-7">
                                     <input id="middle-name" name="middle-name" type="text" class="form-control-sm form-control" placeholder="Middle Name">
                                 </div>
                             </div>
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="academic-degree">Academic degree</label>
                                 <div class="col-7">
                                     <input id="academic-degree" name="academic-degree" type="text" class="form-control-sm form-control" placeholder="Academic Degree">
                                 </div>
                             </div>
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="position">Position</label>
                                 <div class="col-7">
                                     <input id="position" class="form-control form-control-sm mb-0" type="text" name="position" placeholder="Position">
-                                    <div class="invalid-input">
-                                        <p class="text-secondary"><small>Please provide position</small></p>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="row align-content-center needs-validation" novalidate>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
                                 <label class="col-form-label col-5" for="years">Years (Start-End)</label>
                                 <div  id="years" class="col-7 row m-0">
                                     <div class="col-5 p-0">
@@ -157,9 +154,73 @@ $faculty = $admin->listFaculty();
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="delete" form="signatory-form" class="btn btn-danger btn-sm" value="Delete">
                     <button type="submit" id="submit-again" class="btn btn-secondary btn-sm">Submit and add again</button>
                     <input type="submit" name="submit" form="signatory-form" class="btn btn-success btn-sm" value="Add">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-view" tabindex="-1" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">View Signatory</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="last-name">Last Name</label>
+                                <div class="col-7">
+                                    <input disabled id="last-name-view" name="last-name" type="text" class="form-control-sm form-control" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="first-name">First Name</label>
+                                <div class="col-7">
+                                    <input disabled id="first-name-view" name="first-name" type="text" class="form-control-sm form-control" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="middle-name">Middle Name</label>
+                                <div class="col-7">
+                                    <input disabled id="middle-name-view" name="middle-name" type="text" class="form-control-sm form-control" placeholder="Middle Name">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="academic-degree">Academic degree</label>
+                                <div class="col-7">
+                                    <input disabled id="academic-degree-view" name="academic-degree" type="text" class="form-control-sm form-control" placeholder="Academic Degree">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="position">Position</label>
+                                <div class="col-7">
+                                    <input  disabled id="position-view" class="form-control form-control-sm mb-0" type="text" name="position" placeholder="Position">
+                                </div>
+                            </div>
+                            <div class="row align-content-center needs-validation mb-2" novalidate>
+                                <label class="col-form-label col-5" for="years">Years (Start-End)</label>
+                                <div  id="years" class="col-7 row m-0">
+                                    <div class="col-5 p-0">
+                                        <input disabled id="start-year-view" name="start-year" type="text" class="number form-control-sm form-control" placeholder="Start year">
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <p class="m-0"> - </p>
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        <input disabled id="end-year-view" name="end-year" type="text" class="number form-control-sm form-control" placeholder="End year">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Close</button>
+                    <button data-action='Edit' class="show-modal edit-btn btn btn-primary btn-sm"><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 </div>
             </div>
         </div>
@@ -177,7 +238,7 @@ $faculty = $admin->listFaculty();
                     Delete selected signatory?
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
                     <button id="delete-signatory-confirm" class="edit-btn btn btn-danger btn-sm">Delete</button>
                 </div>
             </div>
@@ -188,6 +249,10 @@ $faculty = $admin->listFaculty();
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/signatory.js"></script>

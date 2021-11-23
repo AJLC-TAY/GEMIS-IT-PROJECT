@@ -66,12 +66,16 @@ $(function() {
 
     /** Validate Form */
     $(document).on("click", ".validate", function (e) {
-        let value = $(".valid").val();
+        let value = $("[name='valid']:checked").val();
         if (value == 'accept') {
             submitValidationForm(value);
         } else {
             $("#confirmation-modal").modal("show");
         }
+    });
+
+    $(document).on("click", ".validateReject", function (e) {
+        submitValidationForm('reject');
     });
 
     $(document).on("click", ".action", function () {
@@ -85,7 +89,6 @@ $(function() {
                 $(".edit-opt").hide();
                 $("#valid-change-btn").show();
                 $(".enroll-request-con select").prop("disabled", true);
-
                 break;
         }
     });

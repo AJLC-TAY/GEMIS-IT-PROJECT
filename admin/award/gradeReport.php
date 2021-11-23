@@ -43,7 +43,7 @@ $general_averages = $admin->getGeneralAverages($report_id);
 // $admittedIn = 'None';
 // $eligible = '12';
 // $date = date("F j, Y");
-$trackStrand = $admin->getTrackStrand($stud_id);
+$trackStrand = ($admin->getTrackStrand($stud_id))[1];
 $attendance = $admin->getStudentAttendance($report_id);
 $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report';
 ?>

@@ -59,10 +59,6 @@ $(function () {
         required: true,
         lettersonly: true
       },
-      middlename: {
-        required: true,
-        lettersonly: true
-      },
       age: {
         required: true,
         max: 99
@@ -74,24 +70,20 @@ $(function () {
     },
     messages: {
       lastname: {
-        required: '<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Last name is letters only!</p>'
+        required: '<p class="text-danger user-select-none"><small>Please enter last name!</small></p>',
+        lettersonly: '<p class="text-danger user-select-none"><small>Last name is letters only!</small></p>'
       },
       firstname: {
-        required: '<p class="text-danger user-select-none">Please enter first name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">First name is letters only!</p>'
-      },
-      middlename: {
-        required: '<p class="text-danger user-select-none">Please enter last name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Middle name is letters only!</p>'
+        required: '<p class="text-danger user-select-none"><small>Please enter first name!</small></p>',
+        lettersonly: '<p class="text-danger user-select-none"><small>First name is letters only!</small></p>'
       },
       age: {
-        required: '<p class="text-danger user-select-none">Please enter age!</p>',
-        max: '<p class="text-danger user-select-none">Age is too high!</p>'
+        required: '<p class="text-danger user-select-none"><small>Please enter age!</small></p>',
+        max: '<p class="text-danger user-select-none"><small>Age is too high!</small></p>'
       },
       email: {
-        required: '<p class="text-danger user-select-none">Please enter an email address!</p>',
-        email: '<p class="text-danger user-select-none">Please enter a <em>valid</em> email address!</p>'
+        required: '<p class="text-danger user-select-none"><small>Please enter an email address</small>small!</p>',
+        email: '<p class="text-danger user-select-none"><small>Please enter a <em>valid</em> email address!</small></p>'
       }
     },
     submitHandler: function(form) { 
@@ -99,6 +91,8 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   });
+
+  
 
 
   //
@@ -235,92 +229,6 @@ $(function () {
   });
 
 
-  //submit done, for implementation
-  // $("#stepper").on('click', function(){
-  // $("#enrollment-form").on("stepper", function(event) {
-  //   event.preventDefault();
-  // }).validate({
-  //   rules: {
-  //     'f-lastname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'f-firstname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'f-middlename': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'm-lastname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'm-firstname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'm-middlename': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'g-lastname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'g-firstname': {
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'g-middlename': {
-  //       required: true,
-  //       lettersonly: true
-  //     }
-  //   },
-  //   messages: {
-  //     'f-lastname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter father's last name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'f-firstname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter father's first name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'f-middlename': {
-  //       required: "<p class='text-danger user-select-none'>Please enter father's middle name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'm-lastname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter mother's last name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'm-firstname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter mother's first name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'm-middlename': {
-  //       required: "<p class='text-danger user-select-none'>Please enter mother's middle name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'g-lastname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter guardian's last name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'g-firstname': {
-  //       required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     },
-  //     'g-middlename': {
-  //       required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
-  //       lettersonly: "<p class='text-danger user-select-none'>Please enter letters only!</p>",
-  //     }
-  //   },
-  //   submitHandler: function(form) {
-  //     form.submit();
-  //     return false;  //This doesn't prevent the form from submitting.
-  //   }
-  // })})
 
   //unique rule, submit done, for implementation and testing
   $("#section-form").on("submit", function(event) {

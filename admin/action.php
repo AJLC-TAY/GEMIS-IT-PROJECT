@@ -335,17 +335,17 @@ if (isset($_POST['action']) && $_POST['action'] === 'editSubjectGrade'){
 /******** SIGNATORY ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addSignatory'){
     $admin->addSignatory();
-    $admin->enterLog("Add Signatory");
+    $this->enterLog("Added Signatory. Sign ID: ".mysqli_insert_id($this->db));
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'editSignatory'){
     $admin->editSignatory();
-    $admin->enterLog("Edit Signatory");
+    $admin->enterLog("Edited Signatory. Sign ID: ".  $_POST['sig-id']);
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'deleteSignatory'){ 
     $admin->deleteSignatory();
-    $admin->enterLog("Delete Signatory");
+    $admin->enterLog("Deleted Signatory. Sign ID: ". $_POST['id']);
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'changeAttendance'){ 
