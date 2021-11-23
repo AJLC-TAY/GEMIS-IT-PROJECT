@@ -202,6 +202,7 @@ $(function () {
 
     });
     $(document).on("click", ".stud-promote", function () {
+        console.log("stud-promote clicked");
         studID = $(this).attr("data-stud-id");
         $('.promotion-confirmation').modal('show');
 

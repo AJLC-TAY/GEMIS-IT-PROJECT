@@ -81,11 +81,12 @@ $enrollmentData = $user->lastestEnrollmentDetail();
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <?php
-            if($_SESSION['promote'] == 0){
-                include_once("failed.php");
-            }elseif($enrollmentData['sy_id'] == $_SESSION['sy_id']){
-                include_once("enrolled.php");
-            } else {?> 
+            if($_SESSION['promote'] == 0 ){
+               include_once("failed.php");
+            } else {
+                if ($enrollmentData['sy_id'] == $_SESSION['sy_id']){
+                    include_once("enrolled.php");
+                } else {?> 
             <section class="wrapper">
 
                 <div class="row">
@@ -582,7 +583,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                     </div>
                 </div>
             </section>
-            <?php }?>
+            <?php }}?>
             <!-- MAIN CONTENT END-->
             <!-- FOOTER -->
             <?php include_once("../inc/footer.html"); ?>
