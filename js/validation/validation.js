@@ -92,8 +92,6 @@ $(function () {
     }
   });
 
-  
-
 
   //
   // $("#lrn").rules("add", {
@@ -448,4 +446,60 @@ $(function () {
   //     }
   //   }
   // });
-})
+  try {
+
+
+    $("#change-pass-form").validate({
+      rules: {
+        current: {
+          required: true,
+          remote: {
+            url: `getAction.php?data=validatePassword&uid=${uid}`,
+            type: "post",
+            data: {
+              current: function () {
+                return $("[name='current']").val();
+              }
+            }
+          }
+        },
+        new_password: {
+          required: true,
+          minlength: 8
+        },
+        "reenter-new-pass": {
+          required: true,
+          equalTo: "#new-pass"
+        }
+      },
+      messages: {
+        current: {
+          required: REQUIRED,
+          remote: "<p class='text-danger'><small>Incorrect password</small></p>"
+        },
+        new_password: {
+          required: REQUIRED,
+          minlength: "<p class='text-danger'><small>Please choose a password with at least 8 characters</small></p>"
+        },
+        "reenter-new-pass": {
+          required: REQUIRED,
+          equalTo: "<p class='text-danger'><small>Please enter the same value again</small></p>"
+        }
+      },
+      submitHandler: function (form) {
+        $.ajax({
+          url: "action.php",
+          data: new FormData(form),
+          processData: false,
+          contentType: false,
+          type: "post",
+          success: function () {
+            $(form).trigger("reset");
+            $("#change-pass-modal").modal("hide");
+            showToast("success", "Password successfully changed");
+          }
+        })
+      }
+    });
+  } catch (e) {}
+});

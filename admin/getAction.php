@@ -1,6 +1,10 @@
 <?php
 require_once('../class/Administration.php');
 $admin = new Administration();
+/** PASSWORD */
+if (isset($_GET['data']) && $_GET['data'] == 'validatePassword') {
+    $admin->validatePassword();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'systemLogs') {
     $admin->getSystemLogs();
 }

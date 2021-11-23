@@ -193,10 +193,10 @@ trait UserSharedMethods
     {
         $user_id = '';
         if ($is_default) {
-            define("ID", "7264723646");
-            define("PASSWORD", "AD7264723646");
-            $user_id = PASSWORD;
-            $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('" . ID . "', NOW(), '$type', '" . PASSWORD . "');");
+            define("ID", "2021001");
+            define("PASSWORD", "AD2021001");
+            $user_id = ID;
+            $this->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('" . ID . "', NOW(), '$type', '" . password_hash(PASSWORD, PASSWORD_DEFAULT) . "');");
         } else {
             $this->query("INSERT INTO user (date_last_modified, user_type) VALUES (NOW(), '$type');");
             $user_id = mysqli_insert_id($this->db);
@@ -414,16 +414,37 @@ trait UserSharedMethods
     {
         session_start();
         $result = $this->query("SELECT password FROM user WHERE id_no = '{$_SESSION['user_id']}' AND is_active=1;");
-        //        print_r($result);
-        //        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
         if (password_verify($_POST['current'], mysqli_fetch_row($result)[0])) {
-            echo "test";
             $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
             $this->query("UPDATE user SET password='$new_password' WHERE id_no = '{$_SESSION['user_id']}';");
-        } else {
-            http_response_code(403);
-            die("Incorrect password");
         }
+
+//        switch($_SESSION['user_type']) {
+//            case 'AD':
+//                $user = "admin";
+//                break;
+//            case 'FA':
+//                $user = "faculty";
+//                break;
+//            default:
+//                $user = "default";
+//        }
+//
+//        header("Location: $user.php?id=$id");
+    }
+
+    public function validatePassword()
+    {
+        $query = "SELECT password FROM user WHERE id_no='{$_GET['uid']}' AND is_active = 1;";
+        $result = $this->query($query);
+        if ($row = mysqli_fetch_assoc($result))
+        {
+            if(password_verify($_POST['current'] ?? $_POST['password-delete'], $row['password'])) {
+                echo "true";
+                exit;
+            }
+        }
+        echo "false";
     }
 }
 

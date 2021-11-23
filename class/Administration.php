@@ -2096,22 +2096,22 @@ class Administration extends Dbconfig
     {
         session_start();
         $id = $_SESSION['id'];
-        $user_id = mysqli_fetch_row($this->query("SELECT admin_user_no FROM administrator WHERE admin_id = '$id';"))[0];
-        $this->query("DELETE FROM administrator WHERE admin_id = '$id';");
-        $this->query("DELETE FROM user WHERE id_no = $user_id AND type = 'AD';");
-        $this->createDefaultAdmin();
+        $this->query("DELETE FROM user WHERE id_no = ANY(SELECT admin_user_no FROM administrator WHERE admin_id = '$id') AND user_type = 'AD';");
+        $result = $this->query("SELECT * FROM administrator;");
+        if (mysqli_num_rows($result) == 0 ) {
+            $this->createDefaultAdmin();
+        }
         echo json_encode("../logout.php");
     }
 
+
     public function createDefaultAdmin()
     {
-        // if (!empty($_SESSION)) {
-        //     session_start();
-        // }
-        session_start();
-        define("NAME", "PCNHS");
+         if (empty($_SESSION)) {
+             session_start();
+         }
         $id = $this->createUser('AD', TRUE);
-        $this->query("INSERT INTO administrator (admin_id, last_name, admin_user_no) VALUES (1, '". NAME ."', '$id');");
+        $this->query("INSERT INTO administrator (admin_id, last_name, first_name, admin_user_no) VALUES (1, 'PCNHS', 'ADMIN', '$id');");
     }
 
     /** Faculty Methods */
