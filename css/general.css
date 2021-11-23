@@ -11,6 +11,10 @@ html {
     margin-left: 10px;
 }
 
+.help-block {
+    color: red;
+}
+
 .tile:hover a.card-link,
 .add-tile {
     box-shadow: var(--shad);

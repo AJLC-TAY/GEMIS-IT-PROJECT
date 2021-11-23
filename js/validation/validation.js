@@ -563,4 +563,12 @@ $(function () {
       date: REQUIRED
     }
   });
+  /** Advisory Class */
+  try {
+    $("#advisory-class-form").validate();
+  } catch (e) {}
+
+
 });
+
+

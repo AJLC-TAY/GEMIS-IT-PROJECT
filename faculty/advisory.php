@@ -203,6 +203,10 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script> let qtr = "<?php echo ("{$_SESSION['current_quarter']}");?>";</script>
 
     <?php echo $jsFilePath; ?>;
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 
 </body>
 

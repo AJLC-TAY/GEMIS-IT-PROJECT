@@ -2186,12 +2186,15 @@ trait Grade
 
             if($first_status == 0 && 2 == $_SESSION['current_quarter']){
                $editable = ''; 
-               $editable2 = 'readonly';//first sem editable
+//               $editable2 = 'readonly';//first sem editable
+               $editable2 = 'disabled';//first sem editable
             } else if ($second_status == 0 && 4 == $_SESSION['current_quarter']) {
-               $editable = 'readonly'; 
+//               $editable = 'readonly';
+               $editable = 'disabled';
                $editable2 = '';//second sem editable
             } else {
-                $editable = $editable2 = 'readonly';
+//                $editable = $editable2 = 'readonly';
+                $editable = $editable2 = 'disabled';
 
             }
             
@@ -2201,8 +2204,8 @@ trait Grade
                 'id'     =>  $stud_id,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
-                'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/first' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
-                '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
+                'grd_f'   =>  "<input min='60' max='100' type='number' name='{$stud_id}/{$report_id}/first' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
+                '2grd_f'  =>  "<input min='60' max='100' type='number' name='{$stud_id}/{$report_id}/second' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
                 'status' => $row['promote'] == 2 ? 'Passed' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'],$qtr,$lvl)

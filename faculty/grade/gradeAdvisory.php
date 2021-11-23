@@ -47,7 +47,7 @@
             } ?>
 
         </div>
-        <form>
+        <form id="advisory-class-form" method="post">
             <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
                 <thead class='thead-dark'>
                     <tr>
