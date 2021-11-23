@@ -1463,9 +1463,8 @@ trait Enrollment
      *  1.  If not valid (meaning, enrollee is rejected), return.
      *      If valid, 
      *          1.1 Add student to a section and initialize subject classes.     
-     *          1.2 Update enrollment attribute.
+     *          1.2 Update enrollment attribute, strand and grade.
      *          1.3 Initialize grade
-     *          1.4 Initialize attendance
      */
     public function validateEnrollment()
     {
@@ -1491,7 +1490,11 @@ trait Enrollment
             $this->query("DELETE FROM gradereport WHERE stud_id = '$stud_id';");
             return;
         }
-        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid' WHERE stud_id='$stud_id';");
+        $strand = $_POST['strand'];
+        $curr_code = mysqli_fetch_row($this->query("SELECT curr_code FROM program WHERE prog_code = '{$strand}';"))[0];
+        $this->query("UPDATE enrollment SET valid_stud_data='$is_valid', curr_code='$curr_code', 
+                            enrolled_in='{$_POST['grade-level']}', prog_code = '$strand' 
+                            WHERE stud_id='$stud_id' AND sy_id = '$current_sy';");
 
         # step 1.3
         $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
@@ -1500,9 +1503,9 @@ trait Enrollment
 
     function prepareParentData($type): array
     {
-        $parent =  [$_POST["$type-lastname"], $_POST["$type-firstname"], $_POST["$type-middlename"]];
+        $parent =  [$_POST["$type-lastname"], $_POST["$type-firstname"], $_POST["$type-middlename"] ?? NULL];
         if ($type === 'f') {
-            $parent[] = $_POST["$type-extensionname"];
+            $parent[] = $_POST["$type-extensionname"] ?? NULL;
         }
         $parent[] =  $_POST["$type-contactnumber"];
 
@@ -1605,7 +1608,6 @@ trait Enrollment
     {
         $current_month = date("F"); // ex. January
         $sy_id = $_SESSION['sy_id'];
-        // $sy_id = 13;
         $result = $this->query("SELECT acad_days_id AS id, month, no_of_days FROM academicdays WHERE sy_id = '$sy_id' ORDER BY acad_days_id;");
         $months = [];
         while ($row = mysqli_fetch_row($result)) {
