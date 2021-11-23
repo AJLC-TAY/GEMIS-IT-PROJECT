@@ -2,7 +2,6 @@
 include_once('../class/Administration.php');
 $admin = new Administration();
 ?>
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -16,8 +15,8 @@ $admin = new Administration();
             <h3 class="fw-bold">Curriculum</h3>
         </div>
         <div class="col-auto">
-            <button type="button" class="view-archive btn btn-secondary mt-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>
-            <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add Curriculum</button>
+<!--            <button type="button" class="view-archive btn btn-secondary mt-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>-->
+            <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Curriculum</button>
         </div>
     </div>
 </header>
@@ -146,53 +145,48 @@ $admin = new Administration();
     </div>
 </div>
 <!-- VIEW ARCHIVED MODAL -->
-<div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h4 class="mb-0">Archived Curriculums</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="overflow-auto" style="height: 50vh;">
-                    <ul class="list-group arch-list">
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <div class="modal-title">-->
+<!--                    <h4 class="mb-0">Archived Curriculums</h4>-->
+<!--                </div>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="overflow-auto" style="height: 50vh;">-->
+<!--                    <ul class="list-group arch-list">-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <!-- UNARCHIVE MODAL -->
-<div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h4 class="mb-0">Confirmation</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>
-                <p class="modal-msg"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!--<div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <div class="modal-title">-->
+<!--                    <h4 class="mb-0">Confirmation</h4>-->
+<!--                </div>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>-->
+<!--                <p class="modal-msg"></p>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>-->
+<!--                <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <script>
     let curricula = <?php $admin->listCurriculumJSON(); ?>;
 </script>
-<!-- VALIDATION -->
-<!-- <script src="../js/validation/jquery.validate.min.js"></script> -->
-<!-- <script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
-<script type="module" src="../js/admin/curriculum-card.js"></script> -->

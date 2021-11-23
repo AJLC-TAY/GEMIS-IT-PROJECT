@@ -130,6 +130,10 @@ if (count($sub_classes) != 0) {
         var currentGrading = '<?php echo $grading; ?>'
     </script>
     <?php echo $jsFilePath; ?>;
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 </body>
 
 </html>

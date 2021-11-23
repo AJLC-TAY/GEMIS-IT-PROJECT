@@ -26,21 +26,21 @@ $subjects = $init_data['subjects'];
 <form id="school-year-form" class="needs-validation" action="action.php" method="POST" novalidate>
     <div id="school-year-stepper" class="bs-stepper">
         <div id="header" class="bs-stepper-header w-50 mx-auto">
-            <div class="step mx-5" data-target="#step-1">
+            <div class="step mx-mb-5" data-target="#step-1">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">1</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#step-2">
+            <div class="step mx-mb-5" data-target="#step-2">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
             <div class="line"></div>
-            <div class="step mx-5" data-target="#step-3">
+            <div class="step mx-mb-5" data-target="#step-3">
                 <button type="button" class="btn step-trigger">
                     <span class="bs-stepper-label">Part</span>
                     <span class="bs-stepper-circle">3</span>
@@ -52,20 +52,23 @@ $subjects = $init_data['subjects'];
                 <div class="card body w-100 h-auto p-4">
                     <!-- STEP 1 -->
                     <h4 class="fw-bold">Set School Year</h4>
-                    <div class="form-group row">
+                    <div class="form-group row mb-3">
                         <label for="" class="col-lg-5 col-form-label">School Year (Start-End)</label>
                         <div class="col-lg-7">
-                            <div class="d-flex align-items-center">
-                                <input type="text" name="start-year" class="form-control form-control-sm number" placeholder="Start">
-                                <span class='mb-3 p-2 text-center'><i class="bi bi-dash"></i></span>
-                                <input type="text" name="end-year" class="form-control form-control-sm number" placeholder="End">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" name="start-year" class="form-control form-control-sm number w-100" placeholder="Start">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="end-year" class="form-control form-control-sm number w-100" placeholder="End">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mb-3">
                         <label for="" class="col-lg-5 col-form-label">Academic Month (Start-End)</label>
                         <div class="col-lg-7">
-                            <div class="d-flex align-items-center">
+                            <div class="row">
                                 <?php 
                                     $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                                     $months_opt = '';
@@ -73,15 +76,18 @@ $subjects = $init_data['subjects'];
                                         $months_opt .= "<option value='$id'>$month</option>";
                                     }
                                 ?>
-                                <select name="start-month" id="start-month" class='form-select-sm form-select'>
-                                    <option selected>Start Month</option>
-                                    <?php echo $months_opt; ?>
-                                </select>
-                                <span class='mb-3 p-2 text-center'><i class="bi bi-dash"></i></span>
-                                <select name="end-month" id="end-month" class='form-select-sm form-select'>
-                                    <option selected>End Month</option>
-                                    <?php echo $months_opt; ?>
-                                </select>
+                                <div class="col-md-6">
+                                    <select name="start-month" id="start-month" class='form-select-sm form-select'>
+                                        <option selected value="" disabled>Start Month</option>
+                                        <?php echo $months_opt; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="end-month" id="end-month" class='form-select-sm form-select'>
+                                        <option selected value="" disabled>End Month</option>
+                                        <?php echo $months_opt; ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,7 +150,7 @@ $subjects = $init_data['subjects'];
                 </div>
                 <div class="d-flex justify-content-end mt-4">
                     <a href="schoolYear.php" class="btn me-1 btn-dark">Cancel</a>
-                    <a class="btn btn-primary next">Next</a>
+                    <button role="button" id="sy-part-1" class="btn btn-primary next">Next</button>
                 </div>
             </div>
             <!-- STEP 1 END -->
@@ -256,10 +262,10 @@ $subjects = $init_data['subjects'];
                 </div>
                 <div class="d-flex flex-row-reverse mt-4">
                     <div class="col-auto">
-                         <a class="btn btn-primary next">Next</a>
+                         <a id="sy-part-2" class="btn btn-primary next">Next</a>
                     </div>
                     <div class="col-auto me-1">
-                        <a class="btn btn-dark previous">Back</a>
+                        <a class="btn btn-dark previous-sy">Back</a>
                     </div>
                 </div>
             </div>
@@ -308,7 +314,7 @@ $subjects = $init_data['subjects'];
                     </div>
                     <?php } ?>
                     <div class="col-auto me-1">
-                        <a href="#" class="btn btn-dark previous">Back</a>
+                        <a href="#" class="btn btn-dark previous-sy">Back</a>
                     </div>
                 </div>
             </div>

@@ -503,7 +503,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 
                     <div class="d-flex flex-row-reverse mt-4">
                         <button id="enroll-part-2" class="btn btn-primary next">Next</button>
-                        <a href="#" class="btn btn-secondary me-1 previous">Back</a>
+                        <a href="#" class="btn btn-secondary me-1 previous-enroll">Back</a>
                     </div>
                 </div>
             </div>
@@ -632,13 +632,13 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <?php if($_SESSION['user_type'] != 'ST') {?>
                     <div class="d-flex flex-row-reverse mt-4">
                         <button  id="enroll-part-3" class="btn btn-primary next to-transferee-form">Next</button>
-                        <a class="btn btn-secondary me-1 previous">Back</a>
+                        <a class="btn btn-secondary me-1 previous-enroll">Back</a>
                     </div>
                     <?php } else {?>
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input id="enroll-submit" class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
-                        <a class="btn btn-secondary me-1 previous">Back</a>
+                        <a class="btn btn-secondary me-1 previous-enroll">Back</a>
                     </div>
                     <?php }?>
                 </div>
@@ -715,7 +715,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class="d-flex flex-row-reverse mt-4">
                         <input type="hidden" name="action" value="enroll">
                         <input id="enroll-submit" class="btn btn-success" form="enrollment-form" type="submit" value="Submit">
-                        <a class="btn btn-secondary me-1 previous">Back</a>
+                        <a class="btn btn-secondary me-1 previous-enroll">Back</a>
                     </div>
                 </div>
             </div>

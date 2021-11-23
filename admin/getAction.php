@@ -35,9 +35,14 @@ if (isset($_GET['data']) && $_GET['data'] == 'student') {
 if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for transfering or adding
     $admin->listStudents(TRUE);
 }
+/** SCHOOL YEAR */
 if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
     $admin->listSYJSON();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'school_years') {
+    $admin->checkIfSYUnique();
+}
+
 if (isset($_GET['data']) && $_GET['data'] == 'section') {
     $admin->listSectionJSON();
 }

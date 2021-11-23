@@ -197,13 +197,13 @@ $(function() {
     });
 
     /** Stepper */
-    $(document).on("click", ".next", () => {
-        stepper.next();
-    });
-
-    $(document).on("click", ".previous", () => {
-        stepper.previous();
-    });
+    // $(document).on("click", ".next", () => {
+    //     stepper.next();
+    // });
+    //
+    // $(document).on("click", ".previous", () => {
+    //     stepper.previous();
+    // });
 
     /** Search Events */
     listSearchEventBinder("#search-core-subjects", "#core-list label", "#core-spinner", "#core-empty-msg");

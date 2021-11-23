@@ -10,19 +10,19 @@ let prepareHTML = data => {
     });
     return html;
 };
-
-let prepareArchiveHTML = archivedData => {
-    console.log("from prepareArchiveHTML");
-    let html = '';
-    archivedData.forEach(element => {
-        var code = element.prog_code;
-        var name = element.prog_desc;
-        html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
-                <button data-name='${name}' class='unarchive-option btn link' id='${code}'>Unarchive</button></li>`;
-    });
-    return html;
-};
-setup('program', programs, prepareHTML, prepareArchiveHTML);
+//
+// let prepareArchiveHTML = archivedData => {
+//     console.log("from prepareArchiveHTML");
+//     let html = '';
+//     archivedData.forEach(element => {
+//         var code = element.prog_code;
+//         var name = element.prog_desc;
+//         html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
+//                 <button data-name='${name}' class='unarchive-option btn link' id='${code}'>Unarchive</button></li>`;
+//     });
+//     return html;
+// };
+setup('program', programs, prepareHTML);
 reload();
 
 // custom script

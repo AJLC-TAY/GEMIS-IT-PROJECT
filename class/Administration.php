@@ -451,6 +451,18 @@ class Administration extends Dbconfig
         }
     }
 
+    public function checkIfSYUnique()
+    {
+        $type = $_GET['type'];
+        $value = $_POST[$type."-year"];
+        $result = $this->query("SELECT distinct 1 ".$type."_year FROM schoolyear WHERE ".$type."_year = '$value';");
+        if (mysqli_num_rows($result) > 0) {
+            echo "false";
+        } else {
+            echo "true";
+        }
+    }
+
     public function listGrade()
     {
 
@@ -1169,10 +1181,7 @@ class Administration extends Dbconfig
 
     public function listCurriculumJSON()
     {
-        echo json_encode([
-            'data'        => $this->listCurriculum('curriculum'),
-            'archived'    => $this->listCurriculum('archived_curriculum')
-        ]);
+        echo json_encode($this->listCurriculum('curriculum'));
     }
 
     /** Get curriculum object from a specified curriculum code */
@@ -1251,10 +1260,7 @@ class Administration extends Dbconfig
     /*** Program Methods */
     public function listProgramsJSON()
     {
-        echo json_encode([
-            'data' => $this->listPrograms('program'),
-            'archived' => $this->listPrograms('archived_program')
-        ]);
+        echo json_encode($this->listPrograms('program'));
     }
 
     public function listProgramsUnderCurrJSON($tbl)

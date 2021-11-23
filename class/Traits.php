@@ -44,18 +44,19 @@ trait School
     }
 
     /** Returns the list of curriculum. */
-    public function listCurriculum($tbl)
+    public function listCurriculum($tbl): array
     {
-        $result = mysqli_query($this->db, "SELECT * FROM $tbl;");
+        $result = $this->query("SELECT * FROM $tbl;");
         $curriculumList = array();
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $curriculumList[] = new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $curriculumList[] = new Curriculum($row['curr_code'], $row['curr_name'], $row['curr_desc']);
+            }
         }
         return $curriculumList;
     }
 
-    public function listPrograms($tbl)
+    public function listPrograms($tbl): array
     {
         $query = isset($_GET['code']) ? "SELECT * FROM {$tbl} WHERE curr_code='{$_GET['code']}';" : "SELECT * FROM {$tbl};";
         $result = $this->query($query);
@@ -1846,18 +1847,22 @@ trait Grade
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
                 if ($qtr == '2' || $qtr == '4'){
-                    $first = 'readonly';
+//                    $first = 'readonly';
+                    $first = 'disabled';
                     $second_final = '';
                     if($grd['second_status'] == 1){
-                        $second_final = 'readonly';
+                        $second_final = 'disabled';
+//                        $second_final = 'readonly';
                     }
                 }
 
                 if ($qtr == '1' || $qtr == '3'){
                     $first = '';
-                    $second_final = 'readonly';
+                    $second_final = 'disabled';
+//                    $second_final = 'readonly';
                     if($grd['first_status'] == 1){
                         $first = 'readonly';
+                        $first = 'disabled';
                     }
                 }
 
@@ -1867,9 +1872,9 @@ trait Grade
             $class_grades[] = [
                 'id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
-                'grd_1' => "<input name='{$grd['stud_id']}/first' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
-                'grd_2' => "<input name='{$grd['stud_id']}/second' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
-                'grd_f' => "<input name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['final_grade']}'>"
+                'grd_1' => "<input min='60' max='100' name='{$grd['stud_id']}/first' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
+                'grd_2' => "<input min='60' max='100' name='{$grd['stud_id']}/second' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
+                'grd_f' => "<input min='60' max='100' name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['final_grade']}'>"
             ];
         }
 

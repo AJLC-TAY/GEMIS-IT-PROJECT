@@ -53,6 +53,10 @@ include_once("../inc/head.html");
     <!-- CUSTOM JS -->
     <script src="../js/common-custom.js"></script>
     <script type="module" src="../js/admin/school-year.js"></script>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 </body>
 
 </html>

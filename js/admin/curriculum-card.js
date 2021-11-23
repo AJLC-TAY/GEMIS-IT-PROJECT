@@ -11,18 +11,18 @@ let prepareHTML = data => {
     return html;
 };
 
-let prepareArchiveHTML = archivedData => {
-    console.log("from prepareArchiveHTML");
-    let html = '';
-    archivedData.forEach(element => {
-        var code = element.cur_code;
-        var name = element.cur_name;
-        html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
-                <button data-name='${name}' class='unarchive-option btn link' id='${code}'>Unarchive</button></li>`;
-    });
-    return html;
-};
-setup('curriculum', curricula, prepareHTML, prepareArchiveHTML);
+// let prepareArchiveHTML = archivedData => {
+//     console.log("from prepareArchiveHTML");
+//     let html = '';
+//     archivedData.forEach(element => {
+//         var code = element.cur_code;
+//         var name = element.cur_name;
+//         html += `<li class='list-group-item d-flex justify-content-between align-items-center'> ${name}
+//                 <button data-name='${name}' class='unarchive-option btn link' id='${code}'>Unarchive</button></li>`;
+//     });
+//     return html;
+// };
+setup('curriculum', curricula, prepareHTML);
 reload();
 // custom script
 $(function() {

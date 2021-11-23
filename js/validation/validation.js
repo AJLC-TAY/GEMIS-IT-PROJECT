@@ -1,9 +1,20 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
+var stepper, form, enrollValidator, syValidator;
+/** Enrollment */
 try {
-  var stepper, enrollValidator, form;
   form =  $("#enrollment-form");
   stepper = new Stepper($('#stepper')[0]);
 } catch (e) {}
+/** School year */
+try {
+  form = $("#school-year-form");
+  stepper = new Stepper($('#school-year-stepper')[0]);
+} catch (e) {}
+
+try {
+  stepper = new Stepper($('#stepper')[0]);
+} catch (e) {}
+
 
 const REQUIRED_TRUE = {required: true};
 const REQUIRED_AE_PARAM = {
@@ -106,6 +117,58 @@ $(function () {
   //     required: "<p class='text-danger'><small>Please provide your LRN</small></p>"
   //   }
   // })
+
+
+  $(document).on("click", "#sy-part-1", function(e) {
+    e.preventDefault();
+    syValidator = form.validate({
+      rules: {
+        "start-year": {
+          required: true,
+          remote: {
+            url: `getAction.php?data=school_years&type=start`,
+            type: "post",
+            data: {
+              "start-year": function () {
+                return $("[name='start-year']").val();
+              }
+            }
+          }
+        },
+        "end-year": {
+          required: true,
+          remote: {
+            url: `getAction.php?data=school_years&type=end`,
+            type: "post",
+            data: {
+              "end-year": function () {
+                return $("[name='end-year']").val();
+              }
+            }
+          }
+        },
+        "start-month": {
+          required: true
+        },
+        "end-month": {
+          required: true
+        }
+      },
+      messages: {
+        "start-year": {
+          remote: "<p>Already used start year</p>"
+        },
+        "end-year": {
+          remote: "<p>Already used end year</p>"
+        }
+      }
+    });
+    if (form.valid()) {
+      stepper.next();
+      syValidator.destroy();
+    }
+  });
+
 
   $(document).on("click", "#enroll-part-1", function(e) {
     e.preventDefault();
@@ -226,10 +289,15 @@ $(function () {
     }
   });
 
-  $(document).on("click", ".previous", function(e) {
+  $(document).on("click", ".previous-enroll", function(e) {
     e.preventDefault();
     stepper.previous();
     enrollValidator.destroy();
+  });
+  $(document).on("click", ".previous-sy", function(e) {
+    e.preventDefault();
+    stepper.previous();
+    syValidator.destroy();
   });
 
 
@@ -566,6 +634,7 @@ $(function () {
   /** Advisory Class */
   try {
     $("#advisory-class-form").validate();
+    $("#grades").validate();
   } catch (e) {}
 
 

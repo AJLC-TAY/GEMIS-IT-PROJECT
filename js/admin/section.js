@@ -26,13 +26,15 @@ tableFormSetup = {
 url = "getAction.php?";
 id = '';
 
-if (isViewPage) {
-    url += `data=student&section=${sectionCode}`;
-    id = 'lrn';
-} else {
-    url += 'data=section';
-    id = 'code';
-}
+try {
+    if (isViewPage) {
+        url += `data=student&section=${sectionCode}`;
+        id = 'lrn';
+    } else {
+        url += 'data=section';
+        id = 'code';
+    }
+} catch (e) {}
 tableSetup.url = url;
 tableSetup.idField = id;
 tableSetup.uniqueId = id;

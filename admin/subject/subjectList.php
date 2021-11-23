@@ -13,14 +13,14 @@
             <h3 class="fw-bold">Subject</h3>
         </div>
         <div class="col-md-8 d-flex justify-content-lg-end">
+<!--            <div class="col-auto">-->
+<!--                <button type="button" class="view-archive btn btn-outline-dark m-1" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>-->
+<!--            </div>-->
             <div class="col-auto">
-                <button type="button" class="view-archive btn btn-outline-dark m-1" data-bs-toggle="modal" data-bs-target="#view-arch-modal"><i class="bi bi-eye me-1"></i>View Archived Subjects</button>
+                <a href="subject.php?page=schedule" role="button" class="btn btn-secondary m-1"><i class="bi bi-calendar4-week me-2"></i> Schedule</a>
             </div>
             <div class="col-auto">
-                <a href="subject.php?page=schedule" role="button" class="btn btn-secondary m-1">Schedule</a>
-            </div>
-            <div class="col-auto">
-                <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog m-1" title='Add new strand'><i class="bi bi-plus me-2"></i>Add Subject</a>
+                <a href="subject.php?action=add" id="add-btn" class="btn btn-success add-prog m-1" title='Add new strand'><i class="bi bi-plus-lg me-2"></i>Add Subject</a>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
                     </span>
                     <div>
                         <!-- <button class="btn btn-primary btn-sm" title='Archive strand'><i class="bi bi-box-arrow-up-left me-2"></i>Export</button> -->
-                        <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>
+<!--                        <button class="btn btn-secondary btn-sm archive-option" title='Archive strand'><i class="bi bi-archive me-2"></i>Archive</button>-->
                     </div>
                 </div>
 

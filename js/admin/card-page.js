@@ -9,7 +9,7 @@ export let pageName, camelized, action, deleteMessage, archiveMessage, unarchive
 // Function
 export let prepareHTMLOfData, prepareHTMLofArchive, filterDataFn;
 
-export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
+export const setup = (page, data, prepareHTML) => {
     // string detail to be added in the delete and archive modal messages
     // page = page
     var programString = "";
@@ -42,12 +42,12 @@ export const setup = (page, data, prepareHTML, prepareArchiveHTML) => {
 
     // delete and arhive messages
     deleteMessage = `Deleting this ${page} will also delete all ${programString}subjects, and student grades under this ${page}.`;
-    archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`;
-    unarchiveMessage = `Unarchiving this ${page} will also unarchive all ${programString}subjects and student grades under this ${page}.`;
+    // archiveMessage = `Archiving this ${page} will also archive all ${programString}subjects and student grades under this ${page}.`;
+    // unarchiveMessage = `Unarchiving this ${page} will also unarchive all ${programString}subjects and student grades under this ${page}.`;
 
     // functions
     prepareHTMLOfData = prepareHTML;
-    prepareHTMLofArchive = prepareArchiveHTML;
+    // prepareHTMLofArchive = prepareArchiveHTML;
 
     keywords = "";
     timeout = null;
@@ -66,8 +66,8 @@ export const reload = (data = '') => {
                     </div>
                 </div>
             </div>`;
-    $('.cards-con').html(prepareHTMLOfData(dataList.data) + addBtn);
-    $('.arch-list').html(prepareHTMLofArchive(dataList.archived));
+    $('.cards-con').html(prepareHTMLOfData(dataList) + addBtn);
+    // $('.arch-list').html(prepareHTMLofArchive(dataList.archived));
 }
 
 
@@ -126,15 +126,15 @@ export const eventDelegations = () => {
     });
 
     // Modal Options 
-    $(document).on('click', '.archive-option', function() {
-        var code = $(this).attr('id');
-        let name = $(this).attr('data-name');
-        let archiveModal = $('#archive-modal');
-        archiveModal.find('#modal-identifier').html(`${name} ${camelized}`);
-        archiveModal.find('.modal-msg').html(archiveMessage);
-        archiveModal.find('.archive-btn').attr('id', code);
-        archiveModal.modal('toggle');
-    });
+    // $(document).on('click', '.archive-option', function() {
+    //     var code = $(this).attr('id');
+    //     let name = $(this).attr('data-name');
+    //     let archiveModal = $('#archive-modal');
+    //     archiveModal.find('#modal-identifier').html(`${name} ${camelized}`);
+    //     archiveModal.find('.modal-msg').html(archiveMessage);
+    //     archiveModal.find('.archive-btn').attr('id', code);
+    //     archiveModal.modal('toggle');
+    // });
 
     $(document).on('click', '.delete-option', function() {
         var code = $(this).attr('id');
@@ -153,50 +153,50 @@ export const eventDelegations = () => {
         $("[class*='error-msg']").addClass('invisible'); // hide error messages
     });
 
-    $(document).on('click', ".view-archive", () => {
-        if (dataList.archived.length == 0) $("ul.arch-list").html(`<li class='text-center my-auto'>No archived ${pageName} yet</li>`);
-        $("#view-arch-modal").modal('show');
-    });
+    // $(document).on('click', ".view-archive", () => {
+    //     if (dataList.archived.length == 0) $("ul.arch-list").html(`<li class='text-center my-auto'>No archived ${pageName} yet</li>`);
+    //     $("#view-arch-modal").modal('show');
+    // });
 
-    $("#unarchive-modal").on('show.bs.modal', () => $("#view-arch-modal").modal("hide"));
+    // $("#unarchive-modal").on('show.bs.modal', () => $("#view-arch-modal").modal("hide"));
 
     //archive script
-    $(document).on('click', '.archive-btn', function() {
-        var code = $(this).attr('id');
-        var action = `archive${camelized}`;
-        $.post("action.php", { code, action }, function(data) {
-            $('#archive-modal').modal('hide');
-            console.log(data);
-            dataList = JSON.parse(data);
-            reload();
-            showToast('success', `${camelized} successfully archived`);
-        });
-    });
+    // $(document).on('click', '.archive-btn', function() {
+    //     var code = $(this).attr('id');
+    //     var action = `archive${camelized}`;
+    //     $.post("action.php", { code, action }, function(data) {
+    //         $('#archive-modal').modal('hide');
+    //         console.log(data);
+    //         dataList = JSON.parse(data);
+    //         reload();
+    //         showToast('success', `${camelized} successfully archived`);
+    //     });
+    // });
 
-    $(document).on('click', '.unarchive-btn', function() {
-        $('#view-arch-modal').modal('hide');
-        var code = $(this).attr('id');
-        var action = `unarchive${camelized}`;
-        console.log('from cardPage');
-        console.log(action);
-        console.log(code);
-        $.post("action.php", { code, action }, function(data) {
-            $('#unarchive-modal').modal('hide');
-            dataList = JSON.parse(data);
-            console.log("datalist:\n", dataList);
-            reload();
-            showToast('success', `${camelized} successfully unarchived`);
-        });
-    });
+    // $(document).on('click', '.unarchive-btn', function() {
+    //     $('#view-arch-modal').modal('hide');
+    //     var code = $(this).attr('id');
+    //     var action = `unarchive${camelized}`;
+    //     console.log('from cardPage');
+    //     console.log(action);
+    //     console.log(code);
+    //     $.post("action.php", { code, action }, function(data) {
+    //         $('#unarchive-modal').modal('hide');
+    //         dataList = JSON.parse(data);
+    //         console.log("datalist:\n", dataList);
+    //         reload();
+    //         showToast('success', `${camelized} successfully unarchived`);
+    //     });
+    // });
 
     // Modal Options 
-    $(document).on('click', '.unarchive-option', function() {
-        var code = $(this).attr('id');
-        let name = $(this).attr('data-name');
-        let unarchiveModal = $('#unarchive-modal');
-        unarchiveModal.find('#modal-identifier').html(`${name} ${camelized}`);
-        unarchiveModal.find('.modal-msg').html(unarchiveMessage);
-        unarchiveModal.find('.unarchive-btn').attr('id', code);
-        unarchiveModal.modal('toggle');
-    });
+    // $(document).on('click', '.unarchive-option', function() {
+    //     var code = $(this).attr('id');
+    //     let name = $(this).attr('data-name');
+    //     let unarchiveModal = $('#unarchive-modal');
+    //     unarchiveModal.find('#modal-identifier').html(`${name} ${camelized}`);
+    //     unarchiveModal.find('.modal-msg').html(unarchiveMessage);
+    //     unarchiveModal.find('.unarchive-btn').attr('id', code);
+    //     unarchiveModal.modal('toggle');
+    // });
 };
