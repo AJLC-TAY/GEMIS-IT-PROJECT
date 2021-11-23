@@ -80,7 +80,10 @@ $enrollmentData = $user->lastestEnrollmentDetail();
         <?php include_once('../inc/studentSideBar.php'); ?>
         <!-- MAIN CONTENT START -->
         <section id="main-content">
-            <?php if($enrollmentData['sy_id'] == $_SESSION['sy_id']){
+            <?php
+            if($_SESSION['promote'] == 0){
+                include_once("failed.php");
+            }elseif($enrollmentData['sy_id'] == $_SESSION['sy_id']){
                 include_once("enrolled.php");
             } else {?> 
             <section class="wrapper">

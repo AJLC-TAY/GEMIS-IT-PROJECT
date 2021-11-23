@@ -22,8 +22,7 @@ include_once("../inc/head.html"); ?>
                     <div class=" ps-3">
                         <div class='d-flex justify-content-center'>
                             <div class="card h-auto bg-light mx-auto mt-5 p-5 text-center " style='width: 65%;'>
-                                <h1><i class='bi bi-check-circle'></i></h1>
-                                <h4>You are currently enrolled in PCNHS' Senior Highschool SY <?php echo $_SESSION['school_year']?></h4>
+                            <h4>You can't enroll, you failed <i class='bi bi-emoji-smile'></i></h4> 
                             </div>
                         </div>
                     </div>

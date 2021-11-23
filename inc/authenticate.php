@@ -32,7 +32,7 @@ $con = $dbConfig->connect();
                             break;
                         case "ST": 
                             $query = "SELECT CONCAT(last_name,', ',first_name,' ',middle_name, ' ', COALESCE(ext_name, '')) AS name, stud_id AS id, id_no FROM student JOIN enrollment using (stud_id) WHERE id_no = '$id_no';"; //AND promote = 0
-                            $query2 = "SELECT promote, prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE id_no = $id_no ORDER BY date_of_enroll DESC;"; //plus promotion
+                            $query2 = "SELECT promote, prog_code, description, enrolled_in FROM enrollment e JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE e.stud_id = $id_no ORDER BY date_of_enroll DESC;"; //plus promotion
                             $data = mysqli_fetch_row(mysqli_query($con, $query2));
                             $destination = "../student/index.php";
                             break;
