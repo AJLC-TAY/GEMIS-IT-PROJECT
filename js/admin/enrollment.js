@@ -6,11 +6,16 @@ function submitValidationForm(status) {
     showSpinner();
     let formData = $("#validate-form").serialize() + `&${status}=true`;
     $.post("action.php", formData, function() {
+        // location.reload();
         $(".edit-opt").hide();
-        $("#valid-change-btn").closest(".badge").show();
-        $("#valid-change-btn").show();
+        let validChangeBtn = $("#valid-change-btn");
+        validChangeBtn.closest(".badge").show();
+        validChangeBtn.show();
         $("#status").html((status == "accept" ? "Enrolled" : "Rejected"));
         $("#confirmation-modal").modal("hide");
+        $(".enroll-request-con select").prop("disabled", true);
+        showToast("success", (status === 'accept' ? "Student is now enrolled" : "Rejected student's enrollment request"));
+
         hideSpinner();
     });
 }
@@ -61,7 +66,12 @@ $(function() {
 
     /** Validate Form */
     $(document).on("click", ".validate", function (e) {
-        submitValidationForm($(this).attr("data-name"));
+        let value = $(".valid").val();
+        if (value == 'accept') {
+            submitValidationForm(value);
+        } else {
+            $("#confirmation-modal").modal("show");
+        }
     });
 
     $(document).on("click", ".action", function () {
@@ -69,10 +79,13 @@ $(function() {
         switch($(this).attr("data-type")) {
             case "change":
                 $(".edit-opt").show();
+                $(".enroll-request-con select").prop("disabled", false);
                 break;
             case "cancel":
                 $(".edit-opt").hide();
                 $("#valid-change-btn").show();
+                $(".enroll-request-con select").prop("disabled", true);
+
                 break;
         }
     });
@@ -169,7 +182,7 @@ $(function() {
     });
 
     $(document).on("click", "[name='balik']", function() {
-        balikAral = $(this).val() == "yes";
+        balikAral = $(this).val() == "Yes";
         let disabled  = !(balikAral);
         $(".trans-detail input, textarea").prop("disabled", disabled);
         $("#transfer-table .form-check-input").prop("disabled", disabled);
