@@ -208,6 +208,7 @@ $(function () {
 
         });
         $('.promotion-confirmation').modal('hide');
+        showToast('Success','Student Sucessfully Promoted');
 
     });
     $(document).on("click", ".stud-promote", function () {
@@ -292,6 +293,8 @@ $(function () {
                 $('#view-candidates-modal').modal('hide');
             
         }
+        showToast('Success','Students Sucessfully Promoted');
+
     });
 
 

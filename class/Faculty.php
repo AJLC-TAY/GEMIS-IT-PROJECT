@@ -264,10 +264,8 @@ class FacultyModule extends Dbconfig
 
         $num = $_POST['grading'] == 'first'? [1,3]:[2,4];
         if(in_array($_SESSION['current_quarter'],$num)){
-            $stat = (int) $_POST['stat'];
-        } else {
-            $stat = 0;
-        }
+            $stat = ",`$status` = {$_POST['stat']}";
+        } 
 
         echo("Status: $status stat: $stat");
 
@@ -275,9 +273,9 @@ class FacultyModule extends Dbconfig
         echo ("stud id: $stud_id, grading: $grading, grade: $grade, code: $code, stat: $stat ");
 
         $this->prepared_query(
-            "UPDATE `classgrade` SET `$grading` =? , `$status` = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
-            [$grade, $stat, $stud_id, $code],
-            "diis"
+            "UPDATE `classgrade` SET `$grading` =? $stat  WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
+            [$grade, $stud_id, $code],
+            "dis"
         );
     }
 
