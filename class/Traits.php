@@ -583,7 +583,7 @@ trait FacultySharedMethods
         //         $data[] = $row['section_name'];
         //     }
         // } else {
-        $query = "SELECT section_code, section_name FROM section WHERE teacher_id=?";
+        $query = "SELECT section_code, section_name, grd_level FROM section WHERE teacher_id=?";
         $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
         if (is_null($sy)) {
             $params = [$id];
@@ -595,7 +595,7 @@ trait FacultySharedMethods
         }
         $data = mysqli_fetch_row($this->prepared_select($query, $params, $types));
         if ($data) {
-            return ["section_code" => $data[0], "section_name" => $data[1]];
+            return ["section_code" => $data[0], "section_name" => $data[1], "section_lvl" => $data[2]];
         }
         return NULL;
     }
@@ -712,7 +712,6 @@ trait FacultySharedMethods
                 JOIN subject s ON s.sub_code=sc.sub_code
                 WHERE $teacher_id se.grd_level != 0 AND se.sy_id = {$_SESSION['sy_id']} AND ss.sub_semester = '{$_SESSION['current_semester']}' ";
 
-// echo($query);
         $result = $this->query($query);
         $handled_sub_classes = array();
 
@@ -1029,7 +1028,7 @@ trait Enrollment
         $this->prepared_query($query, $values, $params);
         $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
         $rep_id = $this->initializeGrades($student_id, $current_sy, $semester);
-        header("Location: enrolled");
+        header("Location: ../student/enrolled.php?page=enrolled");
     }
 
     public function getEnrollees()
@@ -2115,7 +2114,7 @@ trait Grade
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 2 ? "" : "<button data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
+          $action .= $promote == 2 ? "" : "<button type = 'button' data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
           return $action;
 
         }
@@ -2179,7 +2178,7 @@ trait Grade
                 'grd_f'   =>  "<input name='{$stud_id}/{$report_id}/first' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",
                 '2grd_f'  =>  "<input name='{$stud_id}/{$report_id}/second' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable2 value='{$second_gen_ave}'>",
                 'sex'    =>  $row['sex'] == 'm' ? "Male" : "Female",
-                'status' => $row['promote'] == 1 ? 'Promoted' : "",
+                'status' => $row['promote'] == 2 ? 'Passed' : "",
                 'action' =>  actions($report_id, $stud_id,$row['promote'],$qtr,$lvl)
             ];
         }
