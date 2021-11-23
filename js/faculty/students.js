@@ -92,10 +92,10 @@ function toggleGradesColumn(classType) {
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 if (qtr == '2'){
-    var promotionMsg = "Promoting the student will directly enroll him/her to second semester. This action can not be undone."
+    var promotionMsg = "Promoting the student will directly enroll him/her to the second semester. This action can not be undone."
 } else {
     if(sectionLvl == 12){
-        var promotionMsg = "Promoting the student means that he/she has compeleted the senior high curriculum."
+        var promotionMsg = "Promoting the student means that he/she has completed the senior high curriculum."
     } else {
         var promotionMsg = "Promoting the student means that he/she is viable for next level's enrollment. This action can not be undone."
     }
