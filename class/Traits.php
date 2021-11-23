@@ -1777,6 +1777,7 @@ trait Grade
                                             JOIN subject USING (sub_code) WHERE report_id = '$report_id'
                                             AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
                                             WHERE sy_id = '$sy_id' AND sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
+
             while ($row = mysqli_fetch_assoc($result)) {
                 $data[$semester][$row['sub_type']][] = [
                     'sub_name' => $row['sub_name'],
@@ -1788,6 +1789,8 @@ trait Grade
         }
         return $data;
     }
+
+    
 
     public function getGeneralAverages($report_id)
     {
