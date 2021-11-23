@@ -27,7 +27,7 @@ $url = "getAction.php?data=perfectAttendance&sy_id={$_SESSION['sy_id']}";
     </div>
 </header>
 <div class="container">
-    <form id='perfect-attendance-form' method='POST' action='awardReport.php?type=pa'>
+    <form id='perfect-attendance-form' class="report-form" method='POST' action='awardReport.php?type=pa'>
         <div class="row">
             <div class="col-lg-8">
                 <div class="card bg-white p-3 mb-3" style="min-height: 490px;">

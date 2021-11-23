@@ -15,26 +15,18 @@ $sub_classes = [];
 
 // Content
 if ($action == 'add') {
-    // $last_name = '';
-    // $first_name = '';
-    // $middle_name = '';
-    // $ext_name = '';
-    // $cp_no = '';
-    // $email = '';
-    // $age = '';
-    // $sex = "";
-    $last_name = 'Cutay';
-    $first_name = 'Alvin';
-    $middle_name = 'Loquis';
-    $ext_name = '';
-    $cp_no = '090909090909';
-    $email = 'alvin@gmail.com';
-    $age = '22';
-    $sex = "m";
+     $last_name = '';
+     $first_name = '';
+     $middle_name = '';
+     $ext_name = '';
+     $cp_no = '';
+     $email = '';
+     $age = '';
+     $sex = "";
     $gender_option = "<option selected value='NULL'>-- Select gender --</option>"
         . "<option value='f'>Female</option>"
         . "<option value='m'>Male</option>";
-    $birthdate_input = "<input type='date' class='form-control' name='birthdate' required>"
+    $birthdate_input = "<input type='date' class='form-control' name='birthdate'>"
         . "<div class='invalid-feedback'>Please enter birthdate</div>";
     $department_option = "";
     foreach ($departments as $dep) {
@@ -189,6 +181,7 @@ switch ($user_type) {
                         . "</div>";
                 }
                 ?>
+                <div id="sex-error-con"></div>
             </div>
         </div>
         <div class='form-group col-md-4'>
@@ -216,8 +209,8 @@ switch ($user_type) {
                         <input type="reset" data-target-table="#assigned-sc-table" data-input="#search-sc-input" class='clear-table-btn btn btn-sm btn-dark shadow' value='Clear'>
                     </div>
                 </form>
-                <span><button id='add-sc-option' class='btn btn-sm btn-success me-2'><i class="bi bi-plus me-2"></i>Add subject class</button></span>
-                <button class="unassign-selected-btn btn btn-sm btn-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
+                <span><button type='button' id='add-sc-option' class='btn btn-sm btn-success me-2'><i class="bi bi-plus me-2"></i>Add subject class</button></span>
+                <button type='button' class="unassign-selected-btn btn btn-sm btn-danger"><i class="bi bi-dash-circle me-2"></i>Unassign Selected</button>
             </div>
             <table id='assigned-sc-table' class="table-striped table-sm">
                 <thead>
@@ -278,20 +271,20 @@ switch ($user_type) {
     </div>
 </form>
 <!-- VALIDATION -->
-<script>
-    var forms = document.querySelectorAll('.needs-validation');
-
-    Array.prototype.slice.call(forms).forEach(function(form) {
-        form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation();
-            }
-
-            form.classList.add('was-validated');
-        }, false);
-    });
-</script>
+<!--<script>-->
+<!--    var forms = document.querySelectorAll('.needs-validation');-->
+<!---->
+<!--    Array.prototype.slice.call(forms).forEach(function(form) {-->
+<!--        form.addEventListener('submit', function(event) {-->
+<!--            if (!form.checkValidity()) {-->
+<!--                event.preventDefault()-->
+<!--                event.stopPropagation();-->
+<!--            }-->
+<!---->
+<!--            form.classList.add('was-validated');-->
+<!--        }, false);-->
+<!--    });-->
+<!--</script>-->
 
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;

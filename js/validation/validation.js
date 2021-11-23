@@ -5,6 +5,12 @@ try {
   stepper = new Stepper($('#stepper')[0]);
 } catch (e) {}
 
+const REQUIRED_TRUE = {required: true};
+const REQUIRED_AE_PARAM = {
+  required: true,
+  min: 60,
+  max: 100
+}
 $(function () {
   $.validator.setDefaults({
     errorClass: 'help-block',
@@ -315,7 +321,6 @@ $(function () {
     rules: {
       code: {
         required: true,
-        // unique
       }
     },
     messages: {
@@ -348,6 +353,16 @@ $(function () {
       age: {
         required: true,
       },
+      sex: {
+        required: true
+      },
+    },
+    errorPlacement: function (error, element) {
+      if (element.attr("name") == "sex") {
+        error.appendTo("#sex-error-con");
+      } else {
+        error.insertAfter(element)
+      }
     },
     messages:{
       lastname: {
@@ -364,6 +379,9 @@ $(function () {
       },
       age:{
         required: '<p class="text-danger user-select-none">Please enter age!</p>'
+      },
+      sex:{
+        required: REQUIRED
       }
     },
     submitHandler: function(form) {
@@ -502,4 +520,47 @@ $(function () {
       }
     });
   } catch (e) {}
+
+  $("#acad-parameter-form").validate({
+    rules: {
+      semester: REQUIRED_TRUE,
+      grade: REQUIRED_TRUE,
+      "Highest-honor-min": REQUIRED_AE_PARAM,
+      "Highest-honor-max": REQUIRED_AE_PARAM,
+      "High-honor-min": REQUIRED_AE_PARAM,
+      "High-honor-max": REQUIRED_AE_PARAM,
+      "With-honor-min": REQUIRED_AE_PARAM,
+      "With-honor-max": REQUIRED_AE_PARAM,
+    },
+    messages: {
+      semester: {required: REQUIRED},
+      grade: {required: REQUIRED},
+      "Highest-honor-min": {required: REQUIRED},
+      "Highest-honor-max": {required: REQUIRED},
+      "High-honor-min": {required: REQUIRED},
+      "High-honor-max": {required: REQUIRED},
+      "With-honor-min": {required: REQUIRED},
+      "With-honor-max": {required: REQUIRED},
+    }
+  });
+  $("#other-award-form").validate({
+    rules: {
+      filter: REQUIRED_AE_PARAM,
+    },
+    messages: {
+      filter:  {required: REQUIRED}
+    }
+  });
+  $(".report-form").validate({
+    rules: {
+      "report-title": REQUIRED_TRUE,
+      "school-year": REQUIRED_TRUE,
+      date: REQUIRED_TRUE
+    },
+    messages: {
+      "report-title": REQUIRED,
+      "school-year": REQUIRED,
+      date: REQUIRED
+    }
+  });
 });
