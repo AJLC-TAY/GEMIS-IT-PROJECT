@@ -291,7 +291,7 @@ class FacultyModule extends Dbconfig
 
         $status = $_POST['sem'] . '_status';
 
-        $num = $_POST['sem'] == 'first'? [1,3]:[2,4];
+        $num = $_POST['sem'] == 'first'? [1,2]:[3,4];
         if(in_array($_SESSION['current_quarter'],$num)){
             $stat = (int) $_POST['stat'];
         } else {

@@ -131,13 +131,13 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <div class="modal-title">
-                                            <h4 class="mb-0">CONFIRMATION</span></h4>
+                                            <h4 class="mb-0">ARE YOU SURE?</span></h4>
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
 
-                                        <p id="modal-msg">You won't be able to undo this action once the student is promoted.</p>
+                                        <p id="modal-msg"></p>
                                     </div>
                                     <div class="modal-footer">
                                         <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
@@ -198,7 +198,8 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>let code = "<?php echo json_encode($advisory['section_code'] ?? NULL);?>";</script>
+    <script>let code = "<?php echo ($advisory['section_code'] ?? NULL);?>";</script>
+    <script> let sectionLvl = "<?php echo ($advisory['section_lvl'] ?? NULL);?>";</script>
     <script> let qtr = "<?php echo ("{$_SESSION['current_quarter']}");?>";</script>
 
     <?php echo $jsFilePath; ?>;

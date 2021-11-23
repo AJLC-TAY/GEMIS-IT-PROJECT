@@ -100,7 +100,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    var code = '<?php echo json_encode($advisory['section_code']); ?>';
-</script>

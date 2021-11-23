@@ -3,6 +3,7 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 require_once("../class/Student.php");
 $user = new StudentModule();
+ob_start();
 $readonly = 'readonly';
 $disabled = 'disabled';
 
@@ -81,11 +82,14 @@ $enrollmentData = $user->lastestEnrollmentDetail();
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <?php
-            if($_SESSION['promote'] == 0){
-                include_once("failed.php");
-            }elseif($enrollmentData['sy_id'] == $_SESSION['sy_id']){
-                include_once("enrolled.php");
-            } else {?> 
+            if($_SESSION['promote'] == 0 ){
+                header("location: enrolled.php?page=failed"); 
+            }else if($_SESSION['promote'] == 2 && $_SESSION['grd_lvl'] == 12 ){
+                header("location: enrolled.php?page=passed"); 
+            }else {
+                if ($enrollmentData['sy_id'] == $_SESSION['sy_id']){
+                    header("location: enrolled.php?page=enrolled"); 
+                } else {?> 
             <section class="wrapper">
 
                 <div class="row">
@@ -582,7 +586,7 @@ $enrollmentData = $user->lastestEnrollmentDetail();
                     </div>
                 </div>
             </section>
-            <?php }?>
+            <?php }}?>
             <!-- MAIN CONTENT END-->
             <!-- FOOTER -->
             <?php include_once("../inc/footer.html"); ?>

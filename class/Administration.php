@@ -1973,7 +1973,7 @@ class Administration extends Dbconfig
     public function listNotAdvisers($teacher_id = NULL)
     {
         $result = $this->query("SELECT CONCAT(last_name, ', ', first_name,' ',COALESCE(middle_name,'')) as name, teacher_id FROM faculty WHERE teacher_id NOT IN (SELECT DISTINCT (teacher_id)
-                    FROM section WHERE teacher_id IS NOT NULL)" . (!is_null($teacher_id) ? " OR teacher_id = '{$teacher_id}';" : ";"));
+                    FROM section WHERE teacher_id IS NOT NULL AND section.sy_id = {$_SESSION['sy_id']})" . (!is_null($teacher_id) ? " OR teacher_id = '{$teacher_id}';" : ";"));
         $not_advisers = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $not_advisers[] = [
