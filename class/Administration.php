@@ -302,7 +302,7 @@ class Administration extends Dbconfig
 
         # Step 1
         $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
-            . "VALUES (?, ?, ?, ?);";
+            . "VALUES (?, ?, ?, ?, ?);";
         $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
 
         $sy_id = mysqli_insert_id($this->db);

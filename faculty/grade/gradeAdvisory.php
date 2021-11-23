@@ -42,27 +42,31 @@
             if ($_SESSION['current_quarter'] == 2 or $_SESSION['current_quarter'] == 4) {
                 $class = "";
                 echo '<div class="d-flex-inline justify-content-end">';
-                echo '<button type="button" class="btn btn-primary ms-1 save"></i>Save</button>
-                <button type="button" class="btn btn-success submit">Submit</button>';
+                echo '<button type="button" class="btn btn-primary ms-1 save"></i>Save</button>';
                 echo '</div>';
             } ?>
 
         </div>
+        <form>
+            <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
+                <thead class='thead-dark'>
+                    <tr>
+                        <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
+                        <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">1st Sem Gen Ave</th>
+                        <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="2grd_f">2nd Sem Gen Ave</th>
+                        <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
+                    </tr>
+                </thead>
 
-        <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
-            <thead class='thead-dark'>
-                <tr>
-                    <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
-                    <th scope='col' data-width="300" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_2">2nd Grade</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_f">1st Sem Gen Ave</th>
-                    <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="2grd_f">2nd Sem Gen Ave</th>
-                    <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
-                </tr>
-            </thead>
+        </form>
         </table>
+        <div class="d-flex flex-row-reverse mt-2">
+            <button type="button" class="btn btn-success ms-1 submit">Submit</button>
+        </div>
     </div>
 </div>
 <div class="fade modal" id="view-candidates-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
@@ -75,9 +79,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
-                
-                    <table id="for-promotion-table" class="table-striped table-sm">
+
+
+                <table id="for-promotion-table" class="table-striped table-sm">
                     <thead class='thead-dark'>
                         <tr>
                             <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>

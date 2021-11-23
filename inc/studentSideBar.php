@@ -2,7 +2,7 @@
 $school_year = $_SESSION['school_year'];
 $current_quarter = $_SESSION['current_quarter'];
  $enrollment_item = '';
-if ($_SESSION['promote'] != 0 AND $_SESSION['enroll_status'] == 1) {
+if ($_SESSION['enroll_status'] == 1) {
     $enrollment_item = " <li class='sub-menu'>"
             ."<a id='enrollment' href='enrollment.php'>"
                 ."<i class='fa fa-tasks'></i>"

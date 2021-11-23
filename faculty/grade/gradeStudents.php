@@ -26,14 +26,14 @@
             <div>
                 <form method="post" action="action.php" class="ms-2">
                     <input class='hidden' id='export_code' name='code' value=''>
-                    <button type="submit" class="btn btn-primary" name="export" value="Export"><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
+                    <button type="submit" class="btn btn-secondary" name="export" value="Export"><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
                 </form>
             </div>
             <div>
                 <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->
                 <!-- <button type="submit" class="btn btn-secondary export" >EXPORT</button>
                                             <button onclick="Export()" class="btn btn-secondary">EXPORT</button> -->
-                <button type="button" class="btn btn-success ms-2 save"></i>Save</button>
+                <button type="button" class="btn btn-primary ms-2 save"></i>Save</button>
                 
             </div>
         </div>
@@ -53,7 +53,7 @@
                 </thead>
             </table>
         </form>
-        <div class="d-flex flex-row-reverse mb-1 mt-4">
+        <div class="d-flex flex-row-reverse mt-2">
             <button type="button" class="btn btn-success ms-1 submit">Submit</button>
         </div>    
     </div>

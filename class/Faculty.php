@@ -245,17 +245,37 @@ class FacultyModule extends Dbconfig
 
     public function gradeClass()
     {
+        session_start();
         $stud_id = $_POST['id'];
-        $grading = $_POST['grading'];
         $grade = $_POST['grade'];
         $code = $_POST['code'];
         $stat = (int) $_POST['stat'];
+        
+        if ($_POST['grading'] == 'first'){
+            $grading = 'first_grading';
+            $status = 'first_status';
+        } else if ($_POST['grading'] == 'second'){
+            $grading = 'second_grading';
+            $status = 'second_status';
+        } else {
+            $grading = $_POST['grading'];
+            $status = 'second_status';
+        }
+
+        $num = $_POST['grading'] == 'first'? [1,3]:[2,4];
+        if(in_array($_SESSION['current_quarter'],$num)){
+            $stat = (int) $_POST['stat'];
+        } else {
+            $stat = 0;
+        }
+
+        echo("Status: $status stat: $stat");
 
         $grade = $grade != "" ? $grade : NULL;
         echo ("stud id: $stud_id, grading: $grading, grade: $grade, code: $code, stat: $stat ");
 
         $this->prepared_query(
-            "UPDATE `classgrade` SET `$grading` =? , status = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
+            "UPDATE `classgrade` SET `$grading` =? , `$status` = ? WHERE`classgrade`.`stud_id` = ?  AND `classgrade`.`sub_code` = ?;",
             [$grade, $stat, $stud_id, $code],
             "diis"
         );
@@ -267,15 +287,26 @@ class FacultyModule extends Dbconfig
         $stud_id = $_POST['id'];
         $report_id = $_POST['rep_id'];
         $gen_ave = $_POST['gen_ave'];
-        $sem = $_POST['sem'];
-        $stat = (int) $_POST['stat'];
+        $sem = $_POST['sem'] . '_gen_ave';
+
+        $status = $_POST['sem'] . '_status';
+
+        $num = $_POST['sem'] == 'first'? [1,3]:[2,4];
+        if(in_array($_SESSION['current_quarter'],$num)){
+            $stat = (int) $_POST['stat'];
+        } else {
+            $stat = 0;
+        }
+
+        echo("Status: $status stat: $stat");
+        
 
         $gen_ave = $gen_ave != "" ? $gen_ave : NULL;
 
         echo ("stud id:$stud_id rep_id: $report_id gen_ave: $gen_ave stat: $stat");
         
         $this->prepared_query(
-            "UPDATE `gradereport` SET `$sem` =?, status = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
+            "UPDATE `gradereport` SET `$sem` =?, `$status` = ? WHERE`gradereport`.`stud_id` = ?  AND `gradereport`.`report_id` = ?;",
             [$gen_ave, $stat, $stud_id, $report_id],
             "iiii"
         );

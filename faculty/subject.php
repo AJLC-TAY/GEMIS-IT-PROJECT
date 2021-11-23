@@ -125,6 +125,7 @@ if (count($sub_classes) != 0) {
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
+
     <script>
         var currentGrading = '<?php echo $grading; ?>'
     </script>
