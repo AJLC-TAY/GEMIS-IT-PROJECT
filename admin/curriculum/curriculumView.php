@@ -54,19 +54,21 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             <div class="ps-3 row w-100">
                 <form id='curriculum-form' class="needs-validation" action="action.php" method="POST" novalidate>
                     <div class="form-group row">
-                        <div class="col-sm-3"><label class="my-auto">Code</label></div>
+                        <div class="col-sm-3 mt-2 ">
+                            <label class="my-auto">Code</label>
+                        </div>
                         <div class="col-sm-9">
                             <input type="hidden" name="action" value="updateCurriculum">
                             <input type="hidden" name="current_code" value="<?php echo $curr_code; ?>">
-                            <?php echo "<input class='form-control form-input ' type='text' name='code' value='$curr_code' $edit required>"; ?>
+                            <?php echo "<input class='form-control form-input mb-1 ' type='text' name='code' value='$curr_code' $edit required>"; ?>
                         </div>
-                        <label class="col-sm-3">Name</label>
+                        <label class="col-sm-3 mt-2">Name</label>
                         <div class="col-sm-9">
-                            <?php echo "<input class='form-input form-control ' type='text' name='name' value='$curr_name' $edit required>"; ?>
+                            <?php echo "<input class='form-input form-control mb-1 ' type='text' name='name' value='$curr_name' $edit required>"; ?>
                         </div>
-                        <label class="col-sm-3">Description</label>
+                        <label class="col-sm-3 mt-2">Description</label>
                         <div class="col-sm-9">
-                            <?php echo "<textarea  class='form-input form-control ' name='curriculum-desc' $edit>" . $curr_desc . "</textarea>"; ?>
+                            <?php echo "<textarea  class='form-input form-control mb-1 ' name='curriculum-desc' $edit>" . $curr_desc . "</textarea>"; ?>
                         </div>
                     </div>
                 </form>
@@ -91,9 +93,9 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 </div>
                 <tr>
                     <th data-checkbox="true"></th>
-                    <th scope='col' data-width="100" data-align="center" data-field='prog_code'>Code</th>
-                    <th scope='col' data-width="600" data-align="center" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
-                    <th scope='col' data-width="300" data-align="center" data-field="action">Actions</th>
+                    <th scope='col' data-width="200" data-align="center" data-field='prog_code'>Code</th>
+                    <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="prog_desc">Program/Strand Description</th>
+                    <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
                 </tr>
             </thead>
         </table>

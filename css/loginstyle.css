@@ -17,7 +17,7 @@ body {
 }
 
 .user_card {
-  height: 430px;
+  height: auto;
   width: 400px;
   margin-bottom: auto;
   background: #fff;
@@ -35,7 +35,6 @@ body {
 }
 .login_name_wrapper {
   height: 20% !important;
-  min-height: 100px;
   margin-bottom: auto;
   position: relative;
   display: flex;

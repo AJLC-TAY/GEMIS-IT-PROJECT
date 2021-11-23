@@ -56,8 +56,8 @@ const HIDE = "style='display: none;'";
 $change_btn_display = '';
 $form_display = HIDE;
 if ($valid_status === "Pending") {
-        $change_btn_display = HIDE;
-        $form_display = '';
+    $change_btn_display = HIDE;
+    $form_display = '';
 }
 
 const PROFILE_PATH = "../assets/profile.png";
@@ -97,7 +97,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                 <div class="w-100 h-auto text-start mx-auto">
                     <div class="row g-3 p-0">
                         <!-- PROFILE PICTURE -->
-                        <div class="col-xl-4 mx-0">
+                        <div class="col-xl-5 mx-0">
                             <div class="row justify-content-center">
                                 <img src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
                             </div>
@@ -118,27 +118,83 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                     </p>
                                 </dd>
                             </dl>
-                    
-                            <form id="validate-form" class='edit-opt' action="action.php" method="post" <?php echo $form_display; ?>>
-                                <input type="hidden" name='stud_id' value='<?php echo $stud_id; ?>'>
-                                <input type="hidden" name='action' value='validateEnrollment'>
-                                <div class="col-auto">
-                                    <button type="button" class='btn btn-success mb-2 w-100 validate' data-name='accept' title='Enroll student'>Accept Enrollee</button>
-                                </div>
-                                <button type="button" class='btn btn-secondary mb-2 w-100' data-bs-toggle="modal" data-bs-target="#confirmation-modal" title='Decline Enrollee'>Decline Enrollee</button>
+                            <?php
+                            $is_disabled = "";
+                            if ($valid_status != 'Enrolled') {
+                                if ($valid_status == 'Rejected') {
+                                    $is_disabled = "disabled";
+                                }
+                                echo "<h6><b>Requesting to enroll in:</b></h6>";
+                            } else {
+                                $is_disabled = "disabled";
+                                echo "<h6><b>Enrolled in:</b></h6>";
+                            }
+                            ?>
+                            <form id="validate-form" action="action.php" method="post"  class="border p-3 border-1 rounded-2">
                                 <div class="container">
-                                    <dl class="row">
-                                        <dt class="col-3">Accept</dt>
-                                        <dd class="col-9">Accepting student will initialize their grades and attendances to zero.</dd>
-                                        <dt class="col-3">Decline</dt>
-                                        <dd class="col-9">Declining student will not reflect during the creation of section. Any initialized grades will be deleted.</dd>
-                                    </dl>
+                                    <div class="row mb-3">
+                                        <div class="enroll-request-con container">
+                                            <div class="row mb-3">
+                                                <label for="grade-level" class="form-label">Grade Level</label>
+                                                <select name="grade-level" id="grade-level" class="form-select" <?php echo $is_disabled; ?>>
+                                                    <?php
+                                                    foreach([11, 12] as $level) {
+                                                        echo "<option value='$level' ". ($yrlvl == $level ? "selected" : "") .">$level</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="strand" class="form-label">Strand</label>
+                                                <select name="strand" id="strand" class="form-select" <?php echo $is_disabled; ?>>
+                                                    <?php
+                                                    $programs = $admin->listPrograms('program');
+                                                    $trackStrand = $admin->getTrackStrand($stud_id);
+                                                    foreach ($programs as $program) {
+                                                        $prog_code = $program->get_prog_code();
+                                                        echo "<option value='{$prog_code}' ". ($prog_code == $trackStrand ? "selected" : "") ." >{$program->get_prog_desc()}</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='edit-opt'  <?php echo $form_display; ?>>
+                                    <input type="hidden" name='stud_id' value='<?php echo $stud_id; ?>'>
+                                    <input type="hidden" name='action' value='validateEnrollment'>
+
+                                    <div class="row mb-4 justify-content-center">
+                                        <div class="col-6">
+                                            <input required type="radio" class="btn-check" name="valid" id="option1" autocomplete="off" checked value="accept">
+                                            <label class="btn btn-outline-primary w-100" for="option1">Accept Enrollee</label>
+                                        </div>
+                                        <div class="col-6">
+                                            <input required type="radio" class="btn-check" name="valid" id="option2" autocomplete="off" value="reject">
+                                            <label class="btn btn-outline-danger w-100" for="option2">Decline Enrollee</label>
+                                        </div>
+                                    </div>
+<!--                                    <div class="col-auto">-->
+<!--                                        <button type="button" class='btn btn-success mb-2 w-100 validate' data-name='accept' title='Enroll student'>Accept Enrollee</button>-->
+<!--                                    </div>-->
+<!--                                    <button type="button" class='btn btn-secondary mb-2 w-100' data-bs-toggle="modal" data-bs-target="#confirmation-modal" title='Decline Enrollee'>Decline Enrollee</button>-->
+                                    <div class="container">
+                                        <dl class="row">
+                                            <dt class="col-3">Accept</dt>
+                                            <dd class="col-9">Accepting student will initialize their grades and attendances to zero.</dd>
+                                            <dt class="col-3">Decline</dt>
+                                            <dd class="col-9">Declining student will not reflect during the creation of section. Any initialized grades will be deleted.</dd>
+                                        </dl>
+                                        <div class="row">
+                                            <button type="button" class="btn btn-success validate">Save</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <!-- PROFILE PICTURE END -->
                         <!-- DOCUMENT DETAILS -->
-                        <div class="col-xl-8 ps-5 container">
+                        <div class="col-xl-7 ps-5 container">
                             <div class="row">
                                 <h5><b>Documents</b></h5>
                             </div>

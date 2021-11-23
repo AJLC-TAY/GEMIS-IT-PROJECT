@@ -422,7 +422,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='f-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value = "<?php echo $father_first_name; ?>" placeholder='Middle Name' required>
+                            <input type='text' class='form-control' id='f-middlename' name='f-middlename' value = "<?php echo $father_first_name; ?>" placeholder='Middle Name'>
                         </div>
                         <div class='form-group col-md-2'>
                             <label for='f-extensionname'>Extension Name</label>
@@ -452,7 +452,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='m-middlename'>Middle Name</label>
-                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name' required>
+                            <input type='text' class='form-control' id='m-middlename' name='m-middlename' value = "<?php echo $mother_middle_name; ?>" placeholder='Middle Name'>
                         </div>
                     </div>
                     <div class='form-row row mb-2'>
