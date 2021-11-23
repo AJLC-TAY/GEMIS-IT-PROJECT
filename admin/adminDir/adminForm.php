@@ -63,7 +63,7 @@ if ($action == 'add') {
             <!-- GENERAL INFO -->
             <h5 class="fw-bold">Personal Information</h5>
             <div class='form-row row mb-3'>
-                <div class='form-group col-md-4'>
+                <div class='form-group col-md-4 mb-3'>
                     <label for='lastname'>Last Name</label>
                     <input type='text' value='<?php echo $last_name; ?>' class='form-control' id='lastname' name='lastname' placeholder='Last Name' required>
                 </div>
@@ -73,8 +73,9 @@ if ($action == 'add') {
                 </div>
                 <div class='form-group col-md-4'>
                     <label for='middlename'>Middle Name</label>
-                    <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name' required>
+                    <input type='text' value='<?php echo $middle_name; ?>' class='form-control' id='middlename' name='middlename' placeholder='Middle Name'>
                 </div>
+
                 <div class="form-row row">
                     <div class='form-group col-md-4'>
                         <label for='extensionname'>Extension Name</label>
@@ -98,9 +99,9 @@ if ($action == 'add') {
                             ?>
                         </div>
                     </div>
-                </div>
-
             </div>
+        </div>
+
             <!-- GENERAL INFO END -->
 
             <!-- CONTACT INFO -->

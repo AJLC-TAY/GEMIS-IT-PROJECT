@@ -158,14 +158,14 @@ $user = $admin->getAdministrator($user_id);
                             <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
                             <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password" required>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mt-2">
                             <!-- <label for="reenter-new-pass">Re-enter new password</label> -->
                             <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
                 </div>
             </form>

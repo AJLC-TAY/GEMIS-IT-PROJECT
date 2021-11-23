@@ -3123,7 +3123,6 @@ class Administration extends Dbconfig
 
     public function deleteSignatory()
     {
-        $id = $_POST['id'];
         $this->prepared_query("DELETE FROM signatory WHERE sign_id=?;", [$_POST['id']], "i");
     }
 
@@ -3250,7 +3249,7 @@ class Administration extends Dbconfig
 
     public function getTrackStrand($stud_id)
     {
-        $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT CONCAT(c.curr_name,': ', p.description) FROM enrollment e JOIN curriculum c USING(curr_code) JOIN program p on c.curr_code = p.curr_code where stud_id=?;", [$stud_id], "i"));
+        $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT p.prog_code, CONCAT(c.curr_name,': ', p.description) FROM enrollment e JOIN curriculum c USING(curr_code) JOIN program p on c.curr_code = p.curr_code where stud_id=?;", [$stud_id], "i"));
         return $trackStrand;
     }
 

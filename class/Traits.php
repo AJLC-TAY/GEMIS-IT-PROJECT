@@ -213,7 +213,7 @@ trait UserSharedMethods
         }
         $date_time = date('Y-m-d H:i:s');
         $id = $_SESSION['user_id'] ?? 0;
-        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime) VALUES('$id', '{$_SESSION['user_type']}', '$action', '$date_time' );");
+        $this->query("INSERT INTO historylogs (id_no, user_type, action, datetime, sy_id) VALUES('$id', '{$_SESSION['user_type']}', '$action', '$date_time', '{$_SESSION['sy_id']}' );");
     }
 
     /**
@@ -1662,7 +1662,6 @@ trait Enrollment
             foreach ([1, 2, 3, 4] as $quarter) {
                 $query = "INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES ('{$row['value_id']}',$quarter, $report_id, $stud_id);";
                 $this->query($query);
-                // echo($query . "<br>");
             }
         }
 
@@ -1674,8 +1673,7 @@ trait Enrollment
         echo ("initialize attendance <br>");
 
         foreach ($attend_months as $id => $val) {
-            $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id);");
-            // echo ("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ($stud_id, $report_id, $id); <br>");
+            $this->query("INSERT INTO attendance (stud_id, report_id, acad_days_id) VALUES ('$stud_id', '$report_id', '$id');");
         }
 
         return $report_id;

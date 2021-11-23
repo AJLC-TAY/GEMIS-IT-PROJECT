@@ -13,6 +13,25 @@ const tableSetup = {
 };
 let signatoryTable = $("#table").bootstrapTable(tableSetup);
 let addAnother = false;
+const deleteEvent = (id = null) => {
+    var action = 'deleteSignatory';
+    let selected = signatoryTable.bootstrapTable('getSelections');
+    if (selected.length > 0 && id == null) {
+        selected.forEach(element => {
+            var id = element.sign_id;
+            $.post("action.php", {id,action}, function(data) {
+                signatoryTable.bootstrapTable('refresh');
+                $("#confirmation-modal").modal("hide");
+            });
+        });
+    } else {
+        $.post("action.php", {id,action}, function(data) {
+            signatoryTable.bootstrapTable('refresh');
+            $("#confirmation-modal").modal("hide");
+        });
+        $("#delete-signatory-confirm").removeAttr("data-id");
+    }
+}
 $(function() {
     preload("#signatory");
 
@@ -24,10 +43,17 @@ $(function() {
         let modal = $("#modal-form");
 
         let action = $(this).attr("data-action");
-        $("input[name='delete']").addClass('d-none');
+        let signID = $(this).attr('data-id');
         let displaySubmitAgainBtn = true;
+        if (action == 'Delete') {
+            let confirmModal = $("#confirmation-modal");
+            confirmModal.find("#delete-signatory-confirm").attr("data-id", signID);
+            confirmModal.modal("show");
+            hideSpinner();
+            return;
+        }
         if (action == 'Edit') {
-            let info = signatoryTable.bootstrapTable('getRowByUniqueId', $(this).attr('data-id'));
+            let info = signatoryTable.bootstrapTable('getRowByUniqueId', signID);
             $("#sig-id").val(info.sign_id);
             $("#last-name").val(info.last_name);
             $("#first-name").val(info.first_name);
@@ -64,52 +90,68 @@ $(function() {
         $("#signatory-form").submit();
     });
 
-    $(document).on("submit", "#signatory-form", function(e) {
-        e.preventDefault();
-        let form = $(this);
-        console.log(form.serializeArray());
-        $.post("action.php", form.serializeArray(), function() {
-            form.trigger('reset');
-            signatoryTable.bootstrapTable("refresh")
-            if (!addAnother) {
-                $("#modal-form").modal("hide");
-                addAnother = false;
-            }
-            // showToast("success", "Signatory successfully added");
-        });
+    $("#signatory-form").validate({
+        rules: {
+            "last-name": {required: true},
+            "first-name": {required: true},
+            position: {required: true}
+        },
+        messages: {
+            "last-name": {required: REQUIRED},
+            "first-name": {required: REQUIRED},
+            position: {required: REQUIRED}
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: "action.php",
+                data: new FormData(form),
+                type: "post",
+                processData: false,
+                contentType: false,
+                success: function() {
+                    $(form).trigger('reset');
+                    signatoryTable.bootstrapTable("refresh")
+                    if (!addAnother) {
+                        console.log("test");
+                        $("#modal-form").modal("hide");
+                        addAnother = false;
+                    }
+
+                }
+                // showToast("success", "Signatory successfully added");
+            });
+        }
     });
     $(document).on("click", ".table-opt", function(e) {
         let selections = signatoryTable.bootstrapTable('getSelections');
         if (selections.length < 1) return showToast("danger", "Please select a signatory first");
+        $("#confirmation-modal").modal("show");
     });
     $(document).on("click", ".view-btn", function() {
         showSpinner();
         let id = $(this).attr("data-id");
         let data = signatoryTable.bootstrapTable("getRowByUniqueId", id);
-
+        console.log(data);
         let modal = $("#modal-view");
 
         modal.find("#id-no-view").val(data.sign_id);
-        modal.find("#name-view").val(data.name);
+        modal.find("#last-name-view").val(data.last_name);
+        modal.find("#first-name-view").val(data.first_name);
+        modal.find("#middle-name-view").val(data.middle_name);
         modal.find("#position-view").val(data.position);
-        modal.find("#years-view").val(data.years);
+        modal.find("#start-year-view").val(data.start_year);
+        modal.find("#end-year-view").val(data.end_year);
+        modal.find("#academic-degree-view").val(data.acad_degree);
         modal.find(".modal-footer .edit-btn").attr("data-id", id);
+        modal.modal("show");
         hideSpinner();
     });
 
-    $('#delete-signatory-confirm').click(function(e){
+    $('#delete-signatory-confirm').click(function(e) {
         e.preventDefault();
-        var $table = $("#table");
-        var action = 'deleteSignatory';
 
-        let selected = $table.bootstrapTable('getSelections');
-        selected.forEach(element => {
-            var id = element.sign_id;
-            $.post("action.php", {id,action}, function(data) {
-                $table.bootstrapTable('refresh');
-                $("#confirmation-modal").modal("hide");
-            });
-        });
+        console.log($(this).attr("data-id"))
+        deleteEvent($(this).attr("data-id") || null);
     });
 
     hideSpinner();
