@@ -82,7 +82,9 @@ $enrollmentData = $user->lastestEnrollmentDetail();
         <!-- MAIN CONTENT START -->
         <section id="main-content">
             <?php
-            if($_SESSION['promote'] == 0 ){
+            if($_SESSION['grd_lvl'] == 11 && $_SESSION['promote'] == 0 ){
+                header("location: enrolled.php?page=enrolled"); 
+            } else if($_SESSION['promote'] == 0 ){
                 header("location: enrolled.php?page=failed"); 
             }else if($_SESSION['promote'] == 2 && $_SESSION['grd_lvl'] == 12 ){
                 header("location: enrolled.php?page=passed"); 

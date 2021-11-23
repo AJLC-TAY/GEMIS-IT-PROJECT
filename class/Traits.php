@@ -1773,7 +1773,7 @@ trait Grade
         $sy_id = mysqli_fetch_row($this->query("SELECT sy_id FROM gradereport WHERE report_id = '$report_id';"))[0];
         $semesters = [1, 2];
         foreach ($semesters as $semester) {
-            $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, final_grade FROM classgrade
+            $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, first_status, second_status, final_grade FROM classgrade
                                             JOIN subject USING (sub_code) WHERE report_id = '$report_id'
                                             AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
                                             WHERE sy_id = '$sy_id' AND sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
@@ -1781,9 +1781,9 @@ trait Grade
             while ($row = mysqli_fetch_assoc($result)) {
                 $data[$semester][$row['sub_type']][] = [
                     'sub_name' => $row['sub_name'],
-                    'grade_1'  => $row['first_grading'],
-                    'grade_2'  => $row['second_grading'],
-                    'grade_f'  => $row['final_grade'],
+                    'grade_1'  => $row['first_status'] == 0?'':$row['first_grading'],
+                    'grade_2'  => $row['second_status'] == 0?'':$row['second_grading'],
+                    'grade_f'  => $row['second_status'] == 0?'':$row['final_grade'],
                 ];
             }
         }
@@ -2140,7 +2140,7 @@ trait Grade
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
-          $action .= $promote == 2 ? "" : "<button type = 'button' data-stud-id='$stud_id' class='btn btn-primary stud-promote mt-1 $class'> Promote </button></div>";
+          $action .= $promote == 2 ? "" : "<button type = 'button' data-stud-id='$stud_id' class='btn-sm btn-primary stud-promote mt-1 $class'> Promote </button></div>";
           return $action;
 
         }

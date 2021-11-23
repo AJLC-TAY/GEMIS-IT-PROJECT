@@ -2,6 +2,7 @@
 require_once("sessionHandling.php");
 include_once("../inc/head.html"); 
 include_once('../inc/studentSideBar.php');
+
 ?>
 <title>Student | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>

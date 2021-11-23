@@ -214,8 +214,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         <li class="p-0 mb-0 mx-auto p-3">
                                             
                                                 <?php
+                                                if ($grade_level == 12) {
+                                                    $x = (int)$grade_level - 1;
+                                                } else {
+                                                    $x = (int)$grade_level;
+                                                }
                                                 
-                                                $x = (int)$grade_level - 1;
                                                         for ($ctr = $x ; $ctr < ($grade_level + 1); $ctr++ ){
                                                             echo "<p class='fw-bolder mb-0' style='font-size: 20px;'>GRADE $ctr</p>
                                                                     <div class='row'> <div class='col-6'>";
@@ -259,7 +263,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <script src="../js/common-custom.js"></script>
         <script>
             $(function() {
-                preload("#student");
+                preload("#transcript");
                 hideSpinner();
             });
         </script>
