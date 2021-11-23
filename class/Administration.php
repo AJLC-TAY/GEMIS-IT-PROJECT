@@ -296,13 +296,14 @@ class Administration extends Dbconfig
         $end_yr = $_POST['end-year'];
         $enrollment = 0;
         $current_quarter = 1;
+        $current_semester = 1;
 
         // $enrollment = isset($_POST['enrollment']) ? 1 : 0; // short hand for isset; here, return null if isset returns false
 
         # Step 1
-        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, can_enroll) "
+        $query = "INSERT INTO schoolyear (start_year, end_year, current_quarter, current_semester, can_enroll) "
             . "VALUES (?, ?, ?, ?);";
-        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $enrollment], "iiii");
+        $this->prepared_query($query, [$start_yr, $end_yr, $current_quarter, $current_semester, $enrollment], "iiiii");
 
         $sy_id = mysqli_insert_id($this->db);
 

@@ -75,25 +75,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- <div class="overflow-auto" style="height: 50vh;">
-                    <table class="table table-striped table-sm" id = 'stud-table'>
-                    <tr class ='text-center'><th>ID</th>
-                        <th>Student Name</th>
-                        <th>Average</th>
-                        <th>Action</th></tr>
-                <?php
-                // $students = $faculty -> listStudentsForPromotion();
-                // foreach ($students as $student){ 
-                //     // $name = ${student['name']}
-                //     echo "<tr class ='text-center'><td>{$student['stud_id']}</td> 
-                //               <td>{$student['name']}</td> 
-                //               <td>{$student['gen_ave']} </td>
-                //  <td><button data-name='' class='unarchive-option btn link' id=''>Remove</button></td></tr>";
-                //   } 
-                ?> -->
-
-                <!-- </table> -->
-                <table id="for-promotion-table" class="table-striped table-sm">
+                
+                
+                    <table id="for-promotion-table" class="table-striped table-sm">
                     <thead class='thead-dark'>
                         <tr>
                             <th scope='col' data-width="150" data-align="center" data-field="stud_id">ID</th>
@@ -112,6 +96,7 @@
         </div>
     </div>
 </div>
+
 <script>
     var code = '<?php echo json_encode($advisory['section_code']); ?>';
 </script>
