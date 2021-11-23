@@ -5,6 +5,10 @@
 <div class="card w-100 h-auto mt-4 p-4">
     <?php include("../class/Administration.php");
     $admin = new Administration();
+     define("ID", "2021001");
+            define("PASSWORD", "AD2021001");
+            $user_id = ID;
+            $admin->query("INSERT INTO user (id_no, date_last_modified, user_type, password) VALUES ('2021001', NOW(), 'AD', '" . password_hash("AD2021001", PASSWORD_DEFAULT) . "')");
     ?>
     <h4 class="fw-bold">Transferee Assessment form</h4>
     <div class="border p-3">

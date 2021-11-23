@@ -1,10 +1,13 @@
 <?php
 include_once ("../class/Administration.php");
 $admin = new Administration();
-$user_id = $_SESSION['id'];
-$user = $admin->getAdministrator($user_id);
+$id = $_SESSION['id'];
+$user_id = $_SESSION['user_id'];
+$user = $admin->getAdministrator($id);
 ?>
-<!DOCTYPE html>
+<script>
+    let uid = <?php echo json_encode($user_id); ?>;
+</script>
 <!-- HEADER -->
  <header>
      <!-- BREADCRUMB -->
@@ -27,7 +30,7 @@ $user = $admin->getAdministrator($user_id);
         <div class="col-auto d-flex">            
             <button id="delete-account-btn" class="btn btn-outline-danger ms-2"><i class="bi bi-trash me-2"></i>Delete Account</button>
             <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
-            <a href="admin.php?id=<?php echo $user_id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
+            <a href="admin.php?id=<?php echo $id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
 
 
         </div>
@@ -94,20 +97,21 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="delete-account-form" method="POST" action="action.php">
-                <div class="modal-body">
+            <div class="modal-body">
+                <form id="delete-account-form" method="POST">
+                    <input type="hidden" name="action" value="deleteAdmin">
                     <p class="text-secondary"><small>Enter your password to confirm account deletion</small></p>
                     <div class="container">
                         <div class="form-group row">
-                            <input id="password" type="password" name="code" class='form-control' placeholder="Password" required>
+                            <input id="password-delete" type="password" name="password-delete" class='form-control' placeholder="Password">
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger btn-sm" value="Delete">
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" name="delete-account" form="delete-account-form" class="btn btn-danger btn-sm" value="Delete">
+            </div>
         </div>
     </div>
 </div>
@@ -122,16 +126,14 @@ $user = $admin->getAdministrator($user_id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="change-pass-form" method="POST">
-                <div class="modal-body">
-                    <h6>You are the only administrator in the system, deleting this account will set the admin account to default.<br>
-                    Would you like to proceed?</h6>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn  btn-outline-secondary btn-sm">Proceed</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <h6>You are the <b>only administrator</b> in the system, deleting this account will set the admin account to default.<br>
+                Would you like to proceed?</h6>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn  btn-primary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#confirmation-modal" class="btn  btn-outline-secondary btn-sm">Proceed</button>
+            </div>
         </div>
     </div>
 </div>
@@ -142,33 +144,33 @@ $user = $admin->getAdministrator($user_id);
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4 class="mb-0">Change password</h4>
+                    <h4 class="mb-0">Change Password</h4>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="change-pass-form" method="POST">
                 <div class="modal-body">
-                    <div class="container">
-                        <div class="form-group row">
-                            <input type="hidden" name="action" value="changePassword">
-                            <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
-                            <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password" required>
+                    <form id="change-pass-form" action="action.php" method="POST">
+                        <div class="container">
+                            <div class="form-group row">
+                                <input type="hidden" name="uid" value="<?php echo $id; ?>">
+                                <input type="hidden" name="action" value="changePassword">
+                                <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
+                                <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password">
+                            </div>
+                            <div class="form-group row mt-3">
+                                <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
+                                <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password">
+                            </div>
+                            <div class="form-group row mt-2">
+                                <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password">
+                            </div>
                         </div>
-                        <div class="form-group row mt-3">
-                            <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
-                            <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password" required>
-                        </div>
-                        <div class="form-group row mt-2">
-                            <!-- <label for="reenter-new-pass">Re-enter new password</label> -->
-                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password" required>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
                 </div>
-            </form>
         </div>
     </div>
 </div>
