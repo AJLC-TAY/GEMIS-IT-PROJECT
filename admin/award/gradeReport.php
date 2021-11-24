@@ -20,6 +20,10 @@ if ($user_type != 'ST') {
     $breadcrumb = '';
 }
 
+if ($user_type != 'FA'){
+    $breadcrumb = '';
+}
+
 //$report_id = 37;
 
 $stud_id = $_GET['id'];
@@ -53,11 +57,16 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
     <nav aria-label='breadcrumb'>
         <ol class='breadcrumb'>
             <?php
-            if ($user_type != 'ST') {
+            if ($user_type == 'AD') {
                 echo "
                 <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
                 <li class='breadcrumb-item'><a href='index.php'>Student</a></li>
-                $breadcrumb
+                <li class='breadcrumb-item active'>Grade Report</a></li>";
+            }
+            if ($user_type == 'FA') {
+                echo "
+                <li class='breadcrumb-item'><a href='index.php'>Home</a></li>
+                <li class='breadcrumb-item'><a href='../faculty/advisory.php'>Advisory</a></li>
                 <li class='breadcrumb-item active'>Grade Report</a></li>";
             }
             ?>

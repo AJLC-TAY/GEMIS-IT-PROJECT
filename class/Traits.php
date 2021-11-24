@@ -679,7 +679,7 @@ trait FacultySharedMethods
     public function listSubjectClasses($teacher_id = "")
     {
         $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
-        $query = "SELECT sc.sub_class_code, sc.section_code, sys.sub_code, sc.teacher_id, CONCAT('T.', f.last_name,', ', f.first_name,' ', COALESCE(f.middle_name, ''),' ', COALESCE(f.ext_name, '')) AS teacher_name, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
+        $query = "SELECT sc.sub_class_code, ss.sy_id, ss.for_grd_level, ss.sub_semester, sc.section_code, sys.sub_code, sc.teacher_id, CONCAT('T.', f.last_name,', ', f.first_name,' ', COALESCE(f.middle_name, ''),' ', COALESCE(f.ext_name, '')) AS teacher_name, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
                     FROM subjectclass sc JOIN sysub sys USING (sub_sy_id) 
                     JOIN subject s ON s.sub_code=sys.sub_code 
                     JOIN sharedsubject ss ON ss.sub_code = s.sub_code
@@ -694,7 +694,7 @@ trait FacultySharedMethods
             $sub_classes[] = new SubjectClass(
                 $sc_row['sub_code'],
                 $sc_row['sub_name'],
-                $sc_row['grd_level'],
+                $sc_row['for_grd_level'],
                 $sc_row['sub_semester'],
                 $sc_row['sub_type'],
                 $sc_row['sub_class_code'],
@@ -1872,7 +1872,7 @@ trait Grade
                 'id' => $grd['stud_id'],
                 'name' => $grd['stud_name'],
                 'grd_1' => "<input min='60' max='100' name='{$grd['stud_id']}/first' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
-                'grd_2' => "<input min='60' max='100' name='{$grd['stud_id']}/second' class='cal form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
+                'grd_2' => "<input min='60' max='100' name='{$grd['stud_id']}/second' class='cal  form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
                 'grd_f' => "<input min='60' max='100' name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['final_grade']}'>"
             ];
         }
@@ -2123,24 +2123,8 @@ trait Grade
             }
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
-            <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
-              View
-            </button>
-            <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-              <li><a class='dropdown-item' href='#'>Details</a></li>
-              <li><a class='dropdown-item' href='grade.php?id=$report_id'>Grades</a></li>
-            </ul>
-          </div>
-          <div class='dropdown'>
-            <button class='btn btn-secondary btn-sm dropdown-toggle me-1 btn-sm' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
-              Grade
-            </button>
-            <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-              <li><a class='dropdown-item' href='gradeReport.php?id=$stud_id'>Export</a></li>
-              <li><a href='advisory.php?page=values_grade&id=$stud_id' role='button' target='_blank' class='dropdown-item'>Values</a></li>
-            </ul>
-          </div>
+              <a class='btn-sm btn-secondary m-1' href='student.php?id=$stud_id'>Details</a>
+              <a class='btn-sm btn-secondary m-1' href='gradeReport.php?id=$stud_id'><i class='bi bi-box-arrow-up-left me-2'></i>Export</a>
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
