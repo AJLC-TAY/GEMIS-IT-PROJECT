@@ -22,7 +22,7 @@ function validate(selector) {
   }
 
   if (message.length > 1) {
-    alert(message);
+    showToast("danger", message);
     $(selector).val('');
   }
 }

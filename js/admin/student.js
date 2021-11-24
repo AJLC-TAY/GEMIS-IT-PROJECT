@@ -345,7 +345,8 @@ $(function() {
                 data: new FormData(form),
                 processData: false,
                 contentType: false,
-                success: function() {
+                success: function(data) {
+                    location.replace("student.php?id="+JSON.parse(data))
 
                 }
             })

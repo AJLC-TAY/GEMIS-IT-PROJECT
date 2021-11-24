@@ -179,7 +179,8 @@ $(function() {
             }
             console.log(html);
             $("#transfer-table tbody").html(html);
-            $("#transfer-table .form-check-input").prop("disabled", !balikAral);
+            $(".trans-detail input, textarea").prop("disabled", !balikAral);
+            $("#transfer-table tbody").find(".form-check-input").prop("disabled", !balikAral);
 
         });
     });
@@ -187,9 +188,7 @@ $(function() {
     $(document).on("click", "[name='balik']", function() {
         balikAral = $(this).val() == "Yes";
         let disabled  = !(balikAral);
-        $(".trans-detail input, textarea").prop("disabled", disabled);
-        $("#transfer-table .form-check-input").prop("disabled", disabled);
-        $(".balik-con input").prop("disabled", disabled);
+        $(".balik-con input, textarea").prop("disabled", disabled);
     });
 
     hideSpinner();

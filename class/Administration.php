@@ -2314,53 +2314,6 @@ class Administration extends Dbconfig
     }
 
     /** Faculty End */
-
-    //    public static function saveImage($id, $file_name, $target_dir, $file_type)
-    //    {
-    //        session_start();
-    //        $school_year = $_SESSION['sy'] = "2021-2020";
-    //        $target_dir = $target_dir."/".$file_type."/".$school_year;
-    //        if (!file_exists($target_dir)) {
-    //            mkdir($target_dir, 0777, true);
-    //        }
-    //
-    //        if (($_FILES[$file_name]['name']!="")){
-    //            // Where the file is going to be stored
-    //            $file = $_FILES[$file_name]['name'];
-    //            $path = pathinfo($file);
-    ////            $filename = $path['filename'];
-    //            $ext = $path['extension'];
-    //            $temp_name = $_FILES[$file_name]['tmp_name'];
-    //            $path_filename_ext = $target_dir."/$id-$file_type.$ext"; // ../student_assets/psa/2194014-*.jpg
-    //            // Check if file already exists
-    //            if (file_exists($path_filename_ext)) {
-    //                echo "Sorry, file already exists.";
-    //            }else{
-    //                move_uploaded_file($temp_name,$path_filename_ext);
-    //                echo "Congratulations! File Uploaded Successfully.";
-    //            }
-    //        }
-    //    }
-
-
-    //    public function editStudent()
-    //    {
-    //        $id = $_POST['id'];
-    //        $params = [
-    //            $_POST['lrn'], $_POST[''], $_POST[''], $_POST[''], $_POST[''],
-    //            $_POST['birthdate'], $_POST['sex'], $_POST['age'], $_POST[''], $_POST[''],
-    //            $_POST[''], $_POST['religion'], $_POST[''], $_POST[''], $_POST['']
-    //        ];
-    //        $this->prepared_query(
-    //            "UPDATE student SET LRN=?, last_name=?, first_name=?, middle_name=?, ext_name=?, "
-    //                 ."birthdate=?, sex=?, age=?, birth_place=?, indigenous_group=?, "
-    //                 ."mother_tongue=?, religion=?, cp_no=?, psa_birth_cert=?, id_picture=?;",
-    //            $params,
-    //            "issss" . "siiss" . "sssss"
-    //        );
-    //        header("Location: student.php?id=$id");
-    //    }
-
     public function deleteUser($type)
     {
         $id = $_POST['id'];
@@ -2697,6 +2650,8 @@ class Administration extends Dbconfig
 
     public function editStudent()
     {
+        session_start();
+        $sy_id = $_SESSION['sy_id'];
         $statusMsg = array();
         $allowTypes = array('jpg', 'png', 'jpeg');
 
@@ -2714,7 +2669,7 @@ class Administration extends Dbconfig
         $indigenous_group = trim($_POST['group']) ?: NULL;
         $mother_tongue = trim($_POST['mother-tongue']);
         $religion = trim($_POST['religion']) ?: NULL;
-        $cp_no = trim($_POST['cp_no']) ?: NULL;
+        $cp_no = trim($_POST['cp-no']) ?: NULL;
         $belong_to_ipcc = trim($_POST['group']) == 'No' ? '0' : '1';
 
         //address
@@ -2765,69 +2720,31 @@ class Administration extends Dbconfig
         $psa_img = $this->validateImage($_FILES['psaImage'], 8000000);
         $form_img = $this->validateImage($_FILES['form137Image'], 8000000);
         $profile_img = $this->validateImage($_FILES['image'], 5242880);
-        foreach ([$psa_img, $form_img, $profile_img] as $image) {
-            // add image to the parameters if valid
+
+        $params = [];
+        $img_list = [$psa_img, $form_img, $profile_img];
+        foreach ($img_list as $i => $image) {
+            # add image to the parameters if valid
             if ($image['status'] == 'valid') {
                 # Upload image
-                $imgContent = $image['image'];
-                $fileDestination = "uploads/student/6/$imgContent";
-                // for editing
-                    if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-                        $current_img_path = $_POST["current_image_path"];
-                        if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-                            unlink("../".$current_img_path);                                 // delete current image
-                        }
-                    }
+                $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
+                $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
+                move_uploaded_file($image['file'], "../" . $fileDestination);
+                echo "Successfully uploaded image<br>";
                 $params[] = $fileDestination;
+            } else {
+                $params[] = NULL;
             }
         }
 
-        // $status = 'invalid';
-        // $statusInfo = [];
-        // //profile image
-
-        // $profile_img = NULL;
-        // $fileSize = $_FILES['image']['size'];
-        // // print_r($_FILES);
-        // if ($fileSize > 0) {
-        //     if ($fileSize > 5242880) { //  file is greater than 5MB
-        //         $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
-        //     }
-        //     $filename = basename($_FILES['image']['name']);
-        //     $fileType = pathinfo($filename, PATHINFO_EXTENSION);
-        //     if (in_array($fileType, $allowTypes)) {
-        //         $profile_img = time() ."_".uniqid("", true).".$fileType";
-        //     } else {
-        //         $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
-        //         http_response_code(400);
-        //         die(json_encode($statusMsg));
-        //     }
-        // }
-
-        // //psa
-        // $psa_img = NULL;
-        // $fileSize = $_FILES['psaImage']['size'];
-        // if ($fileSize > 0) {
-        //     if ($fileSize > 5242880) { //  file is greater than 5MB
-        //         $statusMsg["imageSize"] = "Sorry, image size should not be greater than 3 MB";
-        //     }
-        //     $filename = basename($_FILES['psaImage']['name']);
-        //     $fileType = pathinfo($filename, PATHINFO_EXTENSION);
-        //     if (in_array($fileType, $allowTypes)) {
-        //         $psa_img = file_get_contents($_FILES['psaImage']['tmp_name']);
-        //     } else {
-        //         $statusMsg["imageExt"] = "Sorry, only JPG, JPEG, & PNG files are allowed to upload.";
-        //         http_response_code(400);
-        //         die(json_encode($statusMsg));
-        //     }
-        // }
-
         //defining update student 
         $stud_params = [
-            $lrn, $first_name, $middle_name, $last_name, $ext_name, $sex, $age, $birthdate, $birth_place,
-            $indigenous_group, $mother_tongue, $religion, $cp_no, $belong_to_ipcc, $params[0], $params[1], $params[3], $stud_id
+            $lrn, $first_name, $middle_name, $last_name, $ext_name,
+            $sex, $age, $birthdate, $birth_place, $indigenous_group,
+            $mother_tongue, $religion, $cp_no, $belong_to_ipcc,
+            $params[0], $params[1], $params[2], $stud_id
         ];
-        $stud_types = "isssssdsssssiisssi";
+        $stud_types = "issss"."sdsss"."ssii"."sssi";
         var_dump($params);
         var_dump($stud_params);
 
@@ -2845,8 +2762,8 @@ class Administration extends Dbconfig
         //     $stud_types .= "s";
         // }
 
-        // $stud_params[] = $id = $_POST['student_id'];
-        // $stud_types .= "i";
+         $stud_params[] = $id = $_POST['student_id'];
+         $stud_types .= "i";
 
         $stud_query = "UPDATE student SET LRN=?, first_name=?, middle_name=?, last_name=?, ext_name=?, sex=?, age=?, birthdate=?, birth_place=?,
         indigenous_group=?,mother_tongue=?,religion=?,cp_no=?,belong_to_IPCC=?, psa_birth_cert=?, form_137=?, id_picture=? WHERE stud_id= ?";
@@ -2878,6 +2795,7 @@ class Administration extends Dbconfig
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
 
 //        header("Location: student.php?id=$stud_id");
+        echo json_encode($stud_id);
     }
 
     public function editSubjectGrade()

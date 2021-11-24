@@ -91,7 +91,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
                     <p role='button' class="edit-text profile-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='upload' class='form-control form-control-sm mt-2 w-75' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='upload' onchange="validate('#upload')" class='form-control form-control-sm mt-2 w-75' id='photo' name='image' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
 
         <div class='form-group col-md-4 d-flex flex-column'>
@@ -102,7 +102,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
                     <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='psaUpload' class='form-control form-control-sm mt-2 w-75' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='psaUpload' onchange="validate('#psaUpload')" class='form-control form-control-sm mt-2 w-75' name='psaImage' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
         <div class='form-group col-md-4 d-flex flex-column'>
             <label for='photo' class='form-label'>Form 137</label>
@@ -112,7 +112,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
                     <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
-            <input id='form137Upload' class='form-control form-control-sm mt-2 w-75' name='form137Image' type='file' accept='image/png, image/jpg, image/jpeg'>
+            <input id='form137Upload' onchange="validate('#form137Upload')" class='form-control form-control-sm mt-2 w-75' name='form137Image' type='file' accept='image/png, image/jpg, image/jpeg'>
         </div>
     </div>
     
@@ -336,7 +336,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
             <!-- <input type='hidden' name='profile' value='faculty'> -->
             <input type='hidden' value='updateStudent' name='action'>
             <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
-            <input type='submit' value='Save' class='btn btn-success btn-space save-btn' name='submit'>
+            <input type='submit' value='Save' form = 'student-form' class='btn btn-success btn-space save-btn' name='submit'>
         </div>
     </div>
 </form>
