@@ -1298,7 +1298,6 @@ trait Enrollment
             $data[$track]['description'] = $row['curr_desc'];
             $data[$track]['strands'][$program]['counts'][$index] = $row['count'];
 
-
 //            if (count($data) === 0) {
 //                $program_array[$index] = $count;
 //                $data[$track] = [$program => $program_array];
@@ -1310,6 +1309,7 @@ trait Enrollment
 //                    $data[$track] = [$program => $program_array];
 //                }
 //            }
+
         }
 
 //        foreach ($programs as $track_code => $prog_data) {

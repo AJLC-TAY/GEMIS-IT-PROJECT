@@ -22,7 +22,7 @@ function validate(selector) {
   }
 
   if (message.length > 1) {
-    alert(message);
+    showToast("danger", message);
     $(selector).val('');
   }
 }
@@ -187,7 +187,7 @@ $(function () {
         lrn: { required: true },
         "last-name": { required: true },
         "first-name": { required: true },
-        "cp-no": { required: true, maxlength: 11 , minlength: 11},
+        "cp-no": { required: true },
         sex: { required: true },
         birthdate: { required: true },
         "birth-place": { required: true },
@@ -215,8 +215,6 @@ $(function () {
         "first-name": { required: "<p class='text-danger'><small>Please provide your first name</small></p>" },
         "cp-no": {
           required: "<p class='text-danger'><small>Please provide your contact number</small></p>",
-          maxlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>",
-          minlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>"
         },
         sex: { required: "<p class='text-danger'><small>This is a required field</small></p>" },
         birthdate: { required: "<p class='text-danger'><small>Please provide your birthdate</small></p>" },
@@ -385,11 +383,9 @@ $(function () {
     rules:{
       lastname:{
         required: true,
-        lettersonly: true
       },
       firstname:{
         required: true,
-        lettersonly: true
       },
       email: {
         required: true,

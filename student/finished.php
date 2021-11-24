@@ -21,7 +21,7 @@ include_once("../inc/head.html"); ?>
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" ps-3">
-                        <div class='d-flex justify-content-center'>
+                        <div class='d-flex justify-content-center mt-5'>
                             <div class="card h-auto bg-light mx-auto mt-5 p-5 text-center " style='width: 65%;'>
                                     <h1><i class="bi bi-check-circle"></i></h1>
                                     <h4>You have successfully submitted an enrollment request for PCNHS Senior Highschool SY <?php echo $_SESSION['school_year']; ?></h4>
