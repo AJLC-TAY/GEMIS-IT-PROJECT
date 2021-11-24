@@ -1,4 +1,8 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
+const EXTENSION_IMAGE = {
+  filesize: 5242880,
+  extension: "png | jpg | jpeg"
+};
 var stepper, formEnroll, enrollValidator, syValidator;
 /** Enrollment */
 try {
@@ -279,12 +283,27 @@ $(function () {
          "program" : { required: true},
          "grade-level" : { required: true},
          "semester" : { required: true},
+          "image-studentid": EXTENSION_IMAGE,
+          "image-form": EXTENSION_IMAGE,
+          "image-psa": EXTENSION_IMAGE
       },
       messages: {
         "track": { required: REQUIRED },
         "program": { required: REQUIRED },
         "grade-level": { required: REQUIRED },
         "semester": { required: REQUIRED },
+        "image-studentid": {
+          filesize: "<p>Image should be not greater than 5MB</p>",
+          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
+        },
+        "image-form": {
+          filesize: "<p>Image should be not greater than 5MB</p>",
+          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
+        },
+        "image-psa": {
+          filesize: "<p>Image should be not greater than 5MB</p>",
+          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
+        }
       }
     });
     if (formEnroll.valid()) {
@@ -297,6 +316,7 @@ $(function () {
     stepper.previous();
     enrollValidator.destroy();
   });
+
   $(document).on("click", ".previous-sy", function(e) {
     e.preventDefault();
     stepper.previous();

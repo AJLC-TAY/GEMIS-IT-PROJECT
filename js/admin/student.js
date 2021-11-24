@@ -1,4 +1,6 @@
 import {averageSubjectGradesEvent, commonTableSetup} from "./utilities.js";
+
+const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
 let tableSetup = {
     ...commonTableSetup,
     search: true,

@@ -2876,7 +2876,8 @@ class Administration extends Dbconfig
         $guardian_types = "sssssi";
         $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
-        header("Location: student.php?id=$stud_id");
+
+//        header("Location: student.php?id=$stud_id");
     }
 
     public function editSubjectGrade()
