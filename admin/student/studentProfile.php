@@ -124,7 +124,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
 </header>
 <div class="d-flex justify-content-between align-items-center">
     <?php if($user_type != 'ST'){
-        echo "<h4 class='my-auto fw-bold'> Profile</h4>";
+        echo "<h4 class='my-auto fw-bold'> $name Profile</h4>";
     }
     ?>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
