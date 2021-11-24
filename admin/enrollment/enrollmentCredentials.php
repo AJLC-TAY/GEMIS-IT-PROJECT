@@ -77,7 +77,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
             <li class="breadcrumb-item active">Credential</li>
         </ol>
     </nav>
-    <h3><?php echo $name; ?></h3>
+    <h3 class="fw-bold"><?php echo $name; ?></h3>
 </header>
 
 <!-- MAIN CONTENT -->
@@ -199,7 +199,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                 <h5><b>Documents</b></h5>
                             </div>
                             <div class="ps-3 row me-3">
-                                    <div class="col-md-4 card">
+                                    <div class="col-md-5 card">
                                         <div class="thumbnail">
                                             <div class="caption">
                                                 <p class="fw-bold text-center">PSA DOCUMENT</p>
@@ -208,7 +208,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                             <!-- </a> -->
                                         </div>
                                     </div>
-                                    <div class="col-md-4 card ms-4">
+                                    <div class="col-md-5 card ms-4">
                                         <div class="thumbnail">
                                             <div class="caption">
                                                 <p class="fw-bold text-center">FORM 137</p>
@@ -246,7 +246,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                     <div class="row p-0">
                         <!-- PROFILE PICTURE -->
                         <div class="col-xl-4">
-                            <?php echo "<img src='../$image' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'" ?>
+                        <img src='<?php echo $image; ?>' alt='Profile image' class='rounded-circle' style='width: 250px; height: 250px;'>
                             <br>
                             <?php echo "<dl class='row mb-2 ms-1'>
                                     <dt class='col-md-4'>User ID: </dt>

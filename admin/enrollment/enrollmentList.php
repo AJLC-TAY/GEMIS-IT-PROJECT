@@ -5,7 +5,6 @@ $archived_btn = '';
 $table_opts = '';
 $sy_filter = '';
 if ($_SESSION['user_type'] == 'AD') {
-    $archived_btn = "<button type='button' class='view-archive btn btn-secondary'><i class='bi bi-eye me-2'></i>View Archived Enrollees</button>";
 
     $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm  my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
                 <button id='archive-opt' class='table-opt btn btn-secondary btn-sm my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
@@ -39,8 +38,7 @@ if ($_SESSION['user_type'] == 'AD') {
             <h3 class="fw-bold">Enrollees</h3>
         </div>
         <div class="col-md-7 d-flex justify-content-end">
-            <?php echo $archived_btn; ?>
-            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success ms-1" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll</a>
+            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success ms-1" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll a student</a>
         </div>
     </div>
 </header>

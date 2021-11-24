@@ -1805,7 +1805,6 @@ class StudentAward extends Award implements JsonSerializable
                     ."<a href='enrollment.php?page=credential&id={$this->stud_id}' class='btn btn-primary btn-sm w-auto me-1' title='View Enrollee' target='_blank'><i class='bi bi-eye'></i></a>"
                     ."<a href='enrollment.php?id={$this->stud_id}&action=export' class='btn btn-dark w-auto me-1 btn-sm' title='Export Enrollee' target='_blank'><i class='bi bi-box-arrow-up-left'></i></a>"
                     ."<button data-lrn='{$this->LRN}' class='delete-student-btn btn btn-danger w-auto me-1 btn-sm' title='Delete Enrollee'><i class='bi bi-trash'></i></button>"
-                    ."<button class='btn btn-secondary w-auto btn-sm' title='Archive Enrollee'><i class='bi bi-archive'></i></button>"
                     ."</div>"
             ];
         }
