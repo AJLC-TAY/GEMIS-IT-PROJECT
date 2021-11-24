@@ -361,7 +361,7 @@ export const tableUserOptionsEventListener = (userType) => {
     });
 }
 export const averageSubjectGradesEvent = () => {
-    $(document).on("keyup", ".Second", function () {
+    $(document).on("keyup", ".cal", function () {
         let row = $(this).closest("tr");
         let inputs = row.find("input");
         var final = (parseInt(inputs.eq(0).val()) + parseInt(inputs.eq(1).val())) / 2;
