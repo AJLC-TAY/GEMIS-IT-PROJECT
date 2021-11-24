@@ -3,7 +3,7 @@ require_once ("../class/Administration.php");
 
 function prepareEmptyProgramOptions($programs, $type = NULL) {
     $prog_opt = "<div id='app-spec-options' class='row ". (($type != 'core') ? "" : "d-none" ). " overflow-auto'>"
-        ."<label class='col-sm-4'>Program Options</label>"
+        ."<label class='col-sm-12'>Program Options</label>"
         ."<div id='program-con' class='col-sm-8'>";
         foreach ($programs as $program) {
             $prog_code = $program->get_prog_code();
@@ -136,7 +136,7 @@ if ($action === 'edit') {
 
     $prog_opt = prepareEmptyProgramOptions($programs, $subject_type);
 
-    $title = "<h3>$subject_name</h3><hr>";
+    $title = "<h3><b>$subject_name</b></h3><hr>";
     $input_sub_with_prog = '';
 
     $links = "<li class='breadcrumb-item'><a href='subject.php'>Subject</a></li>"
@@ -222,7 +222,7 @@ if ($action === 'edit') {
         $title = "<h3>$subject_name</h3><hr><h6>$prog_name</h6>";
 
         $prog_opt = "<div id='app-spec-options' class='row overflow-auto'>
-            <label class='col-sm-6'>Program Options</label>
+            <label class='col-sm-12'>Program Options</label>
             <div id='program-con' class='col-sm-8'>";
                 foreach ($programs as $program) {
                     $prog_code_data = $program->get_prog_code();

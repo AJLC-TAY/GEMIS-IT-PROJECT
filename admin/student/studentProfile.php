@@ -215,7 +215,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 } else {
                                     echo $edit_btn;
                                 }
-                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
+                                echo "<a href='../student/changePW.php' class='btn btn-outline-secondary ms-2 mb-2 mt-3 w-100' title='Change Password'>CHANGE PASSWORD</a>";
                             }
                          ?>
 

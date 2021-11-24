@@ -65,7 +65,7 @@ if ($_SESSION['user_type'] == "AD") {
     <div class="container">
         <div class="row justify-content-end">
              <div class="col-auto">
-                <button class="btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
+                <button class="btn btn-sm btn-primary" onclick="refresh();"><i class="bi bi-arrow-clockwise me-2"></i>Refresh</button>
              </div>
              <div class="col-auto pt-2">
                 <div class="form-check form-switch">

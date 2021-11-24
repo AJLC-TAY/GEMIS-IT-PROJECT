@@ -698,8 +698,8 @@ class Administration extends Dbconfig
 
             $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
                 . "<div class='edit-options' style='display: none;'>"
-                . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
                 . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
                 . "</div>");
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
