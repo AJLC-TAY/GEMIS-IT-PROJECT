@@ -332,11 +332,11 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             <div class="d-flex">
                                 <?php
                                 echo "<div class='form-check me-4'>
-                                            <input class='form-check-input i-group-opt' type='radio' $disabled name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                            <input class='form-check-input i-group-opt' type='radio' name='group' id='yes' value='Yes' >
                                             <label class='form-check-label' for='yes'> Yes </label>
                                         </div>
                                         <div class='form-check'>
-                                            <input class='form-check-input i-group-opt' type='radio' name='group' $disabled id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                                            <input class='form-check-input i-group-opt' type='radio' name='group' id='no' value='No' >
                                             <label class='form-check-label' for='no'> No </label>
                                         </div>";
                                 ?>
@@ -344,7 +344,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         </div>
                         <div class='col-md-8'>
                             <label class="col-form-label text-start">If yes, please specify</label>
-                            <input placeholder="Enter indigenous group here" class="form-control" name="group-name" type="text" value="<?php echo $indigenous_group; ?>" <?php echo $readonly ?> disabled>
+                            <input placeholder="Enter indigenous group here" class="form-control" name="group-name" type="text" value="<?php echo $indigenous_group; ?>" <?php echo $readonly ?>>
                         </div>
                     </div>
                     <!-- MOTHER TONGUE & RELIGION -->
@@ -515,11 +515,11 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <div class="d-flex">
                             <?php
                             echo "<div class='form-check me-4'>"
-                                . "<input class='form-check-input' type='radio' name='balik' id='yes-balik' value='Yes' " . (!is_null($indigenous_group) ? "checked" : "") . ">"
+                                . "<input class='form-check-input' type='radio' name='balik' id='yes-balik' value='Yes' >"
                                 . "<label class='form-check-label' for='yes-balik'> Yes </label>"
                                 . "</div>"
                                 . "<div class='form-check'>"
-                                . "<input class='form-check-input' type='radio' name='balik' id='no-balik' value='No' " . (is_null($indigenous_group) ? "checked" : "") . ">"
+                                . "<input class='form-check-input' type='radio' name='balik' id='no-balik' value='No'>"
                                 . "<label class='form-check-label' for='no-balik'> No </label>"
                                 . "</div>";
                             ?>
@@ -539,7 +539,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                             </div>
                             <div class="col-md-4">
                                 <label for="general-average" class="col-form-label">General Average</label>
-                                <input placeholder="Enter general average" id="general-average" class="form-control" name="general-average" type="number" value="<?php echo $gen_ave; ?>">
+                                <input  placeholder="Enter general average" id="general-average" class="form-control" name="general-average" type="number" value="<?php echo $gen_ave; ?>">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -730,7 +730,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
         <div class="container">
             <div class="row">
                 <div class="col-2">
-                    <input id="%ID%" type="checkbox" class="form-check-input" name="subjects[]" value="%ID%">
+                    <input id="%ID%"  type="checkbox" class="form-check-input" name="subjects[]" value="%ID%">
                 </div>
                 <label for="%ID%" class="form-check-label col-form-label col-10 py-0">
                     %SUBJECTNAME%

@@ -8,10 +8,9 @@
             <li class="breadcrumb-item active">Faculty</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between mb-3 row">
-        <h3 class="fw-bold col-auto">Faculty Members</h3>
-        <div class="col-auto">
-            <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Faculty</button>
+    <div class="d-flex justify-content-between mb-3">
+        <h3 class="fw-bold">Faculty Members</h3>
+        <div>
             <a href="faculty.php?action=add" id="add-btn" class="btn btn-success" title='Add new faculty'><i class="bi bi-plus me-2"></i>Add Faculty</a>
         </div>
     </div>

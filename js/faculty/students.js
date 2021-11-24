@@ -43,7 +43,7 @@ function changeName(name) {
  * @returns {jQuery|*}       Bootstrap-table object.
  */
 function initializeTable(id, url) {
-$(id).bootstrapTable(tableSetup);
+    $(id).bootstrapTable(tableSetup);
     tableSetup.url = url;
     // if (classType === 'advisory') {
     //     return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
@@ -91,20 +91,20 @@ function toggleGradesColumn(classType) {
 
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
-if (qtr == '2'){
+if (qtr == '2') {
     var promotionMsg = "Promoting the student will directly enroll him/her to the second semester. This action can not be undone."
 } else {
-    if(sectionLvl == 12){
+    if (sectionLvl == 12) {
         var promotionMsg = "Promoting the student means that he/she has completed the senior high curriculum."
     } else {
         var promotionMsg = "Promoting the student means that he/she is viable for next level's enrollment. This action can not be undone."
     }
 }
 var studID = '';
-$(function () {
+$(function() {
     preload('#advisory');
 
-    
+
 
     $("#classes").select2({
         theme: "bootstrap-5",
@@ -122,7 +122,7 @@ $(function () {
         changeName(classTmp);
     }
 
-    $(document).on("change", "#classes", function () {
+    $(document).on("change", "#classes", function() {
         let selected, url, classType, sectionName, displayGrades;
         selected = $("#classes option:selected");
         url = selected.attr("data-url");
@@ -136,7 +136,7 @@ $(function () {
         setTableData(classType, url);
     });
 
-    $(document).on("click", ".export-grade", function () {
+    $(document).on("click", ".export-grade", function() {
         let reportID = $(this).attr("data-report-id");
         let studID = $(this).attr("data-stud-id");
         let form = $("#confirm-sig-form");
@@ -162,7 +162,7 @@ $(function () {
         $(".grading-confirmation").modal("toggle");
     });
 
-    $(document).on("click", "#confirm", function (e) {
+    $(document).on("click", "#confirm", function(e) {
         var stat = document.getElementById("label").innerText == "submit" ? "1" : "0";
         this.attr
         console.log(stat);
@@ -182,7 +182,7 @@ $(function () {
                 'stat': stat
             };
 
-            $.post("action.php", grades, function (data) {
+            $.post("action.php", grades, function(data) {
                 // console.log(grades);
                 console.log(grades);
                 studentTable.bootstrapTable("refresh");
@@ -193,7 +193,7 @@ $(function () {
         $('.grading-confirmation').modal('hide');
         $(".number").attr('readOnly', true);
     });
-    $(document).on("click", "#promote", function () {
+    $(document).on("click", "#promote", function() {
         console.log('entered');
         console.log(studID);
         var record = {
@@ -202,16 +202,16 @@ $(function () {
             'promote': 1
         };
 
-        $.post("action.php", record, function (data) {
+        $.post("action.php", record, function(data) {
             console.log(data);
             studentTable.bootstrapTable("refresh");
 
         });
         $('.promotion-confirmation').modal('hide');
-        showToast('Success','Student Sucessfully Promoted');
+        showToast('success', 'Student Sucessfully Promoted');
 
     });
-    $(document).on("click", ".stud-promote", function () {
+    $(document).on("click", ".stud-promote", function() {
         console.log("stud-promote clicked");
         studID = $(this).attr("data-stud-id");
         var modal = $('.promotion-confirmation');
@@ -220,7 +220,7 @@ $(function () {
 
     });
 
-    $(document).on("click", ".multi-promote", function (e) {
+    $(document).on("click", ".multi-promote", function(e) {
         $('#view-candidates-modal').modal('show');
     });
 
@@ -233,7 +233,7 @@ $(function () {
         row = $(this).closest("tr");
         let inputState = true;
 
-        switch($(this).attr("data-type")) {
+        switch ($(this).attr("data-type")) {
             case "remove":
                 type = "undo";
                 row.addClass("bg-light");
@@ -248,7 +248,7 @@ $(function () {
                 inputState = false;
                 $("#".id).val('enable');
                 row.removeClass("bg-light");
-                
+
                 break;
         }
         $(`.action[data-id='${id}'][data-type='${type}']`).show();
@@ -256,7 +256,7 @@ $(function () {
         console.log($("#for-promotion-table").bootstrapTable("getRowByUniqueId", id));
     });
 
-    $(document).on("click", ".promote-btn", function (e) {
+    $(document).on("click", ".promote-btn", function(e) {
         //gets table
         var oTable = document.getElementById('for-promotion-table');
 
@@ -272,38 +272,38 @@ $(function () {
             //gets amount of cells of current row
 
             //get names of students
-                var ID = oCells.item(0).innerHTML;
+            var ID = oCells.item(0).innerHTML;
 
-                if(!oCells.item(1).innerHTML.includes("disabled")){
-                    var record = {
-                            'action': 'promote',
-                            'stud_id': ID,
-                            'promote': 1
-                        };
-                
-                        $.post("action.php", record, function (data) {
-                            console.log(data);
-                            studentTable.bootstrapTable("refresh");
-                            forPromotionStudentTable.bootstrapTable("refresh")
+            if (!oCells.item(1).innerHTML.includes("disabled")) {
+                var record = {
+                    'action': 'promote',
+                    'stud_id': ID,
+                    'promote': 1
+                };
 
-                
-                        });
-                }
-                
-                $('#view-candidates-modal').modal('hide');
-            
+                $.post("action.php", record, function(data) {
+                    console.log(data);
+                    studentTable.bootstrapTable("refresh");
+                    forPromotionStudentTable.bootstrapTable("refresh")
+
+
+                });
+            }
+
+            $('#view-candidates-modal').modal('hide');
+
         }
-        showToast('Success','Students Sucessfully Promoted');
+        showToast('Success', 'Students Sucessfully Promoted');
 
     });
 
 
-    $(document).on("click", ".calculate", function () {
+    $(document).on("click", ".calculate", function() {
         let formData = [
-            {name: 'action', value: 'calculateGeneralAverage'},
-            {name: 'section_code', value: $(this).attr("data-code")}
+            { name: 'action', value: 'calculateGeneralAverage' },
+            { name: 'section_code', value: $(this).attr("data-code") }
         ];
-        $.post("action.php", formData, function (data) {
+        $.post("action.php", formData, function(data) {
             data = JSON.parse(data);
             data.forEach(e => {
                 $(`input[name*='/${e.report_id}/${e.semester}']`).val(e.general_ave);
@@ -311,7 +311,7 @@ $(function () {
         });
     });
 
-    $(document).on("shown.bs.modal", "#view-candidates-modal", function () {
+    $(document).on("shown.bs.modal", "#view-candidates-modal", function() {
         forPromotionStudentTable.bootstrapTable("resetView");
     });
 
