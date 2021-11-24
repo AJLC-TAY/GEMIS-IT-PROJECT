@@ -65,43 +65,18 @@ while ($row = mysqli_fetch_assoc($result)) {
         <section id="main-content">
             <section class="wrapper">
                 <div class="row">
-                    <div class="col-lg-12">
                         <div class="row mt ps-3">
 
-                            <?php
-                            ?>
-                            <!-- HEADER -->
-                            <header>
-                                <!-- BREADCRUMB -->
-                                <nav aria-label='breadcrumb'>
-                                    <ol class='breadcrumb'>
-                                        
-                                    </ol>
-                                </nav>
-                                <div class="d-flex justify-content-between">
-                                    <span>
-                                        <h4><b>Transcript of Records</b></h4>
-                                        <?php //echo $school_year; 
-                                        ?>
-                                        <?php if ($user_type == 'ST') {
-                                            echo "<h3>{$_SESSION['User']}</h3>";
-                                        } else {
-                                            echo "<h3>$lastName, $firstName $midName</h3>";
-                                        } ?>
-                                    </span>
-                                    
-                                </div>
-                            </header>
-                            <hr class='m-1'>
+                            
                             <?php
                             function prepareGradeRecordsHTML($grade)
                             {
                                 $row = '';
                                 foreach ($grade as $gradeInfo) {
                                     $row .= "<tr>
-            <td>{$gradeInfo['sub_name']}</td>
-            <td align='center'>{$gradeInfo['grade_f']}</td>
-            </tr>";
+                                    <td>{$gradeInfo['sub_name']}</td>
+                                    <td align='center'>{$gradeInfo['grade_f']}</td>
+                                    </tr>";
                                 }
                                 return $row;
                             }
@@ -109,108 +84,47 @@ while ($row = mysqli_fetch_assoc($result)) {
                             function renderSemesterGradeTable($semester_desc, $grades, $general_average)
                             {
                                 $grd =  "
-        <h6 class='fw-bolder mb-0' style='font-size: 14px;'>$semester_desc</h6>
-        <table class='table w-100 table-sm' style='font-size: 12px;'>
-            <col style='width: 65%;'>
-            
-            <col style='width: 15%;'>
-            
-            <thead class='text-center bg-light'>
-                <tr>
-                    <td rowspan='2' valign='middle' align='center'>SUBJECTS</td>
-                    <td rowspan='2' valign='middle' align='center'>SEMESTER FINAL GRADE</td>
-                </tr>
-                
-            </thead>
-            <tbody>"
-                                    . (isset($grades['core']) ?
-                                        "<tr class='bg-light'>
-                    <td colspan='2'>Core Subjects</td>
-                </tr>" .
-                                        prepareGradeRecordsHTML($grades['core']) : "")
-                                    . (isset($grades['applied']) ? "<tr class='bg-light'>
-                    <td colspan='2' class='fw-bold'>Applied Subjects</td>
-                </tr>" . prepareGradeRecordsHTML($grades['applied']) : "")
-                                    . (isset($grades['specialized']) ?   "<tr class='bg-light'>
-                    <td colspan='2' class='fw-bold'>Specialized</td>
-                    </tr>" . prepareGradeRecordsHTML($grades['specialized']) : "");
-
-
-                                //    if ($_SESSION['user_type'] == 'ST') {
-
-                                //    } else {
-
-                                //        if (array_key_exists('specialized', $grades)) {
-                                //            prepareGradeRecordsHTML($grades['specialized']);
-                                //        }
-                                //        else {
-                                //            for ($x = 0; $x < 5; $x++) {
-                                //                $grd .= "<tr height=26>
-                                //                                    <td> </td>
-                                //                                    <td align='center'> </td>
-                                //                                    <td align='center'> </td>
-                                //                                    <td align='center'> </td>
-                                //                                    </tr>";
-                                //            }
-                                //        }
-                                //    }
-                                //    if (array_key_exists('specialized', $grades)) {
-                                //        $grd .= "<tr class='bg-light'>
-                                //                    <td colspan='4' class='fw-bold'>Specialized</td>
-                                //                    </tr>";
-                                //        prepareGradeRecordsHTML($grades['specialized']);
-                                //    }
-
-                                $grd .= "<tr>
-                <td colspan='' class='border-0 fst-italic text-end pe-3'>General Average for the Semester</td>
-                    <td class='bg-white text-center'>$general_average</td>
-                </tr>
-            </tbody>
-        </table>";
+                                        <h6 class='fw-bolder mb-0' style='font-size: 14px;'>$semester_desc</h6>
+                                        <table class='table w-100 table-sm' style='font-size: 12px;'>
+                                            <col style='width: 65%;'>
+                                            
+                                            <col style='width: 15%;'>
+                                            
+                                            <thead class='text-center bg-light'>
+                                                <tr>
+                                                    <td rowspan='2' valign='middle' align='center'>SUBJECTS</td>
+                                                    <td rowspan='2' valign='middle' align='center'>SEMESTER FINAL GRADE</td>
+                                                </tr>
+                                                
+                                            </thead>
+                                            <tbody>"
+                                                                    . (isset($grades['core']) ?
+                                                                        "<tr class='bg-light'>
+                                                    <td colspan='2' class='fw-bold'>Core Subjects</td>
+                                                </tr>" .
+                                                                        prepareGradeRecordsHTML($grades['core']) : "")
+                                                                    . (isset($grades['applied']) ? "<tr class='bg-light'>
+                                                    <td colspan='2' class='fw-bold'>Applied Subjects</td>
+                                                </tr>" . prepareGradeRecordsHTML($grades['applied']) : "")
+                                                                    . (isset($grades['specialized']) ?   "<tr class='bg-light'>
+                                                    <td colspan='2' class='fw-bold'>Specialized</td>
+                                                    </tr>" . prepareGradeRecordsHTML($grades['specialized']) : "");
+                                                                $grd .= "<tr>
+                                                <td colspan='' class='border-0 fst-italic text-end pe-3'>General Average for the Semester</td>
+                                                    <td class='bg-white text-center'>$general_average</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>";
 
                                 echo $grd;
                             }
-
-                            // function prepareStudentAttendanceHTML($label, $att)
-                            // {
-                            //     $total = 0;
-                            //     foreach ($att[$label] as $month => $days) {
-                            //         $total += $days;
-                            //         echo "<td align='center'>$days</td>";
-                            //     }
-                            //     echo "<td align='center'>$total</td>";
-                            // }
-
-
-                            $observed_values_desc = [
-                                "Makadiyos" => [
-                                    "Expresses one’s spiritual beliefs while respecting the spirtiual beliefs of others.",
-                                    "Shows  adherence to ethical principles by uphoalding truth in all undertakings."
-                                ],
-                                "Makatao"  =>  [
-                                    "In sensitive to individual, social, and cultural differences.",
-                                    "Demonstrates contributions towards solidarity"
-                                ],
-                                "Makakalikasan" => [
-                                    "Cares for environment and utilizes resources wisely, judiciously and economically.",
-                                ],
-                                "Makabansa"  => [
-                                    "Demonstrates pride in being a Filipino; exercises the rights and responsibilities of a Filipino citizen.",
-                                    "Demonstrate appropriate behavior in carrying out activities in school, community and country."
-                                ]
-                            ];
-
-                            // $observed_values = $admin->listValuesReport();
-                            // print_r($attendance);
                             ?>
 
 
 
-                            <div class="d-flex justify-content-center p-3">
+                            <div class="d-flex justify-content-center p-19 m-3">
                                 <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
                                     <ul class="template p-0 w-100">
-
-
                                         <li class="p-0 mb-0 mx-auto p-3">
                                             
                                                 <?php
@@ -219,7 +133,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                 } else {
                                                     $x = (int)$grade_level;
                                                 }
-                                                
                                                         for ($ctr = $x ; $ctr < ($grade_level + 1); $ctr++ ){
                                                             echo "<p class='fw-bolder mb-0' style='font-size: 20px;'>GRADE $ctr</p>
                                                                     <div class='row'> <div class='col-6'>";
@@ -228,20 +141,11 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                             echo "<div class='col-6'>";
                                                             renderSemesterGradeTable('SECOND SEMESTER', $grades[$ctr][0][2], $general_averages[$ctr][0][1]);
                                                             echo "</div> </div>";
-                                                            
-                                                            
                                                         }
-                                                        
                                                 ?>
-                                            
                                         </li>
-
-
-
                                     </ul>
                                 </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>

@@ -74,13 +74,14 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
     </nav>
     <div class="d-flex justify-content-between">
         <span>
-            <h4><b>Grade Report</b></h4>
+            
             <?php //echo $school_year; ?>
-            <?php if ($user_type == 'ST') {
-                echo "<h3>{$_SESSION['User']}</h3>";
-            } else {
-                echo "<h3>$lastName, $firstName $midName</h3>";
-            } ?>
+            <?php if($user_type != 'ST'){
+                echo "<h4><b>Grade Report</b></h4>
+                <h3>$lastName, $firstName $midName</h3>";
+            }
+                
+             ?>
         </span>
         <?php if ($user_type != 'ST') { ?>
             <div class="mt-4">
@@ -89,8 +90,11 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
         <?php } ?>
     </div>
 </header>
-<hr class='m-1'>
+
 <?php
+if ($user_type != 'ST'){
+    echo"<hr class='m-1'>";
+}
 function prepareGradeRecordsHTML($grade)
 {
     $row = '';
@@ -129,7 +133,7 @@ function renderSemesterGradeTable($semester_desc, $grades, $general_average)
             <tbody>"
         . (isset($grades['core']) ?
             "<tr class='bg-light'>
-                    <td colspan='4'>Core Subjects</td>
+                    <td colspan='4'class='fw-bold'><b>Core Subjects</td>
                 </tr>" .
         prepareGradeRecordsHTML($grades['core']) : "")
         . (isset($grades['applied']) ? "<tr class='bg-light'>
