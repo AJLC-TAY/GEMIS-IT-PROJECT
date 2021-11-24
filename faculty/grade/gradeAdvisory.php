@@ -35,7 +35,8 @@
                 $class = "";
             } ?>
             <div class="d-flex-inline mb-2 ">
-                <button type="button" class="btn btn-outline-dark ms-2 calculate" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
+                
+                <button type="button" class="btn btn-outline-dark ms-2 calculate <?php echo $class ?>" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
                 <button type="button" class="btn btn-secondary multi-promote <?php echo $class ?>"></i>Promote</button>
             </div>
             <?php

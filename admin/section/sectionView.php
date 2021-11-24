@@ -46,7 +46,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         </div>
         <div class="col-md-7 d-flex justify-content-lg-end">
             <button data-code='<?php echo $sect_code; ?>' class='btn btn-primary edit-sub-class m-1' title='Subject classes'><i class='bi bi-pencil-square me-2'></i>Subject Class</button>
-            <button type="button" class="btn btn-secondary m-1"><i class="bi bi-archive me-1"></i>Archive Section</button>
             <a href="section.php?sec_code=<?php echo $sect_code; ?>&action=export" class="btn btn-outline-dark m-1" title='Export section'><i class="bi bi-box-arrow-up-left me-2"></i>Export</a>
         </div>
     </div>
