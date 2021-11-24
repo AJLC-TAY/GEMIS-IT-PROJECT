@@ -124,7 +124,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
 </header>
 <div class="d-flex justify-content-between align-items-center">
     <?php if($user_type != 'ST'){
-        echo "<h4 class='my-auto fw-bold'> $name Profile</h4>";
+        echo "<h4 class='my-auto fw-bold'> $name</h4>";
     }
     ?>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
@@ -314,7 +314,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 <div class="row w-100 h-auto text-start mx-auto">
                     <div class="row p-0">
                         <div class="row">
-                            <div class="col-md-4 card">
+                            <div class="col-md-4 card ms-4 mt-2">
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <p class="fw-bold text-center">PSA DOCUMENT</p>
@@ -324,7 +324,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
 
-                            <div class="col-md-4 card ms-4">
+                            <div class="col-md-4 card ms-4 mt-2">
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <p class="fw-bold text-center">FORM 137</p>
