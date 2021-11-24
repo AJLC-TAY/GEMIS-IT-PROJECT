@@ -99,12 +99,16 @@ $(function() {
     $("#psaUpload").change(function(){
         readURL(this, "#psaResult");
     });
+    $("#updload").change(function(){
+        readURL(this, "#resultImg");
+    });
 
     $("#form137Upload").change(function(){
         readURL(this, "#form137Result");
     });
 
     $(".psa-photo").click(()=> $("#psaUpload").click());
+    $(".profile-photo").click(()=> $("#upload").click());
     $(".form137-photo").click(()=> $("#form137Upload").click());
 
     $("#psa").click(function(){

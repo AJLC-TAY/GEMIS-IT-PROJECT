@@ -2702,6 +2702,7 @@ class Administration extends Dbconfig
                 'fname' => trim($_POST['m_firstname']),
                 'mname' => trim($_POST['m_middlename']) ?: NULL,
                 'lname' => trim($_POST['m_lastname']),
+                'extname' => NULL,
                 'sex' => trim($_POST['m_sex']),
                 'cp_no' => trim($_POST['m_contactnumber']),
                 'occupation' => trim($_POST['m_occupation']) ?: NULL
@@ -2716,57 +2717,71 @@ class Administration extends Dbconfig
             $relationship = trim($_POST['relationship']);
         }
 
-        // Image validation
-        $psa_img = $this->validateImage($_FILES['psaImage'], 8000000);
-        $form_img = $this->validateImage($_FILES['form137Image'], 8000000);
-        $profile_img = $this->validateImage($_FILES['image'], 5242880);
-
-        $params = [];
-        $img_list = [$psa_img, $form_img, $profile_img];
-        foreach ($img_list as $i => $image) {
-            # add image to the parameters if valid
-            if ($image['status'] == 'valid') {
-                # Upload image
-                $folder = ($i == array_key_last($img_list)) ? "student" : "credential";
-                $fileDestination = "uploads/$folder/$sy_id/{$image['name']}";
-                move_uploaded_file($image['file'], "../" . $fileDestination);
-                echo "Successfully uploaded image<br>";
-                $params[] = $fileDestination;
-            } else {
-                $params[] = NULL;
+        # images
+        if ($_FILES['psaImage']['size'] > 0) {
+            $result = $this->query("SELECT psa_birth_cert FROM student WHERE stud_id = '$stud_id';");
+            if (mysqli_num_rows($result) > 0) {
+                $path =  mysqli_fetch_row($result)[0];
+                if (file_exists($path)) {
+                    unlink("../$path");
+                }
             }
+            $psa_img = $_FILES['psaImage'];
+            $filename = basename($psa_img['name']);
+            $file_type = pathinfo($filename, PATHINFO_EXTENSION);
+            $img_name = time() . "_" . uniqid("", true) . ".$file_type";
+            $img_content = $psa_img['tmp_name'];
+            $fileDestination = "uploads/credential/$sy_id/$img_name";
+            move_uploaded_file($img_content, "../" . $fileDestination);
+            $this->prepared_query("UPDATE student SET psa_birth_cert = ?  WHERE stud_id = ?;", [$fileDestination, $stud_id], "si");
+        }
+
+        if ($_FILES['form137Image']['size'] > 0) {
+            $result = $this->query("SELECT form_137 FROM student WHERE stud_id = '$stud_id';");
+            if (mysqli_num_rows($result) > 0) {
+                $path =  mysqli_fetch_row($result)[0];
+                if (file_exists($path)) {
+                    unlink("../$path");
+                }
+            }
+            $form_img = $_FILES['form137Image'];
+            $filename = basename($form_img['name']);
+            $file_type = pathinfo($filename, PATHINFO_EXTENSION);
+            $img_name = time() . "_" . uniqid("", true) . ".$file_type";
+            $img_content = $form_img['tmp_name'];
+            $fileDestination = "uploads/credential/$sy_id/$img_name";
+            move_uploaded_file($img_content, "../" . $fileDestination);
+            $this->prepared_query("UPDATE student SET form_137 = ?  WHERE stud_id = ?;", [$fileDestination, $stud_id], "si");
+
+        }
+        if ($_FILES['image']['size'] > 0) {
+            $result = $this->query("SELECT id_picture FROM student WHERE stud_id = '$stud_id';");
+            if (mysqli_num_rows($result) > 0) {
+                $path =  mysqli_fetch_row($result)[0];
+                if (file_exists($path)) {
+                    unlink("../$path");
+                }
+            }
+            $profile_img = $_FILES['image'];
+            $filename = basename($profile_img['name']);
+            $file_type = pathinfo($filename, PATHINFO_EXTENSION);
+            $img_name = time() . "_" . uniqid("", true) . ".$file_type";
+            $img_content = $profile_img['tmp_name'];
+            $fileDestination = "uploads/student/$sy_id/$img_name";
+            move_uploaded_file($img_content, "../" . $fileDestination);
+            $this->prepared_query("UPDATE student SET id_picture = ?  WHERE stud_id = ?;", [$fileDestination, $stud_id], "si");
         }
 
         //defining update student 
         $stud_params = [
             $lrn, $first_name, $middle_name, $last_name, $ext_name,
             $sex, $age, $birthdate, $birth_place, $indigenous_group,
-            $mother_tongue, $religion, $cp_no, $belong_to_ipcc,
-            $params[0], $params[1], $params[2], $stud_id
+            $mother_tongue, $religion, $cp_no, $belong_to_ipcc, $stud_id
         ];
-        $stud_types = "issss"."sdsss"."ssii"."sssi";
-        var_dump($params);
-        var_dump($stud_params);
-
-        #Add picture parameter if images are not null
-        // $imgQuery = $psaQuery = "";
-        // if ($profile_img !== NULL) {
-        //     $imgQuery = ", id_picture=?";
-        //     $stud_params[] = $profile_img;
-        //     $stud_types .= "s";
-        // }
-
-        // if ($psa_img !== NULL) {
-        //     $psaQuery = ", psa_birth_cert=?";
-        //     $stud_params[] = $psa_img;
-        //     $stud_types .= "s";
-        // }
-
-         $stud_params[] = $id = $_POST['student_id'];
-         $stud_types .= "i";
+        $stud_types = "issss"."sdsss"."ssiii";
 
         $stud_query = "UPDATE student SET LRN=?, first_name=?, middle_name=?, last_name=?, ext_name=?, sex=?, age=?, birthdate=?, birth_place=?,
-        indigenous_group=?,mother_tongue=?,religion=?,cp_no=?,belong_to_IPCC=?, psa_birth_cert=?, form_137=?, id_picture=? WHERE stud_id= ?";
+        indigenous_group=?,mother_tongue=?,religion=?,cp_no=?,belong_to_IPCC=? WHERE stud_id= ?;";
         $this->prepared_query($stud_query, $stud_params, $stud_types);
 
         $address_params = [

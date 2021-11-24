@@ -109,7 +109,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
             <div class="image-preview-con">
                 <img id='form137Result' src="<?php echo "../" . $form137; ?>" alt='form137 image' class = "img-thumbnail w-100 h-100" />
                 <div class='edit-img-con text-center'>
-                    <p role='button' class="edit-text psa-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
+                    <p role='button' class="edit-text form137-photo opacity-0"><i class='bi bi-pencil-square me-2'></i>Edit</p>
                 </div>
             </div>
             <input id='form137Upload' onchange="validate('#form137Upload')" class='form-control form-control-sm mt-2 w-75' name='form137Image' type='file' accept='image/png, image/jpg, image/jpeg'>
