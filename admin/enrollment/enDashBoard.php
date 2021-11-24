@@ -4,7 +4,7 @@ $deactivate_modal = "";
 $enroll_setup = "";
 $enroll_report = "";
 if ($_SESSION['user_type'] == "AD") {
-    $enroll_report = "<a href='enrollment.php?page=generateReport' class='btn btn-secondary button col me-3'><i class='bi bi-file-earmark-text-fill fa-3x'></i><br>Generate Report</a>";
+    $enroll_report = "<a href='enrollment.php?page=generateReport' class='btn btn-secondary button col me-3 mt-1'><i class='bi bi-file-earmark-text-fill fa-3x'></i><br>Generate Report</a>";
     $enroll_status = "<div class='toggle d-flex flex-row-reverse align-items-center'>
             <label class='switch ms-3'>
                 <input name='enrollment' type='checkbox' " . $_SESSION['enroll_status'] == 0 ? '' : 'checked' . ">
@@ -35,7 +35,7 @@ if ($_SESSION['user_type'] == "AD") {
                                 </div>
                             </div>
                         </div>";
-    $enroll_setup = "<a href='enrollment.php?page=setup' class='btn btn-secondary button col me-3'><i class='bi bi-gear-wide-connected fa-3x'></i><br>Enrollment Setup</a>";
+    $enroll_setup = "<a href='enrollment.php?page=setup' class='btn btn-secondary button col me-3 mt-1'><i class='bi bi-gear-wide-connected fa-3x'></i><br>Enrollment Setup</a>";
 }
 ?>
 <!-- HEADER -->
@@ -65,7 +65,7 @@ if ($_SESSION['user_type'] == "AD") {
     <div class="container">
         <div class="row justify-content-end">
              <div class="col-auto">
-                <button class="btn btn-sm btn-primary" onclick="refresh();">Refresh</button>
+                <button class="btn btn-sm btn-primary" onclick="refresh();"><i class="bi bi-arrow-clockwise me-2"></i>Refresh</button>
              </div>
              <div class="col-auto pt-2">
                 <div class="form-check form-switch">
@@ -118,12 +118,12 @@ if ($_SESSION['user_type'] == "AD") {
     <hr class="mt-1 mb-3">
     <div class="col-lg-12 ms-2">
         <div class="row">
-            <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3"> <i class="bi bi-person-lines-fill fa-3x"></i><br>View Enrollment List</a>
+            <a href='enrollment.php?page=enrollees' class="btn btn-secondary button col me-3 mt-1"> <i class="bi bi-person-lines-fill fa-3x"></i><br>View Enrollment List</a>
             <?php
             echo $enroll_report;
             echo $enroll_setup;
             ?>
-            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3"><i class="bi bi-ui-radios fa-3x"><br></i>Enrollment Form</a>
+            <a href='enrollment.php?page=form' class="btn btn-secondary button col me-3 mt-1"><i class="bi bi-ui-radios fa-3x"><br></i>Enrollment Form</a>
         </div>
     </div>
 </div>

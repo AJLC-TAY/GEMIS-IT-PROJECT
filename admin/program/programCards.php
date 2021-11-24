@@ -9,23 +9,20 @@ $admin = new Administration() ?>
         </ol>
     </nav>
     <div class="row justify-content-between">
-        <div class="col-md-4">
+        <div class="col-auto">
             <h3 class="fw-bold">Programs</h3>
         </div>
-        <div class="col-md-8  d-flex justify-content-lg-end">
-<!--            <div class="col-auto">-->
-<!--                <button type="button" class="view-archive btn btn-secondary m-1"><i class="bi bi-eye me-2"></i>View Archived Program</button>-->
-<!--            </div>-->
             <div class="col-auto">
-                <button type="button" class="btn btn-success m-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Program</button>
+                <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Program</button>
             </div>
-        </div>
     </div>
-    <!-- SEARCH BAR -->
-    <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
 </header>
 
 <div class="container">
+        <!-- SEARCH BAR -->
+        <form action="">
+        <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
+    </form>
     <!-- NO RESULTS MESSAGE -->
     <div class="w-100 d-flex justify-content-center">
         <p class="no-result-msg my-5 mx-auto" style="display: none;">No results found</p>

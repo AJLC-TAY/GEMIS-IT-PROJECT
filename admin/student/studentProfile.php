@@ -33,8 +33,7 @@ $form137 = $userProfile->get_form137();
 $parents = $userProfile->get_parents();
 $guardian = $userProfile->get_guardians();
 $grades = $userProfile->get_grades();
-if (is_null($parents)) {
-    $parents = NULL;
+if ($parents['f']['fname'] == '') {
 } else {
     foreach ($parents as $par) {
         $parent = $par['sex'] == 'f' ? 'mother' : 'father';
@@ -124,7 +123,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
 </header>
 <div class="d-flex justify-content-between align-items-center">
     <?php if($user_type != 'ST'){
-        echo "<h4 class='my-auto fw-bold'> $name Profile</h4>";
+        echo "<h4 class='my-auto fw-bold'> $name</h4>";
     }
     ?>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
@@ -314,7 +313,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 <div class="row w-100 h-auto text-start mx-auto">
                     <div class="row p-0">
                         <div class="row">
-                            <div class="col-md-4 card">
+                            <div class="col-md-4 card ms-4 mt-2">
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <p class="fw-bold text-center">PSA DOCUMENT</p>
@@ -324,7 +323,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
 
-                            <div class="col-md-4 card ms-4">
+                            <div class="col-md-4 card ms-4 mt-2">
                                 <div class="thumbnail">
                                     <div class="caption">
                                         <p class="fw-bold text-center">FORM 137</p>
@@ -362,8 +361,8 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             $sub_grd_id = (int) $sub_grd['grade_id'];
                                             echo "<tr>
                                                 <td class='ps-3'>{$sub_grd['name']}</td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['first']}' disabled></td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['second']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['first']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['second']}' disabled></td>
                                                 <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
                                                 <td  align='center'>
                                                     <div class='d-flex justify-content-center'>

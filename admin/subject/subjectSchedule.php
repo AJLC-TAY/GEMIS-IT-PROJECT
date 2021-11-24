@@ -42,7 +42,7 @@ foreach ($programs as $prog) {
         <select id="program-select" class="form-select me-1">
             <?php echo $prog_opt; ?>
         </select>
-        <button class='btn btn-outline-primary edit-sched-btn ms-2'>Edit</button>
+        <button class='btn btn-primary edit-sched-btn ms-2'><i class="bi bi-pencil-square me-2"></i>Edit</button>
         <div class="d-flex edit-opt-con d-none ms-1">
             <a href="subject.php?page=schedule" class="btn btn-dark me-1">Cancel</a>
             <input type="submit" form="schedule-form" class="btn btn-success save-sched-btn" value="Save">

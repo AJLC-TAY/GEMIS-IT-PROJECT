@@ -1299,7 +1299,6 @@ trait Enrollment
             $data[$track]['description'] = $row['curr_desc'];
             $data[$track]['strands'][$program]['counts'][$index] = $row['count'];
 
-
 //            if (count($data) === 0) {
 //                $program_array[$index] = $count;
 //                $data[$track] = [$program => $program_array];
@@ -1311,6 +1310,7 @@ trait Enrollment
 //                    $data[$track] = [$program => $program_array];
 //                }
 //            }
+
         }
 
 //        foreach ($programs as $track_code => $prog_data) {
@@ -1871,7 +1871,7 @@ trait Grade
                 'name' => $grd['stud_name'],
                 'grd_1' => "<input min='60' max='100' name='{$grd['stud_id']}/first' class='form-control form-control-sm text-center mb-0 First number' $first value='{$grd['first_grading']}'>",
                 'grd_2' => "<input min='60' max='100' name='{$grd['stud_id']}/second' class='cal  form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['second_grading']}'>",
-                'grd_f' => "<input min='60' max='100' name='{$grd['stud_id']}/final_grade' class='form-control form-control-sm text-center mb-0 Second number' $second_final value='{$grd['final_grade']}'>"
+                'grd_f' => "<input min='60' max='100' name='{$grd['stud_id']}/final_grade' class='form-control form-control-xs text-center mb-0 Second number' $second_final value='{$grd['final_grade']}'>"
             ];
         }
 
