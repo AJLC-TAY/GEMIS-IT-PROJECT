@@ -6,7 +6,7 @@ $con = $dbConfig->connect();
 $uid = $_POST['UName'];
 if(isset($_POST['loginBtn']))
 {
-    $inputPassword = $_POST['Password'];
+    $inputPassword = $_POST['password'];
     $query = "SELECT id_no, password, user_type FROM user WHERE id_no='{$uid}' AND is_active=1;";
     $result = mysqli_query($con,$query);
 
