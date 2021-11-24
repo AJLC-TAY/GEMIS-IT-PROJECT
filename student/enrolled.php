@@ -17,14 +17,12 @@ include_once('../inc/studentSideBar.php');
     <!-- SPINNER END -->
     <section id="container">
         <!-- MAIN CONTENT START -->
-       
-                
-        </section><section class="wrapper">
+        <section class="wrapper">
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" ps-3">
-                        <div class='d-flex justify-content-center'>
-                            <div class="card h-auto bg-light mx-auto mt-5 p-5 text-center " style='width: 65%;'>
+                        <div class='d-flex justify-content-center mt-5'>
+                            <div class="card h-auto bg-light mx-auto mt-5 p-5 text-center" style='width: 65%;'>
                             <?php if ($_GET['page'] == 'enrolled'){
                                 echo "
                                 <h1><i class='bi bi-check-circle'></i></h1>
@@ -32,12 +30,14 @@ include_once('../inc/studentSideBar.php');
                                 ";
                             } elseif($_GET['page'] == 'failed') {
                                 echo "
-                                <h4>You can't enroll, you failed <i class='bi bi-emoji-smile'></i></h4> 
+                                <h1><i class='bi bi-exclamation-circle'></i></h1>
+                                <h4 class='text-center'>I'm sorry you can't enroll for now. Try contacting your adviser.</h4> 
                                 ";
                             } else {
                                 echo "
-                                <h4>Congrats! You have finished PCHNS' Senior High Curriculum</i> </h4> 
-                                ";
+                                <h1><i class='bi bi-check-circle'></i></h1>
+                                <h4>Curriculum Completed!</h4> 
+                                "; 
                             }
                             ?>
                             </div>
