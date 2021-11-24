@@ -3158,7 +3158,7 @@ class Administration extends Dbconfig
         $result = $this->query("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
         WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
         // echo ("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
-        //  WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
+        // WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
             $attendance[] = [

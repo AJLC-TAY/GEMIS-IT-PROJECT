@@ -36,7 +36,7 @@ include_once('../inc/studentSideBar.php');
                                 ";
                             } else {
                                 echo "
-                                <h4>Congrats! College ka na! Welcome to hell <i class='bi bi-emoji-smile'></i> </h4> 
+                                <h4>Congrats! You have finished PCHNS' Senior High Curriculum</i> </h4> 
                                 ";
                             }
                             ?>

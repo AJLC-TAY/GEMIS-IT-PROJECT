@@ -605,7 +605,7 @@ trait FacultySharedMethods
         //         $data[] = $row['section_name'];
         //     }
         // } else {
-        $query = "SELECT section_code, section_name, grd_level FROM section WHERE teacher_id=?";
+        $query = "SELECT section_code, section_name, grd_level FROM section WHERE teacher_id=? AND sy_id = {$_SESSION['sy_id']}";
         $id = $_GET['id'] ?? ($_SESSION['user_type'] == 'FA' ? $_SESSION['id'] : $id);
         if (is_null($sy)) {
             $params = [$id];
@@ -770,6 +770,12 @@ trait FacultySharedMethods
                                 JOIN attendance a USING (stud_id) 
                                 JOIN academicdays USING (acad_days_id)
                                 WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
+                                // echo("SELECT stud_id, status, attendance_id, CONCAT(last_name,', ', first_name, ' ',COALESCE(middle_name,''), ' ', COALESCE(ext_name, '')) 
+                                // AS name, month, no_of_present AS present, no_of_absent AS absent, no_of_tardy AS tardy, no_of_days AS total FROM student s 
+                                // JOIN enrollment e USING (stud_id)
+                                // JOIN attendance a USING (stud_id) 
+                                // JOIN academicdays USING (acad_days_id)
+                                // WHERE section_code = '{$_GET['class']}' AND acad_days_id = '{$_GET['month']}';");
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
             $addon = $row['status'] == 0?"final":"disabled";
@@ -1824,14 +1830,7 @@ trait Grade
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
         AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']}");
-        // echo ("SELECT DISTINCT stud_id, first_status, second_status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
-        // FROM classgrade 
-        // JOIN student USING(stud_id) 
-        // JOIN enrollment e USING(stud_id)
-        // JOIN sysub USING(sub_code) 
-        // JOIN subjectclass sc USING(sub_sy_id)
-        // WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
-        // AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']}");
+        
         
         // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
         // FROM student 
