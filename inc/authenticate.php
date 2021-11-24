@@ -69,6 +69,11 @@ if(isset($_POST['loginBtn']))
                 $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
                 $_SESSION['current_semester'] = $sy_row['current_semester']; ;
                 $_SESSION['current_quarter'] = $sy_row['current_quarter'];
+                
+                $date_time = date('Y-m-d H:i:s');
+                // $id = $_SESSION['user_id'] ?? 0;
+                $query = "INSERT INTO historylogs (id_no, user_type, action, datetime, sy_id) VALUES('{$_SESSION['user_id']}', '{$_SESSION['user_type']}', 'Login', '$date_time', '{$_SESSION['sy_id']}' );";
+                $result = mysqli_query($con,$query);
                 header("location: $destination");
             }
         } else {
