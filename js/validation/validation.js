@@ -1,8 +1,8 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
-var stepper, form, enrollValidator, syValidator;
+var stepper, formEnroll, enrollValidator, syValidator;
 /** Enrollment */
 try {
-  form =  $("#enrollment-form");
+  formEnroll =  $("#enrollment-form");
   stepper = new Stepper($('#stepper')[0]);
 } catch (e) {}
 /** School year */
@@ -169,11 +169,14 @@ $(function () {
     }
   });
 
+  $(document).on("click", "#sy-part-2", function(e) {
+    stepper.next();
+  });
 
   $(document).on("click", "#enroll-part-1", function(e) {
     e.preventDefault();
 
-    enrollValidator = form.validate({
+    enrollValidator = formEnroll.validate({
       rules: {
         lrn: { required: true },
         "last-name": { required: true },
@@ -224,7 +227,7 @@ $(function () {
         "zip-code": { required: REQUIRED }
       },
     });
-    if (form.valid()) {
+    if (formEnroll.valid()) {
       stepper.next();
       enrollValidator.destroy();
     }
@@ -232,7 +235,7 @@ $(function () {
 
   $(document).on("click", "#enroll-part-2", function(e) {
     e.preventDefault();
-    form.validate({
+    formEnroll.validate({
       rules: {
         "f-lastname": { required: true  , lettersonly: true},
         "m-lastname": { required: true  , lettersonly: true},
@@ -264,13 +267,13 @@ $(function () {
         "g-relationship": { required: REQUIRED }
       }
     });
-    if (form.valid()) {
+    if (formEnroll.valid()) {
       stepper.next();
     }
   });
   $(document).on("click", "#enroll-part-3", function(e) {
     e.preventDefault();
-    form.validate({
+    formEnroll.validate({
       rules: {
          "track" : { required: true},
          "program" : { required: true},
@@ -284,7 +287,7 @@ $(function () {
         "semester": { required: REQUIRED },
       }
     });
-    if (form.valid()) {
+    if (formEnroll.valid()) {
       stepper.next();
     }
   });

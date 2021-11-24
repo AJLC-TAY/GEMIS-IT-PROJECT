@@ -285,7 +285,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <!-- CONTACT NO -->
                         <div class='col-md-4'>
                             <label class="col-form-label">Contact Number</label>
-                            <input placeholder="Enter cp no here (ex 09XXXXXXXXX)" class="form-control number" name="cp-no" type="text" value="<?php echo $cp_no; ?>">
+                            <input placeholder="Enter cp no here (ex 09XXXXXXXXX)" class="form-control number" name="cp-no" type="number" value="<?php echo $cp_no; ?>">
                         </div>
                         <!-- SEX -->
                         <div class="col-md-4">
@@ -432,7 +432,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='f-contactnumber'>Contact Number</label>
-                            <input type='text' class='form-control' id='f-contactnumber' name='f-contactnumber' value="<?php echo $father_cp_no; ?>" placeholder='Contact Number'>
+                            <input type='number' class='form-control number' id='f-contactnumber' name='f-contactnumber' value="<?php echo $father_cp_no; ?>" placeholder='Contact Number'>
                         </div>
                         <div class='form-group col-md-8'>
                             <label for='f-occupation'>Occupation</label>
@@ -458,7 +458,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='m-contactnumber'>Contact Number</label>
-                            <input type='text' class='form-control' id='m-contactnumber' name='m-contactnumber' value="<?php echo $mother_cp_no; ?>" placeholder='Contact Number'>
+                            <input type='number' class='form-control number' id='m-contactnumber' name='m-contactnumber' value="<?php echo $mother_cp_no; ?>" placeholder='Contact Number'>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='m-occupation'>Occupation</label>
@@ -493,7 +493,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                     <div class='form-row row mb-2'>
                         <div class='form-group col-md-4'>
                             <label for='g-contactnumber'>Contact Number</label>
-                            <input type='text' class='form-control' id='g-contactnumber' name='g-contactnumber' value="<?php echo $guardian_cp_no; ?>" placeholder='Contact Number'>
+                            <input type='number' class='form-control number' id='g-contactnumber' name='g-contactnumber' value="<?php echo $guardian_cp_no; ?>" placeholder='Contact Number'>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='g-relationship'>Relationship</label>
