@@ -258,6 +258,98 @@ $(function() {
     });
     showToast("success", "Successfully saved");
 }
+
+    /** Student Edit */
+    $("#student-form").validate({
+        rules: {
+            lrn: { required: true },
+            "last-name": { required: true },
+            "first-name": { required: true },
+            "cp-no": { required: true, maxlength: 11 , minlength: 11},
+            sex: { required: true },
+            birthdate: { required: true },
+            "birth-place": { required: true },
+            age: { required: true },
+            group: { required: true },
+            "group-name": { required: true },
+            "mother-tongue": { required: true },
+            "house-no": { required: true },
+            street: { required: true },
+            barangay: { required: true },
+            "city-muni": { required: true },
+            province: { required: true },
+            "zip-code": { required: true },
+            // "f-lastname": { required: true  , lettersonly: true},
+            // "m-lastname": { required: true  , lettersonly: true},
+            // "g-lastname": { required: true  , lettersonly: true},
+            // "f-firstname": { required: true , lettersonly: true },
+            // "m-firstname": { required: true , lettersonly: true },
+            // "g-firstname": { required: true , lettersonly: true },
+            // "f-occupation": { required: true },
+            // "m-occupation": { required: true },
+            // "g-occupation": { required: true },
+            // "f-contactnumber": { required: true },
+            // "m-contactnumber": { required: true },
+            // "g-contactnumber": { required: true },
+            // "g-relationship": { required: true }
+        },
+        messages: {
+            // "f-lastname": { required:  REQUIRED },
+            // "m-lastname": { required: REQUIRED },
+            // "g-lastname": { required: REQUIRED },
+            // "f-firstname": { required: REQUIRED },
+            // "m-firstname": { required: REQUIRED },
+            // "g-firstname": { required: REQUIRED },
+            // "f-occupation": { required: REQUIRED },
+            // "m-occupation": { required: REQUIRED },
+            // "g-occupation": { required: REQUIRED },
+            // "f-contactnumber": { required: REQUIRED },
+            // "m-contactnumber": { required: REQUIRED },
+            // "g-contactnumber": { required: REQUIRED },
+            // "g-relationship": { required: REQUIRED },
+            lrn: { required: "<p class='text-danger'><small>Please provide your LRN</small></p>" },
+            "last-name": { required: "<p class='text-danger'><small>Please provide your last name</small></p>" },
+            "first-name": { required: "<p class='text-danger'><small>Please provide your first name</small></p>" },
+            "cp-no": {
+                required: "<p class='text-danger'><small>Please provide your contact number</small></p>",
+                maxlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>",
+                minlength: "<p class='text-danger'><small>Please provide a valid contact number</small></p>"
+            },
+            sex: { required: "<p class='text-danger'><small>This is a required field</small></p>" },
+            birthdate: { required: "<p class='text-danger'><small>Please provide your birthdate</small></p>" },
+            "birth-place": { required: "<p class='text-danger'><small>Please provide your birth place</small></p>" },
+            age: { required: "<p class='text-danger'><small>Please provide your age</small></p>" },
+            group: { required: "<p class='text-danger'><small>Please provide your indigenous group</small></p>" },
+            "group-name": { required: "<p class='text-danger'><small>Please provide group name</small></p>" },
+            "mother-tongue": { required: "<p class='text-danger'><small>Please provide your mother tongue</small></p>" },
+            "house-no": { required:  REQUIRED },
+            street: { required: REQUIRED },
+            barangay: { required: REQUIRED },
+            "city-muni": { required: REQUIRED },
+            province: { required: REQUIRED },
+            "zip-code": { required: REQUIRED }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") == "sex") {
+                error.appendTo("#sex-error-con");
+            } else {
+                error.insertAfter(element)
+            }
+        },
+        submitHandler: function(form) {
+            $.ajax({
+                url: "action.php",
+                type: "post",
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                success: function() {
+
+                }
+            })
+            return false;  //This doesn't prevent the form from submitting.
+        }
+    });
     /** Call automatic average */
     averageSubjectGradesEvent();
     hideSpinner();

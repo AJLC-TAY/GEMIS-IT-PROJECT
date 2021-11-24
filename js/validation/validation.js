@@ -235,41 +235,41 @@ $(function () {
 
   $(document).on("click", "#enroll-part-2", function(e) {
     e.preventDefault();
-    formEnroll.validate({
-      rules: {
-        "f-lastname": { required: true  , lettersonly: true},
-        "m-lastname": { required: true  , lettersonly: true},
-        "g-lastname": { required: true  , lettersonly: true},
-        "f-firstname": { required: true , lettersonly: true },
-        "m-firstname": { required: true , lettersonly: true },
-        "g-firstname": { required: true , lettersonly: true },
-        "f-occupation": { required: true },
-        "m-occupation": { required: true },
-        "g-occupation": { required: true },
-        "f-contactnumber": { required: true },
-        "m-contactnumber": { required: true },
-        "g-contactnumber": { required: true },
-        "g-relationship": { required: true }
-      },
-      messages: {
-        "f-lastname": { required:  REQUIRED },
-        "m-lastname": { required: REQUIRED },
-        "g-lastname": { required: REQUIRED },
-        "f-firstname": { required: REQUIRED },
-        "m-firstname": { required: REQUIRED },
-        "g-firstname": { required: REQUIRED },
-        "f-occupation": { required: REQUIRED },
-        "m-occupation": { required: REQUIRED },
-        "g-occupation": { required: REQUIRED },
-        "f-contactnumber": { required: REQUIRED },
-        "m-contactnumber": { required: REQUIRED },
-        "g-contactnumber": { required: REQUIRED },
-        "g-relationship": { required: REQUIRED }
-      }
-    });
-    if (formEnroll.valid()) {
+    // formEnroll.validate({
+    //   rules: {
+    //     "f-lastname": { required: true  , lettersonly: true},
+    //     "m-lastname": { required: true  , lettersonly: true},
+    //     "g-lastname": { required: true  , lettersonly: true},
+    //     "f-firstname": { required: true , lettersonly: true },
+    //     "m-firstname": { required: true , lettersonly: true },
+    //     "g-firstname": { required: true , lettersonly: true },
+    //     "f-occupation": { required: true },
+    //     "m-occupation": { required: true },
+    //     "g-occupation": { required: true },
+    //     "f-contactnumber": { required: true },
+    //     "m-contactnumber": { required: true },
+    //     "g-contactnumber": { required: true },
+    //     "g-relationship": { required: true }
+    //   },
+    //   messages: {
+    //     "f-lastname": { required:  REQUIRED },
+    //     "m-lastname": { required: REQUIRED },
+    //     "g-lastname": { required: REQUIRED },
+    //     "f-firstname": { required: REQUIRED },
+    //     "m-firstname": { required: REQUIRED },
+    //     "g-firstname": { required: REQUIRED },
+    //     "f-occupation": { required: REQUIRED },
+    //     "m-occupation": { required: REQUIRED },
+    //     "g-occupation": { required: REQUIRED },
+    //     "f-contactnumber": { required: REQUIRED },
+    //     "m-contactnumber": { required: REQUIRED },
+    //     "g-contactnumber": { required: REQUIRED },
+    //     "g-relationship": { required: REQUIRED }
+    //   }
+    // });
+    // if (formEnroll.valid()) {
       stepper.next();
-    }
+    // }
   });
   $(document).on("click", "#enroll-part-3", function(e) {
     e.preventDefault();
@@ -303,8 +303,6 @@ $(function () {
     syValidator.destroy();
   });
 
-
-
   //unique rule, submit done, for implementation and testing
   $("#section-form").on("submit", function(event) {
     event.preventDefault();
@@ -325,34 +323,6 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   })
-  //submit done, for implementation
-  // $("#program-form").on("submit", function(event) {
-  //   event.preventDefault();
-  // }).validate({
-  //   rules: {
-  //     'prog-code': {
-  //       required: true,
-  //     },
-  //     'prog-name':{
-  //       required: true,
-  //       lettersonly: true
-  //     },
-  //     'prog-desc':{
-  //       required: true,
-  //       lettersonly: true
-  //     }
-  //   },
-  //   messages: {
-  //     'prog-code': {
-  //       required: '<p class="text-danger user-select-none">Please enter code!</p>'
-  //     },
-  //   },
-  //   submitHandler: function(form) {
-  //     form.submit();
-  //     return false;  //This doesn't prevent the form from submitting.
-  //   }
-  // })
-  // unique rule, submit done, for implementation
   $("#enroll-report-form").on("submit", function(event) {
     event.preventDefault();
   }).validate({
@@ -483,61 +453,8 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   });
-  //submit done, for implementation
-  $("#student-form").on("submit", function(event) {
-    event.preventDefault();
-  }).validate({
-    rules: {
-      "g_lastname": {
-        required: true,
-        lettersonly: true
-      },
-      'g_firstname': {
-        required: true,
-        lettersonly: true
-      },
-      'g_middlename': {
-        required: true,
-        lettersonly: true
-      },
-    },
-    messages: {
-      "g_lastname": {
-        required: '<p class="text-danger user-select-none">Please enter guardians last name!</p>',
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
-      },
-      'g_firstname': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's first name!</p>",
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
-      },
-      'g_middlename': {
-        required: "<p class='text-danger user-select-none'>Please enter guardian's middle name!</p>",
-        lettersonly: '<p class="text-danger user-select-none">Please enter letters only!</p>',
-      },
-      submitHandler: function(form) { 
-        form.submit();
-        return false;  //This doesn't prevent the form from submitting.
-      }
-    }
-  })
-  //for questioning
-  //program view form for improvement
-  // $("#school-year-form").validate({
-  //   rules: {
-  //     code: {
-  //       required: true,
-  //       // similar validation
-  //     }
-  //   },
-  //   messages: {
-  //     code: {
-  //       required: '<p class="text-danger user-select-none">Please enter current code!</p>'
-  //     }
-  //   }
-  // });
+
   try {
-
-
     $("#change-pass-form").validate({
       rules: {
         current: {
@@ -614,6 +531,7 @@ $(function () {
       "With-honor-max": {required: REQUIRED},
     }
   });
+
   $("#other-award-form").validate({
     rules: {
       filter: REQUIRED_AE_PARAM,
@@ -622,6 +540,7 @@ $(function () {
       filter:  {required: REQUIRED}
     }
   });
+
   $(".report-form").validate({
     rules: {
       "report-title": REQUIRED_TRUE,
@@ -634,6 +553,7 @@ $(function () {
       date: REQUIRED
     }
   });
+
   /** Advisory Class */
   try {
     $("#advisory-class-form").validate();

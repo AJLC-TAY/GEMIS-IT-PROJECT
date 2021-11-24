@@ -74,28 +74,28 @@ $school_name = '';
 $school_id_no = '';
 $school_address = '';
 //
-//$lrn = rand(1, 1000000);
-//$lname = 'Rizal';
-//$fname = 'Jose';
-//$mname = 'Test';
-//$extname = 'III';
-//$sex = '';
-//$age = '21';
-//$birthdate = '';
-//$birth_place = 'Baguio City';
-//$indigenous_group = 'Test';
-//$mother_tongue = 'Kankanaey';
-//$religion = 'Roman Catholic';
-//
-//$house_no = '123';
-//$street = 'Street';
-//$barangay = 'Bakakeng';
-//$city = 'Baguio City';
-//$province = 'Benguet';
-//$zip = '2600';
-//
-//$cp_no = '09090990090';
-//$psa_birth_cert = '923871';
+$lrn = rand(1, 1000000);
+$lname = 'Rizal';
+$fname = 'Jose';
+$mname = 'Test';
+$extname = 'III';
+$sex = '';
+$age = '21';
+$birthdate = '';
+$birth_place = 'Baguio City';
+$indigenous_group = 'Test';
+$mother_tongue = 'Kankanaey';
+$religion = 'Roman Catholic';
+
+$house_no = '123';
+$street = 'Street';
+$barangay = 'Bakakeng';
+$city = 'Baguio City';
+$province = 'Benguet';
+$zip = '2600';
+
+$cp_no = '09090990090';
+$psa_birth_cert = '923871';
 $belong_to_ipcc = '';
 $id_picture = '';
 $section = '';

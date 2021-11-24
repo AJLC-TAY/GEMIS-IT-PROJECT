@@ -2703,27 +2703,27 @@ class Administration extends Dbconfig
         //general info
         $stud_id = trim($_POST['student_id']);
         $lrn = trim($_POST['lrn']) ?: NULL;
-        $first_name = trim($_POST['first_name']);
-        $middle_name = trim($_POST['middl_name']) ?: NULL;
-        $last_name = trim($_POST['last_name']);
-        $ext_name = trim($_POST['suffix']) ?: NULL;
+        $first_name = trim($_POST['first-name']);
+        $middle_name = trim($_POST['middle-name']) ?: NULL;
+        $last_name = trim($_POST['last-name']);
+        $ext_name = trim($_POST['ext-name']) ?: NULL;
         $sex = trim($_POST['sex']);
         $age = trim($_POST['age']);
         $birthdate = trim($_POST['birthdate']);
-        $birth_place = trim($_POST['birthplace']) ?: NULL;
+        $birth_place = trim($_POST['birth-place']) ?: NULL;
         $indigenous_group = trim($_POST['group']) ?: NULL;
-        $mother_tongue = trim($_POST['mother_tongue']);
+        $mother_tongue = trim($_POST['mother-tongue']);
         $religion = trim($_POST['religion']) ?: NULL;
-        $cp_no = trim($_POST['contact_no']) ?: NULL;
-        $belong_to_ipcc = trim($_POST['belong_group']) == 'No' ? '0' : '1';
+        $cp_no = trim($_POST['cp_no']) ?: NULL;
+        $belong_to_ipcc = trim($_POST['group']) == 'No' ? '0' : '1';
 
         //address
-        $house_no = trim($_POST['house_no']);
+        $house_no = trim($_POST['house-no']);
         $street = trim($_POST['street']);
         $barangay = trim($_POST['barangay']);
-        $city = trim($_POST['city']);
+        $city = trim($_POST['city-muni']);
         $province = trim($_POST['province']);
-        $zip = trim($_POST['zip']);
+        $zip = trim($_POST['zip-code']);
 
         //parent
         $f_firstname = trim($_POST['f_firstname']) ?: NULL;
@@ -2772,12 +2772,12 @@ class Administration extends Dbconfig
                 $imgContent = $image['image'];
                 $fileDestination = "uploads/student/6/$imgContent";
                 // for editing
-                //    if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
-                //        $current_img_path = $_POST["current_image_path"];
-                //        if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
-                //            unlink("../".$current_img_path);                                 // delete current image
-                //        }
-                //    }
+                    if (isset($_POST["current_image_path"])) { // if it exists, page is from edit form
+                        $current_img_path = $_POST["current_image_path"];
+                        if (strlen($current_img_path) != 0) { // if more than 0, there exists an image
+                            unlink("../".$current_img_path);                                 // delete current image
+                        }
+                    }
                 $params[] = $fileDestination;
             }
         }

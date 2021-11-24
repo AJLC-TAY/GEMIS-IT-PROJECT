@@ -24,7 +24,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
 
 <title>Home | GEMIS</title>
 </head>
-<!DOCTYPE html>
 
 <body>
     <!-- SPINNER -->

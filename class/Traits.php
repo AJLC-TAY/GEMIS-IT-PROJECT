@@ -304,8 +304,6 @@ trait UserSharedMethods
             $stat = $res[0];
         }
 
-
-
         sizeof($parent) != 0 ?: $parent = NULL;
         sizeof($guardian) != 0 ?: $guardian = NULL;
 
