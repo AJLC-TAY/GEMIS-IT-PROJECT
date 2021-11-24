@@ -42,7 +42,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
             <li class="breadcrumb-item active">Transferee Assessment</li>
         </ol>
     </nav>
-    <h3>Transferee Assessment Form</h3>
+    <h3 class="fw-bold">Transferee Assessment Form</h3>
 </header>
 <!-- CONTENT  -->
 <form id="transferee-form" method="POST" action="action.php">
@@ -98,7 +98,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
     </div>
     <div class="card w-100 h-auto mt-4 p-4">
         <div class="subject-list">
-            <h6>LIST OF SUBJECTS FOR <?php echo $transfereeData['strand_name']; ?></h6>
+            <h5 class="fw-bold">LIST OF SUBJECTS FOR <?php echo $transfereeData['strand_name']; ?></h6>
             <p class="text-secondary ms-1"><small><i class="bi bi-info-circle me-2"></i>Check subjects the student have already taken from previous school, regardless of the grade level in the subject list below.</small></p>
             <div class="container overflow-auto">
                 <table id="transfer-table" class="table table-sm table-bordered table-striped">
@@ -121,7 +121,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
         </div>
     </div>
     <div class="card w-100 h-auto mt-4 p-4 overflow-auto">
-        <h6>SUGGESTED SCHEDULE</h6>
+        <h5 class="fw-bold">SUGGESTED SCHEDULE</h6>
         <table class="table table-striped table-bordered">
             <col width="10%">
             <col width="45%">

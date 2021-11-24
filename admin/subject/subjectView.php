@@ -28,13 +28,13 @@ $coreq = $subject->get_corequisite();
 
 //button class='btn m-auto text-danger pt-1 px-1 archive-option'  id = '$sub_code'  > <i class='bi bi-archive me-1 ' ></i>Archive</button>
 
-$title =  "<div class='d-flex justify-content-between'>
-    <h3 class='mb-0'>$sub_name</h3>
+$title =  "<div class='d-flex justify-content-between fw-bold'>
+    <h3 class='fw-bold'>$sub_name</h3>
     <div class='buttons-con d-flex'>
         <a href='subject.php?sub_code=$sub_code&action=edit". ($sub_type !== 'specialized' ? '' : '&prog_code='.$prog_code) ."' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
     </div>
 </div>
-<hr class='mb-1'>";
+<hr class='mb-0'>";
 
 
 ?>

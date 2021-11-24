@@ -10,8 +10,8 @@ $admin = new Administration();
             <li class="breadcrumb-item active" aria-current="page">Curriculum</li>
         </ol>
     </nav>
-    <div class="d-flex justify-content-between row">
-        <div class="col-auto mt-2">
+    <div class="justify-content-between row">
+        <div class="col-md-4 mt-2">
             <h3 class="fw-bold">Curriculum</h3>
         </div>
         <div class="col-auto">

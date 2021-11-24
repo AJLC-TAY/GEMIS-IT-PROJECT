@@ -698,8 +698,8 @@ class Administration extends Dbconfig
 
             $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
                 . "<div class='edit-options' style='display: none;'>"
-                . "<button data-id='$sy_id' class='cancel-btn btn btn-dark d-inline btn-sm m-1'>Cancel</button>"
                 . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
                 . "</div>");
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
@@ -2824,7 +2824,7 @@ class Administration extends Dbconfig
                 $new_grade['final'],
                 $grade_id
             ];
-            $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, status = 1 WHERE grade_id = ?;", $params, "iiii");
+            $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, first_status = 1, second_status = 1 WHERE grade_id = ?;", $params, "iiii");
             # write log
             [$stud_id, $sub_code] = mysqli_fetch_row($this->query("SELECT stud_id, sub_code FROM classgrade WHERE grade_id = '$grade_id';"));
             $action = "Edited subject grade (Student ID: $stud_id and Subject code: $sub_code).";

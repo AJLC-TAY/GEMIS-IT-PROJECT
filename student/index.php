@@ -1,6 +1,7 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html"); 
+$sem = $_SESSION['current_semester'] == 1? 'First': 'Second';
 ?>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 
@@ -40,7 +41,7 @@ include_once("../inc/head.html");
                                                     <h4> <?php echo $_SESSION['User']?></h4>
                                                 </li>
                                                 <li>
-                                                    <h6>Currently Enrolled in: First Semester, 2022-2023</h6>
+                                                    <h6>Currently Enrolled in: <?php echo "$sem Semester, {$_SESSION['school_year']}"?></h6>
                                                 </li>
                                             </ul>
                                         </div>
