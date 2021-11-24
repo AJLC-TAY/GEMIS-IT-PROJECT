@@ -123,7 +123,10 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
     <!-- BREADCRUMB -->
 </header>
 <div class="d-flex justify-content-between align-items-center">
-    <h4 class="my-auto fw-bold">Student Profile</h4>
+    <?php if($user_type != 'ST'){
+        echo "<h4 class='my-auto fw-bold'> $name Profile</h4>";
+    }
+    ?>
     <div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

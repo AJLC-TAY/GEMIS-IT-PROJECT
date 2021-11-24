@@ -89,7 +89,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <hr class="mt-1 mb-4">
                 <div class="d-flex flex-row-reverse mb-3">
                     <!-- <div class="d-flex mb-3"> -->
-                    <button id="track-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button>
+                    <!-- <button id="track-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button> -->
                 </div>
                 <tr>
                     <th data-checkbox="true"></th>

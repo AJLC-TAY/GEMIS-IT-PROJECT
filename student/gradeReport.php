@@ -118,7 +118,7 @@ if ($_GET['id'] != $_SESSION['id']) {
     <script src="../js/common-custom.js"></script>
     <script>
         $(function() {
-            preload("#students");
+            preload("#grade");
             hideSpinner();
         });
     </script>
