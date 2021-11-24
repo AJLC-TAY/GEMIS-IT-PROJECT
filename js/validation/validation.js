@@ -169,6 +169,9 @@ $(function () {
     }
   });
 
+  $(document).on("click", "#sy-part-2", function(e) {
+    stepper.next();
+  });
 
   $(document).on("click", "#enroll-part-1", function(e) {
     e.preventDefault();
