@@ -65,6 +65,8 @@ switch ($user_type) {
         $breadcrumb = "<li class='breadcrumb-item'><a href='student.php' target='_self'>Student</a></li>";
         break;
     case 'FA':
+        $breadcrumb = "<li class='breadcrumb-item'><a href='../faculty/advisory.php'>Advisory</a></li>";
+        break;
     case 'ST':
         $breadcrumb = '';
         break;
@@ -204,7 +206,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </dl>" ?>
                             
                             <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
-                            <?php if ($user_type != 'ST') {
+                            <?php if ($user_type == 'AD') {
                                 echo "<a href='student.php?action=transfer&id=$stud_id' class='transfer-stud btn btn-success btn-sm  ms-2 mb-2 w-100'>Transfer Student</a>";
                                 $edit_btn = "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-primary link my-auto btn-sm ms-2 mb-2 w-100'><i class='bi bi-pencil-square me-2'></i>Edit</a>";
                                 if ($user_type == 'AD') {
@@ -213,9 +215,9 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 } else {
                                     echo $edit_btn;
                                 }
-                            } else {
-                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-75' title='Change Password'>CHANGE PASSWORD</a>";
-                            } ?>
+                                echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>CHANGE PASSWORD</a>";
+                            }
+                         ?>
 
                         </div>
                         <?php $admin->listValuesReport() ?>

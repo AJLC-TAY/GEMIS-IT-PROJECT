@@ -1,6 +1,11 @@
 <?php
 require_once("sessionHandling.php");
 include_once("../inc/head.html");
+require_once("../class/Faculty.php");
+$faculty = new FacultyModule();
+$id = $_SESSION['id'];
+$sub_classes = $faculty->get_handled_sub_classes($id);
+
 ?>
 
 <title>Home | GEMIS</title>
@@ -47,82 +52,33 @@ include_once("../inc/head.html");
                                     </div>
                                 </div>
                             </header>
-                            <div class="container-fluid mb-2">
-                                <!-- OVERVIEW -->
-                                <section class="row">
-                                    <h4 class="fw-bold">OVERVIEW</h4>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-forest h-75">
-                                            <div class="inner">
-                                                <h3>200</h3>
-                                                <h5>Total Students</h5>
-                                            </div>
-                                            <div class="icon">
-                                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-tea h-75">
-                                            <div class="inner">
-                                                <h5>View</h5>
-                                                <h5>Grades</h5>
-                                            </div>
-                                            <div class="icon">
-                                                <i class="bi bi-card-list" aria-hidden="true"></i>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-green h-75">
-                                            <div class="inner">
-                                                <h5> View</h5>
-                                                <h5>Attendance</h5>
-                                            </div>
-                                            <div class="icon">
-                                                <i class="bi bi-clipboard-check" aria-hidden="true"></i>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
+                               
                             <!-- CLASSES -->
                             <div class="container mb-3">
                                 <div class="row">
                                     <h5 class="fw-bold">ASSIGNED CLASSES</h5>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-default">
-                                            <div class="inner">
-                                                <h3>11 ABM A</h3>
-                                                <h4>Practical Research 1</h4>
-                                                <h6>40 Students</h6>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-default">
-                                            <div class="inner">
-                                                <h3>12 ABM A</h3>
-                                                <h4>Applied Economics</h4>
-                                                <h6>38 Students</h6>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="card-box bg-default">
-                                            <div class="inner">
-                                                <h3>12 ABM B</h3>
-                                                <h4>Applied Economics</h4>
-                                                <h6>40 Students</h6>
-                                            </div>
-                                            <a href="" class="card-box-footer">View <i class="fa fa-arrow-circle-right"></i></a>
-                                        </div>
-                                    </div>
+                                    
+                                        
+                                                <?php 
+                                                if (count($sub_classes) != 0) {
+                                                    //    $sub_class_opn .= "<optgroup label='Subject Class'>";
+                                                        foreach ($sub_classes as $sub_class) {
+                                                            echo "<div class='col-lg-4'>
+                                                            <div class='card-box bg-default'>
+                                                            <div class='inner'
+                                                            <h3>{$sub_class->get_section_name()}</h3>
+                                                            <h4>{$sub_class->get_sub_name()}</h4>
+                                                            </div>
+                                                            </div>
+                                                            </div>";
+                                                           
+                                                        }
+                                                    //    $sub_class_opn .= "</optgroup>";
+                                                    }
+                                                ?>
+                                                
+                                          
+                                    
                                 </div>
                             </div>
                         </div>

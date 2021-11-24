@@ -90,12 +90,12 @@ if (in_array('award_coor', $roles)) {
             echo $enrollment_item;
             echo $award_coor_item;
             ?>
-            <li class="mx-0">
+            <!-- <li class="mx-0">
                 <a id='archived' href="archivedClasses.php">
                     <i class="fa fa-archive"></i>
                     <span>Previous Classes</span>
                 </a>
-            </li>
+            </li> -->
         </ul>
         <!-- SIDEBAR MENU END -->
     </div>

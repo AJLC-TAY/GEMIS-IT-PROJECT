@@ -13,6 +13,7 @@ if (mysqli_num_rows($row_temp) == 0) {
 ?>
 <title>Login | GEMIS</title>
 <link rel="stylesheet" type="text/css" href="css/loginstyle.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,7 +24,7 @@ if (mysqli_num_rows($row_temp) == 0) {
         <div class="d-flex justify-content-center h-50">
             <div class="user_card">
                 <div class="d-flex justify-content-center">
-                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo" style="width: 100%; height: 100%;">  </div>
+                    <div class="login_logo_container"> <img src="assets/school_logo.jpg" class="login_logo" alt="Logo" style="width: 100%; height: 100%;"> </div>
                 </div>
                 <div class="d-flex justify-content-center form_container">
                     <form id="login-form" action="inc/authenticate.php" method="post" style="width: 320px">
@@ -31,12 +32,16 @@ if (mysqli_num_rows($row_temp) == 0) {
                             <label for="userID" class="form-label text-secondary"><small>UID</small></label>
                             <input id="userID" type="text" name="UName" class="form-control input_user" placeholder="Enter User ID" value="<?php echo $_GET['uid'] ?? ''; ?>">
                         </div>
-                        <div class="form-group mb-4">
+                        <div class="form-group">
                             <label for="password" class="form-label text-secondary"><small>Password</small></label>
-                            <input id="password" type="password" name="Password" class="form-control input_pass" placeholder="Enter Password" value="">
-                            <p class="text-danger text-center mt-3"><?php echo $_GET['error'] ?? ''; ?> </p>
+                            <input id="password" type="password" name="password" class="form-control input_pass" placeholder="Enter Password" value="">
+                            <p class="text-danger text-center"><?php echo $_GET['error'] ?? ''; ?> </p>
                         </div>
-
+                        <div class="form-check d-flex justify-content-end">
+                            <input class="form-check-input me-1" type="checkbox" onclick="myFunction()">
+                            <label class="form-check-label" for="flexCheckDefault"><small>Show Password</small>
+                            </label>
+                        </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
                             <input type="submit" name="loginBtn" class="btn login_btn" value="Login">
                         </div>
@@ -61,21 +66,24 @@ if (mysqli_num_rows($row_temp) == 0) {
             </div>
         </div>
     </div>
-    <?php include_once ("inc/footer.html"); ?>
-    <!-- VALIDATION -->
+    <?php include_once("inc/footer.html"); ?>
+
+
     <script src="../js/validation/jquery.validate.min.js"></script>
     <script src="../js/validation/additional-methods.min.js"></script>
     <script>
-        $(function () {
+        $(function() {
             $("#login-form").validate({
                 rules: {
-                    UName: {required: true},
+                    UName: {
+                        required: true
+                    },
                     password: {
                         required: true,
                         minlength: 8,
                     }
                 },
-                messages:{
+                messages: {
                     UName: {
                         required: "<p>Please provide your User ID</p>",
                     },
@@ -91,7 +99,17 @@ if (mysqli_num_rows($row_temp) == 0) {
             });
         });
     </script>
-
+    <!-- PEEK PW -->
+    <script>
+        function myFunction() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 </body>
 
 </html>

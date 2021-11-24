@@ -24,10 +24,10 @@
                 </select>
             </div>
             <div>
-                <form method="post" action="action.php" class="ms-2">
+                <!-- <form method="post" action="action.php" class="ms-2">
                     <input class='hidden' id='export_code' name='code' value=''>
                     <button type="submit" class="btn btn-secondary" name="export" value="Export"><i class='bi bi-box-arrow-up-left me-2'></i>Export</button>
-                </form>
+                </form> -->
             </div>
             <div>
                 <!-- <form method="post" action="action.php"><input type="submit" id='export' name="export" class="btn btn-secondary" value="EXPORT"></form> -->

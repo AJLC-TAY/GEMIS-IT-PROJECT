@@ -97,10 +97,12 @@ $handledSection = $school_user->get_handled_section();
             <large class="my-auto">Faculty Profile</large>
             <h3 class="fw-bold"><?php echo $name; ?></h3>
         </div>
+        <?php if($_SESSION['user_type'] == 'AD') {?>
         <div class="d-flex justify-content-center">
             <button id="deactivate-btn" class="btn btn-outline-danger me-3" data-bs-toggle="modal" data-bs-target="#confirmation-modal">Deactivate</button>
             <a href="faculty.php?id=<?php echo $current_teacher_id; ?>&action=edit" role="button" class="btn btn-primary link my-auto"><i class="bi bi-pencil-square me-2"></i>Edit</a>
         </div>
+        <?php } ?>
     </div>
 </header>
 <!-- HEADER END -->

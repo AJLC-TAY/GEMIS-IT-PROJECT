@@ -52,8 +52,7 @@ const detailFormatter = (index, row) => {
         `<div class='ms-1'>` +
         `<p>Subject: ${row.sub_name}</p>` +
         `<p>Subject Type: ${row.sub_type}</p>` +
-        `<p>Grade Level: ${row.for_grd_level}</p>` +
-        `<p>Semester: ${row.sub_semester}</p>` +
+        `<p>Grade Level: ${row.grd_level}</p>` +
         "</div>" +
         "</div>";
 };
