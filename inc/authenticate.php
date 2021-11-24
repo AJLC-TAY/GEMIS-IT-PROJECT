@@ -34,7 +34,6 @@ if(isset($_POST['loginBtn']))
             }
             $user_res = mysqli_query($con, $query);
             if ($u_row = mysqli_fetch_assoc($user_res)) {
-                session_destroy();
                 session_start();
                 # user
                 $_SESSION['User'] = $u_row['name'];
