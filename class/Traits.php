@@ -378,6 +378,7 @@ trait UserSharedMethods
                                 LEFT JOIN transferee t USING (transferee_id)
                                 JOIN subject s on cg.sub_code = s.sub_code
                                 WHERE cg.stud_id = '$id' AND g.sy_id={$_SESSION['sy_id']};");
+                                
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
