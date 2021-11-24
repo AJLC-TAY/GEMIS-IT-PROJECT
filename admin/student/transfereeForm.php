@@ -4,23 +4,40 @@ $admin = new Administration();
 $stud_id = $_GET['stud_id'];
 $strand = $_GET['strand'];
 $result = $admin->query("SELECT * FROM transferee WHERE stud_id = '$stud_id';");
-$row = mysqli_fetch_assoc($result);
 $student_name = '';
 $sy_id = $_SESSION['sy_id'];
-$enrolled_strand = mysqli_fetch_row($admin->query("SELECT e.prog_code, description FROM enrollment e JOIN program USING (prog_code) WHERE stud_id='$stud_id' AND sy_id = '$sy_id' ORDER BY date_of_enroll DESC LIMIT 1;"));
 
-$transferee_id = $row['transferee_id'];
+$transferee_id = '';
 $transfereeData = [
     'transferee_id' => $transferee_id,
-    'school_name' => $row['school_name'],
-    'grade_level' => $row['last_grd_lvl_comp'],
-    'school_year' => $row['last_school_yr_comp'],
-    'grd'         => $row['grd_to_enroll'],
-    'semester'    => $row['semester'],
-    'track'       => $row['track'],
-    'strand_code' => $enrolled_strand[0],
-    'strand_name' => strtoupper($enrolled_strand[1])
-];
+    'school_name' => '',
+    'grade_level' => '',
+    'school_year' => '',
+    'grd'         => '',
+    'semester'    => '',
+    'track'       => '',
+    'strand_code' => '',
+    'strand_name' => ''
+];  
+
+$enrolled_strand = mysqli_fetch_row($admin->query("SELECT e.prog_code, description FROM enrollment e JOIN program USING (prog_code) WHERE stud_id='$stud_id' AND sy_id = '$sy_id' ORDER BY date_of_enroll DESC LIMIT 1;"));
+if(mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+
+    $transferee_id = $row['transferee_id'];
+    $transfereeData = [
+        'transferee_id' => $transferee_id,
+        'school_name' => $row['school_name'],
+        'grade_level' => $row['last_grd_lvl_comp'],
+        'school_year' => $row['last_school_yr_comp'],
+        'grd'         => $row['grd_to_enroll'],
+        'semester'    => $row['semester'],
+        'track'       => $row['track'],
+        'strand_code' => $enrolled_strand[0],
+        'strand_name' => strtoupper($enrolled_strand[1])
+    ];  
+}
+
 
 $student_name = mysqli_fetch_row($admin->query("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name, ''), ' ', COALESCE(ext_name, '')) as name FROM student WHERE stud_id = '$stud_id';"))[0];
 $subjectsData = $admin->getSubjectScheduleData(NULL, TRUE, $transferee_id);

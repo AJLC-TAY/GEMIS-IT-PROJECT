@@ -2340,10 +2340,11 @@ class Administration extends Dbconfig
 
     public function listStudent()
     {
+        session_start();
 
         $query = "SELECT * from student s "
             . "JOIN enrollment e ON e.stud_id = s.stud_id "
-            . "JOIN user u ON u.id_no = s.id_no WHERE e.valid_stud_data = '1' "
+            . "JOIN user u ON u.id_no = s.id_no WHERE e.valid_stud_data = '1' AND e.sy_id = {$_SESSION['sy_id']} "
             . (isset($_GET['section']) ? "AND e.section_code='{$_GET['section']}';" : ""); # WHERE s.id_no IN (SELECT id_no FROM user WHERE is_active=1);
         $result = $this->query($query);
         $studentList = array();
@@ -2824,7 +2825,7 @@ class Administration extends Dbconfig
                 $new_grade['final'],
                 $grade_id
             ];
-            $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, first_status = 1, second_status = 1 WHERE grade_id = ?;", $params, "iiii");
+            $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, first_status = 1, second_status = WHERE grade_id = ?;", $params, "iiii");
             # write log
             [$stud_id, $sub_code] = mysqli_fetch_row($this->query("SELECT stud_id, sub_code FROM classgrade WHERE grade_id = '$grade_id';"));
             $action = "Edited subject grade (Student ID: $stud_id and Subject code: $sub_code).";

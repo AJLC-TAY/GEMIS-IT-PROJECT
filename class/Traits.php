@@ -372,13 +372,12 @@ trait UserSharedMethods
 
         $grades = [];
         $result = $this->query("SELECT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
-                                    FROM classgrade cg
-                                    LEFT JOIN transfereesubject ts USING (sub_code)
-                                    LEFT JOIN transferee t USING (transferee_id)
-                                    JOIN subject s on cg.sub_code = s.sub_code
-                                    WHERE cg.stud_id = '$stud_id'
-                                    AND (ts.transferee_id IS NULL OR ts.transferee_id IN (SELECT transferee_id FROM transferee WHERE t.stud_id = '$stud_id'))
-                                    ORDER BY sub_name;");
+                                FROM gradereport g
+                                JOIN classgrade cg
+                                LEFT JOIN transfereesubject ts USING (sub_code)
+                                LEFT JOIN transferee t USING (transferee_id)
+                                JOIN subject s on cg.sub_code = s.sub_code
+                                WHERE cg.stud_id = '$id' AND g.sy_id={$_SESSION['sy_id']};");
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
                 'grade_id' => $row['grade_id'],
