@@ -154,50 +154,27 @@ $admin = new Administration() ?>
     </div>
 </div>
 
-<!-- VIEW ARCHIVED MODAL -->
-<!--<div class="modal fade" id="view-arch-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">-->
-<!--    <div class="modal-dialog modal-dialog-centered">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <div class="modal-title">-->
-<!--                    <h4 class="mb-0">Archived Programs</h4>-->
-<!--                </div>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="overflow-auto" style="height: 50vh;">-->
-<!--                    <ul class="list-group arch-list">-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!---->
-<!--<!-- DELETE MODAL -->-->
-<!--<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">-->
-<!--    <div class="modal-dialog modal-dialog-centered">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <div class="modal-title">-->
-<!--                    <h4 class="mb-0">Confirmation</h4>-->
-<!--                </div>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <h5>Do you want to delete <span class="modal-identifier"></span>?</h5>-->
-<!--                <p class="modal-msg"></p>-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--                <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>-->
-<!--                <button class="btn btn-danger close-btn delete-btn btn-sm">Delete</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+           <div class="modal-header">
+               <div class="modal-title">
+                   <h4 class="mb-0">Confirmation</h4>
+               </div>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+               <h5>Do you want to delete <span class="modal-identifier"></span>?</h5>
+               <p class="modal-msg"></p>
+           </div>
+           <div class="modal-footer">
+               <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+               <button class="btn btn-danger close-btn delete-btn btn-sm">Delete</button>
+           </div>
+       </div>
+   </div>
+ </div>
 
 <script type="text/javascript">
     let programs = <?php $admin->listProgramsJSON(); ?>;

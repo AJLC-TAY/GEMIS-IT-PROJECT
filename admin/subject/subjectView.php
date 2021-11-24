@@ -31,7 +31,7 @@ $coreq = $subject->get_corequisite();
 $title =  "<div class='d-flex justify-content-between fw-bold'>
     <h3 class='fw-bold'>$sub_name</h3>
     <div class='buttons-con d-flex'>
-        <a href='subject.php?sub_code=$sub_code&action=edit". ($sub_type !== 'specialized' ? '' : '&prog_code='.$prog_code) ."' target='_self' class='btn m-auto text-primary pt-1 px-1'><i class='bi bi-pencil-square me-1'></i>Edit</a>
+        <a href='subject.php?sub_code=$sub_code&action=edit". ($sub_type !== 'specialized' ? '' : '&prog_code='.$prog_code) ."' target='_self' class='btn m-auto btn-primary'><i class='bi bi-pencil-square me-2'></i>Edit</a>
     </div>
 </div>
 <hr class='mb-0'>";
