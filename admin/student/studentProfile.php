@@ -33,23 +33,12 @@ $form137 = $userProfile->get_form137();
 $parents = $userProfile->get_parents();
 $guardian = $userProfile->get_guardians();
 $grades = $userProfile->get_grades();
-if ($parents['f']['fname'] == '') {
-} else {
-    foreach ($parents as $par) {
-        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
-        ${$parent . '_name'} = $par['name'];
-        ${$parent . '_occupation'} = $par['occupation'];
-        ${$parent . '_cp_no'} = $par['cp_no'];
-    }
-}
+$father = $mother = NULL;
 
-if (is_null($guardian)) {
-    $guardian = NULL;
-} else {
-    $guardian_name = $guardian['name'];
-    $guardian_cp_no = $guardian['cp_no'];
-    $guardian_relationship = $guardian['relationship'];
-}
+
+
+
+
 
 const PROFILE_PATH = "../assets/profile.png";
 const PREVIEW_PATH = "../assets/no_preview.jpg";
@@ -273,36 +262,74 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </div>
 
                             <div class="row mt-3">
-                                <h6><b>Contact Persons</b></h6>
-                                <?php if ($parents != NULL) {
-                                    echo "<h6>Parent/s</h6>";
-                                    foreach ($parents as $par) {
-                                        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
-                                        $name = ${$parent . '_name'};
-                                        $occupation = ${$parent . '_occupation'};
-                                        $no = ${$parent . '_cp_no'};
+
+                                
+
+                                <?php 
+                                $parents = $userProfile->get_parents();
+                                $guardian = $userProfile->get_guardians();
+                                
+
+                                if ($parents['f']['fname'] == '' && $parents['m']['fname'] == '' ) {
+                                    $parents = NULL;
+                                    echo " <h6><b>Contact Persons</b></h6>";
+
+                                } else {
+                                    if($parents['f']['fname'] == ''){ 
                                         echo "
                                         <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
-                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>" . ucwords('Father') . "'s Name </dt>
+                                            <dd class='col-md-8'> {$parents['m']['name']} </dd>
                                             <dt class='col-md-4'>Occupation </dt>
-                                            <dd class='col-md-8'> $occupation </dd>
+                                            <dd class='col-md-8'> {$parents['m']['occupation']} </dd>
                                             <dt class='col-md-4'>Contact Number </dt>
-                                            <dd class='col-md-8'> $no </dd>
-                                        </dl>";
+                                            <dd class='col-md-8'> {$parents['m']['cp_no']} </dd>
+                                        </dl>"; 
+
+                                    } elseif ($parents['m']['fname'] == '') {
+                                        echo "
+                                        <dl class='row mb-3 ms-2'>
+                                            <dt class='col-md-4'>" . ucwords('Mother') . "'s Name </dt>
+                                            <dd class='col-md-8'> {$parents['f']['name']} </dd>
+                                            <dt class='col-md-4'>Occupation </dt>
+                                            <dd class='col-md-8'> {$parents['f']['occupation']} </dd>
+                                            <dt class='col-md-4'>Contact Number </dt>
+                                            <dd class='col-md-8'> {$parents['f']['cp_no']} </dd>
+                                        </dl>"; 
+
+                                    } else {
+                                       
+                                        foreach ($parents as $par) {
+                                            $parent = $par['sex'] == 'f' ? 'mother' : 'father';
+                                            $name = ${$parent . '_name'};
+                                            $occupation = ${$parent . '_occupation'};
+                                            $no = ${$parent . '_cp_no'};
+                                            echo "
+                                            <dl class='row mb-3 ms-2'>
+                                                <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
+                                                <dd class='col-md-8'> $name </dd>
+                                                <dt class='col-md-4'>Occupation </dt>
+                                                <dd class='col-md-8'> $occupation </dd>
+                                                <dt class='col-md-4'>Contact Number </dt>
+                                                <dd class='col-md-8'> $no </dd>
+                                            </dl>";
+                                        }
                                     }
                                 }
-                                if ($guardian != NULL) {
-                                    echo "<hr><h6 class='mt-3'>Guardian/s</h6>
-                                        <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-4'>Guardian's Name</dt>
-                                            <dd class='col-md-8'> $guardian_name </dd>
-                                            <dt class='col-md-4'>Relationship</dt>
-                                            <dd class='col-md-8'> $guardian_relationship </dd>
-                                            <dt class='col-md-4'>Contact Number</dt>
-                                            <dd class='col-md-8'> $guardian_cp_no </dd>
-                                        </dl>";
-                                } ?>
+                                
+                                    if ($guardian['fname']!= '') {
+                                        echo "<hr><h6 class='mt-3'>Guardian/s</h6>
+                                            <dl class='row mb-3 ms-2'>
+                                                <dt class='col-md-4'>Guardian's Name</dt>
+                                                <dd class='col-md-8'> {$guardian['name']} </dd>
+                                                <dt class='col-md-4'>Relationship</dt>
+                                                <dd class='col-md-8'> {$guardian['relationship']} </dd>
+                                                <dt class='col-md-4'>Contact Number</dt>
+                                                <dd class='col-md-8'> {$guardian['cp_no']} </dd>
+                                            </dl>";
+                                    }  ?>
+                               
+                                
                             </div>
                         </div>
                     </div>
@@ -495,3 +522,4 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
         </div>
     </div>
 </div>
+
