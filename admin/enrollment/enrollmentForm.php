@@ -407,18 +407,18 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <div id="step-2" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
                     <h4 class="fw-bold"> Parent | Guardian's Information</h4>
-                    <p class="text-secondary"><small><i class="bi bi-info-circle me-2"></i>Enter N/A for fields that are not applicable</small></p>
+                    <p class="text-secondary"><small><i class="bi bi-info-circle me-2"></i>For part 2, leave fields blank <b>if not applicable</b></small></p>
 
                     <!-- FATHER -->
                     <div class='form-row row mt-3 mb-2'>
                         <h5>Father</h5>
                         <div class='form-group col-md-3'>
                             <label for='f-lastname'>Last Name</label>
-                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value = "<?php echo $father_last_name; ?>" placeholder='Last Name' required>
+                            <input type='text' class='form-control' id='f-lastname' name='f-lastname' value = "<?php echo $father_last_name; ?>" placeholder='Last Name'>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='f-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name' required>
+                            <input type='text' class='form-control' id='f-firstname' name='f-firstname' value = "<?php echo $father_last_name; ?>" placeholder='First Name'>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='f-middlename'>Middle Name</label>
@@ -444,11 +444,11 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <h5>Mother</h5>
                         <div class='form-group col-md-3'>
                             <label for='m-lastname'>Maiden Last Name</label>
-                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value = "<?php echo $mother_last_name; ?>" placeholder='Last Name' required>
+                            <input type='text' class='form-control' id='m-lastname' name='m-lastname' value = "<?php echo $mother_last_name; ?>" placeholder='Last Name'>
                         </div>
                         <div class='form-group col-md-4'>
                             <label for='m-firstname'>First Name</label>
-                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value = "<?php echo $mother_first_name; ?>" placeholder='First Name' required>
+                            <input type='text' class='form-control' id='m-firstname' name='m-firstname' value = "<?php echo $mother_first_name; ?>" placeholder='First Name'>
                         </div>
                         <div class='form-group col-md-3'>
                             <label for='m-middlename'>Middle Name</label>
@@ -560,15 +560,15 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
 
                     <div class='form-group col-md-5 d-flex flex-column mb-2'>
                         <label for='image-studentid' class='form-label'>Student ID Photo</label>
-                        <input class='form-control form-control-sm' id='image-studentid' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <input onchange="validate('#image-studentid')" class='form-control form-control-sm' id='image-studentid' name='image-studentid' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column mb-2'>
                         <label for='image-form' class='form-label'>Student Form 137</label>
-                        <input class='form-control form-control-sm' id='image-form' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <input onchange="validate('#image-form')"  class='form-control form-control-sm' id='image-form' name='image-form' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
                     <div class='form-group col-md-5 d-flex flex-column mb-3'>
                         <label for='image-psa' class='form-label'>PSA Birth Certificate</label>
-                        <input class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
+                        <input onchange="validate('#image-psa')" class='form-control form-control-sm' id='image-psa' name='image-psa' type='file' accept='image/png, image/jpg, image/jpeg'>
                     </div>
 
 

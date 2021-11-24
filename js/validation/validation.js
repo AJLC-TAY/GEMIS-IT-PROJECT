@@ -1,8 +1,32 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
-const EXTENSION_IMAGE = {
-  filesize: 5242880,
-  extension: "png | jpg | jpeg"
-};
+// const EXTENSION_IMAGE = {
+//   // filesize: 5242880,
+//   extension: "png | jpg | jpeg"
+// };
+
+function validate(selector) {
+  var file = $(selector)[0].files[0];
+  var file_size = file.size;
+  var file_name = file.name;
+  var ext = file_name.split(".");
+  ext = ext[ext.length-1].toLowerCase();
+  var arrayExtensions = ["jpg", "jpeg", "png"];
+
+  var message = '';
+  if(file_size > 5242880) {
+    message += "Image should not exceed 5MB file size. ";
+  }
+
+  if (arrayExtensions.lastIndexOf(ext) == -1) {
+    message += "Allowed image types are jpg, jpeg, png.";
+  }
+
+  if (message.length > 1) {
+    alert(message);
+    $(selector).val('');
+  }
+}
+
 var stepper, formEnroll, enrollValidator, syValidator;
 /** Enrollment */
 try {
@@ -48,18 +72,6 @@ $(function () {
     }
   });
 
-  // var codes = '<?php echo json_encode($currarray); ?>';
-  // $.mockjax({
-  //   url: "unique.action",
-  //   response: function(settings) {
-  //     var code = settings.data.code,
-  //       this.responseText = "true";
-  //     if ($.inArray(code, codes) !== -1) {
-  //       this.responseText = "false";
-  //     }
-  //   },
-  //   responseTime: 500
-  // });
   $.validator.addMethod('strongPassword', function (value, element) {
     return this.optional(element)
       || value.length >= 6
@@ -112,16 +124,6 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   });
-
-
-  //
-  // $("#lrn").rules("add", {
-  //   required: true,
-  //   messages: {
-  //     required: "<p class='text-danger'><small>Please provide your LRN</small></p>"
-  //   }
-  // })
-
 
   $(document).on("click", "#sy-part-1", function(e) {
     e.preventDefault();
@@ -282,28 +284,13 @@ $(function () {
          "track" : { required: true},
          "program" : { required: true},
          "grade-level" : { required: true},
-         "semester" : { required: true},
-          "image-studentid": EXTENSION_IMAGE,
-          "image-form": EXTENSION_IMAGE,
-          "image-psa": EXTENSION_IMAGE
+         "semester" : { required: true}
       },
       messages: {
         "track": { required: REQUIRED },
         "program": { required: REQUIRED },
         "grade-level": { required: REQUIRED },
-        "semester": { required: REQUIRED },
-        "image-studentid": {
-          filesize: "<p>Image should be not greater than 5MB</p>",
-          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
-        },
-        "image-form": {
-          filesize: "<p>Image should be not greater than 5MB</p>",
-          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
-        },
-        "image-psa": {
-          filesize: "<p>Image should be not greater than 5MB</p>",
-          extension: "<p>Only png, jpg, or jpeg are allowed</p>"
-        }
+        "semester": { required: REQUIRED }
       }
     });
     if (formEnroll.valid()) {
@@ -330,7 +317,6 @@ $(function () {
     rules: {
       'section-name': {
         required: true,
-        // unique
       }
     },
     messages: {
@@ -349,14 +335,12 @@ $(function () {
     rules: {
       code: {
         required: true,
-        // unique
       },
       desc: {
         required: true
       },
       'section-name': {
         required: true,
-        // unique
       }
     },
     messages: {
@@ -579,8 +563,6 @@ $(function () {
     $("#advisory-class-form").validate();
     $("#grades").validate();
   } catch (e) {}
-
-
 });
 
 

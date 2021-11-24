@@ -38,8 +38,8 @@ if (mysqli_num_rows($row_temp) == 0) {
                             <p class="text-danger text-center"><?php echo $_GET['error'] ?? ''; ?> </p>
                         </div>
                         <div class="form-check d-flex justify-content-end">
-                            <input class="form-check-input me-1" type="checkbox" onclick="myFunction()">
-                            <label class="form-check-label" for="flexCheckDefault"><small>Show Password</small>
+                            <input id="show-password" class="form-check-input me-1" type="checkbox" onclick="myFunction()">
+                            <label class="form-check-label" for="show-password"><small>Show Password</small>
                             </label>
                         </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
