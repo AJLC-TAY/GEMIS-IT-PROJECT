@@ -33,8 +33,7 @@ $form137 = $userProfile->get_form137();
 $parents = $userProfile->get_parents();
 $guardian = $userProfile->get_guardians();
 $grades = $userProfile->get_grades();
-if (is_null($parents)) {
-    $parents = NULL;
+if ($parents['f']['fname'] == '') {
 } else {
     foreach ($parents as $par) {
         $parent = $par['sex'] == 'f' ? 'mother' : 'father';
@@ -362,8 +361,8 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             $sub_grd_id = (int) $sub_grd['grade_id'];
                                             echo "<tr>
                                                 <td class='ps-3'>{$sub_grd['name']}</td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['first']}' disabled></td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center Second'  value='{$sub_grd['second']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['first']}' disabled></td>
+                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['second']}' disabled></td>
                                                 <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
                                                 <td  align='center'>
                                                     <div class='d-flex justify-content-center'>
