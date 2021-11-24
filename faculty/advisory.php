@@ -109,7 +109,7 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <div class="modal-title">
-                                            <h4 class="mb-0">ARE YOU SURE?</span></h4>
+                                            <h4 class="mb-0">Are you sure?</span></h4>
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
