@@ -36,42 +36,47 @@ $(function () { // document ready
         });
     });
 
-    $("#delete-account-form").validate({
-        rules: {
-            "password-delete": {
-                required: true,
-                minlength: 8,
-                remote: {
-                    url: `getAction.php?data=validatePassword&uid=${uid}`,
-                    type: "post",
-                    data: {
-                        "password-delete": function () {
-                            return $("[name='password-delete']").val();
+    try {
+        $("#delete-account-form").validate({
+            rules: {
+                "password-delete": {
+                    required: true,
+                    minlength: 8,
+                    remote: {
+                        url: `getAction.php?data=validatePassword&uid=${uid}`,
+                        type: "post",
+                        data: {
+                            "password-delete": function () {
+                                return $("[name='password-delete']").val();
+                            }
                         }
                     }
                 }
-            }
-        },
-        messages: {
-            "password-delete": {
-                required: REQUIRED,
-                minlength: "<p class='text-danger'><small>Please choose a password with at least 8 characters</small></p>",
-                remote: "<p class='text-danger'><small>Incorrect password</small></p>"
-            }
-        },
-        submitHandler: function(form) {
-            $.ajax({
-                url: "action.php",
-                type: "post",
-                data: new FormData(form),
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    location.replace(JSON.parse(data));
+            },
+            messages: {
+                "password-delete": {
+                    required: REQUIRED,
+                    minlength: "<p class='text-danger'><small>Please choose a password with at least 8 characters</small></p>",
+                    remote: "<p class='text-danger'><small>Incorrect password</small></p>"
                 }
-            })
-        }
-    });
+            },
+            submitHandler: function(form) {
+                $.ajax({
+                    url: "action.php",
+                    type: "post",
+                    data: new FormData(form),
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        location.replace(JSON.parse(data));
+                    }
+                })
+            }
+        });
+
+    } catch (e) {
+        
+    }
 
 
 
