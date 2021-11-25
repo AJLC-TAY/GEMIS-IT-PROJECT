@@ -7,7 +7,6 @@ $sem = $_SESSION['current_semester'] == 1? 'First': 'Second';
 
 <title>Home | GEMIS</title>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -17,7 +16,7 @@ $sem = $_SESSION['current_semester'] == 1? 'First': 'Second';
     </div>
     <!-- SPINNER END -->
     <section id="container">
-        <?php include_once('../inc/StudentSideBar.php'); ?>
+        <?php include_once('../inc/studentSideBar.php'); ?>
         <!--main content start-->
         <section id="main-content">
             <section class="wrapper ps-4">
