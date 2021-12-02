@@ -33,19 +33,6 @@ let sTableSetup = {
 };
 
 const detailFormatter = (index, row) => {
-    // row details for reference
-    // corequisite: []
-    // for_grd_level: "12"
-    // prerequisite: []
-    // school_yr: "0"
-    // section_code: "2"
-    // section_name: "ABM 12"
-    // sub_class_code: "9200"
-    // sub_code: "Project"
-    // sub_name: "Research Project"
-    // sub_semester: "2"
-    // sub_type: "applied"
-    // teacher_id: 1
     return "<div class='container'>" +
         `<h5 class='mb-1'>${row.section_name}</h5>` +
         `<p class='text-secondary'><small>Section Code | ${row.section_code}</small></p>` +
@@ -82,7 +69,6 @@ let scTableSetup = {...setupWithPagination,
 };
 
 let advisoryTableSetup = {
-    url: "getAction.php?data=sectionHandled",
     uniqueId: "section_code",
     idField: "section_code",
     height: 300,

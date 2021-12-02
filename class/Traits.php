@@ -743,6 +743,25 @@ trait FacultySharedMethods
         return $handled_sub_classes;
     }
 
+    public function get_handled_sections ($teacher_id = NULL, $is_JSON = false)
+    {
+        if (is_null($teacher_id)) {
+            session_start();
+            $teacher_id = $_SESSION['id'];
+        }
+        $data = [];
+        $result = $this->query("SELECT DISTINCT * FROM historysection hs JOIN section s WHERE hs.teacher_id = '$teacher_id' GROUP BY s.section_code;");
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = [];
+        }
+        if ($is_JSON) {
+            echo json_encode($data);
+            exit;
+        }
+        return $data;
+    }
+
+
     public function listAttendance($is_JSON = FALSE)
     {
         $addon = '';
@@ -808,16 +827,17 @@ trait FacultySharedMethods
     {
         // session_start();
         $id = $_GET['id'];
-        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND section_code!={$_GET['currentAdvisory']}" : "";
-        $result = $this->query("SELECT se.section_code, se.section_name, se.grd_level, se.stud_no, "
-            . "CONCAT(sy.start_year,' - ',sy.end_year) AS school_year, sy.start_year, sy.end_year  "
-            . "FROM section AS se JOIN schoolyear AS sy USING (sy_id) WHERE teacher_id={$id} $advisorCondition;");
+        $advisorCondition = isset($_GET['currentAdvisory']) ? "AND s.section_code!={$_GET['currentAdvisory']}" : "";
+        $result = $this->query("SELECT DISTINCT s2.start_year, s2.end_year, s.section_code, s.section_name, stud_no, grd_level FROM historysection hs JOIN section s JOIN schoolyear s2 on s.sy_id = s2.sy_id WHERE hs.teacher_id = '$id' $advisorCondition GROUP BY s.section_code;");
         $advisory_classes = [];
+
         while ($row = mysqli_fetch_assoc($result)) {
+            $start_year = $row['start_year'];
+            $end_year = $row['end_year'];
             $advisory_classes[] = [
-                "sy"           => $row['school_year'],
-                "start_y"      => $row['start_year'],
-                "end_y"        => $row['end_year'],
+                "sy"           => "$start_year - $end_year",
+                "start_y"      => $start_year,
+                "end_y"        => $end_year,
                 "section_code" => $row['section_code'],
                 "section_name" => $row['section_name'],
                 "section_grd"  => $row['grd_level'],
@@ -1435,6 +1455,11 @@ trait Enrollment
             foreach ($_POST['students'] as $stud) {
                 $this->query("UPDATE enrollment SET section_code = '$section_code' WHERE stud_id = '$stud' AND sy_id = '$sy_id';");
             }
+        }
+
+        if (!is_null($adviser)) {
+            $semester = $_SESSION['current_semester'];
+            $this->query("INSERT INTO historysection (teacher_id, section_code, date_assignment, semester) VALUES ('$adviser', '$section_code', NOW(), '$semester');");
         }
 
         echo json_encode($section_code);
