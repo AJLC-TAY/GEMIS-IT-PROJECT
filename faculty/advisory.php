@@ -46,6 +46,8 @@ $schoolYearInfo = $faculty->getSchoolYearInfo($sy_id);
 $sem = $schoolYearInfo['sem'] == '1' ? 'First' : 'Second';
 $grading = $_SESSION['current_quarter'] == '1' ? 'First' : 'Second';
 $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
+
+$signatories = $faculty->getGradeReportSignatoryOptions($sy_id);
 ?>
 
 <title>Advisory Class | GEMIS</title>
@@ -71,18 +73,13 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
                         if (isset($_GET['page']) && $_GET['page'] == 'values_grade' ) {
                             include_once("grade/valuesGrade.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/class-grade.js'></script>";
-                        }
-//                        else
-//                            if(isset($_GET['page']) && $_GET['page'] === 'report_card'){
-//                            include_once("../admin/gradeReport.php");
-//                        }
-                            else {
+                        } else {
                             include_once("grade/gradeAdvisory.php");
                             $jsFilePath = "<script type='module' src='../js/faculty/students.js'></script> ";
                         }
                         ?>
+
                         <!-- MODAL -->
-                        
                         <div id="" class="modal fade grading-confirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -177,9 +174,11 @@ $qtrs = $schoolYearInfo['sem'] == '1' ? ['1st', '2nd']  : ['3rd', '4th'];
     <script src='../assets/js/bootstrap-table-en-US.min.js'></script>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
-    <script>let code = "<?php echo ($advisory['section_code'] ?? NULL);?>";</script>
-    <script> let sectionLvl = "<?php echo ($advisory['section_lvl'] ?? NULL);?>";</script>
-    <script> let qtr = "<?php echo ("{$_SESSION['current_quarter']}");?>";</script>
+    <script>
+        let code = "<?php echo ($advisory['section_code'] ?? NULL);?>";
+        let sectionLvl = "<?php echo ($advisory['section_lvl'] ?? NULL);?>";
+        let qtr = "<?php echo ("{$_SESSION['current_quarter']}");?>";
+    </script>
 
     <?php echo $jsFilePath; ?>;
     <!-- VALIDATION -->

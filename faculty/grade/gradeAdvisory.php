@@ -6,9 +6,25 @@
             <li class="breadcrumb-item active">Advisory</li>
         </ol>
     </nav>
-    <div class="row align-content-center">
+    <div class="row align-content-center justify-content-between">
         <div class="col-auto">
             <h3 class="fw-bold"><?php echo $advisory['section_name'] ?? 'No Advisory Class'  ?></h3>
+        </div>
+        <div class="col-7">
+            <div class="row">
+                <div class="col-md-4 text-end"><label for="signatory" class="pt-lg-2">Grade report signatory</label></div>
+                <div class="col-md-8">
+                    <select name="signatory" class="form-select form-control-sm" id="signatory" title="Signatory in the grade report">
+                        <?php
+                        foreach ($signatories  as $signatory) {
+                            $name = $signatory->get_name();
+                            $position = $signatory->get_position();
+                            echo "<option value = '{$signatory->get_sign_id()}' data-name = '$name' ". (strpos(strtolower($position), "assistant principal") !== false ? "selected" : "") ." data-position = '$position'>$name - $position</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </header>
@@ -26,7 +42,6 @@
                 <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
                     <?php
                     echo $adv_opn;
-                    // echo $sub_class_opn;
                     ?>
                 </select>
             </div>
@@ -35,7 +50,6 @@
                 $class = "";
             } ?>
             <div class="d-flex-inline mb-2 ">
-                
                 <button type="button" class="btn btn-outline-dark ms-2 calculate <?php echo $class ?>" title="Calculate GA" data-code="<?php echo $advisory['section_code']; ?>"></i>Calculate GA</button>
                 <button type="button" class="btn btn-secondary multi-promote <?php echo $class ?>"></i>Promote</button>
             </div>
@@ -62,13 +76,13 @@
                         <th scope='col' data-width="150" data-align="center" data-field="action">Actions</th>
                     </tr>
                 </thead>
-
+            </table>
         </form>
-        </table>
         <div class="d-flex flex-row-reverse mt-2">
             <button type="button" class="btn btn-success ms-1 submit">Submit</button>
         </div>
     </div>
+
 </div>
 <div class="fade modal" id="view-candidates-modal" tabindex="-1" aria-labelledby="modal viewArhivedCurriculum" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">

@@ -252,6 +252,9 @@ trait UserSharedMethods
      */
     public function getStudent($id)
     {
+        if (empty($_SESSION)) {
+            session_start();
+        }
         // Step 1
         $result = $this->prepared_select("SELECT * FROM student as s 
                                         JOIN user USING (id_no)
@@ -260,7 +263,8 @@ trait UserSharedMethods
         $personalInfo = mysqli_fetch_assoc($result);
 
         // Step 2 
-        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
+//        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
+        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? AND sy_id=?", [$id, $_SESSION['sy_id']], "ii");
         $enrollmentInfo = mysqli_fetch_row($result);
 
         // Step 3
@@ -620,18 +624,6 @@ trait FacultySharedMethods
         return NULL;
     }
 
-    // public function getSectionList()
-    // {
-    //     $sy_id = $_SESSION['sy_id'];
-    //     $query= "SELECT section_code, section_name FROM section;";
-    //     $result = mysqli_query($this->db, $query);
-    //     $section_list=array();
-    //     while($row = mysqli_fetch_assoc($result))
-    //     {
-
-    //     }
-    // }
-
     /**
      * Returns an array of sections/classes handled by a specified teacher.
      * @param   string  $teacher_id     ID of the faculty.
@@ -751,13 +743,6 @@ trait FacultySharedMethods
         return $handled_sub_classes;
     }
 
-    public function get_handled_sections ()
-    {
-        $data = [];
-//        $result = $this->query("SELECT * FROM ");
-        return $data;
-    }
-
     public function listAttendance($is_JSON = FALSE)
     {
         $addon = '';
@@ -819,8 +804,6 @@ trait FacultySharedMethods
         }
     }
 
-
-
     public function listAdvisoryClasses($is_JSON = FALSE)
     {
         // session_start();
@@ -847,6 +830,22 @@ trait FacultySharedMethods
             return;
         }
         return $advisory_classes;
+    }
+
+    public function getGradeReportSignatoryOptions($sy_id)
+    {
+        $result = $this->query("SELECT start_year, end_year FROM schoolyear WHERE sy_id = '$sy_id';");
+        [$start_year, $end_year] = mysqli_fetch_row($result);
+
+        $result = $this->query("SELECT * FROM signatory WHERE year_started BETWEEN $start_year AND $end_year OR year_ended BETWEEN $start_year AND $end_year;");
+        $signatories = [];
+        while($row = mysqli_fetch_assoc($result)) {
+            $start_year = $row['year_started'];
+            $end_year = $row['year_ended'];
+            $signatories[] = new Signatory($row['sign_id'], $row['first_name'], $row['middle_name'] ?? NULL,
+                $row['last_name'], $row['acad_degree'], "$start_year - $end_year", $start_year, $end_year, $row['position']);
+        }
+        return $signatories;
     }
 }
 
@@ -2122,7 +2121,7 @@ trait Grade
             // $promote_btn = in_array($_SESSION['current_quarter'], [2, 4]) ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote btn-sm'>Promote</button>" : "";
             $action =  "<div class='d-flex justify-content-center'>
               <a class='btn-sm btn-secondary m-1' href='student.php?id=$stud_id'>Details</a>
-              <a class='btn-sm btn-secondary m-1' href='gradeReport.php?id=$stud_id'><i class='bi bi-box-arrow-up-left me-2'></i>Export</a>
+              <a class='btn-sm btn-secondary m-1' href='javascript:redirectToGradeReport(`gradeReport.php?id=$stud_id`);'><i class='bi bi-box-arrow-up-left me-2'></i>Export</a>
           </div>";
 
         //   $action .= $promote == 1 ? "<button data-stud-id='$stud_id' class='btn btn-secondary promote'>Promote</button></div>" : "<button data-stud-id='$stud_id' class='btn btn-secondary unpromote'>Unpromote</button></div>";
@@ -2130,12 +2129,7 @@ trait Grade
           return $action;
 
         }
-        // <div class='d-flex justify-content-center'>"
-        //             . "<button class='btn btn-sm btn-secondary me-1'>View</button>"
-        //             . "<button data-report-id='$report_id' data-stud-id='$stud_id' class='btn btn-sm btn-secondary me-1 export-grade'>Export Grades</button>"
-        //             . "<a href='grade.php?id=$report_id' role='button' target='_blank' class='btn btn-sm btn-primary'>View Grades</a>"
-        //             . "<a href='advisory.php?values_grade=$report_id&id=$stud_id' role='button' target='_blank' class='btn btn-sm btn-primary'>Grade Values</a>"
-        //             . "</div>
+
         if (empty($_SESSION)) { 
             session_start();
         }

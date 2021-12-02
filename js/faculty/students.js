@@ -10,6 +10,7 @@ let tableSetup = {
     ...commonTableSetup,
     pagination: false
 };
+
 let promotionSetup = {
     search: true,
     searchSelector: "#search-input",
@@ -21,12 +22,6 @@ let promotionSetup = {
     ...commonTableSetup,
     pagination: false
 };
-console.log(code);
-// let advisoryTable = {}, subClassTable = {};
-// try {
-//     advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
-//     subClassTable = $("#sub-table").bootstrapTable(tableSetup);
-// } catch (e) {}
 
 let studentTable = $("#table").bootstrapTable(tableSetup);
 let forPromotionStudentTable = $("#for-promotion-table").bootstrapTable(promotionSetup);
@@ -37,23 +32,6 @@ function changeName(name) {
 }
 
 /**
- * Initializes the table given the class type and data url
- * @param {String} classType Values can either be 'advisory' or 'sub-class'.
- * @param {String} url       The url from which the data will be retrieved.
- * @returns {jQuery|*}       Bootstrap-table object.
- */
-function initializeTable(id, url) {
-    $(id).bootstrapTable(tableSetup);
-    tableSetup.url = url;
-    // if (classType === 'advisory') {
-    //     return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
-    // }
-    // if (classType === 'sub-class') {
-    //     return subClassTable = $("#sub-table").bootstrapTable(tableSetup);
-    // }
-}
-
-/**
  *
  * @param classType
  * @param url
@@ -61,22 +39,6 @@ function initializeTable(id, url) {
  */
 function setTableData(classType, url) {
     studentTable.bootstrapTable("refresh", { url });
-    // if (classType === 'advisory') {
-    //     try {
-    //         advisoryTable.bootstrapTable('refresh', {url});
-    //     } catch (e) {
-    //         return advisoryTable = $("#advisory-table").bootstrapTable(tableSetup);
-    //     }
-    //     return;
-    // }
-    // if (classType === 'sub-class') {
-    //     try {
-    //         subClassTable.bootstrapTable('refresh', {url});
-    //     } catch (e) {
-    //         tableSetup.url = url;
-    //         return subClassTable = $("#sub-table").bootstrapTable(tableSetup);
-    //     }
-    // }
 }
 
 /**
@@ -84,8 +46,6 @@ function setTableData(classType, url) {
  * @param {String} classType Values may be 'advisory' or 'sub-class'.
  */
 function toggleGradesColumn(classType) {
-    // let displayGrades = classType === 'advisory' ? 'hideColumn' : 'showColumn';
-    // studentTable.bootstrapTable('showColumn', ['grd_f','action_2','sex']);
     studentTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
 }
 
@@ -101,14 +61,33 @@ if (qtr == '2') {
     }
 }
 var studID = '';
+
+/** Change of url when export is clicked */
+let signatory, position;
+function redirectToGradeReport(link) {
+    location.replace(link + `&signatory=${signatory}&position=${position}`)
+    console.log(link);
+}
+
+window.redirectToGradeReport = redirectToGradeReport;
+function changeSignatoryInfo() {
+    signatory = $("select[name='signatory'] option:selected").attr("data-name") || "No signatories yet";
+    position = $("select[name='signatory'] option:selected").attr("data-position") || '';
+}
 $(function() {
     preload('#advisory');
-
-
 
     $("#classes").select2({
         theme: "bootstrap-5",
         width: "100%"
+    });
+
+    /** Select signatory */
+    try {
+        changeSignatoryInfo();
+    } catch (e) {}
+    $(document).on("change", "select[name='signatory']", function () {
+        changeSignatoryInfo();
     });
 
     // Display current/selected section name
@@ -118,7 +97,6 @@ $(function() {
         let classType = firstClass.attr("data-class-type");
         studentTable.bootstrapTable("refresh", { url: firstClass.attr("data-url") });
         toggleGradesColumn(classType);
-        // initializeTable(classType, firstClass.attr("data-url"));
         changeName(classTmp);
     }
 
@@ -130,7 +108,6 @@ $(function() {
         classType = selected.attr("data-class-type");
 
         toggleGradesColumn(classType);
-        console.log(classType);
         $("#classes").select2("close");
         changeName(sectionName);
         setTableData(classType, url);
@@ -194,8 +171,6 @@ $(function() {
         $(".number").attr('readOnly', true);
     });
     $(document).on("click", "#promote", function() {
-        console.log('entered');
-        console.log(studID);
         var record = {
             'action': 'promote',
             'stud_id': studID,
@@ -293,7 +268,7 @@ $(function() {
             $('#view-candidates-modal').modal('hide');
 
         }
-        showToast('Success', 'Students Sucessfully Promoted');
+        showToast('Success', 'Students successfully promoted');
 
     });
 
@@ -314,16 +289,5 @@ $(function() {
     $(document).on("shown.bs.modal", "#view-candidates-modal", function() {
         forPromotionStudentTable.bootstrapTable("resetView");
     });
-
-
-    // if(qtr == 4 ){
-    //     $(".multi-promote").attr("class","hidden");
-    // }
-
-
-    // var list = document.getElementsByClassName("promote-name");
-    // for (var n = 0; n < list.length; ++n) {
-    //     list[n].innerText = "test";
-    // }
     hideSpinner();
 });

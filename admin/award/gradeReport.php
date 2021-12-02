@@ -4,18 +4,13 @@ $admin = new Administration();
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
 $sy_id = $_SESSION['sy_id'];
-const approve = 'WHITNEY A. DAWAYEN';
-const approve_pos = 'Secondary School Principal III';
+$signatory_name = strtoupper($_GET['signatory']);
+$position = $_GET['position'];
 $teacherName = '';
 $school_year = '';
 if ($user_type != 'ST') {
     // $teacherName = $_POST['teacher_name'];
     $teacherName = strtoupper($_SESSION['User']);
-    $grade = 12;
-    // $signatoryName = $_POST['signatory_name'];
-    $signatoryName = 'Whitney Houston';
-    $position = 'Secondary School Principal III';
-    // $position = $_POST['position'];
     $school_year = mysqli_fetch_row($admin->query("SELECT CONCAT(start_year, ' - ', end_year) FROM schoolyear WHERE sy_id = '$sy_id';"))[0];
     $breadcrumb = '';
 }
@@ -24,10 +19,7 @@ if ($user_type != 'FA'){
     $breadcrumb = '';
 }
 
-//$report_id = 37;
-
 $stud_id = $_GET['id'];
-
 $userProfile = $admin->getProfile("ST");
 $stud_id = $userProfile->get_stud_id();
 $lrn = $userProfile->get_lrn();
@@ -39,14 +31,11 @@ $age = $userProfile->get_age();
 $section = $userProfile->get_section();
 $grade_level = $userProfile->get_yrlvl();
 
+
 $strand = mysqli_fetch_row($admin->query("SELECT prog_code FROM enrollment WHERE stud_id = '$stud_id' AND sy_id = '$sy_id';"))[0];
-//$grades = $admin->listGrade($stud_id);
 $report_id = mysqli_fetch_row($admin->query("SELECT report_id FROM gradereport WHERE stud_id =  '$stud_id' AND sy_id='{$_SESSION['sy_id']}';"))[0];
 $grades = $admin->listStudentGradesForReport($report_id, $grade_level, $strand);
 $general_averages = $admin->getGeneralAverages($report_id);
-// $admittedIn = 'None';
-// $eligible = '12';
-// $date = date("F j, Y");
 $trackStrand = ($admin->getTrackStrand($stud_id))[1];
 $attendance = $admin->getStudentAttendance($report_id);
 $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report';
@@ -142,33 +131,6 @@ function renderSemesterGradeTable($semester_desc, $grades, $general_average)
         . (isset($grades['specialized']) ?   "<tr class='bg-light'>
                     <td colspan='4' class='fw-bold'>Specialized</td>
                     </tr>" . prepareGradeRecordsHTML($grades['specialized']) : "" );
-
-
-//    if ($_SESSION['user_type'] == 'ST') {
-
-//    } else {
-
-//        if (array_key_exists('specialized', $grades)) {
-//            prepareGradeRecordsHTML($grades['specialized']);
-//        }
-//        else {
-//            for ($x = 0; $x < 5; $x++) {
-//                $grd .= "<tr height=26>
-//                                    <td> </td>
-//                                    <td align='center'> </td>
-//                                    <td align='center'> </td>
-//                                    <td align='center'> </td>
-//                                    </tr>";
-//            }
-//        }
-//    }
-//    if (array_key_exists('specialized', $grades)) {
-//        $grd .= "<tr class='bg-light'>
-//                    <td colspan='4' class='fw-bold'>Specialized</td>
-//                    </tr>";
-//        prepareGradeRecordsHTML($grades['specialized']);
-//    }
-
     $grd .= "<tr>
                 <td colspan='3' class='border-0 fst-italic text-end pe-3'>General Average for the Semester</td>
                     <td class='bg-white text-center'>$general_average</td>
@@ -209,8 +171,7 @@ $observed_values_desc = [
 ];
 
 $observed_values = $admin->listValuesReport();
-// print_r($attendance);
-function otherinfo($teacher_name)
+function otherinfo($teacher_name, $signatory_name, $position)
 {
     echo "
         <div class='mx-auto' style='width: 85%;'>
@@ -249,8 +210,8 @@ function otherinfo($teacher_name)
             <p class='mb-2' style='font-size: 14px;'>Approved:</p>
             <div class='row mb-4'  style='font-size: 14px;' >
                 <div class='col-6' >   
-                    <div class='row ps-2 mb-0 fw-bold'>". approve ."</div>             
-                    <div class='row ps-2 mb-0'>". approve_pos ."</div>             
+                    <div class='row ps-2 mb-0 fw-bold'>". $signatory_name ."</div>             
+                    <div class='row ps-2 mb-0'>". $position ."</div>             
                 </div>
                 <div class='col-6 ' >
                     <div class='container'>
@@ -277,7 +238,7 @@ function otherinfo($teacher_name)
     </div>";
 }
 
-function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position)
+function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position)
 {
     echo "
         <div class='col-6'>
@@ -344,7 +305,7 @@ function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $s
               </div>
                 <div class='row mb-4'  style='font-size: 12px;' >
                   <div class='col-3 fw-bold text-center d-flex align-items-end'>Track/<br>Strand:</div>
-                  <div class='col-9 border-bottom border-dark text-center'><p class='mb-0'>$trackStrand[0]</p></div>
+                  <div class='col-9 border-bottom border-dark text-center'><p class='mb-0'>$trackStrand</p></div>
               </div>
                <div class='row mb-3'  style='font-size: 14px;' >
                   <p class='fst-italic mb-0' style = 'font-size: 10px;'>Dear Parent,</p>
@@ -355,8 +316,8 @@ function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $s
               </div>
               <div class='row mb-3 text-center'  style='font-size: 14px;' >
                 <div class='col-6' >   
-                    <div class='row ps-2 mb-0 fw-bold'>". approve ."</div>             
-                    <div class='row ps-2 mb-0' style='font-size: 12px;' >". approve_pos ."</div>             
+                    <div class='row ps-2 mb-0 fw-bold'>". $signatory_name ."</div>             
+                    <div class='row ps-2 mb-0' style='font-size: 12px;' >". $position ."</div>             
                 </div>
                 <div class='col-6 ' >
                         <div class='row mb-0 justify-content-center border-bottom border-dark fw-bold'>". $teacherName ."</div>             
@@ -371,7 +332,7 @@ function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $s
 </li>
 ";
 }
-function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position)
+function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position)
 {
     echo "
     <li class='p-0 mb-0 mx-auto'>
@@ -415,8 +376,8 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                     prepareStudentAttendanceHTML('no_of_absent', $attendance);
                 echo "</tr>";
             echo "</tbody></table>";
-            otherinfo($teacherName);
-            logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
+            otherinfo($teacherName, $signatory_name, $position);
+            logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position);
 }
 ?>
 
@@ -425,7 +386,7 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
             <ul class="template p-0 w-100">
                 <?php
                 if ($user_type != "ST") {
-                    attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position);
+                    attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade_level, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position);
                 }
                 ?>
 
