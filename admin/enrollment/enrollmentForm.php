@@ -341,6 +341,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                         </div>";
                                 ?>
                             </div>
+                            <div class="d-flex" id="group-error-con"></div>
                         </div>
                         <div class='col-md-8'>
                             <label class="col-form-label text-start">If yes, please specify</label>
