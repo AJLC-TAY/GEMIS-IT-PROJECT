@@ -375,13 +375,11 @@ trait UserSharedMethods
         );
 
         $grades = [];
-        $result = $this->query("SELECT DISTINCT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
-                                FROM gradereport g
-                                JOIN classgrade cg
-                                LEFT JOIN transfereesubject ts USING (sub_code)
-                                LEFT JOIN transferee t USING (transferee_id)
-                                JOIN subject s on cg.sub_code = s.sub_code
-                                WHERE cg.stud_id = '$id' AND g.sy_id={$_SESSION['sy_id']};");
+        $result = $this->query("SELECT DISTINCT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id 
+                                        FROM gradereport g JOIN classgrade cg 
+                                            LEFT JOIN transfereesubject ts USING (sub_code) 
+                                            LEFT JOIN transferee t USING (transferee_id) JOIN subject s on cg.sub_code = s.sub_code 
+                                            WHERE cg.stud_id = '$stud_id' AND (transferee_id IS NULL OR transferee_id = ANY (SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id'))");
                                 
         while ($row = mysqli_fetch_assoc($result)) {
             $grades_data = [
@@ -908,7 +906,7 @@ trait Enrollment
             $last_sy_attended = $_POST['last-sy'][0] . "-" . $_POST['last-sy'][1];
         }
         echo 'Adding transferee record...<br>';
-        if($_POST['balik'] == 1 OR isset($_POST['transferee']) && $_POST['transferee'] == 'yes'){
+        if($_POST['balik'] == "Yes" OR isset($_POST['transferee']) && $_POST['transferee'] == 'yes'){
             $this->prepared_query(
                 "INSERT INTO transferee (school_id, school_name, school_add, last_grd_lvl_comp, last_school_yr_comp, "
                     . "balik_aral, grd_to_enroll, last_gen_ave, semester, stud_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -918,7 +916,6 @@ trait Enrollment
                     $_POST['school-address'] ?? NULL,
                     $_POST['last-grade-level'] ?? NULL,
                     $last_sy_attended,
-
                     $_POST['balik'],
                     $_POST['grade-level'] ?? NULL,
                     $_POST['general-average'] ?? NULL,

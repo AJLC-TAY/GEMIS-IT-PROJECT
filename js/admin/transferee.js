@@ -60,7 +60,6 @@ $(function () {
     preload("#student");
     $.get(`getAction.php?data=schedule&code=${strandCode}`, function (scheduleData) {
         let subData = JSON.parse(scheduleData).data;
-        // console.log(subData)
         let template = $("#table-cell-template").html();
         let html = '';
 
@@ -98,7 +97,7 @@ $(function () {
         let subCodes = JSON.parse(data);
         subCodes.forEach(e => {
             $(`#${e}`).prop("checked", true);
-        })
+        });
     });
 
     /** Subject Schedule */

@@ -23,7 +23,6 @@ $transfereeData = [
 $enrolled_strand = mysqli_fetch_row($admin->query("SELECT e.prog_code, description FROM enrollment e JOIN program USING (prog_code) WHERE stud_id='$stud_id' AND sy_id = '$sy_id' ORDER BY date_of_enroll DESC LIMIT 1;"));
 if(mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
-
     $transferee_id = $row['transferee_id'];
     $transfereeData = [
         'transferee_id' => $transferee_id,
@@ -115,7 +114,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
     </div>
     <div class="card w-100 h-auto mt-4 p-4">
         <div class="subject-list">
-            <h5 class="fw-bold">LIST OF SUBJECTS FOR <?php echo $transfereeData['strand_name']; ?></h6>
+            <h5 class="fw-bold">LIST OF SUBJECTS FOR <?php echo $transfereeData['strand_name']; ?></h5>
             <p class="text-secondary ms-1"><small><i class="bi bi-info-circle me-2"></i>Check subjects the student have already taken from previous school, regardless of the grade level in the subject list below.</small></p>
             <div class="container overflow-auto">
                 <table id="transfer-table" class="table table-sm table-bordered table-striped">
@@ -138,7 +137,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
         </div>
     </div>
     <div class="card w-100 h-auto mt-4 p-4 overflow-auto">
-        <h5 class="fw-bold">SUGGESTED SCHEDULE</h6>
+        <h5 class="fw-bold">SUGGESTED SCHEDULE</h5>
         <table class="table table-striped table-bordered">
             <col width="10%">
             <col width="45%">
