@@ -26,4 +26,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
 if (isset($_GET['data']) && $_GET['data'] == 'enroll-data') {
     $faculty->listEnrollmentData(TRUE);
 }
+if (isset($_GET['data']) && $_GET['data'] == 'advisoryClasses') {
+    $faculty->listAdvisoryClasses(TRUE);
+}
 ?>

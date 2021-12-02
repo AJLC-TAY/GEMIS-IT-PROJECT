@@ -205,6 +205,8 @@ $(function () {
       errorPlacement: function (error, element) {
         if (element.attr("name") == "sex") {
           error.appendTo("#sex-error-con");
+        } else if (element.attr("name") == "group") {
+          error.appendTo("#group-error-con");
         } else {
           error.insertAfter(element)
         }

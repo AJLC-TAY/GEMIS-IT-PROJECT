@@ -284,7 +284,7 @@ $handledSection = $school_user->get_handled_section();
                         <div class="row p-0">
                             <!-- ADVISORY TABLE -->
                             <p>Advisory Class History</p>
-                            <table id="advisory-class-table" data-url="getAction.php?data=advisoryClasses&id=<?php echo $current_teacher_id; ?><?php echo $advisory_get_variable; ?>" class="table-striped table-sm">
+                            <table id="advisory-class-table" data-toggle="table" data-url="getAction.php?data=advisoryClasses&id=<?php echo $current_teacher_id; ?><?php echo $advisory_get_variable; ?>" class="table-striped table-sm">
                                 <thead class='thead-dark track-table'>
                                     <tr>
                                         <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field='sy'>SY</th>
