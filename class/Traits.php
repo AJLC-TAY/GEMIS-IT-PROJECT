@@ -375,7 +375,7 @@ trait UserSharedMethods
         );
 
         $grades = [];
-        $result = $this->query("SELECT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
+        $result = $this->query("SELECT DISTINCT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id
                                 FROM gradereport g
                                 JOIN classgrade cg
                                 LEFT JOIN transfereesubject ts USING (sub_code)
