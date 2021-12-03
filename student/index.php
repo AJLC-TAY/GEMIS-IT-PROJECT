@@ -39,8 +39,10 @@ $sem = $_SESSION['current_semester'] == 1? 'First': 'Second';
                                                 <li>
                                                     <h4> <?php echo $_SESSION['User']?></h4>
                                                 </li>
-                                                <li>
-                                                    <h6>Currently Enrolled in: <?php echo "$sem Semester, {$_SESSION['school_year']}"?></h6>
+                                                <li><h6>
+                                                    <?php if($_SESSION['promote'] == 2) {
+                                                        echo "Completed the SHS curriculum";
+                                                    }else {echo "Currently Enrolled in: $sem Semester, {$_SESSION['school_year']}";}?></h6>
                                                 </li>
                                             </ul>
                                         </div>
