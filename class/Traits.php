@@ -263,8 +263,8 @@ trait UserSharedMethods
         $personalInfo = mysqli_fetch_assoc($result);
 
         // Step 2 
-//        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
-        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? AND sy_id=?", [$id, $_SESSION['sy_id']], "ii");
+       $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
+        // $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? AND sy_id=?", [$id, $_SESSION['sy_id']], "ii");
         $enrollmentInfo = mysqli_fetch_row($result);
 
         // Step 3
@@ -1062,7 +1062,7 @@ trait Enrollment
 
 
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
-        . "VALUES (CURRENT_TIMESTAMP, 1, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
+        . "VALUES (CURRENT_TIMESTAMP, 0, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
 
         // echo($query);
         // echo json_encode($values);

@@ -151,8 +151,14 @@ class FacultyModule extends Dbconfig
         $section_code = $_GET['section'];
 
         $students =[];
-        $ave = $_SESSION['current_semester']=='1'?'first_gen_ave':'second_gen_ave';
-        $result = $this->query("SELECT stud_id, $ave, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code=$section_code AND $ave > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74);");
+        if($_SESSION['current_semester']=='1'){
+            $ave ='first_gen_ave';
+            $prom = 0;
+        } else {
+            $ave ='second_gen_ave';
+            $prom = 1;
+        }
+        $result = $this->query("SELECT stud_id, $ave, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code=$section_code AND $ave > 74 AND promote = $prom AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74);");
     //    echo("SELECT stud_id, $ave, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student JOIN enrollment USING (stud_id) JOIN gradereport USING(stud_id) WHERE section_code=$section_code AND $ave > 74 AND promote = 0 AND stud_id NOT IN (SELECT stud_id FROM classgrade WHERE final_grade < 74)");
         while ($row = mysqli_fetch_assoc($result)) {
             $students[] = [
