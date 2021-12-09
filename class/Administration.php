@@ -212,9 +212,25 @@ class Administration extends Dbconfig
       $records = array();
 
       while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+        if($row['user_type'] == 'ST'){
+            $tbl = 'student';
+            $hdr = 'id_no';
+        } elseif($row['user_type'] == 'AD'){
+            $tbl = 'administrator';
+            $hdr = 'admin_user_no';
+        } else {
+            $tbl = 'faculty';
+            $hdr = 'teacher_user_no';
+        }
+
+        // echo ("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM `$tbl` WHERE $hdr = {$row['id_no']};");
+            $name = mysqli_fetch_row($this->query("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM `$tbl` WHERE $hdr = {$row['id_no']};"))[0];
+            // echo $name;
+            
           $records[] = [
               'log_id' => $row['log_id'],
               'id_no' => $row['id_no'],
+              'name' => $name,
               'user_type' => $row['user_type'],
               'action' => $row['action'],
               'datetime' => $row['datetime']

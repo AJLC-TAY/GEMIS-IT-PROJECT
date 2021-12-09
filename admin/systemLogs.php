@@ -64,8 +64,9 @@ $faculty = $admin->listFaculty();
 <!--                                                <th data-checkbox="true"></th>-->
                                                 <th scope='col' data-width="100" data-align="center" data-field="log_id">Log ID</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="id_no">UID</th>
+                                                <th scope='col' data-width="100" data-align="center" data-field="name">User Name</th>
                                                 <th scope='col' data-width="100" data-halign="center" data-align="center" data-sortable="true" data-field="user_type">User Type</th>
-                                                <th scope='col' data-width="500" data-halign="center" data-align="left" " data-field="action">Action</th>
+                                                <th scope='col' data-width="500" data-halign="center" data-align="left" data-field="action">Action</th>
                                                 <th scope='col' data-width="200" data-halign="center" data-align="left" data-sortable="true" data-field="datetime">Date Time</th>
                                             </tr>
                                         </thead>
