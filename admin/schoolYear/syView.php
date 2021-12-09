@@ -97,44 +97,6 @@ if ($_SESSION['sy_id'] != $sy_id_in_link) {
         </section>
     </section>
 </div>
-<h5 class="fw-bold mb-3">SUBJECT CHECKLIST</h5>
-<div class="container">
-    <section class="row">
-        <section class="col-sm-5">
-            <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4 ">
-                <h5 class='text-start p-0 fw-bold'>CORE SUBJECTS</h5>
-                <hr class='mt-1'>
-                <ul class='ms-2 list-group overflow-auto' style='max-height: 700px;'>
-                    <?php
-                        foreach($sy_info['subject']['core'] as $core_id => $core) {
-                            echo "<a href='subject.php?sub_code=$core_id' class='link text-start list-group-item list-group-item-action bg-light' target='_blank'>{$core['name']}</a>";
-                        }
-                    ?>
-                </ul>
-            </div>
-        </section>
-        <section class="col-sm-7">
-            <div class="col-xl-12 shadow-sm p-4 bg-light border rounded-3 text-start mb-4">
-                <h5 class='text-start p-0 fw-bold'>SPECIALIZED | APPLIED SUBJECTS </h5>
-                <hr class='mt-1'>
-                <ul class='ms-2 list-group overflow-auto' style='max-height: 700px;'>
-                    <?php
-                    foreach($sy_info['subject']['spap'] as $spap_id => $spap) {
-                        echo "<li class='list-group-item bg-light'>"
-                            ."<a href='subject.php?sub_code=$spap_id' class='link text-start btn' target='_blank'>{$spap['name']}</a>";
-                            if (isset($spap['prog'])) {
-                                foreach($spap['prog'] as $prog_badge) {
-                                    echo "<span class='badge bg-primary badge-pill ms-1'><a href='program.php?prog_code=$prog_badge' class='text-white' target='_blank'>$prog_badge</a></span>";
-                                }
-                            }
-                        echo "</li>";
-                    }
-                    ?>
-                </ul>
-            </div>
-        </section>
-    </section>
-</div>
 
  <!-- MODAL -->
  <div class="modal fade" id="month-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

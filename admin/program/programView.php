@@ -77,9 +77,18 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     <div class="card w-100 h-auto">
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark track-table'>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold">SUBJECTS</h5>
-                    <a href="subject.php?prog_code=<?php echo $prog_code; ?>&action=add" id="add-btn" class="btn btn-success"><i class="bi bi-plus me-2"></i>Add subject</a>
+                <div class="row justify-content-between align-items-center mb-3">
+                    <div class="col-auto">
+                        <h5 class="fw-bold">SUBJECTS</h5>
+                    </div>
+                    <div class="d-flex col-auto">
+                        <div class="col-auto">
+                            <a href="subject.php?page=schedule&prog_code=<?php echo $prog_code; ?>" role="button" class="btn btn-secondary m-1"><i class="bi bi-calendar4-week me-2"></i> Schedule</a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="subject.php?prog_code=<?php echo $prog_code; ?>&action=add" id="add-btn" class="btn btn-success m-1"><i class="bi bi-plus-lg me-2"></i>Add subject</a>
+                        </div>
+                    </div>
                 </div>
                 <hr class="mt-1 mb-4">
                 <div class="d-flex flex-row-reverse mb-3">

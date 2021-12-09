@@ -72,22 +72,16 @@ trait School
         if (!isset($_SESSION)) {
             session_start();
         }
+
         $sy_id = $_SESSION['sy_id'] ?? NULL;
         $subjectList = [];
 
-        $shared_sub = ($tbl == "archived_subject") ? 'archived_sharedsubject' : 'sharedsubject';
-
-        $queryOne = '';
         if (is_null($sy_id)) {
             $queryOne = "SELECT * FROM subject;";
         } else {
             $queryOne = (isset($_GET['prog_code']))
-                ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}' AND sy_id = '$sy_id';"
-                // ? "SELECT * FROM $tbl WHERE sub_code
-                //    IN (SELECT sub_code FROM $shared_sub
-                //    WHERE prog_code='{$_GET['prog_code']}' AND sy_id='$sy_id')
-                //    UNION SELECT * FROM $tbl WHERE sub_type='core' AND sy_id='$sy_id' GROUP BY sub_code;"
-                : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) WHERE sy_id = '$sy_id' GROUP BY sub_code;";
+                ? "SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE prog_code = '{$_GET['prog_code']}';"
+                : "SELECT * FROM $tbl JOIN $tbl2 USING (sub_code) GROUP BY sub_code;";
         }
 
         $resultOne = $this->query($queryOne);
@@ -668,8 +662,8 @@ trait FacultySharedMethods
     {
         $condition = $teacher_id ? "WHERE sc.teacher_id !='$teacher_id' OR sc.teacher_id IS NULL" : "";
         $query = "SELECT sc.sub_class_code, ss.sy_id, ss.for_grd_level, ss.sub_semester, sc.section_code, sys.sub_code, sc.teacher_id, CONCAT('T.', f.last_name,', ', f.first_name,' ', COALESCE(f.middle_name, ''),' ', COALESCE(f.ext_name, '')) AS teacher_name, s.sub_name, s.sub_type, se.grd_level, ss.sub_semester, se.sy_id, se.section_name 
-                    FROM subjectclass sc JOIN sysub sys USING (sub_sy_id) 
-                    JOIN subject s ON s.sub_code=sys.sub_code 
+                    FROM subjectclass sc 
+                    JOIN subject s ON s.sub_code=sc.sub_code 
                     JOIN sharedsubject ss ON ss.sub_code = s.sub_code
                     JOIN section AS se USING (section_code)
                     LEFT JOIN faculty f ON f.teacher_id=se.teacher_id
@@ -1689,7 +1683,6 @@ trait Enrollment
         # 3. Initialize classgrade
         # 3.a retrieve subjects
         $result = $this->query("SELECT s.sub_code FROM subject s
-                                JOIN sysub sy USING (sub_code)
                                 LEFT JOIN sharedsubject ss ON s.sub_code = ss.sub_code
                                 WHERE sy.sy_id = '$sy_id'
                                 AND for_grd_level = '$grade_level'
@@ -1778,7 +1771,6 @@ trait Grade
 
         $result = $this->query("SELECT sub_code, sub_name, first_grading, second_grading, final_grade FROM `classgrade` 
             JOIN subjectclass USING (sub_class_code) 
-            JOIN sysub USING (sub_sy_id) 
             JOIN subject USING (sub_code) WHERE report_id='$grade_report_id'; ");
         $grades = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -1848,7 +1840,7 @@ trait Grade
         JOIN sysub USING(sub_code) 
         JOIN subjectclass sc USING(sub_sy_id)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
-        AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']}");
+        AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']};");
         
         
         // SELECT DISTINCT stud_id, status, CONCAT(last_name, ', ', first_name, ' ', LEFT(middle_name, 1), '.', COALESCE(ext_name, '')) as stud_name, first_grading, second_grading, final_grade 
@@ -1865,21 +1857,17 @@ trait Grade
         while ($grd = mysqli_fetch_assoc($res)) {
             if ($teacher_id != 'admin') {
                 if ($qtr == '2' || $qtr == '4'){
-//                    $first = 'readonly';
                     $first = 'disabled';
                     $second_final = '';
                     if($grd['second_status'] == 1){
                         $second_final = 'disabled';
-//                        $second_final = 'readonly';
                     }
                 }
 
                 if ($qtr == '1' || $qtr == '3'){
                     $first = '';
                     $second_final = 'disabled';
-//                    $second_final = 'readonly';
                     if($grd['first_status'] == 1){
-                        $first = 'readonly';
                         $first = 'disabled';
                     }
                 }

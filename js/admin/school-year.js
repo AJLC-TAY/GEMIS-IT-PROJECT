@@ -103,8 +103,7 @@ $(function() {
 
         $.post("action.php", formData);
 
-        let newGradeVal, newQtrVal, newSemVal;
-        newQtrVal = selectInputs.eq(0).val();
+        let newQtrVal = selectInputs.eq(0).val();
 
         // update the current values in the record of bootstrap table with
         // the given row ID, and row values
@@ -196,15 +195,6 @@ $(function() {
         toggleListElement(selector, isChecked);
     });
 
-    /** Stepper */
-    // $(document).on("click", ".next", () => {
-    //     stepper.next();
-    // });
-    //
-    // $(document).on("click", ".previous", () => {
-    //     stepper.previous();
-    // });
-
     /** Search Events */
     listSearchEventBinder("#search-core-subjects", "#core-list label", "#core-spinner", "#core-empty-msg");
     listSearchEventBinder("#search-spap-subjects", "#spap-list label", "#spap-spinner", "#spap-empty-msg");
@@ -254,17 +244,6 @@ $(function() {
         let syID, idRow, modal, row, monthsOfSY;
         syID = $(this).attr("data-id");
         modal = $("#month-modal");
-        // row = syTable.bootstrapTable('getRowByUniqueId', idRow);
-        // monthsOfSY = row.acad_months;
-        //
-        // console.log(row);
-        // let monthsHTML = '';
-        // for (const monthID in monthsOfSY) {
-        //     let item = monthsOfSY[monthID];
-        //     let monthDesc = item['month'];
-        //     monthsHTML += createMonthListItem(monthID, monthDesc, item['days']);
-        // }
-
 
         $("#month-form").find("[name='sy-id']").val(syID);
         modal.modal("show");
@@ -307,7 +286,6 @@ $(function() {
 
     $(document).on("click", "input[name='schedule']", function() {
         let isDisabled = false;
-        // let isDisabled = ($(this).val() !== 'copy');
         if ($(this).val() === 'copy') {
             $("input[name='initialize']").prop("disabled", isDisabled);
             $("input[name='initAndSwitch']").prop("disabled", isDisabled);
@@ -318,5 +296,6 @@ $(function() {
             $("input[name='initAndSchedule']").prop("disabled", isDisabled);
         }
     });
+
     hideSpinner();
 });

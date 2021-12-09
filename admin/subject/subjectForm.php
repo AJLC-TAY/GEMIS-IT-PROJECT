@@ -189,9 +189,9 @@ if ($action === 'edit') {
         foreach ($sub_programs as $sprog) {
             $old_program[] = "<input type='hidden' name='old_program[]' value='$sprog'>";
         }
-        $prog_opt = "<div id='app-spec-options' class='form-group row overflow-auto'>"
+        $prog_opt = "<input type='hidden' name='old_type' value='applied'><div id='app-spec-options' class='form-group row overflow-auto'>"
                     ."<label class='col-sm-6'>Program Options</label>"
-                    ."<div id='program-con' class='col-sm-8'><input type='hidden' name='old_type' value='applied'>";
+                    ."<div id='program-con' class='col-sm-8'>";
         
         foreach ($programs as $program) {
             $prog_code = $program->get_prog_code();

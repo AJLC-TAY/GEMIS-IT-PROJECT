@@ -43,10 +43,9 @@ $admin = new Administration() ?>
                 <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
                     <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
                     <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                        <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                        <button type='button' class='btn kebab rounded-circle m-1 px-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
                         <ul class='dropdown-menu' style='z-index: 99;'>
                             <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
-                            <li><button data-name='%PROGDESC%' class='archive-option dropdown-item' id='%PROGCODE%'>Archive</button></li>
                             <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
                         </ul>
                     </div>
@@ -110,50 +109,6 @@ $admin = new Administration() ?>
         </form>
     </div>
 </div>
-<!-- ARCHIVE MODAL -->
-<div class="modal fade" id="archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h4 class="mb-0">Confirmation</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
-                <p class="modal-msg"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary archive-btn">Archive</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- UNARCHIVE MODAL -->
-<div class="modal fade" id="unarchive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h4 class="mb-0">Confirmation</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Do you want to unarchive <span id="modal-identifier"></span>?</h5>
-                <p class="modal-msg"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary close-btn unarchive-btn">Unarchive</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered">
@@ -165,7 +120,7 @@ $admin = new Administration() ?>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
            <div class="modal-body">
-               <h5>Do you want to delete <span class="modal-identifier"></span>?</h5>
+               <h5>Do you want to delete <span id="modal-identifier"></span>?</h5>
                <p class="modal-msg"></p>
            </div>
            <div class="modal-footer">

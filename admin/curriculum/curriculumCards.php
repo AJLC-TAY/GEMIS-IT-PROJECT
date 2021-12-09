@@ -49,10 +49,9 @@ $admin = new Administration();
             <div data-id='%CODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
                 <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='../admin/curriculum.php?code=%CODE%'></a>
                 <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                    <button type='button' class='btn kebab rounded-circle m-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                    <button type='button' class='btn kebab rounded-circle m-1 px-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
                     <ul class='dropdown-menu' style='z-index: 99;'>
                         <li><a class='dropdown-item' href='../admin/curriculum.php?code=%CODE%&state=edit'>Edit</a></li>
-                        <li><button data-name='%NAME%' class='archive-option dropdown-item' id='%CODE%'>Archive</button></li>
                         <li><button data-name='%NAME%' class='delete-option dropdown-item' id='%CODE%'>Delete</button></li>
                     </ul>
                 </div>

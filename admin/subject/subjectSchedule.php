@@ -10,19 +10,11 @@ $applied = '';
 $specialized = '';
 $prog_opt = '';
 
-// // echo json_encode($subjectsData);
-// foreach($sub_opt['core'] as $sub_core) {
-//     $core .= "<option value='{$sub_core['code']}'>{$sub_core['name']}</option>";
-// }
-// foreach($sub_opt['applied'] as $sub_app) {
-//     $applied .= "<option value='{$sub_app['code']}'>{$sub_app['name']}</option>";
-// }
-// foreach($sub_opt['specialized'] as $sub_spec) {
-//     $specialized .= "<option value='{$sub_spec['code']}'>{$sub_spec['name']}</option>";
-// }
+$selected_prog = $_GET['prog_code'] ?? '';
 
 foreach ($programs as $prog) {
-    $prog_opt .= "<option value='{$prog->get_prog_code()}'>{$prog->get_prog_desc()}</option>";
+    $prog_code = $prog->get_prog_code();
+    $prog_opt .= "<option value='$prog_code' ". ($selected_prog == $prog_code ? "selected" : "") .">{$prog->get_prog_desc()}</option>";
 }
 ?>
 <!-- HEADER -->
@@ -44,7 +36,7 @@ foreach ($programs as $prog) {
         </select>
         <button class='btn btn-primary edit-sched-btn ms-2'><i class="bi bi-pencil-square me-2"></i>Edit</button>
         <div class="d-flex edit-opt-con d-none ms-1">
-            <a href="subject.php?page=schedule" class="btn btn-dark me-1">Cancel</a>
+            <a href="subject.php?page=schedule<?php echo (strlen($selected_prog) == 0 ? '' : "&prog_code=$selected_prog") ?>"class="btn btn-dark me-1">Cancel</a>
             <input type="submit" form="schedule-form" class="btn btn-success save-sched-btn" value="Save">
         </div>
     </div>

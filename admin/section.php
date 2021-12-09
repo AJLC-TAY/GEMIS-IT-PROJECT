@@ -95,10 +95,8 @@ include_once("../inc/head.html"); ?>
                             <input type="hidden" id="selected-section" name="section" value="">
                             <input type="hidden" name="action" value="editSubjectSection">
                             <div class="container">
-                                <div class="row">
-                                    <div class="row"><p class="px-0 fw-bold">Recommended</p></div>
-                                    <div class="row recommended"></div>
-                                </div>
+                                <div class="row"><p class="px-0 fw-bold">Recommended</p></div>
+                                <div class="row recommended"></div>
                             </div>
                         </form>
                     </div>

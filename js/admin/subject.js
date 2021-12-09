@@ -152,7 +152,7 @@ $(function () {
   /** Subject Schedule End */
 
 
-  $('#sub-type').change(function () {
+  $(document).on("change", '#sub-type', function () {
     let options = $('#app-spec-options');
     let type = $(this).val();
     if (type === 'applied' || type === 'specialized') {

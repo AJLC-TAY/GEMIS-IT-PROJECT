@@ -50,7 +50,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         </div>
     </div>
     <hr class="my-2">
-    <h5 class="fw-bold">Section</h4>
+    <h5 class="fw-bold">Section</h5>
 </header>
 <!-- HEADER END -->
 <!-- INFORMATION -->
@@ -143,10 +143,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                                                 ?>
                                             </select>
                                             <button id='adviser-clear-btn' class='btn btn-outline-danger edit-opt <?php echo $display; ?> btn-sm w-auto mt-1'><i class="bi bi-dash-circle me-2"></i> Unassign</button>
-
-                                            <!--                                        <small class='editjjquery-opt ms-1 text-secondary --><?php //echo $display; ?><!--'>Clear field to unassign adviser</small>-->
                                         </div>
-                                        <!-- <span class="badge"><button id="adviser-edit-btn" class="btn btn-sm link-green"><i class="bi bi-plus-square me-2"></i>Assign</button></span> -->
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +161,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h5 class='m-0 fw-bold'>Student List</h4>
+            <h5 class='m-0 fw-bold'>Student List</h5>
         </span>
         <span><button id="add-student" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>" class="btn btn-success btn"><i class="bi bi-plus bi-plus-lg me-2"></i>Add Student</button></span>
     </div>
@@ -175,7 +172,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                 <span class="flex-grow-1 me-2">
                     <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
                 </span>
-                
                 <div>
                     <button id="transfer-btn" class="btn btn-secondary btn-sm" data-section="<?php echo $sect_code; ?>" data-grade-level="<?php echo $sect_grd_level; ?>"  data-sy-id="<?php echo $sy_id; ?>"  title='Transfer student to another section'><i class="bi bi-arrow-left-right me-2"></i>Transfer student</button>
                 </div>
@@ -199,7 +195,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 <div class="container mt-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <span class="my-auto">
-            <h5 class='m-0 fw-bold'>Adviser History</h6>
+            <h6 class='m-0 fw-bold'>Adviser History</h6>
         </span>
     </div>
     <div class="card w-100 h-auto bg-light">
@@ -311,48 +307,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
         </div>
     </div>
 </div>
-<!-- <div class="modal fade" id="add-student-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <form id="transfer-form" method="POST">
-            <input type="hidden" name="action" value="transferStudent">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h4 class="mb-0">Add Student</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><small class='text-secondary'>Select students who will be added or transferred to this section. </small></p>
-                    <table id="add-student-table" class="table-striped table-sm">
-                        <thead class='thead-dark'>
-                        <div class="d-flex justify-content-between mb-3"> -->
-                            <!-- SEARCH BAR -->
-                            <!-- <span class="flex-grow-1 me-2">
-                        <input id="add-student-search" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                    </span>
-                            <div>
-                                <button id="transfer-btn" class="btn btn-secondary btn-sm" title='Transfer student to another section'><i class="bi bi-arrow-left-right me-2"></i>Transfer student</button>
-                            </div>
-                        </div>
-                        <tr>
-                            <th data-checkbox="true"></th>
-                            <th scope='col' data-width="200" data-align="center" data-field="lrn">LRN</th>
-                            <th scope='col' data-width="500" data-halign="center" data-align="left" data-sortable="true" data-field="name">Student Name</th>
-                            <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="action" id="action" value="addSection" />
-                    <button class="close btn btn-dark close-btn" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" form="section-form" class="submit btn btn-success" value="Submit" />
-                </div>
-            </div>
-        </form>
-    </div>
-</div> -->
 <!-- MODAL END -->
 <script type="text/javascript">
     let isViewPage = <?php echo json_encode($isViewPage); ?>;

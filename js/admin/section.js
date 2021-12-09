@@ -341,69 +341,6 @@ $(function() {
     });
 
     /** Edit subject class */
-    // $(document).on("click", ".edit-sub-class", function() {
-    //     let sectionCode, row;
-    //     sectionCode = $(this).attr("data-code");
-    //     // section data
-    //     try {
-    //         row = $("#table").bootstrapTable('getRowByUniqueId', sectionCode );
-    //         console.log(row)
-    //         $("#section-name-modal").html(row.name);
-    //         $("#stud-no").html(row.stud_no);
-    //         $(".grd-level").html(row.grd_level);
-    //     } catch (e) {
-    //         $("#section-name").html(currentSectName);
-    //         $("#stud-no").html(currentSectNo);
-    //         $(".grd-level").html(currentSectLevel);
-    //     }
-    //
-    //     $.get(`getAction.php?data=sectionInfo&code=${sectionCode}`, function (data) {
-    //         console.log(data);
-    //         // let temp = JSON.parse(JSON.stringify(data));
-    //         // let temp = $.parseJSON(data);
-    //         console.log(temp);
-    //         // update the section input in form
-    //         $("#selected-section").val(sectionCode);
-    //         // reset program list and update
-    //         $("#program-list").html('');
-    //         // populate programs in subject class modal
-    //         temp.programs.forEach(e => {
-    //             $("#program-list").append(e.link);
-    //         });
-    //
-    //         let form = $("#subject-class-form");
-    //         form.find(".recommended").html('');
-    //         let recommendedHTML = '';
-    //         Object.entries(temp.recommended).forEach(e => {
-    //             let progCode = e[0];
-    //             recommendedHTML += `<div class="d-flex justify-content-between border rounded-3 p-3"><span class="fw-bold">${progCode}</span><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#${progCode}-collapse"><i class="bi bi-eye"></i></button></div>`; // strand code
-    //             recommendedHTML += `<div id="${progCode}-collapse" class="collapse p-3 bg-light">`; // strand code
-    //             Object.entries(e[1]).forEach(semester => {
-    //                 let semDesc = semester[0]; // 1 or 2
-    //                 recommendedHTML += `<table data-program="${progCode}" data-semester="${semDesc}" class="table table-sm table-striped table-bordered">
-    //                                         <col width="5%">
-    //                                         <col width="45%">
-    //                                         <col width="50%">
-    //                                         <thead class="text-center">
-    //                                             <tr><td colspan="3">${(semDesc == 1 ? "First Semester" : "Second Semester")}</td></tr>
-    //                                             <tr>
-    //                                                 <td><input class="form-check-input semester-checkbox" type="checkbox" data-program="${progCode}" data-semester="${semDesc}"value="" id="${progCode}-${semDesc}"></td>
-    //                                                 <td>Subject Name</td>
-    //                                                 <td>Faculty</td>
-    //                                             </tr>
-    //                                         </thead>
-    //                                         <tbody>`;
-    //                 semester[1].forEach(semItem => {
-    //                     recommendedHTML += semItem;
-    //                 });
-    //                 recommendedHTML += "</tbody></thead></table>";
-    //             });
-    //             recommendedHTML += `</div>`; // strand code
-    //         });
-    //         form.find(".recommended").html(recommendedHTML);
-    //     });
-    //     $("#sub-class-modal").modal("show");
-    // });
     $(document).on("click", ".edit-sub-class", function() {
         let sectionCode, row;
         sectionCode = $(this).attr("data-code");
@@ -437,7 +374,7 @@ $(function() {
             Object.entries(temp.recommended).forEach(e => {
                 let progCode = e[0];
                 recommendedHTML += `<div class="d-flex justify-content-between border rounded-3 p-3"><span class="fw-bold">${progCode}</span><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#${progCode}-collapse"><i class="bi bi-eye"></i></button></div>`; // strand code
-                recommendedHTML += `<div id="${progCode}-collapse" class="collapse p-3 bg-light">`; // strand code
+                recommendedHTML += `<div id="${progCode}-collapse" class="collapse p-3 bg-light overflow-auto">`; // strand code
                 Object.entries(e[1]).forEach(semester => {
                     let semDesc = semester[0]; // 1 or 2
                     recommendedHTML += `<table data-program="${progCode}" data-semester="${semDesc}" class="table table-sm table-striped table-bordered">

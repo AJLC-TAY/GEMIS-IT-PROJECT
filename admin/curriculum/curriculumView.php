@@ -84,7 +84,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             <thead class='thead-dark track-table'>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold">STRAND LIST</h5>
-                    <a href="#add-modal" id="add-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus me-2"></i>Add strand</a>
+                    <a href="#add-modal" id="add-btn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add strand</a>
                 </div>
                 <hr class="mt-1 mb-4">
                 <div class="d-flex flex-row-reverse mb-3">
