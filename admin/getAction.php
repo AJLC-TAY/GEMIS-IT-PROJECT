@@ -36,6 +36,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for
     $admin->listStudents(TRUE);
 }
 /** SCHOOL YEAR */
+if (isset($_GET['data']) && $_GET['data'] == 'end_school_year') {
+    $admin->endSchoolYear();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'school_year') {
     $admin->listSYJSON();
 }

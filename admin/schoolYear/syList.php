@@ -1,4 +1,3 @@
-<!DOCTYPE html>
  <!-- HEADER -->
  <header>
      <!-- BREADCRUMB -->
@@ -8,12 +7,16 @@
              <li class="breadcrumb-item active" aria-current="page">School Year</li>
          </ol>
      </nav>
-     <div class="d-flex justify-content-between align-items-center mb-3">
-         <h3 class="fw-bold">School Year</h3>
-         <span>
-            <!-- <a href="" id="add-btn" class="btn btn-secondary" title='Initialize a school year'><i class="bi bi-eye me-2"></i>View</a> -->
-            <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
-         </span>
+     <div class="row justify-content-between align-items-center mb-3">
+         <div class="col-auto">
+            <h3 class="fw-bold">School Year</h3>
+         </div>
+         <div class="col-auto">
+             <?php if ($_SESSION['current_quarter'] != 5) { ?>
+             <button id="end-sy" class="btn btn-danger me-1" data-bs-toggle='modal' data-bs-target="#end-sy-modal" title='End this school year'>End School Year</button>
+             <?php } ?>
+             <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
+         </div>
      </div>
  </header>
  <!-- HEADER END -->

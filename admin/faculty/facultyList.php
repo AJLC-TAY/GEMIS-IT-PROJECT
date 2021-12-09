@@ -20,15 +20,15 @@
     <div class="card w-100 h-auto bg-light">
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>
-                <div class="d-flex justify-content-between mb-3">
+                <div class="row justify-content-between mb-3">
                     <!-- SEARCH BAR -->
-                    <span class="flex-grow-1 me-3"> 
-                        <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
-                    </span>
-                    <div>
-                        <button data-type="reset" class="table-opt btn btn-secondary btn-sm" title='Reset Password'>Reset Password</button>
-                        <button data-type="activate"  class="table-opt btn btn-success btn-sm" title='Activate account'>Activate</button>
-                        <button data-type="deactivate" class="table-opt btn btn-outline-danger btn-sm" title='Deactivate Faculty'>Deactivate</button>
+                    <div class="col-md-5">
+                        <input id="search-input" type="search" class="form-control form-control-sm m-1" placeholder="Search something here">
+                    </div>
+                    <div class="col-md-auto">
+                        <button data-type="reset" class="table-opt btn btn-secondary btn-sm ms-1" title='Reset Password'>Reset Password</button>
+                        <button data-type="activate"  class="table-opt btn btn-success btn-sm ms-1" title='Activate account'>Activate</button>
+                        <button data-type="deactivate" class="table-opt btn btn-outline-danger btn-sm ms-1" title='Deactivate Faculty'>Deactivate</button>
                     </div>
                 </div>
 

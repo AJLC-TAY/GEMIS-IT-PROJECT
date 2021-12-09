@@ -30,7 +30,6 @@ if ($_SESSION['enroll_status'] == 1) {
                 <h8 class="topbar fw-bold">Hi, <?php echo $_SESSION['User']?></h8>
             </li>
             
-            <!-- <li><a class="topbar" href=""><i class="fa fa-user me-2"></i>Login as Admin</a></li> -->
             <li><a class="logout" href="" data-bs-toggle="modal" data-bs-target="#log-out-modal"><i class="fa fa-sign-out me-2"></i>Sign out</a></li>
         </ul>
     </div>
@@ -46,7 +45,7 @@ if ($_SESSION['enroll_status'] == 1) {
                 echo "<h5 class='text-center'>No initialized SY</h5>";
             } else {
                 echo "<h5 class='text-center'>SY $school_year</h5>";
-                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
+                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First Quarter" : ($current_quarter == '2' ? "Second Quarter" : ($current_quarter == '3' ? "Third Quarter" : ($current_quarter == '4' ? "Fourth Quarter" : "Ended")))). " </small></p>";
             }
             ?>
             <li class="mt">

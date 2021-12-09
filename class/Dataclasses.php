@@ -330,7 +330,6 @@ class Faculty implements JsonSerializable
                         <div class='col-9 ps-1'>$status</div>
                     </div>";
 
-        ;
         $this->action = "<div class='d-flex justify-content-center'>"
                       ."<a href='faculty.php?id=$teacher_id' role='button' class='btn btn-primary btn-sm w-auto me-1' title='View Faculty'><i class='bi bi-eye'></i></a>"
                       ."<a href='faculty.php?id=$teacher_id&action=edit' class='btn btn-secondary btn-sm w-auto' title='Edit Faculty'><i class='bi bi-pencil-square'></i></a>"
@@ -866,7 +865,19 @@ class Student implements JsonSerializable
         $this->guardians = $guardians;
         $this->form137 =  is_null($form137) ? NULL : "../".$form137;
         $this->status = $status;
-        $this->is_active = ($is_active == 1) ? "Active" : "Deactivated";
+
+        $color_badge = "danger";
+        $status = 'Deactivated';
+        if ($is_active == 1) {
+            $color_badge = "success";
+            $status = 'Active';
+        }
+        $this->is_active = "<div class='container px-1'>
+                <div class='row justify-content-center'>
+                    <div class='col-3 pe-1 pt-1'><span class='badge'><div class='bg-$color_badge rounded-circle my-auto' style='width: 10px; height: 10px;'></div></span></div>
+                    <div class='col-9 ps-1'>$status</div>
+                </div>";
+
         $this->program = $program;
         $this->strand = $strand;
         $this->yrLvl = $yrLvl;

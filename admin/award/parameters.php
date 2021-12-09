@@ -1,7 +1,7 @@
 <?php
 include("../class/Administration.php");
 $admin = new Administration();
-$result = $admin->query("SELECT sub_code, sub_name FROM sysub JOIN subject USING (sub_code) WHERE sy_id = '{$_SESSION['sy_id']}';");
+$result = $admin->query("SELECT sub_code, sub_name FROM subject;");
 $subjects = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $subjects[$row['sub_code']] = $row['sub_name'];
@@ -12,8 +12,6 @@ $param = [
     "High" => ['min' => "95", 'max' => "97"],
     "With" => ['min' => "90", 'max' => "94"],
 ];
-
-//$subjects = $admin->getCurrentSubjects();
 ?>
 <div class="container">
     <header>

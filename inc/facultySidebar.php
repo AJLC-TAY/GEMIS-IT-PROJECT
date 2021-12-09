@@ -53,7 +53,7 @@ if (in_array('award_coor', $roles)) {
                 echo "<h5 class='text-center'>No initialized SY</h5>";
             } else {
                 echo "<h5 class='text-center'>SY $school_year</h5>";
-                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First" : ($current_quarter == '2' ? "Second" : ($current_quarter == '3' ? "Third" : "Fourth"))). "  Quarter </small></p>";
+                echo "<p class='text-center text-light'><small>". ($current_quarter == '1' ? "First Quarter" : ($current_quarter == '2' ? "Second Quarter" : ($current_quarter == '3' ? "Third Quarter" : ($current_quarter == '4' ? "Fourth Quarter" : "Ended")))). " </small></p>";
             }
             ?>
             <li class="mt mx-0">

@@ -208,7 +208,6 @@ class Administration extends Dbconfig
 
       $query .= " LIMIT $limit";
       $query .= " OFFSET $offset";
-//             echo $query;
       $result = $this->query($query);
       $records = array();
 
@@ -342,6 +341,11 @@ class Administration extends Dbconfig
         return $sy_id;
     }
 
+    public function endSchoolYear() {
+        session_start();
+        $this->query("UPDATE schoolyear SET status='0', can_enroll='0' WHERE sy_id = '{$_SESSION['sy_id']}';");
+        header("Location: index.php");
+    }
     public function updateSYStatus($sy_id = NULL) {
         if (empty($_SESSION)) {
             session_start();
@@ -2237,11 +2241,12 @@ class Administration extends Dbconfig
         if (empty($_SESSION)) {
             session_start();
         }
-        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', COALESCE (middle_name, ''), ' ',COALESCE(ext_name, ''))
-                                        AS name, grd_level FROM subjectclass sc
-                                        JOIN subject su ON s.sub_code = su.sub_code
-                                        JOIN section USING (section_code)
-                                        LEFT JOIN faculty f ON sc.teacher_id = f.teacher_id
+        $result = $this->query("SELECT sub_class_code, sub_name, section_code, section_name, sc.teacher_id, 
+                                    CONCAT('T. ',last_name, ', ', first_name, ' ', COALESCE (middle_name, ''), ' ',COALESCE(ext_name, '')) AS name, 
+                                    grd_level  FROM subjectclass sc
+                                        JOIN section s USING (section_code)
+                                        JOIN subject USING (sub_code)
+                                        LEFT JOIN faculty f ON f.teacher_id = sc.teacher_id
                                         WHERE s.sy_id ='{$_SESSION['sy_id']}';");
 
         $sub_classes = [];
@@ -2499,12 +2504,10 @@ class Administration extends Dbconfig
         }
 
         $g_firstname = trim($_POST['g_firstname']) ?: NULL;
-        if ($g_firstname != NULL) {
-            $g_lastname = trim($_POST['g_lastname']);
+            $g_lastname = trim($_POST['g_lastname']) ?: NULL;
             $g_middlename = trim($_POST['g_middlename']) ?: NULL;
-            $g_cp_no = trim($_POST['g_contactnumber']);
-            $relationship = trim($_POST['relationship']);
-        }
+            $g_cp_no = trim($_POST['g_contactnumber']) ?: NULL;
+            $relationship = trim($_POST['relationship']) ?: NULL;
 
         # images
         if ($_FILES['psaImage']['size'] > 0) {

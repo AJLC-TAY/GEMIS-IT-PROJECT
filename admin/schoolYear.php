@@ -42,6 +42,27 @@ include_once("../inc/head.html");
             </section>
         </section>
     </section>
+    <!-- END SY MODAL -->
+    <div class="modal fade" id="end-sy-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>End school year <?php echo $_SESSION['school_year']; ?>?</h5>
+                    <p class="modal-msg">Ending this school year will automatically promote students with passing grades.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <a href="getAction.php?data=end_school_year" class="btn btn-danger close-btn delete-btn btn-sm">End school year</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>

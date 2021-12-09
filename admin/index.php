@@ -63,11 +63,17 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                     echo " <li>
                                                     <div class='row align-content-center mt-3'>
                                                         <div class='col-4 mt-1'><label for='current-quarter' class='mb-0 mx-auto'>Current Quarter</label></div>
-                                                        <div class='col-8' style='width:40%;'><select name='quarter' class='form-select-sm form-select mb-0' id='current-quarter' value='$current_quarter'>";
-                                                    foreach ([1, 2, 3, 4] as $qtr) {
-                                                        echo "<option value='$qtr' " . ($qtr == $current_quarter ? "selected" : "") . " >" . ($qtr == 1 ? "First" : ($qtr == 2 ? "Second" : ($qtr == 3 ? "Third" : "Fourth"))) . " Quarter </option>";
+                                                        <div class='col-8 mt-1' style='width:40%;'>";
+                                                    if ($current_quarter != 5) {
+                                                        echo "<select name='quarter' class='form-select-sm form-select mb-0' id='current-quarter' value='$current_quarter'>";
+                                                        foreach ([1, 2, 3, 4] as $qtr) {
+                                                            echo "<option value='$qtr' " . ($qtr == $current_quarter ? "selected" : "") . " >" . ($qtr == 1 ? "First" : ($qtr == 2 ? "Second" : ($qtr == 3 ? "Third" : "Fourth"))) . " Quarter </option>";
+                                                        }
+                                                        echo "</select>";
+                                                    } else {
+                                                        echo "Ended";
                                                     }
-                                                    echo "</select></div>
+                                                    echo "</div>
                                                         </li>";
                                                 }
                                                 ?>

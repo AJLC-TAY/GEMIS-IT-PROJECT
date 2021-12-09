@@ -182,18 +182,18 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
                         <label class="col-form-label me-4">Belonging to any Indigenous Group? </label>
                         <?php
                         echo "<div class='form-check'>
-                                <input class='form-check-input' type='radio' name='belong_group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
+                                <input class='form-check-input' type='radio' name='group' id='yes' value='Yes' " . (($indigenous_group != NULL) ? "checked" : "") . ">
                                 <label class='form-check-label' for='yes'> Yes </label>
                             </div>
                             <div class='form-check'>
-                            <input class='form-check-input' type='radio' name='belong_group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
+                            <input class='form-check-input' type='radio' name='group' id='no' value='No' " . (($indigenous_group == NULL) ? "checked" : "") . ">
                                 <label class='form-check-label' for='yes'> No </label></div>";
                         ?>
                     </div>
 
                     <div class='col-5'>
                         <label class="col-form-label text-start">If yes, please specify</label>
-                        <input class="form-control" type="text" name='group' value='<?php echo $indigenous_group ?>' placeholder="Indigenous Group">
+                        <input class="form-control" type="text" name='group' value='<?php echo $indigenous_group ?>' <?php echo ($indigenous_group == NULL ? "disabled" : "")?> placeholder="Indigenous Group">
                     </div>
 
                     <div class="col-6">
@@ -306,11 +306,11 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
                     <div class='form-row row'>
                         <div class='form-group col-md-6'>
                             <label for='g_lastname'>Last Name</label>
-                            <input id='g_lastname' type='text' class='form-control' name='g_lastname' value='<?php echo $guardian_last_name ?>' placeholder='Last Name' required>
+                            <input id='g_lastname' type='text' class='form-control' name='g_lastname' value='<?php echo $guardian_last_name ?>' placeholder='Last Name'>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='g_firstname'>First Name</label>
-                            <input id='g_firstname' type='text' class='form-control' name='g_firstname' value='<?php echo $guardian_first_name ?>' placeholder='First Name' required>
+                            <input id='g_firstname' type='text' class='form-control' name='g_firstname' value='<?php echo $guardian_first_name ?>' placeholder='First Name'>
                         </div>
                         <div class='form-group col-md-6'>
                             <label for='g_middlename'>Middle Name</label>
