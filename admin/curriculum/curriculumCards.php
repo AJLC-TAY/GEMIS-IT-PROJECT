@@ -15,7 +15,6 @@ $admin = new Administration();
             <h3 class="fw-bold">Curriculum</h3>
         </div>
         <div class="col-auto">
-<!--            <button type="button" class="view-archive btn btn-secondary mt-1"><i class="bi bi-eye me-2"></i>View Archived Curriculum</button>-->
             <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Curriculum</button>
         </div>
     </div>
@@ -40,7 +39,7 @@ $admin = new Administration();
         </div>
     </div>
     <!--CARDS-->
-    <div class="">
+    <div>
         <ul data-page="curriculum" class="cards-con d-flex justify-content-center flex-wrap mt-4 me-5 h-auto" style="min-height: 60vh;">
 
         </ul>

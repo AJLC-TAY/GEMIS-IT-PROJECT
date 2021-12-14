@@ -23,14 +23,14 @@
  <!-- SCHOOL YEAR TABLE -->
  <div class="container mt-1">
      <div class="card w-100 h-auto bg-light">
+         <div class="d-flex justify-content-between mb-3">
+             <!-- SEARCH BAR -->
+             <span class="flex-grow-1 me-3">
+                 <input id="search-input" type="search" class="form-control" placeholder="Search something here">
+             </span>
+         </div>
          <table id="table" class="table-striped">
              <thead class='thead-dark'>
-                 <div class="d-flex justify-content-between mb-3">
-                     <!-- SEARCH BAR -->
-                     <span class="flex-grow-1 me-3">
-                         <input id="search-input" type="search" class="form-control" placeholder="Search something here">
-                     </span>
-                 </div>
                  <tr>
                      <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>

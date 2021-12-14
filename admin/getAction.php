@@ -36,6 +36,12 @@ if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for
     $admin->listStudents(TRUE);
 }
 /** SCHOOL YEAR */
+if (isset($_GET['data']) && $_GET['data'] == 'action-maintenance' && ($_GET['action'] == 'restore' || $_GET['action'] == 'delete')) {
+    $admin->performMaintenance();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'archivedsy') {
+    $admin->listArchivedSY();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'end_school_year') {
     $admin->endSchoolYear();
 }
@@ -64,9 +70,6 @@ if (isset($_GET['data']) && $_GET['data'] == 'enrolled') {
 if (isset($_GET['data']) && $_GET['data'] == 'faculty-privilege') {
     $admin->listFacultyPrivilegeJSON();
 }
-// if (isset($_GET['data']) && $_GET['data'] == 'sectionOption') {
-//     $admin->listSectionOptionJSON($_GET['teacher_id']);
-// }
 
 if (isset($_GET['data']) && $_GET['data'] == 'fullSection') {
     $admin->listFullSectionJSON();

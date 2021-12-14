@@ -2999,4 +2999,46 @@ class Administration extends Dbconfig
         $trackStrand = mysqli_fetch_row($this->prepared_select("SELECT p.prog_code, CONCAT(c.curr_name,': ', p.description) FROM enrollment e JOIN curriculum c USING(curr_code) JOIN program p on c.curr_code = p.curr_code where stud_id=?;", [$stud_id], "i"));
         return $trackStrand;
     }
+
+    /** MAINTENANCE METHODS */
+    public function listArchivedSY() 
+    {
+        $backup = "./maintenance/backup";
+        $list = scandir($backup);
+        $backup_list = array_diff($list, array('..', '.'));
+        $data = [];
+        foreach($backup_list as $item) { 
+            $index = strpos($item, '.');
+            $name = substr($item, 0, $index);    
+            $data[] = [
+                "name" =>  $name,
+                "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm'>Delete</button>
+                    <button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm'>Restore</button>"
+            ];
+        }
+
+        echo json_encode($data);
+    }
+    public function performMaintenance() 
+    {
+        $action = $_GET['action'];
+        $path = "../admin/maintenance/backup/".$_GET['name'].".sql";
+        print_r($path);
+        $message = "Item successfully $action"."d";
+
+        switch($action) {
+            case "restore":
+                $sql = file_get_contents($path);
+                mysqli_multi_query($this->db, $sql);
+                break;
+            case "delete":
+                unlink($path);
+                break;
+        }
+
+        echo json_encode([
+            "status" => "success",
+            "message" => $message
+        ]);
+    }
 }
