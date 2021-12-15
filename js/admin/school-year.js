@@ -57,8 +57,23 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
     inputsToDisplay.eq(0).val(quarter);
 };
 
+function showNameToModal(id, name) {
+    $(".backup-name").html(name);
+    let actionBtn = $("#archive-confirmation-modal").find(".action");
+    actionBtn.attr("data-sy-id", id);
+    actionBtn.attr("data-sy", name);
+}
 
+window.showNameToModal = showNameToModal;
 $(function() {
+    $(document).on("click", ".action", function() {
+        let syID = $(this).attr("data-sy-id");
+        let syName = $(this).attr("data-sy");
+        $.get(`getAction.php?data=action&action=archivesy&id=${syID}&name=${syName}`, function() {
+            showToast("success", "School year successfully archived");
+            syTable.bootstrapTable("refresh");
+        });
+    });
     $(document).on("click", ".edit-btn", function() {
         syTable.bootstrapTable("showLoading");
         let element, row, id;
@@ -214,19 +229,6 @@ $(function() {
     });
 
     /** Month */
-    // function createMonthListItem(monthID, monthDesc, days) {
-    //     return `<li class='form-control-sm row'>
-    //                 <label for='${monthID}' class='col-form-label-sm col-4'>${monthDesc}</label>
-    //                 <div class='col-5'>
-    //                     <input value='${days}' id='${monthID}' type='number' name='month[${monthID}]' class='number form-control form-control-sm' placeholder='Enter no. of days' title='${monthDesc}' min='0' max='30''>
-    //                 </div>
-    //                 <div class='col-3 text-center'>
-    //                     <button class='btn btn-sm btn-danger edit-opt' data-type='remove'>Remove</button>
-    //                     <button class='btn btn-sm btn-primary edit-opt' data-type='undo' style='display: none;'>Undo</button>
-    //                 </div>
-    //             </li>`;
-    // }
-
     function createNewMonthInputItem(monthDesc, days) {
         return `<li class='form-control-sm row'>
                     <label class='col-form-label-sm col-4 fw-bold'>${monthDesc}</label>

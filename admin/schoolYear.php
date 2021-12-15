@@ -68,6 +68,26 @@ include_once("../inc/head.html");
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- ARCHIVE CONFIRMATION MODAL -->
+    <div class="modal fade" id="archive-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Archive <span class='backup-name'></span> school year?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger btn-sm close-btn action"><i class='bi bi-archive me-2'></i>Archive</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- JQUERY FOR BOOTSTRAP TABLE -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

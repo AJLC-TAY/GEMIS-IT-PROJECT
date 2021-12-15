@@ -13,9 +13,9 @@
          </div>
          <div class="col-auto">
              <?php if ($_SESSION['current_quarter'] != 5) { ?>
-             <button id="end-sy" class="btn btn-danger me-1" data-bs-toggle='modal' data-bs-target="#end-sy-modal" title='End this school year'>End School Year</button>
+             <button id="end-sy" class="btn btn-danger m-1" data-bs-toggle='modal' data-bs-target="#end-sy-modal" title='End this school year'>End School Year</button>
              <?php } ?>
-             <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success" title='Initialize a school year'>Initialize</a>
+             <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success m-1" title='Initialize a school year'>Initialize</a>
          </div>
      </div>
  </header>

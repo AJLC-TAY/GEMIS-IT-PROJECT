@@ -1,8 +1,4 @@
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
-// const EXTENSION_IMAGE = {
-//   // filesize: 5242880,
-//   extension: "png | jpg | jpeg"
-// };
 
 function validate(selector) {
   var file = $(selector)[0].files[0];
@@ -79,7 +75,6 @@ $(function () {
       && /[a-z]/i.test(value);
   }, 'Your password must be at least 6 characters long and contain at least one number and one char\'.')
 //implementing validation
-  // done final, done implementation final
   $("#admin-form").on("submit", function(event){
     event.preventDefault();
   }).validate({
@@ -125,9 +120,9 @@ $(function () {
     }
   });
 
-  $(document).on("click", "#sy-part-1", function(e) {
+  $("#school-year-form").on("submit", function(e) {
     e.preventDefault();
-    syValidator = form.validate({
+  }).validate({
       rules: {
         "start-year": {
           required: true,
@@ -158,6 +153,9 @@ $(function () {
         },
         "end-month": {
           required: true
+        }, 
+        "default-days": {
+          required: true
         }
       },
       messages: {
@@ -167,16 +165,11 @@ $(function () {
         "end-year": {
           remote: "<p>Already used end year</p>"
         }
+      },
+      submitHandler: function(form) { 
+        form.submit();
+        return false;  //This doesn't prevent the form from submitting.
       }
-    });
-    if (form.valid()) {
-      stepper.next();
-      syValidator.destroy();
-    }
-  });
-
-  $(document).on("click", "#sy-part-2", function(e) {
-    stepper.next();
   });
 
   $(document).on("click", "#enroll-part-1", function(e) {
@@ -241,41 +234,7 @@ $(function () {
 
   $(document).on("click", "#enroll-part-2", function(e) {
     e.preventDefault();
-    // formEnroll.validate({
-    //   rules: {
-    //     "f-lastname": { required: true  , lettersonly: true},
-    //     "m-lastname": { required: true  , lettersonly: true},
-    //     "g-lastname": { required: true  , lettersonly: true},
-    //     "f-firstname": { required: true , lettersonly: true },
-    //     "m-firstname": { required: true , lettersonly: true },
-    //     "g-firstname": { required: true , lettersonly: true },
-    //     "f-occupation": { required: true },
-    //     "m-occupation": { required: true },
-    //     "g-occupation": { required: true },
-    //     "f-contactnumber": { required: true },
-    //     "m-contactnumber": { required: true },
-    //     "g-contactnumber": { required: true },
-    //     "g-relationship": { required: true }
-    //   },
-    //   messages: {
-    //     "f-lastname": { required:  REQUIRED },
-    //     "m-lastname": { required: REQUIRED },
-    //     "g-lastname": { required: REQUIRED },
-    //     "f-firstname": { required: REQUIRED },
-    //     "m-firstname": { required: REQUIRED },
-    //     "g-firstname": { required: REQUIRED },
-    //     "f-occupation": { required: REQUIRED },
-    //     "m-occupation": { required: REQUIRED },
-    //     "g-occupation": { required: REQUIRED },
-    //     "f-contactnumber": { required: REQUIRED },
-    //     "m-contactnumber": { required: REQUIRED },
-    //     "g-contactnumber": { required: REQUIRED },
-    //     "g-relationship": { required: REQUIRED }
-    //   }
-    // });
-    // if (formEnroll.valid()) {
-      stepper.next();
-    // }
+    stepper.next();
   });
   $(document).on("click", "#enroll-part-3", function(e) {
     e.preventDefault();

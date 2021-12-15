@@ -300,7 +300,7 @@ class Administration extends Dbconfig
         foreach ($tracks as $track) {
             // insert record to sycurriculum table
             $this->prepared_query("INSERT INTO sycurriculum (sy_id, curr_code) VALUES (?, ?);", [$sy_id, $track], 'is');
-            echo "Added school year - curriculum: ". $sy_id ." - ". $track ."<br>";
+            // echo "Added school year - curriculum: ". $sy_id ." - ". $track ."<br>";
 
             // store syc_id
             $school_year_curr_id = mysqli_insert_id($this->db);
@@ -349,7 +349,7 @@ class Administration extends Dbconfig
             return;
         }
 
-        echo "School year successfully initialized.";
+        // echo "School year successfully initialized.";
         if ($is_JSON) {
             echo json_encode("schoolYear.php?id=$sy_id");
             exit;
@@ -624,15 +624,6 @@ class Administration extends Dbconfig
             $quarter = $row['current_quarter'];
             $enrollment = $row['can_enroll'];
 
-            // // grade options
-            // $grd_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='grade-level' type='text' data-key='$grd_level' value='$grd_level' readonly>"
-            //     . "<select data-id='$sy_id' name='grade-level' class='form-select d-none'>";
-            // foreach ($grd_list as $id => $value) {
-            //     // $grd_opt .= "<option value='$id' ". (($id == $grd_level) ? "selected" : "") .">$value</option>";
-            //     $grd_opt .= "<option value='$id'>$value</option>";
-            // }
-            // $grd_opt .= "</select>";
-
             // quarter options
             $quarter_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='quarter' type='text'  data-key='$quarter' value='{$quarter_list[$quarter]}' readonly><select data-id='$sy_id' name='quarter' class='form-select d-none'>";
             foreach ($quarter_list as $id => $value) {
@@ -640,12 +631,20 @@ class Administration extends Dbconfig
                 $quarter_opt .= "<option value='$id'>$value</option>";
             }
             $quarter_opt .= "</select>";
+            $sy_year = $row['start_year'] . " - " . $row['end_year'];
 
-            $actions_btn = ($sy_id != $_SESSION['sy_id'] ? "" : "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
-                . "<div class='edit-options' style='display: none;'>"
-                . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
-                . "</div>");
+            # Action buttons
+            $actions_btn = "";
+            $archive_btn = "<button onclick='showNameToModal(`$sy_id`, `$sy_year`)' data-bs-toggle='modal' data-bs-target='#archive-confirmation-modal' class='btn btn-sm btn-danger archive-sy-btn' title='Archive'><i class='bi bi-archive'></i></button>";
+            if ($sy_id == $_SESSION['sy_id']) {
+                $actions_btn =  "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                                . "<div class='edit-options' style='display: none;'>"
+                                . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                                ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
+                                . "</div>";
+                $archive_btn = "";
+            }
+
             $enroll_opt = ($enrollment ? "On-going" : "Ended");
             $enroll_opt =
                 "<div class='form-check form-switch ms-3 my-auto'>"
@@ -658,14 +657,15 @@ class Administration extends Dbconfig
                 'id'              => $sy_id,
                 's_year'          => $row['start_year'],
                 'e_year'          => $row['end_year'],
-                'sy_year'         => $row['start_year'] . " - " . $row['end_year'],
+                'sy_year'         => $sy_year,
                 'current_qtr_val' => $quarter,
                 'current_qtr'     => $quarter_opt,
                 'enrollment_val'  => $enrollment,
                 'enrollment'      => $enroll_opt,
                 'action' => $actions_btn
                     . $switch
-                    . "<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
+                    ."<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
+                    .$archive_btn
             ];
         }
         echo json_encode($sy_list);
@@ -3012,21 +3012,33 @@ class Administration extends Dbconfig
             $name = substr($item, 0, $index);    
             $data[] = [
                 "name" =>  $name,
-                "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm'>Delete</button>
-                    <button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm'>Restore</button>"
+                "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm'>Delete</button>"
+                           ."<button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm'>Restore</button>"
             ];
         }
 
         echo json_encode($data);
     }
+
+    public function archiveSY()
+    {
+        $id = $_GET['id'];
+        $name = $_GET['name'];
+
+        # queries to archive tables
+
+    }
+
     public function performMaintenance() 
     {
         $action = $_GET['action'];
         $path = "../admin/maintenance/backup/".$_GET['name'].".sql";
-        print_r($path);
         $message = "Item successfully $action"."d";
 
         switch($action) {
+            case "archive":
+                $this->archiveSY();
+                break;
             case "restore":
                 $sql = file_get_contents($path);
                 mysqli_multi_query($this->db, $sql);
