@@ -649,7 +649,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <div id="step-4" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
                     <h4>Transferee Assessment Form</h4>
-                    <p class="text-secondary ms-1"><small><i class="bi bi-info-circle me-2"></i>Answer part 4 if you're a grade 11 or 12 transferee.</small></p>
+                    <p class="text-secondary ms-1"><small><i class="bi bi-info-circle me-2"></i>Answer part 4 if student is a grade 11 or 12 transferee.</small></p>
                     <div class="trans-detail border p-3">
                         <div class="container">
                             <div class="row">

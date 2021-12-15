@@ -1676,7 +1676,6 @@ class Administration extends Dbconfig
     {
         session_start();
         $sy_id = $_SESSION['sy_id'] ?? NULL;
-//        $prog_code = $_POST['program'];
         $grd_levels = [11, 12];
         $semesters = [1, 2];
         $types = ['core', 'specialized', 'applied'];
@@ -1688,9 +1687,6 @@ class Administration extends Dbconfig
 
                     $result = $this->query("SELECT sub_code FROM transfereeschedule JOIN subject USING (sub_code) WHERE sub_type='$type' 
                         AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');");
-
-                    echo "SELECT sub_code FROM transfereeschedule JOIN subject USING (sub_code) WHERE sub_type='$type' 
-                        AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');";
                     $current = [];
                     while ($row = mysqli_fetch_row($result)) {
                         $current[] = $row[0];
@@ -2921,8 +2917,6 @@ class Administration extends Dbconfig
         echo json_encode($attendance);
     }
 
-
-
     public function importSubjectGradesToCSV()
     {
         // // Load the database configuration file
@@ -2976,9 +2970,6 @@ class Administration extends Dbconfig
         //         $qstring = '?status=invalid_file';
         //     }
     }
-
-    // Redirect to the listing page
-    // header("Location: index.php".$qstring);
 
     public function getStudentAttendance($report_id)
     {

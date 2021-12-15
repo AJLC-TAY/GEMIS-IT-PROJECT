@@ -176,7 +176,7 @@ $form137 = !is_null($id_picture) ? (file_exists($form137) ? $form137 : NO_FILE) 
 
                     <div class='col-5'>
                         <label class="col-form-label">Contact Number</label>
-                        <input class="form-control" type="number" name='cp-no' value='<?php echo $cp_no ?>' aria-label="default input example" placeholder="Contact number">
+                        <input class="form-control" type="text" name='cp-no' value='<?php echo $cp_no ?>' aria-label="default input example" placeholder="Contact number">
                     </div>
                     <div class="col-6">
                         <label class="col-form-label me-4">Belonging to any Indigenous Group? </label>

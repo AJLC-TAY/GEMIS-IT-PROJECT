@@ -3,7 +3,6 @@
 require_once("../class/Administration.php");
 $admin = new Administration();
 $user_type = $_SESSION['user_type'];
-// print_r($admin->getTransfereeNames());
 
 $link = "student.php";
 $userProfile = $admin->getProfile("ST");
@@ -33,12 +32,8 @@ $form137 = $userProfile->get_form137();
 $parents = $userProfile->get_parents();
 $guardian = $userProfile->get_guardians();
 $grades = $userProfile->get_grades();
+$general_average = $userProfile->get_gen_averages();
 $father = $mother = NULL;
-
-
-
-
-
 
 const PROFILE_PATH = "../assets/profile.png";
 const PREVIEW_PATH = "../assets/no_preview.jpg";
@@ -196,7 +191,6 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     <dd class='col-md-8'>$yrlvl</dd>
                             </dl>" ?>
                             
-                            <!-- <button type='button' class='transfer-stud btn btn-success ms-2 mb-2 w-100 ' href="studentTranfer.php?id=<?php echo $stud_id ?>">TRANSFER STUDENT</button> -->
                             <?php if ($user_type == 'AD') {
                                 echo "<a href='student.php?action=transfer&id=$stud_id' class='transfer-stud btn btn-success btn-sm  ms-2 mb-2 w-100'>Transfer Student</a>";
                                 $edit_btn = "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-primary link my-auto btn-sm ms-2 mb-2 w-100'><i class='bi bi-pencil-square me-2'></i>Edit</a>";
@@ -262,18 +256,13 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </div>
 
                             <div class="row mt-3">
-
-                                
-
                                 <?php 
                                 $parents = $userProfile->get_parents();
                                 $guardian = $userProfile->get_guardians();
-                                
 
                                 if ($parents['f']['fname'] == '' && $parents['m']['fname'] == '' ) {
                                     $parents = NULL;
                                     echo " <h6><b>Contact Persons</b></h6>";
-
                                 } else {
                                     if($parents['f']['fname'] == ''){ 
                                         echo "
@@ -375,7 +364,6 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     <div class="col-6 d-flex justify-content-lg-end">
                                         <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id."&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="current-con">
@@ -502,7 +490,6 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                     </div>
                 </div>
             <?php } ?>
-
         </div>
 
         <div class="modal fade" id="imgPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">

@@ -825,14 +825,12 @@ class Student implements JsonSerializable
     private $strand;
     private $yrLvl;
 
-
-
-        public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
-                                    $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
-                                    $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture,
-                                    $section_code, $section, $parents, $guardians, $form137, $status,
-                                    $is_active, $program = NULL, $strand = NULL, $yrLvl = NULL)
-        {
+    public function __construct($stud_id,$id_no,$lrn,$first_name,$middle_name,$last_name,$ext_name,
+                                $sex,$age,$birthdate,$birth_place,$indigenous_group,$mother_tongue,
+                                $religion,$address,$cp_no,$psa_birth_cert,$belong_to_ipcc,$id_picture,
+                                $section_code, $section, $parents, $guardians, $form137, $status,
+                                $is_active, $program = NULL, $strand = NULL, $yrLvl = NULL)
+    {
         $this->stud_id = $stud_id;
         $this->id_no = $id_no;
         $this->lrn = $lrn;
@@ -1034,6 +1032,16 @@ class Student implements JsonSerializable
     public function get_grades()
     {
         return $this->grades;
+    }
+
+    public function set_gen_average($gen_average_data)
+    {
+        $this->gen_averages = $gen_average_data;
+    }
+
+    public function get_gen_averages()
+    {
+        return $this->gen_averages;
     }
 
     public function jsonSerialize(){

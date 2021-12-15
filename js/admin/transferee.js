@@ -56,6 +56,7 @@ function prepareSchedOptions(firstStrand, type) {
         renderSubOptToHtml(finalOpt, type);
     } catch (e) {}
 }
+
 $(function () {
     preload("#student");
     $.get(`getAction.php?data=schedule&code=${strandCode}`, function (scheduleData) {

@@ -20,7 +20,8 @@ $transfereeData = [
     'strand_name' => ''
 ];  
 
-$enrolled_strand = mysqli_fetch_row($admin->query("SELECT e.prog_code, description FROM enrollment e JOIN program USING (prog_code) WHERE stud_id='$stud_id' AND sy_id = '$sy_id' ORDER BY date_of_enroll DESC LIMIT 1;"));
+$enrolled_strand = mysqli_fetch_row($admin->query("SELECT e.prog_code, description, enrolled_in FROM enrollment e JOIN program USING (prog_code) WHERE stud_id='$stud_id' AND sy_id = '$sy_id' ORDER BY date_of_enroll DESC LIMIT 1;"));
+$grd_to_enroll = $enrolled_strand[2];
 if(mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
     $transferee_id = $row['transferee_id'];
@@ -63,6 +64,7 @@ $sub_opt = $subjectsData['options'] ?? NULL;
 <!-- CONTENT  -->
 <form id="transferee-form" method="POST" action="action.php">
     <input type="hidden" name="transferee-id" value="<?php echo $transferee_id; ?>">
+    <input type="hidden" name="grd-to-enroll" value="<?php echo $grd_to_enroll; ?>">
     <input type="hidden" name="prog-code" value="<?php echo $transfereeData['strand_code']; ?>">
     <input type="hidden" name="stud-id" value="<?php echo $stud_id; ?>">
     <div class="card w-100 h-auto mt-4 p-4">

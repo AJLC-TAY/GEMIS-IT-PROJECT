@@ -149,7 +149,7 @@ trait School
         $sy_id = $_SESSION['sy_id'];
         $prog_code = $_GET['code'];
         $subjectList['data'] = [];
-        $result = $this->query("SELECT * FROM subject JOIN sharedsubject USING (sub_code) WHERE for_grd_level != '0' AND sy_id = '$sy_id'  AND prog_code = '$prog_code';");
+        $result = $this->query("SELECT * FROM sharedsubject JOIN subject USING (sub_code) WHERE for_grd_level != '0' AND prog_code = '$prog_code';");
         $temp = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $temp[$row['for_grd_level']][$row['sub_semester']][] = ["sub_code" => $row['sub_code'], "sub_name" => $row['sub_name']];
@@ -241,6 +241,7 @@ trait UserSharedMethods
      * 3.   Get Student Guardian Information 
      * 4.   Get Student enrollment Status
      * 5.   Initialize Student object
+     * 6.   Get student grades
      * 
      * @return Student Student object.
      */
@@ -249,19 +250,19 @@ trait UserSharedMethods
         if (empty($_SESSION)) {
             session_start();
         }
-        // Step 1
+        # Step 1
         $result = $this->prepared_select("SELECT * FROM student as s 
                                         JOIN user USING (id_no)
                                         JOIN address as a ON a.stud_id = s.stud_id 
                                         WHERE s.stud_id=?;", [$id], "i");
         $personalInfo = mysqli_fetch_assoc($result);
 
-        // Step 2 
+        # Step 2 
        $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? ORDER BY date_of_enroll DESC", [$id], "i");
         // $result = $this->prepared_select("SELECT prog_code, description, enrolled_in FROM enrollment JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE stud_id = ? AND sy_id=?", [$id, $_SESSION['sy_id']], "ii");
         $enrollmentInfo = mysqli_fetch_row($result);
 
-        // Step 3
+        # Step 3
         $result = $this->prepared_select("SELECT * FROM parent WHERE stud_id=?;", [$id], "i");
         $parent = array();
         while ($parentInfo = mysqli_fetch_assoc($result)) {
@@ -279,7 +280,7 @@ trait UserSharedMethods
             );
         };
 
-        // Step 4
+        # Step 4
         $result = $this->prepared_select("SELECT * FROM guardian WHERE stud_id=?;", [$id], "i");
         $guardian = array();
 
@@ -292,10 +293,10 @@ trait UserSharedMethods
                 'lname' => $guardianInfo['guardian_middle_name'],
                 'relationship' => $guardianInfo['relationship'],
                 'cp_no' => $guardianInfo['cp_no']
-            ]; //is_null($parentInfo['occcupation']) ? NULL : $parentInfo['occcupation']);
+            ]; 
         };
 
-        // Step 5
+        # Step 5
         $stat = '';
         $status = $this->prepared_select("SELECT CASE WHEN e.valid_stud_data = 1 THEN 'Enrolled' WHEN e.valid_stud_data = 0 THEN 'Pending' ELSE 'Rejected' END AS status FROM enrollment AS e WHERE stud_id = ?;", [$id], "i");
         while ($res = mysqli_fetch_row($status)) {
@@ -333,8 +334,7 @@ trait UserSharedMethods
         ];
         $active_status = $personalInfo['is_active'];
 
-
-        //Step 6
+        # Step 5
         $stud_id = trim($personalInfo['stud_id']);
         $student = new Student(
             $stud_id,
@@ -368,30 +368,52 @@ trait UserSharedMethods
             $enrollmentInfo[2],
         );
 
+        # Step 6
         $grades = [];
-        $result = $this->query("SELECT DISTINCT grade_id, cg.sub_code, sub_name, sub_type, first_grading, second_grading, final_grade, ts.transferee_id 
-                                        FROM gradereport g JOIN classgrade cg 
-                                            LEFT JOIN transfereesubject ts USING (sub_code) 
-                                            LEFT JOIN transferee t USING (transferee_id) JOIN subject s on cg.sub_code = s.sub_code 
-                                            WHERE cg.stud_id = '$stud_id' AND (transferee_id IS NULL OR transferee_id = ANY (SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id'))");
+        $result = $this->query("SELECT DISTINCT cg.sub_code, s.sub_name, s.sub_type, grade_id, first_grading, second_grading, final_grade, for_grd_level, sub_semester FROM classgrade cg
+                                LEFT JOIN sharedsubject ss ON cg.sub_code = ss.sub_code
+                                LEFT JOIN subject s ON cg.sub_code = s.sub_code
+                                WHERE cg.stud_id = '$stud_id' AND prog_code = '{$enrollmentInfo[0]}'
+                                ORDER BY sub_semester, for_grd_level;");
+
+        # store already taken subjects if applicable
+        $taken_subjects = [];
+        $ts_result = $this->query("SELECT sub_code FROM transfereesubject WHERE transferee_id = ANY (SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id')");
+        while ($row = mysqli_fetch_row($ts_result)) {
+            $taken_subjects[] = $row[0];
+        }
                                 
         while ($row = mysqli_fetch_assoc($result)) {
+            $sub_code = $row['sub_code'];
             $grades_data = [
                 'grade_id' => $row['grade_id'],
-                'code'     => $row['sub_code'],
+                'code'     => $sub_code,
                 'name'     => $row['sub_name'],
                 'first'    => $row['first_grading'] ?? 0,
                 'second'   => $row['second_grading'] ?? 0,
                 'final'    => $row['final_grade'] ?? 0
             ];
             $sub_type = $row['sub_type'];
-            if (is_null($row['transferee_id'])) {
-                $grades['current'][$sub_type][] = $grades_data;
-            } else {
+
+            if (in_array($sub_code, $taken_subjects)) {
                 $grades['advanced'][$sub_type][] = $grades_data;
+            } else {
+                $grades['current'][$sub_type][] = $grades_data;
             }
         }
         $student->set_grades($grades);
+
+        # general averages
+        $gen_averages_data = [];
+        $result_gen = $this->query("SELECT report_id, first_gen_ave, second_gen_ave FROM gradereport WHERE stud_id = '$stud_id' ORDER BY report_id; ");
+        while($row = mysqli_fetch_row($result_gen)) {
+            $gen_averages_data[] = [
+                "report_id" => $row[0],
+                "first_ga" => $row[1],
+                "second_ga" => $row[2]
+            ];
+        }
+        $student->set_gen_average($gen_averages_data);
         return $student;
     }
 
@@ -413,19 +435,6 @@ trait UserSharedMethods
             $new_password = password_hash($_POST['new_password'], PASSWORD_DEFAULT);
             $this->query("UPDATE user SET password='$new_password' WHERE id_no = '{$_SESSION['user_id']}';");
         }
-
-//        switch($_SESSION['user_type']) {
-//            case 'AD':
-//                $user = "admin";
-//                break;
-//            case 'FA':
-//                $user = "faculty";
-//                break;
-//            default:
-//                $user = "default";
-//        }
-//
-//        header("Location: $user.php?id=$id");
     }
 
     public function validatePassword()
@@ -453,10 +462,9 @@ trait FacultySharedMethods
         session_start();
         $user_type = $_SESSION['user_type'];
         $statusMsg = array();
-        $action = $_POST['action'];                 // value = "add" or "edit"
+        $action = $_POST['action'];  # value = "add" || "edit"
 
-
-        // General information
+        # General information
         $lastname = trim($_POST['lastname']);
         $firstname = trim($_POST['firstname']);
         $middlename = trim($_POST['middlename']);
@@ -466,11 +474,11 @@ trait FacultySharedMethods
         $birthdate = trim($_POST['birthdate']);
         $sex = $_POST['sex'];
 
-        // Contact information
+        # Contact information
         $cp_no = trim($_POST['cpnumber']) ?: NULL;
         $email = trim($_POST['email']);
 
-        // School information
+        # School information
         $department = $_POST['department'] ?? NULL;
 
         $params = [
@@ -501,6 +509,7 @@ trait FacultySharedMethods
 
         echo $statusMsg;
     }
+
     /**
      * Implementation of updating Faculty
      * 1.   Add teacher id to the parameter and types before executing the query.
@@ -1259,9 +1268,22 @@ trait Enrollment
         $sy = $_POST['trans-sy'];
         $school = $_POST['trans-school'];
         $prog_code = $_POST['prog-code'];
-        # update transferee table
-        $this->prepared_query("UPDATE transferee SET track = ?, semester = ?, last_school_yr_comp = ?, school_name = ? WHERE transferee_id = ?;",
-            [$track, $semester, $sy, $school, $transferee_id], 'sissi');
+        $grade_to_enroll = $_POST['grd-to-enroll']; 
+
+        if (strlen($transferee_id) == 0) {
+            $this->prepared_query(
+                "INSERT INTO transferee (stud_id, school_name, school_id, school_add, last_grd_lvl_comp,last_school_yr_comp, balik_aral, 
+                grd_to_enroll, last_gen_ave, semester, track) VALUES (?, ?, NULL, NULL, NULL, ?, '1', ?, NULL, ?, ?);",
+                [$stud_id, $school, $sy, $grade_to_enroll, $semester, $prog_code],
+                "ississ"
+            );
+            $transferee_id = mysqli_insert_id($this->db);
+        } else {
+            # update transferee table
+            $this->prepared_query("UPDATE transferee SET track = ?, semester = ?, last_school_yr_comp = ?, school_name = ? WHERE transferee_id = ?;",
+                [$track, $semester, $sy, $school, $transferee_id], 'ssssi');
+        }
+        
         # save subjects
         # current subjects
         $current_subjects = [];
@@ -1513,7 +1535,6 @@ trait Enrollment
     public function validateEnrollment()
     {
         session_start();
-        // $stud_id, $current_sy, $is_valid
         $stud_id = $_POST['stud_id'];
         $current_sy = $_SESSION['sy_id'];
         $is_valid = (isset($_POST['accept'])) ? 1
@@ -1672,7 +1693,6 @@ trait Enrollment
         $grade_level = $enroll_detail['grade_level'];
         $program = $enroll_detail['prog_code'];
 
-
         echo "Start initializing grade .. <br>";
         # 1. initialize gradereport
         $this->prepared_query("INSERT INTO gradereport (stud_id, sy_id) VALUES (?, ?);", [$stud_id, $sy_id], 'ii');
@@ -1684,27 +1704,26 @@ trait Enrollment
         # 3.a retrieve subjects
         $result = $this->query("SELECT s.sub_code FROM subject s
                                 LEFT JOIN sharedsubject ss ON s.sub_code = ss.sub_code
-                                WHERE sy.sy_id = '$sy_id'
-                                AND for_grd_level = '$grade_level'
-                                AND (prog_code = '$program' OR sub_type = 'core')
+                                WHERE for_grd_level = '$grade_level'
+                                AND prog_code = '$program'
                                 GROUP BY s.sub_code;");
 
         while ($row = mysqli_fetch_row($result)) {
             $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES ('$report_id', '$stud_id', '{$row[0]}');");
         }
-        # 4. Initialize array of default observed value ids
-        $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");
+        // # 4. Initialize array of default observed value ids
+        // $values = $this->query("SELECT DISTINCT `value_id` FROM `values`;");
 
-        # 4.a For each value_id, 
-        # for each quarter, create an observedvalue.
-        echo("initialize observe values <br>");
+        // # 4.a For each value_id, 
+        // # for each quarter, create an observedvalue.
+        // echo("initialize observe values <br>");
 
-        while ($row = mysqli_fetch_assoc($values)) {
-            foreach ([1, 2, 3, 4] as $quarter) {
-                $query = "INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES ('{$row['value_id']}',$quarter, $report_id, $stud_id);";
-                $this->query($query);
-            }
-        }
+        // while ($row = mysqli_fetch_assoc($values)) {
+        //     foreach ([1, 2, 3, 4] as $quarter) {
+        //         $query = "INSERT INTO `observedvalues`(`value_id`, `quarter`, `report_id`, `stud_id`) VALUES ('{$row['value_id']}',$quarter, $report_id, $stud_id);";
+        //         $this->query($query);
+        //     }
+        // }
 
         echo "End initializing grade: $report_id<br>";
 
