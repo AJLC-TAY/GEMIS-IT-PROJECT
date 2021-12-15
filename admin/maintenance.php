@@ -39,7 +39,7 @@ include_once("../inc/head.html");
                                 </div>
                             </header>
                             <div class="content">
-                                <div class="card py-3">
+                                <div class="card py-3 mb-3">
                                     <div class="container">
                                         <h5>Backup</h5>
                                         <div class="d-flex justify-content-between mb-3">
@@ -52,14 +52,22 @@ include_once("../inc/head.html");
                                             <table id="table" data-url="getAction.php?data=archivedsy" data-height="500" data-search-selector="#search-input" data-toggle="table" class="table table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th scope='col' data-width="600" data-halign="center" data-align="left" data-field="name">School Year</th>
-                                                        <th scope='col' data-width="400" data-align="center" data-field="action">Action</th>
+                                                        <th scope='col' data-width="500" data-halign="center" data-align="left" data-field="name">School Year</th>
+                                                        <th scope='col' data-width="300" data-align="center" data-field="date">Date created</th>
+                                                        <th scope='col' data-width="200" data-align="center" data-field="action">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                 </tbody>
                                             </table>                                   
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="card py-3">
+                                    <h5>Reset System</h5>
+                                    <p>Reseting the system will delete all data and backup stored, which includes the admin and faculty members, student records, and curriculum data.</p>
+                                    <div class="d-flex justify-content-end">
+                                        <button data-bs-toggle="modal" data-bs-target="#reset-confirmation-modal" class="btn btn-danger">Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -118,18 +126,47 @@ include_once("../inc/head.html");
             </div>
         </div>
     </div>
+    <!-- RESET CONFIRMATION MODAL -->
+    <div class="modal fade" id="reset-confirmation-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reset-system-form" method="POST">
+                        <input type="hidden" name="action" value="reset-system">
+                        <p class="text-secondary"><small>Enter your password to confirm system reset</small></p>
+                        <div class="container">
+                            <div class="form-group row mb-3">
+                                <label for="current">Current password</label>
+                                <input id="current" type="password" name="current" class='form-control' placeholder="Password">
+                            </div>
+                            <div class="form-group row">
+                                <label for="current">Re-enter password</label>
+                                <input id="re-enter-pass" type="password" name="re-enter-pass" class='form-control' placeholder="Password">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-danger close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" name="reset-system" form="reset-system-form" class="btn btn-secondary btn-sm" value="Reset">
+                </div>
+            </div>
+        </div>
+</div>
 </body>
-
-<!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
 
 <!-- JQUERY FOR BOOTSTRAP TABLE -->
 <script src="../assets/js/bootstrap-table.min.js"></script>
 <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
 <script type="text/javascript" src="../js/common-custom.js"></script>
 <script>
+    let uid = <?php echo json_encode($_SESSION['user_id']); ?>;
     function showBackUpName(name) {
         $(".backup-name").html(name);
         $(".action").attr("data-name", name);
@@ -144,10 +181,17 @@ include_once("../inc/head.html");
         });
     });
     $(function () {
+        preload("#maintenance");
         $("#main-spinner-con").hide();
 
     });
-
+    
 </script>
+
+
+<!-- VALIDATION -->
+<script src="../js/validation/jquery.validate.min.js"></script>
+<script src="../js/validation/additional-methods.min.js"></script>
+<script src="../js/validation/validation.js"></script>
 
 </html>

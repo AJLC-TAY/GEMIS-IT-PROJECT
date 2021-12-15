@@ -18,7 +18,6 @@ const MONTHS = ["January", "February", "March", "April", "May", "June",
 ];
 
 var syTable = $("#table").bootstrapTable(tableSetup);
-var enrollAfter = false;
 try {
     var stepper = new Stepper($('#school-year-stepper')[0]);
 } catch (e) {}
@@ -170,6 +169,7 @@ $(function() {
     const toggleListElement = (selector, bool) => {
         $(`[data-track-id='${selector}']`).prop("disabled", !bool);
     }
+    
     $(document).on("click", "#track-checkbox-all", function() {
         let isChecked = $(this).is(":checked");
         let list = $(this).attr("data-target-list");
@@ -177,12 +177,6 @@ $(function() {
         tracks.each(function() {
             toggleListElement($(this).find('input').val(), isChecked)
         })
-    });
-
-    $(document).on('click', "input[name='initAndEnroll']", function(e) {
-        e.preventDefault();
-        enrollAfter = true;
-        $("#school-year-form").submit();
     });
 
     $(document).on("submit", "#school-year-form", function(e) {
@@ -194,11 +188,6 @@ $(function() {
         $.post("action.php", formData, function(data) {
             let url = JSON.parse(data);
             let message = 'Redirecting to the initialized school year';
-            console.log(url);
-            if (enrollAfter) {
-                message = 'Redirecting to the enrollment setup page';
-                url = 'enrollment.php?page=setup';
-            }
             showToast('dark', message, { delay: 3000 });
             location.replace(url);
         });
@@ -284,19 +273,6 @@ $(function() {
             $("#month-modal").modal("hide");
             location.reload();
         });
-    });
-
-    $(document).on("click", "input[name='schedule']", function() {
-        let isDisabled = false;
-        if ($(this).val() === 'copy') {
-            $("input[name='initialize']").prop("disabled", isDisabled);
-            $("input[name='initAndSwitch']").prop("disabled", isDisabled);
-            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
-        } else {
-            $("input[name='initialize']").prop("disabled", !isDisabled);
-            $("input[name='initAndSwitch']").prop("disabled", !isDisabled);
-            $("input[name='initAndSchedule']").prop("disabled", isDisabled);
-        }
     });
 
     hideSpinner();

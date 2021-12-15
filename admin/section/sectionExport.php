@@ -104,6 +104,7 @@ foreach($students as $student) {
                         <thead>
                             <tr class="text-center">
                                 <td>LRN</td>
+                                <td>User ID</td>
                                 <td>Student Name</td>
                                 <td>Sex</td>
                             </tr>
@@ -113,6 +114,7 @@ foreach($students as $student) {
                                 foreach($students as $student) {
                                     echo "<tr>";
                                     echo "<td align='center'>{$student['lrn']}</td>";
+                                    echo "<td align='center'>{$student['uid']}</td>";
                                     echo "<td>{$student['name']}</td>";
                                     echo "<td align='center'>{$student['sex']}</td>";
                                     echo "</tr>";

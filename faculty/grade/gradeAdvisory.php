@@ -38,13 +38,6 @@
             <span class="flex-grow-1 me-2">
                 <input id="search-input" type="search" class="form-control " placeholder="Search something here">
             </span>
-            <div class="col-lg-3 mb-2">
-                <select name="" class="form-control form-control-sm mb-3 w-auto" id="classes">
-                    <?php
-                    echo $adv_opn;
-                    ?>
-                </select>
-            </div>
             <?php $class = "hidden";
             if ($_SESSION['current_quarter'] == 2 or $_SESSION['current_quarter'] == 4) {
                 $class = "";
@@ -63,10 +56,10 @@
 
         </div>
         <form id="advisory-class-form" method="post">
-            <table id="table" class="table-striped table-sm <?php echo $adv_table_display; ?>">
+            <table id="table" class="table-striped table-sm" data-url="getAction.php?data=student&section=<?php echo $section_code ?>">
                 <thead class='thead-dark'>
                     <tr>
-                        <th scope='col' data-width="50" data-align="center" data-field="id">ID</th>
+                        <th scope='col' data-width="50" data-align="center" data-field="uid">UID</th>
                         <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="status">Status</th>
                         <th scope='col' data-width="100" data-align="center" data-sortable="true" data-field="grd_1">1st Grade</th>
@@ -94,8 +87,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-
                 <table id="for-promotion-table" class="table-striped table-sm">
                     <thead class='thead-dark'>
                         <tr>
@@ -106,7 +97,6 @@
                         </tr>
                     </thead>
                 </table>
-                <!-- </div> -->
             </div>
             <div class="modal-footer">
                 <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>

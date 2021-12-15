@@ -3009,15 +3009,23 @@ class Administration extends Dbconfig
         $data = [];
         foreach($backup_list as $item) { 
             $index = strpos($item, '.');
-            $name = substr($item, 0, $index);    
+            $name = substr($item, 0, $index);
+            $date =  date ("F d, Y H:i:s", filemtime($backup."/".$name.".sql"));  
             $data[] = [
                 "name" =>  $name,
-                "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm'>Delete</button>"
-                           ."<button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm'>Restore</button>"
+                "date" => $date,
+                "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm m-1'>Delete</button>"
+                           ."<button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm m-1'>Restore</button>"
             ];
         }
 
         echo json_encode($data);
+    }
+
+    public function resetSystem() 
+    {
+        # create default admin
+        $this->createDefaultAdmin();
     }
 
     public function archiveSY()

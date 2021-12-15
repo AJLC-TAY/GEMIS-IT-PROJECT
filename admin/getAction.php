@@ -39,6 +39,9 @@ if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for
 if (isset($_GET['data']) && $_GET['data'] == 'action-maintenance' && ($_GET['action'] == 'restore' || $_GET['action'] == 'delete')) {
     $admin->performMaintenance();
 }
+if (isset($_GET['data']) && $_GET['data'] == 'action' && $_GET['action'] == 'archivesy') {
+    $admin->performMaintenance();
+}
 if (isset($_GET['data']) && $_GET['data'] == 'archivedsy') {
     $admin->listArchivedSY();
 }

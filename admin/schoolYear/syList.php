@@ -13,7 +13,7 @@
          </div>
          <div class="col-auto">
              <?php if ($_SESSION['current_quarter'] != 5) { ?>
-             <button id="end-sy" class="btn btn-danger m-1" data-bs-toggle='modal' data-bs-target="#end-sy-modal" title='End this school year'>End School Year</button>
+             <button id="end-sy" class="btn btn-danger m-1" data-bs-toggle='modal' data-bs-target="#end-sy-modal" title='End this school year'>End Current School Year</button>
              <?php } ?>
              <a href="schoolYear.php?action=init" id="add-btn" class="btn btn-success m-1" title='Initialize a school year'>Initialize</a>
          </div>
@@ -35,7 +35,7 @@
                      <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                      <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field="sy_year">School Year</th>
-                     <th scope='col' data-width="100" data-align="left" data-field="current_qtr">Current Quarter</th>
+                     <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="current_qtr">Current Quarter</th>
                      <th scope='col' data-width="250" data-align="center" data-field="action">Action</th>
                      <th scope='col' data-width="150" data-align="center" data-field="enrollment">Enrollment Status</th>
                  </tr>

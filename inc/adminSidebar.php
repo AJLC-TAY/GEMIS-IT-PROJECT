@@ -103,6 +103,12 @@ if (isset($_SESSION['sy_id'])) {
                 </a>
             </li>
             <li class="sub-menu mx-0">
+                <a id='maintenance' href="maintenance.php">
+                    <i class="bi bi-gear"></i>
+                    <span>Maintenance</span>
+                </a>
+            </li>
+            <li class="sub-menu mx-0">
                 <a id='system-logs' href="systemLogs.php">
                     <i class="fa fa-list"></i>
                     <span>System Logs</span>

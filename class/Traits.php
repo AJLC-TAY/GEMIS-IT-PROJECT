@@ -2148,12 +2148,13 @@ trait Grade
         $qtr = mysqli_fetch_row($this->query("SELECT current_quarter FROM `schoolyear` Where `sy_id`='{$_SESSION['sy_id']}';"))[0];
 
 
-        $result = $this->query("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
+        $result = $this->query("SELECT DISTINCT id_no, stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 JOIN enrollment USING (stud_id) WHERE  enrollment.semester = {$_SESSION['current_semester']} AND section_code='$section_code' ORDER BY sex, last_name;");
                                 // echo("SELECT DISTINCT stud_id, LRN, promote, sex, CONCAT(last_name, ', ', first_name, ' ', middle_name, ' ', COALESCE(ext_name, '')) AS name FROM student 
                                 // JOIN enrollment USING (stud_id) WHERE section_code='$section_code' AND semester = {$_SESSION['current_semester']} AND sy_id = {$_SESSION['sy_id']} ORDER BY sex, last_name;");
         while ($row = mysqli_fetch_assoc($result)) {
             $stud_id = $row['stud_id'];
+            $uid = $row['id_no'];
 
             $lvl = mysqli_fetch_row($this->query("SELECT enrolled_in FROM enrollment Where stud_id='$stud_id';"))[0];
 
@@ -2192,6 +2193,7 @@ trait Grade
 
             $students[] = [
                 'id'     =>  $stud_id,
+                'uid'    =>  $uid,
                 'lrn'    =>  $row['LRN'],
                 'name'   =>  $row['name'],
                 'grd_f'   =>  "<input min='60' max='100' type='number' name='{$stud_id}/{$report_id}/first' class='form-control form-control-sm text-center mb-0 number gen-ave' $editable value='{$first_gen_ave}'>",

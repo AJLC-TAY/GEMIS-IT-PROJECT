@@ -167,9 +167,23 @@ $(function () {
         }
       },
       submitHandler: function(form) { 
-        form.submit();
+        let formData = new FormData(form);
+        $.ajax({
+          url: "action.php", 
+          data: formData,
+          method: "post",
+          processData: false,
+          contentType: false,
+          success: function(data) {
+            let url = JSON.parse(data);
+            let message = 'Redirecting to the initialized school year';
+            console.log(url);
+            showToast('dark', message, { delay: 3000 });
+            location.replace(url);
+          }
+        });
         return false;  //This doesn't prevent the form from submitting.
-      }
+      }, 
   });
 
   $(document).on("click", "#enroll-part-1", function(e) {
@@ -469,6 +483,44 @@ $(function () {
       }
     });
   } catch (e) {}
+
+  try {
+    $("#reset-system-form").validate({
+      rules: {
+        current: {
+          required: true,
+          minlength: 8,
+          remote: {
+            url: `getAction.php?data=validatePassword&uid=${uid}`,
+            type: "post",
+            data: {
+              current: function () {
+                return $("[name='current']").val();
+              }
+            }
+          }
+        },
+        "re-enter-pass": {
+          required: true,
+          equalTo: "#current"
+        }
+      },
+      messages: {
+        current: {
+          required: REQUIRED,
+          remote: "<p class='text-danger'><small>Incorrect password</small></p>"
+        },
+        "reenter-pass": {
+          required: REQUIRED,
+          equalTo: "<p class='text-danger'><small>Please enter the same value again</small></p>"
+        }
+      },
+      submitHandler: function (form) {
+        form.submit();
+        return false;
+      }
+    });
+  } catch(e) {}
 
   $("#acad-parameter-form").validate({
     rules: {

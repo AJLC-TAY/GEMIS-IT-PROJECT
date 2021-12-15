@@ -128,8 +128,15 @@ $subjects = $init_data['subjects'];
         </div>
     
     </div>
-        <div class="d-flex justify-content-end mt-4">
-        <a href="schoolYear.php" class="btn me-1 btn-dark">Cancel</a>
-        <button class="btn btn-success">Initialize</button>
+    <div class="row justify-content-lg-end mt-4">
+        <div class="col-auto px-1">
+            <a role="button" href="schoolYear.php" class="w-100 btn my-1 btn-dark">Cancel</a>
+        </div>
+        <div class="col-auto px-1">
+            <input type="submit" name="initAndSwitch" class="btn btn-secondary my-1" value="Initialize & Switch">
+        </div>
+        <div class="col-auto px-1">
+            <input type="submit" name="initialize" class="btn btn-success my-1" value="Initialize">
+        </div>
     </div>
 </form>

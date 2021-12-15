@@ -2,13 +2,6 @@
 include('../class/Administration.php');
 $admin = new Administration();
 
-/******** TEST ********/
-if (isset($_POST['action']) && $_POST['action'] === 'validateImage') {
-    echo "image";
-//    print_r($admin->validateImage('image', 5000000));
-    // Administration::saveImage("2194014", 'image', "../student_assets", 'psa');
-}
-
 /******** ADMINISTRATOR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addAdministrator') {
     $admin->addAdministrator();
@@ -28,15 +21,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteAdmin') {
 //}
 
 /******** SCHOOL YEAR ********/
-if (isset($_POST['action']) && $_POST['action'] === 'initializeSY') {
+if (isset($_POST['action']) && $_POST['action'] === 'initializeSY' && isset($_POST['initialize']) ) {
     $admin->initializeSY(FALSE, TRUE);
     $admin->enterLog("Inialize School Year");
 }
-if (isset($_POST['action']) && $_POST['action'] === 'initAndSchedule') {
-    $admin->initializeSY(TRUE, FALSE, 'schedule');
-    $admin->enterLog("Inialize School Year and Schedule");
-}
-if (isset($_POST['action']) && $_POST['action'] === 'initAndSwitch') {
+if (isset($_POST['action']) && $_POST['action'] === 'initializeSY' && isset($_POST['initAndSwitch'])) {
     $admin->initializeSY(TRUE, FALSE, 'view');
     $admin->enterLog("Inialize and Switch School Year");
 }
@@ -55,6 +44,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'editAcademicDays') {
 if (isset($_GET['action']) && $_GET['action'] === 'switchSY') {
     $admin->switchSY(NULL, TRUE, 'view');
     $admin->enterLog("Switch School Year");
+}
+if (isset($_GET['action']) && $_GET['action'] === 'reset-system') {
+    $admin->resetSystem();
 }
 
 /******** ENROLLMENT ********/

@@ -7,21 +7,12 @@ $sub_classes = [];
 $sy_id = $_SESSION['sy_id'];
 $advisory = $faculty->getAdvisoryClass($sy_id);
 $sub_classes = $faculty->get_handled_sub_classes($sy_id);
-$adv_opn = '';
 $sub_class_opn = '';
-$adv_table_display = '';
 
 $adv_count_is_empty = !(is_null($advisory));
 if ($adv_count_is_empty) {
-    $adv_table_display = '';
     $section_code = $advisory['section_code'];
     $section_name = $advisory['section_name'];
-
-    $adv_opn = "<optgroup label='Advisory Class'>"
-        . "<option value='$section_code' title='$section_code'  data-class-type='advisory' "
-        . "data-url='getAction.php?data=student&section={$section_code}' "
-        . "data-name='$section_name'>$section_name</option>"
-        . "</optgroup>";
 }
 
 if (!(is_null($sub_classes))) {
