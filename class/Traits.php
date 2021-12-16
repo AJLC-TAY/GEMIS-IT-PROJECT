@@ -335,7 +335,7 @@ trait UserSharedMethods
         $active_status = $personalInfo['is_active'];
 
         # Step 5
-        $stud_id = trim($personalInfo['stud_id']);
+        $stud_id = (int) $personalInfo['stud_id'];
         $student = new Student(
             $stud_id,
             $personalInfo['id_no'],
@@ -378,13 +378,15 @@ trait UserSharedMethods
 
         # store already taken subjects if applicable
         $taken_subjects = [];
-        $ts_result = $this->query("SELECT sub_code FROM transfereesubject WHERE transferee_id = ANY (SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id')");
+        $ts_result = $this->query("SELECT sub_code FROM transfereesubject WHERE transferee_id = ANY(SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id');");
         while ($row = mysqli_fetch_row($ts_result)) {
             $taken_subjects[] = $row[0];
         }
                                 
         while ($row = mysqli_fetch_assoc($result)) {
             $sub_code = $row['sub_code'];
+            $grd_level = $row['for_grd_level'];
+            $semester = $row['sub_semester'];
             $grades_data = [
                 'grade_id' => $row['grade_id'],
                 'code'     => $sub_code,
@@ -398,22 +400,27 @@ trait UserSharedMethods
             if (in_array($sub_code, $taken_subjects)) {
                 $grades['advanced'][$sub_type][] = $grades_data;
             } else {
-                $grades['current'][$sub_type][] = $grades_data;
+                $grades['current'][$grd_level][$semester][$sub_type][] = $grades_data;
             }
         }
         $student->set_grades($grades);
 
         # general averages
         $gen_averages_data = [];
-        $result_gen = $this->query("SELECT report_id, first_gen_ave, second_gen_ave FROM gradereport WHERE stud_id = '$stud_id' ORDER BY report_id; ");
-        while($row = mysqli_fetch_row($result_gen)) {
-            $gen_averages_data[] = [
-                "report_id" => $row[0],
-                "first_ga" => $row[1],
-                "second_ga" => $row[2]
+        $result_gen = $this->query("SELECT report_id, first_gen_ave, second_gen_ave, enrolled_in, CONCAT(start_year,' - ',end_year) AS sy FROM `gradereport` 
+                                    JOIN student s USING (stud_id) 
+                                    JOIN enrollment e ON e.stud_id = s.stud_id 
+                                    JOIN schoolyear sy ON sy.sy_id = e.sy_id 
+                                    WHERE e.sy_id = ANY (SELECT sy_id FROM enrollment WHERE stud_id = '$stud_id') AND s.stud_id = '$stud_id';");
+        while($row = mysqli_fetch_assoc($result_gen)) {
+            $gen_averages_data[$row['enrolled_in']] = [
+                "report_id" => $row['report_id'],
+                "sy"        => $row['sy'],
+                "first"  => $row['first_gen_ave'],
+                "second" => $row['second_gen_ave']
             ];
         }
-        $student->set_gen_average($gen_averages_data);
+        $student->set_gen_averages($gen_averages_data);
         return $student;
     }
 

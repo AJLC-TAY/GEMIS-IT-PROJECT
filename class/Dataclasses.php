@@ -1034,7 +1034,7 @@ class Student implements JsonSerializable
         return $this->grades;
     }
 
-    public function set_gen_average($gen_average_data)
+    public function set_gen_averages($gen_average_data)
     {
         $this->gen_averages = $gen_average_data;
     }

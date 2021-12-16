@@ -24,6 +24,7 @@ var message = 'Are you sure you want to transfer the student?';
 var stud_id;
 let row = '';
 var gradesTemp = [];
+var gradesGATemp = [];
 let formData = [];
 let tempChanges = [];
 
@@ -138,6 +139,52 @@ $(function() {
     });
 
 
+
+
+    $(document).on("click", ".ga-action", function () {
+        showSpinner();
+        let gradeID = $(this).attr("data-grade-id");
+        let row = $(this).closest("tr");
+        let input = row.find("input");
+
+        switch($(this).attr("data-action")) {
+            case "edit":
+                input.prop("disabled", false);
+                gradesGATemp.push({'gid' : gradeID, 'data' : input.val()});
+                $(this).addClass('d-none');
+                $(this).siblings(".edit-options").removeClass("d-none");
+                hideSpinner();
+                return;
+            case "save":
+                formData.push({'name': input.attr('name'), 'value': input.val()});
+                formData.push({'name': 'action', 'value': 'editGeneralAverage'});
+                let modal = $("#confirmation-edit-ga-modal");
+                modal.find(".submit-edit-button").attr("data-type", 'gen-average');
+                modal.modal('show');
+                hideSpinner();
+                return;
+            case "cancel":
+                let gradeData;
+                gradesGATemp = gradesGATemp.filter(e => {
+                    if (e.gid == gradeID) {
+                        gradeData = e;
+                    }
+                    return e.gid != gradeID;
+                });
+
+                console.log(gradeData)
+                input.val(gradeData.data);
+                break;
+        }
+        let editOptions = $(this).closest('.edit-options');
+        editOptions.addClass('d-none');
+        editOptions.siblings("button").removeClass("d-none");
+        input.prop("disabled", true);
+        hideSpinner();
+
+        
+    });
+
     $(document).on("click", ".grade-table .action", function () {
         showSpinner();
         let gradeID = $(this).attr("data-grade-id");
@@ -146,7 +193,6 @@ $(function() {
         let inputOne = inputs.eq(0);
         let inputTwo = inputs.eq(1);
         let inputFin = inputs.eq(2);
-
 
         switch($(this).attr("data-action")) {
             case "edit":
@@ -177,9 +223,6 @@ $(function() {
                 });
 
                 inputOne.val(gradeData.data[0]);
-                inputTwo.val(gradeData.data[1]);
-                inputFin.val(gradeData.data[2]);
-
                 break;
         }
         let editOptions = $(this).closest('.edit-options');
@@ -205,6 +248,16 @@ $(function() {
             case 'attendance':
                 saveRow(row);
               break;
+            case 'gen-average':
+                $.post("action.php", formData, function(data) {
+                    formData = [];
+                    let gradeID = JSON.parse(data);
+                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
+                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
+                    $(`input[name*="gaGrade[${gradeID}]"]`).prop("disabled", true);
+                    showToast('success', 'General average successfully edited')
+                });
+                break;
           }
         
     });

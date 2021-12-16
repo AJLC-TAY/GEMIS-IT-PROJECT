@@ -15,10 +15,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteAdmin') {
     $admin->deleteAdmin();
     $admin->enterLog("Delete Administrator");
 }
-//if (isset($_POST['action']) && $_POST['action'] === 'resetAdmin') {
-//    $admin->deleteAdmin();
-//    $admin->enterLog("Delete Administrator");
-//}
 
 /******** SCHOOL YEAR ********/
 if (isset($_POST['action']) && $_POST['action'] === 'initializeSY' && isset($_POST['initialize']) ) {
@@ -323,7 +319,9 @@ if (isset($_POST['action']) && $_POST['action'] === 'newPassword'){
 }
 if (isset($_POST['action']) && $_POST['action'] === 'editSubjectGrade'){
     $admin->editSubjectGrade();
-    // $admin->enterLog("Edit Subject Grade");
+}
+if (isset($_POST['action']) && $_POST['action'] === 'editGeneralAverage'){
+    $admin->editGeneralAverage();
 }
 
 

@@ -2630,9 +2630,28 @@ class Administration extends Dbconfig
             ];
             $this->prepared_query("UPDATE classgrade SET first_grading = ?, second_grading = ?, final_grade = ?, first_status = 1, second_status = 1 WHERE grade_id = ?;", $params, "iiii");
             # write log
-            [$stud_id, $sub_code] = mysqli_fetch_row($this->query("SELECT stud_id, sub_code FROM classgrade WHERE grade_id = '$grade_id';"));
-            $action = "Edited subject grade (Student ID: $stud_id and Subject code: $sub_code).";
+            [$stud_id, $sub_code, $stud_name] = mysqli_fetch_row($this->query("SELECT lrn, sub_code, CONCAT(first_name,' ',COALESCE(middle_name,''),' ', last_name) FROM classgrade JOIN student USING (stud_id) WHERE grade_id = '$grade_id';"));
+            $action = "Edited subject grade of student, $stud_name (LRN: $stud_id and Subject code: $sub_code).";
             $this->enterLog($action);
+
+            echo json_encode($grade_id);
+        }
+    }
+
+    public function editGeneralAverage() 
+    {
+        $new_data = $_POST['gaGrade'];
+        foreach($new_data as $grade_id => $new_data) {
+            # update grade
+            foreach($new_data as $semester => $new_grade) {
+                $attribute = ($semester == 'first' ? "first_gen_ave" : "second_gen_ave");
+                $params = [$new_grade, $grade_id];
+                $this->prepared_query("UPDATE gradereport SET $attribute = ? WHERE report_id = ?;", $params, "ii");
+                # write log
+                [$stud_id, $stud_name] = mysqli_fetch_row($this->query("SELECT lrn, CONCAT(first_name,' ',COALESCE(middle_name,''),' ', last_name) FROM gradereport JOIN student USING (stud_id) WHERE report_id = '$grade_id';"));
+                $action = "Edited $semester general average of student, $stud_name (LRN: $stud_id).";
+                $this->enterLog($action);
+            }
 
             echo json_encode($grade_id);
         }

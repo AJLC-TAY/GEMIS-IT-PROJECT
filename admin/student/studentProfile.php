@@ -358,37 +358,55 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                         <div class="row p-0">
                             <div class="container">
                                 <div class="row mb-3">
-                                    <div class="col-6">
+                                    <div class="col-lg-6">
                                         <h5>Subject checklist</h5>
                                     </div>
-                                    <div class="col-6 d-flex justify-content-lg-end">
-                                        <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id."&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
+                                    <div class="col-lg-6 d-flex justify-content-lg-end">
+                                            <a href="#already-taken" class="btn btn-sm link me-2">Go to already taken subjects</a>
+                                            <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id."&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="current-con">
                                 <?php
+                                function echoGradeRowsHtml($sub_grd) {
+                                    $sub_grd_id = (int) $sub_grd['grade_id'];
+                                    echo "<tr>
+                                        <td class='ps-3'>{$sub_grd['name']}</td>
+                                        <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['first']}' disabled></td>
+                                        <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['second']}' disabled></td>
+                                        <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
+                                        <td  align='center'>
+                                            <div class='d-flex justify-content-center'>
+                                                <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-secondary' data-action='edit'><i class='bi bi-pencil-square'></i></button>
+                                                <div class='edit-options d-flex d-none'>
+                                                    <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-dark me-1' data-action='cancel'>Cancel</button>
+                                                    <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-success' data-action='save'>Save</button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>";
+                                }
                                 function echoSubjects($grades, $status, $sub_type)
                                 {
                                     if (isset($grades[$status][$sub_type])) {
                                         echo "<tr><td colspan='5' class='bg-light fw-bold'>" . ucwords($sub_type) . " subjects</td></tr>";
                                         foreach ($grades[$status][$sub_type] as $sub_grd) {
-                                            $sub_grd_id = (int) $sub_grd['grade_id'];
-                                            echo "<tr>
-                                                <td class='ps-3'>{$sub_grd['name']}</td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][first]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['first']}' disabled></td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][second]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$sub_grd['second']}' disabled></td>
-                                                <td align='center'><input type='number' min='60' max='100' name='grade[" . $sub_grd_id . "][final]' class='number form-control form-control-sm mb-0 text-center'  value='{$sub_grd['final']}' disabled></td>
-                                                <td  align='center'>
-                                                    <div class='d-flex justify-content-center'>
-                                                        <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-secondary' data-action='edit'><i class='bi bi-pencil-square'></i></button>
-                                                        <div class='edit-options d-flex d-none'>
-                                                            <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-dark me-1' data-action='cancel'>Cancel</button>
-                                                            <button data-grade-id='$sub_grd_id' class='action btn btn-sm btn-success' data-action='save'>Save</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                        </tr>";
+                                            echoGradeRowsHtml($sub_grd);
+                                        }
+                                    }
+                                }
+
+                                function echoCurrentSubjects($grades) {
+                                    foreach($grades['current'] as $grd_level => $data) {
+                                        foreach($data as $semester => $grd_data) {
+                                            echo "<tr><td colspan='5' class='fw-bold'>Grade $grd_level, Semester $semester</td></tr>";
+                                            foreach ($grd_data as $sub_type => $grds) {
+                                                echo "<tr><td colspan='5' class='bg-light '>" . ucwords($sub_type) . " subjects</td></tr>";
+                                                foreach($grds as $grd) {
+                                                    echoGradeRowsHtml($grd); 
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -412,17 +430,58 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php echoSubjects($grades, 'current', 'core'); ?>
-                                        <?php echoSubjects($grades, 'current', 'applied'); ?>
-                                        <?php echoSubjects($grades, 'current', 'specialized'); ?>
+                                        <?php echoCurrentSubjects($grades); ?>
                                     </tbody>
                                 </table>
+                            </div>
+                            <hr>
+                            <div class="row my-4">
+                                <div class="container">
+                                    <h6>General Average</h6>
+                                    <table class="table table-sm table-bordered">
+                                        <col width="55%">
+                                        <col width="25%">
+                                        <col width="20%">
+                                        <thead align="center">
+                                            <th>Semester</th>
+                                            <th>General Average</th>
+                                            <th>Action</th>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                            $general_averages = $userProfile->get_gen_averages();
+                                            foreach ($general_averages as $grd_level => $ga_info) {
+                                                echo "<tr>
+                                                    <td colspan='3' class='bg-light'>Grade $grd_level, SY {$ga_info['sy']}</td></tr>";
+                                                $report_id = $ga_info['report_id'];
+                                                foreach(['first' => $ga_info['first'], 'second' => $ga_info['second']] as $semester => $grade) {
+                                                    echo "<tr>
+                                                        <td>". ucfirst($semester) ." Semester</td>
+                                                        <td>
+                                                            <input type='number' min='60' max='100' name='gaGrade[" . $report_id. "][$semester]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$grade}' disabled>
+                                                        </td>";
+                                                    echo "<td  align='center'>
+                                                            <div class='d-flex justify-content-center'>
+                                                                <button data-grade-id='$report_id' class='ga-action btn btn-sm btn-secondary' data-action='edit'><i class='bi bi-pencil-square'></i></button>
+                                                                <div class='edit-options d-flex d-none'>
+                                                                    <button data-grade-id='$report_id' class='ga-action btn btn-sm btn-dark me-1' data-action='cancel'>Cancel</button>
+                                                                    <button data-grade-id='$report_id' class='ga-action btn btn-sm btn-success' data-action='save'>Save</button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>";
+                                                }
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>   
                             </div>
                         </div>
                         <hr>
                         <div class="row p-0">
                             <h5>Already taken subjects</h5>
-                            <div class="advanced-con">
+                            <div id="already-taken" class="advanced-con">
                                 <table class="table table-sm table-bordered grade-table">
                                     <col width="55%">
                                     <col width="10%">
@@ -481,6 +540,24 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </div>
                             <div class="modal-body">
                                 Saving this changes will not allow <span id = "teacher"> </span> from editing the student's <span id="type"></span>. Proceed?
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
+                                <button class="submit-edit-button btn btn-sm btn-success" data-type = "" data-bs-dismiss="modal">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="confirmation-edit-ga-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-title">
+                                    <h4 class="mb-0">Confirmation</h4>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                Save changes?
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
