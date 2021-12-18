@@ -3043,9 +3043,113 @@ class Administration extends Dbconfig
         $id = $_GET['id'];
         $name = $_GET['name'];
 
-        # queries to archive tables
+        //$tables = array('schoolyear', 'sycurriculum', 'enrollment', 'gradereport', 'academicdays', 'hostorylogs', 'section', 'sharedsubject');
+        //exportTables($tables);
 
+        # queries to archive tables
+        #schoolyear
+        mysqli_query($this->db, "INSERT INTO archived_schoolyear SELECT * FROM schoolyear WHERE sy_id = $id;");
+        #SyCurriculum
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_curriculum SELECT * FROM curriculum WHERE curr_code IN (SELECT curr_code FROM sycurriculum WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT INTO archived_sycurriculum SELECT * FROM sycurriculum WHERE sy_id = $id;");
+        #Enrollment
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_student SELECT * FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_curriculum SELECT * FROM curriculum WHERE curr_code IN (SELECT curr_code FROM enrollment WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_program SELECT * FROM program WHERE prog_code IN (SELECT prog_code FROM enrollment WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT INTO archived_enrollment SELECT * FROM enrollment WHERE sy_id = $id;");
+        #Gradereport
+        mysqli_query($this->db, "INSERT INTO archived_gradereport SELECT * FROM gradereport WHERE sy_id = $id; ");
+        #Academicdays
+        mysqli_query($this->db, "INSERT INTO archived_academicdays SELECT * FROM academicdays WHERE sy_id = $id;");
+        mysqli_query($this->db, "INSERT INTO archived_attendance SELECT * FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id);");
+        # Historylogs
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
+        mysqli_query($this->db, "INSERT INTO archived_historylogs SELECT * FROM historylogs WHERE sy_id = $id;");
+        #Section
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT teacher_user_no FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id;");
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_faculty SELECT * FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id;");
+        mysqli_query($this->db, "INSERT INTO archived_section SELECT * FROM section WHERE sy_id = $id;");
+        #Sharedsubject
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_subject SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM sharedsubject WHERE sy_id = $id;");
+        mysqli_query($this->db, "INSERT IGNORE INTO archived_program SELECT * FROM program WHERE prog_code IN (SELECT prog_code FROM sharedsubject WHERE sy_id = $id;");
+        mysqli_query($this->db, "INSERT INTO archived_sharedsubject SELECT * FROM sharedsubject WHERE sy_id = $id;");
+       
+        #Delete From Original Table
+        #Schoolyear
+        mysqli_query($this->db, "DELETE FROM schoolyear WHERE sy_id = $id;");
+        #SyCurriculum
+        mysqli_query($this->db, "DELETE FROM sycurriculum WHERE sy_id = $id;");
+        #Enrollment
+        mysqli_query($this->db, "DELETE FROM user WHERE id_no IN (SELECT id_no FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id)) AND user_type != 'AD' AND user_type != 'FA');");
+        mysqli_query($this->db, "DELETE FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id;");
+        mysqli_query($this->db, "DELETE FROM enrollment WHERE sy_id = $id;");
+        #Gradereport
+        mysqli_query($this->db, "DELETE FROM gradereport WHERE sy_id = $id;");
+        #Academicdays
+        mysqli_query($this->db, "DELETE FROM academicdays WHERE sy_id = $id;");
+        mysqli_query($this->db, "DELETE FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id;");
+        # Historylogs
+        mysqli_query($this->db, "DELETE FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
+        mysqli_query($this->db, "DELETE FROM historylogs WHERE sy_id = $id;");
+        # Section
+        mysqli_query($this->db, "DELETE FROM section WHERE sy_id = $id;");
+        mysqli_query($this->db, "DELETE FROM user WHERE id_no IN (SELECT teacher_user_no FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id);");
+        mysqli_query($this->db, "DELETE FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id);");
+        #Sharedsubject
+        mysqli_query($this->db, "DELETE FROM sharedsubject WHERE sy_id = $id;");
     }
+
+    public function exportTables($tables='*') {
+        if($tables == '*') { 
+            $tables = array();
+            $result = $this->query("SHOW TABLES");
+            while($row = $result->fetch_row()) { 
+                $tables[] = $row[0];
+            }
+        } else { 
+            $tables = is_array($tables) ? $tables:explode(',',$tables);
+        }
+    
+        $return = '';
+    
+        foreach($tables as $table){
+            $result = $this->query("SELECT * FROM $table");
+            $numColumns = $result->field_count;
+    
+            $result2 = $this->query("SHOW CREATE TABLE $table");
+            $row2 = $result2->fetch_row();
+    
+            $return .= "\n\n".$row2[1].";\n\n";
+    
+            for($i = 0; $i < $numColumns; $i++) { 
+                while($row = $result->fetch_row()) { 
+                    $return .= "INSERT INTO $table VALUES(";
+                    for($j=0; $j < $numColumns; $j++) { 
+                        $row[$j] = addslashes($row[$j]);
+                        $row[$j] = $row[$j];
+                        if (isset($row[$j])) { 
+                            $return .= '"'.$row[$j].'"' ;
+                        } else { 
+                            $return .= '""';
+                        }
+                        if ($j < ($numColumns-1)) {
+                            $return.= ',';
+                        }
+                    }
+                    $return .= ");\n";
+                }
+            }
+    
+            $return .= "\n\n\n";
+        }
+        $start = '2021'; //$_GET['start_year'];
+        $end = '2022'; //$_GET['end_year'];
+        $handle = fopen('../admin/maintenance/backup/'.$start.'-'.$end.'.sql','w+');
+        fwrite($handle,$return);
+        fclose($handle);
+        echo json_encode("Database Export Successfully!");
+    }  
 
     public function performMaintenance() 
     {
