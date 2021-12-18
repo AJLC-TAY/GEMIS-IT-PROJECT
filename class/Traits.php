@@ -365,7 +365,7 @@ trait UserSharedMethods
             $active_status,
             NULL,
             $enrollmentInfo[1],
-            $enrollmentInfo[2],
+            $enrollmentInfo[2]
         );
 
         # Step 6
@@ -744,7 +744,7 @@ trait FacultySharedMethods
                 $sc_row['sub_class_code'],
                 $sc_row['section_code'],
                 $sc_row['section_name'],
-                $sc_row['sy_id'],
+                $sc_row['sy_id']
 //                $teacher_id
             );
         }
