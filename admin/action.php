@@ -299,15 +299,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateStudent') {
 if (isset($_POST['action']) && $_POST['action'] === 'archiveStudent') {
     $admin->moveSubject("", "archived_");
     $admin->enterLog("Archive Student");
-    // $admin->listArchStudentsJSON();
-    // $admin->moveSubject('archived_subject','subject','archived_sharedsubject','sharedsubject','archived_requisite','requisite');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveStudent') {
     $admin->moveSubject("archived_", "");
     $admin->enterLog("Unarchive Student");
-    // $admin->listArchStudentsJSON();
-    // $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'forgotPassword'){

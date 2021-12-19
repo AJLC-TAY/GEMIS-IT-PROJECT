@@ -3045,7 +3045,6 @@ class Administration extends Dbconfig
         # School year curriculum and strand
         $this->query("INSERT INTO archived_sycurriculum SELECT * FROM sycurriculum WHERE sy_id = $id;");
         $this->query("INSERT INTO archived_sycurrstrand SELECT * FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
-
         # Enrollment
         $this->query("INSERT INTO archived_enrollment SELECT * FROM enrollment WHERE sy_id = $id;");
         # Grade Report
@@ -3064,39 +3063,36 @@ class Administration extends Dbconfig
 
     public function deleteDataFromOrigin($id)
     {
-            # School year
-            $this->query("DELETE FROM schoolyear WHERE sy_id = $id;");
-            # School year curriculum and strand
-            $this->query("DELETE FROM sycurriculum WHERE sy_id = $id;");
-            $this->query("DELETE FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
-            # Enrollment
-            $this->query("DELETE FROM enrollment WHERE sy_id = $id;");
-            # Grade report
-            $this->query("DELETE FROM gradereport WHERE sy_id = $id;");
-            #Class Grade
-            $this->query("DELETE FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
-            #Academicdays
-            $this->query("DELETE FROM academicdays WHERE sy_id = $id;");
-            $this->query("DELETE FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id;");
-            # Historylogs
-            $this->query("DELETE FROM historylogs WHERE sy_id = $id;");
-            # Section
-            $this->query("DELETE FROM section WHERE sy_id = $id;");
-            $this->query("DELETE FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
+        # School year
+        $this->query("DELETE FROM schoolyear WHERE sy_id = $id;");
+        # School year curriculum and strand
+        $this->query("DELETE FROM sycurriculum WHERE sy_id = $id;");
+        $this->query("DELETE FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
+        # Enrollment
+        $this->query("DELETE FROM enrollment WHERE sy_id = $id;");
+        # Grade report
+        $this->query("DELETE FROM gradereport WHERE sy_id = $id;");
+        #Class Grade
+        $this->query("DELETE FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
+        #Academicdays
+        $this->query("DELETE FROM academicdays WHERE sy_id = $id;");
+        $this->query("DELETE FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id;");
+        # Historylogs
+        $this->query("DELETE FROM historylogs WHERE sy_id = $id;");
+        # Section
+        $this->query("DELETE FROM section WHERE sy_id = $id;");
+        $this->query("DELETE FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
     }
 
     public function archiveSY()
     {
         $id = $_GET['id'];
-
-        //$tables = array('schoolyear', 'sycurriculum', 'enrollment', 'gradereport', 'academicdays', 'hostorylogs', 'section', 'sharedsubject');
-        //exportTables($tables);
-
         $this->moveDataToArchiveTables($id);
         $this->deleteDataFromOrigin($id);
     }
 
     public function exportTables($tables='*') {
+        session_start();
         if($tables == '*') { 
             $tables = array();
             $result = $this->query("SHOW TABLES");
@@ -3104,12 +3100,12 @@ class Administration extends Dbconfig
                 $tables[] = $row[0];
             }
         } else { 
-            $tables = is_array($tables) ? $tables:explode(',',$tables);
+            $tables = is_array($tables) ? $tables : explode(',',$tables);
         }
     
         $return = '';
     
-        foreach($tables as $table){
+        foreach($tables as $table) {
             $result = $this->query("SELECT * FROM $table");
             $numColumns = $result->field_count;
     
@@ -3139,10 +3135,9 @@ class Administration extends Dbconfig
     
             $return .= "\n\n\n";
         }
-        $start = '2021'; //$_GET['start_year'];
-        $end = '2022'; //$_GET['end_year'];
-        $handle = fopen('../admin/maintenance/backup/'.$start.'-'.$end.'.sql','w+');
-        fwrite($handle,$return);
+        $sy = $_SESSION['school_year'].uniqid("_backup");
+        $handle = fopen("../admin/maintenance/backup/{$sy}.sql",'w+');
+        fwrite($handle, $return);
         fclose($handle);
         echo json_encode("Database Export Successfully!");
     }  

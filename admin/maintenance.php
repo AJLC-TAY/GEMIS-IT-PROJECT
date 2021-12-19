@@ -40,6 +40,13 @@ include_once("../inc/head.html");
                             </header>
                             <div class="content">
                                 <div class="card py-3 mb-3">
+                                    <h5>Backup Data</h5>
+                                    <p>This will export all the data that is currently recorded in the database. This will only make a copy of all records (curriculum, school personnel, and student records of any school year), which can be restored or deleted. </p>
+                                    <div class="d-flex justify-content-end">
+                                        <button data-bs-toggle="modal" data-bs-target="#backup-confirmation-modal" class="btn btn-success">Backup</button>
+                                    </div>
+                                </div>
+                                <div class="card py-3 mb-3">
                                     <div class="container">
                                         <h5>Backup</h5>
                                         <div class="d-flex justify-content-between mb-3">
@@ -85,6 +92,26 @@ include_once("../inc/head.html");
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- BACKUP CONFIRMATION MODAL -->
+    <div class="modal fade" id="backup-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h4 class="mb-0">Confirmation</h4>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Export a back up file?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button class="close btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button data-action="backupData" class="btn btn-success btn-sm close-btn action">Backup Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- DELETE CONFIRMATION MODAL -->
     <div class="modal fade" id="delete-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -96,8 +123,7 @@ include_once("../inc/head.html");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Delete <span class='backup-name'></span> school year backup?</h5>
-                    <p>Student records under this school year will be permanently deleted? </p>
+                    <h5>Delete this backup file?</h5>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-danger btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -117,7 +143,7 @@ include_once("../inc/head.html");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>Restore <span class='backup-name'></span> school year backup?</h5>
+                    <h5>Restore this backup file?</h5>
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
