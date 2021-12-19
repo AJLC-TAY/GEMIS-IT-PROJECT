@@ -3042,59 +3042,47 @@ class Administration extends Dbconfig
     {
         # School year
         $this->query("INSERT INTO archived_schoolyear SELECT * FROM schoolyear WHERE sy_id = $id;");
-        # School year curriculum
-        $this->query("INSERT IGNORE INTO archived_curriculum SELECT * FROM curriculum WHERE curr_code IN (SELECT curr_code FROM sycurriculum WHERE sy_id = $id);");
+        # School year curriculum and strand
         $this->query("INSERT INTO archived_sycurriculum SELECT * FROM sycurriculum WHERE sy_id = $id;");
+        $this->query("INSERT INTO archived_sycurrstrand SELECT * FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
+
         # Enrollment
-        // $this->query("INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
-        // $this->query("INSERT IGNORE INTO archived_student SELECT * FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id);");
-        // $this->query("INSERT IGNORE INTO archived_curriculum SELECT * FROM curriculum WHERE curr_code IN (SELECT curr_code FROM enrollment WHERE sy_id = $id);");
-        // $this->query("INSERT IGNORE INTO archived_program SELECT * FROM program WHERE prog_code IN (SELECT prog_code FROM enrollment WHERE sy_id = $id);");
         $this->query("INSERT INTO archived_enrollment SELECT * FROM enrollment WHERE sy_id = $id;");
         # Grade Report
         $this->query("INSERT INTO archived_gradereport SELECT * FROM gradereport WHERE sy_id = $id; ");
-        $this->query("INSERT INTO archived_class_grade SELECT * FROM gradereport WHERE sy_id = $id; ");
-        // class grade
+        #Class Grade
+        $this->query("INSERT INTO archived_class_grade SELECT * FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
         # Academic days
         $this->query("INSERT INTO archived_academicdays SELECT * FROM academicdays WHERE sy_id = $id;");
         $this->query("INSERT INTO archived_attendance SELECT * FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id);");
         # Historylogs
-        // $this->query("INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
         $this->query("INSERT INTO archived_historylogs SELECT * FROM historylogs WHERE sy_id = $id;");
-        # Section
-        // $this->query("INSERT IGNORE INTO archived_user SELECT * FROM user WHERE id_no IN (SELECT teacher_user_no FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id;");
-        // $this->query("INSERT IGNORE INTO archived_faculty SELECT * FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id;");
+        # Section and subjectclass
         $this->query("INSERT INTO archived_section SELECT * FROM section WHERE sy_id = $id;");
-        # Sharedsubject
-        // $this->query("INSERT IGNORE INTO archived_subject SELECT * FROM subject WHERE sub_code IN (SELECT sub_code FROM sharedsubject WHERE sy_id = $id;");
-        // $this->query("INSERT IGNORE INTO archived_program SELECT * FROM program WHERE prog_code IN (SELECT prog_code FROM sharedsubject WHERE sy_id = $id;");
-        // $this->query("INSERT INTO archived_sharedsubject SELECT * FROM sharedsubject WHERE sy_id = $id;");
+        $this->query("INSERT INTO archived_subjectclass SELECT * FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
     }
 
     public function deleteDataFromOrigin($id)
     {
             # School year
             $this->query("DELETE FROM schoolyear WHERE sy_id = $id;");
-            # School year curriculum
+            # School year curriculum and strand
             $this->query("DELETE FROM sycurriculum WHERE sy_id = $id;");
+            $this->query("DELETE FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
             # Enrollment
-        //    $this->query("DELETE FROM user WHERE id_no IN (SELECT id_no FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id)) AND user_type != 'AD' AND user_type != 'FA');");
-        //    $this->query("DELETE FROM student WHERE stud_id IN (SELECT stud_id FROM enrollment WHERE sy_id = $id;");
             $this->query("DELETE FROM enrollment WHERE sy_id = $id;");
             # Grade report
             $this->query("DELETE FROM gradereport WHERE sy_id = $id;");
+            #Class Grade
+            $this->query("DELETE FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
             #Academicdays
             $this->query("DELETE FROM academicdays WHERE sy_id = $id;");
             $this->query("DELETE FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id;");
             # Historylogs
-            // $this->query("DELETE FROM user WHERE id_no IN (SELECT id_no FROM historylogs WHERE sy_id = $id);");
             $this->query("DELETE FROM historylogs WHERE sy_id = $id;");
             # Section
             $this->query("DELETE FROM section WHERE sy_id = $id;");
-            // $this->query("DELETE FROM user WHERE id_no IN (SELECT teacher_user_no FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id);");
-            // $this->query("DELETE FROM faculty WHERE teacher_id IN (SELECT teacher_id FROM section WHERE sy_id = $id);");
-            #Sharedsubject
-            // $this->query("DELETE FROM sharedsubject WHERE sy_id = $id;");
+            $this->query("DELETE FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
     }
 
     public function archiveSY()
