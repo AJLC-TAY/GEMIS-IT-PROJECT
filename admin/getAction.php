@@ -39,14 +39,18 @@ if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for
 if (isset($_GET['data']) && $_GET['data'] == 'action-maintenance' && ($_GET['action'] == 'restore' || $_GET['action'] == 'delete')) {
     $admin->performMaintenance();
 }
+
 if (isset($_GET['data']) && $_GET['data'] == 'action-maintenance' && $_GET['action'] == 'backupData') {
     $admin->exportTables();
     $admin->enterLog("Exported backup ({$_SESSION['school_year']}).");
 } 
-if (isset($_GET['data']) && $_GET['data'] == 'action' && $_GET['action'] == 'archivesy') {
+if (isset($_GET['data']) && $_GET['data'] == 'action' && in_array($_GET['action'], ['archivesy', 'unarchivesy'])) {
     $admin->performMaintenance();
 }
-if (isset($_GET['data']) && $_GET['data'] == 'archivedsy') {
+if (isset($_GET['data']) && $_GET['data'] == 'backupFiles') {
+    $admin->listBackupFiles();
+}
+if (isset($_GET['data']) && $_GET['data'] == 'archivedSY') {
     $admin->listArchivedSY();
 }
 if (isset($_GET['data']) && $_GET['data'] == 'end_school_year') {

@@ -616,9 +616,7 @@ class Administration extends Dbconfig
         session_start();
         $result = $this->query("SELECT * FROM schoolyear ORDER BY status DESC;");
         $sy_list = [];
-        $grd_list = array('11' => '11', '12' => '12');
         $quarter_list = array('1' => 'First', '2' => 'Second', '3' => 'Third', '4' => 'Fourth');
-        $semester_list = array('1' => 'First', '2' => 'Second');
         while ($row = mysqli_fetch_assoc($result)) {
             $sy_id = $row['sy_id'];
             $quarter = $row['current_quarter'];
@@ -627,7 +625,6 @@ class Administration extends Dbconfig
             // quarter options
             $quarter_opt = "<input class='form-control m-0 border-0 bg-transparent' data-id='$sy_id' data-name='quarter' type='text'  data-key='$quarter' value='{$quarter_list[$quarter]}' readonly><select data-id='$sy_id' name='quarter' class='form-select d-none'>";
             foreach ($quarter_list as $id => $value) {
-                // $quarter_opt .= "<option value='$id' ". (($id == $quarter) ? "selected" : "") .">$value</option>";
                 $quarter_opt .= "<option value='$id'>$value</option>";
             }
             $quarter_opt .= "</select>";
@@ -637,7 +634,7 @@ class Administration extends Dbconfig
             $actions_btn = "";
             $archive_btn = "<button onclick='showNameToModal(`$sy_id`, `$sy_year`)' data-bs-toggle='modal' data-bs-target='#archive-confirmation-modal' class='btn btn-sm btn-danger archive-sy-btn' title='Archive'><i class='bi bi-archive'></i></button>";
             if ($sy_id == $_SESSION['sy_id']) {
-                $actions_btn =  "<button data-id='$sy_id' class='btn btn-secondary edit-btn btn-sm m-1'>Edit</button>"
+                $actions_btn =  "<button data-id='$sy_id' title='Edit current quarter' class='btn btn-secondary edit-btn btn-sm'><i class='bi bi-pencil-square'></i></button>"
                                 . "<div class='edit-options' style='display: none;'>"
                                 . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
                                 ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
@@ -652,7 +649,7 @@ class Administration extends Dbconfig
                 . "<span class='status'>$enroll_opt</span>"
                 . "</div>";
 
-            $switch = ($_SESSION['sy_id'] == $sy_id) ? "" : "<a role='button' href='action.php?action=switchSY&id=$sy_id' class='btn btn-dark btn-sm m-1'>Switch</a>";
+            $switch = ($_SESSION['sy_id'] == $sy_id) ? "" : "<a role='button' title='Switch to this school year' href='action.php?action=switchSY&id=$sy_id' class='btn btn-dark btn-sm'>Switch</a>";
             $sy_list[] = [
                 'id'              => $sy_id,
                 's_year'          => $row['start_year'],
@@ -664,8 +661,8 @@ class Administration extends Dbconfig
                 'enrollment'      => $enroll_opt,
                 'action' => $actions_btn
                     . $switch
-                    ."<a role='button' href='schoolYear.php?id=$sy_id' class='btn btn-primary btn-sm m-1' target='_blank'>View</a>"
-                    .$archive_btn
+                    . "<a role='button' href='schoolYear.php?id=$sy_id' title='View school year' class='btn btn-primary btn-sm m-1' target='_blank'><i class='bi bi-eye'></i></a>"
+                    . $archive_btn
             ];
         }
         echo json_encode($sy_list);
@@ -3013,6 +3010,21 @@ class Administration extends Dbconfig
     /** MAINTENANCE METHODS */
     public function listArchivedSY() 
     {
+        $sy_list = [];
+        $result = $this->query("SELECT sy_id, CONCAT(start_year, ' - ', end_year) FROM archived_schoolyear;");
+        while ($row = mysqli_fetch_row($result)) {
+            $sy_id = $row[0];
+            $sy = $row[1];
+            $sy_list[] = [
+                "id" => $sy_id,
+                "sy_year" => $sy,
+                "action" => "<button data-sy-id='$sy_id' data-action='unarchivesy' data-sy='$sy' class='btn btn-sm btn-success action' title='Unarchive SY $sy'>Unarchive</button>"
+            ];
+        }
+        echo json_encode($sy_list);
+    }
+    public function listBackupFiles() 
+    {
         $backup = "./maintenance/backup";
         $list = scandir($backup);
         $backup_list = array_diff($list, array('..', '.'));
@@ -3038,57 +3050,64 @@ class Administration extends Dbconfig
         $this->createDefaultAdmin();
     }
 
-    public function moveDataToArchiveTables($id) 
+    public function moveData($id, $is_archive = TRUE) 
     {
+        $archive = "archived_";
+        $a_other = "";
+        if (!$is_archive) {
+            $a_other = $archive;
+            $archive = "";
+        }
         # School year
-        $this->query("INSERT INTO archived_schoolyear SELECT * FROM schoolyear WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}schoolyear SELECT * FROM {$a_other}schoolyear WHERE sy_id = $id;");
         # School year curriculum and strand
-        $this->query("INSERT INTO archived_sycurriculum SELECT * FROM sycurriculum WHERE sy_id = $id;");
-        $this->query("INSERT INTO archived_sycurrstrand SELECT * FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
+        $this->query("INSERT INTO {$archive}sycurriculum SELECT * FROM {$a_other}sycurriculum WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}sycurrstrand SELECT * FROM {$a_other}sycurrstrand WHERE syc_id IN (SELECT syc_id FROM {$a_other}sycurriculum WHERE sy_id = $id);");
         # Enrollment
-        $this->query("INSERT INTO archived_enrollment SELECT * FROM enrollment WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}enrollment SELECT * FROM {$a_other}enrollment WHERE sy_id = $id;");
         # Grade Report
-        $this->query("INSERT INTO archived_gradereport SELECT * FROM gradereport WHERE sy_id = $id; ");
+        $this->query("INSERT INTO {$archive}gradereport SELECT * FROM {$a_other}gradereport WHERE sy_id = $id; ");
         #Class Grade
-        $this->query("INSERT INTO archived_class_grade SELECT * FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
+        $this->query("INSERT INTO {$archive}class_grade SELECT * FROM {$a_other}classgrade WHERE report_id IN (SELECT report_id FROM {$a_other}gradereport WHERE sy_id = $id);");
         # Academic days
-        $this->query("INSERT INTO archived_academicdays SELECT * FROM academicdays WHERE sy_id = $id;");
-        $this->query("INSERT INTO archived_attendance SELECT * FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id);");
+        $this->query("INSERT INTO {$archive}academicdays SELECT * FROM {$a_other}academicdays WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}attendance SELECT * FROM {$a_other}attendance WHERE acad_days_id IN (SELECT acad_days_id FROM {$a_other}academicdays WHERE sy_id = $id);");
         # Historylogs
-        $this->query("INSERT INTO archived_historylogs SELECT * FROM historylogs WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}historylogs SELECT * FROM {$a_other}historylogs WHERE sy_id = $id;");
         # Section and subjectclass
-        $this->query("INSERT INTO archived_section SELECT * FROM section WHERE sy_id = $id;");
-        $this->query("INSERT INTO archived_subjectclass SELECT * FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
+        $this->query("INSERT INTO {$archive}section SELECT * FROM {$a_other}section WHERE sy_id = $id;");
+        $this->query("INSERT INTO {$archive}subjectclass SELECT * FROM {$a_other}subjectclass WHERE section_code IN (SELECT section_code FROM {$a_other}section WHERE sy_id = $id);");
     }
 
-    public function deleteDataFromOrigin($id)
+    public function deleteDataFromTables($id, $is_archive = TRUE)
     {
+        $archive = ($is_archive ? "" : "archived_");
         # School year
-        $this->query("DELETE FROM schoolyear WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}schoolyear WHERE sy_id = $id;");
         # School year curriculum and strand
-        $this->query("DELETE FROM sycurriculum WHERE sy_id = $id;");
-        $this->query("DELETE FROM sycurrstrand WHERE syc_id IN (SELECT syc_id FROM sycurriculum WHERE sy_id = $id);");
+        $this->query("DELETE FROM {$archive}sycurriculum WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}sycurrstrand WHERE syc_id IN (SELECT syc_id FROM {$archive}sycurriculum WHERE sy_id = $id);");
         # Enrollment
-        $this->query("DELETE FROM enrollment WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}enrollment WHERE sy_id = $id;");
         # Grade report
-        $this->query("DELETE FROM gradereport WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}gradereport WHERE sy_id = $id;");
         #Class Grade
-        $this->query("DELETE FROM classgrade WHERE report_id IN (SELECT report_id FROM gradereport WHERE sy_id = $id);");
+        $this->query("DELETE FROM {$archive}classgrade WHERE report_id IN (SELECT report_id FROM {$archive}gradereport WHERE sy_id = $id);");
         #Academicdays
-        $this->query("DELETE FROM academicdays WHERE sy_id = $id;");
-        $this->query("DELETE FROM attendance WHERE acad_days_id IN (SELECT acad_days_id FROM academicdays WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}academicdays WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}attendance WHERE acad_days_id IN (SELECT acad_days_id FROM {$archive}academicdays WHERE sy_id = $id;");
         # Historylogs
-        $this->query("DELETE FROM historylogs WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}historylogs WHERE sy_id = $id;");
         # Section
-        $this->query("DELETE FROM section WHERE sy_id = $id;");
-        $this->query("DELETE FROM subjectclass WHERE section_code IN (SELECT section_code FROM section WHERE sy_id = $id);");
+        $this->query("DELETE FROM {$archive}section WHERE sy_id = $id;");
+        $this->query("DELETE FROM {$archive}subjectclass WHERE section_code IN (SELECT section_code FROM {$archive}section WHERE sy_id = $id);");
     }
 
-    public function archiveSY()
+    public function archiveSY($is_archive = TRUE)
     {
         $id = $_GET['id'];
-        $this->moveDataToArchiveTables($id);
-        $this->deleteDataFromOrigin($id);
+        $this->moveData($id, $is_archive);
+        $this->deleteDataFromTables($id, $is_archive);
     }
 
     public function exportTables($tables='*') {
@@ -3146,11 +3165,15 @@ class Administration extends Dbconfig
     {
         $action = $_GET['action'];
         $path = "../admin/maintenance/backup/".$_GET['name'].".sql";
-        $message = "Item successfully $action"."d";
 
         switch($action) {
-            case "archive":
+            case "unarchivesy": 
+                $this->archiveSY(FALSE);
+                $action = "unarchive";
+                break;
+            case "archivesy":
                 $this->archiveSY();
+                $action = "archive";
                 break;
             case "restore":
                 $sql = file_get_contents($path);
@@ -3163,7 +3186,7 @@ class Administration extends Dbconfig
 
         echo json_encode([
             "status" => "success",
-            "message" => $message
+            "message" => "Item successfully $action"."d"
         ]);
     }
 }

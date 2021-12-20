@@ -56,7 +56,7 @@ include_once("../inc/head.html");
                                             </span>
                                         </div>
                                         <div class="row overflow-auto">
-                                            <table id="table" data-url="getAction.php?data=archivedsy" data-height="500" data-search-selector="#search-input" data-toggle="table" class="table table-sm">
+                                            <table id="table" data-url="getAction.php?data=backupFiles" data-height="500" data-search-selector="#search-input" data-toggle="table" class="table table-sm">
                                                 <thead>
                                                     <tr>
                                                         <th scope='col' data-width="500" data-halign="center" data-align="left" data-field="name">School Year</th>

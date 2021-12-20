@@ -83,7 +83,7 @@ include_once("../inc/head.html");
                 </div>
                 <div class="modal-footer">
                     <button class="close btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <button class="btn btn-danger btn-sm close-btn action"><i class='bi bi-archive me-2'></i>Archive</button>
+                    <button data-action="archivesy" class="btn btn-danger btn-sm close-btn action" data-bs-dismiss="modal"><i class='bi bi-archive me-2'></i>Archive</button>
                 </div>
             </div>
         </div>

@@ -68,10 +68,20 @@ $(function() {
     $(document).on("click", ".action", function() {
         let syID = $(this).attr("data-sy-id");
         let syName = $(this).attr("data-sy");
-        $.get(`getAction.php?data=action&action=archivesy&id=${syID}&name=${syName}`, function() {
-            showToast("success", "School year successfully archived");
+        let action = $(this).attr("data-action");
+        $.get(`getAction.php?data=action&action=${action}&id=${syID}&name=${syName}`, function(data) {
+            data = JSON.parse(data);
             syTable.bootstrapTable("refresh");
+            if (action == 'unarchivesy') {
+                $("#archived-table").bootstrapTable("refresh");
+            }
+            showToast("success", data.message);
         });
+    });
+    $(document).on("shown.bs.modal", "#view-archive-modal", function() {
+        let table = $("#archived-table");
+        table.bootstrapTable("refresh");
+        table.bootstrapTable("resetView");
     });
     $(document).on("click", ".edit-btn", function() {
         syTable.bootstrapTable("showLoading");
