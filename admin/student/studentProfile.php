@@ -539,7 +539,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
                             <div class="modal-body">
-                                Saving this changes will not allow <span id = "teacher"> </span> from editing the student's <span id="type"></span>. Proceed?
+                                
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
