@@ -55,11 +55,6 @@ $old_program = '';
 if ($action === 'add') {
     $prog_opt = prepareEmptyProgramOptions($programs, "core");
 
-    // // prepare semester options
-    // foreach ($semesters as $id => $value) {
-    //     $semester_opt .= "<option value='$id'". (($id == '0' ) ? 'selected' : '') .">$value</option>";
-    // }
-
     // prepare subject type options
     foreach ($sub_opt as $id => $value) {
         $sub_type_opt .= "<option value='$id' ". (($id == "core" ) ? "selected" : "") .">$value</option>"; // Default = Core subject type
@@ -164,7 +159,6 @@ if ($action === 'edit') {
                         </tr>";
     }
 
-    // $grade_level_state = ($subject_grd == 11) ? 'disabled': '';
     $grade_level_state = '';
     $reqRowsGrd12 = '';
     foreach ($subjectGrade12 as $subGr12) {
