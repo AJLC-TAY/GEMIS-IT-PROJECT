@@ -106,7 +106,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
     <!-- BREADCRUMB -->
 </header>
 <div class="d-flex justify-content-between align-items-center">
-    <?php if($user_type != 'ST'){
+    <?php if ($user_type != 'ST') {
         echo "<h4 class='my-auto fw-bold'> $name</h4>";
     }
     ?>
@@ -190,7 +190,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     <dt class='col-md-4'>Year Level: </dt>
                                     <dd class='col-md-8'>$yrlvl</dd>
                             </dl>" ?>
-                            
+
                             <?php if ($user_type == 'AD') {
                                 echo "<a href='student.php?action=transfer&id=$stud_id' class='transfer-stud btn btn-success btn-sm  ms-2 mb-2 w-100'>Transfer Student</a>";
                                 $edit_btn = "<a href='student.php?action=edit&id=$stud_id' role=button' class='btn btn-primary link my-auto btn-sm ms-2 mb-2 w-100'><i class='bi bi-pencil-square me-2'></i>Edit</a>";
@@ -204,7 +204,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     echo "<a href='../student/changePW.php' class='btn btn-secondary ms-2 mb-2 w-100' title='Change Password'>Change Password</a>";
                                 }
                             }
-                         ?>
+                            ?>
 
                         </div>
                         <?php $admin->listValuesReport() ?>
@@ -256,15 +256,15 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </div>
 
                             <div class="row mt-3">
-                                <?php 
+                                <?php
                                 $parents = $userProfile->get_parents();
                                 $guardian = $userProfile->get_guardians();
 
-                                if ($parents['f']['fname'] == '' && $parents['m']['fname'] == '' ) {
+                                if ($parents['f']['fname'] == '' && $parents['m']['fname'] == '') {
                                     $parents = NULL;
                                     echo " <h6><b>Contact Persons</b></h6>";
                                 } else {
-                                    if($parents['f']['fname'] == ''){ 
+                                    if ($parents['f']['fname'] == '') {
                                         echo "
                                         <dl class='row mb-3 ms-2'>
                                             <dt class='col-md-4'>" . ucwords('Father') . "'s Name </dt>
@@ -273,8 +273,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             <dd class='col-md-8'> {$parents['m']['occupation']} </dd>
                                             <dt class='col-md-4'>Contact Number </dt>
                                             <dd class='col-md-8'> {$parents['m']['cp_no']} </dd>
-                                        </dl>"; 
-
+                                        </dl>";
                                     } elseif ($parents['m']['fname'] == '') {
                                         echo "
                                         <dl class='row mb-3 ms-2'>
@@ -284,10 +283,9 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             <dd class='col-md-8'> {$parents['f']['occupation']} </dd>
                                             <dt class='col-md-4'>Contact Number </dt>
                                             <dd class='col-md-8'> {$parents['f']['cp_no']} </dd>
-                                        </dl>"; 
-
+                                        </dl>";
                                     } else {
-                                       
+
                                         foreach ($parents as $par) {
                                             $parent = $par['sex'] == 'f' ? 'mother' : 'father';
                                             $name = ${$parent . '_name'};
@@ -305,9 +303,9 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                         }
                                     }
                                 }
-                                
-                                    if ($guardian['fname']!= '') {
-                                        echo "<hr><h6 class='mt-3'>Guardian/s</h6>
+
+                                if ($guardian['fname'] != '') {
+                                    echo "<hr><h6 class='mt-3'>Guardian/s</h6>
                                             <dl class='row mb-3 ms-2'>
                                                 <dt class='col-md-4'>Guardian's Name</dt>
                                                 <dd class='col-md-8'> {$guardian['name']} </dd>
@@ -316,9 +314,9 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                                 <dt class='col-md-4'>Contact Number</dt>
                                                 <dd class='col-md-8'> {$guardian['cp_no']} </dd>
                                             </dl>";
-                                    }  ?>
-                               
-                                
+                                }  ?>
+
+
                             </div>
                         </div>
                     </div>
@@ -362,14 +360,15 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                         <h5>Subject checklist</h5>
                                     </div>
                                     <div class="col-lg-6 d-flex justify-content-lg-end">
-                                            <a href="#already-taken" class="btn btn-sm link me-2">Go to already taken subjects</a>
-                                            <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id."&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
+                                        <a href="#already-taken" class="btn btn-sm link me-2">Go to already taken subjects</a>
+                                        <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id . "&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="current-con">
                                 <?php
-                                function echoGradeRowsHtml($sub_grd) {
+                                function echoGradeRowsHtml($sub_grd)
+                                {
                                     $sub_grd_id = (int) $sub_grd['grade_id'];
                                     echo "<tr>
                                         <td class='ps-3'>{$sub_grd['name']}</td>
@@ -397,14 +396,15 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                     }
                                 }
 
-                                function echoCurrentSubjects($grades) {
-                                    foreach($grades['current'] as $grd_level => $data) {
-                                        foreach($data as $semester => $grd_data) {
+                                function echoCurrentSubjects($grades)
+                                {
+                                    foreach ($grades['current'] as $grd_level => $data) {
+                                        foreach ($data as $semester => $grd_data) {
                                             echo "<tr><td colspan='5' class='fw-bold'>Grade $grd_level, Semester $semester</td></tr>";
                                             foreach ($grd_data as $sub_type => $grds) {
                                                 echo "<tr><td colspan='5' class='bg-light '>" . ucwords($sub_type) . " subjects</td></tr>";
-                                                foreach($grds as $grd) {
-                                                    echoGradeRowsHtml($grd); 
+                                                foreach ($grds as $grd) {
+                                                    echoGradeRowsHtml($grd);
                                                 }
                                             }
                                         }
@@ -448,17 +448,17 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             <th>Action</th>
                                         </thead>
                                         <tbody>
-                                            <?php 
+                                            <?php
                                             $general_averages = $userProfile->get_gen_averages();
                                             foreach ($general_averages as $grd_level => $ga_info) {
                                                 echo "<tr>
                                                     <td colspan='3' class='bg-light'>Grade $grd_level, SY {$ga_info['sy']}</td></tr>";
                                                 $report_id = $ga_info['report_id'];
-                                                foreach(['first' => $ga_info['first'], 'second' => $ga_info['second']] as $semester => $grade) {
+                                                foreach (['first' => $ga_info['first'], 'second' => $ga_info['second']] as $semester => $grade) {
                                                     echo "<tr>
-                                                        <td>". ucfirst($semester) ." Semester</td>
+                                                        <td>" . ucfirst($semester) . " Semester</td>
                                                         <td>
-                                                            <input type='number' min='60' max='100' name='gaGrade[" . $report_id. "][$semester]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$grade}' disabled>
+                                                            <input type='number' min='60' max='100' name='gaGrade[" . $report_id . "][$semester]' class='number form-control form-control-sm mb-0 text-center cal'  value='{$grade}' disabled>
                                                         </td>";
                                                     echo "<td  align='center'>
                                                             <div class='d-flex justify-content-center'>
@@ -475,7 +475,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                             ?>
                                         </tbody>
                                     </table>
-                                </div>   
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -512,23 +512,23 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                 </div>
                 <!-- Attendance Tab -->
                 <div class="tab-pane fade bg-white p-4 <?php echo $tab_three_active; ?>" id="attendance" role="tabpanel" aria-labelledby="docu-tab">
-                <div class="container mt-2 ms-0">
-                    <div class="w-100 h-auto">
-                        <form id="attendance-form" >
-                            <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
-                                <thead class='thead-dark'>
-                                    <tr>
-                                        <th scope='col' data-width="100" data-align="center" data-field="month" title="month">Month</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="present">Present</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="absent">Absent</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="tardy">Tardy</th>
-                                        <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </form>
+                    <div class="container mt-2 ms-0">
+                        <div class="w-100 h-auto">
+                            <form id="attendance-form">
+                                <table id="table" data-url="<?php echo $url; ?>" class="table-striped table-sm">
+                                    <thead class='thead-dark'>
+                                        <tr>
+                                            <th scope='col' data-width="100" data-align="center" data-field="month" title="month">Month</th>
+                                            <th scope='col' data-width="100" data-align="center" data-field="present">Present</th>
+                                            <th scope='col' data-width="100" data-align="center" data-field="absent">Absent</th>
+                                            <th scope='col' data-width="100" data-align="center" data-field="tardy">Tardy</th>
+                                            <th scope='col' data-width="100" data-align="center" data-field="action">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div class="modal fade" id="confirmation-edit-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -539,11 +539,24 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
                             <div class="modal-body">
-                                
+                                <p class="text-danger">Warning: This cannot be undone.</p>
+                                <hr class="mt-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    <label class="form-check-label">
+                                    <p class="text-left">Grades will be reflected in the student's account.</p> 
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    <label class="form-check-label">
+                                    The submitted grades of the faculty will be overwritten. 
+                                    </label>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
-                                <button class="submit-edit-button btn btn-sm btn-success" data-type = "" data-bs-dismiss="modal">Save Changes</button>
+                                <button class="submit-edit-button btn btn-sm btn-success" data-type="" data-bs-dismiss="modal">Save Changes</button>
                             </div>
                         </div>
                     </div>
@@ -561,7 +574,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
-                                <button class="submit-edit-button btn btn-sm btn-success" data-type = "" data-bs-dismiss="modal">Save Changes</button>
+                                <button class="submit-edit-button btn btn-sm btn-success" data-type="" data-bs-dismiss="modal">Save Changes</button>
                             </div>
                         </div>
                     </div>
@@ -586,4 +599,3 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
         </div>
     </div>
 </div>
-
