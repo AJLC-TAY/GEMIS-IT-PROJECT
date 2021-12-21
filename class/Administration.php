@@ -81,10 +81,10 @@ class Administration extends Dbconfig
                 WHERE gr.stud_id = $id AND sy_id = $sy;"
         );
         # old query
-//        "SELECT sub_name, first_grading, second_grading, final_grade, sub_type
-//            FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code)
-//            JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code)
-//            WHERE stud_id = $id AND sy_id = $sy AND current_semester = $curr_sem AND status = 1;"
+        //        "SELECT sub_name, first_grading, second_grading, final_grade, sub_type
+        //            FROM schoolyear JOIN sysub USING (sy_id) JOIN subject USING(sub_code)
+        //            JOIN subjectclass USING (sub_sy_id) JOIN classgrade USING(sub_class_code)
+        //            WHERE stud_id = $id AND sy_id = $sy AND current_semester = $curr_sem AND status = 1;"
 
         while ($grd =  mysqli_fetch_assoc($result)) {
             $grado[] = [
@@ -180,67 +180,67 @@ class Administration extends Dbconfig
     /*** School Year Methods */
     public function getSystemLogs()
     {
-      session_start();
-      $limit = $_GET['limit'];
-      $offset = $_GET['offset'];
-//      $query = "SELECT * FROM historylogs WHERE sy_id = {$_SESSION['sy_id']} ";
-      $query = "SELECT * FROM historylogs ";
+        session_start();
+        $limit = $_GET['limit'];
+        $offset = $_GET['offset'];
+        //      $query = "SELECT * FROM historylogs WHERE sy_id = {$_SESSION['sy_id']} ";
+        $query = "SELECT * FROM historylogs ";
 
 
-      $search_query = "";
-      if (strlen(trim($_GET['search'])) > 0) {
-          $text = $_GET['search'];
-          $search_query .= " WHERE (log_Id LIKE \"%$text%\"";
-          $search_query .= " OR id_no LIKE \"%$text%\"";
-          $search_query .= " OR user_type LIKE \"%$text%\"";
-          $search_query .= " OR action LIKE \"%$text%\"";
-          $search_query .= " OR datetime LIKE \"%$text%\")";
-      }
+        $search_query = "";
+        if (strlen(trim($_GET['search'])) > 0) {
+            $text = $_GET['search'];
+            $search_query .= " WHERE (log_Id LIKE \"%$text%\"";
+            $search_query .= " OR id_no LIKE \"%$text%\"";
+            $search_query .= " OR user_type LIKE \"%$text%\"";
+            $search_query .= " OR action LIKE \"%$text%\"";
+            $search_query .= " OR datetime LIKE \"%$text%\")";
+        }
 
-      $query .= $search_query;
+        $query .= $search_query;
         if (isset($_GET['sort'])) {
             $query .= " ORDER BY {$_GET['sort']} {$_GET['order']} ";
         } else {
             $query .= " ORDER BY datetime DESC";
         }
-      $result = $this->query($query);
-      $num_rows_not_filtered = $result->num_rows;
+        $result = $this->query($query);
+        $num_rows_not_filtered = $result->num_rows;
 
-      $query .= " LIMIT $limit";
-      $query .= " OFFSET $offset";
-      $result = $this->query($query);
-      $records = array();
+        $query .= " LIMIT $limit";
+        $query .= " OFFSET $offset";
+        $result = $this->query($query);
+        $records = array();
 
-      while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
-        if($row['user_type'] == 'ST'){
-            $tbl = 'student';
-            $hdr = 'id_no';
-        } elseif($row['user_type'] == 'AD'){
-            $tbl = 'administrator';
-            $hdr = 'admin_user_no';
-        } else {
-            $tbl = 'faculty';
-            $hdr = 'teacher_user_no';
-        }
+        while ($row = mysqli_fetch_assoc($result)) { // MYSQLI_ASSOC allows to retrieve the data through the column name
+            if ($row['user_type'] == 'ST') {
+                $tbl = 'student';
+                $hdr = 'id_no';
+            } elseif ($row['user_type'] == 'AD') {
+                $tbl = 'administrator';
+                $hdr = 'admin_user_no';
+            } else {
+                $tbl = 'faculty';
+                $hdr = 'teacher_user_no';
+            }
 
-        // echo ("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM `$tbl` WHERE $hdr = {$row['id_no']};");
+            // echo ("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM `$tbl` WHERE $hdr = {$row['id_no']};");
             $name = mysqli_fetch_row($this->query("SELECT CONCAT(last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM `$tbl` WHERE $hdr = {$row['id_no']};"))[0];
             // echo $name;
-            
-          $records[] = [
-              'log_id' => $row['log_id'],
-              'id_no' => $row['id_no'],
-              'name' => $name,
-              'user_type' => $row['user_type'],
-              'action' => $row['action'],
-              'datetime' => $row['datetime']
-          ];
-      }
-      $output = new stdClass();
-      $output->total = $num_rows_not_filtered;
-      $output->totalNotFiltered = $num_rows_not_filtered;
-      $output->rows = $records;
-      echo json_encode($output);
+
+            $records[] = [
+                'log_id' => $row['log_id'],
+                'id_no' => $row['id_no'],
+                'name' => $name,
+                'user_type' => $row['user_type'],
+                'action' => $row['action'],
+                'datetime' => $row['datetime']
+            ];
+        }
+        $output = new stdClass();
+        $output->total = $num_rows_not_filtered;
+        $output->totalNotFiltered = $num_rows_not_filtered;
+        $output->rows = $records;
+        echo json_encode($output);
     }
     public function getInitSYData()
     {
@@ -357,12 +357,14 @@ class Administration extends Dbconfig
         return $sy_id;
     }
 
-    public function endSchoolYear() {
+    public function endSchoolYear()
+    {
         session_start();
         $this->query("UPDATE schoolyear SET status='0', can_enroll='0' WHERE sy_id = '{$_SESSION['sy_id']}';");
         header("Location: index.php");
     }
-    public function updateSYStatus($sy_id = NULL) {
+    public function updateSYStatus($sy_id = NULL)
+    {
         if (empty($_SESSION)) {
             session_start();
         }
@@ -402,8 +404,8 @@ class Administration extends Dbconfig
     public function checkIfSYUnique()
     {
         $type = $_GET['type'];
-        $value = $_POST[$type."-year"];
-        $result = $this->query("SELECT distinct 1 ".$type."_year FROM schoolyear WHERE ".$type."_year = '$value';");
+        $value = $_POST[$type . "-year"];
+        $result = $this->query("SELECT distinct 1 " . $type . "_year FROM schoolyear WHERE " . $type . "_year = '$value';");
         if (mysqli_num_rows($result) > 0) {
             echo "false";
         } else {
@@ -421,8 +423,8 @@ class Administration extends Dbconfig
             $stud_id = 110001;
         }
         $grado = [];
-        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = {$_SESSION['sy_id']}"); 
-        $sy_id = $_SESSION['sy_id']; 
+        $result = $this->query("SELECT current_semester FROM schoolyear WHERE sy_id = {$_SESSION['sy_id']}");
+        $sy_id = $_SESSION['sy_id'];
         $subject_type = $this->query("SELECT DISTINCT sub_type FROM classgrade JOIN subjectclass USING(sub_code) JOIN subject WHERE stud_id = $stud_id"); //insert ung query nung pagretrieve ng subtypes nung subjects na meron si stud  // subtypes lang ba etey?
         while ($sem = mysqli_fetch_assoc($result)) {
             while ($sub_type = mysqli_fetch_assoc($subject_type)) { // e.g. $row = sem 
@@ -439,21 +441,21 @@ class Administration extends Dbconfig
 
                         if ($sub_type['sub_type'] == $grd['sub_type']) {
                             // if ($_SESSION['user_type'] == 'ST') {
-                                if ($grd['status'] == 1) {
-                                    $grado[] = [
-                                        'sub_name'  => $grd['sub_name'],
-                                        'grade_1'   => $grd['first_grading'],
-                                        'grade_2'   => $grd['second_grading'],
-                                        'grade_f'   => $grd['final_grade']
-                                    ];
-                                } else {
-                                    $grado[] = [
-                                        'sub_name'  => $grd['sub_name'],
-                                        'grade_1'   => '',
-                                        'grade_2'   => '',
-                                        'grade_f'   => ''
-                                    ];
-                                }
+                            if ($grd['status'] == 1) {
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => $grd['first_grading'],
+                                    'grade_2'   => $grd['second_grading'],
+                                    'grade_f'   => $grd['final_grade']
+                                ];
+                            } else {
+                                $grado[] = [
+                                    'sub_name'  => $grd['sub_name'],
+                                    'grade_1'   => '',
+                                    'grade_2'   => '',
+                                    'grade_f'   => ''
+                                ];
+                            }
                             // } else {
                             //     $grado[] = [
                             //         'sub_name'  => $grd['sub_name'],
@@ -549,7 +551,7 @@ class Administration extends Dbconfig
     {
         $stud_id = $_POST['stud_id'];
         $sy_id = $_POST['sy_id'];
-        $this->query( "SELECT sub_code, sub_name, first_grading, second_grading, final_grade 
+        $this->query("SELECT sub_code, sub_name, first_grading, second_grading, final_grade 
             FROM classgrade 
             JOIN subjectclass USING (sub_class_code) 
             JOIN subject USING (sub_code) 
@@ -635,10 +637,10 @@ class Administration extends Dbconfig
             $archive_btn = "<button onclick='showNameToModal(`$sy_id`, `$sy_year`)' data-bs-toggle='modal' data-bs-target='#archive-confirmation-modal' class='btn btn-sm btn-danger archive-sy-btn' title='Archive'><i class='bi bi-archive'></i></button>";
             if ($sy_id == $_SESSION['sy_id']) {
                 $actions_btn =  "<button data-id='$sy_id' title='Edit current quarter' class='btn btn-secondary edit-btn btn-sm'><i class='bi bi-pencil-square'></i></button>"
-                                . "<div class='edit-options' style='display: none;'>"
-                                . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
-                                ."<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
-                                . "</div>";
+                    . "<div class='edit-options' style='display: none;'>"
+                    . "<button data-id='$sy_id' class='save-btn d-inline w-auto  btn btn-success btn-sm'>Save</button>"
+                    . "<button data-id='$sy_id' class='cancel-btn btn btn-outline-dark d-inline btn-sm m-1'>Cancel</button>"
+                    . "</div>";
                 $archive_btn = "";
             }
 
@@ -681,28 +683,28 @@ class Administration extends Dbconfig
         ];
     }
 
-    
+
     public function editSY()
     {
         session_start();
         $sy_id = $_POST['sy_id'] ?? $_SESSION['sy_id'];
         $quarter = $_POST['quarter'];
-        $first = [1,2];
-        $sem = in_array($quarter,$first)?1:2;
+        $first = [1, 2];
+        $sem = in_array($quarter, $first) ? 1 : 2;
         $this->prepared_query("UPDATE schoolyear SET current_quarter=?, current_semester=? WHERE sy_id=?", [$quarter, $sem, $sy_id], "iii");
-        echo json_encode("School is currently at ". ($quarter == 1 ? "First" : ($quarter == 2 ? "Second" : ($quarter == 3 ? "Third" : "Fourth"))). " Quarter");
+        echo json_encode("School is currently at " . ($quarter == 1 ? "First" : ($quarter == 2 ? "Second" : ($quarter == 3 ? "Third" : "Fourth"))) . " Quarter");
     }
 
     public function editAcademicDays()
     {
-//        $sy_id = $_POST['sy-id'];
+        //        $sy_id = $_POST['sy-id'];
         session_start();
         $sy_id = $_SESSION['sy_id'];
         $new_month_values = $_POST['month'];
         # delete current months if new months value array is zero
         if (count($new_month_values) === 0) {
             echo ("Delete all");
-             $this->query("DELETE FROM academicdays WHERE sy_id = '$sy_id';");
+            $this->query("DELETE FROM academicdays WHERE sy_id = '$sy_id';");
         } else {
             # store current academic days
             $cur_acad = [];
@@ -795,9 +797,9 @@ class Administration extends Dbconfig
         $sectionList = array();
         if (is_null($sy_id) && is_null($grade_level)) { # no specific school year id, grade level, and section
             $query = "SELECT section_code, section_name, sy_id, grd_level, stud_no_max, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM section LEFT JOIN faculty USING (teacher_id) ";
-//            $query .= ((isset($_GET['current']) && $_GET['current'] == 'true')
-//                                                                                ? "WHERE sy_id={$_SESSION['sy_id']};"
-//                                                                                : "");
+            //            $query .= ((isset($_GET['current']) && $_GET['current'] == 'true')
+            //                                                                                ? "WHERE sy_id={$_SESSION['sy_id']};"
+            //                                                                                : "");
             $query .= "WHERE sy_id={$_SESSION['sy_id']};";
             $result = $this->query($query);
             while ($row = mysqli_fetch_assoc($result)) {
@@ -805,7 +807,7 @@ class Administration extends Dbconfig
             }
         } else {
             $grd_condition = isset($grade_level) ? "AND grd_level = '$grade_level' " : "";
-            $section_condition = isset($section) ? "AND section_code != '$section';": ";";
+            $section_condition = isset($section) ? "AND section_code != '$section';" : ";";
             $query = "SELECT section_code, section_name, grd_level, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name 
                       FROM section LEFT JOIN faculty USING (teacher_id) WHERE sy_id = '$sy_id' $grd_condition $section_condition";
             $result = $this->query($query);
@@ -829,11 +831,12 @@ class Administration extends Dbconfig
         echo json_encode($this->listSection($sy_id, $grade_level, $section));
     }
 
-    public function enterAdviserLog($adviser, $section) {
+    public function enterAdviserLog($adviser, $section)
+    {
         $result = $this->query("SELECT teacher_id FROM section WHERE section_code='$section';");
         if (!is_null($adviser)) {
             if (mysqli_fetch_row($result)[0] != $adviser) {
-                $this->enterLog((mysqli_num_rows($result) > 0 ? "Updated" : "Assigned"). " adviser of section ID: $section.");
+                $this->enterLog((mysqli_num_rows($result) > 0 ? "Updated" : "Assigned") . " adviser of section ID: $section.");
                 $semester = in_array($_SESSION['current_quarter'], [1, 2]) ? "1" : "2";
                 $this->query("INSERT INTO historysection VALUES ('$adviser', '$section', NOW(), '$semester');");
             }
@@ -894,7 +897,7 @@ class Administration extends Dbconfig
 
         $grd_level = mysqli_fetch_row($this->query("SELECT grd_level FROM section WHERE section_code = '$code';"))[0];
         $result = $this->query("SELECT DISTINCT(prog_code) FROM enrollment WHERE sy_id = '$sy_id' AND section_code = '$code'; ");
-        while($row = mysqli_fetch_row($result)) {
+        while ($row = mysqli_fetch_row($result)) {
             $program = $row[0];
             $programs[] = ["code" => $program, "link" => "<a href='program.php?prog_code=$program' target='_blank' role='button' class='btn btn-sm btn-primary rounded-pill m-1'>$program</a>"];
         }
@@ -906,10 +909,10 @@ class Administration extends Dbconfig
         $none_display = "style='display: none;'";
         $sub_class_faculty = [];
         $current_subjects = [];
-        foreach($programs as $prog) {
+        foreach ($programs as $prog) {
             $prog_code = $prog['code'];
             $result = $this->query("SELECT sub_code, sub_semester, sub_name FROM sharedsubject JOIN subject USING (sub_code) WHERE prog_code = '$prog_code' AND for_grd_level = '$grd_level';");
-            while($row = mysqli_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $sub_code = $row['sub_code'];
                 $sub_semester = $row['sub_semester'];
 
@@ -963,7 +966,8 @@ class Administration extends Dbconfig
         ]);
     }
 
-    public function listSectionAdvisersHistory () {
+    public function listSectionAdvisersHistory()
+    {
         # history advisers
         $result = $this->query("SELECT CONCAT ('T. ',last_name,', ',first_name,' ',COALESCE(LEFT(middle_name, 1), ''),' ',COALESCE(ext_name,'')) AS teacher, date_assignment, 
             CASE WHEN semester = 1 THEN 'First' ELSE 'Second' END as semester  FROM `historysection` JOIN faculty USING (teacher_id) WHERE section_code = '{$_GET['section_code']}' ORDER BY date_assignment DESC");
@@ -1061,7 +1065,7 @@ class Administration extends Dbconfig
         // parameter order: new code, current code, name, description, current code
         $param = [$code, $_POST['name'], $_POST['curriculum-desc'], $old_code];
         $this->prepared_query("UPDATE curriculum SET curr_code=?, curr_name=?, curr_desc=? WHERE curr_code=?;", $param);
-//                header("Location: curriculum.php?code=$code");
+        //                header("Location: curriculum.php?code=$code");
         echo json_encode($code);
     }
 
@@ -1220,10 +1224,10 @@ class Administration extends Dbconfig
             }
         }
 
-//        if ($is_JSON) {
-//            echo json_encode($subjectList);
-//            return;
-//        }
+        //        if ($is_JSON) {
+        //            echo json_encode($subjectList);
+        //            return;
+        //        }
         return $subjectList;
     }
 
@@ -1281,7 +1285,7 @@ class Administration extends Dbconfig
         $result = $this->prepared_select("SELECT * FROM subject WHERE sub_code=?", [$code]);
         $row = mysqli_fetch_assoc($result);
         $sub_type = $row['sub_type'];
-//        $sy_id_condition = (is_null($sy_id) ? "AND sy_id IS NULL;" : "AND sy_id = '$sy_id';");
+        //        $sy_id_condition = (is_null($sy_id) ? "AND sy_id IS NULL;" : "AND sy_id = '$sy_id';");
 
         # schedule
         $res = $this->query("SELECT prog_code, sub_semester, for_grd_level FROM sharedsubject WHERE sub_code = '$code';");
@@ -1362,7 +1366,7 @@ class Administration extends Dbconfig
 
         if ($type == 'specialized') {
             $prog_code = $_POST['prog_code'][0];
-            $this->addSharedSubject([$code, $prog_code], );
+            $this->addSharedSubject([$code, $prog_code],);
         }
 
         if ($type == 'applied') {
@@ -1391,7 +1395,7 @@ class Administration extends Dbconfig
 
     public function getUpdateRequisiteQry($code, $requisite)
     {
-//        $query = '';
+        //        $query = '';
         if (isset($_POST["$requisite"])) {
             $req_code_list = $_POST["$requisite"];
 
@@ -1422,7 +1426,7 @@ class Administration extends Dbconfig
             $this->query("DELETE FROM requisite WHERE sub_code='$code' AND  type='$requisite';");
         }
 
-//        return $query;
+        //        return $query;
     }
 
     public function updateSubject()
@@ -1489,7 +1493,7 @@ class Administration extends Dbconfig
             $all_programs[] = $row[0];
         }
         $to_add = array_diff($all_programs, $current_programs);
-        foreach($to_add as $to_add_sub_prog) {
+        foreach ($to_add as $to_add_sub_prog) {
             $this->query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester) VALUES ('$code', '$to_add_sub_prog', 0, 0);");
         }
     }
@@ -1833,7 +1837,7 @@ class Administration extends Dbconfig
     {
         $query = '';
         $user_type = $_POST['user_type'];
-        switch($user_type) {
+        switch ($user_type) {
             case "AD":
                 $query = "SELECT admin_user_no FROM administrator WHERE admin_id='$user_id';";
                 break;
@@ -1846,7 +1850,7 @@ class Administration extends Dbconfig
         }
         $row = mysqli_fetch_row($this->query($query))[0];
         echo $row;
-        $default_password = password_hash($user_type.$row, PASSWORD_DEFAULT);
+        $default_password = password_hash($user_type . $row, PASSWORD_DEFAULT);
         $this->query("UPDATE user SET password='$default_password' WHERE id_no='$row';");
     }
 
@@ -1893,14 +1897,14 @@ class Administration extends Dbconfig
         }
     }
 
-    public function checkAdministratorCount() 
+    public function checkAdministratorCount()
     {
         $count = mysqli_fetch_row($this->query("SELECT COUNT(admin_id) FROM administrator; "))[0];
         // $is_allowed_to_delete = TRUE;
         if ($count == 1) {
             http_response_code(403);
             die();
-        } 
+        }
         // echo json_encode(["allowed" => $is_allowed_to_delete]);
     }
 
@@ -1910,7 +1914,7 @@ class Administration extends Dbconfig
         $id = $_SESSION['id'];
         $this->query("DELETE FROM user WHERE id_no = ANY(SELECT admin_user_no FROM administrator WHERE admin_id = '$id') AND user_type = 'AD';");
         $result = $this->query("SELECT * FROM administrator;");
-        if (mysqli_num_rows($result) == 0 ) {
+        if (mysqli_num_rows($result) == 0) {
             $this->createDefaultAdmin();
         }
         echo json_encode("../logout.php");
@@ -1919,9 +1923,9 @@ class Administration extends Dbconfig
 
     public function createDefaultAdmin()
     {
-         if (empty($_SESSION)) {
-             session_start();
-         }
+        if (empty($_SESSION)) {
+            session_start();
+        }
         $id = $this->createUser('AD', TRUE);
         $this->query("INSERT INTO administrator (admin_id, last_name, first_name, admin_user_no) VALUES (1, 'PCNHS', 'ADMIN', '$id');");
     }
@@ -2055,12 +2059,12 @@ class Administration extends Dbconfig
         if (isset($_POST['subjects'])) {
             // Step 1
             $subjects = $_POST['subjects'];
-            $result = $this->query( "SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
+            $result = $this->query("SELECT sub_code FROM subjectfaculty WHERE teacher_id='$id'");
             $current_subjects = [];
 
             if (mysqli_num_rows($result) == 0) {
                 foreach ($subjects as $sub) {
-                    $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');");
+                    $this->query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$sub', '$id');");
                 }
                 return;
             }
@@ -2078,7 +2082,7 @@ class Administration extends Dbconfig
             // Step 3
             $new_sub_codes = array_diff($subjects, $current_subjects);       // codes not found in the current subjects will be added as new row in the db
             foreach ($new_sub_codes as $new_code) {
-                $this->query( "INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
+                $this->query("INSERT INTO subjectfaculty (sub_code, teacher_id) VALUES ('$new_code', '$id');");
             }
         } else {
             // Delete all subject rows handled by the faculty
@@ -2102,10 +2106,10 @@ class Administration extends Dbconfig
 
     public function listSubClassFacultyOptions()
     {
-//        $condition = '';
-//        if (isset($_POST['exclude'])) {
-//            $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
-//        }
+        //        $condition = '';
+        //        if (isset($_POST['exclude'])) {
+        //            $condition = "WHERE teacher-id != '{$_POST['exclude']}'";
+        //        }
         $result = $this->query("SELECT teacher_id, CONCAT('T. ',last_name, ', ', first_name, ' ', 
                                     COALESCE(middle_name, ''), ' ',COALESCE(ext_name, '')) AS name
                                     FROM faculty f JOIN user u ON f.teacher_user_no = u.id_no WHERE u.is_active = 1;");
@@ -2318,11 +2322,11 @@ class Administration extends Dbconfig
 
         $section_dest = $_POST['section'];
 
-         if (!$section_dest) {
-             // faculty will be unassigned to any section
-             $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
-             return;
-         }
+        if (!$section_dest) {
+            // faculty will be unassigned to any section
+            $this->prepared_query("UPDATE section SET teacher_id=NULL WHERE teacher_id=?;", [$teacher_id], "i");
+            return;
+        }
 
         # faculty will be assigned to new section
         if (!isset($_POST['current-adviser'])) {
@@ -2420,15 +2424,15 @@ class Administration extends Dbconfig
         $current_sub_codes = $this->getCurrentSubjectsOfSection($code, $sy_id);
         print_r($current_sub_codes);
         if (isset($_POST['subjects'])) {
-            foreach($_POST['subjects'] as $prog_code => $sub_codes) {
+            foreach ($_POST['subjects'] as $prog_code => $sub_codes) {
                 # delete
                 $to_delete = array_diff($current_sub_codes, $sub_codes);
-                foreach($to_delete as $sub_code_delete) {
+                foreach ($to_delete as $sub_code_delete) {
                     $this->query("DELETE FROM subjectclass WHERE section_code = '$code' AND sub_code = '$sub_code_delete';");
                 }
                 # add
                 $to_add = array_diff($sub_codes, $current_sub_codes);
-                foreach($to_add as $sub_code_add) {
+                foreach ($to_add as $sub_code_add) {
                     $this->query("INSERT INTO subjectclass (section_code, sub_code) VALUES ('$code', '$sub_code_add');");
                 }
             }
@@ -2438,8 +2442,8 @@ class Administration extends Dbconfig
         }
 
         # update subject faculty
-        foreach($_POST['subjectClass'] as $section_code => $subjectData) {
-            foreach($subjectData as $subject_code => $teacher_id) {
+        foreach ($_POST['subjectClass'] as $section_code => $subjectData) {
+            foreach ($subjectData as $subject_code => $teacher_id) {
                 $teacher_id = empty($teacher_id) ? "NULL" : "'$teacher_id'";
 
                 $result = $this->query("SELECT sub_class_code FROM subjectclass WHERE section_code = '$section_code' AND sub_code = '$subject_code';");
@@ -2513,10 +2517,10 @@ class Administration extends Dbconfig
         }
 
         $g_firstname = trim($_POST['g_firstname']) ?: NULL;
-            $g_lastname = trim($_POST['g_lastname']) ?: NULL;
-            $g_middlename = trim($_POST['g_middlename']) ?: NULL;
-            $g_cp_no = trim($_POST['g_contactnumber']) ?: NULL;
-            $relationship = trim($_POST['relationship']) ?: NULL;
+        $g_lastname = trim($_POST['g_lastname']) ?: NULL;
+        $g_middlename = trim($_POST['g_middlename']) ?: NULL;
+        $g_cp_no = trim($_POST['g_contactnumber']) ?: NULL;
+        $relationship = trim($_POST['relationship']) ?: NULL;
 
         # images
         if ($_FILES['psaImage']['size'] > 0) {
@@ -2553,7 +2557,6 @@ class Administration extends Dbconfig
             $fileDestination = "uploads/credential/$sy_id/$img_name";
             move_uploaded_file($img_content, "../" . $fileDestination);
             $this->prepared_query("UPDATE student SET form_137 = ?  WHERE stud_id = ?;", [$fileDestination, $stud_id], "si");
-
         }
         if ($_FILES['image']['size'] > 0) {
             $result = $this->query("SELECT id_picture FROM student WHERE stud_id = '$stud_id';");
@@ -2579,7 +2582,7 @@ class Administration extends Dbconfig
             $sex, $age, $birthdate, $birth_place, $indigenous_group,
             $mother_tongue, $religion, $cp_no, $belong_to_ipcc, $stud_id
         ];
-        $stud_types = "issss"."sdsss"."ssiii";
+        $stud_types = "issss" . "sdsss" . "ssiii";
 
         $stud_query = "UPDATE student SET LRN=?, first_name=?, middle_name=?, last_name=?, ext_name=?, sex=?, age=?, birthdate=?, birth_place=?,
         indigenous_group=?,mother_tongue=?,religion=?,cp_no=?,belong_to_IPCC=? WHERE stud_id= ?;";
@@ -2610,14 +2613,14 @@ class Administration extends Dbconfig
         $guardian_query = "CALL editStudentGuardian(?, ?, ?, ?, ?, ?);";
         $this->prepared_query($guardian_query, $guardian_params, $guardian_types);
 
-//        header("Location: student.php?id=$stud_id");
+        //        header("Location: student.php?id=$stud_id");
         echo json_encode($stud_id);
     }
 
     public function editSubjectGrade()
     {
         $new_data = $_POST['grade'];
-        foreach($new_data as $grade_id => $new_grade) {
+        foreach ($new_data as $grade_id => $new_grade) {
             # update grade
             $params = [
                 $new_grade['first'],
@@ -2635,12 +2638,12 @@ class Administration extends Dbconfig
         }
     }
 
-    public function editGeneralAverage() 
+    public function editGeneralAverage()
     {
         $new_data = $_POST['gaGrade'];
-        foreach($new_data as $grade_id => $new_data) {
+        foreach ($new_data as $grade_id => $new_data) {
             # update grade
-            foreach($new_data as $semester => $new_grade) {
+            foreach ($new_data as $semester => $new_grade) {
                 $attribute = ($semester == 'first' ? "first_gen_ave" : "second_gen_ave");
                 $params = [$new_grade, $grade_id];
                 $this->prepared_query("UPDATE gradereport SET $attribute = ? WHERE report_id = ?;", $params, "ii");
@@ -2899,12 +2902,13 @@ class Administration extends Dbconfig
                 break;
         }
 
-        foreach($id as $id_no) {
+        foreach ($id as $id_no) {
             $this->prepared_query("UPDATE user SET is_active = $value WHERE id_no = ANY($sub_query);", [$id_no], "i");
         }
     }
 
-    public function getStudentAttendanceJSON(){
+    public function getStudentAttendanceJSON()
+    {
         session_start();
         $id = $_GET['id'];
         $sy = $_SESSION['sy_id'];
@@ -2916,7 +2920,7 @@ class Administration extends Dbconfig
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
             $attendance[] = [
-                'month' =>$row['month'],
+                'month' => $row['month'],
                 'present' => "<input name='data[{$attend_id}][present]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_present']}'>",
                 'absent'  => "<input name='data[{$attend_id}][absent]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_absent']}'>",
                 'tardy'   => "<input name='data[{$attend_id}][tardy]' class='form-control form-control-sm text-center mb-0 number' readonly value='{$row['no_of_tardy']}'>",
@@ -3008,7 +3012,7 @@ class Administration extends Dbconfig
     }
 
     /** MAINTENANCE METHODS */
-    public function listArchivedSY() 
+    public function listArchivedSY()
     {
         $sy_list = [];
         $result = $this->query("SELECT sy_id, CONCAT(start_year, ' - ', end_year) FROM archived_schoolyear;");
@@ -3023,34 +3027,34 @@ class Administration extends Dbconfig
         }
         echo json_encode($sy_list);
     }
-    public function listBackupFiles() 
+    public function listBackupFiles()
     {
         $backup = "./maintenance/backup";
         $list = scandir($backup);
         $backup_list = array_diff($list, array('..', '.'));
         $data = [];
-        foreach($backup_list as $item) { 
+        foreach ($backup_list as $item) {
             $index = strpos($item, '.');
             $name = substr($item, 0, $index);
-            $date =  date ("F d, Y H:i:s", filemtime($backup."/".$name.".sql"));  
+            $date =  date("F d, Y H:i:s", filemtime($backup . "/" . $name . ".sql"));
             $data[] = [
                 "name" =>  $name,
                 "date" => $date,
                 "action" => "<button onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#delete-confirmation-modal' class='btn btn-danger btn-sm m-1'>Delete</button>"
-                           ."<button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm m-1'>Restore</button>"
+                    . "<button  onclick='showBackUpName(`$name`)' data-bs-toggle='modal' data-bs-target='#restore-confirmation-modal' class='btn btn-success btn-sm m-1'>Restore</button>"
             ];
         }
 
         echo json_encode($data);
     }
 
-    public function resetSystem() 
+    public function resetSystem()
     {
         # create default admin
         $this->createDefaultAdmin();
     }
 
-    public function moveData($id, $is_archive = TRUE) 
+    public function moveData($id, $is_archive = TRUE)
     {
         $archive = "archived_";
         $a_other = "";
@@ -3110,64 +3114,65 @@ class Administration extends Dbconfig
         $this->deleteDataFromTables($id, $is_archive);
     }
 
-    public function exportTables($tables='*') {
+    public function exportTables($tables = '*')
+    {
         session_start();
-        if($tables == '*') { 
+        if ($tables == '*') {
             $tables = array();
             $result = $this->query("SHOW TABLES");
-            while($row = $result->fetch_row()) { 
+            while ($row = $result->fetch_row()) {
                 $tables[] = $row[0];
             }
-        } else { 
-            $tables = is_array($tables) ? $tables : explode(',',$tables);
+        } else {
+            $tables = is_array($tables) ? $tables : explode(',', $tables);
         }
-    
+
         $return = '';
-    
-        foreach($tables as $table) {
-            $result = $this->query("SELECT * FROM $table");
+
+        foreach ($tables as $table) {
+            $result = $this->query("SELECT * FROM `$table`");
             $numColumns = $result->field_count;
-    
-            $result2 = $this->query("SHOW CREATE TABLE $table");
+
+            $result2 = $this->query("SHOW CREATE TABLE `$table`");
             $row2 = $result2->fetch_row();
-    
-            $return .= "\n\n".$row2[1].";\n\n";
-    
-            for($i = 0; $i < $numColumns; $i++) { 
-                while($row = $result->fetch_row()) { 
-                    $return .= "INSERT INTO $table VALUES(";
-                    for($j=0; $j < $numColumns; $j++) { 
+
+            $return .= "\n\n" . $row2[1] . ";\n\n";
+
+            for ($i = 0; $i < $numColumns; $i++) {
+                while ($row = $result->fetch_row()) {
+                    $return .= "INSERT INTO `$table` VALUES(";
+                    for ($j = 0; $j < $numColumns; $j++) {
                         $row[$j] = addslashes($row[$j]);
                         $row[$j] = $row[$j];
-                        if (isset($row[$j])) { 
-                            $return .= '"'.$row[$j].'"' ;
-                        } else { 
+                        if (isset($row[$j])) {
+                            $return .= '"' . $row[$j] . '"';
+                        } else {
                             $return .= '""';
                         }
-                        if ($j < ($numColumns-1)) {
-                            $return.= ',';
+                        if ($j < ($numColumns - 1)) {
+                            $return .= ',';
                         }
                     }
                     $return .= ");\n";
                 }
             }
-    
+
             $return .= "\n\n\n";
         }
-        $sy = $_SESSION['school_year'].uniqid("_backup");
-        $handle = fopen("../admin/maintenance/backup/{$sy}.sql",'w+');
+        $sy = $_SESSION['school_year'] . uniqid("_backup");
+        $handle = fopen("../admin/maintenance/backup/{$sy}.sql", 'w+');
         fwrite($handle, $return);
         fclose($handle);
         echo json_encode("Database Export Successfully!");
-    }  
+    }
 
-    public function performMaintenance() 
+    public function performMaintenance()
     {
         $action = $_GET['action'];
-        $path = "../admin/maintenance/backup/".$_GET['name'].".sql";
+        $path = "../admin/maintenance/backup/" . $_GET['name'] . ".sql";
 
-        switch($action) {
-            case "unarchivesy": 
+        switch ($action) {
+            case "unarchivesy":
                 $this->archiveSY(FALSE);
                 $action = "unarchive";
                 break;
@@ -3186,7 +3191,7 @@ class Administration extends Dbconfig
 
         echo json_encode([
             "status" => "success",
-            "message" => "Item successfully $action"."d"
+            "message" => "Item successfully $action" . "d"
         ]);
     }
 }
