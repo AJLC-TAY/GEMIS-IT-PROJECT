@@ -163,7 +163,7 @@ include_once("../inc/head.html");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="reset-system-form" method="POST">
+                    <form id="reset-system-form" method="POST" action="action.php" >
                         <input type="hidden" name="action" value="reset-system">
                         <p class="text-secondary"><small>Enter your password to confirm system reset</small></p>
                         <div class="container">

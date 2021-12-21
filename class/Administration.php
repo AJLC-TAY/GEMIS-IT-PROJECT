@@ -1928,6 +1928,7 @@ class Administration extends Dbconfig
         }
         $id = $this->createUser('AD', TRUE);
         $this->query("INSERT INTO administrator (admin_id, last_name, first_name, admin_user_no) VALUES (1, 'PCNHS', 'ADMIN', '$id');");
+        header("Location: ../login.php");
     }
 
     /** Faculty Methods */
@@ -3050,6 +3051,7 @@ class Administration extends Dbconfig
 
     public function resetSystem()
     {
+        echo("entered resetSystem");
         $this->truncateTables();
         # create default admin
         $this->createDefaultAdmin();
@@ -3061,66 +3063,66 @@ class Administration extends Dbconfig
         # Truncate All Tables
         // $db = 'gemis';
         // $toTruncate = $this->query("SELECT CONCAT('TRUNCATE TABLE ',table_schema,'.',TABLE_NAME,';') FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = {$db};");
-        // $tables = array();
-        // $result = $this->query("SHOW TABLES");
-        // while ($row = $result->fetch_row()) {
-        //     $tables[] = $row[0];
-        // }
-        // foreach ($tables as $table) {
-        //     $result = $this->query("TRUNCATE TABLE $table");
-        // }
-        // $this->query("SET FOREIGN_KEY_CHECKS=1;");
-        $this->query("TRUNCATE TABLE academicdays;");
-        $this->query("TRUNCATE TABLE academicexcellence;");
-        $this->query("TRUNCATE TABLE address;");
-        $this->query("TRUNCATE TABLE administrator;");
-        $this->query("TRUNCATE TABLE archived_academicdays;");
-        $this->query("TRUNCATE TABLE archived_attendance;");
-        $this->query("TRUNCATE TABLE archived_classgrade;");
-        $this->query("TRUNCATE TABLE archived_enrollment;");
-        $this->query("TRUNCATE TABLE archived_gradereport;");
-        $this->query("TRUNCATE TABLE archived_schoolyear;");
-        $this->query("TRUNCATE TABLE archived_section;");
-        $this->query("TRUNCATE TABLE archived_subjectclass;");
-        $this->query("TRUNCATE TABLE archived_sycurriculum;");
-        $this->query("TRUNCATE TABLE archived_sycurrstrand;");
-        $this->query("TRUNCATE TABLE archived_transferee;");
-        $this->query("TRUNCATE TABLE archived_transfereeschedule;");
-        $this->query("TRUNCATE TABLE archived_transfereesubject;");
-        $this->query("TRUNCATE TABLE attendance;");
-        $this->query("TRUNCATE TABLE award;");
-        $this->query("TRUNCATE TABLE classgrade;");
-        $this->query("TRUNCATE TABLE curriculum;");
-        $this->query("TRUNCATE TABLE enrollment;");
-        $this->query("TRUNCATE TABLE faculty;");
-        $this->query("TRUNCATE TABLE gradereport;");
-        $this->query("TRUNCATE TABLE guardian;");
-        $this->query("TRUNCATE TABLE historylogs;");
-        $this->query("TRUNCATE TABLE historysection;");
-        $this->query("TRUNCATE TABLE historysubjectclass;");
-        $this->query("TRUNCATE TABLE observedvalues;");
-        $this->query("TRUNCATE TABLE parent;");
-        $this->query("TRUNCATE TABLE program;");
-        $this->query("TRUNCATE TABLE requisite;");
-        $this->query("TRUNCATE TABLE resetpassword;");
-        $this->query("TRUNCATE TABLE schoolyear;");
-        $this->query("TRUNCATE TABLE section;");
-        $this->query("TRUNCATE TABLE sharedsubject;");
-        $this->query("TRUNCATE TABLE signatory;");
-        $this->query("TRUNCATE TABLE signedreport;");
-        $this->query("TRUNCATE TABLE student;");
-        $this->query("TRUNCATE TABLE studentaward;");
-        $this->query("TRUNCATE TABLE subject;");
-        $this->query("TRUNCATE TABLE subjectclass;");
-        $this->query("TRUNCATE TABLE subjectfaculty;");
-        $this->query("TRUNCATE TABLE sycurriculum;");
-        $this->query("TRUNCATE TABLE sycurrstrand;");
-        $this->query("TRUNCATE TABLE transferee;");
-        $this->query("TRUNCATE TABLE transfereeschedule;");
-        $this->query("TRUNCATE TABLE transfereesubject;");
-        $this->query("TRUNCATE TABLE user;");
-        $this->query("TRUNCATE TABLE values;");
+        $tables = array();
+        $result = $this->query("SHOW TABLES");
+        while ($row = $result->fetch_row()) {
+            $tables[] = $row[0];
+        }
+        foreach ($tables as $table) {
+            $result = $this->query("TRUNCATE TABLE $table");
+        }
         $this->query("SET FOREIGN_KEY_CHECKS=1;");
+        // $this->query("TRUNCATE TABLE academicdays;");
+        // $this->query("TRUNCATE TABLE academicexcellence;");
+        // $this->query("TRUNCATE TABLE address;");
+        // $this->query("TRUNCATE TABLE administrator;");
+        // $this->query("TRUNCATE TABLE archived_academicdays;");
+        // $this->query("TRUNCATE TABLE archived_attendance;");
+        // $this->query("TRUNCATE TABLE archived_classgrade;");
+        // $this->query("TRUNCATE TABLE archived_enrollment;");
+        // $this->query("TRUNCATE TABLE archived_gradereport;");
+        // $this->query("TRUNCATE TABLE archived_schoolyear;");
+        // $this->query("TRUNCATE TABLE archived_section;");
+        // $this->query("TRUNCATE TABLE archived_subjectclass;");
+        // $this->query("TRUNCATE TABLE archived_sycurriculum;");
+        // $this->query("TRUNCATE TABLE archived_sycurrstrand;");
+        // $this->query("TRUNCATE TABLE archived_transferee;");
+        // $this->query("TRUNCATE TABLE archived_transfereeschedule;");
+        // $this->query("TRUNCATE TABLE archived_transfereesubject;");
+        // $this->query("TRUNCATE TABLE attendance;");
+        // $this->query("TRUNCATE TABLE award;");
+        // $this->query("TRUNCATE TABLE classgrade;");
+        // $this->query("TRUNCATE TABLE curriculum;");
+        // $this->query("TRUNCATE TABLE enrollment;");
+        // $this->query("TRUNCATE TABLE faculty;");
+        // $this->query("TRUNCATE TABLE gradereport;");
+        // $this->query("TRUNCATE TABLE guardian;");
+        // $this->query("TRUNCATE TABLE historylogs;");
+        // $this->query("TRUNCATE TABLE historysection;");
+        // $this->query("TRUNCATE TABLE historysubjectclass;");
+        // $this->query("TRUNCATE TABLE observedvalues;");
+        // $this->query("TRUNCATE TABLE parent;");
+        // $this->query("TRUNCATE TABLE program;");
+        // $this->query("TRUNCATE TABLE requisite;");
+        // $this->query("TRUNCATE TABLE resetpassword;");
+        // $this->query("TRUNCATE TABLE schoolyear;");
+        // $this->query("TRUNCATE TABLE section;");
+        // $this->query("TRUNCATE TABLE sharedsubject;");
+        // $this->query("TRUNCATE TABLE signatory;");
+        // $this->query("TRUNCATE TABLE signedreport;");
+        // $this->query("TRUNCATE TABLE student;");
+        // $this->query("TRUNCATE TABLE studentaward;");
+        // $this->query("TRUNCATE TABLE subject;");
+        // $this->query("TRUNCATE TABLE subjectclass;");
+        // $this->query("TRUNCATE TABLE subjectfaculty;");
+        // $this->query("TRUNCATE TABLE sycurriculum;");
+        // $this->query("TRUNCATE TABLE sycurrstrand;");
+        // $this->query("TRUNCATE TABLE transferee;");
+        // $this->query("TRUNCATE TABLE transfereeschedule;");
+        // $this->query("TRUNCATE TABLE transfereesubject;");
+        // $this->query("TRUNCATE TABLE user;");
+        // $this->query("TRUNCATE TABLE values;");
+        // $this->query("SET FOREIGN_KEY_CHECKS=1;");
         echo json_encode("All tables truncated.");
     }
 

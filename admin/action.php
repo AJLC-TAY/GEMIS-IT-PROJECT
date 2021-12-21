@@ -41,7 +41,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'switchSY') {
     $admin->switchSY(NULL, TRUE, 'view');
     $admin->enterLog("Switch School Year");
 }
-if (isset($_GET['action']) && $_GET['action'] === 'reset-system') {
+if (isset($_POST['action']) && $_POST['action'] === 'reset-system') {
     $admin->resetSystem();
 }
 
