@@ -207,8 +207,8 @@ $(function() {
                     formData.push({'name': $(this).attr('name'), 'value': $(this).val()});
                 });
                 formData.push({'name': 'action', 'value': 'editSubjectGrade'});
-                document.getElementById("teacher").innerText = "subject teachers";
-                document.getElementById("type").innerText = "grades";
+                // document.getElementById("teacher").innerText = "subject teachers";
+                // document.getElementById("type").innerText = "grades";
                 document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type','grades');
                 $("#confirmation-edit-modal").modal('show');
                 hideSpinner();
