@@ -49,6 +49,32 @@ function toggleGradesColumn(classType) {
     studentTable.bootstrapTable('hideColumn', ['grd_1', 'grd_2']);
 }
 
+function gradeStud(stat){
+    var studGrades = document.getElementsByClassName("gen-ave");
+        console.log(studGrades);
+        studGrades.forEach(element => {
+
+            var recordInfo = element['name'].split("/")
+            var grades = {
+                'id': recordInfo[0],
+                'rep_id': recordInfo[1],
+                'sem': recordInfo[2],
+                'gen_ave': element['value'],
+                'action': 'gradeAdvisory',
+                'stat': stat
+            };
+
+            $.post("action.php", grades, function(data) {
+                // console.log(grades);
+                console.log(grades);
+                studentTable.bootstrapTable("refresh");
+
+            });
+
+        });
+        $(".number").attr('readOnly', true);
+}
+
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 if (qtr == '2') {
@@ -74,6 +100,7 @@ function changeSignatoryInfo() {
     signatory = $("select[name='signatory'] option:selected").attr("data-name") || "No signatories yet";
     position = $("select[name='signatory'] option:selected").attr("data-position") || '';
 }
+
 $(function() {
     preload('#advisory');
 
@@ -122,10 +149,12 @@ $(function() {
     });
 
     $(document).on("click", ".submit", () => {
-        document.getElementById("label").innerText = "submit";
-        document.getElementById("modal-msg").innerText = submitMsg;
-        document.getElementById("confirm").innerText = "Submit";
-        $(".grading-confirmation").modal("toggle");
+        // document.getElementById("label").innerText = "submit";
+        // document.getElementById("modal-msg").innerText = submitMsg;
+        // document.getElementById("confirm").innerText = "Submit";
+        // $(".grading-confirmation").modal("toggle");
+        $("#msg").addClass("hidden");
+        $("#confirmation-submit-modal").modal("show");
 
     });
 
@@ -140,35 +169,25 @@ $(function() {
     });
 
     $(document).on("click", "#confirm", function(e) {
-        var stat = document.getElementById("label").innerText == "submit" ? "1" : "0";
+        var stat = this.innerText == "Submit" ? "1" : "0";
         this.attr
         console.log(stat);
 
-        // let studGrades = new FormData();
-        var studGrades = document.getElementsByClassName("gen-ave");
-        console.log(studGrades);
-        studGrades.forEach(element => {
-
-            var recordInfo = element['name'].split("/")
-            var grades = {
-                'id': recordInfo[0],
-                'rep_id': recordInfo[1],
-                'sem': recordInfo[2],
-                'gen_ave': element['value'],
-                'action': 'gradeAdvisory',
-                'stat': stat
-            };
-
-            $.post("action.php", grades, function(data) {
-                // console.log(grades);
-                console.log(grades);
-                studentTable.bootstrapTable("refresh");
-
-            });
-
-        });
-        $('.grading-confirmation').modal('hide');
-        $(".number").attr('readOnly', true);
+        if (stat == 1){
+            if (($("#reflect").prop("checked") == true) && ($("#editable").prop("checked") == true)){
+                gradeStud(stat);
+                $('#confirmation-submit-modal').modal('hide');
+                
+            }else{
+                var element = document.getElementById("msg");
+                element.classList.remove("hidden");
+            }
+        } else {
+            gradeStud(stat);
+            $('.grading-confirmation').modal('hide');
+        }
+        
+        
     });
     $(document).on("click", "#promote", function() {
         var record = {

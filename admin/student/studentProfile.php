@@ -542,21 +542,26 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 <p class="text-danger">Warning: This cannot be undone.</p>
                                 <hr class="mt-0">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="">
+                                    <input class="form-check-input" id ="reflect" type="checkbox" value="">
                                     <label class="form-check-label">
-                                    <p class="text-left">Grades will be reflected in the student's account.</p> 
+                                    <p class="text-left"><span class="type"></span> will be reflected in the student's account.</p> 
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="">
+                                    <input class="form-check-input" id="overwrite" type="checkbox" value="">
                                     <label class="form-check-label">
-                                    The submitted grades of the faculty will be overwritten. 
+                                    <p><span class="type"></span> submitted by the <span id="teacher"></span> will be overwritten. </p>
                                     </label>
                                 </div>
+                                <div class ="hidden" id = "msg">
+                                    <hr>
+                                    <p class="text-danger">Please check all items.</p>
+                                </div>
+                                
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
-                                <button class="submit-edit-button btn btn-sm btn-success" data-type="" data-bs-dismiss="modal">Save Changes</button>
+                                <button class="submit-edit-button btn btn-sm btn-success" data-type="">Save Changes</button>
                             </div>
                         </div>
                     </div>

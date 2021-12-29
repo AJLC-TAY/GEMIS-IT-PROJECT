@@ -52,6 +52,35 @@ var submitMsg = "Submitted grades are final and are not editable. For necessary 
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
 var stat = document.getElementById("label").innerText == "submit?"? "1": "0";
 
+function gradeStud(){
+    var studGrades = $("#grades").serializeArray();        
+            studGrades.forEach(element => {
+                var recordInfo = element['name'].split("/")
+                if(recordInfo[2] == 'general_average'){
+                    var grades = {'id' : recordInfo[0],
+                                'rep_id' : recordInfo[1],
+                                'gen_ave' : element['value'],
+                                'action' : 'gradeAdvisory',
+                                'stat': stat};
+                } else {
+                    var grades  = {'id' : recordInfo[0],
+                                    'grading' : recordInfo[1],
+                                    'grade': element['value'],
+                                    'code' : code,
+                                    'stat': stat,
+                                    'action' : 'gradeClass'};
+                }
+                $.post("../faculty/action.php", grades, function(data) {	
+                    // console.log(grades);
+                    console.log(grades)
+                    classGradeTable.bootstrapTable("refresh")
+                    
+                });
+
+            });  
+            $(".number").attr('readOnly',true);
+            
+}
 $(function() {
     preload('#subject');
     
@@ -93,11 +122,12 @@ $(function() {
 
     $(document).on("click", ".submit", () => {
         stat = "1";
-        document.getElementById("stmt").innerText="Are you sure you want to ";
-        document.getElementById("label").innerText="submit?";
-        document.getElementById("modal-msg").innerText=submitMsg;
-        document.getElementById("confirm").innerText="Submit";
-        $(".grading-confirmation").modal("toggle");
+        // document.getElementById("stmt").innerText="Are you sure you want to ";
+        // document.getElementById("label").innerText="submit?";
+        // document.getElementById("modal-msg").innerText=submitMsg;
+        // document.getElementById("confirm").innerText="Submit";
+        $("#msg").addClass("hidden");
+        $("#confirmation-submit-modal").modal("show");
        
     });
 
@@ -123,34 +153,20 @@ $(function() {
 
         // let studGrades = new FormData();
         if (type == 'grades'){
-            var studGrades = $("#grades").serializeArray();        
-            studGrades.forEach(element => {
-                
-                var recordInfo = element['name'].split("/")
-                if(recordInfo[2] == 'general_average'){
-                    var grades = {'id' : recordInfo[0],
-                                'rep_id' : recordInfo[1],
-                                'gen_ave' : element['value'],
-                                'action' : 'gradeAdvisory',
-                                'stat': stat};
-                } else {
-                    var grades  = {'id' : recordInfo[0],
-                                    'grading' : recordInfo[1],
-                                    'grade': element['value'],
-                                    'code' : code,
-                                    'stat': stat,
-                                    'action' : 'gradeClass'};
-                }
-                $.post("../faculty/action.php", grades, function(data) {	
-                    // console.log(grades);
-                    console.log(grades)
-                    classGradeTable.bootstrapTable("refresh")
+            if (stat == 1){
+                if (($("#reflect").prop("checked") == true) && ($("#editable").prop("checked") == true)){
+                    gradeStud();
+                    $('#confirmation-submit-modal').modal('hide');
                     
-                });
-
-            });        
-            $('.grading-confirmation').modal('hide');
-            $(".number").attr('readOnly',true);
+                }else{
+                    var element = document.getElementById("msg");
+                    element.classList.remove("hidden");
+                }
+            } else {
+                gradeStud();
+                $('.grading-confirmation').modal('hide');
+            }
+            
         } else {
             var select = document.getElementsByClassName('markings');
             select.forEach((element) => {

@@ -1863,8 +1863,7 @@ trait Grade
         FROM classgrade 
         JOIN student USING(stud_id) 
         JOIN enrollment e USING(stud_id)
-        JOIN sysub USING(sub_code) 
-        JOIN subjectclass sc USING(sub_sy_id)
+        JOIN subjectclass sc USING(sub_code)
         WHERE $addOn sc.sub_class_code = $sub_class_code AND e.section_code='$section_code' AND stud_id NOT IN (SELECT stud_id FROM transferee)
         AND e.sy_id=$sy_id AND e.semester = {$_SESSION['current_semester']};");
         

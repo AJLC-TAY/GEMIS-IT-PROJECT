@@ -1,4 +1,4 @@
-import {averageSubjectGradesEvent, commonTableSetup} from "./utilities.js";
+import { averageSubjectGradesEvent, commonTableSetup } from "./utilities.js";
 
 const REQUIRED = "<p class='text-danger'><small>This field is required</small></p>";
 let tableSetup = {
@@ -36,7 +36,7 @@ let tempChanges = [];
  * */
 function cancelEditRow(row) {
     // return original values to input & set them to readonly
-    $.each(row.find(".number"), function(i, val) {
+    $.each(row.find(".number"), function (i, val) {
         val.value = tempChanges[i];
         val.setAttribute("readonly", true);
     });
@@ -46,7 +46,7 @@ function cancelEditRow(row) {
  * @param {Object} row tr object
  * */
 function editRow(row) {
-    row.find(".number").each(function() {
+    row.find(".number").each(function () {
         let e = $(this);
         tempChanges.push(e.val());
         e.removeAttr("readonly");
@@ -68,7 +68,7 @@ function exitEditMode(row) {
     hideSpinner();
 }
 
-$(function() {
+$(function () {
     preload('#student');
 
     const readURL = (input, destination) => {
@@ -81,11 +81,11 @@ $(function() {
         };
     };
 
-    $("#upload").change(function(){
+    $("#upload").change(function () {
         readURL(this, "#resultImg");
     });
 
-    $(".profile-photo").click(()=> $("#upload").click());
+    $(".profile-photo").click(() => $("#upload").click());
 
     const readpsaURL = input => {
         if (input.files && input.files[0]) {
@@ -97,22 +97,22 @@ $(function() {
         };
     };
 
-    $("#psaUpload").change(function(){
+    $("#psaUpload").change(function () {
         readURL(this, "#psaResult");
     });
-    $("#updload").change(function(){
+    $("#updload").change(function () {
         readURL(this, "#resultImg");
     });
 
-    $("#form137Upload").change(function(){
+    $("#form137Upload").change(function () {
         readURL(this, "#form137Result");
     });
 
-    $(".psa-photo").click(()=> $("#psaUpload").click());
-    $(".profile-photo").click(()=> $("#upload").click());
-    $(".form137-photo").click(()=> $("#form137Upload").click());
+    $(".psa-photo").click(() => $("#psaUpload").click());
+    $(".profile-photo").click(() => $("#upload").click());
+    $(".form137-photo").click(() => $("#form137Upload").click());
 
-    $("#psa").click(function(){
+    $("#psa").click(function () {
         let preview = $('#imgPreview');
         img = document.getElementById("psaPreview");
         img.src = this.src;
@@ -120,7 +120,7 @@ $(function() {
         preview.modal('toggle');
     });
 
-    $("#form137").click(function(){
+    $("#form137").click(function () {
         let preview = $('#imgPreview');
         img = document.getElementById("psaPreview");
         img.src = this.src;
@@ -129,7 +129,7 @@ $(function() {
         preview.modal('toggle');
     });
 
-    $(document).on("submit", "#reset-form", function(e) {
+    $(document).on("submit", "#reset-form", function (e) {
         e.preventDefault();
         $.post("action.php", $(this).serializeArray(), function () {
             $("#reset-confirmation-modal").modal("hide");
@@ -147,17 +147,17 @@ $(function() {
         let row = $(this).closest("tr");
         let input = row.find("input");
 
-        switch($(this).attr("data-action")) {
+        switch ($(this).attr("data-action")) {
             case "edit":
                 input.prop("disabled", false);
-                gradesGATemp.push({'gid' : gradeID, 'data' : input.val()});
+                gradesGATemp.push({ 'gid': gradeID, 'data': input.val() });
                 $(this).addClass('d-none');
                 $(this).siblings(".edit-options").removeClass("d-none");
                 hideSpinner();
                 return;
             case "save":
-                formData.push({'name': input.attr('name'), 'value': input.val()});
-                formData.push({'name': 'action', 'value': 'editGeneralAverage'});
+                formData.push({ 'name': input.attr('name'), 'value': input.val() });
+                formData.push({ 'name': 'action', 'value': 'editGeneralAverage' });
                 let modal = $("#confirmation-edit-ga-modal");
                 modal.find(".submit-edit-button").attr("data-type", 'gen-average');
                 modal.modal('show');
@@ -182,7 +182,7 @@ $(function() {
         input.prop("disabled", true);
         hideSpinner();
 
-        
+
     });
 
     $(document).on("click", ".grade-table .action", function () {
@@ -194,22 +194,26 @@ $(function() {
         let inputTwo = inputs.eq(1);
         let inputFin = inputs.eq(2);
 
-        switch($(this).attr("data-action")) {
+        switch ($(this).attr("data-action")) {
             case "edit":
                 inputs.prop("disabled", false);
-                gradesTemp.push({'gid' : gradeID, 'data' : [inputOne.val(), inputTwo.val(), inputFin.val()]});
+                gradesTemp.push({ 'gid': gradeID, 'data': [inputOne.val(), inputTwo.val(), inputFin.val()] });
                 $(this).addClass('d-none');
                 $(this).siblings(".edit-options").removeClass("d-none");
                 hideSpinner();
                 return;
             case "save":
-                inputs.each(function() {
-                    formData.push({'name': $(this).attr('name'), 'value': $(this).val()});
+                inputs.each(function () {
+                    formData.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
                 });
-                formData.push({'name': 'action', 'value': 'editSubjectGrade'});
-                // document.getElementById("teacher").innerText = "subject teachers";
-                // document.getElementById("type").innerText = "grades";
-                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type','grades');
+                formData.push({ 'name': 'action', 'value': 'editSubjectGrade' });
+                document.getElementById("teacher").innerText = "subject teachers";
+                let type = document.getElementsByClassName('type');
+                for (let i = 0; i < type.length; i++) {
+                    type[i].innerText = "Grades";
+                }
+                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type', 'grades');
+                $("#msg").addClass("hidden");
                 $("#confirmation-edit-modal").modal('show');
                 hideSpinner();
                 return;
@@ -233,23 +237,40 @@ $(function() {
     });
 
 
-    $(document).on("click", ".submit-edit-button", function() {
-        switch($(this).attr('data-type')) {
+    $(document).on("click", ".submit-edit-button", function () {
+        switch ($(this).attr('data-type')) {
             case 'grades':
-                $.post("action.php", formData, function(data) {
-                    formData = [];
-                    let gradeID = JSON.parse(data);
-                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
-                    $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
-                    $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
-                    showToast('success', 'Subject grade successfully edited')
-                });
-              break;
+                if (($("#reflect").prop("checked") == true) && ($("#overwrite").prop("checked") == true)) {
+                    $.post("action.php", formData, function (data) {
+                        formData = [];
+                        let gradeID = JSON.parse(data);
+                        $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
+                        $(`[data-action='edit'][data-grade-id='${gradeID}']`).siblings("").addClass("d-none");
+                        $(`input[name*="grade[${gradeID}]"]`).prop("disabled", true);
+                        $("#confirmation-edit-modal").modal('hide');
+                        showToast('success', 'Subject grade successfully edited')
+                    });
+                    console.log("checked");
+
+                } else {
+                    var element = document.getElementById("msg");
+                    element.classList.remove("hidden");
+                    console.log("unchecked");
+                }
+
+                break;
             case 'attendance':
-                saveRow(row);
-              break;
+                if (($("#reflect").prop("checked") == true) && ($("#overwrite").prop("checked") == true)) {
+                    saveRow(row);
+
+                } else {
+                    var element = document.getElementById("msg");
+                    element.classList.remove("hidden");
+                }
+                
+                break;
             case 'gen-average':
-                $.post("action.php", formData, function(data) {
+                $.post("action.php", formData, function (data) {
                     formData = [];
                     let gradeID = JSON.parse(data);
                     $(`[data-action='edit'][data-grade-id='${gradeID}']`).removeClass("d-none");
@@ -258,11 +279,11 @@ $(function() {
                     showToast('success', 'General average successfully edited')
                 });
                 break;
-          }
-        
+        }
+
     });
 
-    $(document).on("click", ".action", function(e) {
+    $(document).on("click", ".action", function (e) {
         e.preventDefault();
         showSpinner();
         row = $(this).closest("tr");
@@ -280,8 +301,12 @@ $(function() {
                 return;
             case "save":
                 document.getElementById("teacher").innerText = "advisers";
-                document.getElementById("type").innerText = "attendance";
-                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type','attendance');
+                let type = document.getElementsByClassName('type');
+                for (let i = 0; i < type.length; i++) {
+                    type[i].innerText = "Attendance";
+                }
+                document.getElementsByClassName('submit-edit-button')[0].setAttribute('data-type', 'attendance');
+                $("#msg").addClass("hidden");
                 $("#confirmation-edit-modal").modal('show');
                 break;
             case "cancel":
@@ -294,29 +319,31 @@ $(function() {
  * Submits new attendance value and make row inputs to readonly.
  * @param {Object} row tr object
  * */
- function saveRow(row) {
-    let formData = new FormData();
-    $.each(row.find(".number"), function(i, val) {
-        formData.append(val.getAttribute('name'), val.value);
-        val.setAttribute("readonly", true);
-    });
-    formData.append('action', "changeAttendance");
-    formData.append('stat', "1");
+    function saveRow(row) {
+        let formData = new FormData();
+        $.each(row.find(".number"), function (i, val) {
+            formData.append(val.getAttribute('name'), val.value);
+            val.setAttribute("readonly", true);
+        });
+        formData.append('action', "changeAttendance");
+        formData.append('stat', "1");
 
-    for (var pair of formData.entries()) {
-        console.log(pair[0] + " - " + pair[1]);
-      }
-    // formData.append('month', $("[name='month']").val());
-    $.ajax({
-        url: "action.php",
-        method: "POST",
-        processData: false,
-        contentType: false,
-        data: formData,
-        success: data => {}
-    });
-    showToast("success", "Successfully saved");
-}
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + " - " + pair[1]);
+        }
+        // formData.append('month', $("[name='month']").val());
+        $.ajax({
+            url: "action.php",
+            method: "POST",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: data => { }
+        });
+        $("#confirmation-edit-modal").modal('hide');
+
+        showToast("success", "Successfully saved");
+    }
 
     /** Student Edit */
     $("#student-form").validate({
@@ -324,7 +351,7 @@ $(function() {
             lrn: { required: true },
             "last-name": { required: true },
             "first-name": { required: true },
-            "cp-no": { required: true, maxlength: 11 , minlength: 11},
+            "cp-no": { required: true, maxlength: 11, minlength: 11 },
             sex: { required: true },
             birthdate: { required: true },
             "birth-place": { required: true },
@@ -381,7 +408,7 @@ $(function() {
             group: { required: "<p class='text-danger'><small>Please provide your indigenous group</small></p>" },
             "group-name": { required: "<p class='text-danger'><small>Please provide group name</small></p>" },
             "mother-tongue": { required: "<p class='text-danger'><small>Please provide your mother tongue</small></p>" },
-            "house-no": { required:  REQUIRED },
+            "house-no": { required: REQUIRED },
             street: { required: REQUIRED },
             barangay: { required: REQUIRED },
             "city-muni": { required: REQUIRED },
@@ -395,15 +422,15 @@ $(function() {
                 error.insertAfter(element)
             }
         },
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             $.ajax({
                 url: "action.php",
                 type: "post",
                 data: new FormData(form),
                 processData: false,
                 contentType: false,
-                success: function(data) {
-                    location.replace("student.php?id="+JSON.parse(data))
+                success: function (data) {
+                    location.replace("student.php?id=" + JSON.parse(data))
 
                 }
             })

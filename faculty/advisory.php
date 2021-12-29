@@ -112,6 +112,8 @@ $signatories = $faculty->getGradeReportSignatoryOptions($sy_id);
                                 </div>
                             </div>
                         </div>
+                        
+
                         <!-- MODAL END -->
                     </div>
                 </div>
@@ -153,6 +155,42 @@ $signatories = $faculty->getGradeReportSignatoryOptions($sy_id);
             </div>
         </div>
     </div>
+    <div class="modal fade" id="confirmation-submit-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-title">
+                                    <h4 class="mb-0">Confirmation</h4>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <p class="text-danger">Warning: This cannot be undone.</p>
+                                <hr class="mt-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" id ="reflect" type="checkbox" value="">
+                                    <label class="form-check-label">
+                                    <p class="text-left">Submitted grades will be reflected in the student's account.</p> 
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" id="editable" type="checkbox" value="">
+                                    <label class="form-check-label">
+                                    <p><span class="type">Submitted Grades will no longer be editable.</p>
+                                    </label>
+                                </div>
+                                <div class ="hidden" id = "msg">
+                                    <hr>
+                                    <p class="text-danger">Please check all items.</p>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-dark" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn close-btn btn-success" id = "confirm">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     <!-- CONFIRM SIGNATORY MODAL END -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
