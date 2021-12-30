@@ -84,15 +84,15 @@ $sem = $_SESSION['current_semester'] == 1? 'First': 'Second';
                                                 <hr class="mt-1 mb-3">                
                                                 <div class="me-5">
                                                     <div class='row'>
-                                                    <div class="inner w-75">
-                                                        <ul>
-                                                            <li>
-                                                                <h5>Academic Excellence</h5>
-                                                                <h6>First Semester, 2023-2021</h6>
-                                                            </li>
-                                                            <hr>
-                                                        </ul>
-                                                    </div>                                
+                                                        <div class="inner w-75">
+                                                            <ul>
+                                                                <li>
+                                                                    <h5>Academic Excellence</h5>
+                                                                    <h6>First Semester, 2023-2021</h6>
+                                                                </li>
+                                                                <hr>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </section>

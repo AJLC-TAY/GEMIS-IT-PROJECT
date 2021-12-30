@@ -5,9 +5,7 @@ include_once("../inc/head.html");
 <title>Account Archived | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
 <body>
-
     <section id="container">
         <!-- MAIN CONTENT START -->
         <section class="wrapper">
@@ -27,13 +25,11 @@ include_once("../inc/head.html");
 
                 </div>
             </div>
-
         </section>
         <!-- MAIN CONTENT END-->
         <!-- FOOTER -->
         <?php include_once("../inc/footer.html"); ?>
         <!-- FOOTER END -->
-    </section>
     </section>
 </body>
 

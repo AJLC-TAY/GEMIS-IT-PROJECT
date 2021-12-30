@@ -6,9 +6,8 @@ include_once('../inc/studentSideBar.php');
 <title>Incoming Grade 12 Enrollment | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
-<body>
 
+<body>
     <section id="container">
         <!-- MAIN CONTENT START -->
         <section id="main-content">
@@ -49,7 +48,6 @@ include_once('../inc/studentSideBar.php');
                                         </div>
                                     </div>
 
-
                                     <div class="form-group row">
                                         <div class="d-flex justify-content-end">
                                             <input type='hidden' name='action' value=''>
@@ -60,10 +58,8 @@ include_once('../inc/studentSideBar.php');
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </section>
             <!-- MAIN CONTENT END-->
             <!-- FOOTER -->

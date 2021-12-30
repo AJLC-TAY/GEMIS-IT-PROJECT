@@ -6,7 +6,6 @@ if ($_SESSION['enrolled'] != TRUE) {
 include_once("../inc/head.html"); ?>
 <title>Enrollment | GEMIS</title>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -44,13 +43,13 @@ include_once("../inc/head.html"); ?>
         <?php include_once("../inc/footer.html"); ?>
         <!-- FOOTER END -->
     </section>
-
     <script src="../js/common-custom.js"></script>
     <script>
         $(function() {
             $("#main-spinner-con").hide();
         });
     </script>
+
 </body>
 
 </html>

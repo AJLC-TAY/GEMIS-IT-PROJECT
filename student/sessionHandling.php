@@ -16,7 +16,6 @@ if(!isset($_SESSION['id']) || $_SESSION['user_type'] != 'ST') {
         $_SESSION['enroll_status'] = $sy_row['can_enroll']; ;
         $_SESSION['current_semester'] = $sy_row['current_semester'];
         $_SESSION['current_quarter'] = $sy_row['current_quarter'];
-        
     }
     $query2 = "SELECT promote, prog_code, description, enrolled_in FROM enrollment e JOIN student USING (stud_id) JOIN program USING(prog_code) WHERE e.stud_id = {$_SESSION['id']} ORDER BY date_of_enroll DESC;"; //plus promotion
     $data = mysqli_fetch_row(mysqli_query($con, $query2));

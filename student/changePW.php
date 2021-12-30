@@ -6,9 +6,8 @@ include_once('../inc/studentSideBar.php');
 <title>Change Password | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
 </head>
-<!DOCTYPE html>
-<body>
 
+<body>
     <section id="container">
         <!-- MAIN CONTENT START -->
         <section id="main-content">
@@ -72,4 +71,5 @@ include_once('../inc/studentSideBar.php');
     </div>
     <!-- TOAST END -->
 </body>
+
 </html>
