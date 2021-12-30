@@ -7,7 +7,6 @@ $admin = new Administration();
 $administrators = $admin->listAdministrators();
 $faculty = $admin->listFaculty();
 
-
 ?>
 <title>Signatory | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>

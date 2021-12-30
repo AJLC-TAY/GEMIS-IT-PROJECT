@@ -60,7 +60,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                 <?php
                                                 if (!empty($_SESSION['sy_id'])) {
                                                     echo "<li>School Year {$_SESSION['school_year']}</li>";
-                                                    echo " <li>
+                                                    echo "<li>
                                                     <div class='row align-content-center mt-3'>
                                                         <div class='col-4 mt-1'><label for='current-quarter' class='mb-0 mx-auto'>Current Quarter</label></div>
                                                         <div class='col-8 mt-1' style='width:40%;'>";
@@ -73,8 +73,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                                                     } else {
                                                         echo "Ended";
                                                     }
-                                                    echo "</div>
-                                                        </li>";
+                                                    echo "</div></li>";
                                                 }
                                                 ?>
                                             </ul>
@@ -268,6 +267,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
         </section>
         <!--main content end-->
     </section>
+    <!--  CHANGE QUARTER MODAL  -->
     <div class="modal fade" id="change-quarter-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -287,43 +287,44 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             </div>
         </div>
     </div>
+    <!--  CHANGE QUARTER MODAL END  -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script type="text/javascript">
+        function changeQuarter(quarter) {
+            let formData = [{
+                    name: "action",
+                    value: "editSY"
+                },
+                {
+                    name: "quarter",
+                    value: quarter
+                },
+            ];
+            $.post("action.php", formData, function(data) {
+                $("#change-quarter-confirmation-modal").modal("hide");
+                location.reload();
+            });
+        }
+
+        $(function() {
+            preload("#home");
+            $(document).on("change", "#current-quarter", function() {
+                let value = $(this).find("option:selected").val();
+                let modal = $("#change-quarter-confirmation-modal");
+                modal.find("#quarter").html((value == 1) ? "First" : (value == 2 ? "Second" : (value == 3 ? "Third" : "Fourth")));
+                modal.find("#quarter-submit").attr("onclick", `changeQuarter(${value})`);
+                modal.modal("show");
+            });
+            hideSpinner();
+        });
+    </script>
 
 </body>
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="text/javascript">
-    function changeQuarter(quarter) {
-        let formData = [{
-                name: "action",
-                value: "editSY"
-            },
-            {
-                name: "quarter",
-                value: quarter
-            },
-        ];
-        $.post("action.php", formData, function(data) {
-            $("#change-quarter-confirmation-modal").modal("hide");
-            location.reload();
-        });
-    }
-
-    $(function() {
-        preload("#home");
-        $(document).on("change", "#current-quarter", function() {
-            let value = $(this).find("option:selected").val();
-            let modal = $("#change-quarter-confirmation-modal");
-            modal.find("#quarter").html((value == 1) ? "First" : (value == 2 ? "Second" : (value == 3 ? "Third" : "Fourth")));
-            modal.find("#quarter-submit").attr("onclick", `changeQuarter(${value})`);
-            modal.modal("show");
-        });
-        hideSpinner();
-    });
-</script>
 
 </html>

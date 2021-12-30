@@ -12,15 +12,15 @@ $admin = new Administration() ?>
         <div class="col-auto">
             <h3 class="fw-bold">Programs</h3>
         </div>
-            <div class="col-auto">
-                <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Program</button>
-            </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Program</button>
+        </div>
     </div>
 </header>
 
 <div class="container">
-        <!-- SEARCH BAR -->
-        <form action="">
+    <!-- SEARCH BAR -->
+    <form action="">
         <input id="search-input" type="search" class="form-control search" placeholder="Search something here">
     </form>
     <!-- NO RESULTS MESSAGE -->
@@ -36,29 +36,27 @@ $admin = new Administration() ?>
         </div>
     </div>
     <div class=" ">
-        <ul data-page="program" class="cards-con flex-wrap mt-3 d-flex justify-content-center me-5 h-auto" style="min-height: 60vh;">
-        </ul>
-            <!-- TEMPLATE -->
-            <template id="card-template">
-                <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
-                    <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
-                    <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
-                        <button type='button' class='btn kebab rounded-circle m-1 px-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
-                        <ul class='dropdown-menu' style='z-index: 99;'>
-                            <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
-                            <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
-                        </ul>
+        <ul data-page="program" class="cards-con flex-wrap mt-3 d-flex justify-content-center me-5 h-auto" style="min-height: 60vh;"></ul>
+        <!-- TEMPLATE -->
+        <template id="card-template">
+            <li data-id='%PROGCODE%' class='tile card shadow-sm p-0 mb-4 position-relative'>
+                <a role='button' class='card-link btn btn-link start-0 top-0 end-0 bottom-0 h-100' style='z-index: 2;' href='program.php?prog_code=%PROGCODE%'></a>
+                <div class='dropstart position-absolute top-0 end-0' style='z-index: 3;'>
+                    <button type='button' class='btn kebab rounded-circle m-1 px-1' data-bs-toggle='dropdown'><i class='bi bi-three-dots-vertical'></i></button>
+                    <ul class='dropdown-menu' style='z-index: 99;'>
+                        <li><a class='dropdown-item' href='program.php?state=edit&prog_code=%PROGCODE%'>Edit</a></li>
+                        <li><button data-name='%PROGDESC%' class='delete-option dropdown-item' id='%PROGCODE%'>Delete</button></li>
+                    </ul>
+                </div>
+                <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
+                    <div class='tile-content'>
+                        <h4 class='card-title'>%PROGDESC%</h4>
+                        <p class='card-text'>%CURCODE% | %PROGCODE%</p>
                     </div>
-                    <div class='card-body position-absolute d-flex-column justify-content-between start-0' style='top: 40px;'>
-                        <div class='tile-content'>
-                            <h4 class='card-title'>%PROGDESC%</h4>
-                            <p class='card-text'>%CURCODE% | %PROGCODE%</p>
-                        </div>
-                    </div>
-                </li>
-            </template>
-            <!-- TEMPLATE END -->
-        
+                </div>
+            </li>
+        </template>
+        <!-- TEMPLATE END -->
     </div>
 </div>
 
@@ -129,7 +127,7 @@ $admin = new Administration() ?>
            </div>
        </div>
    </div>
- </div>
+</div>
 
 <script type="text/javascript">
     let programs = <?php $admin->listProgramsJSON(); ?>;

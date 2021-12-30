@@ -8,7 +8,6 @@ $faculty_list = $admin->listNotAdvisers();
     let isViewPage = false;
     let activeFacultyList = <?php echo json_encode($admin->listFaculty()); ?>;
 </script>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -32,10 +31,7 @@ $faculty_list = $admin->listNotAdvisers();
             <div class="col-md-12 ">
                 <input id="search-input" type="search" class="form-control form-control-sm m-0 mb-1" placeholder="Search something here">
             </div>
-            <div class="button-con col-md-6 d-flex justify-content-lg-end">
-                <!-- <button class="btn btn-secondary btn-sm me-1"><i class="bi bi-archive me-2"></i>Archive</button> -->
-                <!-- <button class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-up-left me-2"></i>Export</button> -->
-            </div>
+            <div class="button-con col-md-6 d-flex justify-content-lg-end"></div>
         </div>
         <table id="table" class="table-striped table-sm">
             <thead class='thead-dark'>

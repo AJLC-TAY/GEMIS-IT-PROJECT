@@ -35,7 +35,6 @@ $report_title = $_POST['sub_code'];
                     <small class="text-secondary mb-3">Unselect students to remove from the list</small>
                     <table id="ae-table" data-toggle="table" data-click-to-select="true" data-url="<?php echo $url; ?>" data-height="465" data-unique-id="id" class="table table-sm">
                         <thead>
-<!--                            <th data-checkbox="true"></th>-->
                             <th scope='col' data-width="100" data-sortable="true" data-align="center" data-field='lrn'>LRN</th>
                             <th scope='col' data-width="220" data-sortable="true" data-halign="center" data-align="left" data-field='name'>Name</th>
                             <th scope='col' data-width="80" data-sortable="true" data-align="center" data-field='sex'>Sex</th>
@@ -71,7 +70,6 @@ $report_title = $_POST['sub_code'];
                                 <option>Search user</option>
                                 <?php
                                 foreach($signatory_list as $element) {
-                                    // echo "<option ". ($element['id'] == $_SESSION['id'] ? "selected" : "") ." class='signatory' data-name='{$element['name']}' data-position='{$element['position']}' value='{$element['id']}'>{$element['name']} - {$element['position']}</option>";
                                     echo "<option ". ($element->sign_id == 1 ? "selected" : "") ." class='signatory' data-name='{$element->name}' data-position='{$element->position}' value='{$element->sign_id}'>{$element->name} - {$element->position}</option>";
                                 }
                                 ?>

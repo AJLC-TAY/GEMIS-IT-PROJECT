@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -9,9 +8,6 @@
     </nav>
     <div class="d-flex justify-content-between mb-3">
         <h3 class="fw-bold">Students</h3>
-        <div>
-            <!-- <button type="button" class="view-archive btn btn-secondary"><i class="bi bi-eye me-2"></i>View Archived Students</button> -->
-        </div>
     </div>
 </header>
 

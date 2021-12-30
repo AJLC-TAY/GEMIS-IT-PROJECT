@@ -138,14 +138,11 @@ if (isset($_POST['action']) && $_POST['action'] === 'updateProgram') {
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'archiveProgram') {
-    // echo("from action.php: archiveProgram");
-    // $admin->moveProgram('archived_program','program','archived_sharedsubject','sharedsubject');
     $admin->moveProgram('', 'archived_');
     $admin->enterLog("Archive Program");
 }
 
 if (isset($_POST['action']) && $_POST['action'] === 'unarchiveProgram') {
-    // $admin->moveProgram('program','archived_program','sharedsubject','archived_sharedsubject');
     $admin->moveProgram('archived_', '');
     $admin->enterLog("Unarchive Program");
 }
@@ -202,7 +199,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'unarchiveSubject') {
     $admin->moveSubject("archived_", "");
     $admin->listArchSubjectsJSON();
     $admin->enterLog("Unarchive subject");
-    // $admin->moveSubject('subject','archived_subject','sharedsubject','archived_sharedsubject', 'requisite','archived_requisite');
 }
 
 /******** FACULTY ********/
@@ -281,7 +277,6 @@ if (isset($_POST['action']) &&  $_POST['action'] === 'editSubjectSection') {
 
 }
 
-
 /******** STUDENT ********/
 if (isset($_POST['action']) && $_POST['action'] === 'transferStudent') {
     $admin->transferStudent();
@@ -320,8 +315,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'editGeneralAverage'){
     $admin->editGeneralAverage();
 }
 
-
-
 /******** SIGNATORY ********/
 if (isset($_POST['action']) && $_POST['action'] === 'addSignatory'){
     $admin->addSignatory();
@@ -341,6 +334,4 @@ if (isset($_POST['action']) && $_POST['action'] === 'deleteSignatory'){
 if (isset($_POST['action']) && $_POST['action'] === 'changeAttendance'){ 
     $admin->changeAttendance();
 }
-
-
 ?>

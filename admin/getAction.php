@@ -32,7 +32,7 @@ if (isset($_GET['data']) && $_GET['data'] == 'faculty') {
 if (isset($_GET['data']) && $_GET['data'] == 'student') {
     $admin->listStudentJSON();
 }
-if (isset($_GET['data']) && $_GET['data'] == 'students') { # section options for transfering or adding
+if (isset($_GET['data']) && $_GET['data'] == 'students') {
     $admin->listStudents(TRUE);
 }
 /** SCHOOL YEAR */
@@ -125,7 +125,6 @@ if (isset($_GET['data']) && $_GET['data'] == 'schedule') {
 if (isset($_GET['data']) && $_GET['data'] == 'attendance') {
     $admin->getStudentAttendanceJSON();
 }
-
 
 /** TRANSFEREE  */
 if (isset($_GET['data']) && $_GET['data'] == 'transfereesubject') {

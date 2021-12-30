@@ -3,16 +3,12 @@ require_once("../class/Administration.php");
 $admin = new Administration();
 $file_name = 'student_info';
 $students = [];
-//if (!isset($_POST['id'])){
-//    header("Location: student.php");
-//}
 $students = $_POST['id'];
 ?>
     <script src="../assets/js/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/report.css">
 </head>
 <body>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -59,7 +55,6 @@ $students = $_POST['id'];
             </div>
             <div class="report-title">
                 <h5 class="">Student Information</h5>
-<!--                <p class="sub-title">SY --><?php //echo $school_year ?><!--</p>-->
             </div>
             <!-- DOCUMENT HEADER END -->
             <div class="content mb-3">

@@ -3,11 +3,8 @@ require_once("sessionHandling.php");
 include_once("../inc/head.html");
 require_once("../class/Administration.php");
 $admin = new Administration();
-
 $administrators = $admin->listAdministrators();
 $faculty = $admin->listFaculty();
-
-
 ?>
 <title>System Logs | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
@@ -55,7 +52,6 @@ $faculty = $admin->listFaculty();
                                     <table id="table" class="table-striped table-sm">
                                         <thead class='thead-dark'>
                                             <tr>
-<!--                                                <th data-checkbox="true"></th>-->
                                                 <th scope='col' data-width="100" data-align="center" data-field="log_id">Log ID</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="id_no">UID</th>
                                                 <th scope='col' data-width="100" data-align="center" data-field="name">User Name</th>
@@ -100,9 +96,6 @@ $faculty = $admin->listFaculty();
             url: "getAction.php?data=systemLogs",
             buttonsToolbar: ".buttons-toolbar",
             sidePagination: "server",
-            // uniqueId: "LRN",
-            // idField: "LRN",
-            // queryParams: queryParams,
             toggle: "#toolbar",
             height: 880,
             maintainMetaDat: true, // set true to preserve the selected row even when the current table is empty
@@ -110,12 +103,10 @@ $faculty = $admin->listFaculty();
             pageSize: 25,
             pagination: true,
             pageList: "[25, 50, 100, All]",
-            // responseHandler:         responseHandler
         };
         let systemLogs = $('#table').bootstrapTable(tableSetup);
         $(function () {
             preload("#system-logs");
-
             hideSpinner();
         });
     </script>

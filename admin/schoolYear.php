@@ -4,9 +4,7 @@ include_once("../inc/head.html");
 ?>
 <title>School Year | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet'>
-</link>
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">

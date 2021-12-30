@@ -13,7 +13,6 @@ switch ($_SESSION['user_type']) {
 $program_list = $user->listPrograms("program");
 $filters =  $user->getEnrollFilters();
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -30,7 +29,6 @@ $filters =  $user->getEnrollFilters();
             <p><small class='text-secondary'>Please complete the following: </small></p>
         </span>
     </div>
-
 </header>
 <!-- HEADER END -->
 <form id="section-form-page" method="POST" action="action.php">
@@ -64,7 +62,6 @@ $filters =  $user->getEnrollFilters();
                         </select>
                     </div>
                 </div>
-
             </div>
             <div class="form-group col-sm-6">
                 <div class="form-row row">
@@ -120,8 +117,6 @@ $filters =  $user->getEnrollFilters();
                             }
                             ?>
                         </select>
-                        
-                        
                     </div>
                 </div>
             </div>

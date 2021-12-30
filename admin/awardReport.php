@@ -14,43 +14,42 @@ include_once("../inc/head.html"); ?>
     </div>
     <!-- SPINNER END -->
     <section id="container">
-    <?php include_once('../inc/adminSidebar.php'); ?>
-    <!-- MAIN CONTENT START -->
-    <section id="main-content">
-        <section class="wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row mt ps-3">
-                        <?php 
-                        if (isset($_GET['type'])) {
-                            switch ($_GET['type']) {
-                                case 'ae': # ae for academic excellence
-                                    require_once("award/academicExcellence.php");
-                                    break;
-                                case 'pa': # pa for perfect attendance
-                                    require_once("award/perfectAttendance.php");
-                                    break;
-                                case 'ca': # ca for conduct award
-                                    require_once("award/conduct.php");
-                                    break;
-                                case "ga":
-                                    require_once ("award/awardGeneric.php");
-                                    break;
+        <?php include_once('../inc/adminSidebar.php'); ?>
+        <!-- MAIN CONTENT START -->
+        <section id="main-content">
+            <section class="wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row mt ps-3">
+                            <?php
+                            if (isset($_GET['type'])) {
+                                switch ($_GET['type']) {
+                                    case 'ae': # ae for academic excellence
+                                        require_once("award/academicExcellence.php");
+                                        break;
+                                    case 'pa': # pa for perfect attendance
+                                        require_once("award/perfectAttendance.php");
+                                        break;
+                                    case 'ca': # ca for conduct award
+                                        require_once("award/conduct.php");
+                                        break;
+                                    case "ga":
+                                        require_once ("award/awardGeneric.php");
+                                        break;
+                                }
+                            } else {
+                                require_once("award/parameters.php");
                             }
-                        } else {
-                            require_once("award/parameters.php");
-
-                        }
-                        ?>
+                            ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            <!-- MAIN CONTENT END-->
+            <!-- FOOTER -->
+            <?php include_once("../inc/footer.html"); ?>
+            <!-- FOOTER END -->
         </section>
-        <!-- MAIN CONTENT END-->
-        <!-- FOOTER -->
-        <?php include_once("../inc/footer.html"); ?>
-        <!-- FOOTER END -->
-    </section>
     </section>
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
@@ -64,32 +63,6 @@ include_once("../inc/head.html"); ?>
     <!--CUSTOM JS-->
     <script src="../js/common-custom.js"></script>
     <script>
-        // function generatePDF(filename) {
-        //     // hide horizontal line
-        //     // $(".doc hr").addClass('d-none');
-        //     const template = document.querySelector(".template");
-        //     var opt = {
-        //         margin: [0.5, 0, 0.5, 0],
-        //         // margin: 0,
-        //         filename: filename + '.pdf',
-        //         image: {
-        //             type: 'jpeg',
-        //             quality: 0.98
-        //         },
-        //         html2canvas: {
-        //             scale: 4,
-        //             dpi: 300
-        //         },
-        //         jsPDF: {
-        //             unit: 'in',
-        //             format: 'letter',
-        //             orientation: 'portrait'
-        //         }
-        //     };
-        //     html2pdf().from(template).set(opt).save();
-        //     // $(".doc hr").removeClass('d-none');
-        // }
-        // window.generatePDF = generatePDF;
         $(function() {
             preload("#awards");
             hideSpinner();

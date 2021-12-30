@@ -33,7 +33,6 @@
          <table id="table" class="table-striped">
              <thead class='thead-dark'>
                  <tr>
-                     <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="150" data-align="center" data-field="id">ID</th>
                      <th scope='col' data-width="150" data-align="center" data-sortable="true" data-field="sy_year">School Year</th>
                      <th scope='col' data-width="100" data-halign="center" data-align="left" data-field="current_qtr">Current Quarter</th>

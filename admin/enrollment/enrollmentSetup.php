@@ -1,7 +1,6 @@
 <?php require_once("../class/Administration.php");
 $admin = new Administration();
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header id="main-header">
     <!-- BREADCRUMB -->
@@ -34,18 +33,11 @@ $admin = new Administration();
                     <span class="bs-stepper-circle">2</span>
                 </button>
             </div>
-            <!-- <div class="line"></div>
-            <div class="step mx-5" data-target="#test-l-3">
-                <button type="button" class="btn step-trigger">
-                    <span class="bs-stepper-label">Step</span>
-                    <span class="bs-stepper-circle">3</span>
-                </button>
-            </div> -->
         </div>
         <div class="bs-stepper-content">
+            <!-- STEP 1 -->
             <div id="test-l-1" class="content">
                 <div class="card body w-100 h-auto p-4">
-                    <!-- STEP 1 -->
                     <div class="d-flex justify-content-between">
                         <h4 class="fw-bold">FACULTY ENROLLMENT PRIVILEGES</h4>
                         <hr class='mt-4'>
@@ -64,7 +56,6 @@ $admin = new Administration();
                         </span>
                         <div>
                             <input id="f-table-clear-btn" type="reset" class=" mb-0 me-1 btn btn-outline-dark btn-sm" value="Clear" />
-
                             <button id="rm-enroll-priv" class="enroll-priv-btn btn btn-secondary btn-sm me-1" title=''>Remove enrollment access</button>
                             <button id="enroll-priv" class="enroll-priv-btn btn btn-primary btn-sm" title=''>Grant enrollment access</button>
                         </div>
@@ -86,53 +77,44 @@ $admin = new Administration();
                 </div>
             </div>
             <!-- STEP 1 END -->
-            <!-- STEP 2 -->
-          
-        <!--STEP 2 END-->
-        <!--STEP 3-->
-        <div id="test-l-2" class="content">
-            <div class="card body w-100 h-auto p-4">
-                <!-- STEP 1 -->
-                <h4 class="fw-bold">Enable enrollment</h4>
-                <div class="row mt-3">
-                    <div class="col-lg-6 mb-3">
-                        <h6>Summary list of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
-                        <ul id="faculty-list" class="list-group overflow-auto" style="max-height: 350px;">
+            <!--STEP 2-->
+            <div id="test-l-2" class="content">
+                <div class="card body w-100 h-auto p-4">
+                    <!-- STEP 1 -->
+                    <h4 class="fw-bold">Enable enrollment</h4>
+                    <div class="row mt-3">
+                        <div class="col-lg-6 mb-3">
+                            <h6>Summary list of Faculties who can enroll <span id='faculty-count' class="badge bg-secondary rounded-pill"></span></h6>
+                            <ul id="faculty-list" class="list-group overflow-auto" style="max-height: 350px;">
 
-                        </ul>
-                    </div>
-                    <!-- <div class="col-lg-4 mb-3">
-                        <h6>List of Sections <span id='section-count' class="badge bg-secondary rounded-pill"></span></h6>
-                        <ul id="section-list" class="list-group h-75 overflow-auto">
-
-                        </ul>
-                    </div> -->
-                    <div class="col-lg-6 mb-3">
-                        <h6>Enrollment status</h6>
-                        <div class="container p-4 border border-2">
-                            <div class='form-check form-switch my-auto'>
-                                <?php
-                                $enroll_opt = "Enrollment is " . ($_SESSION['enroll_status']  ? "on-going" : "disabled");
-                                echo "<input " . ($_SESSION['enroll_status'] ? "checked" : "") . " name='enrollment' data-id='{$_SESSION['sy_id']}' class='form-check-input' "
-                                    . "type='checkbox' title='Turn " . ($_SESSION['enroll_status'] ? "off" : "on") . " enrollment'>"
-                                    . "<span class='status'>$enroll_opt</span>";
-                                ?>
-                            </div>
-                            <p class="mt-3 text-secondary"><small>Enabling / Disabling enrollment will automatically start or stop accepting enrollees.</small></p>
+                            </ul>
                         </div>
+                        <div class="col-lg-6 mb-3">
+                            <h6>Enrollment status</h6>
+                            <div class="container p-4 border border-2">
+                                <div class='form-check form-switch my-auto'>
+                                    <?php
+                                    $enroll_opt = "Enrollment is " . ($_SESSION['enroll_status']  ? "on-going" : "disabled");
+                                    echo "<input " . ($_SESSION['enroll_status'] ? "checked" : "") . " name='enrollment' data-id='{$_SESSION['sy_id']}' class='form-check-input' "
+                                        . "type='checkbox' title='Turn " . ($_SESSION['enroll_status'] ? "off" : "on") . " enrollment'>"
+                                        . "<span class='status'>$enroll_opt</span>";
+                                    ?>
+                                </div>
+                                <p class="mt-3 text-secondary"><small>Enabling / Disabling enrollment will automatically start or stop accepting enrollees.</small></p>
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row justify-content-end mt-3">
+                <div class="row justify-content-end mt-3">
                     <div class="col-auto">
                         <a class="stepper-btn btn btn-secondary me-1 previous">Back</a>
                         <a href="enrollment.php" class="stepper-btn btn btn-success">Go to Enrollment Dashboard</a>
                     </div>
                 </div>
+            </div>
+            <!--STEP 2 END-->
         </div>
-        <!--STEP 3 END-->
-    </div>
     </div>
     <!-- STEPPER END -->
 </form>

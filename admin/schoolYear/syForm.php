@@ -126,7 +126,6 @@ $subjects = $init_data['subjects'];
                 </div>
             </div>
         </div>
-    
     </div>
     <div class="row justify-content-lg-end mt-4">
         <div class="col-auto px-1">

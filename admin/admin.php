@@ -121,7 +121,7 @@ include_once("../inc/head.html");
             </div>
         </div>
     </div>
-    <!-- VIEW MODAL -->
+    <!-- VIEW MODAL END -->
     <!-- BOOTSTRAP TABLE JS -->
     <script src="../assets/js/bootstrap-table.min.js"></script>
     <script src="../assets/js/bootstrap-table-en-US.min.js"></script>

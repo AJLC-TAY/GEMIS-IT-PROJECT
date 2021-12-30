@@ -52,7 +52,7 @@ include_once("../inc/head.html"); ?>
             <!-- FOOTER END -->
         </section>
     </section>
-
+    <!--  SUBJECT CLASS MODAL  -->
     <div class="modal fade" id="sub-class-modal" tabindex="-1" aria-labelledby="modal subClass" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -108,16 +108,17 @@ include_once("../inc/head.html"); ?>
             </div>
         </div>
     </div>
+    <!--  SUBJECT CLASS MODAL END -->
     <!-- TOAST -->
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="bottom: 0px; right: 0px">
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <?php echo $js; ?>
 </body>
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<?php echo $js; ?>
 
 </html>

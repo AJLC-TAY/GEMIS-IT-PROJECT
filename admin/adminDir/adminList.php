@@ -9,19 +9,19 @@ $user = $admin->getAdministrator($id);
     let uid = <?php echo json_encode($user_id); ?>;
 </script>
 <!-- HEADER -->
- <header>
-     <!-- BREADCRUMB -->
-     <nav aria-label="breadcrumb">
+<header>
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb">
          <ol class="breadcrumb">
              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
              <li class="breadcrumb-item active" aria-current="page">Administrator</li>
          </ol>
-     </nav>
-     <div class="d-flex justify-content-between align-items-center mb-3">
-         <h3 class="fw-bold">Administrator</h3>
-     </div>
- </header>
- <!-- HEADER END -->
+    </nav>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">Administrator</h3>
+    </div>
+</header>
+<!-- HEADER END -->
 <div class="container mt-1">
     <div class="row justify-content-between align-items-center mb-3">
         <div class="col-auto">
@@ -31,8 +31,6 @@ $user = $admin->getAdministrator($id);
             <button id="delete-account-btn" class="btn btn-outline-danger ms-2"><i class="bi bi-trash me-2"></i>Delete Account</button>
             <button class="btn btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#change-pass-modal">Change Password</button>
             <a href="admin.php?id=<?php echo $id; ?>&action=edit" role="button" class="btn btn-primary ms-2"><i class="bi bi-pencil-square me-2"></i>Edit</a>
-
-
         </div>
     </div>
     <div class="card w-100 h-auto bg-light">
@@ -74,14 +72,12 @@ $user = $admin->getAdministrator($id);
                      </span>
                  </div>
                  <tr>
-                     <!-- <th data-checkbox="true"></th> -->
                      <th scope='col' data-width="100" data-align="left" data-field="admin_id">ID</th>
                      <th scope='col' data-width="250" data-halign="center" data-align="left" data-sortable="true" data-field="name">Name</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="age">Age</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="sex">Sex</th>
                      <th scope='col' data-width="100" data-align="left" data-sortable="true" data-field="cp_no">Contact Number</th>
                      <th scope='col' data-width="250" data-halign="center" data-align="left"  data-field="email">Email</th>
-<!--                     <th scope='col' data-width="100" data-align="center" data-field="action">Action</th>-->
                  </tr>
              </thead>
          </table>
@@ -115,7 +111,6 @@ $user = $admin->getAdministrator($id);
         </div>
     </div>
 </div>
-
 <!-- CHANGE PASSWORD MODAL -->
 <div class="modal fade" id="single-admin-confirm-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -148,29 +143,29 @@ $user = $admin->getAdministrator($id);
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-                <div class="modal-body">
-                    <form id="change-pass-form" action="action.php" method="POST">
-                        <div class="container">
-                            <div class="form-group row">
-                                <input type="hidden" name="uid" value="<?php echo $id; ?>">
-                                <input type="hidden" name="action" value="changePassword">
-                                <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
-                                <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password">
-                            </div>
-                            <div class="form-group row mt-3">
-                                <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
-                                <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password">
-                            </div>
-                            <div class="form-group row mt-2">
-                                <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password">
-                            </div>
+            <div class="modal-body">
+                <form id="change-pass-form" action="action.php" method="POST">
+                    <div class="container">
+                        <div class="form-group row">
+                            <input type="hidden" name="uid" value="<?php echo $id; ?>">
+                            <input type="hidden" name="action" value="changePassword">
+                            <p class="text-secondary p-0"><small>Please complete the following</small></small></p>
+                            <input id="current-pass" type="password" name="current" class='form-control form-control-sm' placeholder="Current password">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
-                    <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
-                </div>
+                        <div class="form-group row mt-3">
+                            <p class="text-secondary p-0"><small>Enter new password:</small></small></p>
+                            <input id="new-pass" type="password" name="new_password" class='form-control form-control-sm' placeholder="New password">
+                        </div>
+                        <div class="form-group row mt-2">
+                            <input id="reenter-new-pass" type="password" name="reenter-new-pass" class='form-control form-control-sm' placeholder="Re-enter new password">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <input type="submit" name="change-pass" form="change-pass-form" class="btn btn-success btn-sm" value="Change">
+            </div>
         </div>
     </div>
 </div>

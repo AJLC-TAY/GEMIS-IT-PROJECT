@@ -27,7 +27,6 @@ $header = "<div class='row p-0 mx-1'>
                 </div>
             </div>";
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->

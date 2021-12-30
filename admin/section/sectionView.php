@@ -246,8 +246,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
                             <th scope='col' data-width="400" data-align="center" data-sortable="true" data-field="adviser">Adviser</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <div class="modal-footer">
@@ -268,8 +267,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             </div>
             <div class="modal-body">
                 <p><small class='text-secondary'>Select students who will be added or transferred to this section</small></p>
-
-                <form action="">
+                <form>
                     <div class="d-flex justify-content-between mb-1"> 
                         <!-- SEARCH BAR -->
                         <span class="flex-grow-1 me-3">

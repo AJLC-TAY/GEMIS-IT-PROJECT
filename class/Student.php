@@ -34,6 +34,4 @@ class StudentModule extends Dbconfig
         }
     }
 }
-
-
 ?>

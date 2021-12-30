@@ -175,10 +175,6 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                             <label class="btn btn-outline-danger w-100" for="option2">Decline Enrollee</label>
                                         </div>
                                     </div>
-<!--                                    <div class="col-auto">-->
-<!--                                        <button type="button" class='btn btn-success mb-2 w-100 validate' data-name='accept' title='Enroll student'>Accept Enrollee</button>-->
-<!--                                    </div>-->
-<!--                                    <button type="button" class='btn btn-secondary mb-2 w-100' data-bs-toggle="modal" data-bs-target="#confirmation-modal" title='Decline Enrollee'>Decline Enrollee</button>-->
                                     <div class="container">
                                         <dl class="row">
                                             <dt class="col-3">Accept</dt>
@@ -346,35 +342,35 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
     </div>
 </div>
 
- <!-- Creates the bootstrap modal where the image will appear -->
- <div class="modal fade" id="psaPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h4 class="mb-0">PSA Preview</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="img01">
-                        <img  src ="<?php echo $psaPreview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
-                    </div>
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade" id="psaPreview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">PSA Preview</h4>
                 </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="img01">
+                <img  src ="<?php echo $psaPreview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="modal fade" id="137Preview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class="modal-title">
-                            <h4 class="mb-0">137 Preview</h4>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="img01">
-                        <img  src ="<?php echo $form137Preview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
-                    </div>
+<div class="modal fade" id="137Preview" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h4 class="mb-0">137 Preview</h4>
                 </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="img01">
+                <img  src ="<?php echo $form137Preview; ?>"  class="img-responsive" alt="PSA document" style="width:100%">
             </div>
         </div>
+    </div>
+</div>

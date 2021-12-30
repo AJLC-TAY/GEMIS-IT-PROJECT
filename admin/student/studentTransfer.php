@@ -26,7 +26,7 @@ $stud_id = $userProfile->get_stud_id();
     <h5>Section: <?php echo $section; ?></h5>
 </div>
 <!-- Section List: With slots -->
-<div id='subject' class=''>
+<div id='subject'>
     <input id="search-section" type="text" class="form-control form-control" placeholder="Search section here ...">
     <div class="available-section list-group border">
         <?php
@@ -68,11 +68,9 @@ $stud_id = $userProfile->get_stud_id();
                     <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="adviser_name">Adviser</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="student">Student to swap</th>
                     <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="action">Action</th>
-                    
                 </tr>
             </thead>
-
-        </table> 
+        </table>
     </div>
     <div class="modal fade" id="transferConfirmation" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -115,8 +113,7 @@ $stud_id = $userProfile->get_stud_id();
             </div>
         </div>
     </div>
-
-
-    <script>
-        var id = <?php echo $stud_id; ?>;
-    </script>
+</div>
+<script>
+    var id = <?php echo $stud_id; ?>;
+</script>

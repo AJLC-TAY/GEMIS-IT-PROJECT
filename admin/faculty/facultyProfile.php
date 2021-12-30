@@ -1,5 +1,4 @@
 <?php
-# session handling here
 const STYLE_DISPLAY_NONE = "style='display: none'";
 # Determine what class to import basing on the user type
 
@@ -444,7 +443,6 @@ $handledSection = $school_user->get_handled_section();
                             <th scope='col' data-width="400" data-halign="center" data-align="left" data-sortable="true" data-field="sub_name">Subject Name</th>
                             <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="sub_type">Subject Type</th>
                             <th scope='col' data-width="200" data-align="center" data-sortable="true" data-field="for_grd_level">Grade Level</th>
-                            <!-- <th scope='col' data-width="200" data-align="center" data-field="action">Actions</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -485,7 +483,6 @@ $handledSection = $school_user->get_handled_section();
                     <div id="section-opt-con" class="border p-3">
                         <p class="text-secondary"><small>Select one section to be assigned or switched</small></p>
                         <div class="d-flex justify-content-between mb-2">
-
                             <!-- SEARCH BAR -->
                             <span class="flex-grow-1 me-3">
                                 <input id="search-input" type="search" class="form-control form-control-sm" placeholder="Search something here">
@@ -510,8 +507,6 @@ $handledSection = $school_user->get_handled_section();
                             <div class="d-flex justify-content-center <?php echo $no_match_display; ?>" style="position: absolute; top: 0; right: 0; bottom: 0; left:0; z-index: 2;">
                                 <p class="no-result-msg my-auto">No results found</p>
                             </div>
-
-
                             <ul class="list-group top-0 bottom-0 right-0 left-0 overflow-auto" id="section-list" style="z-index: 1; height: 250px;">
                                 <?php
                                 foreach ($section_list as $section) {

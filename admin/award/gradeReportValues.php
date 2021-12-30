@@ -2,24 +2,17 @@
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
 if ($user_type != 'ST') {
-    // $teacherName = $_POST['teacher_name'];
-    $teacherName = 'Kesley Bautista Trinidad';
-    $grade = 12;
-    // $signatoryName = $_POST['signatory_name'];
-    $signatoryName = 'Whitney Houston';
-    $position = 'Secondary School Principal III';
-    // $position = $_POST['position'];
-    $school_year = '9';
-    $breadcrumb = '';
+     $teacherName = $_POST['teacher_name'];
+     $grade = 12;
+     $signatoryName = $_POST['signatory_name'];
+     $position = $_POST['position'];
+     $school_year = '9';
+     $breadcrumb = '';
 }
 include "../class/Administration.php";
 $admin = new Administration();
-$report_id = 1;
-// $report_id = $_GET['report_id'];
-$stud_id = '110001';  // test
-
-// $stud_id = $_GET['id'];
-
+$report_id = $_GET['report_id'];
+$stud_id = $_GET['id'];
 
 $grades = $admin->listGrade();
 
@@ -33,12 +26,9 @@ $sex = $student->get_sex();
 $age = $student->get_age();
 $section = $student->get_section();
 
-// $admittedIn = 'None';
-// $eligible = '12';
-// $date = date("F j, Y");
 $trackStrand = $admin->getTrackStrand();
 $attendance = $admin->getStudentAttendance(1);
-$filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report'; // 1111_grade_report
+$filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report';
 ?>
 <!-- HEADER -->
 <header>
@@ -75,8 +65,6 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
 </header>
 <hr class='m-1'>
 <?php
-
-// echo json_encode($grades);
 
 function prepareGradeRecordsHTML($grade)
 {
@@ -189,7 +177,6 @@ $observed_values_desc = [
 ];
 
 $observed_values = $admin->listValuesReport();
-// print_r($attendance);
 function otherinfo()
 {
     echo "
@@ -237,7 +224,6 @@ function otherinfo()
 
 function logoToSignatory($lastName, $firstName, $midName, $age, $sex, $grade, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatoryName, $position)
 {
-
 
     echo "
 <li class='p-0 mb-0 mx-auto'>
@@ -409,18 +395,8 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                     ?>
                     <br>
                 </li>
-<!--                <hr class='m-0'>-->
                 <li class="p-0 mb-0 mx-auto">
-
                     <h6 class="text-center"><b>Report on Learner's Observed Values</b></h6>
-                    <!--
-                <div class="d-flex justify-content-between">
-                    <p><b>AO</b> - Always Observed</p>
-                    <p><b>SO</b> - Sometimes Observed</p>
-                    <p><b>RO</b> - Rarely Observed</p>
-                    <p><b>NO</b> - Not Observed</p>
-                </div> -->
-
                     <table class="table-bordered table w-100">
                         <col style='width: 20%;'>
                         <col style='width: 40%;'>
@@ -441,7 +417,6 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                         </thead>
                         <tbody>
                             <?php
-                            // echo json_encode($observed_values);
                             // echo "<tr>";
                             foreach ($observed_values as $id => $values) { //id = MakaDiyos , values = [ 'sfdsdfsdfdsf => 1 => 'AO',2 => 'AO,],
                                 echo "<td rowspan='" . count($values) . "'><b>$id</b></td>";

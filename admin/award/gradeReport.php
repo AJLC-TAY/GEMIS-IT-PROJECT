@@ -9,7 +9,6 @@ $position = $_GET['position'] ?? "";
 $teacherName = '';
 $school_year = '';
 if ($user_type != 'ST') {
-    // $teacherName = $_POST['teacher_name'];
     $teacherName = strtoupper($_SESSION['User']);
     $school_year = mysqli_fetch_row($admin->query("SELECT CONCAT(start_year, ' - ', end_year) FROM schoolyear WHERE sy_id = '$sy_id';"))[0];
     $breadcrumb = '';
@@ -30,7 +29,6 @@ $sex = $userProfile->get_sex();
 $age = $userProfile->get_age();
 $section = $userProfile->get_section();
 $grade_level = $userProfile->get_yrlvl();
-
 
 $strand = mysqli_fetch_row($admin->query("SELECT prog_code FROM enrollment WHERE stud_id = '$stud_id' AND sy_id = '$sy_id';"))[0];
 $report_id = mysqli_fetch_row($admin->query("SELECT report_id FROM gradereport WHERE stud_id =  '$stud_id' AND sy_id='{$_SESSION['sy_id']}';"))[0];
@@ -63,14 +61,12 @@ $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_repor
     </nav>
     <div class="d-flex justify-content-between">
         <span>
-            
-            <?php //echo $school_year; ?>
-            <?php if($user_type != 'ST'){
+            <?php
+            if($user_type != 'ST'){
                 echo "<h4><b>Grade Report</b></h4>
                 <h3>$lastName, $firstName $midName</h3>";
             }
-                
-             ?>
+            ?>
         </span>
         <?php if ($user_type != 'ST') { ?>
             <div class="mt-4">
@@ -381,56 +377,55 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
 }
 ?>
 
-    <div class="d-flex justify-content-center">
-        <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
-            <ul class="template p-0 w-100">
+<div class="d-flex justify-content-center">
+    <div class="doc bg-white ms-2 mt-3 p-0 shadow overflow-auto">
+        <ul class="template p-0 w-100">
+            <?php
+            if ($user_type != "ST") {
+                attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade_level, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position);
+            }
+            ?>
+
+            <li class="p-0 mb-0 mx-auto">
+                <p class="fw-bolder mb-0" style="font-size: 14px;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</p>
+                <div class="row">
+                    <?php
+                    if ($user_type == "ST") {
+                        $curr = $curr_sem == 1? 'FIRST': 'SECOND';
+                        renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem], $general_averages[$curr_sem - 1]);
+                    } else {
+                        echo "<div class='col-6'>";
+                        renderSemesterGradeTable('FIRST SEMESTER', $grades['1'], $general_averages[0]);
+                        echo "</div>";
+                        echo "<div class='col-6'>";
+                        renderSemesterGradeTable('SECOND SEMESTER', $grades['2'],  $general_averages[1]);
+                        echo "</div>";
+                    }
+
+                    ?>
+                </div>
+            </li>
+
+            <!-- Modality -->
+            <li class="p-0 mb-0 mx-auto" style="font-size: 14px;">
+                <div class="row justify-content-between">
                 <?php
-                if ($user_type != "ST") {
-                    attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $grade_level, $section, $lrn, $school_year, $trackStrand, $teacherName, $signatory_name, $position);
+                foreach([[1, 2], [3, 4]] as $qtrs) {
+                    echo "<div class='col-5'>"
+                        ."<table class='table' style='font-style: 12px;'>"
+                        ."<thead class='text-center'><tr><td colspan='2'>LEARNING MODALITY</td></tr>";
+                    echo "<tr>";
+                    foreach($qtrs as $qtr) {
+                        echo "<td>QUARTER $qtr</td>";
+                    }
+                    echo "</tr></thead>";
+                    echo "<tbody>";
+                    echo "<tr class='text-center'><td>MODULAR(PRINTED)</td><td>MODULAR(PRINTED)</td></tr>";
+                    echo "</tbody></table></div>";
                 }
                 ?>
-
-                <li class="p-0 mb-0 mx-auto">
-                    <p class="fw-bolder mb-0" style="font-size: 14px;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</p>
-                    <div class="row">
-                        <?php
-                        if ($user_type == "ST") {
-                            $curr = $curr_sem == 1? 'FIRST': 'SECOND'; 
-                            renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem], $general_averages[$curr_sem - 1]);
-                        } else {
-                            echo "<div class='col-6'>";
-                            renderSemesterGradeTable('FIRST SEMESTER', $grades['1'], $general_averages[0]);
-                            echo "</div>";
-                            echo "<div class='col-6'>";
-                            renderSemesterGradeTable('SECOND SEMESTER', $grades['2'],  $general_averages[1]);
-                            echo "</div>";
-                        }
-
-                        ?>
-                    </div>
-                </li>
-
-                <!-- Modality -->
-                <li class="p-0 mb-0 mx-auto" style="font-size: 14px;">
-                    <div class="row justify-content-between">
-                    <?php
-                    foreach([[1, 2], [3, 4]] as $qtrs) {
-                        echo "<div class='col-5'>"
-                            ."<table class='table' style='font-style: 12px;'>"
-                            ."<thead class='text-center'><tr><td colspan='2'>LEARNING MODALITY</td></tr>";
-                        echo "<tr>";
-                        foreach($qtrs as $qtr) {
-                            echo "<td>QUARTER $qtr</td>";
-                        }
-                        echo "</tr></thead>";
-                        echo "<tbody>";
-                        echo "<tr class='text-center'><td>MODULAR(PRINTED)</td><td>MODULAR(PRINTED)</td></tr>";
-                        echo "</tbody></table></div>";
-                    }
-                    ?>
-                    </div>
-                </li>
-
-            </ul>
-        </div>
+                </div>
+            </li>
+        </ul>
     </div>
+</div>

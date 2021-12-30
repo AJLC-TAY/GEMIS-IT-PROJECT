@@ -797,9 +797,6 @@ class Administration extends Dbconfig
         $sectionList = array();
         if (is_null($sy_id) && is_null($grade_level)) { # no specific school year id, grade level, and section
             $query = "SELECT section_code, section_name, sy_id, grd_level, stud_no_max, stud_no, CONCAT('T. ',' ',last_name,', ',first_name,' ',COALESCE(middle_name,''),' ', COALESCE(ext_name, '')) as name FROM section LEFT JOIN faculty USING (teacher_id) ";
-            //            $query .= ((isset($_GET['current']) && $_GET['current'] == 'true')
-            //                                                                                ? "WHERE sy_id={$_SESSION['sy_id']};"
-            //                                                                                : "");
             $query .= "WHERE sy_id={$_SESSION['sy_id']};";
             $result = $this->query($query);
             while ($row = mysqli_fetch_assoc($result)) {
@@ -916,7 +913,6 @@ class Administration extends Dbconfig
                 $sub_code = $row['sub_code'];
                 $sub_semester = $row['sub_semester'];
 
-
                 if (!in_array($sub_code, $current_subjects)) {
                     $current_subjects[] = $sub_code;
                     $checked_state = (in_array($sub_code, $current_sub_code) ? "checked" : "");
@@ -940,7 +936,6 @@ class Administration extends Dbconfig
                             'sub_teacher' => $teacher_id
                         ];
                     }
-
 
                     $add_btn_display = is_null($teacher_id) ? "" : $none_display;
                     $unassign_display = is_null($teacher_id) ? $none_display : "";
@@ -1088,25 +1083,6 @@ class Administration extends Dbconfig
         $this->listCurriculumJSON();
     }
 
-    // public function listArchivedCurr()
-    // {
-    //     $query = "SELECT * FROM archived_curriculum";
-    //     $result = mysqli_query($this->db, $query);
-    //     $archivedCurrList = array();
-
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         $curriculum = new Curriculum($row['curr_code'], $row['curr_name']);
-    //         $curriculum->add_cur_desc($row['curr_desc']);
-    //         $archivedCurrList[] = $curriculum;
-    //     }
-    //     return $archivedCurrList;
-    // }
-
-    // public function listArchivedCurrJSON()
-    // {
-    //     echo json_encode($this->listArchivedCurr());
-    // }
-
     /*** Program Methods */
     public function listProgramsJSON()
     {
@@ -1157,9 +1133,6 @@ class Administration extends Dbconfig
         $old_code = $_POST['current_code'];
 
         $this->prepared_query("UPDATE program SET prog_code=?, description=? WHERE prog_code=?;", [$code, $prog_description, $old_code]);
-        //        $this->listProgramsJSON();
-
-        //        header("Location: program.php?prog_code=$code");
     }
 
     public function moveProgram($pref_og, $pref_dest)
@@ -1574,14 +1547,12 @@ class Administration extends Dbconfig
         $req_origin = "{$pref_og}requisite";
 
         $code = $_POST['code'];
-        // $query = "";
 
         $this->query("INSERT INTO $sub_dest SELECT * FROM $sub_origin WHERE sub_code = '$code';");
         $this->query("INSERT INTO $shared_dest SELECT * FROM $shared_origin WHERE sub_code = '$code';");
         $this->query("INSERT INTO $req_dest SELECT * FROM $req_origin where sub_code = '$code';");
         $this->query("DELETE FROM $sub_origin WHERE sub_code = '$code';");
         $this->query("DELETE FROM $req_origin WHERE sub_code = '$code';");
-        // mysqli_query($this->db, "DELETE FROM $shared_origin WHERE sub_code = '$code';");
     }
 
     public function saveSchedule()
@@ -1632,44 +1603,6 @@ class Administration extends Dbconfig
                 }
             }
         }
-
-
-        // foreach($_POST['data'] as $grd => $values) {
-        //     foreach($values as $sem => $sem_val) {
-        //         foreach($sem_val as $type => $codes) {
-        //             $result = $this->query("SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code) WHERE sub_type='$type' 
-        //                 AND for_grd_level = '$grd' AND prog_code = '$prog_code' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
-        //             $current = [];
-        //             while ($row = mysqli_fetch_row($result)) {
-        //                 $current[]  = $row[0];
-        //             }
-        //             // # Delete
-        //             $delete = array_diff($current, $codes);
-        //             foreach ($delete as $sub_del) {
-        //                 $this->query("DELETE FROM sharedsubject WHERE sub_code = '$sub_del' AND prog_code = '$prog_code' AND for_grd_level = '$grd' AND sub_semester = '$sem' AND sy_id = '$sy_id';");
-        //                 // $this->query("DELETE FROM sharedsubject WHERE sub_code = '$sub_del' AND prog_code = '$prog_code' AND for_grd_level = '$grd' AND sub_semester = '$sem';");
-        //             }
-        //             // # Add
-        //             $add = array_diff($codes, $current);
-        //             if (mysqli_num_rows($result) == 0) {
-        //                 echo "success";
-        //                 print_r($current);
-        //                 $add = $codes;
-        //             }
-        //             foreach ($add as $sub_add) {
-        //                 $this->query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$sub_add', '$prog_code', '$grd', '$sem', '$sy_id');");
-        //                 echo("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$sub_add', '$prog_code', '$grd', '$sem', '$sy_id');");
-        //                 // $this->query("INSERT INTO sharedsubject (sub_code, prog_code, for_grd_level, sub_semester) VALUES ('$sub_add', '$prog_code', '$grd', '$sem');");
-        //             }
-
-        //             // print_r($delete);
-        //             // echo "current<br>";
-        //             // print_r($current);
-        //             // echo "new<br>";
-        //             // print_r($codes);
-        //         }
-        //     }
-        // }
         echo json_encode(["program" => $prog_code, "new" => $this->getSubjectScheduleData($prog_code)['schedule']]);
     }
 
@@ -2128,24 +2061,6 @@ class Administration extends Dbconfig
     public function deleteUser($type)
     {
         $id = $_POST['id'];
-
-        //        $user_table =  "";
-        //        $id_attribute = "";
-        //        switch ($type) {
-        //            case 'AD':
-        //                $user_table = 'administrator';
-        //                $id_attribute = 'admin_id';
-        //                break;
-        //            case 'FA':
-        //                $user_table = 'faculty';
-        //                $id_attribute = 'teacher_id';
-        //                break;
-        //            case 'ST':
-        //                $user_table = 'student';
-        //                $id_attribute = 'stud_id';
-        //                break;
-        //        }
-
         $this->query("DELETE FROM user WHERE id_no='$id' AND user_type='$type';");
     }
 
@@ -2235,17 +2150,6 @@ class Administration extends Dbconfig
 
     public function listEnrolleesJSON()
     {
-        //        $result = $this->getEnrollees();
-        //        $enrollees = [];
-        //        while ($row = mysqli_fetch_assoc($result)) {
-        //            $enrollees[] = new Enrollee(
-        //                $row['SY'], $row['LRN'], $row['name'],
-        //                $row['date_of_enroll'], $row['enrolled_in'],
-        //                $row['curr_code'], $row['status'], $row['stud_id']
-        //            );
-        //        }
-        //
-        //        echo json_encode($enrollees);
         echo json_encode($this->getEnrollees());
     }
 
@@ -2816,8 +2720,6 @@ class Administration extends Dbconfig
         $newPass = $_POST['newPass'];
         $newPassConf = $_POST['newPassConf'];
 
-        //validation ng passwords kung nagmatch
-        // $token = $_SESSION['token'];
         $token = $_POST['token'];
 
         if ($newPass == $newPassConf) {
@@ -2916,8 +2818,7 @@ class Administration extends Dbconfig
 
         $result = $this->query("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
         WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
-        // echo ("SELECT attendance_id, month, no_of_absent, no_of_tardy, no_of_present FROM attendance JOIN academicdays using (acad_days_id) 
-        // WHERE report_id = (SELECT report_id FROM gradereport WHERE stud_id = '$id' AND sy_id = '$sy')");
+
         while ($row = mysqli_fetch_assoc($result)) {
             $attend_id = $row['attendance_id'];
             $attendance[] = [

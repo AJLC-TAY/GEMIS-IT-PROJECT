@@ -10,7 +10,6 @@ $quarter_opt = '';
 $enroll_stat_msg = "No enrollment";
 $display = 'd-none';
 
-
 if ($action == 'add') {
     $header = "Add";
     $last_name = '';
@@ -38,10 +37,7 @@ if ($action == 'add') {
     $sex = $admin_user->sex;
     $button = "Save";
 }
-
-
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -99,11 +95,9 @@ if ($action == 'add') {
                             ?>
                         </div>
                     </div>
+                </div>
             </div>
-        </div>
-
             <!-- GENERAL INFO END -->
-
             <!-- CONTACT INFO -->
             <hr class="mt-0 mb-3">
             <h5 class="fw-bold">Contact Information</h5>

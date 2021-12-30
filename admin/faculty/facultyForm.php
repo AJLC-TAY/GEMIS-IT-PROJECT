@@ -13,7 +13,6 @@ $assigned_sub = [];
 $assigned_sub_classes = [];
 $sub_classes = [];
 
-// Content
 if ($action == 'add') {
      $last_name = '';
      $first_name = '';
@@ -197,9 +196,7 @@ switch ($user_type) {
     <div class='row card bg-light w-100 h-auto text-start mx-auto '>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>SUBJECT CLASS</h5>
-            <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#sc-class-con' type='button' value='Assign'>-->
         </div>
-        <!--        <div id='sc-class-con' class='collapse mt-3'>-->
         <div id='sc-class-con' class='mt-3'>
             <div class="d-flex justify-content-between mb-3">
                 <!-- SEARCH BAR - SUBJECT CLASS -->
@@ -233,9 +230,7 @@ switch ($user_type) {
     <div class='row card bg-light w-100 h-auto text-start mx-auto mt-4'>
         <div class='d-flex justify-content-between'>
             <h5 class='my-auto'>ASSIGNED SUBJECTS</h5>
-            <!--            <input class='btn btn-primary w-auto my-auto' data-bs-toggle='collapse' data-bs-target='#assign-subj-table' type='button' value='Assign'>-->
         </div>
-        <!--        <div id='assign-subj-table' class='collapse'>-->
         <div id='assign-subj-table'>
             <p class='text-secondary'><small>Check subjects to be assigned to the faculty. Uncheck to unassign.</small></p>
             <div class="d-flex justify-content-between mb-3">
@@ -266,26 +261,9 @@ switch ($user_type) {
     <?php } ?>
 
     <div class='d-flex justify-content-end mt-3'>
-        <!-- <a href='' role='button' class='btn btn-secondary me-2' target='_self'>CANCEL</a> -->
         <input type='submit' form='faculty-form' value='<?php echo $final_btn ?>' class='btn btn-success'>
     </div>
 </form>
-<!-- VALIDATION -->
-<!--<script>-->
-<!--    var forms = document.querySelectorAll('.needs-validation');-->
-<!---->
-<!--    Array.prototype.slice.call(forms).forEach(function(form) {-->
-<!--        form.addEventListener('submit', function(event) {-->
-<!--            if (!form.checkValidity()) {-->
-<!--                event.preventDefault()-->
-<!--                event.stopPropagation();-->
-<!--            }-->
-<!---->
-<!--            form.classList.add('was-validated');-->
-<!--        }, false);-->
-<!--    });-->
-<!--</script>-->
-
 <script type="text/javascript">
     let teacherID = <?php echo json_encode($current_teacher_id); ?>;
     let subjects = <?php echo json_encode($subjects); ?>;

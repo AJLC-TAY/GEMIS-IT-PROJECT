@@ -66,14 +66,6 @@ $title =  "<div class='d-flex justify-content-between fw-bold'>
                         <div class='col-xl-4 fw-bold'>Name</div>
                         <div class='col-xl-8'><?php echo $sub_name; ?></div>
                     </div>
-                    <!-- <div class='row mb-3'>
-                        <div class='col-xl-4 fw-bold'>Semester</div>
-                        <div class='col-xl-8'><?php echo $sub_semester; ?></div>
-                    </div>
-                    <div class='row mb-3'>
-                        <div class='col-xl-4 fw-bold'>Grade Level</div>
-                        <div class='col-xl-8'><?php echo $sub_grd_lvl; ?></div>
-                    </div> -->
                     <div class='row mb-3'>
                         <div class='col-xl-4 fw-bold'>Type</div>
                         <div class='col-xl-8'><?php echo $sub_type; ?></div>

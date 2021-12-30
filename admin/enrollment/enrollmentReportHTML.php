@@ -66,12 +66,12 @@ $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
                 <div class="table-con">
                     <table class="table table-sm">
                         <thead>
-                        <tr class="table-dark text-center">
-                            <td>Track</td>
-                            <td>Strand</td>
-                            <td colspan="2">Accepted</td>
-                            <td colspan="2">Rejected</td>
-                        </tr>
+                            <tr class="table-dark text-center">
+                                <td>Track</td>
+                                <td>Strand</td>
+                                <td colspan="2">Accepted</td>
+                                <td colspan="2">Rejected</td>
+                            </tr>
                         </thead>
                         <tbody>
                             <?php 
@@ -110,11 +110,8 @@ $file_name = str_replace(' - ', '_', $school_year). '_enrollment_report';
                                         echo "<td></td>";
                                     }
                                     echo "</tr>";
-                                
-                        
                                 }
                             }
-
                             echo "<tr class='table-secondary'>"
                                     ."<td class='text-end' colspan='3'>Total</td>"
                                     ."<td class='text-end'>". array_sum($accepted_grand_total) ."</td>"

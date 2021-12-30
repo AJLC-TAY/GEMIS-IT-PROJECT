@@ -1,5 +1,4 @@
 <?php
-//include_once("../inc/head.html");
 include_once ("../class/Administration.php");
 $admin = new Administration();
 $sy_info = $admin->getSYInfo();

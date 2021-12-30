@@ -21,9 +21,6 @@ switch ($_SESSION['user_type']) {
         break;
 }
 
-
-
-
 $stud_id = '';
 $user_id_no = '';
 $lrn = '';
@@ -73,7 +70,7 @@ $gen_ave = '';
 $school_name = '';
 $school_id_no = '';
 $school_address = '';
-//
+// TEST
 $lrn = rand(1, 1000000);
 $lname = 'Rizal';
 $fname = 'Jose';
@@ -310,9 +307,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <!-- BIRTH INFO -->
                         <div class="col-md-4">
                             <label class="col-form-label">Birthdate</label>
-<!--                            <div class='input-group date' id='datepicker'>-->
-                                <input type='date' name="birthdate" class="form-control" value="<?php echo $birthdate; ?>" <?php echo $readonly ?> />
-<!--                            </div>-->
+                            <input type='date' name="birthdate" class="form-control" value="<?php echo $birthdate; ?>" <?php echo $readonly ?> />
                         </div>
                         <div class='col-md-5'>
                             <label class="col-form-label">Birth Place</label>
@@ -696,19 +691,18 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                         <div class="container">
                             <table id="transfer-table" class="table table-sm table-bordered table-striped">
                                 <thead class="text-center">
-                                <tr>
-                                    <td colspan="2">GRADE 11</td>
-                                    <td colspan="2">GRADE 12</td>
-                                </tr>
-                                <tr>
-                                    <td>FIRST SEMESTER</td>
-                                    <td>SECOND SEMESTER</td>
-                                    <td>FIRST SEMESTER</td>
-                                    <td>SECOND SEMESTER</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="2">GRADE 11</td>
+                                        <td colspan="2">GRADE 12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>FIRST SEMESTER</td>
+                                        <td>SECOND SEMESTER</td>
+                                        <td>FIRST SEMESTER</td>
+                                        <td>SECOND SEMESTER</td>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -721,7 +715,6 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                 </div>
             </div>
             <?php } ?>
-            
             <!-- STEP 4 END -->
     </div>
         <!-- STEPPER END -->

@@ -57,15 +57,15 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <label class="col-xl-2 col-lg-3 col-form-label text-start">Program Code</label>
                 <div class="col-xl-10 col-lg-9">
                     <input type="hidden" name="current_code" value="<?php echo $prog_code; ?>">
-                    <?php echo "<input class='form-input form-control mb-1' type='text' name='prog-code' value='$prog_code' $state required> 
-                                                <div class='invalid-feedback'>
-                                                    Please enter current code
-                                                </div>"; ?>
+                    <?php
+                    echo "<input class='form-input form-control mb-1' type='text' name='prog-code' value='$prog_code' $state required> 
+                            <div class='invalid-feedback'>
+                                Please enter current code
+                            </div>";
+                    ?>
                 </div>
                 <label class="col-xl-2 col-lg-3 col-form-label text-start">Description</label>
                 <div class='col-xl-10 col-lg-9'>
-                    <!-- <input name="name" value="<?php //echo $prog_name; 
-                                                    ?>" disabled> -->
                     <?php echo "<textarea class='form-input form-control' name='name' $state>" . $prog_name . "</textarea>"; ?>
                 </div>
             </div>
@@ -91,10 +91,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                     </div>
                 </div>
                 <hr class="mt-1 mb-4">
-                <div class="d-flex flex-row-reverse mb-3">
-                    <!-- <div class="d-flex mb-3"> -->
-                    <!-- <button id="subject-archive-btn" class="btn btn-secondary btn-sm"><i class="bi bi-archive me-2"></i>Archive</button> -->
-                </div>
+                <div class="d-flex flex-row-reverse mb-3"></div>
                 <tr>
                     <th data-checkbox="true"></th>
                     <th scope='col' data-width="100" data-align="center" data-field='sub_code'>Code</th>

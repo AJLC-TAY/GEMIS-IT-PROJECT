@@ -30,8 +30,6 @@ trait QueryMethods
 
 trait School
 {
-    
-
     public function listDepartments()
     {
         $result = $this->query("SELECT DISTINCT(department) FROM faculty WHERE department IS NOT NULL;");
@@ -107,19 +105,11 @@ trait School
         echo json_encode($this->listSubjects('subject', 'sharedsubject'));
     }
 
-    public function listClass()
-    {
-        if ($_GET['class'] === 'advisory') {
-        } else {
-        }
-    }
-
     public function listEnrollmentData($is_JSON = false)
     {
         session_start();
         $en_data = ['pending' => 0, 'enrolled' => 0, 'rejected' => 0];
         $sy_id = $_SESSION['sy_id'];
-        //        $sy_id = $_SESSION['sy_id'];
         $result = $this->query("SELECT valid_stud_data AS status, COUNT(*) AS count FROM enrollment WHERE sy_id = '$sy_id' GROUP BY valid_stud_data;");
         while ($row = mysqli_fetch_assoc($result)) {
             switch ($row['status']) {
@@ -815,9 +805,7 @@ trait FacultySharedMethods
 
     public function changeAttendance()
     {
-        foreach ($_POST['data'] as $id => $value) { // $id = report_id
-        //        print_r($result);
-        //        print_r(password_verify($_POST['current'], mysqli_fetch_row($result)[0]));
+        foreach ($_POST['data'] as $id => $value) {
          $stat =  mysqli_fetch_row($this->query("SELECT status FROM attendance WHERE attendance_id = $id;"))[0];
 
          $stat = $stat == 1?$stat:$_POST['stat'];
@@ -855,7 +843,7 @@ trait FacultySharedMethods
 
         if ($is_JSON) {
             echo json_encode($advisory_classes);
-            return;
+            exit;
         }
         return $advisory_classes;
     }
@@ -1011,8 +999,6 @@ trait Enrollment
 
         // update parent info
         $parent_q = "UPDATE `parent` SET `cp_no`=?,`occupation`=? WHERE `stud_id`=?";
-        // $f_query = "$general_q ext_name, cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
-        // $m_query = "$general_q cp_no, sex, occupation, stud_id) VALUES (?, ?, ?, ?, ?, ?, ?);";
         $g_query = "UPDATE `guardian` SET `guardian_first_name`=?,`guardian_middle_name`=?,`guardian_last_name`=?,`relationship`=?,`cp_no`=? WHERE `stud_id`=?; ";
         $this->prepared_query($parent_q, $father, "isi");
         $this->prepared_query($parent_q, $mother, "isi");
@@ -1051,12 +1037,13 @@ trait Enrollment
         $date = $previousDeets['first_attended'];
         
         $values = [
-                $lvl,
-                $sem,
-                $student_id,
-                $school_year, 
-                $track,
-                $program];
+            $lvl,
+            $sem,
+            $student_id,
+            $school_year,
+            $track,
+            $program
+        ];
         
         $params = "iiisss";
 
@@ -1074,9 +1061,6 @@ trait Enrollment
         $query = "INSERT INTO enrollment (date_of_enroll, valid_stud_data, date_first_attended, enrolled_in, semester, stud_id, sy_id, curr_code, prog_code $add) "
         . "VALUES (CURRENT_TIMESTAMP, 0, STR_TO_DATE('$date','%Y-%m-%d'), ?, ?, ?, ?, ?, ? $add_q);";
 
-        // echo($query);
-        // echo json_encode($values);
-        // echo json_encode($params);
         $this->prepared_query($query, $values, $params);
         $semester = (in_array((int) $_SESSION['current_quarter'], [1,2]) ? "1" : "2");
         $rep_id = $this->initializeGrades($student_id, $current_sy, $semester);
@@ -1123,7 +1107,6 @@ trait Enrollment
         $search_query = "";
         if (strlen(trim($_GET['search'])) > 0) {
             $text = $_GET['search'];
-            //            $status = $text == 'pending' ? "0" : $text == 'enrolled' ? "1" : $text == 'rejected' ? "2" : "";
             $search_query .= " AND (sy.start_year LIKE \"%$text%\"";
             $search_query .= " OR sy.end_year LIKE \"%$text%\"";
             $search_query .= " OR s.last_name LIKE \"%$text%\"";
@@ -1337,25 +1320,7 @@ trait Enrollment
 
             $data[$track]['description'] = $row['curr_desc'];
             $data[$track]['strands'][$program]['counts'][$index] = $row['count'];
-
-//            if (count($data) === 0) {
-//                $program_array[$index] = $count;
-//                $data[$track] = [$program => $program_array];
-//            } else {
-//                if ($this->in_multi_array($track, $data)) {
-//                    $data[$track][$program][] = $count;
-//                } else {
-//                    $program_array = [$count];
-//                    $data[$track] = [$program => $program_array];
-//                }
-//            }
-
         }
-
-//        foreach ($programs as $track_code => $prog_data) {
-//
-//        }
-//
 
         if ($is_json) {
             echo json_encode($data);
@@ -1417,45 +1382,6 @@ trait Enrollment
         }, $params);
     }
 
-    // public function addSection($grade_level, $prog_code, $stud_no, $letter, $sy, $sycs) {
-    //     echo "$grade_level, $prog_code, $stud_no, $letter, $sy, $sycs";
-    //     $section_name =  "$grade_level-{$letter}-{$prog_code}-Class";  // 11-A-ABM-Class
-    //     $section_code = rand(10, 10000000);
-    //     // echo "Added section: ".$section_name."<br>";
-    //     // echo "Section code: ". $section_code;
-    //     $this->prepared_query(
-    //         "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, stud_no, sy_id) VALUES (?, ?, ?, ?, ?, ?);",
-    //         [$section_code, $section_name, $grade_level, 50, $stud_no, $sy],
-    //         "ssiiii"
-    //     );
-    //     $this->prepared_query("INSERT INTO sectionprog (section_code, sycs_id) VALUES (?, ?);",
-    //         [$section_code, $sycs],
-    //         "si"
-    //     );
-
-
-    //     return $section_code;
-    // }
-
-    // public function addSection() 
-    //     {
-    //         session_start();
-    //         $code = $_POST['code'];
-    // //        $program = $_POST['program'];
-    //         $grade_level = $_POST['grade-level'];
-    //         $max_no = $_POST['max-no'] ?: Administration::MAX_SECTION_COUNT;
-    //         $section_name = $_POST['section-name'];
-    //         $adviser = $_POST['adviser'] ?: NULL;
-    //         $sy_id = $_SESSION['sy_id'];
-
-    //         $this->prepared_query(
-    //             "INSERT INTO section (section_code, section_name, grd_level, stud_no_max, teacher_id, sy_id) VALUES (?, ?, ?, ?, ?, ?) ;",
-    //             [$code, $section_name, $grade_level, $max_no, $adviser, $sy_id],
-    //             "ssiiii"
-    //         );
-    //     }
-
-
     public function addSection()
     {
         session_start();
@@ -1492,7 +1418,6 @@ trait Enrollment
         $section_code = $_POST['code'];
 
         $this->prepared_query("UPDATE `section` SET `teacher_id` = ? WHERE `section`.`section_code` = ?;", [$teacher_id, $section_code], "is");
-        //UPDATE `section` SET `teacher_id` = '0000000022' WHERE `section`.`section_code` = $section_code;
     }
 
 
@@ -1961,12 +1886,6 @@ trait Grade
             ];
         }
 
-        //        foreach ($excellence as $curr => $prog_rec) {
-        //            foreach ($prog_rec as $prog => $prog_list) {
-        //                $excellence[$curr][$prog]['size'] = count($prog_list['students']);
-        //            }
-        //        }
-
         echo json_encode($excellence);
     }
 
@@ -2076,16 +1995,6 @@ trait Grade
         return $data;
     }
 
-    // public function getSpecificDiscParamters()
-    // {
-    //     $data = [];
-    //     $result = $this->query("SELECT * FROM specificdiscipline;");
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         $data[$row['award_code']] = ['desc' => $row["spec_descipline"], 'grd' => $row['min_grd']];
-    //     }
-    //     return $data;
-    // }
-
     public function listStudentAwardSelection($is_JSON = FALSE)
     {
         $data = [];
@@ -2136,7 +2045,6 @@ trait Grade
         }
     }
 
-
     public function listAdvisoryStudents($is_JSON = false)
     {
 
@@ -2185,7 +2093,6 @@ trait Grade
 
             # get report id
             $row_temp = $this->query("SELECT `report_id`, `first_status`, `first_gen_ave`,`second_status`,`second_gen_ave` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
-// echo("SELECT `report_id`, `status`, `first_gen_ave`, `second_gen_ave` FROM `gradereport` WHERE `stud_id`='$stud_id' AND `sy_id`='{$_SESSION['sy_id']}';");
             $temp = mysqli_fetch_row($row_temp);
             if ($temp != NULL) {
                 $report_id = $temp[0];
@@ -2230,7 +2137,7 @@ trait Grade
         }
         if ($is_JSON) {
             echo json_encode($students);
-            return;
+            exit;
         }
         return $students;
     }

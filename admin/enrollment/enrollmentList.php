@@ -5,7 +5,6 @@ $archived_btn = '';
 $table_opts = '';
 $sy_filter = '';
 if ($_SESSION['user_type'] == 'AD') {
-
     $table_opts = "<button id='delete-opt' class='table-opt btn btn-danger btn-sm  my-1' title='Delete'><i class='bi bi-trash me-2'></i>Delete</button>
                 <button id='archive-opt' class='table-opt btn btn-secondary btn-sm my-1'><i class='bi bi-archive me-2'></i>Archive</button>";
 
@@ -19,7 +18,6 @@ if ($_SESSION['user_type'] == 'AD') {
                                 }
                 $sy_filter.= "</select>
                         </div>
-                       
                     </li>";
 }
 ?>
@@ -138,9 +136,7 @@ if ($_SESSION['user_type'] == 'AD') {
                 </ul>
             </div>
         </div>
-        <div class="buttons-toolbar">
-            
-        </div>
+        <div class="buttons-toolbar"></div>
         <table id="table" class="table-striped">
             <thead class='thead-dark'>
                 <tr>

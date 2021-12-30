@@ -33,9 +33,6 @@ include_once("../inc/head.html");
                                     <div class="col-md-4 mt-2">
                                         <h3 class="fw-bold">Maintenance</h3>
                                     </div>
-                                    <!-- <div class="col-auto">
-                                        <button type="button" class="btn btn-success mt-1" data-bs-toggle="modal" data-bs-target="#add-modal"><i class="bi bi-plus-lg me-2"></i>Add Curriculum</button>
-                                    </div> -->
                                 </div>
                             </header>
                             <div class="content">
@@ -64,15 +61,14 @@ include_once("../inc/head.html");
                                                         <th scope='col' data-width="200" data-align="center" data-field="action">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                </tbody>
+                                                <tbody></tbody>
                                             </table>                                   
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card py-3">
                                     <h5>Reset System</h5>
-                                    <p>Reseting the system will delete all data and backup stored, which includes the admin and faculty members, student records, and curriculum data.</p>
+                                    <p>Resetting the system will delete all data and backup stored, which includes the admin and faculty members, student records, and curriculum data.</p>
                                     <div class="d-flex justify-content-end">
                                         <button data-bs-toggle="modal" data-bs-target="#reset-confirmation-modal" class="btn btn-danger">Reset</button>
                                     </div>
@@ -132,6 +128,7 @@ include_once("../inc/head.html");
             </div>
         </div>
     </div>
+    <!-- DELETE CONFIRMATION MODAL END -->
     <!-- RESTORE CONFIRMATION MODAL -->
     <div class="modal fade" id="restore-confirmation-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -152,6 +149,7 @@ include_once("../inc/head.html");
             </div>
         </div>
     </div>
+    <!-- RESTORE CONFIRMATION MODAL END-->
     <!-- RESET CONFIRMATION MODAL -->
     <div class="modal fade" id="reset-confirmation-modal" tabindex="-1" aria-labelledby="modal deleteAccount" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -184,40 +182,37 @@ include_once("../inc/head.html");
                 </div>
             </div>
         </div>
-</div>
-</body>
+    </div>
+    <!-- RESET CONFIRMATION MODAL END-->
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script>
+        let uid = <?php echo json_encode($_SESSION['user_id']); ?>;
+        function showBackUpName(name) {
+            $(".backup-name").html(name);
+            $(".action").attr("data-name", name);
+        }
 
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script>
-    let uid = <?php echo json_encode($_SESSION['user_id']); ?>;
-    function showBackUpName(name) {
-        $(".backup-name").html(name);
-        $(".action").attr("data-name", name);
-    }
-
-    $(document).on("click", ".action", function() {
-        $.get(`getAction.php?data=action-maintenance&action=${$(this).attr("data-action")}&name=${$(this).attr("data-name")}`, function(data) {
-            data = JSON.parse(data);
-            $("[id*='confirmation-modal']").modal('hide');
-            $("#table").bootstrapTable("refresh");
-            showToast(data.status, data.message);
+        $(document).on("click", ".action", function() {
+            $.get(`getAction.php?data=action-maintenance&action=${$(this).attr("data-action")}&name=${$(this).attr("data-name")}`, function(data) {
+                data = JSON.parse(data);
+                $("[id*='confirmation-modal']").modal('hide');
+                $("#table").bootstrapTable("refresh");
+                showToast(data.status, data.message);
+            });
         });
-    });
-    $(function () {
-        preload("#maintenance");
-        $("#main-spinner-con").hide();
+        $(function () {
+            preload("#maintenance");
+            $("#main-spinner-con").hide();
+        });
+    </script>
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
 
-    });
-    
-</script>
-
-
-<!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
+</body>
 
 </html>

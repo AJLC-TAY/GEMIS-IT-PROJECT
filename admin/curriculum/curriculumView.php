@@ -102,33 +102,6 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
     </div>
 </div>
 <!-- STRAND TABLE END -->
-</div>
-</div>
-</div>
-</section>
-<!-- MAIN CONTENT END-->
-<!-- ARCHIVE CONFIRMATION MODAL -->
-<div class="modal fade" id="track-archive-modal" tabindex="-1" aria-labelledby="modal confirmation msg" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h4 class="mb-0">Confirmation</h4>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Do you want to archive <span id="modal-identifier"></span>?</h5>
-                <p class="modal-msg"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="close btn btn-secondary close-btn" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary close-btn archive-btn">Archive</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ARCHIVE CONFIRMATION MODAL END -->
 <!-- ADD MODAL -->
 <div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="modal addProgram" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

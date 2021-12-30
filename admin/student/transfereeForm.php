@@ -247,8 +247,6 @@ $sub_opt = $subjectsData['options'] ?? NULL;
         <input type="hidden" name="action" value="assessTransferee">
         <input id="transferee-submit" class="btn btn-success" form="transferee-form" type="submit" value="Submit">
     </div>
-
-</div>
 </form>
 <template id="table-cell-template">
     <td>

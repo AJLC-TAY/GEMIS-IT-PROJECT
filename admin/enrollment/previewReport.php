@@ -11,7 +11,6 @@ $signatory_list = $admin->listSignatory();
 $track_names = [];
 $programs = [];
 ?>
-<!DOCTYPE html>
 <!-- HEADER -->
 <header>
     <!-- BREADCRUMB -->
@@ -84,17 +83,13 @@ $programs = [];
                     ?>
                     <div class="container ">
                         <div class="row align-items-center" >
-
-                            <div class="col-2">
-                                Total
-                            </div>
+                            <div class="col-2"> Total </div>
                             <div class="col-5">
                                 <input value="<?php echo array_sum($accepted_grand_total); ?>" type="text" class="form-control form-control-sm mb-0">
                             </div>
                             <div class="col-5">
                                 <input value="<?php echo array_sum($rejected_grand_total); ?>" type="text" class="form-control form-control-sm mb-0">
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -104,33 +99,6 @@ $programs = [];
                 <!-- GENERAL REPORT INFO  -->
                 <div class="card p-4 bg-white mb-3">
                     <h5>Report Information</h5>
-<!--                    <div class="row align-items-center mb-3">-->
-<!--                        <div class="col-md-3">Report Title</div>-->
-<!--                        <div class="col-md-9"><input name='report-title' class='form-control mb-0 me-3' value ='Enrollment Report'></div>-->
-<!--                    </div>-->
-<!--                    <div class="row align-items-center mb-3">-->
-<!--                        <div class="col-md-3">School Year</div>-->
-<!--                        <div class="col-md-9"><input name='school-year' class='form-control mb-0 me-3' value ='--><?php //echo $school_year; ?><!--'></div>-->
-<!--                    </div>-->
-<!--                    <div class="row align-items-center mb-3">-->
-<!--                        <div class="col-md-3">Date</div>-->
-<!--                        <div class="col-md-9"><input name='date' type='date' class='form-control mb-0 me-3' value ='--><?php //echo $date; ?><!--'></div>-->
-<!--                    </div>-->
-<!--                     SIGNATORY INFO -->
-<!--                    <h5>Signatory</h5>-->
-<!--                    <div class="d-flex flex-column">-->
-<!--                        <input type="hidden" name="signatory" value='--><?php //echo $signatory; ?><!--'>-->
-<!--                        <input type="hidden" name="position" value='--><?php //echo $position; ?><!--'>-->
-<!--                        <select class="select2 px-0 form-select form-select-sm" id="id-no-select" required>-->
-<!--                            <option>Search user</option>-->
-<!--                            --><?php
-//                            foreach($signatory_list as $element) {
-//                                // echo "<option ". ($element['id'] == $_SESSION['id'] ? "selected" : "") ." class='signatory' data-name='{$element['name']}' data-position='{$element['position']}' value='{$element['id']}'>{$element['name']} - {$element['position']}</option>";
-//                                echo "<option ". ($element->sign_id == 1 ? "selected" : "") ." class='signatory' data-name='{$element->name}' data-position='{$element->position}' value='{$element->sign_id}'>{$element->name} - {$element->position}</option>";
-//                            }
-//                            ?>
-<!--                        </select>-->
-<!--                    </div>-->
                     <div class="container">
                         <div class="row align-items-center mb-3">
                             <label class="form-label px-0">Report Title</label>

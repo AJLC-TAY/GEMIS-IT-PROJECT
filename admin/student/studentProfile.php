@@ -1,5 +1,4 @@
 <?php
-
 require_once("../class/Administration.php");
 $admin = new Administration();
 $user_type = $_SESSION['user_type'];
@@ -220,38 +219,36 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 $name = $userProfile->get_name();
                                 echo
                                 "<dl class='row mb-3 ms-2 border border-1 p-2'>
-                                            <dt class='col-md-4'>Student LRN</dt>
-                                            <dd class='col-md-8'>$lrn</dd>
-                                            <dt class='col-md-4'>Name</dt>
-                                            <dd class='col-md-8'> $name </dd>
-                                            <dt class='col-md-4'>Gender </dt>
-                                            <dd class='col-md-8'>$sex</dd>
-                                            <dt class='col-md-4'>Age</dt>
-                                            <dd class='col-md-8'>$age</dd>
-                                            <dt class='col-md-4'>Birthdate</dt>
-                                            <dd class='col-md-8'> {$birthdate} </dd>
-                                            <dt class='col-md-4'>Birth Place</dt>
-                                            <dd class='col-md-8'> $birth_place </dd>
-                                            <dt class='col-md-4'>Indeginous Group </dt>
-                                            <dd class='col-md-8'> $indigenous_group </dd>
-                                            <dt class='col-md-4'>Mother Tongue</dt>
-                                            <dd class='col-md-8'> $mother_tongue </dd>
-                                            <dt class='col-md-4'>Religion </dt>
-                                            <dd class='col-md-8'> $religion </dd>
-
+                                    <dt class='col-md-4'>Student LRN</dt>
+                                    <dd class='col-md-8'>$lrn</dd>
+                                    <dt class='col-md-4'>Name</dt>
+                                    <dd class='col-md-8'> $name </dd>
+                                    <dt class='col-md-4'>Gender </dt>
+                                    <dd class='col-md-8'>$sex</dd>
+                                    <dt class='col-md-4'>Age</dt>
+                                    <dd class='col-md-8'>$age</dd>
+                                    <dt class='col-md-4'>Birthdate</dt>
+                                    <dd class='col-md-8'> {$birthdate} </dd>
+                                    <dt class='col-md-4'>Birth Place</dt>
+                                    <dd class='col-md-8'> $birth_place </dd>
+                                    <dt class='col-md-4'>Indeginous Group </dt>
+                                    <dd class='col-md-8'> $indigenous_group </dd>
+                                    <dt class='col-md-4'>Mother Tongue</dt>
+                                    <dd class='col-md-8'> $mother_tongue </dd>
+                                    <dt class='col-md-4'>Religion </dt>
+                                    <dd class='col-md-8'> $religion </dd>
                                 </dl>";
                                 ?>
                             </div>
                             <div class="row mt-3">
                                 <h6><b>Contact Information</b></h6>
-                                <?php echo
-                                "<dl class='row mb-3 ms-2'>
-                                        <dt class='col-md-4'>Home Address </dt>
-                                        <dd class='col-md-8'> $add </dd>
-                                        <dt class='col-md-4'>Cellphone No. </dt>
-                                        <dd class='col-md-8'> $cp_no </dd>
-                                        
-                                    </dl>"; ?>
+                                <?php
+                                echo "<dl class='row mb-3 ms-2'>
+                                    <dt class='col-md-4'>Home Address </dt>
+                                    <dd class='col-md-8'> $add </dd>
+                                    <dt class='col-md-4'>Cellphone No. </dt>
+                                    <dd class='col-md-8'> $cp_no </dd>
+                                   </dl>"; ?>
                                 <hr>
                             </div>
 
@@ -314,9 +311,8 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                                 <dt class='col-md-4'>Contact Number</dt>
                                                 <dd class='col-md-8'> {$guardian['cp_no']} </dd>
                                             </dl>";
-                                }  ?>
-
-
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

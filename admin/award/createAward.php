@@ -5,7 +5,6 @@ $admin = new Administration();
 <title>Create Award | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-<!DOCTYPE html>
 <header>
     <!-- BREADCRUMB -->
     <nav aria-label="breadcrumb">
@@ -144,7 +143,6 @@ $admin = new Administration();
         </section>
     </section>
     <!-- MAIN CONTENT END -->
-
 
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>

@@ -1,7 +1,6 @@
 <?php
 include "../class/Administration.php";
 $admin = new Administration();
-//$excellence = $admin->getExcellenceAwardData($_SESSION['sy_id'], $_POST['grade'], $_POST['Highest-honor'], $_POST['High-honor'], $_POST['With-honor']);
 $school_year = $_SESSION['school_year'];
 $filename = "Academic_Excellence_$school_year";
 $date_desc = date("F j, Y");
@@ -46,7 +45,6 @@ $url = "getAction.php?data=academicExcellence&sy_id={$_SESSION['sy_id']}&semeste
                     <small class="text-secondary mb-3">Unselect students to remove from the list</small>
                     <table id="ae-table" data-toggle="table" data-click-to-select="true" data-url="<?php echo $url; ?>" data-height="465" data-unique-id="id" class="table table-sm">
                         <thead>
-<!--                            <th data-checkbox="true"></th>-->
                             <th scope='col' data-width="220" data-sortable="true" data-halign="center" data-align="left" data-field='name'>Name</th>
                             <th scope='col' data-width="80" data-sortable="true" data-align="center" data-field='sex'>Sex</th>
                             <th scope='col' data-width="120" data-sortable="true" data-align="center" data-field='program'>Strand</th>

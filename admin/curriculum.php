@@ -44,17 +44,17 @@ include_once("../inc/head.html");
         <div id="toast-con" class="position-fixed d-flex flex-column-reverse overflow-visible " style="z-index: 99999; bottom: 20px; right: 25px;"></div>
     </div>
     <!-- TOAST END -->
+
+    <!-- VALIDATION -->
+    <script src="../js/validation/jquery.validate.min.js"></script>
+    <script src="../js/validation/additional-methods.min.js"></script>
+    <script src="../js/validation/validation.js"></script>
+
+    <!-- JQUERY FOR BOOTSTRAP TABLE -->
+    <script src="../assets/js/bootstrap-table.min.js"></script>
+    <script src="../assets/js/bootstrap-table-en-US.min.js"></script>
+    <script type="text/javascript" src="../js/common-custom.js"></script>
+    <script type="module" src="<?php echo $jsFilePath; ?>"></script>
 </body>
-
-<!-- VALIDATION -->
-<script src="../js/validation/jquery.validate.min.js"></script>
-<script src="../js/validation/additional-methods.min.js"></script>
-<script src="../js/validation/validation.js"></script>
-
-<!-- JQUERY FOR BOOTSTRAP TABLE -->
-<script src="../assets/js/bootstrap-table.min.js"></script>
-<script src="../assets/js/bootstrap-table-en-US.min.js"></script>
-<script type="text/javascript" src="../js/common-custom.js"></script>
-<script type="module" src="<?php echo $jsFilePath; ?>"></script>
 
 </html>
