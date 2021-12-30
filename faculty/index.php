@@ -57,28 +57,21 @@ $sub_classes = $faculty->get_handled_sub_classes($id);
                             <div class="container mb-3">
                                 <div class="row">
                                     <h5 class="fw-bold">ASSIGNED CLASSES</h5>
-                                    
-                                        
-                                                <?php 
-                                                if (count($sub_classes) != 0) {
-                                                    //    $sub_class_opn .= "<optgroup label='Subject Class'>";
-                                                        foreach ($sub_classes as $sub_class) {
-                                                            echo "<div class='col-lg-4'>
-                                                            <div class='card-box bg-default'>
-                                                            <div class='inner'
-                                                            <h3>{$sub_class->get_section_name()}</h3>
-                                                            <h4>{$sub_class->get_sub_name()}</h4>
-                                                            </div>
-                                                            </div>
-                                                            </div>";
-                                                           
-                                                        }
-                                                    //    $sub_class_opn .= "</optgroup>";
-                                                    }
-                                                ?>
-                                                
-                                          
-                                    
+                                        <?php
+                                        if (count($sub_classes) != 0) {
+                                            foreach ($sub_classes as $sub_class) {
+                                                echo "<div class='col-lg-4'>
+                                                <div class='card-box bg-default'>
+                                                <div class='inner'
+                                                <h3>{$sub_class->get_section_name()}</h3>
+                                                <h4>{$sub_class->get_sub_name()}</h4>
+                                                </div>
+                                                </div>
+                                                </div>";
+
+                                            }
+                                        }
+                                        ?>
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,6 @@ include_once("../inc/head.html");
 <title>Student Profile | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -47,8 +46,6 @@ include_once("../inc/head.html");
                                         <!-- GENERAL INFORMATION -->
                                         <div class="tab-pane fade bg-white p-4 show active" id="gen-info" role="tabpanel" aria-labelledby="home-tab">
                                             <div class="row w-100 h-auto text-start mx-auto">
-                                                <!-- <h5>GENERAL INFORMATION</h5> -->
-                                                <!-- <hr> -->
                                                 <div class="row p-0">
                                                     <!-- PROFILE PICTURE -->
                                                     <div class="col-xl-3">

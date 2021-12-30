@@ -6,7 +6,6 @@ include_once("../inc/head.html");
 <title>Enrollment List | GEMIS</title>
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
     <div id="main-spinner-con" class="spinner-con">
@@ -67,20 +66,6 @@ include_once("../inc/head.html");
                                                                 </select>
                                                             </div>
                                                         </li>
-                                                        <!--                    <div class="dropdown">-->
-                                                        <!--                        <button class="btn btn-sm shadow" type="button" id="section-filter" data-bs-toggle="dropdown" aria-expanded="false">-->
-                                                        <!--                            School Year-->
-                                                        <!--                        </button>-->
-                                                        <!--                        <ul class="dropdown-menu" aria-labelledby="section-filter">-->
-                                                        <!--                            <li><a role="button" href="#" id="all-section-btn" class="dropdown-item">All</a></li>-->
-                                                        <!--                            <li><hr class="dropdown-divider"></li>-->
-                                                        <!--                            <li><a role="button" id="no-adv-btn" class="dropdown-item active">Current</a></li>-->
-
-
-                                                        <!--                            <li><a role="button" id="with-adv-btn" class="dropdown-item">With Adviser</a></li>-->
-                                                        <!--                            <li><hr class="dropdown-divider"></li>-->
-                                                        <!--                        </ul>-->
-                                                        <!--                    </div>-->
                                                         <!--TRACK FILTER-->
                                                         <li class="col-4 mb-3 me-2">
                                                             <div class="input-group input-group-sm">
@@ -137,26 +122,13 @@ include_once("../inc/head.html");
                                                                 </select>
                                                             </div>
                                                         </li>
-                                                        <!--AUTO REFRESH SWITCH-->
-                                                        <!--                            <div class="col-auto  mb-2 me-0 ms-3 ">-->
-                                                        <!--                                <div class="input-group input-group-sm ">-->
-                                                        <!--                                    <div class="form-check form-switch">-->
-                                                        <!--                                        <input class="form-check-input auto-refresh" name="auto-refresh" type="checkbox" id="auto-refresh-table" checked>-->
-                                                        <!--                                        <label class="form-check-label" for="auto-refresh-table">Auto Refresh Table</label>-->
-                                                        <!--                                    </div>-->
-                                                        <!--                                </div>-->
-                                                        <!--                            </div>-->
-                                                        <!--                        </div>-->
                                                         <div class="d-flex justify-content-end">
                                                             <button type="button" class="reset-filter-btn btn btn-outline-danger btn-sm me-5"><i class="bi bi-x-circle me-2"></i>Reset All</button>
                                                         </div>
                                                     </ul>
                                                 </div>
                                             </div>
-                                            <div class="buttons-toolbar">
-
-                                            </div>
-
+                                            <div class="buttons-toolbar"></div>
                                             <tr>
                                                 <th data-checkbox="true"></th>
                                                 <th scope='col' data-width="100" data-align="center" data-sortable="false" data-field="SY">SY</th>

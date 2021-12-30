@@ -7,14 +7,13 @@ include_once("../inc/head.html");
 <link href='../assets/css/bootstrap-table.min.css' rel='stylesheet' />
 </head>
 
-<!DOCTYPE html>
 <body>
     <!-- SPINNER -->
-    <!--<div id="main-spinner-con" class="spinner-con">
+    <div id="main-spinner-con" class="spinner-con">
         <div id="main-spinner-border" class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-    </div> -->
+    </div>
     <!-- SPINNER END -->
     <section id="container">
         <?php include_once('../inc/facultySidebar.php'); ?>
@@ -24,15 +23,15 @@ include_once("../inc/head.html");
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row mt ps-3">
-                        <header>
-    <!-- BREADCRUMB -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">ABM</a></li>
-        </ol>
-    </nav>
-</header>
+                            <header>
+                                <!-- BREADCRUMB -->
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                                        <li class="breadcrumb-item active">ABM</a></li>
+                                    </ol>
+                                </nav>
+                            </header>
                             <div class="d-flex justify-content-between mb-3">
                                 <h3 class="fw-bold">ABM 12 A</h3>
                                 <div>
@@ -79,7 +78,6 @@ include_once("../inc/head.html");
         </section>
     </section>
     <!-- MAIN CONTENT END -->
-
 
     <!--BOOTSTRAP TABLE JS-->
     <script src='../assets/js/bootstrap-table.min.js'></script>
