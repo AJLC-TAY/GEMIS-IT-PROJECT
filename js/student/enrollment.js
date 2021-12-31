@@ -17,25 +17,7 @@ $(function() {
         });
     } catch (e) {}
 
-    
-    // $(document).on('submit', '#enroll-report-form', function() {
-    //     showToast('dark', 'Downloading file ...');
-    //     setTimeout(() => {
-    //         showToast('dark', 'Redirecting to enrollment dashboard ...');
-    //     }, 2000);
-    //     setTimeout(() => {
-    //         window.location.replace("enrollment.php?page=enrollees");
-    //     }, 4000);
-    // });
-
-    // $(document).on("change", "#id-no-select", function(e) {
-    //     e.preventDefault();
-    //     let selected = $("#id-no-select option:selected");
-    //     $("input[name='signatory']").val(selected.attr("data-name").trim());
-    //     $("input[name='position']").val(selected.attr("data-position"));
-    // });
-
-    /** Stepper */ 
+    /** Stepper */
     $(document).on("click", ".next", function(e) {
         e.preventDefault();
         stepper.next();
@@ -46,13 +28,6 @@ $(function() {
         stepper.previous();
     });
 
-    /** Validate Form */
-    // $(document).on("click", "#enrollment-form [type='submit']", function (e) {
-    //     console.log("submit clicked");
-        
-    // });
-
-    
      /** Indigenous Group */
     $(document).on("click", ".i-group-opt", function() {
         $("[name='group-name']").prop("disabled", $(this).val() == "Yes" ? false : true);

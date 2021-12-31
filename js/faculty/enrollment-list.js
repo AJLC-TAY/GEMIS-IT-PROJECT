@@ -1,20 +1,5 @@
 preload("#enrollment", "#enrollment-sub")
 
-// const tableSetup = {
-//     url:                'getAction.php?data=enrollees',
-//     method:             'GET',
-//     uniqueId:           'LRN',
-//     idField:            'LRN',
-//     height:             440,
-//     maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
-//     clickToSelect:      true,
-//     pageSize:           20,
-//     pagination:         true,
-//     pageList:           "[20, 40, 80, 100, All]",
-//     paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-//     searchSelector:     '#search-input'
-// }
-
 let selections = [];
 
 function queryParams(params) {
@@ -52,8 +37,7 @@ const tableSetup = {
     pageSize:           25,
     pagination:         true,
     pageList:           "[25, 50, 100, All]",
-    onPostBody:         checkSelections,
-    // responseHandler:         responseHandler
+    onPostBody:         checkSelections
 };
 let enrolleesTable = $('#table').bootstrapTable(tableSetup);
 enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
@@ -63,8 +47,6 @@ enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-al
     });
     // push or splice the selections if you want to save all data selections
 });
-
-
 
 $(function() {
     $(".buttons-toolbar").hide();

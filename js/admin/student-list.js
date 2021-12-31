@@ -18,14 +18,11 @@ const tableSetup = {
 };
 
 let studentTable = $("#table").bootstrapTable(tableSetup);
-let selection = [];
 $(function () {
     preload('#student','#student-list');
 
     /** Table options */
     tableUserOptionsEventListener('ST');
     /** Table options end */
-
-
     hideSpinner();
 });

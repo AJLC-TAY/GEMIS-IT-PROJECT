@@ -185,12 +185,8 @@ $(function() {
                                 console.log(data)                                
                             });
                             console.log(values);
-            }); // en
-            // $('.grading-confirmation').modal('hide');
-            // location.reload(true);
+            });
         }
-        
-        // $(".grade").addClass('hidden');
     });
 
     $(document).on("click", ".export", function(e)  {
@@ -200,10 +196,7 @@ $(function() {
         });
     });
     
-    
     averageSubjectGradesEvent();
 
-   
-    
     hideSpinner();
 });

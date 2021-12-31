@@ -13,7 +13,6 @@ let prepareHTML = data => {
 setup('program', programs, prepareHTML);
 reload();
 
-// custom script
 $(function() {
     $("#program-form").validate({
       rules: {
@@ -69,7 +68,7 @@ $(function() {
                   showToast("success", "Program successfully added");
               }
           });
-        return false;  //This doesn't prevent the form from submitting.
+        return false;
       }
     });
     eventDelegations();

@@ -1,18 +1,3 @@
-// const tableSetup = {
-//     url:                'getAction.php?data=enrollees',
-//     method:             'GET',
-//     uniqueId:           'LRN',
-//     idField:            'LRN',
-//     height:             440,
-//     maintainMetaDat:    true,       // set true to preserve the selected row even when the current table is empty
-//     clickToSelect:      true,
-//     pageSize:           20,
-//     pagination:         true,
-//     pageList:           "[20, 40, 80, 100, All]",
-//     paginationParts:    ["pageInfoShort", "pageSize", "pageList"],
-//     searchSelector:     '#search-input'
-// }
-
 let selections = [];
 
 function queryParams(params) {
@@ -50,8 +35,7 @@ const tableSetup = {
     pageSize: 25,
     pagination: true,
     pageList: "[25, 50, 100, All]",
-    onPostBody: checkSelections,
-    // responseHandler:         responseHandler
+    onPostBody: checkSelections
 };
 let enrolleesTable = $('#table').bootstrapTable(tableSetup);
 enrolleesTable.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function() {
@@ -85,11 +69,6 @@ $(function() {
                 modal.find("#student-selected").html(studentList);
                 modal.modal("show");
                 break;
-            case "export-opt":
-                break;
-            case "archive-opt":
-                break;
-
         }
     });
 

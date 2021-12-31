@@ -8,7 +8,6 @@ $(function () {
 		speed: 'slow',
 		showCount: false,
 		autoExpand: true,
-		//        cookie: 'dcjq-accordion-1',
 		classExpand: 'dcjq-current-parent'
 	});
 });
@@ -70,39 +69,20 @@ var Script = function () {
 		}
 	});
 
-	// // custom scrollbar
-	// $("#sidebar").niceScroll({
-	// 	styler: "fb",
-	// 	cursorcolor: "#4ECDC4",
-	// 	cursorwidth: '3',
-	// 	cursorborderradius: '10px',
-	// 	background: '#404040',
-	// 	spacebarenabled: false,
-	// 	cursorborder: ''
-	// });
-
-
 	// widget tools
-
-
 	jQuery('.panel .tools .fa-times').click(function () {
 		jQuery(this).parents(".panel").parent().remove();
 	});
 
 
 	//    tool tips
-
 	$('.tooltips').tooltip();
 
 	//    popovers
-
 	$('.popovers').popover();
-
-
 }();
 
 jQuery(document).ready(function ($) {
-
 	// Go to top
 	$('.go-top').on('click', function (e) {
 		e.preventDefault();

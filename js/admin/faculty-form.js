@@ -18,19 +18,6 @@ let asTableSetup = {
 };
 
 const detailFormatter = (index, row) => {
-    // row details for reference
-    // corequisite: []Management
-    // for_grd_level: "12"
-    // prerequisite: []
-    // school_yr: "0"
-    // section_code: "2"
-    // section_name: "ABM 12"
-    // sub_class_code: "9200"
-    // sub_code: "Project"
-    // sub_name: "Research Project"
-    // sub_semester: "2"
-    // sub_type: "applied"
-    // teacher_id: 1
     return "<div class='container'>"
             + `<h5 class='mb-1'>${row.section_name}</h5>`
             + `<p class='text-secondary'><small>Section Code | ${row.section_code}</small></p>`
@@ -64,8 +51,6 @@ let scTableSetup = {
     searchSelector:     '#search-sc-input',
     height:             380,
     ...commonTableSetup
-    // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
-    // detailFormatter:    detailFormatter
 };
 
 const ASSIGNEDSCID = "#assigned-sc-table";
@@ -84,36 +69,6 @@ $(function () {
         /** Add Subject Class Methods */
         scMethods(ASSIGNEDSCID, SCID);
     } catch (e) {}
-
-    // $(document).on("submit", "#faculty-form", function (e) {
-    //     e.preventDefault();
-    //     // var action = $(this).attr('data-action');
-    //     var formData = new FormData($(this)[0]);
-    //
-    //     try {
-    //         $("#assigned-sc-table").bootstrapTable("getData")
-    //                        .forEach(e => {
-    //                            formData.append("asgn-sub-class[]",  e.sub_class_code);
-    //                        });
-    //
-    //         $("#subject-table").bootstrapTable("getSelections")
-    //                            .forEach(e => {
-    //                                formData.append("subjects[]", e.sub_code);
-    //                            });
-    //     } catch (e) {}
-    //
-    //     $.ajax({
-    //         url: "action.php",
-    //         method: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: data => {
-    //             let response = JSON.parse(data);
-    //             window.location.replace(`faculty.php?id=${response.teacher_id}`);
-    //         }
-    //     });
-    // });
 
     $(".edit-text").click(()=> $("#upload").click());
     hideSpinner();

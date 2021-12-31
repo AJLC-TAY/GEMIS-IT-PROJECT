@@ -17,7 +17,3 @@ function reloadOptions(currentID = null) {
         dropdownParent: $('#assign-modal')
     });
 }
-
-$(function() {
-
-});

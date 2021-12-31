@@ -20,8 +20,6 @@ export const implementAssignSubjectMethods = (assignedSub, subTable) => {
     let subjectTable = subTable; // the table where the data of assigned subjects will be rendered
 
     $(document).on("click", ".edit-as-btn, #edit-as-btn", function() {
-        // show
-        console.log(assigned);
         subjectTable.bootstrapTable('checkBy', { field: 'sub_code', values: assigned })
     });
 
@@ -134,7 +132,6 @@ export const implementAssignSubjectClassMethods = (ASSIGNEDSCID, SCID) => {
         form = $(this);
         selections = $(SCID).bootstrapTable('getSelections');
 
-        console.log(form.attr('data-page'));
         if (form.attr('data-page') === 'profile') { // allow database update on profile page only
             // form page
             formData = form.serializeArray();
@@ -317,7 +314,6 @@ export const tableUserOptionsEventListener = (userType) => {
     });
 
     $(document).on("click", ".submit[data-type='export']", function () {
-        // $("#confirmation-modal").find("#export-form").submit();
         $("#export-form")[0].submit();
 
     });

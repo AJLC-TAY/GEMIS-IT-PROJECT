@@ -47,16 +47,6 @@ $(function () {
         });
     } catch (e) {}
 
-
-    try {
-        // $("#ae-table").bootstrapTable('hideColumn', "input");
-
-        // /** Check all rows after rendering the academic excellence table */
-        // $(document).on("post-body.bs.table", "#ae-table", function() {
-        //     $("#ae-table").bootstrapTable('checkAll');
-        // });
-    } catch (e) {}
-
     $(document).on("change", ".filter-item", function () {
         let yearLevel = $("#year-level").val();
         let section = encodeURIComponent($("#section").val());
@@ -70,7 +60,6 @@ $(function () {
 
     $(document).on("click", ".action", function() {
         let id = $(this).attr("data-id");
-        console.log(id);
         switch ($(this).attr('data-type')) {
             case 'add':
                 if (selection.includes(id)) {
@@ -107,7 +96,7 @@ $(function () {
 
     $(document).on("click", "#ae-table .action", function(e) {
         e.preventDefault();
-        let id, row, elementToToggle, type;
+        let id, row, type;
         $(this).hide();
 
         id = $(this).attr("data-id");
@@ -127,7 +116,6 @@ $(function () {
         }
         $(`.action[data-id='${id}'][data-type='${type}']`).show();
         row.find("input").prop("disabled", inputState);
-        console.log($("#ae-table").bootstrapTable("getRowByUniqueId", id));
     });
 
     $(document).on("click", "button[form='ae-form']", function() {

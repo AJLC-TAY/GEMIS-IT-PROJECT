@@ -1,6 +1,3 @@
-
-
-// let sectionTable = $("#table").bootstrapTable(tableSetup)
 import {commonTableSetup} from "./utilities.js";
 
 const tableSetup = {
@@ -39,7 +36,6 @@ $(function() {
         confirmationModal.modal('toggle');
     });
 
-
     $(document).on('click', '.transfer-btn', function() {
         showSpinner();
         var action = 'transferStudent'
@@ -62,7 +58,6 @@ $(function() {
         fullConfirmationModal.modal('toggle');
 
     });
-
 
     $(document).on('click', '.transfer-btn-full', function() {
         var action = 'transferStudentFull'
@@ -93,5 +88,4 @@ $(function() {
 
     listSearchEventBinder("#search-section", ".available-section button");
     hideSpinner();
-
 });

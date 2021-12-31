@@ -47,12 +47,6 @@ try {
 
 let addAnother = false;
 
-
-const refreshCount = () => {
-    $("#table").bootstrapTable("refresh");
-    $("#no-of-stud").html( $("#table").bootstrapTable("getData").length);
-}
-
 const renderSelect2 = () => {
     $(".teacher-select").select2({
         theme: "bootstrap-5",
@@ -65,15 +59,7 @@ $(function() {
     $("#adviser").select2({
         theme: "bootstrap-5",
         width: null,
-        // dropdownParent: $('#add-modal')
     });
-
-
-    // $("#adviser").select2({
-    //     theme: "bootstrap-5",
-    //     width: null,
-    //     dropdownParent: $('#add-modal')
-    // });
 
     $("#adviser-section").select2({
         theme: "bootstrap-5",
@@ -93,7 +79,6 @@ $(function() {
         e.preventDefault();
         let form = $(this);
         $.post("action.php", form.serializeArray(), function(data) {
-            // console.log(JSON.parse(data))
             form.trigger("reset");
             $("#table").bootstrapTable('refresh');
             if (!addAnother) {
@@ -132,7 +117,6 @@ $(function() {
 
         let teacherInput = inputs.eq(1);
         teacherInput.val(tempData[1]);
-        // teacherInput.addClass("d-none")
 
         $("a.link").removeClass("d-none");
     });
@@ -142,42 +126,9 @@ $(function() {
         showSpinner();
         let form = $(this);
         let formData = form.serializeArray();
-        console.log(formData);
         $.post("action.php", formData, function(data) {
-            let teacherID, inputs, teacherInput, teacherLink;
             data = JSON.parse(data);
-
-            // inputs = form.find("input");
-            // inputs.eq(0).prop("disabled", true);
-            //
-            // teacherID = formData[1].value;
-            // teacherLink = $("a.link");
-            // if (teacherID.trim().length === 0) {
-            //     // $("#empty-msg").removeClass("d-none")
-            //     // teacherLink = $("a.link")
-            //     // teacherLink.attr("href", "")
-            //     // teacherLink.html("")
-            //     // teacherLink.addClass("d-none")
-            // } else {
-            //     teacherInput = inputs.eq(1);
-            //     teacherInput.val(teacherID);
-            //
-            //     teacherLink.attr("href", `faculty.php?id=${teacherID}`);
-            //     let name = $(`#adviser-list option[value*='${teacherID}']`).html();
-            //     name = "Teacher " + name.substring(name.indexOf("-") + 2);
-            //     teacherLink.html(name);
-            //     teacherLink.removeClass("d-none");
-            //
-            // }
             location.replace(`section.php?sec_code=${data.section}`);
-
-
-            // $("#edit-btn").toggleClass('d-none')
-            // $(".edit-opt").addClass('d-none')
-
-            // tempData = []
-            // hideSpinner()
-            // showToast("success", "Successfully updated section")
         });
     });
 
@@ -188,9 +139,7 @@ $(function() {
         $("#adviser-section").trigger("change");
     });
 
-    $(document).on("click", "#transfer-btn", function() {
-
-    });
+    $(document).on("click", "#transfer-btn", function() {});
 
     /** Specific subject */
     $(document).on("click", "#add-subject-btn", function() {
@@ -291,8 +240,6 @@ $(function() {
         $.post("action.php", formData, function() {
             $("#add-student-modal").modal("hide");
             location.reload();
-            // $("#student-options-table").bootstrapTable("refresh");
-            // refreshCount();
         });
     });
 
@@ -335,8 +282,6 @@ $(function() {
         $.post("action.php", formData, function() {
             $("#transfer-modal").modal("hide");
             location.reload();
-            // $("#section-options-table").bootstrapTable("refresh");
-            // refreshCount();
         });
     });
 
@@ -473,13 +418,8 @@ $(function() {
         const semester = $(this).attr("data-semester");
         const bool = $(this).is(":checked");
         $(`table[data-program='${program}'][data-semester='${semester}'] tbody`).find("input.form-check-input").prop("checked", bool);
-
-        // toggleListElement(program, semester, bool);
     });
 
     /** End subject class end */
-
-
-
     hideSpinner();
 })

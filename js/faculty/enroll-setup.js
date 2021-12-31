@@ -191,20 +191,5 @@ $(function () {
         stepper.previous();
     });
 
-    /** Remove section from enrollment setup */
-    // $(document).on('click', '#remove-section-btn', function(e) {
-    //     e.preventDefault()
-    //     let selections = sectionTable.bootstrapTable('getSelections')
-    //     if (selections.length === 0) return showToast('danger', 'Please select a section first')
-    //
-    //     let formData = new FormData()
-    //     formData.append('action', 'deleteSection')
-    //     selections.forEach(e => {
-    //         formData.append('section-code[]', e.code)
-    //     })
-    //
-    //
-    //
-    // })
     hideSpinner();
 });

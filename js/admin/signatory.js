@@ -32,6 +32,7 @@ const deleteEvent = (id = null) => {
         $("#delete-signatory-confirm").removeAttr("data-id");
     }
 }
+
 $(function() {
     preload("#signatory");
 
@@ -45,7 +46,7 @@ $(function() {
         let action = $(this).attr("data-action");
         let signID = $(this).attr('data-id');
         let displaySubmitAgainBtn = true;
-        if (action == 'Delete') {
+        if (action === 'Delete') {
             let confirmModal = $("#confirmation-modal");
             confirmModal.find("#delete-signatory-confirm").attr("data-id", signID);
             confirmModal.modal("show");
@@ -116,22 +117,22 @@ $(function() {
                         $("#modal-form").modal("hide");
                         addAnother = false;
                     }
-
                 }
                 // showToast("success", "Signatory successfully added");
             });
         }
     });
+
     $(document).on("click", ".table-opt", function(e) {
         let selections = signatoryTable.bootstrapTable('getSelections');
         if (selections.length < 1) return showToast("danger", "Please select a signatory first");
         $("#confirmation-modal").modal("show");
     });
+
     $(document).on("click", ".view-btn", function() {
         showSpinner();
         let id = $(this).attr("data-id");
         let data = signatoryTable.bootstrapTable("getRowByUniqueId", id);
-        console.log(data);
         let modal = $("#modal-view");
 
         modal.find("#id-no-view").val(data.sign_id);
@@ -149,8 +150,6 @@ $(function() {
 
     $('#delete-signatory-confirm').click(function(e) {
         e.preventDefault();
-
-        console.log($(this).attr("data-id"))
         deleteEvent($(this).attr("data-id") || null);
     });
 

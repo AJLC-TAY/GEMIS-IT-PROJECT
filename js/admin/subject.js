@@ -68,7 +68,6 @@ function changeSchedTable(firstStrand) {
 }
 
 function getSubjectsByProgram(list, program) {
-  console.log("get subjects by pr");
   let temp = [];
   list.forEach(element => {
     if (element.program == program) {
@@ -79,16 +78,12 @@ function getSubjectsByProgram(list, program) {
 }
 
 function renderSubOptToHtml(list, type) {
-  console.log("render html /n");
-
   let html = '';
   const semester = [1, 2];
   const grade = [11, 12];
   list.forEach(e => {
     html += `<option value='${e.code}'>${e.name}</option>`;
   });
-
-  console.log(html);
   grade.forEach(e => {
     semester.forEach(s => {
       $(`[name='data[${e}][${s}][${type}][]']`).html(html);
@@ -97,7 +92,6 @@ function renderSubOptToHtml(list, type) {
 }
 
 function prepareSchedOptions(firstStrand, type) {
-  console.log("prepare sched options /n");
   try {
     // filter subject options by subject type
     let opt = schedOptions[type];
@@ -110,11 +104,7 @@ function prepareSchedOptions(firstStrand, type) {
 $(function () {
   /** Subject Schedule */
   try {
-    console.log("schedule", schedule);
-    console.log("options", schedule);
     let firstStrand = progSelect.val();
-   
-  
     if (firstStrand.length > 0) {
       changeSchedTable(firstStrand);
     }
@@ -137,8 +127,6 @@ $(function () {
         let prog = newData['program'];
         delete schedule[prog];
         schedule[prog] = newData['new'][prog];
-        
-        // schedule[newData['program']] = newData['new'][prog];
       });
     });
 
@@ -209,7 +197,6 @@ $(function () {
       showSpinner();
       var form = $("#add-subject-form");
       var formData = form.serializeArray();
-      console.log(formData)
 
       // initialize requisites array
       var prereq = [];
@@ -253,8 +240,6 @@ $(function () {
           $('#app-spec-options').addClass('d-none');
           $('#sub-code').attr('autofocus');
           addAgain = false;
-          // hideSpinner();
-
           return showToast('success', 'Subject successfully added!');
         }
         data = JSON.parse(data);
@@ -263,64 +248,6 @@ $(function () {
       return false;  //This doesn't prevent the form from submitting.
     }
   });
-  //
-  // $('#add-subject-form').submit(function (e) {
-  //   e.preventDefault();
-  //   showSpinner();
-  //   var form = $(this);
-  //   var formData = form.serializeArray();
-  //   console.log(formData)
-  //
-  //   // initialize requisites array
-  //   var prereq = [];
-  //   var coreq = [];
-  //
-  //   // remove radio buttons from the formdata and store them from the respective requisite arrays
-  //   formData = formData.filter(function (item) {
-  //     let value = item.value;
-  //     if (item.name.includes('radio-')) {
-  //       if (value.includes('PRE-')) {
-  //         prereq.push(value);
-  //       } else if (value.includes('CO-')) {
-  //         coreq.push(value);
-  //       }
-  //       return false;
-  //     }
-  //     return true;
-  //   });
-  //
-  //   /**
-  //    * Stores all subject code under one requisite to the form data.
-  //    * @param {String}  requisite   Requisite identifier, 'pre' or 'co'.
-  //    * @param {Array}   codeList    Raw subject code list.
-  //    */
-  //   var saveRequisiteCodes = (requisite, codeList) => {
-  //     if (codeList.length === 0) return; // return if list of codes is empty
-  //
-  //     codeList.forEach(code => {
-  //       code = code.substring(code.indexOf('-') + 1);
-  //       formData.push({ name: requisite, value: code }); // store subject code value; from PRE-ABM to ABM
-  //     });
-  //   };
-  //
-  //   saveRequisiteCodes('PRE[]', prereq);
-  //   saveRequisiteCodes('CO[]', coreq);
-  //
-  //   $.post('action.php', formData, function (data) {
-  //     hideSpinner();
-  //     if (addAgain) {
-  //       $('#add-subject-form').trigger('reset');
-  //       $('#app-spec-options').addClass('d-none');
-  //       $('#sub-code').attr('autofocus');
-  //       addAgain = false;
-  //       // hideSpinner();
-  //
-  //       return showToast('success', 'Subject successfully added!');
-  //     }
-  //     data = JSON.parse(data);
-  //     window.location.href = `subject.php?${data.redirect}`;
-  //   });
-  // });
 
   $(document).on('click', '#edit-btn', function (e) {
     let editBtn = $('#edit-btn');

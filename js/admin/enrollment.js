@@ -95,19 +95,11 @@ $(function() {
 
     $("#psa").click(function(){
         let preview = $('#psaPreview');
-        // img = document.getElementById("psaPreview");
-        // img.src = "http://localhost:3000/uploads/credential/14/1635868394_61815eead9dc89.54219229.jpg";
-
-        // preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
 
     $("#form137").click(function(){
         let preview = $('#137Preview');
-        // img = document.getElementById("psaPreview");
-        // img.src = this.src;
-        // //  this.src;
-        // preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
 
@@ -147,7 +139,6 @@ $(function() {
         $("#chosen-strand").html($("#program-select option:selected").text().toUpperCase());
         $.get(`getAction.php?data=schedule&code=${strandCode}`, function (scheduleData) {
             let subData = JSON.parse(scheduleData).data;
-            // console.log(subData)
             let template = $("#table-cell-template").html();
             let html = '';
 

@@ -26,7 +26,6 @@ function toggleDisableMonthSelector(bool) {
  * @param {Object} row tr object
  * */
 function saveRow(row) {
-    console.log("entered save row");
     let formData = new FormData();
     $.each(row.find(".number"), function (i, val) {
         formData.append(val.getAttribute('name'), val.value);
@@ -49,7 +48,6 @@ function saveRow(row) {
 }
 
 function saveAll(){
-    // e.preventDefault();
         showSpinner();
         let formData = new FormData($("#attendance-form")[0]);
         formData.append('stat', stat);            
@@ -138,11 +136,10 @@ function saveConfirmation() {
 
 function submitConfirmation() {
     stat = "1";
-    console.log("from faculty/attendance.js submit clicked");
-    document.getElementById("stmt").innerText = "Are you sure you want to ";
-    document.getElementById("label").innerText = "submit?";
-    document.getElementById("modal-msg").innerText = submitMsg;
-    document.getElementById("confirm").innerText = "Submit";
+    $("#stmt").text("Are you sure you want to ");
+    $("#label").text("submit?");
+    $("#modal-msg").text(submitMsg);
+    $("#confirm").text("Submit");
     $(".attendancerect-confirmation").modal("toggle");
 }
 
@@ -154,20 +151,17 @@ $(function () {
         showSpinner();
         // hide main edit button & show main edit options
         $(this).toggle(false);
-        document.getElementById("rectification-type").innerText = "multiple";
+        $("#rectification-type").text("multiple");
         $(".edit-options").toggle(true);
-        console.log("entered edit button");
 
         // make all inputs editable
         $(".final").removeAttr("readonly");
-        console.log("read only removed");
 
         // disabled month selector
         toggleDisableMonthSelector(true);
         // disabled specified edit buttons and options
         $('.edit-spec-btn').toggle(true).prop("disabled", true);
         $('.edit-spec-options').toggle(false);
-        console.log("entered edit button");
         hideSpinner();
     });
 
@@ -201,7 +195,6 @@ $(function () {
 
     $(document).on("click", ".submit-btn", () => {
         submitConfirmation(row);
-
     });
 
     $(document).on("click", ".save-btn", () => {
@@ -214,7 +207,6 @@ $(function () {
         } else{
             saveRow(row);
         }
-        
     });
 
     $(document).on("click", ".action", function (e) {
@@ -246,68 +238,6 @@ $(function () {
         }
         exitEditMode(row);
     });
-
-    // $(document).on("click", ".edit-spec-btn", function (e) {
-    //     e.preventDefault();
-    //     // hide specific btn
-    //     $(this).toggle(false);
-    //     // disable month selector
-    //     toggleDisableMonthSelector(true);
-    //
-    //     // make row inputs editable and store their values temporarily
-    //     let row = $(this).closest("tr");
-    //     row.find(".number").each(function() {
-    //         let e = $(this);
-    //         tempChanges.push(e.val());
-    //         e.removeAttr("readonly");
-    //     });
-    //     // show specific edit options
-    //     row.find('.edit-spec-options').toggle(true);
-    // });
-
-    // $(document).on("click", ".cancel-spec-btn", function (e) {
-    //     e.preventDefault();
-    //     // hide specific edit options
-    //     $(this).closest(".edit-spec-options").toggle(false);
-    //
-    //     // return original values to input & set them to readonly
-    //     let row = $(this).closest("tr");
-    //     $.each(row.find(".number"), function(i, val) {
-    //         val.value = tempChanges[i];
-    //         val.setAttribute("readonly", true);
-    //     });
-    //     // show specific edit btn
-    //     row.find('.edit-spec-btn').toggle(true);
-    //     // empty the temporary array
-    //     tempChanges = [];
-    //     // enable month selector
-    //     toggleDisableMonthSelector(false);
-    // });
-
-    // $(document).on("click", ".save-spec-btn", function (e) {
-    //     e.preventDefault();
-    //     $(this).closest(".edit-spec-options").toggle(false);
-    //     let row = $(this).closest("tr");
-    //     let formData = new FormData();
-    //     $.each(row.find(".number"), function(i, val) {
-    //         formData.append(val.getAttribute('name'), val.value);
-    //         val.setAttribute("readonly", true);
-    //     });
-    //     formData.append('action', "changeAttendance");
-    //     formData.append('month', $("[name='month'] option:selected").text());
-    //     $.ajax({
-    //         url: "action.php",
-    //         method: "POST",
-    //         processData: false,
-    //         contentType: false,
-    //         data: formData,
-    //         success: data => {
-    //             tempChanges = [];
-    //             toggleDisableMonthSelector(false);
-    //         }
-    //     })
-    //     row.find('.edit-spec-btn').toggle(true);
-    // });
 
     /** Event handler if month selector is changed */
 

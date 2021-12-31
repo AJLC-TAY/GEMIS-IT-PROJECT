@@ -1,5 +1,3 @@
-
-
 var code = '';
 var submitMsg = "Submitted grades are final and are not editable. For necessary changes, contact the admin.";
 var saveMsg = "Saved grades are editable within the duration of the current quarter.";
@@ -72,10 +70,7 @@ $(function() {
                                     'action' : 'gradeClass'};
                 }
                 $.post("action.php", grades, function(data) {	
-                    // console.log(grades);
-                    console.log(data)
                     classGradeTable.bootstrapTable("refresh")
-                    
                 });
 
             });        
@@ -90,15 +85,11 @@ $(function() {
             }); // en
 
         }
-        
-        // $(".grade").addClass('hidden');
     });
 
     $(document).on("click", ".export", function(e)  {
         var action = "export";
         $.post("action.php", action , function(data) {	
-            console.log(data);
-            
         });
     });
 

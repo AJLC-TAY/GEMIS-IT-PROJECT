@@ -5,7 +5,6 @@ function preload(menuItem, subMenuItem = null) {
     spinner = $('#main-spinner-con');
     spinner.show();
     if (subMenuItem == null) {
-        // console.log(menuItem);
         return $(menuItem).click();
     }
     mainMenuItem = $(`${menuItem} a:first`);

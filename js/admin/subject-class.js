@@ -137,7 +137,6 @@ $(function() {
             processData: false,
             contentType: false,
             success: data => {
-                // let response = JSON.parse(data);
                 selections = [];
                 table.bootstrapTable('refresh');
                 $("#assign-modal").modal("hide");

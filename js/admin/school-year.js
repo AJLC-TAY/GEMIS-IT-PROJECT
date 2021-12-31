@@ -32,9 +32,7 @@ const setCurrentValuesToInput = (id, row, inputs = "input") => { // id of row
     let data, quarter, semester, inputsToDisplay, inputsToHide;
     // get values from table
     data = syTable.bootstrapTable("getRowByUniqueId", id);
-    // grade = data.current_grd_val;
     quarter = data.current_qtr_val;
-    semester = data.current_sem_val;
 
     // show all the elements with the provided html tag
     inputsToDisplay = row.find(inputs);
@@ -138,7 +136,7 @@ $(function() {
             }
         });
 
-        let grade, quarter, semester, inputsToDisplay;
+        let quarter, inputsToDisplay;
         // find select inputs get their labels and set them to the input html tags
         quarter = selectInputs.eq(0).find(`[value='${newQtrVal}']`).text();
 
@@ -253,7 +251,6 @@ $(function() {
     $(document).on("click", ".edit-opt", function(e) {
         e.preventDefault();
         let button = $(this);
-
         let toggle;
         switch (button.attr("data-type")) {
             case "add":

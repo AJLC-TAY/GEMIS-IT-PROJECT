@@ -40,7 +40,6 @@ $(function () {
         var action = 'archiveProgram';
     
         let selected = $table.bootstrapTable('getSelections');
-        console.log(selected);
         selected.forEach(element => {
             var code = element.prog_code;
             $.post("action.php", {code, action:action}, function(data) {	
@@ -92,8 +91,6 @@ $(function () {
                 success: function (data) {
                     $(form).trigger('reset');
                     addModal.modal('hide');
-                    console.log("New data: \n");
-                    console.log(data);
                     reload(JSON.parse(data));
                     hideSpinner();
                     $(".no-result-msg").hide();

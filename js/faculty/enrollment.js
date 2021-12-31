@@ -1,4 +1,3 @@
-
 try {
     var stepper = new Stepper($('#stepper')[0]);
 } catch (e) {}
@@ -15,15 +14,10 @@ $(function() {
 
     
     $(document).on('submit', '#enroll-report-form', function() {
-        // showSpinner();
-        console.log($(this).serializeArray());
         showToast('dark', 'Downloading file ...');
         setTimeout(() => {
             showToast('dark', 'Redirecting to enrollment dashboard ...');
         }, 2000);
-        // setTimeout(() => {
-        //     window.location.replace("enrollment.php?page=enrollees");
-        // }, 4000);
     });
 
     $(document).on("change", "#id-no-select", function(e) {

@@ -63,8 +63,6 @@ let scTableSetup = {...setupWithPagination,
         idField: "sub_class_code",
         searchSelector: "#search-sc-input",
         height: "380"
-            // onPostBody:          () => $("#sc-table").bootstrapTable('resetView')
-            // detailFormatter:    detailFormatter
     }
 };
 
@@ -126,10 +124,6 @@ $(function() {
         rolesTmp.push(value); // value is pushed to temporary roles
         $(`.role-to-delete-btn[data-value=${value}]`).removeClass('d-none'); // icon inside delete con is shown
         checkRolesTagForMsg();
-
-        // console.log("*****Add clicked******")
-        // console.log("Temp Roles:", rolesTmp)
-        // console.log("Roles to Delete:", rolesDel)
     });
 
     // delete role tag
@@ -144,11 +138,6 @@ $(function() {
 
         checkRolesTagForMsg();
         $(`#role-option-tag-con [data-value=${value}]`).removeClass('d-none'); // show add role tag button
-
-        // console.log("*****Delete clicked******")
-        // console.log("Temp Roles:", rolesTmp)
-        // console.log("Roles to Delete:", rolesDel)
-
     });
 
     // cancel role edit
@@ -178,11 +167,6 @@ $(function() {
         // temporary arrays are set to empty
         rolesDel = [];
         rolesTmp = [];
-
-        // console.log("*****Cancel clicked******")
-        // console.log("Temp Roles:", roles)
-        // console.log("Temp Roles:", rolesTmp)
-        // console.log("Roles to Delete:", rolesDel)
     });
 
     // $("#role-save-btn").click(() => $("#role-form").submit())
@@ -260,11 +244,7 @@ $(function() {
 
         // show
         $("#dept-edit-btn").fadeIn();
-        // $("#dept-edit-btn").removeClass("d-none");
-        // $("#dept-empty-msg").toggleClass('d-none');
         hideSpinner();
-
-
     });
 
     $("#dept-form").submit(function(e) {
@@ -370,7 +350,6 @@ $(function() {
             hideSpinner();
             showToast("success", "Successfully updated advisory class");
         });
-        // console.log($("input[type='radio']:checked"))
     });
 
     // Disable all section input when unassign checkbox is checked
@@ -382,8 +361,6 @@ $(function() {
         }
         $("#section-opt-con input, #section-filter").prop("disabled", bool);
     });
-
-
 
     listSearchEventBinder("#search-section", "#section-list li");
     listSearchEventBinder("#search-subject", ".assigned-sub-con a");

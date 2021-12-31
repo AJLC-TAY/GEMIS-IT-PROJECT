@@ -7,8 +7,8 @@ let tableSetup = {
     searchSelector: "#search-input",
     uniqueId: "month",
     fieldId: "month",
-    // height:         800
 };
+
 let table = $("#table").bootstrapTable(tableSetup);
 
 let prepareSectionHTML = section => {
@@ -124,7 +124,6 @@ $(function () {
         let preview = $('#imgPreview');
         img = document.getElementById("psaPreview");
         img.src = this.src;
-        //  this.src;
         preview.find('.modal-title').text(this.alt);
         preview.modal('toggle');
     });
@@ -172,7 +171,6 @@ $(function () {
                     return e.gid != gradeID;
                 });
 
-                console.log(gradeData)
                 input.val(gradeData.data);
                 break;
         }
@@ -181,8 +179,6 @@ $(function () {
         editOptions.siblings("button").removeClass("d-none");
         input.prop("disabled", true);
         hideSpinner();
-
-
     });
 
     $(document).on("click", ".grade-table .action", function () {
@@ -250,19 +246,15 @@ $(function () {
                         $("#confirmation-edit-modal").modal('hide');
                         showToast('success', 'Subject grade successfully edited')
                     });
-                    console.log("checked");
-
                 } else {
                     var element = document.getElementById("msg");
                     element.classList.remove("hidden");
-                    console.log("unchecked");
                 }
 
                 break;
             case 'attendance':
                 if (($("#reflect").prop("checked") == true) && ($("#overwrite").prop("checked") == true)) {
                     saveRow(row);
-
                 } else {
                     var element = document.getElementById("msg");
                     element.classList.remove("hidden");
@@ -364,35 +356,9 @@ $(function () {
             barangay: { required: true },
             "city-muni": { required: true },
             province: { required: true },
-            "zip-code": { required: true },
-            // "f-lastname": { required: true  , lettersonly: true},
-            // "m-lastname": { required: true  , lettersonly: true},
-            // "g-lastname": { required: true  , lettersonly: true},
-            // "f-firstname": { required: true , lettersonly: true },
-            // "m-firstname": { required: true , lettersonly: true },
-            // "g-firstname": { required: true , lettersonly: true },
-            // "f-occupation": { required: true },
-            // "m-occupation": { required: true },
-            // "g-occupation": { required: true },
-            // "f-contactnumber": { required: true },
-            // "m-contactnumber": { required: true },
-            // "g-contactnumber": { required: true },
-            // "g-relationship": { required: true }
+            "zip-code": { required: true }
         },
         messages: {
-            // "f-lastname": { required:  REQUIRED },
-            // "m-lastname": { required: REQUIRED },
-            // "g-lastname": { required: REQUIRED },
-            // "f-firstname": { required: REQUIRED },
-            // "m-firstname": { required: REQUIRED },
-            // "g-firstname": { required: REQUIRED },
-            // "f-occupation": { required: REQUIRED },
-            // "m-occupation": { required: REQUIRED },
-            // "g-occupation": { required: REQUIRED },
-            // "f-contactnumber": { required: REQUIRED },
-            // "m-contactnumber": { required: REQUIRED },
-            // "g-contactnumber": { required: REQUIRED },
-            // "g-relationship": { required: REQUIRED },
             lrn: { required: "<p class='text-danger'><small>Please provide your LRN</small></p>" },
             "last-name": { required: "<p class='text-danger'><small>Please provide your last name</small></p>" },
             "first-name": { required: "<p class='text-danger'><small>Please provide your first name</small></p>" },
@@ -416,7 +382,7 @@ $(function () {
             "zip-code": { required: REQUIRED }
         },
         errorPlacement: function (error, element) {
-            if (element.attr("name") == "sex") {
+            if (element.attr("name") === "sex") {
                 error.appendTo("#sex-error-con");
             } else {
                 error.insertAfter(element)
@@ -431,10 +397,9 @@ $(function () {
                 contentType: false,
                 success: function (data) {
                     location.replace("student.php?id=" + JSON.parse(data))
-
                 }
             })
-            return false;  //This doesn't prevent the form from submitting.
+            return false;
         }
     });
     /** Call automatic average */

@@ -1,6 +1,7 @@
 function resetSchedTable() {
     $(".subject-select").val([]).change();
 }
+
 function changeSchedTable(strand) {
     resetSchedTable();
     try {
