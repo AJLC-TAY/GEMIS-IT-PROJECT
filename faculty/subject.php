@@ -120,6 +120,7 @@ if (count($sub_classes) != 0) {
                                 </div>
                             </div>
                             <div class="modal-body">
+                                <p>Are you sure you want to submit?</p>
                                 <p class="text-danger">Warning: This cannot be undone.</p>
                                 <hr class="mt-0">
                                 <div class="form-check">

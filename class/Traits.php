@@ -1742,10 +1742,11 @@ trait Grade
         $sy_id = mysqli_fetch_row($this->query("SELECT sy_id FROM gradereport WHERE report_id = '$report_id';"))[0];
         $semesters = [1, 2];
         foreach ($semesters as $semester) {
+            echo("$report_id $grade_level $strand $sy_id $semester");
             $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, first_status, second_status, final_grade FROM classgrade
                                             JOIN subject USING (sub_code) WHERE report_id = '$report_id'
                                             AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
-                                            WHERE sy_id = '$sy_id' AND sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
+                                            WHERE sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $data[$semester][$row['sub_type']][] = [
