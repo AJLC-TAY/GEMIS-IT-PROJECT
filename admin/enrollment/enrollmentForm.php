@@ -507,7 +507,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
             <!-- STEP 3 -->
             <div id="step-3" class="content">
                 <div class="card w-100 h-auto mt-4 p-4">
-                        <label class="col-form-label me-4">Balik Aral Student? </label>
+                        <label class="col-form-label me-4">Balik Aral/Transfer Student? </label>
                         <div class="d-flex">
                             <?php
                             echo "<div class='form-check me-4'>"
