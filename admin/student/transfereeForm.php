@@ -158,35 +158,28 @@ $sub_opt = $subjectsData['options'] ?? NULL;
             <tr>
                 <td class="text-center"><b>Core</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][1][core][]" multiple="multiple">
-                    </select>
-
+                    <select class="js-example-basic-multiple subject-select" name="data[11][1][core][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][2][core][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[11][2][core][]" multiple="multiple"></select>
                 </td>
             </tr>
             <tr>
                 <td class="text-center"><b>Contextualized</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][1][applied][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[11][1][applied][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][2][applied][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[11][2][applied][]" multiple="multiple"></select>
                 </td>
             </tr>
             <tr>
                 <td class="text-center"><b>Specialization</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][1][specialized][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[11][1][specialized][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[11][2][specialized][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[11][2][specialized][]" multiple="multiple"></select>
                 </td>
             </tr>
             </tbody>
@@ -209,34 +202,28 @@ $sub_opt = $subjectsData['options'] ?? NULL;
             <tr>
                 <td class="text-center"><b>Core</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][1][core][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][1][core][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][2][core][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][2][core][]" multiple="multiple"></select>
                 </td>
             </tr>
             <tr>
                 <td class="text-center"><b>Contextualized</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][1][applied][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][1][applied][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][2][applied][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][2][applied][]" multiple="multiple"></select>
                 </td>
             </tr>
             <tr>
                 <td class="text-center"><b>Specialization</b></td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][1][specialized][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][1][specialized][]" multiple="multiple"></select>
                 </td>
                 <td>
-                    <select class="js-example-basic-multiple subject-select" name="data[12][2][specialized][]" multiple="multiple">
-                    </select>
+                    <select class="js-example-basic-multiple subject-select" name="data[12][2][specialized][]" multiple="multiple"></select>
                 </td>
             </tr>
             </tbody>

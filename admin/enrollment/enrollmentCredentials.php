@@ -303,36 +303,66 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                             </div>
 
                             <div class="row mt-3">
-                                <h6><b>Contact Persons</b></h6>
-                                <?php if ($parents != NULL) {
-                                    echo "<h6>Parent/s</h6>";
-                                    foreach ($parents as $par) {
-                                        $parent = $par['sex'] == 'f' ? 'mother' : 'father';
-                                        $name = ${$parent . '_name'};
-                                        $occupation = ${$parent . '_occupation'};
-                                        $no = ${$parent . '_cp_no'};
+                                <?php
+                                $parents = $student->get_parents();
+                                $guardian = $student->get_guardians();
+
+                                if ($parents['f']['fname'] == '' && $parents['m']['fname'] == '') {
+                                    $parents = NULL;
+                                    echo " <h6><b>Contact Persons</b></h6>";
+                                } else {
+                                    if ($parents['f']['fname'] == '') {
                                         echo "
                                         <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
-                                            <dd class='col-md-8'> $name </dd>
+                                            <dt class='col-md-4'>" . ucwords('Father') . "'s Name </dt>
+                                            <dd class='col-md-8'> {$parents['m']['name']} </dd>
                                             <dt class='col-md-4'>Occupation </dt>
-                                            <dd class='col-md-8'> $occupation </dd>
+                                            <dd class='col-md-8'> {$parents['m']['occupation']} </dd>
                                             <dt class='col-md-4'>Contact Number </dt>
-                                            <dd class='col-md-8'> $no </dd>
+                                            <dd class='col-md-8'> {$parents['m']['cp_no']} </dd>
                                         </dl>";
+                                    } elseif ($parents['m']['fname'] == '') {
+                                        echo "
+                                        <dl class='row mb-3 ms-2'>
+                                            <dt class='col-md-4'>" . ucwords('Mother') . "'s Name </dt>
+                                            <dd class='col-md-8'> {$parents['f']['name']} </dd>
+                                            <dt class='col-md-4'>Occupation </dt>
+                                            <dd class='col-md-8'> {$parents['f']['occupation']} </dd>
+                                            <dt class='col-md-4'>Contact Number </dt>
+                                            <dd class='col-md-8'> {$parents['f']['cp_no']} </dd>
+                                        </dl>";
+                                    } else {
+
+                                        foreach ($parents as $par) {
+                                            $parent = $par['sex'] == 'f' ? 'mother' : 'father';
+                                            $name = ${$parent . '_name'};
+                                            $occupation = ${$parent . '_occupation'};
+                                            $no = ${$parent . '_cp_no'};
+                                            echo "
+                                            <dl class='row mb-3 ms-2'>
+                                                <dt class='col-md-4'>" . ucwords($parent) . "'s Name </dt>
+                                                <dd class='col-md-8'> $name </dd>
+                                                <dt class='col-md-4'>Occupation </dt>
+                                                <dd class='col-md-8'> $occupation </dd>
+                                                <dt class='col-md-4'>Contact Number </dt>
+                                                <dd class='col-md-8'> $no </dd>
+                                            </dl>";
+                                        }
                                     }
                                 }
-                                if ($guardian != NULL) {
+
+                                if ($guardian['fname'] != '') {
                                     echo "<hr><h6 class='mt-3'>Guardian/s</h6>
-                                        <dl class='row mb-3 ms-2'>
-                                            <dt class='col-md-4'>Guardian's Name</dt>
-                                            <dd class='col-md-8'> $guardian_name </dd>
-                                            <dt class='col-md-4'>Relationship</dt>
-                                            <dd class='col-md-8'> $guardian_relationship </dd>
-                                            <dt class='col-md-4'>Contact Number</dt>
-                                            <dd class='col-md-8'> $guardian_cp_no </dd>
-                                        </dl>";
-                                } ?>
+                                            <dl class='row mb-3 ms-2'>
+                                                <dt class='col-md-4'>Guardian's Name</dt>
+                                                <dd class='col-md-8'> {$guardian['name']} </dd>
+                                                <dt class='col-md-4'>Relationship</dt>
+                                                <dd class='col-md-8'> {$guardian['relationship']} </dd>
+                                                <dt class='col-md-4'>Contact Number</dt>
+                                                <dd class='col-md-8'> {$guardian['cp_no']} </dd>
+                                            </dl>";
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

@@ -1614,13 +1614,17 @@ class Administration extends Dbconfig
         $semesters = [1, 2];
         $types = ['core', 'specialized', 'applied'];
         $sy_condition = (is_null($sy_id) ? "IS NULL" : "= '$sy_id'");
+
+        $report_id = mysqli_fetch_row($this->query("SELECT report_id FROM `gradereport` WHERE stud_id = '$stud_id' AND sy_id = '$sy_id';"))[0];
         foreach ($grd_levels as $grd) {
             foreach ($semesters as $sem) {
                 foreach ($types as $type) {
                     $codes = $_POST['data'][$grd][$sem][$type] ?? [];
 
                     $result = $this->query("SELECT sub_code FROM transfereeschedule JOIN subject USING (sub_code) WHERE sub_type='$type' 
-                        AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0');");
+                        AND prog_code = '$prog_code'  AND sy_id " . $sy_condition . " AND ((for_grd_level = '$grd' AND sub_semester = '$sem') OR for_grd_level = '0')
+                        AND transferee_id = '$transferee_id';");
+
                     $current = [];
                     while ($row = mysqli_fetch_row($result)) {
                         $current[] = $row[0];
@@ -1630,17 +1634,22 @@ class Administration extends Dbconfig
                     $delete = array_diff($current, $codes);
                     foreach ($delete as $sub_del) {
                         $this->query("DELETE FROM transfereeschedule WHERE transferee_id = '$transferee_id' AND sub_code = '$sub_del' AND prog_code = '$prog_code' AND for_grd_level = '$grd' AND sub_semester = '$sem' AND sy_id $sy_condition;");
+                        $this->query("DELETE FROM classgrade WHERE report_id = '$report_id' AND sub_code = '$sub_del' AND prog_code = '$prog_code' AND for_grd_level = '$grd' AND sub_semester = '$sem' AND sy_id $sy_condition;");
                     }
+
                     # Add
                     $add = array_diff($codes, $current);
                     foreach ($add as $sub_add) {
                         $this->query("INSERT INTO transfereeschedule (transferee_id, sub_code, prog_code, for_grd_level, sub_semester, sy_id) VALUES ('$transferee_id','$sub_add', '$prog_code', '$grd', '$sem', " . (is_null($sy_id) ? "NULL" : "'$sy_id'") . ");");
+                        $current_subgrade = $this->query("SELECT * FROM classgrade WHERE report_id = '$report_id' AND sub_code = '$sub_add';");
+                        if (mysqli_num_rows($current_subgrade) == 0) {
+                            $this->query("INSERT INTO classgrade (report_id, stud_id, sub_code) VALUES('$report_id', '$stud_id', '$sub_add') ON DUPLICATE KEY UPDATE sub_code='$sub_add';");
+                        }
                     }
 
                     # update
                     $update = array_intersect($codes, $current);
                     foreach ($update as $sub_upd) {
-                        echo "UPDATE transfereeschedule SET for_grd_level='$grd', sub_semester='$sem' WHERE transferee_id = '$transferee_id' AND sub_code='$sub_upd' AND prog_code='$prog_code' AND sy_id $sy_condition";
                         $this->query("UPDATE sharedsubject SET for_grd_level='$grd', sub_semester='$sem' WHERE sub_code='$sub_upd' AND prog_code='$prog_code' AND sy_id $sy_condition;");
                     }
                 }
@@ -1814,8 +1823,12 @@ class Administration extends Dbconfig
         # reduce section student no if student have section
         $this->query("UPDATE section SET stud_no = (stud_no - 1) WHERE section_code = ANY(SELECT section_code FROM enrollment WHERE stud_id = '$stud_id');");
 
+        # delete student record
+        $id_no = mysqli_fetch_row($this->query("SELECT s.id_no FROM student s WHERE stud_id = '$stud_id';"))[0];
+        $this->query("DELETE FROM student WHERE stud_id = '$stud_id';");
+
         # delete user record
-        $this->query("DELETE FROM user WHERE id_no = ANY(SELECT s.id_no FROM student s WHERE stud_id = '$stud_id');");
+        $this->query("DELETE FROM user WHERE id_no = '$id_no';");
     }
 
     public function deleteStudent()
@@ -2111,15 +2124,13 @@ class Administration extends Dbconfig
 
     public function listStudents($is_JSON = FALSE)
     {
-        // session_start();
         $sy_id = $_GET['sy_id'];
-        $grade = $_GET['grade'];
         $section = $_GET['section'];
         $student_list = [];
         $result = $this->query("SELECT LRN, stud_id, CONCAT(last_name,', ', first_name,' ',COALESCE(middle_name, ''),' ', COALESCE(ext_name, '')) AS name,
                                  section_code, section_name, enrolled_in AS grade, prog_code FROM student JOIN enrollment e USING (stud_id) 
                                     JOIN user USING (id_no)
-                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND enrolled_in='$grade' AND (section_code != '$section' OR section_code IS NULL) AND  valid_stud_data = '1' AND is_active = '1';");
+                                     LEFT JOIN section USING (section_code) WHERE e.sy_id='$sy_id' AND (section_code != '$section' OR section_code IS NULL) AND valid_stud_data = '1' AND is_active = '1';");
         while ($row = mysqli_fetch_assoc($result)) {
             $student_list[] = [
                 'lrn'           => $row['LRN'],

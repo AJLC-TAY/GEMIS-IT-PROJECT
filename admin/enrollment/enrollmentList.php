@@ -36,7 +36,9 @@ if ($_SESSION['user_type'] == 'AD') {
             <h3 class="fw-bold">Enrollees</h3>
         </div>
         <div class="col-md-7 d-flex justify-content-end">
-            <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success ms-1" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll a student</a>
+            <div class="col-auto">
+                <a href="enrollment.php?page=form" id="add-btn" class="btn btn-success ms-1" title='Enroll a student' target="_blank"><i class="bi bi-plus-lg me-2"></i>Enroll a student</a>
+            </div>
         </div>
     </div>
 </header>

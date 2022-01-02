@@ -168,12 +168,45 @@ $(function() {
                 html += renderCellHTML(subjectTwelveSec);
                 html += '</tr>';
             }
-            console.log(html);
             $("#transfer-table tbody").html(html);
-            $(".trans-detail input, textarea").prop("disabled", !balikAral);
-            $("#transfer-table tbody").find(".form-check-input").prop("disabled", !balikAral);
 
         });
+        // $.get(`getAction.php?data=schedule&code=${strandCode}`, function (scheduleData) {
+        //     let subData = JSON.parse(scheduleData).data;
+        //     let template = $("#table-cell-template").html();
+        //     let html = '';
+        //
+        //     let elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem;
+        //     elevenFirSem = subData[0].data.subjects.length;
+        //     elevenSecSem = subData[1].data.subjects.length;
+        //     twelveFirSem = subData[2].data.subjects.length;
+        //     twelveSecSem = subData[3].data.subjects.length;
+        //
+        //     function renderCellHTML(sub) {
+        //         if (sub) {
+        //             return template.replaceAll("%ID%", sub.sub_code).replace("%SUBJECTNAME%", sub.sub_name);
+        //         }
+        //         return "<td></td>";
+        //     }
+        //
+        //     let count = Math.max(elevenFirSem, elevenSecSem, twelveFirSem, twelveSecSem);
+        //     for (let i = 0; i < count; i++) {
+        //         html += '<tr>';
+        //         let subjectElevenFir = subData[0].data.subjects[i] ?? "";
+        //         let subjectElevenSec = subData[1].data.subjects[i] ?? "";
+        //         let subjectTwelveFir = subData[2].data.subjects[i] ?? "";
+        //         let subjectTwelveSec = subData[3].data.subjects[i] ?? "";
+        //         html += renderCellHTML(subjectElevenFir);
+        //         html += renderCellHTML(subjectElevenSec);
+        //         html += renderCellHTML(subjectTwelveFir);
+        //         html += renderCellHTML(subjectTwelveSec);
+        //         html += '</tr>';
+        //     }
+        //     console.log(html);
+        //     $("#transfer-table tbody").html(html);
+        //     $(".trans-detail input, textarea").prop("disabled", !balikAral);
+        //     $("#transfer-table tbody").find(".form-check-input").prop("disabled", !balikAral);
+        // });
     });
 
     $(document).on("click", "[name='balik']", function() {

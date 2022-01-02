@@ -139,8 +139,6 @@ $(function() {
         $("#adviser-section").trigger("change");
     });
 
-    $(document).on("click", "#transfer-btn", function() {});
-
     /** Specific subject */
     $(document).on("click", "#add-subject-btn", function() {
         let subSetUp = {...tableSetup };
@@ -208,9 +206,8 @@ $(function() {
     /** Add student */
     $(document).on("click", "#add-student", function() {
         let syID = $(this).attr("data-sy-id");
-        let gradeLevel = $(this).attr("data-grade-level");
         let tableSetup = {
-            url: `getAction.php?data=students&sy_id=${syID}&grade=${gradeLevel}&section=${sectionCode}`,
+            url: `getAction.php?data=students&sy_id=${syID}&section=${sectionCode}`,
             maintainMetaDat: true,
             clickToSelect: true,
             method: "GET",
@@ -244,7 +241,8 @@ $(function() {
     });
 
     /** Transfer student */
-    $(document).on("click", "#transfer-btn", function() {
+    $(document).on("click", "#transfer-btn", function(e) {
+        e.preventDefault();
         let selections = $("#table").bootstrapTable("getSelections");
         if (selections.length === 0) {
             return showToast('danger', "Please select a student first");

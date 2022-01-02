@@ -136,10 +136,9 @@ trait School
     public function getSubjectSchedule()
     {
         session_start();
-        $sy_id = $_SESSION['sy_id'];
         $prog_code = $_GET['code'];
         $subjectList['data'] = [];
-        $result = $this->query("SELECT * FROM sharedsubject JOIN subject USING (sub_code) WHERE for_grd_level != '0' AND prog_code = '$prog_code';");
+        $result = $this->query("SELECT DISTINCT * FROM sharedsubject JOIN subject USING (sub_code) WHERE for_grd_level != '0' AND prog_code = '$prog_code';");
         $temp = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $temp[$row['for_grd_level']][$row['sub_semester']][] = ["sub_code" => $row['sub_code'], "sub_name" => $row['sub_name']];
@@ -360,11 +359,19 @@ trait UserSharedMethods
 
         # Step 6
         $grades = [];
+        $result = $this->query("SELECT * FROM transfereeschedule WHERE transferee_id = ANY(SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id')
+                                    AND sy_id = '{$_SESSION['sy_id']}';");
+
+        $query = "SELECT * FROM sharedsubject WHERE prog_code = '{$enrollmentInfo[0]}' AND for_grd_level != 0";
+        if (mysqli_num_rows($result) > 0) {
+            $transferee_id = mysqli_fetch_row($this->query("SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id';"))[0];
+            $query = "SELECT * FROM transfereeschedule WHERE transferee_id = '$transferee_id'";
+        }
         $result = $this->query("SELECT DISTINCT cg.sub_code, s.sub_name, s.sub_type, grade_id, first_grading, second_grading, final_grade, for_grd_level, sub_semester FROM classgrade cg
-                                LEFT JOIN sharedsubject ss ON cg.sub_code = ss.sub_code
-                                LEFT JOIN subject s ON cg.sub_code = s.sub_code
-                                WHERE cg.stud_id = '$stud_id' AND prog_code = '{$enrollmentInfo[0]}'
-                                ORDER BY sub_semester, for_grd_level;");
+                    LEFT JOIN ($query) ss ON cg.sub_code = ss.sub_code
+                    LEFT JOIN subject s ON cg.sub_code = s.sub_code
+                    WHERE cg.stud_id = '$stud_id' 
+                    ORDER BY sub_semester, for_grd_level;");
 
         # store already taken subjects if applicable
         $taken_subjects = [];
@@ -1690,24 +1697,24 @@ trait Enrollment
      */
     public function transferee_assessment($student_id,$trans_id): void
     {
-            $student_id = $student_id??$_POST['stud-id'];
-            $trans_id = $trans_id??$_POST['stud-id'];
-            # insert transferee record
-            $params = [
-                $_POST['trans-school'],
-                $_POST['trans-track'],
-                $_POST['trans-semester'],
-                $_POST['trans-sy'],
-                $student_id,
-            ];
+        $student_id = $student_id??$_POST['stud-id'];
+        $trans_id = $trans_id??$_POST['stud-id'];
+        # insert transferee record
+        $params = [
+            $_POST['trans-school'],
+            $_POST['trans-track'],
+            $_POST['trans-semester'],
+            $_POST['trans-sy'],
+            $student_id,
+        ];
 
-            $this->prepared_query("UPDATE transferee SET school_name = ?, track = ?, semester = ?, last_school_yr_comp = ? WHERE stud_id = ?;", $params, "ssssi");
-            # insert selected subject
-            if (isset($_POST['subjects'])) {
-                foreach ($_POST['subjects'] as $sub_code) {
-                    $this->query("INSERT INTO transfereesubject VALUES ('$trans_id', '$sub_code');");
-                }
+        $this->prepared_query("UPDATE transferee SET school_name = ?, track = ?, semester = ?, last_school_yr_comp = ? WHERE stud_id = ?;", $params, "ssssi");
+        # insert selected subject
+        if (isset($_POST['subjects'])) {
+            foreach ($_POST['subjects'] as $sub_code) {
+                $this->query("INSERT INTO transfereesubject VALUES ('$trans_id', '$sub_code');");
             }
+        }
     }
 }
 
