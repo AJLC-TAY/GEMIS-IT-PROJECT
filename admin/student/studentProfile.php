@@ -535,7 +535,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                 </div>
                             </div>
                             <div class="modal-body">
-                                <p class="text-danger">Warning: This cannot be undone.</p>
+                                <p >Are you sure you want to save changes?</p>
                                 <hr class="mt-0">
                                 <div class="form-check">
                                     <input class="form-check-input" id ="reflect" type="checkbox" value="">
