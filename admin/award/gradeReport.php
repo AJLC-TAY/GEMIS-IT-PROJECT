@@ -4,7 +4,7 @@ $admin = new Administration();
 $user_type = $_SESSION['user_type'];
 $curr_sem = $_SESSION['current_semester'];
 $sy_id = $_SESSION['sy_id'];
-$signatory_name = is_null($_GET['signatory']) ? "" : strtoupper($_GET['signatory']);
+if($_SESSION['user_type'] =! 'ST'){$signatory_name = is_null($_GET['signatory']) ? "" : strtoupper($_GET['signatory']);}
 $position = $_GET['position'] ?? "";
 $teacherName = '';
 $school_year = '';
@@ -32,8 +32,8 @@ $grade_level = $userProfile->get_yrlvl();
 
 $strand = mysqli_fetch_row($admin->query("SELECT prog_code FROM enrollment WHERE stud_id = '$stud_id' AND sy_id = '$sy_id';"))[0];
 $report_id = mysqli_fetch_row($admin->query("SELECT report_id FROM gradereport WHERE stud_id =  '$stud_id' AND sy_id='{$_SESSION['sy_id']}';"))[0];
-$grades = $admin->listStudentGradesForReport($report_id, $grade_level, $strand);
-$general_averages = $admin->getGeneralAverages($report_id);
+$grades = $admin->listStudentGradesForReport($stud_id,$report_id, $grade_level, $strand);
+$general_averages = $admin->getGeneralAverages($stud_id,$grade_level);
 $trackStrand = ($admin->getTrackStrand($stud_id))[1];
 $attendance = $admin->getStudentAttendance($report_id);
 $filename = $lastName .', '. mb_substr($firstName, 0, 1, "UTF-8"). '_grade_report';
@@ -390,15 +390,16 @@ function attendance($attendance, $lastName, $firstName, $midName, $age, $sex, $g
                 <p class="fw-bolder mb-0" style="font-size: 14px;">REPORT ON LEARNING PROGRESS AND ACHIEVEMENT</p>
                 <div class="row">
                     <?php
+
                     if ($user_type == "ST") {
-                        $curr = $curr_sem == 1? 'FIRST': 'SECOND';
-                        renderSemesterGradeTable($curr . 'SEMESTER', $grades[$curr_sem], $general_averages[$curr_sem - 1]);
+                        $curr = $curr_sem == 1? 'first': 'second';
+                        renderSemesterGradeTable(strtoupper ($curr) . ' SEMESTER', $grades[$curr_sem], $general_averages[$curr]);
                     } else {
                         echo "<div class='col-6'>";
-                        renderSemesterGradeTable('FIRST SEMESTER', $grades['1'], $general_averages[0]);
+                        renderSemesterGradeTable('FIRST SEMESTER', $grades['1'], $general_averages['first']);
                         echo "</div>";
                         echo "<div class='col-6'>";
-                        renderSemesterGradeTable('SECOND SEMESTER', $grades['2'],  $general_averages[1]);
+                        renderSemesterGradeTable('SECOND SEMESTER', $grades['2'],  $general_averages['second']);
                         echo "</div>";
                     }
 

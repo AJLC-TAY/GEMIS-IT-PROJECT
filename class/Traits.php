@@ -1743,17 +1743,30 @@ trait Grade
         return $grades;
     }
 
-    public function listStudentGradesForReport($report_id, $grade_level, $strand)
+    public function listStudentGradesForReport($stud_id,$report_id, $grade_level, $strand)
     {
         $data = [];
         $sy_id = mysqli_fetch_row($this->query("SELECT sy_id FROM gradereport WHERE report_id = '$report_id';"))[0];
+        $query = "SELECT * FROM sharedsubject WHERE prog_code = '$strand' AND for_grd_level != 0";
+        $result = $this->query("SELECT * FROM transfereeschedule WHERE transferee_id = ANY(SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id')
+                                    AND sy_id = '{$_SESSION['sy_id']}';"); //CHECK IF THERE IS A DIFFERENT SCHED
+        if (mysqli_num_rows($result) > 0) {
+            $transferee_id = mysqli_fetch_row($this->query("SELECT transferee_id FROM transferee WHERE stud_id = '$stud_id';"))[0];
+            $query = "SELECT * FROM transfereeschedule WHERE transferee_id = '$transferee_id'";
+            }
+
         $semesters = [1, 2];
         foreach ($semesters as $semester) {
             echo("$report_id $grade_level $strand $sy_id $semester");
-            $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, first_status, second_status, final_grade FROM classgrade
-                                            JOIN subject USING (sub_code) WHERE report_id = '$report_id'
-                                            AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
-                                            WHERE sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
+            // $result = $this->query("SELECT sub_code, sub_name, sub_type, first_grading, second_grading, first_status, second_status, final_grade FROM classgrade
+            //                                 JOIN subject USING (sub_code) WHERE report_id = '$report_id'
+            //                                 AND sub_code IN (SELECT sub_code FROM sharedsubject JOIN subject USING (sub_code)
+            //                                 WHERE sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand');");
+            $result = $this->query("SELECT DISTINCT cg.sub_code, s.sub_name, s.sub_type, first_status, second_status, first_grading, second_grading, final_grade, for_grd_level, sub_semester FROM classgrade cg
+                    LEFT JOIN ($query) ss ON cg.sub_code = ss.sub_code
+                    LEFT JOIN subject s ON cg.sub_code = s.sub_code
+                    WHERE cg.stud_id = '$stud_id' AND
+                    sub_semester = '$semester' AND for_grd_level = '$grade_level' AND prog_code = '$strand';");
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $data[$semester][$row['sub_type']][] = [
@@ -1764,15 +1777,30 @@ trait Grade
                 ];
             }
         }
+        
         return $data;
     }
 
     
 
-    public function getGeneralAverages($report_id)
+    public function getGeneralAverages($stud_id,$grade_level)
     {
-        $general_averages = mysqli_fetch_row($this->query("SELECT first_gen_ave, second_gen_ave FROM gradereport WHERE report_id = '$report_id';"));
-        return [$general_averages[0] ?: "", $general_averages[1] ?: ""];
+        // # general averages
+        $result_gen = $this->query("SELECT report_id, first_status, second_status, first_gen_ave, second_gen_ave, enrolled_in, CONCAT(start_year,' - ',end_year) AS sy FROM `gradereport` 
+                                    JOIN student s USING (stud_id) 
+                                    JOIN enrollment e ON e.stud_id = s.stud_id 
+                                    JOIN schoolyear sy ON sy.sy_id = e.sy_id 
+                                    WHERE e.sy_id = ANY (SELECT sy_id FROM enrollment WHERE stud_id = '$stud_id') AND s.stud_id = '$stud_id' AND enrolled_in = '$grade_level';");
+        while($row = mysqli_fetch_assoc($result_gen)) {
+            $gen_averages_data = [
+                "report_id" => $row['report_id'],
+                "sy"        => $row['sy'],
+                "first"  => $row['first_status'] == 0?'':$row['first_gen_ave'],
+                "second" => $row['first_status'] == 0?'':$row['second_gen_ave']
+            ];
+        }
+        // $general_averages = mysqli_fetch_row($this->query("SELECT first_gen_ave, second_gen_ave FROM gradereport WHERE report_id = '$report_id';"));
+        return $gen_averages_data;
     }
 
     public function getClassGrades()
