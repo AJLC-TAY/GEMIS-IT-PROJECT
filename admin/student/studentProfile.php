@@ -360,7 +360,7 @@ $url = "getAction.php?data=attendance&id={$stud_id}";
                                         <h5>Subject checklist</h5>
                                     </div>
                                     <div class="col-lg-6 d-flex justify-content-lg-end">
-                                        <a href="#already-taken" class="btn btn-sm link me-2">Go to already taken subjects</a>
+                                        <a href="#already-taken" class="btn btn-sm btn-outline-secondary me-2">Go to already taken subjects</a>
                                         <a href="student.php?action=assesTransferee&stud_id=<?php echo $stud_id . "&strand=ABM"; ?>" class="btn btn-sm btn-primary">Transferee Assessment Form</a>
                                     </div>
                                 </div>
