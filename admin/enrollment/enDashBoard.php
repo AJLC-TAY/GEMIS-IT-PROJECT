@@ -64,14 +64,14 @@ if ($_SESSION['user_type'] == "AD") {
 <section class="border border-2 p-2 pt-3 mb-3">
     <div class="container">
         <div class="row justify-content-end">
-             <div class="col-auto">
-                <button class="btn btn-sm btn-primary" onclick="refresh();"><i class="bi bi-arrow-clockwise me-2"></i>Refresh</button>
-             </div>
              <div class="col-auto pt-2">
                 <div class="form-check form-switch">
                     <input id="auto-refresh" type="checkbox" class="form-check-input refresh-switch" checked>
                     <label for="auto-refresh" class="form-check-label">Auto-Refresh Counts</label>
                 </div>
+             </div>
+             <div class="col-auto">
+                <button class="btn btn-sm btn-primary" onclick="refresh();"><i class="bi bi-arrow-clockwise me-2"></i>Refresh</button>
              </div>
         </div>
         <div class="row">

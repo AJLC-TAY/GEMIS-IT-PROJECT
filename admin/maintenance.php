@@ -46,7 +46,7 @@ include_once("../inc/head.html");
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="">
-                                                    <button data-bs-toggle="modal" data-bs-target="#backup-confirmation-modal" class="btn btn-outline-success w-75">Backup</button>
+                                                    <button data-bs-toggle="modal" data-bs-target="#backup-confirmation-modal" class="btn btn-success w-75">Backup</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,7 +84,7 @@ include_once("../inc/head.html");
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="">
-                                                    <button data-bs-toggle="modal" data-bs-target="#backup-confirmation-modal" class="btn btn-outline-danger w-75">Reset</button>
+                                                    <button data-bs-toggle="modal" data-bs-target="#backup-confirmation-modal" class="btn btn-danger w-75">Reset</button>
                                                 </div>
                                             </div>
                                         </div>
