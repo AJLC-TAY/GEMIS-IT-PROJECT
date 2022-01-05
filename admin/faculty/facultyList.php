@@ -58,7 +58,7 @@
                 <div class="message"></div>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button class="submit btn btn-danger btn-sm"></button>
             </div>
         </div>

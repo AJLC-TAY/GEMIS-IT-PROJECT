@@ -113,7 +113,7 @@ $form137Preview = !is_null($id_picture) ? (file_exists($form_137) ? $form_137 : 
                                     <p><span id="status"><?php echo $valid_status; ?> </span> 
                                         <span class="badge" <?php echo $change_btn_display; ?>>
                                             <button id="valid-change-btn" data-type="change" class="action btn btn-sm btn-primary">Change</button>
-                                            <button class="btn btn-dark btn-sm action edit-opt" data-type="cancel" <?php echo HIDE; ?>>Cancel</button>
+                                            <button class="btn btn-secondary btn-sm action edit-opt" data-type="cancel" <?php echo HIDE; ?>>Cancel</button>
                                         </span>
                                     </p>
                                 </dd>

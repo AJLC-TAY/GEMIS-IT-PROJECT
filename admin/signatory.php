@@ -237,7 +237,7 @@ $faculty = $admin->listFaculty();
                     Delete selected signatory?
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button class="close btn btn-secondary btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
                     <button id="delete-signatory-confirm" class="edit-btn btn btn-danger btn-sm">Delete</button>
                 </div>
             </div>

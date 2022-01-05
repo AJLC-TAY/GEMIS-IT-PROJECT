@@ -44,7 +44,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
             <div class="btn-con my-a">
                 <button id='edit-btn' class='btn link btn-sm <?php echo $edit_btn_display; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class="decide-con <?php echo $display; ?>">
-                    <a id="cancel-btn" href='program.php?prog_code=<?php echo $prog_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
+                    <a id="cancel-btn" href='program.php?prog_code=<?php echo $prog_code; ?>' class="btn btn-secondary btn-sm me-1">Cancel</a>
                     <!--                                                <button id="cancel-btn" class="btn btn-dark btn-sm me-1">Cancel</button>-->
                     <input type="submit" form='program-view-form' class="btn btn-success btn-sm" value="Save">
                 </div>

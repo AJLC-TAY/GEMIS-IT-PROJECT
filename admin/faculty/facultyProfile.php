@@ -21,7 +21,7 @@ switch ($user_type) {
         # role
         $role_edit_btn = "<button id='role-edit-btn' class='btn btn-sm link'><i class='bi bi-pencil-square'></i></button>";
         $role_options = "<div id='role-decide-con' class='my-auto d-none'>"
-            . "<button id='role-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>"
+            . "<button id='role-cancel-btn' class='btn btn-sm btn-secondary me-1'>Cancel</button>"
             . "<input type='submit' form='role-form' id='role-save-btn' class='btn btn-sm btn-success' value='Save'>"
             . "</div>";
 
@@ -156,7 +156,7 @@ $handledSection = $school_user->get_handled_section();
                                             </div>
                                         </div>
                                         <div id="dept-decide-con" class='my-auto' <?php echo $display_style; ?>>
-                                            <button id='dept-cancel-btn' class='btn btn-sm btn-dark me-1'>Cancel</button>
+                                            <button id='dept-cancel-btn' class='btn btn-sm btn-secondary me-1'>Cancel</button>
                                             <input type="submit" form='dept-form' id='dept-save-btn' class='btn btn-sm btn-success' value="Save">
                                         </div>
                                     </div>
@@ -305,7 +305,7 @@ $handledSection = $school_user->get_handled_section();
                                 <h5 class='m-0 fw-bold'>SUBJECT CLASS</h5>
                             </div>
                             <div id="adviser-decide-con" class='d-none my-auto'>
-                                <button id='adviser-cancel-btn' class='btn btn-sm btn-dark me-1 btn-sm'>Cancel</button>
+                                <button id='adviser-cancel-btn' class='btn btn-sm btn-secondary me-1 btn-sm'>Cancel</button>
                                 <button id='adviser-save-btn' class='btn btn-sm btn-success btn-sm'>Save</button>
                             </div>
                         </div>
@@ -547,7 +547,7 @@ $handledSection = $school_user->get_handled_section();
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-outline-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-outline-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <input type="submit" form="advisory-form" class="submit btn btn-success btn-sm" value="Save">
             </div>
         </div>

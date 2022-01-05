@@ -43,7 +43,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 <input type="hidden" name="action" value="updateCurriculum">
                 <button id='edit-btn' class='btn link btn-sm <?php echo $none_when_edit; ?>'><i class="bi bi-pencil-square me-2"></i>Edit</button>
                 <div class="decide-con <?php echo $display_when_edit; ?>">
-                    <a id="cancel-btn" href='curriculum.php?code=<?php echo $curr_code; ?>' class="btn btn-dark btn-sm me-1">Cancel</a>
+                    <a id="cancel-btn" href='curriculum.php?code=<?php echo $curr_code; ?>' class="btn btn-secondary btn-sm me-1">Cancel</a>
                     <!-- <button id="cancel-btn" class="btn btn-dark btn-sm me-1 <?php echo $display_when_edit; ?>">Cancel</button> -->
                     <input type="submit" form="curriculum-form" class="btn btn-success btn-sm" value="Save">
                 </div>
@@ -131,7 +131,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button type="submit" name="submit-prog" form="program-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-2"></i>Add</button>
             </div>
         </div>

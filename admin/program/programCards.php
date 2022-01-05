@@ -100,7 +100,7 @@ $admin = new Administration() ?>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-secondary btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
                 <button form="program-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-1"></i>Add</button>
             </div>
         </div>
@@ -122,7 +122,7 @@ $admin = new Administration() ?>
                <p class="modal-msg"></p>
            </div>
            <div class="modal-footer">
-               <button class="close btn btn-dark btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
+               <button class="close btn btn-secondary btn-sm close-btn" data-bs-dismiss="modal">Cancel</button>
                <button class="btn btn-danger close-btn delete-btn btn-sm">Delete</button>
            </div>
        </div>

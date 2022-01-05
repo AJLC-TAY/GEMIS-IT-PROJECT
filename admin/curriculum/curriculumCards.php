@@ -94,7 +94,7 @@ $admin = new Administration();
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <button form="curriculum-form" class="submit btn btn-success btn-sm"><i class="bi bi-plus-lg me-2"></i>Add</button>
             </div>
         </div>

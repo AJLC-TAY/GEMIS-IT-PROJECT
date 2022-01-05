@@ -175,7 +175,7 @@ if ($_SESSION['user_type'] == 'AD') {
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                 <input type="submit" form="delete-form" class="submit btn btn-success btn-sm" value="Delete"/>
             </div>
         </div>
