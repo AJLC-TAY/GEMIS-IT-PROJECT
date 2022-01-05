@@ -281,7 +281,7 @@ if (isset($_GET['state']) && $_GET['state'] == 'edit') {
                     <p>Transition to <span id="quarter"></span> quarter?</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-sm btn-dark close-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button class="close btn btn-sm btn-secondary close-btn" data-bs-dismiss="modal">Cancel</button>
                     <button id="quarter-submit" data-bs-dismiss="modal" class="btn btn-sm btn-success">Confirm</button>
                 </div>
             </div>

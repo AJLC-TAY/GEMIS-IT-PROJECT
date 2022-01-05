@@ -102,7 +102,7 @@ include_once("../inc/head.html"); ?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="close btn btn-dark close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button class="close btn btn-secondary close-btn btn-sm" data-bs-dismiss="modal">Cancel</button>
                     <input type="submit" form="subject-class-form" class="submit btn btn-success btn-sm" value="Submit" />
                 </div>
             </div>
