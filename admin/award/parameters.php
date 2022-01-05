@@ -50,7 +50,7 @@ $param = [
                                 </select>
                             </div>
                             <div class="col-auto">
-                                <button type="submit" form="acad-parameter-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel me-2"></i>Generate</button>
+                                <button type="submit" form="acad-parameter-form" class="btn-sm btn btn-success"><i class="bi bi-file-earmark-text me-2"></i>    Generate</button>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ $param = [
                 <form id="attendance-form" action="award.php?type=pa" method="post">
                     <input type="hidden" name="action" value="report">
                     <input type="hidden" name="type" value="attendance">
-                    <button type="submit" form="attendance-form" class="btn-sm btn btn-dark w-100 mt-3 mb-2"><i class="bi bi-funnel me-2"></i>Generate</button>
+                    <button type="submit" form="attendance-form" class="btn-sm btn btn-success w-100 mt-3 mb-2"><i class="bi bi-file-earmark-text me-2"></i>Generate</button>
                 </form>
                 <hr class="my-2">
                 <form id="other-award-form" action="award.php?type=re" method="post">
@@ -110,7 +110,7 @@ $param = [
                             <input required value='90' name='filter' type='text' class='form-control form-control-sm number text-end mb-0' placeholder='Enter Value'>
                         </div>
                         <div class="col-2">
-                            <button type="submit" form="other-award-form" class="btn-sm btn btn-dark"><i class="bi bi-funnel"></i></button>
+                            <button type="submit" form="other-award-form" class="btn-sm btn btn-outline-primary"><i class="bi bi-funnel"></i></button>
                         </div>
                     </div>
                 </form>
