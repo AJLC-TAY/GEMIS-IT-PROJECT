@@ -71,31 +71,31 @@ $school_name = '';
 $school_id_no = '';
 $school_address = '';
 // TEST
-$lrn = rand(1, 1000000);
-$lname = 'Rizal';
-$fname = 'Jose';
-$mname = 'Test';
-$extname = 'III';
-$sex = '';
-$age = '21';
-$birthdate = '';
-$birth_place = 'Baguio City';
-$indigenous_group = 'Test';
-$mother_tongue = 'Kankanaey';
-$religion = 'Roman Catholic';
-
-$house_no = '123';
-$street = 'Street';
-$barangay = 'Bakakeng';
-$city = 'Baguio City';
-$province = 'Benguet';
-$zip = '2600';
-
-$cp_no = '09090990090';
-$psa_birth_cert = '923871';
-$belong_to_ipcc = '';
-$id_picture = '';
-$section = '';
+//$lrn = rand(1, 1000000);
+//$lname = 'Rizal';
+//$fname = 'Jose';
+//$mname = 'Test';
+//$extname = 'III';
+//$sex = '';
+//$age = '21';
+//$birthdate = '';
+//$birth_place = 'Baguio City';
+//$indigenous_group = 'Test';
+//$mother_tongue = 'Kankanaey';
+//$religion = 'Roman Catholic';
+//
+//$house_no = '123';
+//$street = 'Street';
+//$barangay = 'Bakakeng';
+//$city = 'Baguio City';
+//$province = 'Benguet';
+//$zip = '2600';
+//
+//$cp_no = '09090990090';
+//$psa_birth_cert = '923871';
+//$belong_to_ipcc = '';
+//$id_picture = '';
+//$section = '';
 
 $parents = ['mother', 'father'];
 foreach ($parents as $par) {
@@ -670,7 +670,7 @@ $enroll_curr_options = $user->getEnrollmentCurriculumOptions();
                                     <div class="row justify-content-center align-content-center">
                                         <label for="school-last-attended" class="col-form-label col-lg-3">Semester</label>
                                         <div class="col-lg-9">
-                                            <input type="text" name="trans-semester" class="form-control form-control-sm" placeholder="Enter semester (ex. First)">
+                                            <input type="text" name="trans-semester" class="form-control form-control-sm" placeholder="Enter semester (ex. 1 or 2)">
                                         </div>
                                     </div>
                                 </div>
